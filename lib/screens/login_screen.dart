@@ -194,19 +194,58 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                // Google Button (UI only)
-                CustomButton(
-                  text: 'Sign in with Google',
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Google Login is UI only for this demo.'),
-                        behavior: SnackBarBehavior.floating,
+                // Premium Sign in with Google Button
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: isDark ? Colors.white : Colors.black87,
+                      side: BorderSide(
+                        color: isDark ? Colors.white24 : const Color(0xFFE5E5EA),
+                        width: 1.2,
                       ),
-                    );
-                  },
-                  isSecondary: true,
-                  icon: Icons.g_mobiledata_rounded,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    onPressed: () {
+                      authProvider.login('saim@gmail.com', 'password123').then((success) {
+                        if (success && mounted) {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) => const MainShell()),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Logged in with Google (Demo account: Saim Y)'),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 22,
+                          height: 22,
+                          margin: const EdgeInsets.only(right: 12),
+                          child: CustomPaint(
+                            painter: GoogleIconPainter(isDark: isDark),
+                          ),
+                        ),
+                        const Text(
+                          'Sign in with Google',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -0.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 40),
 
@@ -243,4 +282,49 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+// Beautiful Google G logo Custom Painter
+class GoogleIconPainter extends CustomPainter {
+  final bool isDark;
+  GoogleIconPainter({required this.isDark});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double w = size.width;
+    final double h = size.height;
+    final double cx = w / 2;
+    final double cy = h / 2;
+    final double r = w / 2;
+
+    final rect = Rect.fromCircle(center: Offset(cx, cy), radius: r - 2);
+    final strokePaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = r * 0.45
+      ..strokeCap = StrokeCap.square;
+
+    // Red sector (top-left)
+    canvas.drawArc(rect, 3.14 + 0.35, 1.57, false, strokePaint..color = const Color(0xFFEA4335));
+    // Yellow sector (bottom-left)
+    canvas.drawArc(rect, 3.14 - 1.22, 1.57, false, strokePaint..color = const Color(0xFFFBBC05));
+    // Green sector (bottom-right)
+    canvas.drawArc(rect, 0.35, 1.57, false, strokePaint..color = const Color(0xFF34A853));
+    // Blue sector (top-right)
+    canvas.drawArc(rect, -1.22, 1.57, false, strokePaint..color = const Color(0xFF4285F4));
+
+    // Blue horizontal bar
+    final barPaint = Paint()
+      ..color = const Color(0xFF4285F4)
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(Rect.fromLTWH(cx, cy - r * 0.225, r - 1, r * 0.45), barPaint);
+
+    // Subtle mask to make it look like a G cutout
+    final cutoutPaint = Paint()
+      ..color = isDark ? const Color(0xFF1C1C1E) : Colors.white
+      ..style = PaintingStyle.fill;
+    // G inner cutout spacing
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

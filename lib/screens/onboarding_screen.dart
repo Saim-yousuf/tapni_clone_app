@@ -28,8 +28,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       'gradient': [Color(0xFF251F14), Color(0xFF0D0D0E)],
     },
     {
-      'title': 'Smart Lead Capture',
-      'description': 'Collect leads during meetings. Let prospects fill out their details directly on your profile page to save them instantly.',
+      'title': 'Smart Contact Capture',
+      'description': 'Collect contacts during meetings. Let prospects fill out their details directly on your profile page to save them instantly.',
       'icon': Icons.people_outline_rounded,
       'gradient': [Color(0xFF15221F), Color(0xFF0D0D0E)],
     },

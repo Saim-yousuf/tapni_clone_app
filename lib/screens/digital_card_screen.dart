@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/qr_code_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/social_icon_button.dart';
+import 'package:tapni_app/widgets/templates_sheet.dart';
 
 class DigitalCardScreen extends StatelessWidget {
   const DigitalCardScreen({Key? key}) : super(key: key);
@@ -18,11 +19,24 @@ class DigitalCardScreen extends StatelessWidget {
     final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final profileProvider = Provider.of<ProfileProvider>(context);
     final profile = profileProvider.profile;
+    final currentTemplate = profileProvider.currentTemplate;
 
     return Scaffold(
       appBar: AppBar(
         title: Text('tapni.com/${profile.name.replaceAll(' ', '').toLowerCase()}'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.palette_outlined),
+            tooltip: 'Choose Template',
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) => const TemplatesSheet(),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.qr_code_2_rounded),
             onPressed: () {
@@ -37,10 +51,24 @@ class DigitalCardScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
         child: Column(
           children: [
-            // Glassmorphic Card Container representing the Business Card itself
-            GlassCard(
-              blur: 20,
-              borderOpacity: 0.12,
+            // Colored and themed Card Container representing the Business Card itself based on selected template
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              decoration: BoxDecoration(
+                color: currentTemplate.backgroundColor,
+                borderRadius: BorderRadius.circular(24),
+                border: currentTemplate.backgroundColor == Colors.white
+                    ? Border.all(color: Colors.black.withOpacity(0.08), width: 1.5)
+                    : null,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.12),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
@@ -48,15 +76,41 @@ class DigitalCardScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(Icons.contactless, color: AppTheme.accentGold, size: 28),
-                      Text(
-                        'tapni PRO',
-                        style: TextStyle(
-                          color: AppTheme.accentGold,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                          letterSpacing: 1.5,
-                        ),
+                      Icon(
+                        Icons.contactless,
+                        color: currentTemplate.brandingColor.withOpacity(0.8),
+                        size: 28,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            currentTemplate.isPro ? 'tapni PRO' : 'tapni',
+                            style: TextStyle(
+                              color: currentTemplate.brandingColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                          if (currentTemplate.isPro) ...[
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: currentTemplate.textColor,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                'PRO',
+                                style: TextStyle(
+                                  color: currentTemplate.backgroundColor,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 7,
+                                ),
+                              ),
+                            )
+                          ]
+                        ],
                       ),
                     ],
                   ),
@@ -67,20 +121,16 @@ class DigitalCardScreen extends StatelessWidget {
                     width: 90,
                     height: 90,
                     decoration: BoxDecoration(
-                      gradient: AppTheme.goldGradient,
+                      color: currentTemplate.isDark
+                          ? Colors.white.withOpacity(0.15)
+                          : Colors.black.withOpacity(0.08),
                       shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppTheme.accentGold.withOpacity(0.2),
-                          blurRadius: 15,
-                        ),
-                      ],
                     ),
                     child: Center(
                       child: Text(
                         profile.name.isNotEmpty ? profile.name[0] : 'S',
-                        style: const TextStyle(
-                          color: AppTheme.secondaryWhite,
+                        style: TextStyle(
+                          color: currentTemplate.textColor,
                           fontSize: 36,
                           fontWeight: FontWeight.w900,
                         ),
@@ -95,20 +145,23 @@ class DigitalCardScreen extends StatelessWidget {
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
+                      color: currentTemplate.textColor,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     profile.designation,
                     style: TextStyle(
-                      color: AppTheme.accentGold,
+                      color: currentTemplate.brandingColor,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                     ),
                   ),
                   Text(
                     profile.company,
-                    style: theme.textTheme.bodyMedium,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: currentTemplate.labelColor,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   
@@ -117,12 +170,12 @@ class DigitalCardScreen extends StatelessWidget {
                     profile.bio,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       height: 1.4,
-                      color: isDark ? Colors.white70 : Colors.black87,
+                      color: currentTemplate.textColor.withOpacity(0.9),
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  Divider(color: isDark ? Colors.white10 : Colors.black12),
+                  Divider(color: currentTemplate.textColor.withOpacity(0.15)),
                   const SizedBox(height: 12),
                   
                   // Quick Actions Bar (Phone, Email, Web)
@@ -133,18 +186,24 @@ class DigitalCardScreen extends StatelessWidget {
                         context,
                         icon: Icons.phone_outlined,
                         label: 'Call',
+                        textColor: currentTemplate.textColor,
+                        labelColor: currentTemplate.labelColor,
                         onTap: () => _copyToClipboard(context, profile.phone, 'Phone number'),
                       ),
                       _buildQuickAction(
                         context,
                         icon: Icons.email_outlined,
                         label: 'Email',
+                        textColor: currentTemplate.textColor,
+                        labelColor: currentTemplate.labelColor,
                         onTap: () => _copyToClipboard(context, profile.email, 'Email address'),
                       ),
                       _buildQuickAction(
                         context,
                         icon: Icons.language_outlined,
                         label: 'Website',
+                        textColor: currentTemplate.textColor,
+                        labelColor: currentTemplate.labelColor,
                         onTap: () => _copyToClipboard(context, profile.website, 'Website URL'),
                       ),
                     ],
@@ -274,11 +333,10 @@ class DigitalCardScreen extends StatelessWidget {
     BuildContext context, {
     required IconData icon,
     required String label,
+    required Color textColor,
+    required Color labelColor,
     required VoidCallback onTap,
   }) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
@@ -288,7 +346,7 @@ class DigitalCardScreen extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isDark ? Colors.white70 : Colors.black87,
+              color: textColor.withOpacity(0.85),
               size: 22,
             ),
             const SizedBox(height: 4),
@@ -297,7 +355,7 @@ class DigitalCardScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                color: labelColor,
               ),
             ),
           ],

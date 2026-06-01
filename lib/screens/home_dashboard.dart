@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/models/activity.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/stat_card.dart';
+import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 class HomeDashboard extends StatelessWidget {
   const HomeDashboard({Key? key}) : super(key: key);
@@ -60,7 +61,9 @@ class HomeDashboard extends StatelessWidget {
                           Text(
                             'Hello,',
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                              color: isDark
+                                  ? AppTheme.textGreyDark
+                                  : AppTheme.textGreyLight,
                             ),
                           ),
                           Text(
@@ -74,15 +77,20 @@ class HomeDashboard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
+
                   // Notification Bell Icon with Badge
                   Stack(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.notifications_outlined, size: 28),
+                        icon: const Icon(
+                          Icons.notifications_outlined,
+                          size: 28,
+                        ),
                         onPressed: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                            MaterialPageRoute(
+                              builder: (_) => const NotificationsScreen(),
+                            ),
                           );
                         },
                       ),
@@ -125,8 +133,8 @@ class HomeDashboard extends StatelessWidget {
                   );
                 },
                 child: GlassCard(
-                  customBgColor: isDark 
-                      ? Colors.white.withOpacity(0.03) 
+                  customBgColor: isDark
+                      ? Colors.white.withOpacity(0.03)
                       : Colors.black.withOpacity(0.02),
                   padding: const EdgeInsets.all(20.0),
                   child: Row(
@@ -136,9 +144,14 @@ class HomeDashboard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
-                                border: Border.all(color: AppTheme.accentGold.withOpacity(0.5)),
+                                border: Border.all(
+                                  color: AppTheme.accentGold.withOpacity(0.5),
+                                ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: const Text(
@@ -162,18 +175,26 @@ class HomeDashboard extends StatelessWidget {
                             Text(
                               '${profile.designation} at ${profile.company}',
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                                color: isDark
+                                    ? AppTheme.textGreyDark
+                                    : AppTheme.textGreyLight,
                               ),
                             ),
                             const SizedBox(height: 16),
                             Row(
                               children: [
-                                const Icon(Icons.qr_code, size: 16, color: AppTheme.accentGold),
+                                const Icon(
+                                  Icons.qr_code,
+                                  size: 16,
+                                  color: AppTheme.accentGold,
+                                ),
                                 const SizedBox(width: 6),
                                 Text(
                                   'Tap to share QR code',
                                   style: TextStyle(
-                                    color: isDark ? Colors.white70 : Colors.black87,
+                                    color: isDark
+                                        ? Colors.white70
+                                        : Colors.black87,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -195,17 +216,109 @@ class HomeDashboard extends StatelessWidget {
                             BoxShadow(
                               color: AppTheme.accentGold.withOpacity(0.15),
                               blurRadius: 15,
-                            )
+                            ),
                           ],
                         ),
                         child: const Center(
-                          child: Icon(Icons.contactless, color: AppTheme.secondaryWhite, size: 32),
+                          child: Icon(
+                            Icons.contactless,
+                            color: AppTheme.secondaryWhite,
+                            size: 32,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
+              if (!profileProvider.isProUser) ...[
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => const ProUpgradeSheet(),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: isDark
+                            ? [const Color(0xFF2C1E14), const Color(0xFF16100B)]
+                            : [
+                                const Color(0xFFFFF7F0),
+                                const Color(0xFFFFF0E5),
+                              ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: isDark
+                            ? const Color(0xFF4C3625)
+                            : const Color(0xFFFFD1B3),
+                        width: 1.2,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFF9500).withOpacity(0.12),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.star_rounded,
+                            color: Color(0xFFFF9500),
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Upgrade to Tapni PRO',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 15,
+                                  color: isDark ? Colors.white : Colors.black87,
+                                  letterSpacing: -0.2,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                'Customize your profile, unlock PRO templates, and get unlimited leads.',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: isDark
+                                      ? Colors.white60
+                                      : Colors.black54,
+                                  height: 1.3,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          color: isDark ? Colors.white38 : Colors.black38,
+                          size: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
               const SizedBox(height: 28),
 
               // Stats Grid
@@ -244,7 +357,7 @@ class HomeDashboard extends StatelessWidget {
                     },
                   ),
                   StatCard(
-                    title: 'Leads',
+                    title: 'Contacts',
                     value: '${leadsProvider.leads.length}',
                     trend: '+24%',
                     icon: Icons.person_add_alt_1_outlined,
@@ -268,14 +381,19 @@ class HomeDashboard extends StatelessWidget {
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('See all activity is mocked. New activities will appear as leads are added.'),
+                          content: Text(
+                            'See all activity is mocked. New activities will appear as leads are added.',
+                          ),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
                     },
                     child: const Text(
                       'See All',
-                      style: TextStyle(color: AppTheme.accentGold, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: AppTheme.accentGold,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -345,7 +463,9 @@ class HomeDashboard extends StatelessWidget {
                                 Text(
                                   activity.description,
                                   style: TextStyle(
-                                    color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                                    color: isDark
+                                        ? AppTheme.textGreyDark
+                                        : AppTheme.textGreyLight,
                                     fontSize: 12,
                                   ),
                                 ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/services/mock_data_service.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
+import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({Key? key}) : super(key: key);
@@ -32,10 +34,59 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     // calculate conversion rate (Leads/Views)
     final double conversionRate = totalViews > 0 ? (totalLeads / totalViews) * 100 : 0.0;
 
+    final profileProvider = Provider.of<ProfileProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Analytics Dashboard'),
         actions: [
+          if (!profileProvider.isProUser)
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => const ProUpgradeSheet(),
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFF2F2F7),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Go ',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? Colors.white : Colors.black87,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        'PRO',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           PopupMenuButton<String>(
             icon: const Icon(Icons.calendar_today_rounded, size: 18),
             onSelected: (val) {

@@ -1,16 +1,118 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
+import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/services/mock_data_service.dart';
 
 class ProfileProvider extends ChangeNotifier {
   late UserProfile _profile;
+  int _selectedTemplateIndex = 1; // Default to Charcoal
+
+  final List<CardTemplate> templates = [
+    CardTemplate(
+      id: 't1',
+      name: 'Violet',
+      backgroundColor: const Color(0xFF7A78FF),
+      textColor: Colors.white,
+      labelColor: Colors.white.withOpacity(0.6),
+      brandingColor: Colors.white,
+      isPro: true,
+      isDark: true,
+    ),
+    CardTemplate(
+      id: 't2',
+      name: 'Charcoal',
+      backgroundColor: const Color(0xFF1E2022),
+      textColor: Colors.white,
+      labelColor: Colors.white.withOpacity(0.6),
+      brandingColor: Colors.white,
+      isPro: false,
+      isDark: true,
+    ),
+    CardTemplate(
+      id: 't3',
+      name: 'Vibrant Red',
+      backgroundColor: const Color(0xFFEA2C3B),
+      textColor: Colors.white,
+      labelColor: Colors.white.withOpacity(0.6),
+      brandingColor: Colors.white,
+      isPro: false,
+      isDark: true,
+    ),
+    CardTemplate(
+      id: 't4',
+      name: 'Pure White',
+      backgroundColor: const Color(0xFFFFFFFF),
+      textColor: const Color(0xFF1E2022),
+      labelColor: const Color(0xFF1E2022).withOpacity(0.6),
+      brandingColor: const Color(0xFF1E2022),
+      isPro: false,
+      isDark: false,
+    ),
+    CardTemplate(
+      id: 't5',
+      name: 'Cream Beige',
+      backgroundColor: const Color(0xFFF5EBE1),
+      textColor: const Color(0xFF1E2022),
+      labelColor: const Color(0xFF1E2022).withOpacity(0.6),
+      brandingColor: const Color(0xFF1E2022),
+      isPro: true,
+      isDark: false,
+    ),
+    CardTemplate(
+      id: 't6',
+      name: 'Olive Green',
+      backgroundColor: const Color(0xFF9EBF7B),
+      textColor: Colors.white,
+      labelColor: Colors.white.withOpacity(0.6),
+      brandingColor: Colors.white,
+      isPro: false,
+      isDark: true,
+    ),
+    CardTemplate(
+      id: 't7',
+      name: 'Light Blue',
+      backgroundColor: const Color(0xFF6BB5FF),
+      textColor: Colors.white,
+      labelColor: Colors.white.withOpacity(0.6),
+      brandingColor: Colors.white,
+      isPro: false,
+      isDark: true,
+    ),
+    CardTemplate(
+      id: 't8',
+      name: 'Pitch Black',
+      backgroundColor: const Color(0xFF000000),
+      textColor: Colors.white,
+      labelColor: Colors.white.withOpacity(0.6),
+      brandingColor: Colors.white,
+      isPro: false,
+      isDark: true,
+    ),
+  ];
+
+  bool _isProUser = false;
 
   ProfileProvider() {
     _profile = MockDataService.getInitialProfile();
   }
 
   UserProfile get profile => _profile;
+  int get selectedTemplateIndex => _selectedTemplateIndex;
+  CardTemplate get currentTemplate => templates[_selectedTemplateIndex];
+  bool get isProUser => _isProUser;
+
+  void upgradeToPro() {
+    _isProUser = true;
+    notifyListeners();
+  }
+
+  void setTemplateIndex(int index) {
+    if (index >= 0 && index < templates.length) {
+      _selectedTemplateIndex = index;
+      notifyListeners();
+    }
+  }
 
   void updateProfile({
     required String name,

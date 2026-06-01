@@ -9,7 +9,8 @@ class MockDataService {
       name: 'Saim Y',
       designation: 'Senior Product Designer',
       company: 'Antigravity Studio',
-      bio: 'Creating immersive digital experiences. Hit the links below to connect with me or download my contact card!',
+      bio:
+          'Creating immersive digital experiences. Hit the links below to connect with me or download my contact card!',
       phone: '+1 (555) 019-2834',
       email: 'saimy@antigravity.io',
       website: 'www.antigravity.io',
@@ -107,7 +108,7 @@ class MockDataService {
     return [
       Activity(
         id: 'a1',
-        title: 'New Lead Captured',
+        title: 'New Contact Captured',
         description: 'Jane Doe added their contact details',
         timestamp: DateTime.now().subtract(const Duration(hours: 2)),
         type: ActivityType.lead,
@@ -177,7 +178,8 @@ class MockDataService {
       {
         'id': 'n4',
         'title': '📈 Monthly Summary',
-        'body': 'In May, you collected 42 leads and received 620 profile scans.',
+        'body':
+            'In May, you collected 42 leads and received 620 profile scans.',
         'time': '3 days ago',
         'isRead': true,
       },
