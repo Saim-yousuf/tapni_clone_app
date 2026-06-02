@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
-import 'package:tapni_app/widgets/glass_card.dart';
 
 class SocialLinksScreen extends StatelessWidget {
   final bool isTab;
@@ -16,402 +15,715 @@ class SocialLinksScreen extends StatelessWidget {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final currentLinks = profileProvider.profile.socialLinks;
 
-    // Separate platforms into "Added" and "Available to Add"
-    final addedPlatforms = currentLinks.map((l) => l.platform).toSet();
-    final availablePlatforms = SocialPlatform.values.where((p) => !addedPlatforms.contains(p)).toList();
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage Social Links'),
-        automaticallyImplyLeading: !isTab,
-        leading: isTab ? null : IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => Navigator.of(context).pop(),
+        title: const Text(
+          'Links',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20.0),
-          children: [
-            // Instructions
-            Text(
-              'Connected Socials',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                letterSpacing: -0.5,
-              ),
+        automaticallyImplyLeading: !isTab,
+        actions: [
+          IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: () {}),
+          Container(
+            margin: const EdgeInsets.only(right: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(20),
             ),
-            Text(
-              'Turn links on or off to control what you share.',
-              style: TextStyle(
-                fontSize: 13,
-                color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Active / Added Links list
-            if (currentLinks.isEmpty)
-              Container(
-                padding: const EdgeInsets.all(20),
-                alignment: Alignment.center,
-                child: Text(
-                  'No social links added yet. Add some below!',
+            child: Row(
+              children: const [
+                Text('Go', style: TextStyle(color: Colors.white, fontSize: 12)),
+                SizedBox(width: 4),
+                Text(
+                  'PRO',
                   style: TextStyle(
-                    color: isDark ? Colors.white54 : Colors.black54,
-                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
                   ),
                 ),
-              )
-            else
-              ...currentLinks.map((link) {
-                return _buildAddedLinkCard(context, link, profileProvider, isDark);
-              }).toList(),
-
-            const SizedBox(height: 32),
-            
-            // Available to Add Section
-            if (availablePlatforms.isNotEmpty) ...[
-              Text(
-                'Available to Add',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -0.5,
+              ],
+            ),
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          currentLinks.isEmpty
+              ? Center(
+                  child: Text(
+                    'No links added yet.\nTap "Add link" to get started.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: isDark ? Colors.white54 : Colors.black45,
+                    ),
+                  ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.only(top: 8, bottom: 100),
+                  itemCount: currentLinks.length,
+                  itemBuilder: (context, index) {
+                    final link = currentLinks[index];
+                    return _buildLinkTile(
+                      context,
+                      link,
+                      profileProvider,
+                      isDark,
+                    );
+                  },
                 ),
-              ),
-              const SizedBox(height: 12),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 2.2,
-                ),
-                itemCount: availablePlatforms.length,
-                itemBuilder: (context, index) {
-                  final platform = availablePlatforms[index];
-                  return _buildAvailablePlatformCard(context, platform, profileProvider, isDark);
+          Padding(
+            padding: const EdgeInsets.only(bottom: 110.0, left: 15, right: 15),
+            child: Align(
+              alignment: AlignmentDirectional.bottomEnd,
+              child: GestureDetector(
+                onTap: () {
+                  _showAddLinkBottomSheet(context, profileProvider);
                 },
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryBlack,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Add link',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Icon(Icons.add, color: Colors.white),
+                    ],
+                  ),
+                ),
               ),
-            ],
-            const SizedBox(height: 24),
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildAddedLinkCard(
+  Widget _buildLinkTile(
     BuildContext context,
     SocialLink link,
     ProfileProvider provider,
     bool isDark,
   ) {
-    Color brandColor;
-    IconData iconData;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      child: Material(
+        color: isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(14),
 
-    switch (link.platform) {
-      case SocialPlatform.whatsApp:
-        brandColor = const Color(0xFF25D366);
-        iconData = Icons.chat_bubble_outline;
-        break;
-      case SocialPlatform.linkedIn:
-        brandColor = const Color(0xFF0077B5);
-        iconData = Icons.business_outlined;
-        break;
-      case SocialPlatform.instagram:
-        brandColor = const Color(0xFFE1306C);
-        iconData = Icons.camera_alt_outlined;
-        break;
-      case SocialPlatform.facebook:
-        brandColor = const Color(0xFF1877F2);
-        iconData = Icons.facebook_outlined;
-        break;
-      case SocialPlatform.youTube:
-        brandColor = const Color(0xFFFF0000);
-        iconData = Icons.play_arrow_outlined;
-        break;
-      case SocialPlatform.website:
-        brandColor = AppTheme.accentGold;
-        iconData = Icons.language_outlined;
-        break;
-    }
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: GlassCard(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            // Brand Icon Circle
-            Container(
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 4,
+          ),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset(
+              _getPlatformAsset(link.platform),
               width: 44,
               height: 44,
-              decoration: BoxDecoration(
-                color: brandColor.withOpacity(link.isActive ? 0.9 : 0.2),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Icon(
-                  iconData, 
-                  color: link.isActive ? Colors.white : brandColor,
-                  size: 20,
+              errorBuilder: (_, __, ___) => Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(10),
                 ),
+                child: const Icon(Icons.link, size: 20),
               ),
             ),
-            const SizedBox(width: 16),
-            
-            // Link details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    link.platformName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    link.value,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            
-            // Actions: Edit, Delete, Toggle Active
-            IconButton(
-              icon: Icon(Icons.edit_outlined, size: 18, color: isDark ? Colors.white60 : Colors.black54),
-              onPressed: () => _showEditLinkDialog(context, link, provider),
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete_outline_rounded, size: 18, color: Colors.redAccent),
-              onPressed: () => provider.deleteSocialLink(link.id),
-            ),
-            Switch.adaptive(
-              value: link.isActive,
-              activeColor: AppTheme.accentGold,
-              onChanged: (_) => provider.toggleLinkActive(link.id),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAvailablePlatformCard(
-    BuildContext context,
-    SocialPlatform platform,
-    ProfileProvider provider,
-    bool isDark,
-  ) {
-    String name;
-    IconData icon;
-    Color brandColor;
-
-    switch (platform) {
-      case SocialPlatform.whatsApp:
-        name = 'WhatsApp';
-        icon = Icons.chat_bubble_outline;
-        brandColor = const Color(0xFF25D366);
-        break;
-      case SocialPlatform.linkedIn:
-        name = 'LinkedIn';
-        icon = Icons.business_outlined;
-        brandColor = const Color(0xFF0077B5);
-        break;
-      case SocialPlatform.instagram:
-        name = 'Instagram';
-        icon = Icons.camera_alt_outlined;
-        brandColor = const Color(0xFFE1306C);
-        break;
-      case SocialPlatform.facebook:
-        name = 'Facebook';
-        icon = Icons.facebook_outlined;
-        brandColor = const Color(0xFF1877F2);
-        break;
-      case SocialPlatform.youTube:
-        name = 'YouTube';
-        icon = Icons.play_arrow_outlined;
-        brandColor = const Color(0xFFFF0000);
-        break;
-      case SocialPlatform.website:
-        name = 'Website';
-        icon = Icons.language_outlined;
-        brandColor = AppTheme.accentGold;
-        break;
-    }
-
-    return InkWell(
-      onTap: () => _showAddLinkDialog(context, platform, provider),
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isDark ? AppTheme.cardDarkBg : Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isDark ? AppTheme.greyBorderDark : AppTheme.greyBorderLight,
           ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: brandColor.withOpacity(0.12),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: brandColor, size: 18),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
-                  ),
-                  const Text(
-                    '+ Add',
-                    style: TextStyle(
-                      color: AppTheme.accentGold,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showAddLinkDialog(
-    BuildContext context,
-    SocialPlatform platform,
-    ProfileProvider provider,
-  ) {
-    final controller = TextEditingController();
-    final linkTemplate = SocialLink(id: '', platform: platform, value: '');
-    
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          title: Text('Add ${linkTemplate.platformName}'),
-          content: Column(
+          title: Text(
+            link.platformName,
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+          ),
+          trailing: Row(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Enter your ${linkTemplate.label}:',
-                style: const TextStyle(fontSize: 12),
+              Switch.adaptive(
+                value: link.isActive,
+                activeColor: Colors.black,
+                onChanged: (_) => provider.toggleLinkActive(link.id),
               ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: controller,
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: platform == SocialPlatform.website 
-                      ? 'www.mywebsite.com' 
-                      : platform == SocialPlatform.whatsApp
-                          ? '+15551234567'
-                          : 'username',
-                  prefixText: platform == SocialPlatform.website || platform == SocialPlatform.whatsApp
-                      ? null 
-                      : linkTemplate.baseUrlPrefix,
-                  prefixStyle: const TextStyle(color: Colors.grey),
-                ),
-              ),
+              const Icon(Icons.chevron_right, color: Colors.grey, size: 20),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (controller.text.trim().isNotEmpty) {
-                  provider.addSocialLink(platform, controller.text.trim());
-                  Navigator.of(ctx).pop();
-                }
-              },
-              child: const Text('Add'),
-            ),
-          ],
+          onTap: () => _showEditBottomSheet(context, link, provider, isDark),
+        ),
+      ),
+    );
+  }
+
+  // ─── ADD LINK BOTTOM SHEET ──────────────────────────────────────────────────
+  void _showAddLinkBottomSheet(BuildContext context, ProfileProvider provider) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final categories = [
+      {
+        'title': 'Featured',
+        'platforms': [SocialPlatform.website],
+      },
+      {
+        'title': 'Social media',
+        'platforms': [
+          SocialPlatform.instagram,
+          SocialPlatform.facebook,
+          SocialPlatform.youTube,
+          SocialPlatform.linkedIn,
+        ],
+      },
+      {
+        'title': 'Contact',
+        'platforms': [SocialPlatform.whatsApp],
+      },
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.92,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          expand: false,
+          builder: (_, scrollController) {
+            return Column(
+              children: [
+                // Drag handle
+                Container(
+                  margin: const EdgeInsets.only(top: 12, bottom: 8),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade400,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                // Header
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                        onPressed: () => Navigator.pop(ctx),
+                      ),
+                      const Expanded(
+                        child: Center(
+                          child: Text(
+                            'Add Link',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.search_rounded),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ),
+                // Grid content
+                Expanded(
+                  child: ListView(
+                    controller: scrollController,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    children: categories.map((cat) {
+                      final platforms =
+                          cat['platforms'] as List<SocialPlatform>;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            child: Text(
+                              cat['title'] as String,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  crossAxisSpacing: 12,
+                                  mainAxisSpacing: 12,
+                                  childAspectRatio: 0.8,
+                                ),
+                            itemCount: platforms.length,
+                            itemBuilder: (context, index) {
+                              final platform = platforms[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(ctx);
+                                  _showNewLinkBottomSheet(
+                                    context,
+                                    platform,
+                                    provider,
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image.asset(
+                                        _getPlatformAsset(platform),
+                                        width: 64,
+                                        height: 64,
+                                        errorBuilder: (_, __, ___) => Container(
+                                          width: 64,
+                                          height: 64,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade200,
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
+                                          ),
+                                          child: const Icon(Icons.link),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      _getPlatformName(platform),
+                                      style: const TextStyle(fontSize: 11),
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
 
-  void _showEditLinkDialog(
+  // ─── NEW LINK BOTTOM SHEET (after selecting platform) ───────────────────────
+  void _showNewLinkBottomSheet(
+    BuildContext context,
+    SocialPlatform platform,
+    ProfileProvider provider,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final usernameController = TextEditingController();
+    final labelController = TextEditingController(
+      text: _getPlatformName(platform),
+    );
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom,
+          ),
+          child: _LinkSettingsSheet(
+            platform: platform,
+            labelController: labelController,
+            usernameController: usernameController,
+            isDark: isDark,
+            isNew: true,
+            onSave: () {
+              if (usernameController.text.trim().isNotEmpty) {
+                provider.addSocialLink(
+                  platform,
+                  usernameController.text.trim(),
+                );
+                Navigator.pop(ctx);
+              }
+            },
+            onDelete: null,
+          ),
+        );
+      },
+    );
+  }
+
+  // ─── EDIT BOTTOM SHEET ───────────────────────────────────────────────────────
+  void _showEditBottomSheet(
     BuildContext context,
     SocialLink link,
     ProfileProvider provider,
+    bool isDark,
   ) {
-    final controller = TextEditingController(text: link.value);
-    
-    showDialog(
+    final usernameController = TextEditingController(text: link.value);
+    final labelController = TextEditingController(text: link.platformName);
+
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
       builder: (ctx) {
-        return AlertDialog(
-          title: Text('Edit ${link.platformName}'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Enter your ${link.label}:',
-                style: const TextStyle(fontSize: 12),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: controller,
-                autofocus: true,
-                decoration: InputDecoration(
-                  prefixText: link.platform == SocialPlatform.website || link.platform == SocialPlatform.whatsApp
-                      ? null 
-                      : link.baseUrlPrefix,
-                  prefixStyle: const TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom,
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (controller.text.trim().isNotEmpty) {
-                  provider.updateSocialLink(link.id, controller.text.trim(), link.isActive);
-                  Navigator.of(ctx).pop();
-                }
-              },
-              child: const Text('Save'),
-            ),
-          ],
+          child: _LinkSettingsSheet(
+            platform: link.platform,
+            labelController: labelController,
+            usernameController: usernameController,
+            isDark: isDark,
+            isNew: false,
+            onSave: () {
+              if (usernameController.text.trim().isNotEmpty) {
+                provider.updateSocialLink(
+                  link.id,
+                  usernameController.text.trim(),
+                  link.isActive,
+                );
+                Navigator.pop(ctx);
+              }
+            },
+            onDelete: () {
+              provider.deleteSocialLink(link.id);
+              Navigator.pop(ctx);
+            },
+          ),
         );
       },
+    );
+  }
+
+  String _getPlatformAsset(SocialPlatform platform) {
+    switch (platform) {
+      case SocialPlatform.whatsApp:
+        return 'assets/images/png/whatsapp-logo.png';
+      case SocialPlatform.linkedIn:
+        return 'assets/images/png/linkedin-logo.png';
+      case SocialPlatform.instagram:
+        return 'assets/images/png/instagram-logo.png';
+      case SocialPlatform.facebook:
+        return 'assets/images/png/snapchatlogo.png';
+      case SocialPlatform.youTube:
+        return 'assets/images/png/threads-logo.png';
+      case SocialPlatform.website:
+        return 'assets/images/png/tiktok-logo.png';
+    }
+  }
+
+  String _getPlatformName(SocialPlatform platform) {
+    switch (platform) {
+      case SocialPlatform.whatsApp:
+        return 'WhatsApp';
+      case SocialPlatform.linkedIn:
+        return 'LinkedIn';
+      case SocialPlatform.instagram:
+        return 'Instagram';
+      case SocialPlatform.facebook:
+        return 'Snapchat';
+      case SocialPlatform.youTube:
+        return 'Threads';
+      case SocialPlatform.website:
+        return 'Tiktok';
+    }
+  }
+}
+
+class _LinkSettingsSheet extends StatefulWidget {
+  final SocialPlatform platform;
+  final TextEditingController labelController;
+  final TextEditingController usernameController;
+  final bool isDark;
+  final bool isNew;
+  final VoidCallback onSave;
+  final VoidCallback? onDelete;
+
+  const _LinkSettingsSheet({
+    required this.platform,
+    required this.labelController,
+    required this.usernameController,
+    required this.isDark,
+    required this.isNew,
+    required this.onSave,
+    required this.onDelete,
+  });
+
+  @override
+  State<_LinkSettingsSheet> createState() => _LinkSettingsSheetState();
+}
+
+class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
+  bool _showLink = true;
+
+  String _getPlatformAsset(SocialPlatform platform) {
+    switch (platform) {
+      case SocialPlatform.whatsApp:
+        return 'assets/images/png/whatsapp-logo.png';
+      case SocialPlatform.linkedIn:
+        return 'assets/images/png/linkedin-logo.png';
+      case SocialPlatform.instagram:
+        return 'assets/images/png/instagram-logo.png';
+      case SocialPlatform.facebook:
+        return 'assets/images/png/snapchatlogo.png';
+      case SocialPlatform.youTube:
+        return 'assets/images/png/threads-logo.png';
+      case SocialPlatform.website:
+        return 'assets/images/png/tiktok-logo.png';
+    }
+  }
+
+  String _getUsernameHint(SocialPlatform platform) {
+    switch (platform) {
+      case SocialPlatform.whatsApp:
+        return 'Enter your phone number';
+      case SocialPlatform.website:
+        return 'Enter your website URL';
+      default:
+        return 'Enter your ${_getPlatformNameStr(platform)} username';
+    }
+  }
+
+  String _getPlatformNameStr(SocialPlatform platform) {
+    switch (platform) {
+      case SocialPlatform.whatsApp:
+        return 'WhatsApp';
+      case SocialPlatform.linkedIn:
+        return 'LinkedIn';
+      case SocialPlatform.instagram:
+        return 'Instagram';
+      case SocialPlatform.facebook:
+        return 'Snapchat';
+      case SocialPlatform.youTube:
+        return 'Threads';
+      case SocialPlatform.website:
+        return 'Tiktok';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final fieldColor = widget.isDark
+        ? const Color(0xFF222222)
+        : const Color(0xFFF5F5F5);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Drag handle
+        Container(
+          margin: const EdgeInsets.only(top: 12, bottom: 16),
+          width: 40,
+          height: 4,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade400,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+
+        const Text(
+          'Link settings',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 20),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              // Label row
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: Image.asset(
+                      _getPlatformAsset(widget.platform),
+                      width: 64,
+                      height: 64,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Icon(Icons.link),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: fieldColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextField(
+                            controller: widget.labelController,
+                            decoration: const InputDecoration.collapsed(
+                              hintText: 'Label',
+                            ),
+                            style: const TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 4),
+                          child: Text(
+                            'Set text under the link icon',
+                            style: TextStyle(fontSize: 11, color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              // Username field
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: fieldColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextField(
+                  controller: widget.usernameController,
+                  decoration: const InputDecoration.collapsed(hintText: ''),
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 4, top: 4),
+                child: Text(
+                  _getUsernameHint(widget.platform),
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Show link toggle
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: fieldColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    const Expanded(
+                      child: Text(
+                        'Show link',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    Switch.adaptive(
+                      value: _showLink,
+                      activeColor: Colors.black,
+                      onChanged: (val) => setState(() => _showLink = val),
+                    ),
+                  ],
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 4, top: 4),
+                child: Text(
+                  "When turned off this link won't be shown on your profile",
+                  style: TextStyle(fontSize: 11, color: Colors.grey),
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Bottom actions
+              Row(
+                children: [
+                  if (widget.onDelete != null)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: fieldColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.delete_outline_rounded),
+                        onPressed: widget.onDelete,
+                      ),
+                    ),
+                  if (widget.onDelete != null) const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: widget.onSave,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        shape: const StadiumBorder(),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: Text(
+                        widget.isNew ? 'Add' : 'Save',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -79,25 +79,34 @@ class AppTheme {
         onSecondary: secondaryWhite,
       ),
 
-      textTheme: GoogleFonts.outfitTextTheme(
-        const TextTheme(
-          headlineLarge: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            color: primaryBlack,
-          ),
-          headlineMedium: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: primaryBlack,
-          ),
-          titleLarge: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: primaryBlack,
-          ),
-          bodyLarge: TextStyle(fontSize: 16, color: primaryBlack),
-          bodyMedium: TextStyle(fontSize: 14, color: primaryBlack),
+      textTheme: const TextTheme(
+        headlineLarge: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+          color: primaryBlack,
+        ),
+        headlineMedium: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: primaryBlack,
+        ),
+        titleLarge: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: primaryBlack,
+        ),
+        bodyLarge: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 16,
+          color: primaryBlack,
+        ),
+        bodyMedium: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 14,
+          color: primaryBlack,
         ),
       ),
 
@@ -170,25 +179,34 @@ class AppTheme {
         onSecondary: primaryBlack,
       ),
 
-      textTheme: GoogleFonts.outfitTextTheme(
-        const TextTheme(
-          headlineLarge: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            color: secondaryWhite,
-          ),
-          headlineMedium: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: secondaryWhite,
-          ),
-          titleLarge: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: secondaryWhite,
-          ),
-          bodyLarge: TextStyle(fontSize: 16, color: secondaryWhite),
-          bodyMedium: TextStyle(fontSize: 14, color: secondaryWhite),
+      textTheme: const TextTheme(
+        headlineLarge: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+          color: secondaryWhite,
+        ),
+        headlineMedium: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: secondaryWhite,
+        ),
+        titleLarge: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: secondaryWhite,
+        ),
+        bodyLarge: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 16,
+          color: secondaryWhite,
+        ),
+        bodyMedium: TextStyle(
+          fontFamily: 'Urbanist',
+          fontSize: 14,
+          color: secondaryWhite,
         ),
       ),
 
