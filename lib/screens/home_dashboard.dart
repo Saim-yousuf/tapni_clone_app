@@ -35,25 +35,41 @@ class HomeDashboard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        width: 38,
-                        height: 38,
-                        decoration: BoxDecoration(
-                          gradient: AppTheme.goldGradient,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white24),
-                        ),
-                        child: Center(
-                          child: Text(
-                            profile.name.isNotEmpty ? profile.name[0] : 'S',
-                            style: const TextStyle(
-                              color: AppTheme.secondaryWhite,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                      profile.profilePhotoUrl != null &&
+                              profile.profilePhotoUrl!.trim().isNotEmpty
+                          ? Container(
+                              width: 38,
+                              height: 38,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white24),
+                                image: DecorationImage(
+                                  image: NetworkImage(profile.profilePhotoUrl!),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              width: 38,
+                              height: 38,
+                              decoration: BoxDecoration(
+                                gradient: AppTheme.goldGradient,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white24),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  profile.name.isNotEmpty
+                                      ? profile.name[0].toUpperCase()
+                                      : 'S',
+                                  style: const TextStyle(
+                                    color: AppTheme.secondaryWhite,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

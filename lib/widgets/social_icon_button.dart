@@ -24,12 +24,14 @@ class SocialIconButton extends StatelessWidget {
         return const Color(0xFF0077B5);
       case SocialPlatform.instagram:
         return const Color(0xFFE1306C);
-      case SocialPlatform.facebook:
-        return const Color(0xFF1877F2);
-      case SocialPlatform.youTube:
-        return const Color(0xFFFF0000);
-      case SocialPlatform.website:
+        // case SocialPlatform.facebook:
+        //   return const Color(0xFF1877F2);
+        // case SocialPlatform.youTube:
+        //   return const Color(0xFFFF0000);
+        // case SocialPlatform.website:
         return AppTheme.accentGold;
+      default:
+        return AppTheme.primaryBlack;
     }
   }
 
@@ -41,29 +43,59 @@ class SocialIconButton extends StatelessWidget {
         return Icons.business; // representing LinkedIn
       case SocialPlatform.instagram:
         return Icons.camera_alt_outlined; // representing Instagram
-      case SocialPlatform.facebook:
-        return Icons.facebook_outlined; // representing Facebook
-      case SocialPlatform.youTube:
-        return Icons.play_circle_outline; // representing YouTube
-      case SocialPlatform.website:
-        return Icons.language; // representing Website
+      // case SocialPlatform.facebook:
+      //   return Icons.facebook_outlined; // representing Facebook
+      // case SocialPlatform.youTube:
+      //   return Icons.play_circle_outline; // representing YouTube
+      // case SocialPlatform.website:
+      //   return Icons.language; // representing Website
+      default:
+        return Icons.link;
     }
   }
 
   Widget _buildIcon(bool isDark) {
     switch (socialLink.platform) {
       case SocialPlatform.whatsApp:
-        return const Icon(Icons.chat_bubble_outline, color: Colors.white, size: 24);
+        return const Icon(
+          Icons.chat_bubble_outline,
+          color: Colors.white,
+          size: 24,
+        );
       case SocialPlatform.linkedIn:
-        return const Text('in', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22, fontFamily: 'sans-serif'));
+        return const Text(
+          'in',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            fontFamily: 'sans-serif',
+          ),
+        );
       case SocialPlatform.instagram:
-        return const Icon(Icons.camera_alt_outlined, color: Colors.white, size: 24);
-      case SocialPlatform.facebook:
-        return const Icon(Icons.facebook, color: Colors.white, size: 26);
-      case SocialPlatform.youTube:
-        return const Icon(Icons.play_arrow, color: Colors.white, size: 26);
-      case SocialPlatform.website:
-        return const Icon(Icons.language_outlined, color: Colors.white, size: 24);
+        return const Icon(
+          Icons.camera_alt_outlined,
+          color: Colors.white,
+          size: 24,
+        );
+      // case SocialPlatform.facebook:
+      //   return const Icon(Icons.facebook, color: Colors.white, size: 26);
+      // case SocialPlatform.youTube:
+      //   return const Icon(Icons.play_arrow, color: Colors.white, size: 26);
+      // case SocialPlatform.website:
+      //   return const Icon(
+      //     Icons.language_outlined,
+      //     color: Colors.white,
+      //     size: 24,
+      //   );
+      default:
+        return Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Image.asset(
+            SocialLink.getAssetPath(socialLink.platform),
+            fit: BoxFit.contain,
+          ),
+        );
     }
   }
 
@@ -77,13 +109,15 @@ class SocialIconButton extends StatelessWidget {
       width: 60,
       height: 60,
       decoration: BoxDecoration(
-        color: socialLink.isActive 
+        color: socialLink.isActive
             ? brandColor.withOpacity(0.9)
-            : (isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.05)),
+            : (isDark
+                  ? Colors.white.withOpacity(0.05)
+                  : Colors.black.withOpacity(0.05)),
         shape: BoxShape.circle,
         border: Border.all(
-          color: socialLink.isActive 
-              ? brandColor.withOpacity(0.5) 
+          color: socialLink.isActive
+              ? brandColor.withOpacity(0.5)
               : (isDark ? Colors.white10 : Colors.black12),
           width: 1,
         ),
@@ -93,7 +127,7 @@ class SocialIconButton extends StatelessWidget {
                   color: brandColor.withOpacity(0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
-                )
+                ),
               ]
             : null,
       ),
@@ -126,7 +160,7 @@ class SocialIconButton extends StatelessWidget {
             style: theme.textTheme.bodyMedium?.copyWith(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: socialLink.isActive 
+              color: socialLink.isActive
                   ? (isDark ? Colors.white : Colors.black)
                   : theme.disabledColor,
             ),

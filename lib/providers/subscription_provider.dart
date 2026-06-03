@@ -52,11 +52,18 @@ class SubscriptionProvider extends ChangeNotifier {
     setChecking(false);
 
     if (response.success && response.data != null) {
-      _currentSubscription = UserSubscription.fromJson(response.data);
-      notifyListeners();
-      return _currentSubscription!.isActive;
+      final data = response.data;
+      final subscriptionJson = data is Map<String, dynamic>
+          ? data['subscription'] ?? data
+          : data;
+
+      if (subscriptionJson is Map<String, dynamic>) {
+        _currentSubscription = UserSubscription.fromJson(subscriptionJson);
+        notifyListeners();
+        return _currentSubscription!.isActive;
+      }
     }
-    
+
     _currentSubscription = null;
     notifyListeners();
     return false;

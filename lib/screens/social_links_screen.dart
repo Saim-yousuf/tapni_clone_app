@@ -171,16 +171,16 @@ class SocialLinksScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final categories = [
-      {
-        'title': 'Featured',
-        'platforms': [SocialPlatform.website],
-      },
+      // {
+      //   'title': 'Featured',
+      //   'platforms': [SocialPlatform.website],
+      // },
       {
         'title': 'Social media',
         'platforms': [
           SocialPlatform.instagram,
-          SocialPlatform.facebook,
-          SocialPlatform.youTube,
+          // SocialPlatform.facebook,
+          // SocialPlatform.youTube,
           SocialPlatform.linkedIn,
         ],
       },
@@ -432,37 +432,11 @@ class SocialLinksScreen extends StatelessWidget {
   }
 
   String _getPlatformAsset(SocialPlatform platform) {
-    switch (platform) {
-      case SocialPlatform.whatsApp:
-        return 'assets/images/png/whatsapp-logo.png';
-      case SocialPlatform.linkedIn:
-        return 'assets/images/png/linkedin-logo.png';
-      case SocialPlatform.instagram:
-        return 'assets/images/png/instagram-logo.png';
-      case SocialPlatform.facebook:
-        return 'assets/images/png/snapchatlogo.png';
-      case SocialPlatform.youTube:
-        return 'assets/images/png/threads-logo.png';
-      case SocialPlatform.website:
-        return 'assets/images/png/tiktok-logo.png';
-    }
+    return SocialLink.getAssetPath(platform);
   }
 
   String _getPlatformName(SocialPlatform platform) {
-    switch (platform) {
-      case SocialPlatform.whatsApp:
-        return 'WhatsApp';
-      case SocialPlatform.linkedIn:
-        return 'LinkedIn';
-      case SocialPlatform.instagram:
-        return 'Instagram';
-      case SocialPlatform.facebook:
-        return 'Snapchat';
-      case SocialPlatform.youTube:
-        return 'Threads';
-      case SocialPlatform.website:
-        return 'Tiktok';
-    }
+    return SocialLink.getPlatformName(platform);
   }
 }
 
@@ -493,48 +467,22 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
   bool _showLink = true;
 
   String _getPlatformAsset(SocialPlatform platform) {
-    switch (platform) {
-      case SocialPlatform.whatsApp:
-        return 'assets/images/png/whatsapp-logo.png';
-      case SocialPlatform.linkedIn:
-        return 'assets/images/png/linkedin-logo.png';
-      case SocialPlatform.instagram:
-        return 'assets/images/png/instagram-logo.png';
-      case SocialPlatform.facebook:
-        return 'assets/images/png/snapchatlogo.png';
-      case SocialPlatform.youTube:
-        return 'assets/images/png/threads-logo.png';
-      case SocialPlatform.website:
-        return 'assets/images/png/tiktok-logo.png';
-    }
+    return SocialLink.getAssetPath(platform);
   }
 
   String _getUsernameHint(SocialPlatform platform) {
     switch (platform) {
       case SocialPlatform.whatsApp:
         return 'Enter your phone number';
-      case SocialPlatform.website:
-        return 'Enter your website URL';
+      // case SocialPlatform.website:
+      //   return 'Enter your website URL';
       default:
         return 'Enter your ${_getPlatformNameStr(platform)} username';
     }
   }
 
   String _getPlatformNameStr(SocialPlatform platform) {
-    switch (platform) {
-      case SocialPlatform.whatsApp:
-        return 'WhatsApp';
-      case SocialPlatform.linkedIn:
-        return 'LinkedIn';
-      case SocialPlatform.instagram:
-        return 'Instagram';
-      case SocialPlatform.facebook:
-        return 'Snapchat';
-      case SocialPlatform.youTube:
-        return 'Threads';
-      case SocialPlatform.website:
-        return 'Tiktok';
-    }
+    return SocialLink.getPlatformName(platform);
   }
 
   @override

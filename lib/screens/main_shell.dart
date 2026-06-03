@@ -4,9 +4,11 @@ import 'package:pandabar/main.view.dart';
 import 'package:pandabar/model.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/digital_card_screen.dart';
 import 'package:tapni_app/screens/leads_screen.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
+import 'package:tapni_app/screens/profile_screen.dart';
 import 'package:tapni_app/screens/settings_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
@@ -26,10 +28,10 @@ class _MainShellState extends State<MainShell> {
       case 'Links':
         return const SocialLinksScreen(isTab: true);
       case 'My Card':
-        return const DigitalCardScreen();
+        return const ProfileScreen();
       case 'Contacts':
         return const LeadsScreen();
-      case 'Analytics':
+      case 'Explore':
         return const AnalyticsScreen();
       case 'Settings':
         return const SettingsScreen();
@@ -41,6 +43,8 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final isEditing = profileProvider.isEditingProfile;
 
     return Scaffold(
       extendBody: true,
@@ -49,21 +53,52 @@ class _MainShellState extends State<MainShell> {
         backgroundColor: isDark ? AppTheme.accentDarkGrey : Colors.white,
         buttonColor: isDark ? Colors.white54 : Colors.black38,
         buttonSelectedColor: AppTheme.accentGold,
-       fabColors: [Colors.transparent, Colors.transparent],
-        fabIcon: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: [
-                AppTheme.accentGold,
-                AppTheme.accentGold.withOpacity(0.7),
-              ],
-            ),
-          ),
-          child: const Icon(Icons.badge_outlined, color: Colors.white),
-        ),
+        fabColors: const [Colors.transparent, Colors.transparent],
+        fabIcon: isEditing
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.black,
+                    ),
+                    child: const Icon(Icons.check, color: Colors.white, size: 28),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Save',
+                    style: TextStyle(
+                      color: isDark ? Colors.white70 : Colors.black87,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          AppTheme.accentGold,
+                          AppTheme.accentGold.withOpacity(0.7),
+                        ],
+                      ),
+                    ),
+                    child: const Icon(Icons.badge_outlined, color: Colors.white),
+                  ),
+                ],
+              ),
         buttonData: [
           PandaBarButtonData(
             id: 'Links',
@@ -76,9 +111,9 @@ class _MainShellState extends State<MainShell> {
             title: 'Contacts',
           ),
           PandaBarButtonData(
-            id: 'Analytics',
-            icon: Icons.analytics_outlined,
-            title: 'Analytics',
+            id: 'Explore',
+            icon: Icons.auto_awesome_outlined,
+            title: 'Explore',
           ),
           PandaBarButtonData(
             id: 'Settings',
@@ -92,9 +127,13 @@ class _MainShellState extends State<MainShell> {
           });
         },
         onFabButtonPressed: () {
-          setState(() {
-            _currentPage = 'My Card';
-          });
+          if (isEditing) {
+            profileProvider.triggerSave();
+          } else {
+            setState(() {
+              _currentPage = 'My Card';
+            });
+          }
         },
       ),
       body: _buildCurrentScreen(),

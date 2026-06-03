@@ -1,10 +1,31 @@
 enum SocialPlatform {
-  whatsApp,
-  linkedIn,
+  behance,
+  calendly,
+  contact,
+  email,
+  eventbrite,
+  github,
+  googleReview,
+  googleMaps,
   instagram,
-  facebook,
-  youTube,
-  website,
+  linkedIn,
+  meetup,
+  mixcloud,
+  patreon,
+  signal,
+  snapchat,
+  soundcloud,
+  spoonFork,
+  spotify,
+  threads,
+  tiktok,
+  tripadvisor,
+  vk,
+  vsco,
+  wave,
+  whatsApp,
+  yandexMusic,
+  zillow,
 }
 
 class SocialLink {
@@ -43,11 +64,19 @@ class SocialLink {
         return 'instagram';
       case SocialPlatform.whatsApp:
         return 'whatsapp';
-      case SocialPlatform.facebook:
-        return 'facebook';
+      case SocialPlatform.snapchat:
+        return 'snapchat';
       case SocialPlatform.linkedIn:
-      case SocialPlatform.youTube:
-      case SocialPlatform.website:
+        return 'linkedin';
+      case SocialPlatform.github:
+        return 'github';
+      case SocialPlatform.spotify:
+        return 'spotify';
+      case SocialPlatform.threads:
+        return 'threads';
+      case SocialPlatform.tiktok:
+        return 'tiktok';
+      default:
         return 'custom';
     }
   }
@@ -67,92 +96,297 @@ class SocialLink {
     final url = json['url'] as String? ?? '';
     final title = json['title'] as String? ?? '';
 
-    SocialPlatform platform;
-    switch (type) {
-      case 'instagram':
-        platform = SocialPlatform.instagram;
-        break;
-      case 'whatsapp':
-        platform = SocialPlatform.whatsApp;
-        break;
-      case 'facebook':
-        platform = SocialPlatform.facebook;
-        break;
-      default:
-        // Map by title if type is custom
-        if (title.toLowerCase().contains('linkedin')) {
-          platform = SocialPlatform.linkedIn;
-        } else if (title.toLowerCase().contains('youtube')) {
-          platform = SocialPlatform.youTube;
-        } else {
-          platform = SocialPlatform.website;
-        }
+    SocialPlatform platform = SocialPlatform.wave;
+    final combined = "${type.toLowerCase()} ${title.toLowerCase()}";
+
+    if (combined.contains('whatsapp')) {
+      platform = SocialPlatform.whatsApp;
+    } else if (combined.contains('linkedin')) {
+      platform = SocialPlatform.linkedIn;
+    } else if (combined.contains('instagram')) {
+      platform = SocialPlatform.instagram;
+    } else if (combined.contains('behance')) {
+      platform = SocialPlatform.behance;
+    } else if (combined.contains('calendly')) {
+      platform = SocialPlatform.calendly;
+    } else if (combined.contains('contact')) {
+      platform = SocialPlatform.contact;
+    } else if (combined.contains('email')) {
+      platform = SocialPlatform.email;
+    } else if (combined.contains('eventbrite')) {
+      platform = SocialPlatform.eventbrite;
+    } else if (combined.contains('github')) {
+      platform = SocialPlatform.github;
+    } else if (combined.contains('googlereview') || combined.contains('google-logo-review')) {
+      platform = SocialPlatform.googleReview;
+    } else if (combined.contains('googlemaps') || combined.contains('google-maps') || combined.contains('maps')) {
+      platform = SocialPlatform.googleMaps;
+    } else if (combined.contains('meetup')) {
+      platform = SocialPlatform.meetup;
+    } else if (combined.contains('mixcloud')) {
+      platform = SocialPlatform.mixcloud;
+    } else if (combined.contains('patreon')) {
+      platform = SocialPlatform.patreon;
+    } else if (combined.contains('signal')) {
+      platform = SocialPlatform.signal;
+    } else if (combined.contains('snapchat')) {
+      platform = SocialPlatform.snapchat;
+    } else if (combined.contains('soundcloud')) {
+      platform = SocialPlatform.soundcloud;
+    } else if (combined.contains('spoon') || combined.contains('fork') || combined.contains('menu')) {
+      platform = SocialPlatform.spoonFork;
+    } else if (combined.contains('spotify')) {
+      platform = SocialPlatform.spotify;
+    } else if (combined.contains('threads')) {
+      platform = SocialPlatform.threads;
+    } else if (combined.contains('tiktok')) {
+      platform = SocialPlatform.tiktok;
+    } else if (combined.contains('tripadvisor')) {
+      platform = SocialPlatform.tripadvisor;
+    } else if (combined.contains('vk')) {
+      platform = SocialPlatform.vk;
+    } else if (combined.contains('vsco')) {
+      platform = SocialPlatform.vsco;
+    } else if (combined.contains('wave')) {
+      platform = SocialPlatform.wave;
+    } else if (combined.contains('yandex')) {
+      platform = SocialPlatform.yandexMusic;
+    } else if (combined.contains('zillow')) {
+      platform = SocialPlatform.zillow;
     }
 
     return SocialLink(
-      id: url, // use URL as stable id from API
+      id: url.isNotEmpty ? url : DateTime.now().millisecondsSinceEpoch.toString(),
       platform: platform,
       value: url,
       isActive: true,
     );
   }
 
-  // ─── Display helpers ─────────────────────────────────────────────────────────
+  String get platformName => getPlatformName(platform);
 
-  String get platformName {
+  static String getPlatformName(SocialPlatform platform) {
     switch (platform) {
-      case SocialPlatform.whatsApp:
-        return 'WhatsApp';
-      case SocialPlatform.linkedIn:
-        return 'LinkedIn';
+      case SocialPlatform.behance:
+        return 'Behance';
+      case SocialPlatform.calendly:
+        return 'Calendly';
+      case SocialPlatform.contact:
+        return 'Contact Card';
+      case SocialPlatform.email:
+        return 'Email';
+      case SocialPlatform.eventbrite:
+        return 'Eventbrite';
+      case SocialPlatform.github:
+        return 'GitHub';
+      case SocialPlatform.googleReview:
+        return 'Google Review';
+      case SocialPlatform.googleMaps:
+        return 'Google Maps';
       case SocialPlatform.instagram:
         return 'Instagram';
-      case SocialPlatform.facebook:
-        return 'Facebook';
-      case SocialPlatform.youTube:
-        return 'YouTube';
-      case SocialPlatform.website:
-        return 'Website';
+      case SocialPlatform.linkedIn:
+        return 'LinkedIn';
+      case SocialPlatform.meetup:
+        return 'Meetup';
+      case SocialPlatform.mixcloud:
+        return 'Mixcloud';
+      case SocialPlatform.patreon:
+        return 'Patreon';
+      case SocialPlatform.signal:
+        return 'Signal';
+      case SocialPlatform.snapchat:
+        return 'Snapchat';
+      case SocialPlatform.soundcloud:
+        return 'SoundCloud';
+      case SocialPlatform.spoonFork:
+        return 'Restaurant Menu';
+      case SocialPlatform.spotify:
+        return 'Spotify';
+      case SocialPlatform.threads:
+        return 'Threads';
+      case SocialPlatform.tiktok:
+        return 'TikTok';
+      case SocialPlatform.tripadvisor:
+        return 'Tripadvisor';
+      case SocialPlatform.vk:
+        return 'VK';
+      case SocialPlatform.vsco:
+        return 'VSCO';
+      case SocialPlatform.wave:
+        return 'Wave Link';
+      case SocialPlatform.whatsApp:
+        return 'WhatsApp';
+      case SocialPlatform.yandexMusic:
+        return 'Yandex Music';
+      case SocialPlatform.zillow:
+        return 'Zillow';
     }
   }
 
   String get label {
     switch (platform) {
+      case SocialPlatform.email:
+        return 'Email address';
       case SocialPlatform.whatsApp:
-        return 'Phone / Link';
-      case SocialPlatform.linkedIn:
-        return 'LinkedIn Profile';
+        return 'Phone number (with country code)';
+      case SocialPlatform.signal:
+        return 'Signal phone number/username';
       case SocialPlatform.instagram:
-        return 'Username';
-      case SocialPlatform.facebook:
-        return 'Profile Link';
-      case SocialPlatform.youTube:
-        return 'Channel Link';
-      case SocialPlatform.website:
-        return 'Website URL';
+        return 'Instagram username';
+      case SocialPlatform.linkedIn:
+        return 'LinkedIn username/link';
+      case SocialPlatform.github:
+        return 'GitHub username';
+      case SocialPlatform.snapchat:
+        return 'Snapchat username';
+      case SocialPlatform.threads:
+        return 'Threads username';
+      case SocialPlatform.tiktok:
+        return 'TikTok username';
+      case SocialPlatform.vsco:
+        return 'VSCO username';
+      case SocialPlatform.behance:
+        return 'Behance username';
+      case SocialPlatform.soundcloud:
+        return 'SoundCloud username';
+      case SocialPlatform.mixcloud:
+        return 'Mixcloud username';
+      case SocialPlatform.patreon:
+        return 'Patreon username';
+      case SocialPlatform.calendly:
+        return 'Calendly profile link';
+      case SocialPlatform.eventbrite:
+        return 'Eventbrite link';
+      case SocialPlatform.meetup:
+        return 'Meetup link';
+      case SocialPlatform.tripadvisor:
+        return 'Tripadvisor link';
+      case SocialPlatform.zillow:
+        return 'Zillow link';
+      case SocialPlatform.spotify:
+        return 'Spotify link';
+      case SocialPlatform.yandexMusic:
+        return 'Yandex Music link';
+      case SocialPlatform.googleReview:
+        return 'Google Review link';
+      case SocialPlatform.googleMaps:
+        return 'Google Maps location link';
+      case SocialPlatform.contact:
+        return 'Contact card details/link';
+      case SocialPlatform.spoonFork:
+        return 'Menu or reservation link';
+      case SocialPlatform.vk:
+        return 'VK profile link';
+      case SocialPlatform.wave:
+        return 'Custom URL';
     }
   }
 
   String get baseUrlPrefix {
     switch (platform) {
-      case SocialPlatform.whatsApp:
-        return 'https://wa.me/';
-      case SocialPlatform.linkedIn:
-        return 'https://linkedin.com/in/';
+      case SocialPlatform.behance:
+        return 'https://behance.net/';
+      case SocialPlatform.calendly:
+        return 'https://calendly.com/';
+      case SocialPlatform.github:
+        return 'https://github.com/';
       case SocialPlatform.instagram:
         return 'https://instagram.com/';
-      case SocialPlatform.facebook:
-        return 'https://facebook.com/';
-      case SocialPlatform.youTube:
-        return 'https://youtube.com/';
-      case SocialPlatform.website:
+      case SocialPlatform.linkedIn:
+        return 'https://linkedin.com/in/';
+      case SocialPlatform.mixcloud:
+        return 'https://mixcloud.com/';
+      case SocialPlatform.patreon:
+        return 'https://patreon.com/';
+      case SocialPlatform.snapchat:
+        return 'https://snapchat.com/add/';
+      case SocialPlatform.soundcloud:
+        return 'https://soundcloud.com/';
+      case SocialPlatform.spotify:
+        return 'https://open.spotify.com/';
+      case SocialPlatform.threads:
+        return 'https://threads.net/@';
+      case SocialPlatform.tiktok:
+        return 'https://tiktok.com/@';
+      case SocialPlatform.vk:
+        return 'https://vk.com/';
+      case SocialPlatform.vsco:
+        return 'https://vsco.co/';
+      case SocialPlatform.whatsApp:
+        return 'https://wa.me/';
+      default:
         return '';
     }
   }
 
+  String get assetPath => getAssetPath(platform);
+
+  static String getAssetPath(SocialPlatform platform) {
+    switch (platform) {
+      case SocialPlatform.behance:
+        return 'assets/images/png/behance-logo.png';
+      case SocialPlatform.calendly:
+        return 'assets/images/png/calendly.png';
+      case SocialPlatform.contact:
+        return 'assets/images/png/contact-logo.png';
+      case SocialPlatform.email:
+        return 'assets/images/png/email-logo.png';
+      case SocialPlatform.eventbrite:
+        return 'assets/images/png/eventbrite-logo.png';
+      case SocialPlatform.github:
+        return 'assets/images/png/github-logo.png';
+      case SocialPlatform.googleReview:
+        return 'assets/images/png/google-logo-review.png';
+      case SocialPlatform.googleMaps:
+        return 'assets/images/png/google-maps.png';
+      case SocialPlatform.instagram:
+        return 'assets/images/png/instagram-logo.png';
+      case SocialPlatform.linkedIn:
+        return 'assets/images/png/linkedin-logo.png';
+      case SocialPlatform.meetup:
+        return 'assets/images/png/meetup-logo.png';
+      case SocialPlatform.mixcloud:
+        return 'assets/images/png/mixcloud-logo.png';
+      case SocialPlatform.patreon:
+        return 'assets/images/png/patreon-logo.png';
+      case SocialPlatform.signal:
+        return 'assets/images/png/signal-logo.png';
+      case SocialPlatform.snapchat:
+        return 'assets/images/png/snapchatlogo.png';
+      case SocialPlatform.soundcloud:
+        return 'assets/images/png/soundcloud-logo.png';
+      case SocialPlatform.spoonFork:
+        return 'assets/images/png/spoon-fork.png';
+      case SocialPlatform.spotify:
+        return 'assets/images/png/spotify-logo.png';
+      case SocialPlatform.threads:
+        return 'assets/images/png/threads-logo.png';
+      case SocialPlatform.tiktok:
+        return 'assets/images/png/tiktok-logo.png';
+      case SocialPlatform.tripadvisor:
+        return 'assets/images/png/tripadvisor-logo.png';
+      case SocialPlatform.vk:
+        return 'assets/images/png/vk-logo.png';
+      case SocialPlatform.vsco:
+        return 'assets/images/png/vsco-logo.png';
+      case SocialPlatform.wave:
+        return 'assets/images/png/wave.png';
+      case SocialPlatform.whatsApp:
+        return 'assets/images/png/whatsapp-logo.png';
+      case SocialPlatform.yandexMusic:
+        return 'assets/images/png/yandexmusic-logo.png';
+      case SocialPlatform.zillow:
+        return 'assets/images/png/zillow-logo.png';
+    }
+  }
+
   String get fullUrl {
-    if (platform == SocialPlatform.website) {
-      if (!value.startsWith('http://') && !value.startsWith('https://')) {
+    if (baseUrlPrefix.isEmpty) {
+      if (platform == SocialPlatform.email && !value.startsWith('mailto:')) {
+        return 'mailto:$value';
+      }
+      if (!value.startsWith('http://') && !value.startsWith('https://') && platform != SocialPlatform.email) {
         return 'https://$value';
       }
       return value;

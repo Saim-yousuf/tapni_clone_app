@@ -117,26 +117,44 @@ class DigitalCardScreen extends StatelessWidget {
                   const SizedBox(height: 24),
                   
                   // Profile Photo Initial
-                  Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      color: currentTemplate.isDark
-                          ? Colors.white.withOpacity(0.15)
-                          : Colors.black.withOpacity(0.08),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        profile.name.isNotEmpty ? profile.name[0] : 'S',
-                        style: TextStyle(
-                          color: currentTemplate.textColor,
-                          fontSize: 36,
-                          fontWeight: FontWeight.w900,
+                  // Profile Photo Initial
+                  profile.profilePhotoUrl != null &&
+                          profile.profilePhotoUrl!.trim().isNotEmpty
+                      ? Container(
+                          width: 90,
+                          height: 90,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: currentTemplate.textColor.withOpacity(0.2),
+                              width: 1.5,
+                            ),
+                            image: DecorationImage(
+                              image: NetworkImage(profile.profilePhotoUrl!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          width: 90,
+                          height: 90,
+                          decoration: BoxDecoration(
+                            color: currentTemplate.isDark
+                                ? Colors.white.withOpacity(0.15)
+                                : Colors.black.withOpacity(0.08),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              profile.name.isNotEmpty ? profile.name[0].toUpperCase() : 'S',
+                              style: TextStyle(
+                                color: currentTemplate.textColor,
+                                fontSize: 36,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 18),
                   
                   // Name and Designation

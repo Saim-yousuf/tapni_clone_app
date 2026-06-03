@@ -37,24 +37,24 @@ class MockDataService {
           value: 'saimy.design',
           isActive: true,
         ),
-        SocialLink(
-          id: '4',
-          platform: SocialPlatform.facebook,
-          value: 'saimy.creative',
-          isActive: false,
-        ),
-        SocialLink(
-          id: '5',
-          platform: SocialPlatform.youTube,
-          value: '@antigravitystudio',
-          isActive: true,
-        ),
-        SocialLink(
-          id: '6',
-          platform: SocialPlatform.website,
-          value: 'https://antigravity.io',
-          isActive: true,
-        ),
+        // SocialLink(
+        //   id: '4',
+        //   platform: SocialPlatform.facebook,
+        //   value: 'saimy.creative',
+        //   isActive: false,
+        // ),
+        // SocialLink(
+        //   id: '5',
+        //   platform: SocialPlatform.youTube,
+        //   value: '@antigravitystudio',
+        //   isActive: true,
+        // ),
+        // SocialLink(
+        //   id: '6',
+        //   platform: SocialPlatform.website,
+        //   value: 'https://antigravity.io',
+        //   isActive: true,
+        // ),
       ],
     );
   }

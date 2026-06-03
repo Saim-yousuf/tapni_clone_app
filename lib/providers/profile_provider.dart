@@ -9,6 +9,22 @@ class ProfileProvider extends ChangeNotifier {
   late UserProfile _profile;
   int _selectedTemplateIndex = 1; // Default to Charcoal
 
+  bool _isEditingProfile = false;
+  bool get isEditingProfile => _isEditingProfile;
+  
+  void setEditingProfile(bool val) {
+    _isEditingProfile = val;
+    notifyListeners();
+  }
+  
+  VoidCallback? onSaveTriggered;
+  
+  void triggerSave() {
+    if (onSaveTriggered != null) {
+      onSaveTriggered!();
+    }
+  }
+
   final List<CardTemplate> templates = [
     CardTemplate(
       id: 't1',
@@ -109,11 +125,13 @@ class ProfileProvider extends ChangeNotifier {
     final response = await repo.profile();
     
     if (response.success && response.data != null) {
-      // The API should return the profile object directly or nested under a key
       final data = response.data;
-      // We assume data is the user object map
       try {
-        _profile = UserProfile.fromApiJson(data);
+        if (data is Map<String, dynamic> && data.containsKey('user')) {
+          _profile = UserProfile.fromApiJson(data['user'] as Map<String, dynamic>);
+        } else if (data is Map<String, dynamic>) {
+          _profile = UserProfile.fromApiJson(data);
+        }
       } catch (e) {
         // Fallback to mock data if there's an issue mapping
       }

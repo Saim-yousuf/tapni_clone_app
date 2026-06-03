@@ -13,51 +13,37 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   late TextEditingController _nameController;
-  late TextEditingController _designationController;
-  late TextEditingController _companyController;
   late TextEditingController _bioController;
-  late TextEditingController _phoneController;
-  late TextEditingController _emailController;
-  late TextEditingController _websiteController;
 
   @override
   void initState() {
     super.initState();
     final profile = Provider.of<ProfileProvider>(context, listen: false).profile;
-    
+
     _nameController = TextEditingController(text: profile.name);
-    _designationController = TextEditingController(text: profile.designation);
-    _companyController = TextEditingController(text: profile.company);
     _bioController = TextEditingController(text: profile.bio);
-    _phoneController = TextEditingController(text: profile.phone);
-    _emailController = TextEditingController(text: profile.email);
-    _websiteController = TextEditingController(text: profile.website);
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _designationController.dispose();
-    _companyController.dispose();
     _bioController.dispose();
-    _phoneController.dispose();
-    _emailController.dispose();
-    _websiteController.dispose();
     super.dispose();
   }
 
   void _saveProfile() {
     if (_formKey.currentState!.validate()) {
+      final profile = Provider.of<ProfileProvider>(context, listen: false).profile;
       Provider.of<ProfileProvider>(context, listen: false).updateProfile(
         name: _nameController.text.trim(),
-        designation: _designationController.text.trim(),
-        company: _companyController.text.trim(),
+        designation: profile.designation,
+        company: profile.company,
         bio: _bioController.text.trim(),
-        phone: _phoneController.text.trim(),
-        email: _emailController.text.trim(),
-        website: _websiteController.text.trim(),
+        phone: profile.phone,
+        email: profile.email,
+        website: profile.website,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -66,8 +52,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           behavior: SnackBarBehavior.floating,
         ),
       );
-
-      Navigator.of(context).pop();
     }
   }
 
@@ -75,147 +59,150 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final profile = Provider.of<ProfileProvider>(context).profile;
 
     return Scaffold(
+      backgroundColor: isDark ? Colors.black : Colors.white,
       appBar: AppBar(
-        title: const Text('Edit Profile'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        title: const Text('Edit Profile'),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Top Prompt
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Container(
+                      height: 220,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.white12 : Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(26),
+                        child: profile.coverPhotoUrl != null && profile.coverPhotoUrl!.isNotEmpty
+                            ? Image.network(
+                                profile.coverPhotoUrl!,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Container(color: Colors.grey.shade300),
+                              )
+                            : Container(
+                                color: Colors.grey.shade300,
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.photo_size_select_large_outlined,
+                                    size: 54,
+                                    color: Colors.white54,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 16,
+                      right: 16,
+                      child: _buildCircleIconButton(
+                        icon: Icons.edit,
+                        backgroundColor: Colors.white,
+                        iconColor: Colors.black,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: -44,
+                      left: 20,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          CircleAvatar(
+                            radius: 44,
+                            backgroundColor: const Color(0xFF1E2022),
+                            backgroundImage: profile.profilePhotoUrl != null && profile.profilePhotoUrl!.isNotEmpty
+                                ? NetworkImage(profile.profilePhotoUrl!) as ImageProvider
+                                : null,
+                            child: profile.profilePhotoUrl == null || profile.profilePhotoUrl!.isEmpty
+                                ? Text(
+                                    profile.name.isNotEmpty
+                                        ? profile.name[0].toUpperCase()
+                                        : '?',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: -4,
+                            child: _buildCircleIconButton(
+                              icon: Icons.edit,
+                              backgroundColor: Colors.black,
+                              iconColor: Colors.white,
+                              size: 34,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 62),
                 Text(
-                  'Profile Information',
-                  style: theme.textTheme.titleLarge?.copyWith(
+                  'Edit your profile details',
+                  style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    letterSpacing: -0.5,
                   ),
                 ),
+                const SizedBox(height: 8),
                 Text(
-                  'These details are visible to anyone who scans your card.',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                  'Only cover, profile photo, name and bio are editable here.',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey.shade600,
+                    height: 1.5,
                   ),
                 ),
-                const SizedBox(height: 28),
-
-                // Name
-                _buildFieldLabel('Full Name'),
+                const SizedBox(height: 24),
                 TextFormField(
                   controller: _nameController,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
                   decoration: const InputDecoration(
+                    labelText: 'Name',
                     prefixIcon: Icon(Icons.person_outline),
-                    hintText: 'John Doe',
                   ),
-                  validator: (value) => value == null || value.isEmpty ? 'Name cannot be empty' : null,
+                  validator: (value) => value == null || value.isEmpty ? 'Enter your name' : null,
                 ),
-                const SizedBox(height: 20),
-
-                // Designation
-                _buildFieldLabel('Designation / Job Title'),
-                TextFormField(
-                  controller: _designationController,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.badge_outlined),
-                    hintText: 'Product Designer',
-                  ),
-                  validator: (value) => value == null || value.isEmpty ? 'Job title cannot be empty' : null,
-                ),
-                const SizedBox(height: 20),
-
-                // Company
-                _buildFieldLabel('Company Name'),
-                TextFormField(
-                  controller: _companyController,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.business_outlined),
-                    hintText: 'Company Inc.',
-                  ),
-                  validator: (value) => value == null || value.isEmpty ? 'Company name cannot be empty' : null,
-                ),
-                const SizedBox(height: 20),
-
-                // Bio
-                _buildFieldLabel('Bio / Tagline'),
+                const SizedBox(height: 16),
                 TextFormField(
                   controller: _bioController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 3,
+                  maxLines: 4,
                   decoration: const InputDecoration(
+                    labelText: 'Bio',
                     prefixIcon: Padding(
-                      padding: EdgeInsets.only(bottom: 40.0),
-                      child: Icon(Icons.description_outlined),
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Icon(Icons.edit_outlined),
                     ),
-                    hintText: 'Describe yourself or your company...',
+                    alignLabelWithHint: true,
                   ),
-                  validator: (value) => value == null || value.isEmpty ? 'Bio cannot be empty' : null,
+                  validator: (value) => value == null || value.isEmpty ? 'Enter your bio' : null,
                 ),
-                const SizedBox(height: 20),
-
-                // Phone
-                _buildFieldLabel('Phone Number'),
-                TextFormField(
-                  controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.phone_outlined),
-                    hintText: '+1 (555) 019-2834',
-                  ),
-                  validator: (value) => value == null || value.isEmpty ? 'Phone number cannot be empty' : null,
-                ),
-                const SizedBox(height: 20),
-
-                // Email
-                _buildFieldLabel('Email Address'),
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email_outlined),
-                    hintText: 'email@domain.com',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Email cannot be empty';
-                    if (!value.contains('@')) return 'Enter a valid email';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-
-                // Website
-                _buildFieldLabel('Website URL'),
-                TextFormField(
-                  controller: _websiteController,
-                  keyboardType: TextInputType.url,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.language_outlined),
-                    hintText: 'www.website.com',
-                  ),
-                  validator: (value) => value == null || value.isEmpty ? 'Website cannot be empty' : null,
-                ),
-                const SizedBox(height: 36),
-
-                // Save Button
+                const SizedBox(height: 32),
                 CustomButton(
-                  text: 'Save Changes',
+                  text: 'Save Profile',
                   onTap: _saveProfile,
                   isGold: true,
                 ),
-                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -224,15 +211,64 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget _buildFieldLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4.0, bottom: 8.0),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-        ),
+  Widget _buildCircleIconButton({
+    required IconData icon,
+    required Color backgroundColor,
+    required Color iconColor,
+    double size = 38,
+  }) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Icon(icon, size: 18, color: iconColor),
+    );
+  }
+
+  Widget _buildLinkButton({
+    required IconData icon,
+    required String label,
+    required Color backgroundColor,
+  }) {
+    return Container(
+      width: 120,
+      height: 140,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 28, color: Colors.white),
+          const Spacer(),
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
