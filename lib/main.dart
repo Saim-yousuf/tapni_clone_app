@@ -4,11 +4,16 @@ import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
+import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/splash_screen.dart';
+import 'package:tapni_app/utils/api_endpoint.dart';
+import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SharedPrefHelper.getInstance();
+  Api.init();
   runApp(
     MultiProvider(
       providers: [
@@ -16,6 +21,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => LeadsProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
       ],
       child: const TapniApp(),
     ),
@@ -30,7 +36,7 @@ class TapniApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
-      title: 'Tapni Demo',
+      title: 'Tapni - Digital Bussiness Card',
       debugShowCheckedModeBanner: false,
       themeMode: themeProvider.themeMode,
       theme: AppTheme.lightTheme,

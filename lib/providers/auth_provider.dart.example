@@ -1,0 +1,734 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:walletric/dev/log.dart';
+import 'package:walletric/error_handler/error_handler.dart';
+import 'package:walletric/go_routes/go_navigator.dart';
+import 'package:walletric/go_routes/go_router.dart';
+import 'package:walletric/helper/helper.dart';
+import 'package:walletric/helper/shared_prefences/preference_helper.dart';
+import 'package:walletric/models/user/profile_model.dart';
+import 'package:walletric/provider/app/bottom_nav_pro.dart';
+import 'package:walletric/provider/currency/currency_pro.dart';
+import 'package:walletric/repository/auth/auth_repo.dart';
+import 'package:walletric/widgets/dailog.dart';
+import 'package:walletric/widgets/snack_bar.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+class AuthPro with ChangeNotifier {
+  final AuthRepo authRepo;
+  AuthPro(this.authRepo);
+  String email = "";
+  String tempToken = "";
+  ProfileModel? user;
+  bool isGoogleLogin = false;
+
+  //Profile
+  final TextEditingController firstnameCtrl = TextEditingController();
+  final TextEditingController lastNameCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController dobCtrl = TextEditingController();
+  final TextEditingController phoneCtrl = TextEditingController();
+  final TextEditingController passwordCtrl = TextEditingController();
+  final TextEditingController companyName = TextEditingController();
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+    ],
+  );
+
+  Future<void> signin({
+    required String email,
+    required String password,
+    required bool isRemeber,
+    required BuildContext context,
+  }) async {
+    CustomDailog.loadingDailog(context);
+    await _googleSignIn.signOut();
+
+    try {
+      final String fcmToken = await getFcmToken();
+      final response = await authRepo.signin(
+        email: email.trim(),
+        password: password,
+        fcmToken: fcmToken,
+      );
+
+      if (response.success) {
+        SharedPrefHelper.putBool(SharedPrefHelper.utils.isRemeber, isRemeber);
+        await saveToken(
+            token: response.data['access'],
+            accountType: response.data['profile']['account_type'],
+            context: context);
+        Go.pop(context);
+        ShowAlert.success(message: "Login Successfully", context: context);
+        Go.namedReplace(
+          context,
+          RouteName.navbar,
+        );
+      } else {
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(
+            context,
+            response.message ?? "Something went wrong",
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Go.pop(context);
+        ErrorHandler.catchException(context, e);
+      }
+    }
+  }
+
+  Future<void> signUp({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String dob,
+    required String phone,
+    required String password,
+    required String companyName,
+    required int currencyId,
+    required int type,
+    required BuildContext context,
+  }) async {
+    await _googleSignIn.signOut();
+    CustomDailog.loadingDailog(context);
+
+    try {
+      this.email = email;
+      final String fcmToken = await getFcmToken();
+      final response = await authRepo.signUp(
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        dob: dob,
+        phone: phone,
+        password: password,
+        companyName: companyName,
+        currencyId: currencyId,
+        type: type,
+        fcmToken: fcmToken,
+      );
+
+      if (response.success) {
+        if (context.mounted) {
+          Go.pop(context);
+          SharedPrefHelper.putBool(SharedPrefHelper.utils.isRemeber, true);
+          Go.named(context, RouteName.signupOtp);
+        }
+      } else {
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(
+            context,
+            response.message ?? "Something went wrong",
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Go.pop(context);
+        ErrorHandler.catchException(context, e);
+      }
+    }
+  }
+
+  Future<void> googleSignIn({
+    required BuildContext context,
+  }) async {
+    CustomDailog.loadingDailog(context);
+    await _googleSignIn.signOut();
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser == null) {
+        if (context.mounted) Go.pop(context);
+        return;
+      }
+
+      final String fcmToken = await getFcmToken();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final String? googleToken = googleAuth.idToken;
+
+      if (googleToken == null) {
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(context, "Google sign-in failed.");
+        }
+        return;
+      }
+
+      final response = await authRepo.socialAuth(
+        email: googleUser.email.trim(),
+        fcmToken: fcmToken,
+        uid: googleUser.id,
+        provider: "google",
+      );
+
+      if (response.success) {
+        Provider.of<BottomNavPro>(context, listen: false).setIndex(0);
+        SharedPrefHelper.putBool(SharedPrefHelper.utils.isRemeber, true);
+        SharedPrefHelper.putString(
+            SharedPrefHelper.utils.tempName, googleUser.displayName ?? "");
+        SharedPrefHelper.putString(
+            SharedPrefHelper.utils.tempEmail, googleUser.email ?? "");
+
+        String? accountType = response.data['data']['profile']['account_type'];
+
+        SharedPrefHelper.putBool(
+            SharedPrefHelper.utils.isCompleteProfile, accountType != null);
+
+        Helper.tokenSave(response.data['data']['access']);
+
+        if (accountType != null) {
+          Helper.loginTypeSave(accountType);
+          await context.read<CurrencyPro>().currency(context);
+          await profile(context: context);
+
+          if (!context.mounted) return;
+          Go.pop(context);
+          Go.namedReplace(
+            context,
+            RouteName.navbar,
+          );
+        } else {
+          if (!context.mounted) return;
+          Go.pop(context);
+          Go.named(
+            context,
+            RouteName.completeProfile,
+          );
+        }
+      } else {
+        PrintLog.logMessage("message");
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(
+            context,
+            response.message ?? "Something went wrong",
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Go.pop(context);
+        ErrorHandler.catchException(context, e);
+      }
+    }
+  }
+
+//  webAuthenticationOptions: Platform.isAndroid
+//             ? WebAuthenticationOptions(
+//                 clientId: "com.softcodix.walletric.service",
+//                 redirectUri: Uri.parse("myapp://apple-signin"),
+//               )
+//             : null,
+  Future<void> appleSignIn({
+    required BuildContext context,
+  }) async {
+    CustomDailog.loadingDailog(context);
+
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      final userIdentifier = credential.userIdentifier;
+      if (userIdentifier == null) {
+        Go.pop(context);
+        return ErrorHandler.apiException(context, "Apple Sign-In failed.");
+      }
+
+      String? appleEmail = credential.email;
+      String fullName =
+          "${credential.givenName ?? ""} ${credential.familyName ?? ""}".trim();
+
+      PrintLog.logMessage("userIdentifier: ${userIdentifier}");
+      PrintLog.logMessage("givenName: ${credential.givenName}");
+      PrintLog.logMessage("familyName: ${credential.familyName}");
+      PrintLog.logMessage("email: ${credential.email}");
+
+      final String fcmToken = await getFcmToken();
+
+      final response = await authRepo.socialAuth(
+        email: (appleEmail ?? '').trim(),
+        fcmToken: fcmToken,
+        uid: userIdentifier,
+        provider: "apple",
+      );
+
+      if (response.success) {
+        Provider.of<BottomNavPro>(context, listen: false).setIndex(0);
+        SharedPrefHelper.putBool(SharedPrefHelper.utils.isRemeber, true);
+        SharedPrefHelper.putString(
+          SharedPrefHelper.utils.tempName,
+          fullName != "" ? "$fullName" : "Apple User",
+        );
+        SharedPrefHelper.putString(
+          SharedPrefHelper.utils.tempEmail,
+          appleEmail ?? "",
+        );
+        String? accountType = response.data['data']['profile']['account_type'];
+
+        SharedPrefHelper.putBool(
+          SharedPrefHelper.utils.isCompleteProfile,
+          accountType != null,
+        );
+
+        Helper.tokenSave(response.data['data']['access']);
+
+        if (accountType != null) {
+          Helper.loginTypeSave(accountType);
+          await context.read<CurrencyPro>().currency(context);
+          await profile(context: context);
+
+          if (!context.mounted) return;
+          Go.pop(context);
+          Go.namedReplace(context, RouteName.navbar);
+        } else {
+          if (!context.mounted) return;
+          Go.pop(context);
+          Go.named(context, RouteName.completeProfile);
+        }
+      } else {
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(
+            context,
+            response.message ?? "Something went wrong",
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Go.pop(context);
+        ErrorHandler.catchException(context, e);
+      }
+    }
+  }
+
+  Future<void> forgot({
+    required String email,
+    required BuildContext context,
+  }) async {
+    CustomDailog.loadingDailog(context);
+
+    try {
+      final response = await authRepo.forgot(
+        email: email.trim(),
+      );
+      this.email = email;
+
+      if (response.success) {
+        if (context.mounted) Go.pop(context);
+        Go.named(context, RouteName.forgotOtp);
+      } else {
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(
+            context,
+            response.message ?? "Something went wrong",
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Go.pop(context);
+        ErrorHandler.catchException(context, e);
+      }
+    }
+  }
+
+  Future<void> otpVerify({
+    required bool isSignup,
+    required String otp,
+    required BuildContext context,
+  }) async {
+    CustomDailog.loadingDailog(context);
+
+    try {
+      final response = await authRepo.otpVerify(
+        email: email.trim(),
+        otp: otp,
+      );
+
+      if (response.success) {
+        if (context.mounted) {
+          if (isSignup) {
+            saveToken(
+                token: response.data['token']['access'],
+                accountType: response.data['profile']['account_type'] ?? "",
+                context: context);
+            Go.pop(context);
+
+            Go.namedReplace(
+              context,
+              RouteName.navbar,
+            );
+          } else {
+            Helper.tokenTempSave(response.data['token']['access']);
+            Go.pop(context);
+            Go.named(context, RouteName.createPassword);
+          }
+        }
+      } else {
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(
+            context,
+            response.message ?? "Something went wrong",
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Go.pop(context);
+        ErrorHandler.catchException(context, e);
+      }
+    }
+  }
+
+  Future<void> password({
+    required String oldPassword,
+    required String password,
+    required BuildContext context,
+  }) async {
+    CustomDailog.loadingDailog(context);
+
+    try {
+      final response = await authRepo.password(
+        password: password,
+        oldPassword: oldPassword,
+      );
+
+      if (response.success) {
+        if (context.mounted) {
+          if (oldPassword.isNotEmpty) {
+            Go.pop(context);
+            Go.pop(context);
+
+            ShowAlert.success(
+              message: "Password Change Successfully",
+              context: context,
+            );
+          } else {
+            Go.pop(context);
+            Go.pop(context);
+            Go.pop(context);
+            Go.pop(context);
+            ShowAlert.success(
+              message: "Password Change Successfully",
+              context: context,
+            );
+          }
+        }
+      } else {
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(
+            context,
+            response.message ?? "Something went wrong",
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Go.pop(context);
+        ErrorHandler.catchException(context, e);
+      }
+    }
+  }
+
+  Future<void> profile({
+    required BuildContext context,
+  }) async {
+    checkGoogleStatus();
+    try {
+      final response = await authRepo.profile();
+
+      if (response.success) {
+        user = ProfileModel.fromJson(response.data);
+        initilizeProfile();
+        notifyListeners();
+      } else {
+        return Future.error(response.message ?? "Something went wrong");
+      }
+    } catch (e) {
+      return Future.error(
+          // ErrorHandler.catchExceptionFuture(e.toString())
+          e);
+    }
+  }
+
+  Future<void> update({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String dob,
+    required String phone,
+    required String companyName,
+    File? profileImg,
+    required BuildContext context,
+  }) async {
+    CustomDailog.loadingDailog(context);
+    bool isAgency = Helper.isAgency();
+    try {
+      final response = await authRepo.update(
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        dob: dob,
+        phone: phone,
+        companyName: companyName,
+        profile: profileImg,
+        accountType: (!isAgency) ? "individual" : "agency",
+      );
+
+      if (response.success) {
+        if (context.mounted) {
+          await profile(context: context);
+          Go.pop(context);
+          Go.pop(context);
+          // showSnackBar(context, "Profile Update Successfully");
+          ShowAlert.success(
+            message: "Profile Update Successfully",
+            context: context,
+          );
+        }
+      } else {
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(
+            context,
+            response.message ?? "Something went wrong",
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Go.pop(context);
+        ErrorHandler.catchException(context, e);
+      }
+    }
+  }
+
+  Future<void> completeProfile({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String dob,
+    required String phone,
+    required String companyName,
+    required int tab,
+    File? profileImg,
+    required BuildContext context,
+  }) async {
+    CustomDailog.loadingDailog(context);
+    try {
+      final response = await authRepo.update(
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        dob: dob,
+        phone: phone,
+        companyName: companyName,
+        profile: profileImg,
+        accountType: (tab == 0) ? "individual" : "agency",
+      );
+
+      if (response.success) {
+        if (context.mounted) {
+          SharedPrefHelper.putBool(
+            SharedPrefHelper.utils.isCompleteProfile,
+            true,
+          );
+          await context.read<CurrencyPro>().currency(context);
+          await profile(context: context);
+          ShowAlert.success(
+            message: "Complete Profile Successfully",
+            context: context,
+          );
+          Go.pop(context);
+          Go.namedReplace(
+            context,
+            RouteName.navbar,
+          );
+        }
+      } else {
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(
+            context,
+            response.message ?? "Something went wrong",
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Go.pop(context);
+        ErrorHandler.catchException(context, e);
+      }
+    }
+  }
+
+  Future<void> logout(
+    context, {
+    bool logoutSilently = false,
+  }) async {
+    if (!logoutSilently) {
+      CustomDailog.loadingDailog(context);
+    }
+
+    try {
+      final response = await authRepo.logout();
+
+      if (response.success) {
+        Helper.removeToken();
+        user = null;
+        if (!logoutSilently) {
+          Go.pop(context);
+          Go.pop(context);
+          ShowAlert.success(message: "Logout Successfully", context: context);
+          Go.onNamedReplace(context, RouteName.splashScreen);
+        }
+      } else {
+        if (context.mounted) {
+          if (!logoutSilently) {
+            Go.pop(context);
+            ErrorHandler.apiException(
+              context,
+              response.message ?? "Something went wrong",
+            );
+          }
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        if (!logoutSilently) {
+          Go.pop(context);
+          ErrorHandler.catchException(context, e);
+        }
+      }
+    }
+  }
+
+  Future<void> userDelete(
+    context,
+  ) async {
+    CustomDailog.loadingDailog(context);
+
+    try {
+      final response = await authRepo.userDelete();
+
+      if (response.success) {
+        Helper.removeToken();
+        user = null;
+
+        Go.pop(context);
+        Go.pop(context);
+        ShowAlert.success(
+            message: "Delete Account Successfully", context: context);
+        Go.onNamedReplace(context, RouteName.splashScreen);
+      } else {
+        if (context.mounted) {
+          Go.pop(context);
+          ErrorHandler.apiException(
+            context,
+            response.message ?? "Something went wrong",
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Go.pop(context);
+        ErrorHandler.catchException(context, e);
+      }
+    }
+  }
+
+  bool isAgency = Helper.isAgency();
+  String dialCode = "";
+  String profileUrl = "";
+
+  Future<String> getFcmToken() async {
+    try {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+      await messaging.requestPermission();
+
+      String? token = await messaging.getToken();
+
+      if (token != null) {
+        return token;
+      }
+      return "";
+    } catch (e) {
+      // Print
+      return "";
+    }
+  }
+
+  initilizeProfile() {
+    isAgency = Helper.isAgency();
+    if (user != null) {
+      emailCtrl.text = user?.email ?? "";
+      phoneCtrl.text = Helper.formatPhone(user?.phone ?? "");
+      dialCode = Helper.formatCode(user?.phone ?? "");
+      profileUrl = user?.profileImg ?? "";
+      if (isAgency) {
+        companyName.text = user?.companyName ?? "";
+      } else {
+        firstnameCtrl.text = user?.firstName ?? "";
+        lastNameCtrl.text = user?.lastName ?? "";
+        dobCtrl.text = user?.dob ?? "";
+      }
+    }
+    notifyListeners();
+  }
+
+  Future<void> saveToken(
+      {required String token,
+      required String accountType,
+      required BuildContext context,
+      bool onlySave = false,
+      p}) async {
+    Helper.tokenSave(token);
+    Helper.loginTypeSave(accountType);
+
+    if (!onlySave) {
+      await context.read<CurrencyPro>().currency(context);
+      await profile(context: context);
+      Provider.of<BottomNavPro>(context, listen: false).setIndex(0);
+    }
+  }
+
+  // logout(context) async {
+  //   CustomDailog.loadingDailog(context);
+  //   Helper.removeToken();
+  //   user = null;
+  //   await Future.delayed(const Duration(seconds: 2));
+  //   Go.pop(context);
+  //   Go.pop(context);
+  //   ShowAlert.success(message: "Logout Successfully", context: context);
+  //   Go.onNamedReplace(context, RouteName.splashScreen);
+  // }
+
+  checkGoogleStatus() async {
+    final bool googleLoggedIn = await _googleSignIn.isSignedIn();
+    PrintLog.logMessage("googleLoggedIn: $googleLoggedIn");
+    isGoogleLogin = googleLoggedIn;
+    notifyListeners();
+  }
+}

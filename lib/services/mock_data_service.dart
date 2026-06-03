@@ -14,7 +14,7 @@ class MockDataService {
       phone: '+1 (555) 019-2834',
       email: 'saimy@antigravity.io',
       website: 'www.antigravity.io',
-      avatarUrl: null, // Custom design initials will be rendered
+      // avatarUrl: null, // Custom design initials will be rendered
       viewsCount: 1420,
       scansCount: 894,
       leadsCount: 128,

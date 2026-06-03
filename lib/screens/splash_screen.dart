@@ -4,6 +4,10 @@ import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/screens/onboarding_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/providers/subscription_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/screens/subscription_screen.dart';
+import 'package:tapni_app/utils/preference_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -42,15 +46,38 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     await Future.delayed(const Duration(milliseconds: 2800));
     if (!mounted) return;
 
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    // AuthProvider check for authenticated needs to be valid.
+    // If it relies on a token check, wait. authProvider.isAuthenticated doesn't exist?
+    // Let's assume there is a token check, or we should use SharedPrefHelper.
+    
+    // Since I haven't added isAuthenticated to AuthProvider in the recent edits,
+    // I should check SharedPrefHelper directly if it is not there.
+    final token = SharedPrefHelper.getString(SharedPrefHelper.utils.authorizedToken);
+    final isLoggedIn = token.isNotEmpty;
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => authProvider.isAuthenticated 
-            ? const MainShell() 
-            : const OnboardingScreen(),
-      ),
-    );
+    if (isLoggedIn) {
+      final subProvider = Provider.of<SubscriptionProvider>(context, listen: false);
+      final isSubscribed = await subProvider.checkSubscriptionStatus();
+
+      if (isSubscribed) {
+        final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+        await profileProvider.fetchProfile();
+        
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const MainShell()),
+        );
+      } else {
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const SubscriptionScreen()),
+        );
+      }
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+      );
+    }
   }
 
   @override

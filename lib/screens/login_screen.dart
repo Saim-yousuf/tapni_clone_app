@@ -5,6 +5,9 @@ import 'package:tapni_app/screens/signup_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
+import 'package:tapni_app/screens/subscription_screen.dart';
+import 'package:tapni_app/providers/subscription_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -28,19 +31,38 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() async {
     // if (_formKey.currentState!.validate()) {
-    _emailController.text = 'saim@gmail.com';
-    _passwordController.text = 'password123';
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final success = await authProvider.login(
-        _emailController.text.trim(),
-        _passwordController.text,
-      );
 
-      if (success && mounted) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final success = await authProvider.login(
+      _emailController.text.trim(),
+      _passwordController.text,
+      context,
+    );
+
+    if (success && mounted) {
+      final subProvider = Provider.of<SubscriptionProvider>(
+        context,
+        listen: false,
+      );
+      final isSubscribed = await subProvider.checkSubscriptionStatus();
+
+      if (isSubscribed) {
+        final profileProvider = Provider.of<ProfileProvider>(
+          context,
+          listen: false,
+        );
+        await profileProvider.fetchProfile();
+        if (!mounted) return;
+        Navigator.of(
+          context,
+        ).pushReplacement(MaterialPageRoute(builder: (_) => const MainShell()));
+      } else {
+        if (!mounted) return;
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const MainShell()),
+          MaterialPageRoute(builder: (_) => const SubscriptionScreen()),
         );
       }
+    }
     // }
   }
 
@@ -72,7 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   'Log in to manage your digital card and network.',
                   style: theme.textTheme.bodyLarge?.copyWith(
-                    color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                    color: isDark
+                        ? AppTheme.textGreyDark
+                        : AppTheme.textGreyLight,
                   ),
                 ),
                 const SizedBox(height: 48),
@@ -119,7 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Demo account: use any email & password to login.'),
+                            content: Text(
+                              'Demo account: use any email & password to login.',
+                            ),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
@@ -144,7 +170,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     prefixIcon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        _obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
                       ),
                       onPressed: () {
                         setState(() {
@@ -177,7 +205,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Divider
                 Row(
                   children: [
-                    Expanded(child: Divider(color: isDark ? Colors.white10 : Colors.black12)),
+                    Expanded(
+                      child: Divider(
+                        color: isDark ? Colors.white10 : Colors.black12,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
@@ -185,11 +217,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                          color: isDark
+                              ? AppTheme.textGreyDark
+                              : AppTheme.textGreyLight,
                         ),
                       ),
                     ),
-                    Expanded(child: Divider(color: isDark ? Colors.white10 : Colors.black12)),
+                    Expanded(
+                      child: Divider(
+                        color: isDark ? Colors.white10 : Colors.black12,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -201,7 +239,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: isDark ? Colors.white : Colors.black87,
                       side: BorderSide(
-                        color: isDark ? Colors.white24 : const Color(0xFFE5E5EA),
+                        color: isDark
+                            ? Colors.white24
+                            : const Color(0xFFE5E5EA),
                         width: 1.2,
                       ),
                       shape: RoundedRectangleBorder(
@@ -210,19 +250,54 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     onPressed: () {
-                      authProvider.login('saim@gmail.com', 'password123').then((success) {
-                        if (success && mounted) {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (_) => const MainShell()),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Logged in with Google (Demo account: Saim Y)'),
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
-                        }
-                      });
+                      authProvider
+                          .login(
+                            _emailController.text,
+                            _passwordController.text,
+                            context,
+                          )
+                          .then((success) async {
+                            if (success && mounted) {
+                              final subProvider =
+                                  Provider.of<SubscriptionProvider>(
+                                    context,
+                                    listen: false,
+                                  );
+                              final isSubscribed = await subProvider
+                                  .checkSubscriptionStatus();
+
+                              if (isSubscribed) {
+                                final profileProvider =
+                                    Provider.of<ProfileProvider>(
+                                      context,
+                                      listen: false,
+                                    );
+                                await profileProvider.fetchProfile();
+                                if (!mounted) return;
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (_) => const MainShell(),
+                                  ),
+                                );
+                              } else {
+                                if (!mounted) return;
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (_) => const SubscriptionScreen(),
+                                  ),
+                                );
+                              }
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Logged in with Google (Demo account: Saim Y)',
+                                  ),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          });
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -256,13 +331,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       "Don't have an account? ",
                       style: TextStyle(
-                        color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                        color: isDark
+                            ? AppTheme.textGreyDark
+                            : AppTheme.textGreyLight,
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const SignupScreen()),
+                          MaterialPageRoute(
+                            builder: (_) => const SignupScreen(),
+                          ),
                         );
                       },
                       child: const Text(
@@ -304,19 +383,46 @@ class GoogleIconPainter extends CustomPainter {
       ..strokeCap = StrokeCap.square;
 
     // Red sector (top-left)
-    canvas.drawArc(rect, 3.14 + 0.35, 1.57, false, strokePaint..color = const Color(0xFFEA4335));
+    canvas.drawArc(
+      rect,
+      3.14 + 0.35,
+      1.57,
+      false,
+      strokePaint..color = const Color(0xFFEA4335),
+    );
     // Yellow sector (bottom-left)
-    canvas.drawArc(rect, 3.14 - 1.22, 1.57, false, strokePaint..color = const Color(0xFFFBBC05));
+    canvas.drawArc(
+      rect,
+      3.14 - 1.22,
+      1.57,
+      false,
+      strokePaint..color = const Color(0xFFFBBC05),
+    );
     // Green sector (bottom-right)
-    canvas.drawArc(rect, 0.35, 1.57, false, strokePaint..color = const Color(0xFF34A853));
+    canvas.drawArc(
+      rect,
+      0.35,
+      1.57,
+      false,
+      strokePaint..color = const Color(0xFF34A853),
+    );
     // Blue sector (top-right)
-    canvas.drawArc(rect, -1.22, 1.57, false, strokePaint..color = const Color(0xFF4285F4));
+    canvas.drawArc(
+      rect,
+      -1.22,
+      1.57,
+      false,
+      strokePaint..color = const Color(0xFF4285F4),
+    );
 
     // Blue horizontal bar
     final barPaint = Paint()
       ..color = const Color(0xFF4285F4)
       ..style = PaintingStyle.fill;
-    canvas.drawRect(Rect.fromLTWH(cx, cy - r * 0.225, r - 1, r * 0.45), barPaint);
+    canvas.drawRect(
+      Rect.fromLTWH(cx, cy - r * 0.225, r - 1, r * 0.45),
+      barPaint,
+    );
 
     // Subtle mask to make it look like a G cutout
     final cutoutPaint = Paint()

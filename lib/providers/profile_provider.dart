@@ -3,6 +3,7 @@ import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/services/mock_data_service.dart';
+import 'package:tapni_app/repository/auth_repo.dart';
 
 class ProfileProvider extends ChangeNotifier {
   late UserProfile _profile;
@@ -92,9 +93,34 @@ class ProfileProvider extends ChangeNotifier {
   ];
 
   bool _isProUser = false;
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
 
   ProfileProvider() {
     _profile = MockDataService.getInitialProfile();
+  }
+
+  Future<void> fetchProfile() async {
+    _isLoading = true;
+    notifyListeners();
+
+    final repo = AuthRepo();
+    final response = await repo.profile();
+    
+    if (response.success && response.data != null) {
+      // The API should return the profile object directly or nested under a key
+      final data = response.data;
+      // We assume data is the user object map
+      try {
+        _profile = UserProfile.fromApiJson(data);
+      } catch (e) {
+        // Fallback to mock data if there's an issue mapping
+      }
+    }
+    
+    _isLoading = false;
+    notifyListeners();
   }
 
   UserProfile get profile => _profile;

@@ -1,0 +1,186 @@
+import 'dart:io';
+
+import 'package:walletric/helper/shared_prefences/preference_helper.dart';
+import 'package:walletric/http/api_handler.dart';
+import 'package:walletric/utils/api.dart';
+
+class AuthRepo {
+  String errorMessage = "authRepo* Error:";
+
+  Future<ApiResponse> signin({
+    required String email,
+    required String password,
+    required String fcmToken,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.signin,
+      body: {
+        "email": email,
+        "password": password,
+        "fcm_token": fcmToken.isEmpty
+            ? "${DateTime.now().millisecondsSinceEpoch}"
+            : fcmToken,
+      },
+      method: ApiMethod.post,
+    );
+  }
+
+  Future<ApiResponse> socialAuth({
+    required String email,
+    required String fcmToken,
+    required String uid,
+    required String provider,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.socialAuth,
+      jsonBody: {
+        "uid": uid,
+        if(email.isNotEmpty)
+        "email": email.isEmpty ? null : email,
+        "fcm_token": fcmToken.isEmpty
+            ? "${DateTime.now().millisecondsSinceEpoch}"
+            : fcmToken,
+        "provider": provider,
+      },
+      method: ApiMethod.post,
+    );
+  }
+
+  Future<ApiResponse> signUp({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String dob,
+    required String phone,
+    required String password,
+    required String companyName,
+    required int currencyId,
+    required String fcmToken,
+    required int type,
+  }) async {
+    Map<String, String>? body = {
+      "first_name": firstName,
+      "last_name": lastName,
+      "email": email,
+      "phone": phone,
+      "password": password,
+      "company_name": companyName,
+      "account_type": type == 0 ? "individual" : "agency",
+      "currencyId": currencyId.toString(),
+      "fcm_token": fcmToken.isEmpty
+          ? "${DateTime.now().millisecondsSinceEpoch}"
+          : fcmToken,
+    };
+    if (type == 0) {
+      body['dob'] = dob;
+    }
+    return await ApiHandler.request(
+      api: Api.auth.signup,
+      body: body,
+      method: ApiMethod.post,
+    );
+  }
+
+  Future<ApiResponse> forgot({
+    required String email,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.forgot,
+      body: {
+        "email": email,
+      },
+      method: ApiMethod.post,
+    );
+  }
+
+  Future<ApiResponse> otpVerify({
+    required String email,
+    required String otp,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.otpVerify,
+      body: {
+        "email": email,
+        "otp": otp,
+      },
+      method: ApiMethod.post,
+    );
+  }
+
+  Future<ApiResponse> password({
+    required String oldPassword,
+    required String password,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.password,
+      authorization: true,
+      tokenKey: oldPassword.isNotEmpty
+          ? null
+          : SharedPrefHelper.utils.authorizedTokenTemp,
+      body: {
+        if (oldPassword.isNotEmpty) "oldPassword": oldPassword,
+        "password": password,
+      },
+      method: ApiMethod.put,
+    );
+  }
+
+  Future<ApiResponse> profile() async {
+    return await ApiHandler.request(
+      api: Api.auth.profile,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> update({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String dob,
+    required String phone,
+    required String companyName,
+    required String accountType,
+    required File? profile,
+  }) async {
+    Map<String, String>? body = {
+      "phone": phone,
+      "account_type": accountType,
+    };
+    // if (!Helper.isAgency()) {
+    if (accountType != "agency") {
+      body['dob'] = dob;
+      body['first_name'] = firstName;
+      body['last_name'] = lastName;
+    } else {
+      body['company_name'] = companyName;
+    }
+    return await ApiHandler.request(
+      api: Api.auth.profile,
+      body: body,
+      method: ApiMethod.multipartPut,
+      authorization: true,
+      field: "profile_img",
+      file: profile,
+    );
+  }
+
+  Future<ApiResponse> logout() async {
+    return await ApiHandler.request(
+      api: Api.auth.logout,
+      method: ApiMethod.post,
+      authorization: true,
+      // body: {
+      //   'refresh':Helper.getToken(),
+      // }
+    );
+  }
+
+  Future<ApiResponse> userDelete() async {
+    return await ApiHandler.request(
+      api: Api.auth.userDelete,
+      method: ApiMethod.post,
+      authorization: true,
+    );
+  }
+}
