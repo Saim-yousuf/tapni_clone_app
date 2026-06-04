@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/services/mock_data_service.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/utils/api_handler.dart';
+
+import '../widgets/loading_widget.dart';
 
 class ProfileProvider extends ChangeNotifier {
   late UserProfile _profile;
@@ -222,7 +225,63 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  void addSocialLink(SocialPlatform platform, String value, bool showLink) {
+  Future<ApiResponse> updateLinks({
+    required List<SocialLink> links,
+    required BuildContext context,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    CustomDialog.loadingDialog(context);
+
+    final updatedProfile = _profile.copyWith(socialLinks: links);
+
+    try {
+      final repo = AuthRepo();
+      final response = await repo.updateProfile(
+        jsonBody: links.isEmpty
+            ? {"links": []}
+            : {"links": links.map((link) => link.toApiJson()).toList()},
+      );
+
+      if (response.success) {
+        if (response.data is Map<String, dynamic>) {
+          final data = response.data as Map<String, dynamic>;
+          final profileData = data['user'] is Map<String, dynamic>
+              ? data['user'] as Map<String, dynamic>
+              : data;
+          try {
+            _profile = UserProfile.fromApiJson(profileData);
+          } catch (_) {
+            _profile = updatedProfile;
+          }
+        } else {
+          _profile = updatedProfile;
+        }
+        notifyListeners();
+        Navigator.pop(context);
+      }
+
+      return response;
+    } catch (error) {
+      Navigator.pop(context);
+      return ApiResponse<dynamic>(
+        success: false,
+        statusCode: 0,
+        message: error.toString(),
+        data: null,
+      );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  addSocialLink(
+    SocialPlatform platform,
+    String value,
+    bool showLink,
+    context,
+  ) async {
     final newLink = SocialLink(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       platform: platform,
@@ -232,20 +291,67 @@ class ProfileProvider extends ChangeNotifier {
     );
     final updatedLinks = List<SocialLink>.from(_profile.socialLinks)
       ..add(newLink);
-    _profile = _profile.copyWith(socialLinks: updatedLinks);
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
+    await profileProvider.updateLinks(links: updatedLinks, context: context);
     notifyListeners();
   }
 
-  void updateSocialLink(String id, String newValue, bool isActive) {
-    final updatedLinks = _profile.socialLinks.map((link) {
-      if (link.id == id) {
-        return link.copyWith(value: newValue, isActive: isActive);
-      }
-      return link;
-    }).toList();
-    _profile = _profile.copyWith(socialLinks: updatedLinks);
+  updateSocialLink(
+    SocialPlatform platform,
+    String value,
+    bool showLink,
+    context,
+  ) async {
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
+
+    final existingIndex = _profile.socialLinks.indexWhere(
+      (link) => link.platform == platform,
+    );
+
+    List<SocialLink> updatedLinks = List<SocialLink>.from(_profile.socialLinks);
+
+    if (existingIndex != -1) {
+      // 🔁 Update existing link
+      updatedLinks[existingIndex] = SocialLink(
+        id: updatedLinks[existingIndex].id,
+        platform: platform,
+        value: value,
+        isActive: true,
+        isPublic: showLink,
+      );
+    } else {
+      // ➕ Add new link
+      updatedLinks.add(
+        SocialLink(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          platform: platform,
+          value: value,
+          isActive: true,
+          isPublic: showLink,
+        ),
+      );
+    }
+
+    await profileProvider.updateLinks(links: updatedLinks, context: context);
     notifyListeners();
   }
+
+  // void updateSocialLink(String id, String newValue, bool isActive) {
+  //   final updatedLinks = _profile.socialLinks.map((link) {
+  //     if (link.id == id) {
+  //       return link.copyWith(value: newValue, isActive: isActive);
+  //     }
+  //     return link;
+  //   }).toList();
+  //   _profile = _profile.copyWith(socialLinks: updatedLinks);
+  //   notifyListeners();
+  // }
 
   void deleteSocialLink(String id) {
     final updatedLinks = _profile.socialLinks

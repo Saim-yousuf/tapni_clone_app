@@ -986,27 +986,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Platform icon
-                        Container(
+                        SizedBox(
                           width: 60,
                           height: 60,
-                          // decoration: BoxDecoration(
-                          //   gradient: const LinearGradient(
-                          //     colors: [
-                          //       Color(0xFFF9CE34),
-                          //       Color(0xFFEE2A7B),
-                          //       Color(0xFF6228D7),
-                          //     ],
-                          //     begin: Alignment.topLeft,
-                          //     end: Alignment.bottomRight,
-                          //   ),
-                          //   borderRadius: BorderRadius.circular(14),
-                          // ),
-                          // child: const Icon(
-                          //   Icons.camera_alt_outlined,
-                          //   color: Colors.white,
-                          //   size: 28,
-                          // ),
+
                           child: Image.asset(
                             SocialLink.getAssetPath(platform),
                             fit: BoxFit.contain,
@@ -1016,7 +999,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         const SizedBox(width: 14),
 
-                        // Label field
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1172,13 +1154,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: SizedBox(
                             height: 60,
                             child: ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 final value = usernameController.text.trim();
                                 if (value.isNotEmpty) {
-                                  provider.addSocialLink(
+                                  await provider.addSocialLink(
                                     platform,
                                     value,
                                     showLink,
+                                    context,
                                   );
                                   Navigator.pop(ctx);
                                 }
@@ -1214,114 +1197,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // void _showNewLinkBottomSheet(
-  //   BuildContext context,
-  //   SocialPlatform platform,
-  //   ProfileProvider provider,
-  // ) {
-  //   final isDark = Theme.of(context).brightness == Brightness.dark;
-  //   final usernameController = TextEditingController();
-
-  //   showModalBottomSheet(
-  //     context: context,
-  //     isScrollControlled: true,
-  //     backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-  //     ),
-  //     builder: (ctx) {
-  //       return Padding(
-  //         padding: EdgeInsets.only(
-  //           bottom: MediaQuery.of(ctx).viewInsets.bottom,
-  //         ),
-  //         child: Padding(
-  //           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Center(
-  //                 child: Container(
-  //                   margin: const EdgeInsets.only(top: 6, bottom: 12),
-  //                   width: 40,
-  //                   height: 4,
-  //                   decoration: BoxDecoration(
-  //                     color: Colors.grey.shade400,
-  //                     borderRadius: BorderRadius.circular(2),
-  //                   ),
-  //                 ),
-  //               ),
-  //               Row(
-  //                 children: [
-  //                   IconButton(
-  //                     icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-  //                     onPressed: () => Navigator.pop(ctx),
-  //                   ),
-  //                   Expanded(
-  //                     child: Text(
-  //                       'Add ${SocialLink.getPlatformName(platform)}',
-  //                       style: const TextStyle(
-  //                         fontSize: 18,
-  //                         fontWeight: FontWeight.bold,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //               const SizedBox(height: 12),
-  //               Text(
-  //                 'Enter your ${SocialLink.getPlatformName(platform)} connection details.',
-  //                 style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-  //               ),
-  //               const SizedBox(height: 16),
-  //               TextField(
-  //                 controller: usernameController,
-  //                 autofocus: true,
-  //                 decoration: InputDecoration(
-  //                   labelText: _getPlatformLabel(platform),
-  //                   prefixIcon: const Icon(Icons.link),
-  //                   border: OutlineInputBorder(
-  //                     borderRadius: BorderRadius.circular(14),
-  //                   ),
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 24),
-  //               SizedBox(
-  //                 width: double.infinity,
-  //                 height: 54,
-  //                 child: ElevatedButton(
-  //                   onPressed: () {
-  //                     final value = usernameController.text.trim();
-  //                     if (value.isNotEmpty) {
-  //                       provider.addSocialLink(platform, value);
-  //                       Navigator.pop(ctx);
-  //                     }
-  //                   },
-  //                   style: ElevatedButton.styleFrom(
-  //                     backgroundColor: const Color(0xFF1E2022),
-  //                     shape: RoundedRectangleBorder(
-  //                       borderRadius: BorderRadius.circular(25),
-  //                     ),
-  //                   ),
-  //                   child: const Text(
-  //                     'Save link',
-  //                     style: TextStyle(
-  //                       fontSize: 16,
-  //                       fontWeight: FontWeight.bold,
-  //                       color: Colors.white,
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 20),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   void _showExistingLinkBottomSheet(
     BuildContext context,
     SocialLink link,
@@ -1329,130 +1204,268 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final valueController = TextEditingController(text: link.value);
+    bool showLink = link.isPublic;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
+      backgroundColor: Colors.transparent,
       builder: (ctx) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(ctx).viewInsets.bottom,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 6, bottom: 12),
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade400,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(ctx).viewInsets.bottom,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF111111) : Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(24),
                   ),
                 ),
-                Row(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                      onPressed: () => Navigator.pop(ctx),
+                    // Drag handle
+                    Container(
+                      margin: const EdgeInsets.only(top: 4, bottom: 14),
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
-                    Expanded(
-                      child: Text(
-                        'Edit ${SocialLink.getPlatformName(link.platform)}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+
+                    // Title
+                    const Text(
+                      'Link Settings',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Icon + Label row
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 60,
+                          height: 60,
+
+                          child: Image.asset(
+                            SocialLink.getAssetPath(link.platform),
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) =>
+                                const Icon(Icons.link, size: 28),
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                readOnly: true,
+
+                                controller: TextEditingController(
+                                  text: SocialLink.getPlatformName(
+                                    link.platform,
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                decoration: const InputDecoration(
+                                  hintText: 'Label',
+                                  fillColor: const Color(0xFFF5F5F5),
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                'Set text under the link icon',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Username field
+                    TextField(
+                      controller: valueController,
+                      autofocus: true,
+                      style: const TextStyle(fontSize: 15),
+
+                      decoration: InputDecoration(
+                        hintText:
+                            '${SocialLink.getPlatformName(link.platform)} username',
+                        hintStyle: TextStyle(color: Colors.grey.shade400),
+                        fillColor: const Color(0xFFF5F5F5),
+                        filled: true,
+                        border: InputBorder.none,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Enter your ${SocialLink.getPlatformName(link.platform)} username',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade800,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Show link toggle
+                    Container(
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0xFF1E1E1E)
+                            : const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Colors.grey.shade200,
+                          width: 0.5,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Show link',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Switch(
+                            value: showLink,
+                            activeColor: Colors.white,
+                            activeTrackColor: const Color(0xFF1E2022),
+                            onChanged: (val) => setState(() => showLink = val),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      "When turned off this link won't be shown on your profile",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade800,
+                      ),
+                    ),
+                    const SizedBox(height: 80),
+
+                    // Bottom row: delete + save
+                    Row(
+                      children: [
+                        // Delete button
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isDark
+                                ? const Color(0xFF1E1E1E)
+                                : const Color(0xFFF5F5F5),
+                            border: Border.all(
+                              color: Colors.grey.shade200,
+                              width: 0.5,
+                            ),
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.delete_forever_outlined, size: 24),
+                            color: Colors.grey.shade600,
+                            onPressed: () => Navigator.pop(ctx),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+
+                        // Save button
+                        Expanded(
+                          child: SizedBox(
+                            height: 60,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final value = valueController.text.trim();
+                                if (value.isNotEmpty) {
+                                  await provider.updateSocialLink(
+                                    link.platform,
+                                    value,
+                                    showLink,
+                                    context,
+                                  );
+                                  Navigator.pop(ctx);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppTheme.primaryBlack,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: const Text(
+                                'Save',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
                   ],
                 ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: valueController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText: _getPlatformLabel(link.platform),
-                    prefixIcon: const Icon(Icons.link),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 54,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            provider.deleteSocialLink(link.id);
-                            Navigator.pop(ctx);
-                          },
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Colors.red),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                          ),
-                          child: const Text(
-                            'Delete',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: SizedBox(
-                        height: 54,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            final value = valueController.text.trim();
-                            if (value.isNotEmpty) {
-                              provider.updateSocialLink(
-                                link.id,
-                                value,
-                                link.isActive,
-                              );
-                              Navigator.pop(ctx);
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1E2022),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                          ),
-                          child: const Text(
-                            'Save',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

@@ -12,6 +12,7 @@ class Api {
     }
     return "https://remake-drained-underarm.ngrok-free.dev";
   }
+
   static const String _liveBaseUrl = "https://your-production-url.com";
 
   static late String baseUrl;
@@ -33,6 +34,7 @@ class _AuthApi {
   String get login => "${Api.baseUrl}/api/user/auth/login";
   String get googleSignIn => "${Api.baseUrl}/api/user/auth/google";
   String get profile => "${Api.baseUrl}/api/user/auth/profile";
+  String get links => "${Api.baseUrl}/api/user/auth/profile/links";
 }
 
 class _SubscriptionApi {

@@ -1,13 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pandabar/main.view.dart';
-import 'package:pandabar/model.dart';
 import 'package:provider/provider.dart';
-import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
-import 'package:tapni_app/screens/digital_card_screen.dart';
-import 'package:tapni_app/screens/leads_screen.dart';
+import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
+import 'package:tapni_app/screens/leads_screen.dart';
 import 'package:tapni_app/screens/profile_screen.dart';
 import 'package:tapni_app/screens/settings_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
@@ -63,6 +59,7 @@ class _MainShellState extends State<MainShell> {
                   setState(() {
                     _currentPage = 'Links';
                   });
+                  profileProvider.setEditingProfile(false);
                 },
                 icon: const Icon(Icons.link),
               ),
@@ -72,6 +69,7 @@ class _MainShellState extends State<MainShell> {
                   setState(() {
                     _currentPage = 'Contacts';
                   });
+                  profileProvider.setEditingProfile(false);
                 },
                 icon: const Icon(Icons.people),
               ),
@@ -82,6 +80,7 @@ class _MainShellState extends State<MainShell> {
                   setState(() {
                     _currentPage = 'Explore';
                   });
+                  profileProvider.setEditingProfile(false);
                 },
                 icon: const Icon(Icons.explore),
               ),
@@ -91,6 +90,7 @@ class _MainShellState extends State<MainShell> {
                   setState(() {
                     _currentPage = 'Settings';
                   });
+                  profileProvider.setEditingProfile(false);
                 },
                 icon: const Icon(Icons.settings),
               ),

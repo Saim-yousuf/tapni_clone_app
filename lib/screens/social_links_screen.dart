@@ -373,6 +373,7 @@ class SocialLinksScreen extends StatelessWidget {
                   platform,
                   usernameController.text.trim(),
                   true,
+                  context,
                 );
                 Navigator.pop(ctx);
               }
@@ -414,11 +415,13 @@ class SocialLinksScreen extends StatelessWidget {
             isNew: false,
             onSave: () {
               if (usernameController.text.trim().isNotEmpty) {
-                provider.updateSocialLink(
-                  link.id,
-                  usernameController.text.trim(),
-                  link.isActive,
-                );
+                // provider.updateSocialLink(
+                //   link.platform,
+
+                //   usernameController.text.trim(),
+                //   showLink,
+                //   context,
+                // );
                 Navigator.pop(ctx);
               }
             },
