@@ -1,5 +1,9 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/card_template.dart';
@@ -173,9 +177,13 @@ class ProfileProvider extends ChangeNotifier {
     required String email,
     required String website,
     required List<SocialLink> links,
+    required File? profileImage,
+    required File? coverImage,
+    required BuildContext context,
   }) async {
     _isLoading = true;
     notifyListeners();
+    CustomDialog.loadingDialog(context);
 
     final updatedProfile = _profile.copyWith(
       name: name,
@@ -188,10 +196,21 @@ class ProfileProvider extends ChangeNotifier {
       socialLinks: links,
     );
 
+    final json = updatedProfile.toApiJson();
+    if (profileImage != null) {
+      final profileImageUrl = await fileToBase64(profileImage);
+      json['profilePhoto'] = profileImageUrl;
+    }
+    if (coverImage != null) {
+      log('Converting cover image to base64');
+      final coverImageUrl = await fileToBase64(coverImage);
+      json['coverPhoto'] = coverImageUrl;
+    }
+
     try {
       final repo = AuthRepo();
       final response = await repo.updateProfile(
-        jsonBody: updatedProfile.toApiJson(),
+        jsonBody: json,
       );
 
       if (response.success) {
@@ -210,9 +229,11 @@ class ProfileProvider extends ChangeNotifier {
         }
         notifyListeners();
       }
+      Navigator.pop(context);
 
       return response;
     } catch (error) {
+      Navigator.pop(context);
       return ApiResponse<dynamic>(
         success: false,
         statusCode: 0,

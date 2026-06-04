@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -17,6 +20,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
   late final TextEditingController _bioController;
+  File? profileImageFile;
+  File? coverImageFile;
 
   @override
   void initState() {
@@ -59,6 +64,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       email: profile.email,
       website: profile.website,
       links: profile.socialLinks,
+      profileImage: profileImageFile,
+      coverImage: coverImageFile,
+      context: context,
     );
 
     if (response.success) {
@@ -210,46 +218,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   // Go PRO button
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black12),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Go ',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text(
-                            'PRO',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 8,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(
+                  //     horizontal: 10,
+                  //     vertical: 4,
+                  //   ),
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.black12),
+                  //     borderRadius: BorderRadius.circular(20),
+                  //   ),
+                  //   child: Row(
+                  //     children: [
+                  //       const Text(
+                  //         'Go ',
+                  //         style: TextStyle(
+                  //           color: Colors.black,
+                  //           fontSize: 12,
+                  //           fontWeight: FontWeight.w600,
+                  //         ),
+                  //       ),
+                  //       Container(
+                  //         padding: const EdgeInsets.symmetric(
+                  //           horizontal: 6,
+                  //           vertical: 2,
+                  //         ),
+                  //         decoration: BoxDecoration(
+                  //           color: Colors.black,
+                  //           borderRadius: BorderRadius.circular(10),
+                  //         ),
+                  //         child: const Text(
+                  //           'PRO',
+                  //           style: TextStyle(
+                  //             color: Colors.white,
+                  //             fontSize: 8,
+                  //             fontWeight: FontWeight.w900,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -282,9 +290,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
-                    child:
-                        profile.coverPhotoUrl != null &&
-                            profile.coverPhotoUrl!.isNotEmpty
+                    child: coverImageFile != null
+                        ? Image.file(
+                            coverImageFile!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) =>
+                                Container(color: const Color(0xFFF5F5F5)),
+                          )
+                        : profile.coverPhotoUrl != null &&
+                              profile.coverPhotoUrl!.isNotEmpty
                         ? Image.network(
                             profile.coverPhotoUrl!,
                             fit: BoxFit.cover,
@@ -296,105 +310,119 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 // Edit Cover Pencil Icon
                 Positioned(
-                  bottom: 12,
+                  bottom: 60,
                   right: 12,
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.edit_outlined,
-                      size: 16,
-                      color: Colors.black54,
+                  child: InkWell(
+                    onTap: () {
+                      pickFile().then((file) {
+                        if (file != null) {
+                          setState(() {
+                            coverImageFile = file.file;
+                          });
+                        }
+                      });
+                    },
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.edit_outlined,
+                        size: 16,
+                        color: Colors.black54,
+                      ),
                     ),
                   ),
                 ),
                 // Overlapping Avatar
-                Positioned(
-                  bottom: -50,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          width: 110,
-                          height: 110,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(0xFF1E2022),
-                            border: Border.all(color: Colors.white, width: 4),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
+                Center(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 120),
+                      child: GestureDetector(
+                        onTap: () {
+                          print('AVATAR TAPPED');
+                          pickFile().then((file) {
+                            if (file != null)
+                              setState(() => profileImageFile = file.file);
+                          });
+                        },
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            Container(
+                              width: 110,
+                              height: 110,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: const Color(0xFF1E2022),
+                                border: Border.all(color: Colors.white, width: 4),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.08),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          child: ClipOval(
-                            child:
-                                profile.profilePhotoUrl != null &&
-                                    profile.profilePhotoUrl!.isNotEmpty
-                                ? Image.network(
-                                    profile.profilePhotoUrl!,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => Center(
-                                      child: Text(
-                                        profile.name.isNotEmpty
-                                            ? profile.name[0].toUpperCase()
-                                            : '?',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 40,
-                                          fontWeight: FontWeight.bold,
+                              child: ClipOval(
+                                child: profileImageFile != null
+                                    ? Image.file(
+                                        profileImageFile!,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : profile.profilePhotoUrl != null &&
+                                          profile.profilePhotoUrl!.isNotEmpty
+                                    ? Image.network(
+                                        profile.profilePhotoUrl!,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Center(
+                                        child: Text(
+                                          profile.name.isNotEmpty
+                                              ? profile.name[0].toUpperCase()
+                                              : '?',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 40,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
+                              ),
+                            ),
+                            // Pencil icon
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 4,
                                     ),
-                                  )
-                                : Center(
-                                    child: Text(
-                                      profile.name.isNotEmpty
-                                          ? profile.name[0].toUpperCase()
-                                          : '?',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 40,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                          ),
-                        ),
-                        // Edit Avatar Pencil Icon
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 4,
+                                  ],
                                 ),
-                              ],
+                                child: const Icon(
+                                  Icons.edit_outlined,
+                                  size: 14,
+                                  color: Colors.black54,
+                                ),
+                              ),
                             ),
-                            child: const Icon(
-                              Icons.edit_outlined,
-                              size: 14,
-                              color: Colors.black54,
-                            ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -416,6 +444,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   vertical: 12,
                 ),
                 border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
                 ),
@@ -442,6 +478,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   vertical: 12,
                 ),
                 border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
                 ),

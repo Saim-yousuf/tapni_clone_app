@@ -39,35 +39,35 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     final profile = profileProvider.profile;
-    final response = await profileProvider.updateProfile(
-      name: _nameController.text.trim(),
-      designation: profile.designation,
-      company: profile.company,
-      bio: _bioController.text.trim(),
-      phone: profile.phone,
-      email: profile.email,
-      website: profile.website,
-      links: profile.socialLinks,
-    );
+    // final response = await profileProvider.updateProfile(
+    //   name: _nameController.text.trim(),
+    //   designation: profile.designation,
+    //   company: profile.company,
+    //   bio: _bioController.text.trim(),
+    //   phone: profile.phone,
+    //   email: profile.email,
+    //   website: profile.website,
+    //   links: profile.socialLinks,
+    // );
 
-    if (!mounted) {
-      return;
-    }
+    // if (!mounted) {
+    //   return;
+    // }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          response.success
-              ? 'Profile updated successfully!'
-              : response.message ?? 'Unable to save profile. Try again.',
-        ),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     content: Text(
+    //       response.success
+    //           ? 'Profile updated successfully!'
+    //           : response.message ?? 'Unable to save profile. Try again.',
+    //     ),
+    //     behavior: SnackBarBehavior.floating,
+    //   ),
+    // );
 
-    if (response.success) {
-      Navigator.of(context).pop();
-    }
+    // if (response.success) {
+    //   Navigator.of(context).pop();
+    // }
   }
 
   @override
