@@ -372,6 +372,7 @@ class SocialLinksScreen extends StatelessWidget {
                 provider.addSocialLink(
                   platform,
                   usernameController.text.trim(),
+                  true,
                 );
                 Navigator.pop(ctx);
               }

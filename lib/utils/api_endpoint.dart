@@ -8,9 +8,9 @@ class Api {
 
   static String get _localBaseUrl {
     if (Platform.isAndroid) {
-      return "http://10.0.2.2:5000";
+      return "https://remake-drained-underarm.ngrok-free.dev";
     }
-    return "http://localhost:5000";
+    return "https://remake-drained-underarm.ngrok-free.dev";
   }
   static const String _liveBaseUrl = "https://your-production-url.com";
 

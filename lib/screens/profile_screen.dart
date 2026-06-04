@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/templates_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -43,27 +44,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
     profileProvider.onSaveTriggered = () => _saveProfile(profileProvider);
   }
 
-  void _saveProfile(ProfileProvider profileProvider) {
-    if (_formKey.currentState?.validate() ?? false) {
-      final profile = profileProvider.profile;
-      profileProvider.updateProfile(
-        name: _nameController.text.trim(),
-        designation: profile.designation,
-        company: profile.company,
-        bio: _bioController.text.trim(),
-        phone: profile.phone,
-        email: profile.email,
-        website: profile.website,
-      );
+  void _saveProfile(ProfileProvider profileProvider) async {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
+    final profile = profileProvider.profile;
+    final response = await profileProvider.updateProfile(
+      name: _nameController.text.trim(),
+      designation: profile.designation,
+      company: profile.company,
+      bio: _bioController.text.trim(),
+      phone: profile.phone,
+      email: profile.email,
+      website: profile.website,
+      links: profile.socialLinks,
+    );
+
+    if (response.success) {
       profileProvider.setEditingProfile(false);
       profileProvider.onSaveTriggered = null;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Profile updated successfully!'),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
     }
+
+    if (!mounted) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          response.success
+              ? 'Profile updated successfully!'
+              : response.message ?? 'Unable to save profile. Try again.',
+        ),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
@@ -1005,27 +1021,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextField(
-                                
+                              TextFormField(
+                                readOnly: true,
+
                                 controller: labelController,
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                 ),
-                                decoration: const InputDecoration.collapsed(
+                                decoration: const InputDecoration(
                                   hintText: 'Label',
                                   fillColor: const Color(0xFFF5F5F5),
                                   filled: true,
-                                  border: InputBorder.none
-                                  
+                                  border: InputBorder.none,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    borderSide: BorderSide.none,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 5),
                               Text(
                                 'Set text under the link icon',
                                 style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey.shade500,
+                                  fontSize: 14,
+                                  color: Colors.grey.shade800,
                                 ),
                               ),
                             ],
@@ -1036,30 +1064,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 14),
 
                     // Username field
-                    Container(
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? const Color(0xFF1E1E1E)
-                            : const Color(0xFFF5F5F5),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Colors.grey.shade200,
-                          width: 0.5,
+                    TextField(
+                      controller: usernameController,
+                      autofocus: true,
+                      style: const TextStyle(fontSize: 15),
+
+                      decoration: InputDecoration(
+                        hintText:
+                            '${SocialLink.getPlatformName(platform)} username',
+                        hintStyle: TextStyle(color: Colors.grey.shade400),
+                        fillColor: const Color(0xFFF5F5F5),
+                        filled: true,
+                        border: InputBorder.none,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide.none,
                         ),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 4,
-                      ),
-                      child: TextField(
-                        controller: usernameController,
-                        autofocus: true,
-                        style: const TextStyle(fontSize: 15),
-                        decoration: InputDecoration(
-                          hintText:
-                              '${SocialLink.getPlatformName(platform)} username',
-                          hintStyle: TextStyle(color: Colors.grey.shade400),
-                          border: InputBorder.none,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
@@ -1067,8 +1090,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Text(
                       'Enter your ${SocialLink.getPlatformName(platform)} username',
                       style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade500,
+                        fontSize: 14,
+                        color: Colors.grey.shade800,
                       ),
                     ),
                     const SizedBox(height: 14),
@@ -1113,11 +1136,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       "When turned off this link won't be shown on your profile",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade500,
+                        fontSize: 14,
+                        color: Colors.grey.shade800,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 80),
 
                     // Bottom row: delete + save
                     Row(
@@ -1137,7 +1160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           child: IconButton(
-                            icon: const Icon(Icons.delete_outline, size: 20),
+                            icon: Icon(Icons.delete_forever_outlined, size: 24),
                             color: Colors.grey.shade600,
                             onPressed: () => Navigator.pop(ctx),
                           ),
@@ -1147,17 +1170,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         // Save button
                         Expanded(
                           child: SizedBox(
-                            height: 48,
+                            height: 60,
                             child: ElevatedButton(
                               onPressed: () {
                                 final value = usernameController.text.trim();
                                 if (value.isNotEmpty) {
-                                  provider.addSocialLink(platform, value);
+                                  provider.addSocialLink(
+                                    platform,
+                                    value,
+                                    showLink,
+                                  );
                                   Navigator.pop(ctx);
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF3A3A3A),
+                                backgroundColor: AppTheme.primaryBlack,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(24),
                                 ),

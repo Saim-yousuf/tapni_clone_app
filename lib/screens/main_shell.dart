@@ -44,7 +44,7 @@ class _MainShellState extends State<MainShell> {
   Widget build(BuildContext context) {
     final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final profileProvider = Provider.of<ProfileProvider>(context);
-    // final isEditing = profileProvider.isEditingProfile;
+    final isEditing = profileProvider.isEditingProfile;
     final profile = profileProvider.profile;
 
     return Scaffold(
@@ -99,17 +99,30 @@ class _MainShellState extends State<MainShell> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       floatingActionButton: InkWell(
         onTap: () {
-          setState(() {
-            _currentPage = 'My Card';
-          });
+          if (isEditing) {
+            profileProvider.triggerSave();
+          } else {
+            setState(() {
+              _currentPage = 'My Card';
+            });
+          }
         },
         child: Container(
           width: 80,
           height: 80,
           decoration: BoxDecoration(shape: BoxShape.circle),
-          child: _currentPage == 'My Card'
+          child: isEditing
+              ? Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppTheme.primaryBlack,
+                  ),
+                  child: const Icon(Icons.check, size: 40, color: Colors.white),
+                )
+              : _currentPage == 'My Card'
               ? profile.profilePhotoUrl == null ||
                         profile.profilePhotoUrl!.isEmpty
                     ? Container(

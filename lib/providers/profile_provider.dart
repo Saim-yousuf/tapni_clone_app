@@ -4,6 +4,7 @@ import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/services/mock_data_service.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:tapni_app/utils/api_handler.dart';
 
 class ProfileProvider extends ChangeNotifier {
   late UserProfile _profile;
@@ -11,14 +12,14 @@ class ProfileProvider extends ChangeNotifier {
 
   bool _isEditingProfile = false;
   bool get isEditingProfile => _isEditingProfile;
-  
+
   void setEditingProfile(bool val) {
     _isEditingProfile = val;
     notifyListeners();
   }
-  
+
   VoidCallback? onSaveTriggered;
-  
+
   void triggerSave() {
     if (onSaveTriggered != null) {
       onSaveTriggered!();
@@ -123,12 +124,14 @@ class ProfileProvider extends ChangeNotifier {
 
     final repo = AuthRepo();
     final response = await repo.profile();
-    
+
     if (response.success && response.data != null) {
       final data = response.data;
       try {
         if (data is Map<String, dynamic> && data.containsKey('user')) {
-          _profile = UserProfile.fromApiJson(data['user'] as Map<String, dynamic>);
+          _profile = UserProfile.fromApiJson(
+            data['user'] as Map<String, dynamic>,
+          );
         } else if (data is Map<String, dynamic>) {
           _profile = UserProfile.fromApiJson(data);
         }
@@ -136,7 +139,7 @@ class ProfileProvider extends ChangeNotifier {
         // Fallback to mock data if there's an issue mapping
       }
     }
-    
+
     _isLoading = false;
     notifyListeners();
   }
@@ -158,7 +161,7 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  void updateProfile({
+  Future<ApiResponse> updateProfile({
     required String name,
     required String designation,
     required String company,
@@ -166,8 +169,12 @@ class ProfileProvider extends ChangeNotifier {
     required String phone,
     required String email,
     required String website,
-  }) {
-    _profile = _profile.copyWith(
+    required List<SocialLink> links,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final updatedProfile = _profile.copyWith(
       name: name,
       designation: designation,
       company: company,
@@ -175,18 +182,56 @@ class ProfileProvider extends ChangeNotifier {
       phone: phone,
       email: email,
       website: website,
+      socialLinks: links,
     );
-    notifyListeners();
+
+    try {
+      final repo = AuthRepo();
+      final response = await repo.updateProfile(
+        jsonBody: updatedProfile.toApiJson(),
+      );
+
+      if (response.success) {
+        if (response.data is Map<String, dynamic>) {
+          final data = response.data as Map<String, dynamic>;
+          final profileData = data['user'] is Map<String, dynamic>
+              ? data['user'] as Map<String, dynamic>
+              : data;
+          try {
+            _profile = UserProfile.fromApiJson(profileData);
+          } catch (_) {
+            _profile = updatedProfile;
+          }
+        } else {
+          _profile = updatedProfile;
+        }
+        notifyListeners();
+      }
+
+      return response;
+    } catch (error) {
+      return ApiResponse<dynamic>(
+        success: false,
+        statusCode: 0,
+        message: error.toString(),
+        data: null,
+      );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
-  void addSocialLink(SocialPlatform platform, String value) {
+  void addSocialLink(SocialPlatform platform, String value, bool showLink) {
     final newLink = SocialLink(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       platform: platform,
       value: value,
       isActive: true,
+      isPublic: showLink,
     );
-    final updatedLinks = List<SocialLink>.from(_profile.socialLinks)..add(newLink);
+    final updatedLinks = List<SocialLink>.from(_profile.socialLinks)
+      ..add(newLink);
     _profile = _profile.copyWith(socialLinks: updatedLinks);
     notifyListeners();
   }
@@ -203,7 +248,9 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   void deleteSocialLink(String id) {
-    final updatedLinks = _profile.socialLinks.where((link) => link.id != id).toList();
+    final updatedLinks = _profile.socialLinks
+        .where((link) => link.id != id)
+        .toList();
     _profile = _profile.copyWith(socialLinks: updatedLinks);
     notifyListeners();
   }

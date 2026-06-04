@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
-import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -33,25 +32,41 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.dispose();
   }
 
-  void _saveProfile() {
-    if (_formKey.currentState!.validate()) {
-      final profile = Provider.of<ProfileProvider>(context, listen: false).profile;
-      Provider.of<ProfileProvider>(context, listen: false).updateProfile(
-        name: _nameController.text.trim(),
-        designation: profile.designation,
-        company: profile.company,
-        bio: _bioController.text.trim(),
-        phone: profile.phone,
-        email: profile.email,
-        website: profile.website,
-      );
+  void _saveProfile() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Profile updated successfully!'),
-          behavior: SnackBarBehavior.floating,
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profile = profileProvider.profile;
+    final response = await profileProvider.updateProfile(
+      name: _nameController.text.trim(),
+      designation: profile.designation,
+      company: profile.company,
+      bio: _bioController.text.trim(),
+      phone: profile.phone,
+      email: profile.email,
+      website: profile.website,
+      links: profile.socialLinks,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          response.success
+              ? 'Profile updated successfully!'
+              : response.message ?? 'Unable to save profile. Try again.',
         ),
-      );
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+
+    if (response.success) {
+      Navigator.of(context).pop();
     }
   }
 

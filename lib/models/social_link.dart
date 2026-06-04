@@ -33,12 +33,14 @@ class SocialLink {
   final SocialPlatform platform;
   final String value; // username, phone number, or URL
   final bool isActive;
+  final bool isPublic;
 
   SocialLink({
     required this.id,
     required this.platform,
     required this.value,
     this.isActive = true,
+    this.isPublic = true,
   });
 
   SocialLink copyWith({
@@ -46,12 +48,14 @@ class SocialLink {
     SocialPlatform? platform,
     String? value,
     bool? isActive,
+    bool? isPublic,
   }) {
     return SocialLink(
       id: id ?? this.id,
       platform: platform ?? this.platform,
       value: value ?? this.value,
       isActive: isActive ?? this.isActive,
+      isPublic: isPublic ?? this.isPublic,
     );
   }
 
@@ -83,11 +87,7 @@ class SocialLink {
 
   /// Convert to API link object.
   Map<String, String> toApiJson() {
-    return {
-      'title': platformName,
-      'type': apiType,
-      'url': fullUrl,
-    };
+    return {'title': platformName, 'type': apiType, 'url': fullUrl};
   }
 
   /// Create from API link object.
@@ -117,9 +117,12 @@ class SocialLink {
       platform = SocialPlatform.eventbrite;
     } else if (combined.contains('github')) {
       platform = SocialPlatform.github;
-    } else if (combined.contains('googlereview') || combined.contains('google-logo-review')) {
+    } else if (combined.contains('googlereview') ||
+        combined.contains('google-logo-review')) {
       platform = SocialPlatform.googleReview;
-    } else if (combined.contains('googlemaps') || combined.contains('google-maps') || combined.contains('maps')) {
+    } else if (combined.contains('googlemaps') ||
+        combined.contains('google-maps') ||
+        combined.contains('maps')) {
       platform = SocialPlatform.googleMaps;
     } else if (combined.contains('meetup')) {
       platform = SocialPlatform.meetup;
@@ -133,7 +136,9 @@ class SocialLink {
       platform = SocialPlatform.snapchat;
     } else if (combined.contains('soundcloud')) {
       platform = SocialPlatform.soundcloud;
-    } else if (combined.contains('spoon') || combined.contains('fork') || combined.contains('menu')) {
+    } else if (combined.contains('spoon') ||
+        combined.contains('fork') ||
+        combined.contains('menu')) {
       platform = SocialPlatform.spoonFork;
     } else if (combined.contains('spotify')) {
       platform = SocialPlatform.spotify;
@@ -156,7 +161,9 @@ class SocialLink {
     }
 
     return SocialLink(
-      id: url.isNotEmpty ? url : DateTime.now().millisecondsSinceEpoch.toString(),
+      id: url.isNotEmpty
+          ? url
+          : DateTime.now().millisecondsSinceEpoch.toString(),
       platform: platform,
       value: url,
       isActive: true,
@@ -386,7 +393,9 @@ class SocialLink {
       if (platform == SocialPlatform.email && !value.startsWith('mailto:')) {
         return 'mailto:$value';
       }
-      if (!value.startsWith('http://') && !value.startsWith('https://') && platform != SocialPlatform.email) {
+      if (!value.startsWith('http://') &&
+          !value.startsWith('https://') &&
+          platform != SocialPlatform.email) {
         return 'https://$value';
       }
       return value;
