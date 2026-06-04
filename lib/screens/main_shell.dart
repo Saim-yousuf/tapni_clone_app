@@ -44,99 +44,113 @@ class _MainShellState extends State<MainShell> {
   Widget build(BuildContext context) {
     final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final profileProvider = Provider.of<ProfileProvider>(context);
-    final isEditing = profileProvider.isEditingProfile;
+    // final isEditing = profileProvider.isEditingProfile;
+    final profile = profileProvider.profile;
 
     return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
-      bottomNavigationBar: PandaBar(
-        backgroundColor: isDark ? AppTheme.accentDarkGrey : Colors.white,
-        buttonColor: isDark ? Colors.white54 : Colors.black38,
-        buttonSelectedColor: AppTheme.accentGold,
-        fabColors: const [Colors.transparent, Colors.transparent],
-        fabIcon: isEditing
-            ? Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 56,
-                    height: 56,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.black,
-                    ),
-                    child: const Icon(Icons.check, color: Colors.white, size: 28),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Save',
-                    style: TextStyle(
-                      color: isDark ? Colors.white70 : Colors.black87,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [
-                          AppTheme.accentGold,
-                          AppTheme.accentGold.withOpacity(0.7),
-                        ],
-                      ),
-                    ),
-                    child: const Icon(Icons.badge_outlined, color: Colors.white),
-                  ),
-                ],
+      body: _buildCurrentScreen(),
+      bottomNavigationBar: SizedBox(
+        height: 80,
+        child: BottomAppBar(
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 8,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                iconSize: 34,
+                onPressed: () {
+                  setState(() {
+                    _currentPage = 'Links';
+                  });
+                },
+                icon: const Icon(Icons.link),
               ),
-        buttonData: [
-          PandaBarButtonData(
-            id: 'Links',
-            icon: Icons.link_rounded,
-            title: 'Links',
+              IconButton(
+                iconSize: 34,
+                onPressed: () {
+                  setState(() {
+                    _currentPage = 'Contacts';
+                  });
+                },
+                icon: const Icon(Icons.people),
+              ),
+              const SizedBox(width: 60),
+              IconButton(
+                iconSize: 34,
+                onPressed: () {
+                  setState(() {
+                    _currentPage = 'Explore';
+                  });
+                },
+                icon: const Icon(Icons.explore),
+              ),
+              IconButton(
+                iconSize: 34,
+                onPressed: () {
+                  setState(() {
+                    _currentPage = 'Settings';
+                  });
+                },
+                icon: const Icon(Icons.settings),
+              ),
+            ],
           ),
-          PandaBarButtonData(
-            id: 'Contacts',
-            icon: Icons.people_outline_rounded,
-            title: 'Contacts',
-          ),
-          PandaBarButtonData(
-            id: 'Explore',
-            icon: Icons.auto_awesome_outlined,
-            title: 'Explore',
-          ),
-          PandaBarButtonData(
-            id: 'Settings',
-            icon: Icons.settings_outlined,
-            title: 'Settings',
-          ),
-        ],
-        onChange: (id) {
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: InkWell(
+        onTap: () {
           setState(() {
-            _currentPage = id;
+            _currentPage = 'My Card';
           });
         },
-        onFabButtonPressed: () {
-          if (isEditing) {
-            profileProvider.triggerSave();
-          } else {
-            setState(() {
-              _currentPage = 'My Card';
-            });
-          }
-        },
+        child: Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(shape: BoxShape.circle),
+          child: _currentPage == 'My Card'
+              ? profile.profilePhotoUrl == null ||
+                        profile.profilePhotoUrl!.isEmpty
+                    ? Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppTheme.primaryBlack,
+                        ),
+                        child: const Icon(
+                          Icons.ios_share,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      )
+                    : ClipOval(
+                        child: Image.network(
+                          profile.profilePhotoUrl ?? "",
+                          fit: BoxFit.cover,
+                        ),
+                      )
+              : ClipOval(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppTheme.primaryBlack,
+                    ),
+                    child: Center(
+                      child: Text(
+                        profile.name.isNotEmpty
+                            ? profile.name[0].toUpperCase()
+                            : '?',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+        ),
       ),
-      body: _buildCurrentScreen(),
     );
   }
 }

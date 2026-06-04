@@ -88,67 +88,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildViewMode(ProfileProvider profileProvider, UserProfile profile) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            const Text(
-              'tapni',
-              style: TextStyle(
-                fontSize: 42,
-                fontWeight: FontWeight.w900,
-                letterSpacing: -2,
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          Spacer(),
+          const SizedBox(height: 20),
+          const Text(
+            'tapni',
+            style: TextStyle(
+              fontSize: 42,
+              fontWeight: FontWeight.w900,
+              letterSpacing: -2,
             ),
-            const SizedBox(height: 40),
-            _buildProfileAvatar(profile),
-            const SizedBox(height: 20),
+          ),
+          const SizedBox(height: 40),
+          _buildProfileAvatar(profile),
+          const SizedBox(height: 20),
+          Text(
+            profile.name,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+          ),
+          if (profile.bio.isNotEmpty) ...[
+            const SizedBox(height: 8),
             Text(
-              profile.name,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+              profile.bio,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
             ),
-            if (profile.bio.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Text(
-                profile.bio,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
-              ),
-            ],
-            const SizedBox(height: 30),
-            _buildLinkSection(
-              profile,
-              isEditable: false,
-              profileProvider: profileProvider,
-            ),
-            const SizedBox(height: 80),
-            SizedBox(
-              width: double.infinity,
-              height: 62,
-              child: ElevatedButton(
-                onPressed: () => _enterEditMode(profileProvider),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xfff3f3f3),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(35),
-                  ),
-                ),
-                child: const Text(
-                  'Edit profile',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 40),
           ],
-        ),
+          const SizedBox(height: 30),
+          _buildLinkSection(
+            profile,
+            isEditable: false,
+            profileProvider: profileProvider,
+          ),
+          const SizedBox(height: 80),
+          SizedBox(
+            width: double.infinity,
+            height: 62,
+            child: ElevatedButton(
+              onPressed: () => _enterEditMode(profileProvider),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xfff3f3f3),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(35),
+                ),
+              ),
+              child: const Text(
+                'Edit profile',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+          Spacer(),
+          const SizedBox(height: 40),
+        ],
       ),
     );
   }
@@ -915,106 +915,385 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final usernameController = TextEditingController();
+    final labelController = TextEditingController(
+      text: SocialLink.getPlatformName(platform),
+    );
+    bool showLink = true;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
+      backgroundColor: Colors.transparent,
       builder: (ctx) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(ctx).viewInsets.bottom,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 6, bottom: 12),
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade400,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(ctx).viewInsets.bottom,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF111111) : Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(24),
                   ),
                 ),
-                Row(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                      onPressed: () => Navigator.pop(ctx),
+                    // Drag handle
+                    Container(
+                      margin: const EdgeInsets.only(top: 4, bottom: 14),
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
-                    Expanded(
-                      child: Text(
-                        'Add ${SocialLink.getPlatformName(platform)}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+
+                    // Title
+                    const Text(
+                      'Create new link',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Icon + Label row
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Platform icon
+                        Container(
+                          width: 60,
+                          height: 60,
+                          // decoration: BoxDecoration(
+                          //   gradient: const LinearGradient(
+                          //     colors: [
+                          //       Color(0xFFF9CE34),
+                          //       Color(0xFFEE2A7B),
+                          //       Color(0xFF6228D7),
+                          //     ],
+                          //     begin: Alignment.topLeft,
+                          //     end: Alignment.bottomRight,
+                          //   ),
+                          //   borderRadius: BorderRadius.circular(14),
+                          // ),
+                          // child: const Icon(
+                          //   Icons.camera_alt_outlined,
+                          //   color: Colors.white,
+                          //   size: 28,
+                          // ),
+                          child: Image.asset(
+                            SocialLink.getAssetPath(platform),
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) =>
+                                const Icon(Icons.link, size: 28),
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+
+                        // Label field
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextField(
+                                
+                                controller: labelController,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                decoration: const InputDecoration.collapsed(
+                                  hintText: 'Label',
+                                  fillColor: const Color(0xFFF5F5F5),
+                                  filled: true,
+                                  border: InputBorder.none
+                                  
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                'Set text under the link icon',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey.shade500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Username field
+                    Container(
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0xFF1E1E1E)
+                            : const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Colors.grey.shade200,
+                          width: 0.5,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 4,
+                      ),
+                      child: TextField(
+                        controller: usernameController,
+                        autofocus: true,
+                        style: const TextStyle(fontSize: 15),
+                        decoration: InputDecoration(
+                          hintText:
+                              '${SocialLink.getPlatformName(platform)} username',
+                          hintStyle: TextStyle(color: Colors.grey.shade400),
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Enter your ${SocialLink.getPlatformName(platform)} username',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Show link toggle
+                    Container(
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0xFF1E1E1E)
+                            : const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Colors.grey.shade200,
+                          width: 0.5,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Show link',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Switch(
+                            value: showLink,
+                            activeColor: Colors.white,
+                            activeTrackColor: const Color(0xFF1E2022),
+                            onChanged: (val) => setState(() => showLink = val),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      "When turned off this link won't be shown on your profile",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Bottom row: delete + save
+                    Row(
+                      children: [
+                        // Delete button
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isDark
+                                ? const Color(0xFF1E1E1E)
+                                : const Color(0xFFF5F5F5),
+                            border: Border.all(
+                              color: Colors.grey.shade200,
+                              width: 0.5,
+                            ),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.delete_outline, size: 20),
+                            color: Colors.grey.shade600,
+                            onPressed: () => Navigator.pop(ctx),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+
+                        // Save button
+                        Expanded(
+                          child: SizedBox(
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                final value = usernameController.text.trim();
+                                if (value.isNotEmpty) {
+                                  provider.addSocialLink(platform, value);
+                                  Navigator.pop(ctx);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF3A3A3A),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: const Text(
+                                'Save',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
                   ],
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  'Enter your ${SocialLink.getPlatformName(platform)} connection details.',
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: usernameController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText: _getPlatformLabel(platform),
-                    prefixIcon: const Icon(Icons.link),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 54,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final value = usernameController.text.trim();
-                      if (value.isNotEmpty) {
-                        provider.addSocialLink(platform, value);
-                        Navigator.pop(ctx);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1E2022),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    child: const Text(
-                      'Save link',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
   }
+
+  // void _showNewLinkBottomSheet(
+  //   BuildContext context,
+  //   SocialPlatform platform,
+  //   ProfileProvider provider,
+  // ) {
+  //   final isDark = Theme.of(context).brightness == Brightness.dark;
+  //   final usernameController = TextEditingController();
+
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+  //     ),
+  //     builder: (ctx) {
+  //       return Padding(
+  //         padding: EdgeInsets.only(
+  //           bottom: MediaQuery.of(ctx).viewInsets.bottom,
+  //         ),
+  //         child: Padding(
+  //           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Center(
+  //                 child: Container(
+  //                   margin: const EdgeInsets.only(top: 6, bottom: 12),
+  //                   width: 40,
+  //                   height: 4,
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.grey.shade400,
+  //                     borderRadius: BorderRadius.circular(2),
+  //                   ),
+  //                 ),
+  //               ),
+  //               Row(
+  //                 children: [
+  //                   IconButton(
+  //                     icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+  //                     onPressed: () => Navigator.pop(ctx),
+  //                   ),
+  //                   Expanded(
+  //                     child: Text(
+  //                       'Add ${SocialLink.getPlatformName(platform)}',
+  //                       style: const TextStyle(
+  //                         fontSize: 18,
+  //                         fontWeight: FontWeight.bold,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //               const SizedBox(height: 12),
+  //               Text(
+  //                 'Enter your ${SocialLink.getPlatformName(platform)} connection details.',
+  //                 style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+  //               ),
+  //               const SizedBox(height: 16),
+  //               TextField(
+  //                 controller: usernameController,
+  //                 autofocus: true,
+  //                 decoration: InputDecoration(
+  //                   labelText: _getPlatformLabel(platform),
+  //                   prefixIcon: const Icon(Icons.link),
+  //                   border: OutlineInputBorder(
+  //                     borderRadius: BorderRadius.circular(14),
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 24),
+  //               SizedBox(
+  //                 width: double.infinity,
+  //                 height: 54,
+  //                 child: ElevatedButton(
+  //                   onPressed: () {
+  //                     final value = usernameController.text.trim();
+  //                     if (value.isNotEmpty) {
+  //                       provider.addSocialLink(platform, value);
+  //                       Navigator.pop(ctx);
+  //                     }
+  //                   },
+  //                   style: ElevatedButton.styleFrom(
+  //                     backgroundColor: const Color(0xFF1E2022),
+  //                     shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(25),
+  //                     ),
+  //                   ),
+  //                   child: const Text(
+  //                     'Save link',
+  //                     style: TextStyle(
+  //                       fontSize: 16,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: Colors.white,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 20),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   void _showExistingLinkBottomSheet(
     BuildContext context,
