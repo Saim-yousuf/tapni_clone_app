@@ -69,12 +69,17 @@ class SubscriptionProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<bool> subscribe(String planId, BuildContext context) async {
+  Future<bool> subscribe(
+    String planId,
+    BuildContext context, {
+    String transactionRef = '',
+    String paymentReceipt = '',
+  }) async {
     setLoading(true);
-    // Hardcoding paymentMethod for now. Usually, this would come from a payment gateway.
     final response = await _subscriptionRepo.subscribe(
       planId: planId,
-      paymentMethod: "stripe", 
+      transactionRef: transactionRef,
+      paymentReceipt: paymentReceipt,
     );
     setLoading(false);
 

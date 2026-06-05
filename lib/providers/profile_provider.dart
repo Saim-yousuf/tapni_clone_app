@@ -453,11 +453,11 @@ class ProfileProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void deleteSocialLink(String id) {
+  Future<void> deleteSocialLink(String id, BuildContext context) async {
     final updatedLinks = _profile.socialLinks
         .where((link) => link.id != id)
         .toList();
-    _profile = _profile.copyWith(socialLinks: updatedLinks);
+    await updateLinks(links: updatedLinks, context: context);
     notifyListeners();
   }
 

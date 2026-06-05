@@ -30,6 +30,13 @@ class UserSubscription {
   final String paymentMethod;
   final DateTime? startDate;
   final DateTime? endDate;
+  final String transactionRef;
+  final String paymentReceipt;
+  final String rejectionReason;
+  final String source;
+  final DateTime? requestedAt;
+  final DateTime? approvedAt;
+  final DateTime? rejectedAt;
 
   UserSubscription({
     required this.id,
@@ -40,9 +47,18 @@ class UserSubscription {
     required this.paymentMethod,
     this.startDate,
     this.endDate,
+    this.transactionRef = '',
+    this.paymentReceipt = '',
+    this.rejectionReason = '',
+    this.source = '',
+    this.requestedAt,
+    this.approvedAt,
+    this.rejectedAt,
   });
 
   bool get isActive => status == 'active';
+  bool get isRequested => status == 'requested';
+  bool get isRejected => status == 'rejected';
 
   factory UserSubscription.fromJson(Map<String, dynamic> json) {
     return UserSubscription(
@@ -57,6 +73,19 @@ class UserSubscription {
           : null,
       endDate: json['endDate'] != null
           ? DateTime.tryParse(json['endDate'].toString())
+          : null,
+      transactionRef: json['transactionRef']?.toString() ?? '',
+      paymentReceipt: json['paymentReceipt']?.toString() ?? '',
+      rejectionReason: json['rejectionReason']?.toString() ?? '',
+      source: json['source']?.toString() ?? '',
+      requestedAt: json['requestedAt'] != null
+          ? DateTime.tryParse(json['requestedAt'].toString())
+          : null,
+      approvedAt: json['approvedAt'] != null
+          ? DateTime.tryParse(json['approvedAt'].toString())
+          : null,
+      rejectedAt: json['rejectedAt'] != null
+          ? DateTime.tryParse(json['rejectedAt'].toString())
           : null,
     );
   }

@@ -6,7 +6,6 @@ import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
-import 'package:tapni_app/screens/subscription_screen.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -57,22 +56,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     if (isLoggedIn) {
       final subProvider = Provider.of<SubscriptionProvider>(context, listen: false);
-      final isSubscribed = await subProvider.checkSubscriptionStatus();
+      await subProvider.checkSubscriptionStatus();
+      final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+      await profileProvider.fetchProfile();
 
-      if (isSubscribed) {
-        final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
-        await profileProvider.fetchProfile();
-        
-        if (!mounted) return;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const MainShell()),
-        );
-      } else {
-        if (!mounted) return;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const SubscriptionScreen()),
-        );
-      }
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const MainShell()),
+      );
     } else {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const OnboardingScreen()),

@@ -5,6 +5,7 @@ import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
+import 'package:tapni_app/screens/subscription_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
@@ -264,7 +265,11 @@ class _LeadsScreenState extends State<LeadsScreen> {
         actions: [
           // Go PRO badge
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const SubscriptionScreen()),
+              );
+            },
             child: Container(
               margin: const EdgeInsets.only(right: 16),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -477,7 +482,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
             // Navigator.of(context).push(
             //   MaterialPageRoute(builder: (_) => const ScanScreen()),
             // );
-            SharingProfileSheet.show(context, profileUrl: 'https://tapni.com/tltqfl43');
+            SharingProfileSheet.show(
+              context,
+              profileUrl: 'https://tapni.com/tltqfl43',
+            );
           },
           child: Container(
             width: double.infinity,

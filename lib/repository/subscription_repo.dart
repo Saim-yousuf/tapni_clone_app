@@ -22,13 +22,15 @@ class SubscriptionRepo {
 
   Future<ApiResponse> subscribe({
     required String planId,
-    required String paymentMethod,
+    String transactionRef = '',
+    String paymentReceipt = '',
   }) async {
     return await ApiHandler.request(
       api: Api.subscription.subscribe,
-      body: {
+      jsonBody: {
         "planId": planId,
-        "paymentMethod": paymentMethod,
+        "transactionRef": transactionRef,
+        "paymentReceipt": paymentReceipt,
       },
       method: ApiMethod.post,
       authorization: true,

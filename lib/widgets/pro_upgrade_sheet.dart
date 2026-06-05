@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/providers/subscription_provider.dart';
 
 class ProUpgradeSheet extends StatefulWidget {
   const ProUpgradeSheet({Key? key}) : super(key: key);
@@ -11,6 +14,38 @@ class ProUpgradeSheet extends StatefulWidget {
 
 class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
   bool _isYearlySelected = true;
+  final _transactionController = TextEditingController();
+  String _receiptBase64 = '';
+
+  Future<void> _pickReceipt() async {
+    final file = await pickFile();
+    if (file?.file == null) return;
+
+    _receiptBase64 = await fileToBase64(File(file!.file!.path));
+    setState(() {});
+  }
+
+  Future<void> _submitRequest() async {
+    final provider = Provider.of<SubscriptionProvider>(context, listen: false);
+
+    final planId = _isYearlySelected ? 'yearly' : 'monthly';
+
+    final success = await provider.subscribe(
+      planId,
+      context,
+      transactionRef: _transactionController.text.trim(),
+      paymentReceipt: _receiptBase64,
+    );
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Subscription request submitted')),
+      );
+      Navigator.pop(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +55,8 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
       context,
       listen: false,
     );
-
+    final subscriptionProvider = Provider.of<SubscriptionProvider>(context);
+    final subscription = subscriptionProvider.currentSubscription;
     return Container(
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF161618) : Colors.white,
@@ -42,435 +78,305 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Drag Handle
-          Container(
-            width: 44,
-            height: 5,
-            decoration: BoxDecoration(
-              color: isDark ? Colors.white24 : Colors.black12,
-              borderRadius: BorderRadius.circular(2.5),
+          if (subscription?.isRequested == true)
+            _statusPanel(
+              isDark: isDark,
+              title: "Request pending",
+              text:
+                  "Your ${subscription!.planName} request is submitted and waiting for approval on ${_date(subscription.requestedAt)}.",
+            )
+          else if (subscription?.isRejected == true)
+            _statusPanel(
+              isDark: isDark,
+              title: "Request rejected",
+              text:
+                  "${subscription!.rejectionReason.isEmpty ? "No reason provided." : subscription.rejectionReason}\nYou can try again below.",
+            )
+          else if (subscription?.isActive == true)
+            _statusPanel(
+              isDark: isDark,
+              title: "Premium active",
+              text:
+                  "${subscription!.planName} is active until ${_date(subscription.endDate)}.\nPlease cancel current plan before buying another.",
             ),
-          ),
-          const SizedBox(height: 12),
-
-          // 14 Days Free Trial Pill
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-            decoration: BoxDecoration(
-              color: isDark
-                  ? Colors.white.withOpacity(0.08)
-                  : const Color(0xFFF2F2F7),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Text(
-              '14 days free trial',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white70 : Colors.black54,
-              ),
-            ),
-          ),
-          const SizedBox(height: 14),
-
-          // Upgrade to PRO title row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Upgrade to ',
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 24,
-                  color: isDark ? Colors.white : Colors.black,
-                  letterSpacing: -0.5,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                  border: isDark ? Border.all(color: Colors.white24) : null,
-                ),
-                child: const Text(
-                  'PRO',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 13,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-
-          // Subscription Plans Selection Options
-          // Option 1: Yearly
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _isYearlySelected = true;
-              });
-            },
-            child: Stack(
-              clipBehavior: Clip.none,
+          if (subscription?.isRequested == false &&
+              subscription?.isActive == false)
+            Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
+                /// HANDLE
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 18,
-                  ),
+                  width: 44,
+                  height: 5,
                   decoration: BoxDecoration(
-                    color: isDark
-                        ? Colors.white.withOpacity(0.02)
-                        : Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: _isYearlySelected
-                          ? (isDark ? Colors.white : Colors.black)
-                          : (isDark ? Colors.white12 : const Color(0xFFE5E5EA)),
-                      width: _isYearlySelected ? 2.2 : 1.2,
-                    ),
+                    color: isDark ? Colors.white24 : Colors.black12,
+                    borderRadius: BorderRadius.circular(2.5),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Yearly',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w900,
-                                fontSize: 18,
-                                color: isDark ? Colors.white : Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              'Rs 8.300 billed yearly',
-                              style: TextStyle(
-                                fontSize: 12.5,
-                                color: isDark ? Colors.white54 : Colors.black45,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'PKR 691.66',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w900,
-                                  color: isDark ? Colors.white : Colors.black,
-                                ),
-                              ),
-                              Text(
-                                '/month',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: isDark
-                                      ? Colors.white54
-                                      : Colors.black45,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 14),
-                      Icon(
-                        _isYearlySelected
-                            ? Icons.check_circle
-                            : Icons.radio_button_off,
-                        color: _isYearlySelected
-                            ? (isDark ? Colors.white : Colors.black)
-                            : (isDark ? Colors.white30 : Colors.black26),
-                        size: 24,
-                      ),
-                    ],
-                  ),
-                ),
-                // Badge: "7 months free"
-                Positioned(
-                  top: -11,
-                  left: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 3.5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10),
-                      border: isDark ? Border.all(color: Colors.white24) : null,
-                    ),
-                    child: const Text(
-                      '7 months free',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 9,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 0.2,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-
-          // Option 2: Monthly
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _isYearlySelected = false;
-              });
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-              decoration: BoxDecoration(
-                color: isDark ? Colors.white.withOpacity(0.02) : Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: !_isYearlySelected
-                      ? (isDark ? Colors.white : Colors.black)
-                      : (isDark ? Colors.white12 : const Color(0xFFE5E5EA)),
-                  width: !_isYearlySelected ? 2.2 : 1.2,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Monthly',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 18,
-                        color: isDark ? Colors.white : Colors.black,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'Rs 1.600',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900,
-                          color: isDark ? Colors.white : Colors.black,
-                        ),
-                      ),
-                      Text(
-                        '/month',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white54 : Colors.black45,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 14),
-                  Icon(
-                    !_isYearlySelected
-                        ? Icons.check_circle
-                        : Icons.radio_button_off,
-                    color: !_isYearlySelected
-                        ? (isDark ? Colors.white : Colors.black)
-                        : (isDark ? Colors.white30 : Colors.black26),
-                    size: 24,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 14),
-
-          // Cancel anytime text
-          Text(
-            'Cancel anytime.',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: isDark ? Colors.white54 : Colors.black54,
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Benefits Checklist Card Container
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: isDark
-                  ? Colors.white.withOpacity(0.03)
-                  : const Color(0xFFF2F2F7),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              children: [
-                _buildBenefitRow(
-                  icon: Icons.palette_outlined,
-                  text: 'Customize your profile design',
-                  isDark: isDark,
-                ),
-                _buildBenefitRow(
-                  icon: Icons.qr_code_scanner_rounded,
-                  text: 'Unlimited scans with AI scanner',
-                  isDark: isDark,
-                ),
-                _buildBenefitRow(
-                  icon: Icons.remove_circle_outline_rounded,
-                  text: 'Remove Tapni branding and add your own',
-                  isDark: isDark,
-                ),
-                _buildBenefitRow(
-                  icon: Icons.analytics_outlined,
-                  text: 'Analytics & insights',
-                  isDark: isDark,
-                ),
-                _buildBenefitRow(
-                  icon: Icons.people_outline_rounded,
-                  text: 'Unlimited contacts & contact categories',
-                  isDark: isDark,
                 ),
                 const SizedBox(height: 12),
 
-                // Learn More Button
+                /// TITLE (same UI)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Upgrade to ',
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 24,
+                        color: isDark ? Colors.white : Colors.black,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text(
+                        'PRO',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+
+                /// YEARLY (same UI style)
+                GestureDetector(
+                  onTap: () => setState(() => _isYearlySelected = true),
+                  child: _planCard(
+                    isDark: isDark,
+                    selected: _isYearlySelected,
+                    title: "Yearly",
+                    subtitle: "Rs 8,300 billed yearly",
+                    price: "PKR 691.66/month",
+                    badge: "7 months free",
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                /// MONTHLY
+                GestureDetector(
+                  onTap: () => setState(() => _isYearlySelected = false),
+                  child: _planCard(
+                    isDark: isDark,
+                    selected: !_isYearlySelected,
+                    title: "Monthly",
+                    subtitle: "Rs 1,600 billed monthly",
+                    price: "PKR 1,600/month",
+                    badge: null,
+                  ),
+                ),
+
+                const SizedBox(height: 14),
+
+                Text(
+                  'Cancel anytime.',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.white54 : Colors.black54,
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                /// BENEFITS (same UI)
                 Container(
-                  width: double.infinity,
-                  height: 48,
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: isDark
-                        ? Colors.white.withOpacity(0.06)
-                        : Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.03),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
+                        ? Colors.white.withOpacity(0.03)
+                        : const Color(0xFFF2F2F7),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      _benefit(
+                        Icons.palette_outlined,
+                        "Customize your profile",
+                      ),
+                      _benefit(Icons.qr_code_scanner, "Unlimited AI scans"),
+                      _benefit(
+                        Icons.analytics_outlined,
+                        "Analytics & insights",
                       ),
                     ],
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Learn more',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white : Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Icon(
-                        Icons.chevron_right,
-                        size: 18,
-                        color: isDark ? Colors.white54 : Colors.black54,
-                      ),
-                    ],
+                ),
+
+                const SizedBox(height: 18),
+
+                /// TRANSACTION FIELD (added from subscription screen)
+                TextField(
+                  controller: _transactionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Transaction reference (optional)',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                /// RECEIPT UPLOAD
+                OutlinedButton.icon(
+                  onPressed: _pickReceipt,
+                  icon: const Icon(Icons.upload_file),
+                  label: Text(
+                    _receiptBase64.isEmpty
+                        ? "Upload receipt (optional)"
+                        : "Receipt attached",
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+
+                /// BUTTON (now real subscription)
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isDark ? Colors.white : Colors.black,
+                      foregroundColor: isDark ? Colors.black : Colors.white,
+                    ),
+                    onPressed: subscriptionProvider.isLoading
+                        ? null
+                        : _submitRequest,
+                    child: subscriptionProvider.isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text("Upgrade now"),
                   ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 24),
-
-          // Upgrade Now CTA Button
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isDark ? Colors.white : Colors.black,
-                foregroundColor: isDark ? Colors.black : Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(26),
-                ),
-                elevation: 0,
-              ),
-              onPressed: () {
-                profileProvider.upgradeToPro();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      '🎉 Congratulations! You upgraded to Tapni PRO!',
-                    ),
-                    duration: Duration(seconds: 3),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Upgrade now',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -0.2,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 14),
-
-          // Policy & Terms disclaimer text
-          Text(
-            'By upgrading, you agree to our\nTerms of Service and Privacy Policy',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 11.5,
-              fontWeight: FontWeight.w500,
-              color: isDark ? Colors.white30 : Colors.black38,
-              height: 1.3,
-            ),
-          ),
         ],
       ),
     );
   }
 
-  // Row helper for benefits card
-  Widget _buildBenefitRow({
-    required IconData icon,
-    required String text,
+  Widget _planCard({
     required bool isDark,
+    required bool selected,
+    required String title,
+    required String subtitle,
+    required String price,
+    String? badge,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 7.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(icon, size: 20, color: isDark ? Colors.white60 : Colors.black54),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white70 : Colors.black87,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isDark ? Colors.white.withOpacity(0.02) : Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: selected
+                  ? (isDark ? Colors.white : Colors.black)
+                  : Colors.black12,
+              width: selected ? 2 : 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(subtitle, style: const TextStyle(fontSize: 12)),
+                  ],
+                ),
+              ),
+              Text(price, style: const TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(width: 10),
+              Icon(selected ? Icons.check_circle : Icons.radio_button_off),
+            ],
+          ),
+        ),
+
+        if (badge != null)
+          Positioned(
+            top: -10,
+            left: 12,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                badge,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 9,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
             ),
           ),
+      ],
+    );
+  }
+
+  Widget _benefit(IconData icon, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Icon(icon, size: 18),
+          const SizedBox(width: 12),
+          Expanded(child: Text(text)),
         ],
       ),
     );
+  }
+
+  Widget _statusPanel({
+    required bool isDark,
+    required String title,
+    required String text,
+  }) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.black12),
+        color: isDark ? Colors.white10 : Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(height: 6),
+          Text(text),
+        ],
+      ),
+    );
+  }
+
+  String _date(DateTime? value) {
+    if (value == null) return '--';
+    return '${value.day}/${value.month}/${value.year}';
   }
 }

@@ -4,7 +4,6 @@ import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
-import 'package:tapni_app/screens/subscription_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -39,9 +38,8 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       if (success && mounted) {
-        // Clear all previous routes and go to Subscription Screen
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const SubscriptionScreen()),
+          MaterialPageRoute(builder: (_) => const MainShell()),
           (route) => false,
         );
       }

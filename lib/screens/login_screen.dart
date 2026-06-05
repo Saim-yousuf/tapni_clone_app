@@ -5,7 +5,6 @@ import 'package:tapni_app/screens/signup_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
-import 'package:tapni_app/screens/subscription_screen.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 
@@ -44,24 +43,16 @@ class _LoginScreenState extends State<LoginScreen> {
         context,
         listen: false,
       );
-      final isSubscribed = await subProvider.checkSubscriptionStatus();
-
-      if (isSubscribed) {
-        final profileProvider = Provider.of<ProfileProvider>(
-          context,
-          listen: false,
-        );
-        await profileProvider.fetchProfile();
-        if (!mounted) return;
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (_) => const MainShell()));
-      } else {
-        if (!mounted) return;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const SubscriptionScreen()),
-        );
-      }
+      await subProvider.checkSubscriptionStatus();
+      final profileProvider = Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      );
+      await profileProvider.fetchProfile();
+      if (!mounted) return;
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const MainShell()));
     }
     // }
   }
@@ -263,30 +254,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                     context,
                                     listen: false,
                                   );
-                              final isSubscribed = await subProvider
-                                  .checkSubscriptionStatus();
-
-                              if (isSubscribed) {
-                                final profileProvider =
-                                    Provider.of<ProfileProvider>(
-                                      context,
-                                      listen: false,
-                                    );
-                                await profileProvider.fetchProfile();
-                                if (!mounted) return;
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (_) => const MainShell(),
-                                  ),
-                                );
-                              } else {
-                                if (!mounted) return;
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (_) => const SubscriptionScreen(),
-                                  ),
-                                );
-                              }
+                              await subProvider.checkSubscriptionStatus();
+                              final profileProvider =
+                                  Provider.of<ProfileProvider>(
+                                    context,
+                                    listen: false,
+                                  );
+                              await profileProvider.fetchProfile();
+                              if (!mounted) return;
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (_) => const MainShell(),
+                                ),
+                              );
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

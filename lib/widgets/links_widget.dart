@@ -889,7 +889,10 @@ class LinkSheet {
                           child: IconButton(
                             icon: Icon(Icons.delete_forever_outlined, size: 24),
                             color: Colors.grey.shade600,
-                            onPressed: () => Navigator.pop(ctx),
+                            onPressed: () async {
+                              // await provider.deleteSocialLink(link.id, context);
+                              Navigator.pop(ctx);
+                            },
                           ),
                         ),
                         const SizedBox(width: 12),
