@@ -6,6 +6,7 @@ import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 class LinkSheet {
   void showAddLinkBottomSheet(BuildContext context, ProfileProvider provider) {
@@ -150,91 +151,11 @@ class LinkSheet {
                         );
                       }
 
-                      return ListView(
-                        controller: scrollController,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        children: categories.map((cat) {
-                          final platforms =
-                              cat['platforms'] as List<SocialPlatform>;
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                child: Text(
-                                  cat['title'] as String,
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              GridView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4,
-                                      crossAxisSpacing: 12,
-                                      mainAxisSpacing: 12,
-                                      childAspectRatio: 0.8,
-                                    ),
-                                itemCount: platforms.length,
-                                itemBuilder: (context, index) {
-                                  final platform = platforms[index];
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(ctx);
-                                      _showNewLinkBottomSheet(
-                                        context,
-                                        platform,
-                                        provider,
-                                      );
-                                    },
-                                    child: Column(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                          child: Image.asset(
-                                            SocialLink.getAssetPath(platform),
-                                            width: 84,
-                                            height: 84,
-                                            errorBuilder: (_, __, ___) =>
-                                                Container(
-                                                  width: 84,
-                                                  height: 84,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey.shade200,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          16,
-                                                        ),
-                                                  ),
-                                                  child: const Icon(Icons.link),
-                                                ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 6),
-                                        Text(
-                                          SocialLink.getPlatformName(platform),
-                                          style: const TextStyle(fontSize: 11),
-                                          textAlign: TextAlign.center,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 8),
-                            ],
-                          );
-                        }).toList(),
+                      return const Center(
+                        child: Text(
+                          'No link templates available',
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
                       );
                     },
                   ),
@@ -256,13 +177,11 @@ class LinkSheet {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          child: Text(
-            category.name,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+        Text(
+          category.name,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 12),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -270,7 +189,7 @@ class LinkSheet {
             crossAxisCount: 4,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
-            childAspectRatio: 0.8,
+            childAspectRatio: 0.6,
           ),
           itemCount: category.templates.length,
           itemBuilder: (context, index) {
@@ -278,6 +197,20 @@ class LinkSheet {
             return GestureDetector(
               onTap: () {
                 Navigator.pop(sheetContext);
+                final isProUser = Provider.of<ProfileProvider>(
+                  context,
+                  listen: false,
+                ).isProUser;
+
+                if (template.isPro && !isProUser) {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => const ProUpgradeSheet(),
+                  );
+                  return;
+                }
                 if (template.actionType == 'contact_card') {
                   _showContactCardBottomSheet(context);
                 } else {
@@ -286,11 +219,22 @@ class LinkSheet {
               },
               child: Column(
                 children: [
-                  _buildTemplateLogo(template.logo, size: 84, radius: 16),
-                  const SizedBox(height: 6),
+                  _buildTemplateLogo(
+                    template.logo,
+                    size: 130,
+                    radius: 5,
+                    isPro: template.isPro,
+                    context: context,
+                  ),
+                  const SizedBox(height: 4),
                   Text(
                     template.label,
-                    style: const TextStyle(fontSize: 11),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppTheme.primaryBlack,
+                      fontWeight: FontWeight.w500,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -309,7 +253,13 @@ class LinkSheet {
     String logo, {
     double size = 60,
     double radius = 14,
+    required bool isPro,
+    required BuildContext context,
   }) {
+    final isProUser = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).isProUser;
     log("Building template logo for$logo");
     final placeholder = Container(
       width: size,
@@ -322,6 +272,40 @@ class LinkSheet {
     );
 
     if (logo.isEmpty) return placeholder;
+
+    if (isPro && !isProUser) {
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(radius),
+            child: Image.network(
+              logo.replaceAll(" ", ""),
+              width: size,
+              height: size,
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) => placeholder,
+            ),
+          ),
+          Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(radius),
+              color: Colors.white.withOpacity(0.8),
+            ),
+            // child:
+          ),
+          Image.asset(
+            "assets/images/png/premium-icon2.png",
+            width: 60,
+            height: 60,
+            fit: BoxFit.cover,
+            opacity: const AlwaysStoppedAnimation(0.7),
+          ),
+        ],
+      );
+    }
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
@@ -389,7 +373,13 @@ class LinkSheet {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildTemplateLogo(template.logo, size: 60),
+                        _buildTemplateLogo(
+                          template.logo,
+                          size: 60,
+
+                          isPro: template.isPro,
+                          context: context,
+                        ),
                         const SizedBox(width: 14),
                         Expanded(
                           child: Column(
@@ -564,7 +554,9 @@ class LinkSheet {
       backgroundColor: Colors.transparent,
       builder: (ctx) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom,
+          ),
           child: Container(
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF111111) : Colors.white,
@@ -592,9 +584,17 @@ class LinkSheet {
                 const SizedBox(height: 20),
                 _contactField(nameController, 'Full name', TextInputType.name),
                 const SizedBox(height: 12),
-                _contactField(phoneController, 'Phone number', TextInputType.phone),
+                _contactField(
+                  phoneController,
+                  'Phone number',
+                  TextInputType.phone,
+                ),
                 const SizedBox(height: 12),
-                _contactField(emailController, 'Email', TextInputType.emailAddress),
+                _contactField(
+                  emailController,
+                  'Email',
+                  TextInputType.emailAddress,
+                ),
                 const SizedBox(height: 12),
                 _contactField(companyController, 'Company', TextInputType.text),
                 const SizedBox(height: 24),

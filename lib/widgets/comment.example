@@ -1,0 +1,88 @@
+ return ListView(
+                        controller: scrollController,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        children: categories.map((cat) {
+                          final platforms =
+                              cat['platforms'] as List<SocialPlatform>;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                child: Text(
+                                  cat['title'] as String,
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 4,
+                                      crossAxisSpacing: 12,
+                                      mainAxisSpacing: 12,
+                                      childAspectRatio: 0.8,
+                                    ),
+                                itemCount: platforms.length,
+                                itemBuilder: (context, index) {
+                                  final platform = platforms[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(ctx);
+                                      _showNewLinkBottomSheet(
+                                        context,
+                                        platform,
+                                        provider,
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          child: Image.asset(
+                                            SocialLink.getAssetPath(platform),
+                                            width: 84,
+                                            height: 84,
+                                            errorBuilder: (_, __, ___) =>
+                                                Container(
+                                                  width: 84,
+                                                  height: 84,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey.shade200,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          16,
+                                                        ),
+                                                  ),
+                                                  child: const Icon(Icons.link),
+                                                ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          SocialLink.getPlatformName(platform),
+                                          style: const TextStyle(fontSize: 11),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 8),
+                            ],
+                          );
+                        }).toList(),
+                      );
+                   
+                   
