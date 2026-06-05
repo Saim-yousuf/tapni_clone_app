@@ -4,7 +4,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/notifications_screen.dart';
-import 'package:tapni_app/screens/qr_code_screen.dart';
+import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/models/activity.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
@@ -144,8 +144,15 @@ class HomeDashboard extends StatelessWidget {
               // Digital Card Quick Summary Card
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const QrCodeScreen()),
+                  final slug = profile.name
+                      .replaceAll(' ', '')
+                      .toLowerCase();
+                  SharingProfileSheet.show(
+                    context,
+                    profileUrl: 'https://tapni.com/$slug',
+                    userInitial:
+                        profile.name.isNotEmpty ? profile.name[0] : 'S',
+                    profilePhotoUrl: profile.profilePhotoUrl,
                   );
                 },
                 child: GlassCard(
