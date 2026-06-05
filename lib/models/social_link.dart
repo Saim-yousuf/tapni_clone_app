@@ -34,8 +34,11 @@ class SocialLink {
   final String? templateId;
   final String? customLabel;
   final String? fieldLabel;
+  final String? fieldType;
   final String? logoUrl;
   final String? url;
+  final Map<String, String>? bankDetails;
+  final bool isCustom;
   final String value; // username, phone number, or URL
   final bool isActive;
   final bool isPublic;
@@ -46,8 +49,11 @@ class SocialLink {
     this.templateId,
     this.customLabel,
     this.fieldLabel,
+    this.fieldType,
     this.logoUrl,
     this.url,
+    this.bankDetails,
+    this.isCustom = false,
     required this.value,
     this.isActive = true,
     this.isPublic = true,
@@ -59,8 +65,11 @@ class SocialLink {
     String? templateId,
     String? customLabel,
     String? fieldLabel,
+    String? fieldType,
     String? logoUrl,
     String? url,
+    Map<String, String>? bankDetails,
+    bool? isCustom,
     String? value,
     bool? isActive,
     bool? isPublic,
@@ -71,8 +80,11 @@ class SocialLink {
       templateId: templateId ?? this.templateId,
       customLabel: customLabel ?? this.customLabel,
       fieldLabel: fieldLabel ?? this.fieldLabel,
+      fieldType: fieldType ?? this.fieldType,
       logoUrl: logoUrl ?? this.logoUrl,
       url: url ?? this.url,
+      bankDetails: bankDetails ?? this.bankDetails,
+      isCustom: isCustom ?? this.isCustom,
       value: value ?? this.value,
       isActive: isActive ?? this.isActive,
       isPublic: isPublic ?? this.isPublic,
@@ -108,11 +120,15 @@ class SocialLink {
   /// Convert to API link object.
   Map<String, dynamic> toApiJson() {
     return {
+      if (RegExp(r'^[a-fA-F0-9]{24}$').hasMatch(id)) '_id': id,
       if (templateId != null && templateId!.isNotEmpty) 'templateId': templateId,
       'label': platformName,
       'title': platformName,
-      'type': apiType,
+      'type': fieldType ?? apiType,
       'value': value,
+      if (logoUrl != null && logoUrl!.isNotEmpty) 'logo': logoUrl,
+      if (bankDetails != null) 'bankDetails': bankDetails,
+      'isCustom': isCustom,
       'url': fullUrl,
       'isActive': isActive,
       'isPublic': isPublic,
@@ -126,6 +142,7 @@ class SocialLink {
     final title = json['label'] as String? ?? json['title'] as String? ?? '';
     final value = json['value'] as String? ?? url;
     final logo = json['logo'] as String?;
+    final bankDetailsJson = json['bankDetails'] as Map<String, dynamic>?;
     final templateId = json['templateId']?.toString();
     final fieldLabel = json['fieldLabel']?.toString();
 
@@ -194,15 +211,22 @@ class SocialLink {
     }
 
     return SocialLink(
-      id: url.isNotEmpty
-          ? url
-          : DateTime.now().millisecondsSinceEpoch.toString(),
+      id: json['_id']?.toString() ??
+          json['id']?.toString() ??
+          (url.isNotEmpty
+              ? url
+              : DateTime.now().millisecondsSinceEpoch.toString()),
       platform: platform,
       templateId: templateId,
       customLabel: title.isNotEmpty ? title : null,
       fieldLabel: fieldLabel,
+      fieldType: type,
+      isCustom: json['isCustom'] as bool? ?? false,
       logoUrl: logo,
       url: url,
+      bankDetails: bankDetailsJson?.map(
+        (key, value) => MapEntry(key, value?.toString() ?? ''),
+      ),
       value: value,
       isActive: json['isActive'] as bool? ?? true,
       isPublic: json['isPublic'] as bool? ?? true,
@@ -430,6 +454,13 @@ class SocialLink {
   }
 
   String get fullUrl {
+    if (bankDetails != null) {
+      final identifier =
+          bankDetails!['iban']?.isNotEmpty == true
+              ? bankDetails!['iban']!
+              : bankDetails!['accountNumber'] ?? '';
+      return identifier.isEmpty ? value : 'bank:$identifier';
+    }
     if (url?.isNotEmpty == true) return url!;
     if (baseUrlPrefix.isEmpty) {
       if (platform == SocialPlatform.email && !value.startsWith('mailto:')) {

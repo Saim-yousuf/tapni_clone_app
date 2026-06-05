@@ -8,6 +8,7 @@ import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
+import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/templates_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -207,46 +208,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
                 // Go PRO button
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black12),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Go ',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
+                if (profile.isPro == false)
+                  InkWell(
+                    onTap: () {
+                      SubcriptionSheet.show(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Text(
-                          'BUSINESS',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                            fontWeight: FontWeight.w900,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black12),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          const Text(
+                            'Go ',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Text(
+                              'BUSINESS',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
               ],
             ),
 
@@ -302,6 +309,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   right: 12,
                   child: InkWell(
                     onTap: () {
+                      if (profile.isPro == false) {
+                        SubcriptionSheet.show(context);
+                        return;
+                      }
                       pickFile().then((file) {
                         if (file != null) {
                           setState(() {
@@ -552,77 +563,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileAvatar(UserProfile profile) {
-    if (profile.profilePhotoUrl != null &&
-        profile.profilePhotoUrl!.trim().isNotEmpty) {
-      return Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            height: 220,
-            width: double.infinity,
-            decoration: BoxDecoration(color: const Color(0xFFF5F5F5)),
-            child: coverImageFile != null
-                ? Image.file(
-                    coverImageFile!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) =>
-                        Container(color: const Color(0xFFF5F5F5)),
-                  )
-                : profile.coverPhotoUrl != null &&
-                      profile.coverPhotoUrl!.isNotEmpty
-                ? Image.network(
-                    profile.coverPhotoUrl!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) =>
-                        Container(color: const Color(0xFFF5F5F5)),
-                  )
-                : null,
-          ),
-          Positioned(
-            bottom: -6,
-            left: 0,
-            right: 0,
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.black),
-                image: DecorationImage(
-                  image: NetworkImage(profile.profilePhotoUrl!),
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: const Color(0xFF1E2022),
-        border: Border.all(color: Colors.black),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        profile.name.isNotEmpty ? profile.name[0].toUpperCase() : '?',
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 56,
-          fontWeight: FontWeight.w800,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        // COVER PHOTO (always check separately)
+        Container(
+          height: 220,
+          width: double.infinity,
+          color: const Color(0xFFF5F5F5),
+          child: coverImageFile != null
+              ? Image.file(coverImageFile!, fit: BoxFit.cover)
+              : (profile.coverPhotoUrl != null &&
+                    profile.coverPhotoUrl!.trim().isNotEmpty)
+              ? Image.network(profile.coverPhotoUrl!, fit: BoxFit.cover)
+              : null,
         ),
-      ),
+
+        // PROFILE PHOTO OR INITIAL
+        Positioned(
+          bottom: -6,
+          left: 0,
+          right: 0,
+          child:
+              profile.profilePhotoUrl != null &&
+                  profile.profilePhotoUrl!.trim().isNotEmpty
+              ? Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.black),
+                    image: DecorationImage(
+                      image: NetworkImage(profile.profilePhotoUrl!),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+              : Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFF1E2022),
+                    border: Border.all(color: Colors.black),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    profile.name.isNotEmpty
+                        ? profile.name[0].toUpperCase()
+                        : '?',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 56,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+        ),
+      ],
     );
   }
 
@@ -664,13 +669,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Column(
                       children: [
-                        Image.asset(
-                          link.assetPath,
-                          fit: BoxFit.contain,
-                          height: 130,
-                          width: 130,
-                          errorBuilder: (_, __, ___) =>
-                              const Icon(Icons.link, size: 32),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.network(
+                              link.logoUrl ?? "",
+                              fit: BoxFit.contain,
+                              height: 130,
+                              width: 130,
+                              errorBuilder: (_, __, ___) =>
+                                  const Icon(Icons.link, size: 32),
+                            ),
+                          ),
                         ),
                         SizedBox(height: 8),
                         Text(

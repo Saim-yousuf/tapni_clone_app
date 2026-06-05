@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -86,8 +89,13 @@ class LinkSheet {
           maxChildSize: 0.95,
           expand: false,
           builder: (_, scrollController) {
-            return Column(
-              children: [
+            final searchController = TextEditingController();
+            bool isSearching = false;
+
+            return StatefulBuilder(
+              builder: (context, setSheetState) {
+                return Column(
+                  children: [
                 Container(
                   margin: const EdgeInsets.only(top: 12, bottom: 8),
                   width: 40,
@@ -97,35 +105,54 @@ class LinkSheet {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                        onPressed: () => Navigator.pop(ctx),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                      const Expanded(
-                        child: Center(
-                          child: Text(
-                            'Add Link',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                            onPressed: () => Navigator.pop(ctx),
                           ),
-                        ),
+                          Expanded(
+                            child: isSearching
+                                ? TextField(
+                                    controller: searchController,
+                                    autofocus: true,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Search links',
+                                      border: InputBorder.none,
+                                    ),
+                                    onChanged: (_) => setSheetState(() {}),
+                                  )
+                                : const Center(
+                                    child: Text(
+                                      'Add Link',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              isSearching
+                                  ? Icons.close_rounded
+                                  : Icons.search_rounded,
+                            ),
+                            onPressed: () {
+                              setSheetState(() {
+                                isSearching = !isSearching;
+                                if (!isSearching) searchController.clear();
+                              });
+                            },
+                          ),
+                        ],
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.search_rounded),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
                 Expanded(
                   child: Consumer<ProfileProvider>(
                     builder: (context, watchedProvider, _) {
@@ -135,10 +162,36 @@ class LinkSheet {
                       }
 
                       if (watchedProvider.linkCatalog.isNotEmpty) {
+                            final query = searchController.text
+                                .trim()
+                                .toLowerCase();
+                            final catalog = query.isEmpty
+                                ? watchedProvider.linkCatalog
+                                : watchedProvider.linkCatalog
+                                    .map((category) {
+                                      final templates = category.templates
+                                          .where((template) =>
+                                              template.label
+                                                  .toLowerCase()
+                                                  .contains(query) ||
+                                              category.name
+                                                  .toLowerCase()
+                                                  .contains(query))
+                                          .toList();
+                                      return LinkCategory(
+                                        id: category.id,
+                                        name: category.name,
+                                        templates: templates,
+                                      );
+                                    })
+                                    .where((category) =>
+                                        category.templates.isNotEmpty)
+                                    .toList();
+
                         return ListView(
                           controller: scrollController,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          children: watchedProvider.linkCatalog
+                              children: catalog
                               .map(
                                 (category) => _buildTemplateCategory(
                                   context,
@@ -160,7 +213,9 @@ class LinkSheet {
                     },
                   ),
                 ),
-              ],
+                  ],
+                );
+              },
             );
           },
         );
@@ -189,7 +244,7 @@ class LinkSheet {
             crossAxisCount: 4,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
-            childAspectRatio: 0.6,
+            childAspectRatio: 0.7,
           ),
           itemCount: category.templates.length,
           itemBuilder: (context, index) {
@@ -213,6 +268,10 @@ class LinkSheet {
                 }
                 if (template.actionType == 'contact_card') {
                   _showContactCardBottomSheet(context);
+                } else if (_isCustomTemplate(template)) {
+                  _showCustomTemplateBottomSheet(context, template, provider);
+                } else if (template.fieldType == 'bank') {
+                  _showBankTemplateBottomSheet(context, template, provider);
                 } else {
                   _showNewTemplateLinkBottomSheet(context, template, provider);
                 }
@@ -222,7 +281,7 @@ class LinkSheet {
                   _buildTemplateLogo(
                     template.logo,
                     size: 130,
-                    radius: 5,
+                    radius: 10,
                     isPro: template.isPro,
                     context: context,
                   ),
@@ -249,6 +308,494 @@ class LinkSheet {
     );
   }
 
+  bool _isCustomTemplate(LinkTemplate template) {
+    final label = template.label.toLowerCase();
+    return template.isSystem &&
+        (label.contains('custom link') || label.contains('custom bank'));
+  }
+
+  Future<String> _pickLogoBase64() async {
+    final file = await pickFile();
+    if (file?.file == null) return '';
+    return fileToBase64(File(file!.file!.path));
+  }
+
+  void _showCustomTemplateBottomSheet(
+    BuildContext context,
+    LinkTemplate template,
+    ProfileProvider provider, {
+    SocialLink? existingLink,
+  }) {
+    if (template.fieldType == 'bank') {
+      _showBankTemplateBottomSheet(
+        context,
+        template,
+        provider,
+        allowCustomMeta: true,
+        existingLink: existingLink,
+      );
+      return;
+    }
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final labelController = TextEditingController(
+      text: existingLink?.platformName ?? '',
+    );
+    final valueController = TextEditingController(text: existingLink?.value ?? '');
+    String logo = existingLink?.logoUrl ?? '';
+    bool showLink = existingLink?.isPublic ?? true;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(ctx).viewInsets.bottom,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF111111) : Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(24),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 4, bottom: 14),
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const Text(
+                      'Custom link',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            final pickedLogo = await _pickLogoBase64();
+                            if (pickedLogo.isNotEmpty) {
+                              setState(() => logo = pickedLogo);
+                            }
+                          },
+                          child: _selectedLogoTile(logo),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: _sheetTextField(
+                            labelController,
+                            'Label',
+                            TextInputType.text,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    _sheetTextField(valueController, 'Link', TextInputType.url),
+                    const SizedBox(height: 14),
+                    _showPublicToggle(
+                      isDark: isDark,
+                      value: showLink,
+                      onChanged: (value) => setState(() => showLink = value),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        if (existingLink != null) ...[
+                          _deleteCircleButton(() async {
+                            await provider.deleteSocialLink(
+                              existingLink.id,
+                              context,
+                            );
+                            Navigator.pop(ctx);
+                          }),
+                          const SizedBox(width: 12),
+                        ],
+                        Expanded(
+                          child: _saveButton(
+                            onPressed: () async {
+                              final label = labelController.text.trim();
+                              final value = valueController.text.trim();
+                              if (label.isEmpty || value.isEmpty) return;
+                              if (existingLink == null) {
+                                await provider.addCustomTemplateLink(
+                                  template: template,
+                                  label: label,
+                                  value: value,
+                                  showLink: showLink,
+                                  context: context,
+                                  logo: logo,
+                                );
+                              } else {
+                                await provider.updateCustomTemplateLink(
+                                  link: existingLink,
+                                  label: label,
+                                  value: value,
+                                  showLink: showLink,
+                                  context: context,
+                                  logo: logo,
+                                );
+                              }
+                              Navigator.pop(ctx);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _selectedLogoTile(String logo) {
+    if (logo.isNotEmpty) {
+      if (logo.startsWith('http://') || logo.startsWith('https://')) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Image.network(
+            logo,
+            width: 60,
+            height: 60,
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) => _logoPlaceholder(true),
+          ),
+        );
+      }
+
+      try {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Image.memory(
+            base64Decode(logo),
+            width: 60,
+            height: 60,
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) => _logoPlaceholder(true),
+          ),
+        );
+      } catch (_) {
+        return _logoPlaceholder(true);
+      }
+    }
+
+    return _logoPlaceholder(false);
+  }
+
+  Widget _logoPlaceholder(bool selected) {
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        color: selected ? Colors.black : Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Icon(
+        selected ? Icons.check_rounded : Icons.add_photo_alternate,
+        color: selected ? Colors.white : Colors.black54,
+      ),
+    );
+  }
+
+  Widget _deleteCircleButton(VoidCallback onPressed) {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFFF5F5F5),
+        border: Border.all(color: Colors.grey.shade200, width: 0.5),
+      ),
+      child: IconButton(
+        icon: const Icon(Icons.delete_forever_outlined, size: 24),
+        color: Colors.grey.shade600,
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  void _showBankTemplateBottomSheet(
+    BuildContext context,
+    LinkTemplate template,
+    ProfileProvider provider, {
+    bool allowCustomMeta = false,
+    SocialLink? existingLink,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bankDetails = existingLink?.bankDetails ?? {};
+    final labelController = TextEditingController(
+      text: existingLink?.platformName ?? (allowCustomMeta ? '' : template.label),
+    );
+    final holderController = TextEditingController(
+      text: bankDetails['accountHolderName'] ?? '',
+    );
+    final ibanController = TextEditingController(text: bankDetails['iban'] ?? '');
+    final accountController = TextEditingController(
+      text: bankDetails['accountNumber'] ?? '',
+    );
+    String logo = existingLink?.logoUrl ?? '';
+    bool showLink = existingLink?.isPublic ?? true;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(ctx).viewInsets.bottom,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF111111) : Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(24),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 4, bottom: 14),
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    Text(
+                      allowCustomMeta ? 'Custom bank' : template.label,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: allowCustomMeta
+                              ? () async {
+                                  final pickedLogo = await _pickLogoBase64();
+                                  if (pickedLogo.isNotEmpty) {
+                                    setState(() => logo = pickedLogo);
+                                  }
+                                }
+                              : null,
+                          child: allowCustomMeta
+                              ? _selectedLogoTile(
+                                  logo.isNotEmpty ? logo : template.logo,
+                                )
+                              : _buildTemplateLogo(
+                                  logo.isNotEmpty ? logo : template.logo,
+                                  size: 60,
+                                  isPro: template.isPro,
+                                  context: context,
+                                ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: _sheetTextField(
+                            labelController,
+                            'Label',
+                            TextInputType.text,
+                            readOnly: !allowCustomMeta,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    _sheetTextField(holderController, 'Account holder name', TextInputType.name),
+                    const SizedBox(height: 12),
+                    _sheetTextField(ibanController, 'IBAN number', TextInputType.text),
+                    const SizedBox(height: 12),
+                    _sheetTextField(accountController, 'Account number', TextInputType.number),
+                    const SizedBox(height: 14),
+                    _showPublicToggle(
+                      isDark: isDark,
+                      value: showLink,
+                      onChanged: (value) => setState(() => showLink = value),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        if (existingLink != null) ...[
+                          _deleteCircleButton(() async {
+                            await provider.deleteSocialLink(
+                              existingLink.id,
+                              context,
+                            );
+                            Navigator.pop(ctx);
+                          }),
+                          const SizedBox(width: 12),
+                        ],
+                        Expanded(
+                          child: _saveButton(
+                            onPressed: () async {
+                              final label = labelController.text.trim();
+                              final holder = holderController.text.trim();
+                              final iban = ibanController.text.trim();
+                              final account = accountController.text.trim();
+                              if (label.isEmpty ||
+                                  holder.isEmpty ||
+                                  (iban.isEmpty && account.isEmpty)) {
+                                return;
+                              }
+                              final details = {
+                                'accountHolderName': holder,
+                                'iban': iban,
+                                'accountNumber': account,
+                              };
+                              if (existingLink == null) {
+                                await provider.addCustomTemplateLink(
+                                  template: template,
+                                  label: label,
+                                  value: iban.isNotEmpty ? iban : account,
+                                  showLink: showLink,
+                                  context: context,
+                                  logo: logo,
+                                  bankDetails: details,
+                                );
+                              } else {
+                                await provider.updateCustomTemplateLink(
+                                  link: existingLink,
+                                  label: label,
+                                  value: iban.isNotEmpty ? iban : account,
+                                  showLink: showLink,
+                                  context: context,
+                                  logo: logo,
+                                  bankDetails: details,
+                                );
+                              }
+                              Navigator.pop(ctx);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _sheetTextField(
+    TextEditingController controller,
+    String hint,
+    TextInputType keyboardType, {
+    bool readOnly = false,
+  }) {
+    return TextField(
+      controller: controller,
+      readOnly: readOnly,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        hintText: hint,
+        fillColor: const Color(0xFFF5F5F5),
+        filled: true,
+        border: InputBorder.none,
+        enabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+
+  Widget _showPublicToggle({
+    required bool isDark,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey.shade200, width: 0.5),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Show link',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+          ),
+          Switch(
+            value: value,
+            activeColor: Colors.white,
+            activeTrackColor: const Color(0xFF1E2022),
+            onChanged: onChanged,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _saveButton({required VoidCallback onPressed}) {
+    return SizedBox(
+      width: double.infinity,
+      height: 60,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppTheme.primaryBlack,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          elevation: 0,
+        ),
+        child: const Text(
+          'Save',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildTemplateLogo(
     String logo, {
     double size = 60,
@@ -260,7 +807,7 @@ class LinkSheet {
       context,
       listen: false,
     ).isProUser;
-    log("Building template logo for$logo");
+    // log("Building template logo for$logo");
     final placeholder = Container(
       width: size,
       height: size,
@@ -275,7 +822,8 @@ class LinkSheet {
 
     if (isPro && !isProUser) {
       return Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topRight,
+        clipBehavior: Clip.none,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(radius),
@@ -287,21 +835,24 @@ class LinkSheet {
               errorBuilder: (_, __, ___) => placeholder,
             ),
           ),
-          Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(radius),
-              color: Colors.white.withOpacity(0.8),
+          // Container(
+          //   width: size,
+          //   height: size,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(radius),
+          //     color: Colors.white.withOpacity(0.8),
+          //   ),
+          //   // child:
+          // ),
+          CircleAvatar(
+            radius: 15,
+            backgroundColor: Colors.black,
+            child: Image.asset(
+              "assets/images/png/premium-icon2.png",
+              width: 20,
+              height: 20,
+              fit: BoxFit.cover,
             ),
-            // child:
-          ),
-          Image.asset(
-            "assets/images/png/premium-icon2.png",
-            width: 60,
-            height: 60,
-            fit: BoxFit.cover,
-            opacity: const AlwaysStoppedAnimation(0.7),
           ),
         ],
       );
@@ -890,7 +1441,6 @@ class LinkSheet {
                             icon: Icon(Icons.delete_forever_outlined, size: 24),
                             color: Colors.grey.shade600,
                             onPressed: () async {
-                              // await provider.deleteSocialLink(link.id, context);
                               Navigator.pop(ctx);
                             },
                           ),
@@ -950,6 +1500,57 @@ class LinkSheet {
     SocialLink link,
     ProfileProvider provider,
   ) {
+    LinkTemplate? catalogTemplate;
+    for (final category in provider.linkCatalog) {
+      for (final template in category.templates) {
+        if (template.id == link.templateId) {
+          catalogTemplate = template;
+          break;
+        }
+      }
+      if (catalogTemplate != null) break;
+    }
+    final isCustomLink = link.isCustom ||
+        (catalogTemplate?.isSystem == true &&
+            catalogTemplate!.label.toLowerCase().contains('custom'));
+    final template = LinkTemplate(
+      id: link.templateId ?? '',
+      categoryId: '',
+      label: catalogTemplate?.label ?? link.platformName,
+      fieldType:
+          catalogTemplate?.fieldType ??
+          link.fieldType ??
+          (link.bankDetails != null ? 'bank' : 'url'),
+      fieldLabel: catalogTemplate?.fieldLabel ?? link.fieldLabel ?? 'Link',
+      prefix: '',
+      logo: link.logoUrl ?? catalogTemplate?.logo ?? '',
+      isPro: false,
+      isFeatured: false,
+      isSystem: isCustomLink,
+      actionType: 'link',
+    );
+
+    if (template.fieldType == 'bank') {
+      _showBankTemplateBottomSheet(
+        context,
+        template,
+        provider,
+        allowCustomMeta: isCustomLink,
+        existingLink: link,
+      );
+      return;
+    }
+
+    if (isCustomLink) {
+      _showCustomTemplateBottomSheet(
+        context,
+        template,
+        provider,
+        existingLink: link,
+      );
+      return;
+    }
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final valueController = TextEditingController(text: link.value);
     bool showLink = link.isPublic;
@@ -1173,7 +1774,10 @@ class LinkSheet {
                           child: IconButton(
                             icon: Icon(Icons.delete_forever_outlined, size: 24),
                             color: Colors.grey.shade600,
-                            onPressed: () => Navigator.pop(ctx),
+                            onPressed: () async {
+                              await provider.deleteSocialLink(link.id, context);
+                              Navigator.pop(ctx);
+                            },
                           ),
                         ),
                         const SizedBox(width: 12),

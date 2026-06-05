@@ -6,6 +6,7 @@ class UserProfile {
   final String? username;
   final String? profilePhotoUrl;
   final String? coverPhotoUrl;
+  final bool isPro;
 
   // Local + API fields
   final String name;
@@ -27,6 +28,7 @@ class UserProfile {
     this.username,
     this.profilePhotoUrl,
     this.coverPhotoUrl,
+    this.isPro = false,
     required this.name,
     required this.email,
     required this.bio,
@@ -51,6 +53,7 @@ class UserProfile {
       username: json['username']?.toString(),
       profilePhotoUrl: json['profilePhoto']?.toString(),
       coverPhotoUrl: json['coverPhoto']?.toString(),
+      isPro: json['isPro'] as bool? ?? json['IsPro'] as bool? ?? false,
       name: json['name']?.toString() ?? '',
       email: json['email']?.toString() ?? '',
       bio: json['bio']?.toString() ?? '',
@@ -86,12 +89,14 @@ class UserProfile {
     int? viewsCount,
     int? scansCount,
     int? leadsCount,
+    bool? isPro,
   }) {
     return UserProfile(
       id: id ?? this.id,
       username: username ?? this.username,
       profilePhotoUrl: profilePhotoUrl ?? this.profilePhotoUrl,
       coverPhotoUrl: coverPhotoUrl ?? this.coverPhotoUrl,
+      isPro: isPro ?? this.isPro,
       name: name ?? this.name,
       email: email ?? this.email,
       bio: bio ?? this.bio,

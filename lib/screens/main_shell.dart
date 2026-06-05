@@ -55,6 +55,7 @@ class _MainShellState extends State<MainShell> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
+                color: _currentPage == 'Links' ? AppTheme.primaryBlack : Colors.grey,
                 iconSize: 34,
                 onPressed: () {
                   setState(() {
@@ -62,9 +63,12 @@ class _MainShellState extends State<MainShell> {
                   });
                   profileProvider.setEditingProfile(false);
                 },
-                icon: const Icon(Icons.link),
+                icon: _currentPage == 'Links'
+                    ? const Icon(Icons.link)
+                    : const Icon(Icons.link_outlined),
               ),
               IconButton(
+                color: _currentPage == 'Contacts' ? AppTheme.primaryBlack : Colors.grey,
                 iconSize: 34,
                 onPressed: () {
                   setState(() {
@@ -72,10 +76,13 @@ class _MainShellState extends State<MainShell> {
                   });
                   profileProvider.setEditingProfile(false);
                 },
-                icon: const Icon(Icons.people),
+                icon: _currentPage == 'Contacts'
+                    ? const Icon(Icons.people)
+                    : const Icon(Icons.people_outline),
               ),
               const SizedBox(width: 60),
               IconButton(
+                color: _currentPage == 'Explore' ? AppTheme.primaryBlack : Colors.grey,
                 iconSize: 34,
                 onPressed: () {
                   setState(() {
@@ -83,9 +90,12 @@ class _MainShellState extends State<MainShell> {
                   });
                   profileProvider.setEditingProfile(false);
                 },
-                icon: const Icon(Icons.explore),
+                icon: _currentPage == 'Explore'
+                    ? const Icon(Icons.explore)
+                    : const Icon(Icons.explore_outlined),
               ),
               IconButton(
+                color: _currentPage == 'Settings' ? AppTheme.primaryBlack : Colors.grey,
                 iconSize: 34,
                 onPressed: () {
                   setState(() {
@@ -93,7 +103,9 @@ class _MainShellState extends State<MainShell> {
                   });
                   profileProvider.setEditingProfile(false);
                 },
-                icon: const Icon(Icons.settings),
+                icon: _currentPage == 'Settings'
+                    ? const Icon(Icons.settings)
+                    : const Icon(Icons.settings_outlined),
               ),
             ],
           ),

@@ -144,8 +144,10 @@ class ProfileProvider extends ChangeNotifier {
           _profile = UserProfile.fromApiJson(
             data['user'] as Map<String, dynamic>,
           );
+          _isProUser = _profile.isPro;
         } else if (data is Map<String, dynamic>) {
           _profile = UserProfile.fromApiJson(data);
+          _isProUser = _profile.isPro;
         }
       } catch (e) {
         // Fallback to mock data if there's an issue mapping
@@ -373,6 +375,34 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  addCustomTemplateLink({
+    required LinkTemplate template,
+    required String label,
+    required String value,
+    required bool showLink,
+    required BuildContext context,
+    String logo = '',
+    Map<String, String>? bankDetails,
+  }) async {
+    final newLink = SocialLink(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      platform: SocialPlatform.wave,
+      templateId: template.id,
+      customLabel: label,
+      fieldLabel: template.fieldLabel,
+      logoUrl: logo.isNotEmpty ? logo : template.logo,
+      value: value,
+      bankDetails: bankDetails,
+      isCustom: true,
+      isActive: true,
+      isPublic: showLink,
+    );
+    final updatedLinks = List<SocialLink>.from(_profile.socialLinks)
+      ..add(newLink);
+    await updateLinks(links: updatedLinks, context: context);
+    notifyListeners();
+  }
+
   updateSocialLink(
     SocialPlatform platform,
     String value,
@@ -439,6 +469,34 @@ class ProfileProvider extends ChangeNotifier {
     }
 
     await profileProvider.updateLinks(links: updatedLinks, context: context);
+    notifyListeners();
+  }
+
+  updateCustomTemplateLink({
+    required SocialLink link,
+    required String label,
+    required String value,
+    required bool showLink,
+    required BuildContext context,
+    String? logo,
+    Map<String, String>? bankDetails,
+  }) async {
+    final updatedLinks = List<SocialLink>.from(_profile.socialLinks);
+    final existingIndex = updatedLinks.indexWhere((item) => item.id == link.id);
+
+    if (existingIndex != -1) {
+      updatedLinks[existingIndex] = link.copyWith(
+        customLabel: label,
+        value: value,
+        logoUrl: logo?.isNotEmpty == true ? logo : link.logoUrl,
+        bankDetails: bankDetails,
+        isCustom: true,
+        isActive: true,
+        isPublic: showLink,
+      );
+    }
+
+    await updateLinks(links: updatedLinks, context: context);
     notifyListeners();
   }
 
