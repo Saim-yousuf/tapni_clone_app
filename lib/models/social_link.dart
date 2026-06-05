@@ -31,6 +31,11 @@ enum SocialPlatform {
 class SocialLink {
   final String id;
   final SocialPlatform platform;
+  final String? templateId;
+  final String? customLabel;
+  final String? fieldLabel;
+  final String? logoUrl;
+  final String? url;
   final String value; // username, phone number, or URL
   final bool isActive;
   final bool isPublic;
@@ -38,6 +43,11 @@ class SocialLink {
   SocialLink({
     required this.id,
     required this.platform,
+    this.templateId,
+    this.customLabel,
+    this.fieldLabel,
+    this.logoUrl,
+    this.url,
     required this.value,
     this.isActive = true,
     this.isPublic = true,
@@ -46,6 +56,11 @@ class SocialLink {
   SocialLink copyWith({
     String? id,
     SocialPlatform? platform,
+    String? templateId,
+    String? customLabel,
+    String? fieldLabel,
+    String? logoUrl,
+    String? url,
     String? value,
     bool? isActive,
     bool? isPublic,
@@ -53,6 +68,11 @@ class SocialLink {
     return SocialLink(
       id: id ?? this.id,
       platform: platform ?? this.platform,
+      templateId: templateId ?? this.templateId,
+      customLabel: customLabel ?? this.customLabel,
+      fieldLabel: fieldLabel ?? this.fieldLabel,
+      logoUrl: logoUrl ?? this.logoUrl,
+      url: url ?? this.url,
       value: value ?? this.value,
       isActive: isActive ?? this.isActive,
       isPublic: isPublic ?? this.isPublic,
@@ -86,15 +106,28 @@ class SocialLink {
   }
 
   /// Convert to API link object.
-  Map<String, String> toApiJson() {
-    return {'title': platformName, 'type': apiType, 'url': fullUrl};
+  Map<String, dynamic> toApiJson() {
+    return {
+      if (templateId != null && templateId!.isNotEmpty) 'templateId': templateId,
+      'label': platformName,
+      'title': platformName,
+      'type': apiType,
+      'value': value,
+      'url': fullUrl,
+      'isActive': isActive,
+      'isPublic': isPublic,
+    };
   }
 
   /// Create from API link object.
   factory SocialLink.fromApiJson(Map<String, dynamic> json) {
     final type = json['type'] as String? ?? 'custom';
     final url = json['url'] as String? ?? '';
-    final title = json['title'] as String? ?? '';
+    final title = json['label'] as String? ?? json['title'] as String? ?? '';
+    final value = json['value'] as String? ?? url;
+    final logo = json['logo'] as String?;
+    final templateId = json['templateId']?.toString();
+    final fieldLabel = json['fieldLabel']?.toString();
 
     SocialPlatform platform = SocialPlatform.wave;
     final combined = "${type.toLowerCase()} ${title.toLowerCase()}";
@@ -165,12 +198,19 @@ class SocialLink {
           ? url
           : DateTime.now().millisecondsSinceEpoch.toString(),
       platform: platform,
-      value: url,
-      isActive: true,
+      templateId: templateId,
+      customLabel: title.isNotEmpty ? title : null,
+      fieldLabel: fieldLabel,
+      logoUrl: logo,
+      url: url,
+      value: value,
+      isActive: json['isActive'] as bool? ?? true,
+      isPublic: json['isPublic'] as bool? ?? true,
     );
   }
 
-  String get platformName => getPlatformName(platform);
+  String get platformName =>
+      customLabel?.isNotEmpty == true ? customLabel! : getPlatformName(platform);
 
   static String getPlatformName(SocialPlatform platform) {
     switch (platform) {
@@ -232,6 +272,7 @@ class SocialLink {
   }
 
   String get label {
+    if (fieldLabel?.isNotEmpty == true) return fieldLabel!;
     switch (platform) {
       case SocialPlatform.email:
         return 'Email address';
@@ -389,6 +430,7 @@ class SocialLink {
   }
 
   String get fullUrl {
+    if (url?.isNotEmpty == true) return url!;
     if (baseUrlPrefix.isEmpty) {
       if (platform == SocialPlatform.email && !value.startsWith('mailto:')) {
         return 'mailto:$value';

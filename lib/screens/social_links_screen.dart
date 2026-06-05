@@ -132,20 +132,20 @@ class SocialLinksScreen extends StatelessWidget {
           ),
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              _getPlatformAsset(link.platform),
-              width: 44,
-              height: 44,
-              errorBuilder: (_, __, ___) => Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.link, size: 20),
-              ),
-            ),
+            child: link.logoUrl?.isNotEmpty == true
+                ? Image.network(
+                    link.logoUrl!,
+                    width: 44,
+                    height: 44,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => _linkPlaceholder(),
+                  )
+                : Image.asset(
+                    _getPlatformAsset(link.platform),
+                    width: 44,
+                    height: 44,
+                    errorBuilder: (_, __, ___) => _linkPlaceholder(),
+                  ),
           ),
           title: Text(
             link.platformName,
@@ -166,6 +166,18 @@ class SocialLinksScreen extends StatelessWidget {
               LinkSheet().showExistingLinkBottomSheet(context, link, provider),
         ),
       ),
+    );
+  }
+
+  Widget _linkPlaceholder() {
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: const Icon(Icons.link, size: 20),
     );
   }
 

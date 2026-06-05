@@ -1,14 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
 
 class LinkSheet {
-   void showAddLinkBottomSheet(
-    BuildContext context,
-    ProfileProvider provider,
-  ) {
+  void showAddLinkBottomSheet(BuildContext context, ProfileProvider provider) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    if (provider.linkCatalog.isEmpty && !provider.isLinkCatalogLoading) {
+      provider.fetchLinkCatalog();
+    }
 
     final categories = [
       {
@@ -122,85 +126,117 @@ class LinkSheet {
                   ),
                 ),
                 Expanded(
-                  child: ListView(
-                    controller: scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    children: categories.map((cat) {
-                      final platforms =
-                          cat['platforms'] as List<SocialPlatform>;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            child: Text(
-                              cat['title'] as String,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  crossAxisSpacing: 12,
-                                  mainAxisSpacing: 12,
-                                  childAspectRatio: 0.8,
+                  child: Consumer<ProfileProvider>(
+                    builder: (context, watchedProvider, _) {
+                      if (watchedProvider.isLinkCatalogLoading &&
+                          watchedProvider.linkCatalog.isEmpty) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (watchedProvider.linkCatalog.isNotEmpty) {
+                        return ListView(
+                          controller: scrollController,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          children: watchedProvider.linkCatalog
+                              .map(
+                                (category) => _buildTemplateCategory(
+                                  context,
+                                  ctx,
+                                  category,
+                                  provider,
                                 ),
-                            itemCount: platforms.length,
-                            itemBuilder: (context, index) {
-                              final platform = platforms[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(ctx);
-                                  _showNewLinkBottomSheet(
-                                    context,
-                                    platform,
-                                    provider,
+                              )
+                              .toList(),
+                        );
+                      }
+
+                      return ListView(
+                        controller: scrollController,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        children: categories.map((cat) {
+                          final platforms =
+                              cat['platforms'] as List<SocialPlatform>;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                child: Text(
+                                  cat['title'] as String,
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 4,
+                                      crossAxisSpacing: 12,
+                                      mainAxisSpacing: 12,
+                                      childAspectRatio: 0.8,
+                                    ),
+                                itemCount: platforms.length,
+                                itemBuilder: (context, index) {
+                                  final platform = platforms[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(ctx);
+                                      _showNewLinkBottomSheet(
+                                        context,
+                                        platform,
+                                        provider,
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          child: Image.asset(
+                                            SocialLink.getAssetPath(platform),
+                                            width: 84,
+                                            height: 84,
+                                            errorBuilder: (_, __, ___) =>
+                                                Container(
+                                                  width: 84,
+                                                  height: 84,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey.shade200,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          16,
+                                                        ),
+                                                  ),
+                                                  child: const Icon(Icons.link),
+                                                ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          SocialLink.getPlatformName(platform),
+                                          style: const TextStyle(fontSize: 11),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
                                   );
                                 },
-                                child: Column(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: Image.asset(
-                                        SocialLink.getAssetPath(platform),
-                                        width: 84,
-                                        height: 84,
-                                        errorBuilder: (_, __, ___) => Container(
-                                          width: 84,
-                                          height: 84,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.shade200,
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
-                                          ),
-                                          child: const Icon(Icons.link),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      SocialLink.getPlatformName(platform),
-                                      style: const TextStyle(fontSize: 11),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                        ],
+                              ),
+                              const SizedBox(height: 8),
+                            ],
+                          );
+                        }).toList(),
                       );
-                    }).toList(),
+                    },
                   ),
                 ),
               ],
@@ -209,6 +245,428 @@ class LinkSheet {
         );
       },
     );
+  }
+
+  Widget _buildTemplateCategory(
+    BuildContext context,
+    BuildContext sheetContext,
+    LinkCategory category,
+    ProfileProvider provider,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          child: Text(
+            category.name,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 0.8,
+          ),
+          itemCount: category.templates.length,
+          itemBuilder: (context, index) {
+            final template = category.templates[index];
+            return GestureDetector(
+              onTap: () {
+                Navigator.pop(sheetContext);
+                if (template.actionType == 'contact_card') {
+                  _showContactCardBottomSheet(context);
+                } else {
+                  _showNewTemplateLinkBottomSheet(context, template, provider);
+                }
+              },
+              child: Column(
+                children: [
+                  _buildTemplateLogo(template.logo, size: 84, radius: 16),
+                  const SizedBox(height: 6),
+                  Text(
+                    template.label,
+                    style: const TextStyle(fontSize: 11),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+
+  Widget _buildTemplateLogo(
+    String logo, {
+    double size = 60,
+    double radius = 14,
+  }) {
+    log("Building template logo for$logo");
+    final placeholder = Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: const Icon(Icons.link),
+    );
+
+    if (logo.isEmpty) return placeholder;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius),
+      child: Image.network(
+        logo.replaceAll(" ", ""),
+        width: size,
+        height: size,
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => placeholder,
+      ),
+    );
+  }
+
+  void _showNewTemplateLinkBottomSheet(
+    BuildContext context,
+    LinkTemplate template,
+    ProfileProvider provider,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final valueController = TextEditingController();
+    bool showLink = true;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(ctx).viewInsets.bottom,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF111111) : Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(24),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 4, bottom: 14),
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const Text(
+                      'Create new link',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildTemplateLogo(template.logo, size: 60),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                readOnly: true,
+                                initialValue: template.label,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                decoration: const InputDecoration(
+                                  hintText: 'Label',
+                                  fillColor: Color(0xFFF5F5F5),
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                'Set text under the link icon',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    TextField(
+                      controller: valueController,
+                      autofocus: true,
+                      keyboardType: _keyboardTypeFor(template.fieldType),
+                      style: const TextStyle(fontSize: 15),
+                      decoration: InputDecoration(
+                        hintText: template.fieldLabel,
+                        hintStyle: TextStyle(color: Colors.grey.shade400),
+                        fillColor: const Color(0xFFF5F5F5),
+                        filled: true,
+                        border: InputBorder.none,
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      template.fieldLabel,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade800,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0xFF1E1E1E)
+                            : const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Colors.grey.shade200,
+                          width: 0.5,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Show link',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Switch(
+                            value: showLink,
+                            activeColor: Colors.white,
+                            activeTrackColor: const Color(0xFF1E2022),
+                            onChanged: (val) => setState(() => showLink = val),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 80),
+                    Row(
+                      children: [
+                        const SizedBox(width: 60),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: SizedBox(
+                            height: 60,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final value = valueController.text.trim();
+                                if (value.isNotEmpty) {
+                                  await provider.addTemplateLink(
+                                    template,
+                                    value,
+                                    showLink,
+                                    context,
+                                  );
+                                  Navigator.pop(ctx);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppTheme.primaryBlack,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: const Text(
+                                'Save',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showContactCardBottomSheet(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final nameController = TextEditingController();
+    final phoneController = TextEditingController();
+    final emailController = TextEditingController();
+    final companyController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
+          child: Container(
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF111111) : Colors.white,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(24),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 4, bottom: 14),
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const Text(
+                  'Contact card',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 20),
+                _contactField(nameController, 'Full name', TextInputType.name),
+                const SizedBox(height: 12),
+                _contactField(phoneController, 'Phone number', TextInputType.phone),
+                const SizedBox(height: 12),
+                _contactField(emailController, 'Email', TextInputType.emailAddress),
+                const SizedBox(height: 12),
+                _contactField(companyController, 'Company', TextInputType.text),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primaryBlack,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _contactField(
+    TextEditingController controller,
+    String hint,
+    TextInputType keyboardType,
+  ) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        hintText: hint,
+        fillColor: const Color(0xFFF5F5F5),
+        filled: true,
+        border: InputBorder.none,
+        enabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+
+  TextInputType _keyboardTypeFor(String fieldType) {
+    switch (fieldType) {
+      case 'phone':
+        return TextInputType.phone;
+      case 'email':
+        return TextInputType.emailAddress;
+      case 'url':
+        return TextInputType.url;
+      default:
+        return TextInputType.text;
+    }
   }
 
   void _showNewLinkBottomSheet(
@@ -547,12 +1005,19 @@ class LinkSheet {
                           width: 60,
                           height: 60,
 
-                          child: Image.asset(
-                            SocialLink.getAssetPath(link.platform),
-                            fit: BoxFit.contain,
-                            errorBuilder: (_, __, ___) =>
-                                const Icon(Icons.link, size: 28),
-                          ),
+                          child: link.logoUrl?.isNotEmpty == true
+                              ? Image.network(
+                                  link.logoUrl!,
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (_, __, ___) =>
+                                      const Icon(Icons.link, size: 28),
+                                )
+                              : Image.asset(
+                                  SocialLink.getAssetPath(link.platform),
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (_, __, ___) =>
+                                      const Icon(Icons.link, size: 28),
+                                ),
                         ),
                         const SizedBox(width: 14),
 
@@ -564,9 +1029,7 @@ class LinkSheet {
                                 readOnly: true,
 
                                 controller: TextEditingController(
-                                  text: SocialLink.getPlatformName(
-                                    link.platform,
-                                  ),
+                                  text: link.platformName,
                                 ),
                                 style: const TextStyle(
                                   fontSize: 15,
@@ -614,6 +1077,7 @@ class LinkSheet {
 
                       decoration: InputDecoration(
                         hintText:
+                            link.fieldLabel ??
                             '${SocialLink.getPlatformName(link.platform)} username',
                         hintStyle: TextStyle(color: Colors.grey.shade400),
                         fillColor: const Color(0xFFF5F5F5),
@@ -631,7 +1095,8 @@ class LinkSheet {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Enter your ${SocialLink.getPlatformName(link.platform)} username',
+                      link.fieldLabel ??
+                          'Enter your ${SocialLink.getPlatformName(link.platform)} username',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey.shade800,
@@ -718,12 +1183,21 @@ class LinkSheet {
                               onPressed: () async {
                                 final value = valueController.text.trim();
                                 if (value.isNotEmpty) {
-                                  await provider.updateSocialLink(
-                                    link.platform,
-                                    value,
-                                    showLink,
-                                    context,
-                                  );
+                                  if (link.templateId?.isNotEmpty == true) {
+                                    await provider.updateTemplateLink(
+                                      link,
+                                      value,
+                                      showLink,
+                                      context,
+                                    );
+                                  } else {
+                                    await provider.updateSocialLink(
+                                      link.platform,
+                                      value,
+                                      showLink,
+                                      context,
+                                    );
+                                  }
                                   Navigator.pop(ctx);
                                 }
                               },

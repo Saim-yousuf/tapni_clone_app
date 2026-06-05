@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
+import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/services/mock_data_service.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
@@ -118,8 +119,12 @@ class ProfileProvider extends ChangeNotifier {
 
   bool _isProUser = false;
   bool _isLoading = false;
+  bool _isLinkCatalogLoading = false;
+  List<LinkCategory> _linkCatalog = [];
 
   bool get isLoading => _isLoading;
+  bool get isLinkCatalogLoading => _isLinkCatalogLoading;
+  List<LinkCategory> get linkCatalog => _linkCatalog;
 
   ProfileProvider() {
     _profile = MockDataService.getInitialProfile();
@@ -149,6 +154,27 @@ class ProfileProvider extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<void> fetchLinkCatalog() async {
+    _isLinkCatalogLoading = true;
+    notifyListeners();
+
+    try {
+      final repo = AuthRepo();
+      final response = await repo.linkCatalog();
+
+      if (response.success && response.data is Map<String, dynamic>) {
+        final data = response.data as Map<String, dynamic>;
+        _linkCatalog = (data['categories'] as List<dynamic>? ?? [])
+            .map((item) => LinkCategory.fromJson(item as Map<String, dynamic>))
+            .where((category) => category.templates.isNotEmpty)
+            .toList();
+      }
+    } finally {
+      _isLinkCatalogLoading = false;
+      notifyListeners();
+    }
   }
 
   UserProfile get profile => _profile;
@@ -320,6 +346,33 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  addTemplateLink(
+    LinkTemplate template,
+    String value,
+    bool showLink,
+    context,
+  ) async {
+    final newLink = SocialLink(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      platform: SocialPlatform.wave,
+      templateId: template.id,
+      customLabel: template.label,
+      fieldLabel: template.fieldLabel,
+      logoUrl: template.logo,
+      value: value,
+      isActive: true,
+      isPublic: showLink,
+    );
+    final updatedLinks = List<SocialLink>.from(_profile.socialLinks)
+      ..add(newLink);
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
+    await profileProvider.updateLinks(links: updatedLinks, context: context);
+    notifyListeners();
+  }
+
   updateSocialLink(
     SocialPlatform platform,
     String value,
@@ -356,6 +409,32 @@ class ProfileProvider extends ChangeNotifier {
           isActive: true,
           isPublic: showLink,
         ),
+      );
+    }
+
+    await profileProvider.updateLinks(links: updatedLinks, context: context);
+    notifyListeners();
+  }
+
+  updateTemplateLink(
+    SocialLink link,
+    String value,
+    bool showLink,
+    context,
+  ) async {
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
+
+    final updatedLinks = List<SocialLink>.from(_profile.socialLinks);
+    final existingIndex = updatedLinks.indexWhere((item) => item.id == link.id);
+
+    if (existingIndex != -1) {
+      updatedLinks[existingIndex] = link.copyWith(
+        value: value,
+        isActive: true,
+        isPublic: showLink,
       );
     }
 

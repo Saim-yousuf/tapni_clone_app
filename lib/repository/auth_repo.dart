@@ -64,4 +64,12 @@ class AuthRepo {
       jsonBody: jsonBody,
     );
   }
+
+  Future<ApiResponse> linkCatalog() async {
+    return await ApiHandler.request(
+      api: Api.auth.linkCatalog,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
 }

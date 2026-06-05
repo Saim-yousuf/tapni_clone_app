@@ -55,6 +55,18 @@ class SocialIconButton extends StatelessWidget {
   }
 
   Widget _buildIcon(bool isDark) {
+    if (socialLink.logoUrl?.isNotEmpty == true) {
+      return Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: Image.network(
+          socialLink.logoUrl!,
+          fit: BoxFit.contain,
+          errorBuilder: (_, __, ___) =>
+              const Icon(Icons.link, color: Colors.white, size: 24),
+        ),
+      );
+    }
+
     switch (socialLink.platform) {
       case SocialPlatform.whatsApp:
         return const Icon(
