@@ -635,22 +635,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           );
                         },
-                  child: Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF7F7F7),
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: Colors.grey.shade200),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Image.asset(
-                        link.assetPath,
-                        fit: BoxFit.contain,
-                        errorBuilder: (_, __, ___) =>
-                            const Icon(Icons.link, size: 32),
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Image.asset(
+                      link.assetPath,
+                      fit: BoxFit.contain,
+                      height: 130,
+                      width: 130,
+                      errorBuilder: (_, __, ___) =>
+                          const Icon(Icons.link, size: 32),
                     ),
                   ),
                 ),
@@ -708,64 +701,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
     );
-  }
-
-  String _getPlatformLabel(SocialPlatform platform) {
-    switch (platform) {
-      case SocialPlatform.email:
-        return 'Email address';
-      case SocialPlatform.whatsApp:
-        return 'Phone number';
-      case SocialPlatform.signal:
-        return 'Signal phone number/username';
-      case SocialPlatform.instagram:
-        return 'Instagram username';
-      case SocialPlatform.linkedIn:
-        return 'LinkedIn username/link';
-      case SocialPlatform.github:
-        return 'GitHub username';
-      case SocialPlatform.snapchat:
-        return 'Snapchat username';
-      case SocialPlatform.threads:
-        return 'Threads username';
-      case SocialPlatform.tiktok:
-        return 'TikTok username';
-      case SocialPlatform.vsco:
-        return 'VSCO username';
-      case SocialPlatform.behance:
-        return 'Behance username';
-      case SocialPlatform.soundcloud:
-        return 'SoundCloud username';
-      case SocialPlatform.mixcloud:
-        return 'Mixcloud username';
-      case SocialPlatform.patreon:
-        return 'Patreon username';
-      case SocialPlatform.calendly:
-        return 'Calendly profile link';
-      case SocialPlatform.eventbrite:
-        return 'Eventbrite link';
-      case SocialPlatform.meetup:
-        return 'Meetup link';
-      case SocialPlatform.tripadvisor:
-        return 'Tripadvisor link';
-      case SocialPlatform.zillow:
-        return 'Zillow link';
-      case SocialPlatform.spotify:
-        return 'Spotify link';
-      case SocialPlatform.yandexMusic:
-        return 'Yandex Music link';
-      case SocialPlatform.googleReview:
-        return 'Google Review link';
-      case SocialPlatform.googleMaps:
-        return 'Google Maps location link';
-      case SocialPlatform.contact:
-        return 'Contact card details/link';
-      case SocialPlatform.spoonFork:
-        return 'Menu or reservation link';
-      case SocialPlatform.vk:
-        return 'VK profile link';
-      case SocialPlatform.wave:
-        return 'Custom URL';
-    }
   }
 }
