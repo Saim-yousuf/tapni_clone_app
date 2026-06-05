@@ -114,11 +114,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildViewMode(ProfileProvider profileProvider, UserProfile profile) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
-          Spacer(),
-          const SizedBox(height: 20),
           const Text(
             'tapni',
             style: TextStyle(
@@ -127,21 +125,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               letterSpacing: -2,
             ),
           ),
-          const SizedBox(height: 40),
-          _buildProfileAvatar(profile),
           const SizedBox(height: 20),
+          _buildProfileAvatar(profile),
+          const SizedBox(height: 10),
           Text(
             profile.name,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
           ),
-          if (profile.bio.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(
-              profile.bio,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
-            ),
-          ],
           const SizedBox(height: 30),
           _buildLinkSection(
             profile,
@@ -187,80 +177,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Top Bar
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Username & edit pencil visual
-                  Row(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Username & edit pencil visual
+                Row(
+                  children: [
+                    Text(
+                      'tapni.com/${profile.username ?? 'tltqfl43'}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.edit,
+                        size: 12,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+                // Go PRO button
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black12),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
                     children: [
-                      Text(
-                        'tapni.com/${profile.username ?? 'tltqfl43'}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -0.5,
+                      const Text(
+                        'Go ',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(width: 6),
                       Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          shape: BoxShape.circle,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
                         ),
-                        child: const Icon(
-                          Icons.edit,
-                          size: 12,
-                          color: Colors.black54,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text(
+                          'BUSINESS',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  // Go PRO button
-                  // Container(
-                  //   padding: const EdgeInsets.symmetric(
-                  //     horizontal: 10,
-                  //     vertical: 4,
-                  //   ),
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.black12),
-                  //     borderRadius: BorderRadius.circular(20),
-                  //   ),
-                  //   child: Row(
-                  //     children: [
-                  //       const Text(
-                  //         'Go ',
-                  //         style: TextStyle(
-                  //           color: Colors.black,
-                  //           fontSize: 12,
-                  //           fontWeight: FontWeight.w600,
-                  //         ),
-                  //       ),
-                  //       Container(
-                  //         padding: const EdgeInsets.symmetric(
-                  //           horizontal: 6,
-                  //           vertical: 2,
-                  //         ),
-                  //         decoration: BoxDecoration(
-                  //           color: Colors.black,
-                  //           borderRadius: BorderRadius.circular(10),
-                  //         ),
-                  //         child: const Text(
-                  //           'PRO',
-                  //           style: TextStyle(
-                  //             color: Colors.white,
-                  //             fontSize: 8,
-                  //             fontWeight: FontWeight.w900,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                ],
-              ),
+                ),
+              ],
             ),
 
             // Logo
@@ -275,7 +262,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
 
             // Cover and Profile Stack
             Stack(
@@ -283,7 +270,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 // Cover Card
                 Container(
-                  height: 180,
+                  height: 200,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: const Color(0xFFF5F5F5),
@@ -311,7 +298,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 // Edit Cover Pencil Icon
                 Positioned(
-                  bottom: 60,
+                  bottom: 55,
                   right: 12,
                   child: InkWell(
                     onTap: () {
@@ -331,7 +318,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
-                        Icons.edit_outlined,
+                        Icons.edit,
                         size: 16,
                         color: Colors.black54,
                       ),
@@ -357,8 +344,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           alignment: Alignment.bottomRight,
                           children: [
                             Container(
-                              width: 110,
-                              height: 110,
+                              width: 130,
+                              height: 130,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: const Color(0xFF1E2022),
@@ -433,7 +420,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
 
-            const SizedBox(height: 60), // Wait for overlapping avatar
+            const SizedBox(height: 15), // Wait for overlapping avatar
             // Name Field input
             TextFormField(
               controller: _nameController,
@@ -443,10 +430,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fillColor: const Color(0xFFF3F3F3),
                 filled: true,
                 hintText: 'Enter your name',
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 2),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
@@ -465,21 +449,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   : null,
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             // Bio Field input
             TextFormField(
               controller: _bioController,
               textAlign: TextAlign.center,
               maxLines: 2,
-              style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               decoration: InputDecoration(
                 fillColor: const Color(0xFFF3F3F3),
                 filled: true,
                 hintText: 'Write something about you or your brand',
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+                  horizontal: 6,
+                  vertical: 6,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -496,29 +480,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 10),
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: const Color(0xFFF3F3F3),
+              ),
+              child: Column(
+                children: [
+                  const Center(
+                    child: Text(
+                      'Drag & Drop links to reorder',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
 
-            const Center(
-              child: Text(
-                'Drag & Drop links to reorder',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w500,
-                ),
+                  const SizedBox(height: 16),
+
+                  // Links Section Grid
+                  _buildLinkSection(
+                    profile,
+                    isEditable: true,
+                    profileProvider: profileProvider,
+                  ),
+                ],
               ),
             ),
 
-            const SizedBox(height: 16),
-
-            // Links Section Grid
-            _buildLinkSection(
-              profile,
-              isEditable: true,
-              profileProvider: profileProvider,
-            ),
-
-            const SizedBox(height: 24),
+            const SizedBox(height: 15),
 
             // Templates Button
             SizedBox(
@@ -560,27 +554,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildProfileAvatar(UserProfile profile) {
     if (profile.profilePhotoUrl != null &&
         profile.profilePhotoUrl!.trim().isNotEmpty) {
-      return Container(
-        width: 140,
-        height: 140,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.black12),
-          image: DecorationImage(
-            image: NetworkImage(profile.profilePhotoUrl!),
-            fit: BoxFit.cover,
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: 220,
+            width: double.infinity,
+            decoration: BoxDecoration(color: const Color(0xFFF5F5F5)),
+            child: coverImageFile != null
+                ? Image.file(
+                    coverImageFile!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) =>
+                        Container(color: const Color(0xFFF5F5F5)),
+                  )
+                : profile.coverPhotoUrl != null &&
+                      profile.coverPhotoUrl!.isNotEmpty
+                ? Image.network(
+                    profile.coverPhotoUrl!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) =>
+                        Container(color: const Color(0xFFF5F5F5)),
+                  )
+                : null,
           ),
-        ),
+          Positioned(
+            bottom: -6,
+            left: 0,
+            right: 0,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.black),
+                image: DecorationImage(
+                  image: NetworkImage(profile.profilePhotoUrl!),
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+        ],
       );
     }
 
     return Container(
-      width: 140,
-      height: 140,
+      width: 100,
+      height: 100,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: const Color(0xFF1E2022),
-        border: Border.all(color: Colors.black12),
+        border: Border.all(color: Colors.black),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.08),
@@ -637,20 +662,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Image.asset(
-                      link.assetPath,
-                      fit: BoxFit.contain,
-                      height: 130,
-                      width: 130,
-                      errorBuilder: (_, __, ___) =>
-                          const Icon(Icons.link, size: 32),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          link.assetPath,
+                          fit: BoxFit.contain,
+                          height: 130,
+                          width: 130,
+                          errorBuilder: (_, __, ___) =>
+                              const Icon(Icons.link, size: 32),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          link.platformName,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
                 if (isEditable)
                   Positioned(
                     top: -4,
-                    right: -4,
+                    right: 2,
                     child: GestureDetector(
                       onTap: () => LinkSheet().showExistingLinkBottomSheet(
                         context,
@@ -686,15 +724,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: () =>
                   LinkSheet().showAddLinkBottomSheet(context, profileProvider),
               child: Container(
-                width: 90,
-                height: 90,
+                width: 130,
+                height: 130,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF7F7F7),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(color: Colors.grey.shade200),
                 ),
                 child: const Center(
-                  child: Icon(Icons.add, size: 36, color: Colors.black54),
+                  child: Icon(Icons.add, size: 70, color: Colors.black),
                 ),
               ),
             ),
