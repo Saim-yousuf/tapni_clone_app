@@ -5,6 +5,7 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
 import 'package:tapni_app/screens/leads_screen.dart';
 import 'package:tapni_app/screens/profile_screen.dart';
+import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/screens/settings_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
@@ -100,49 +101,57 @@ class _MainShellState extends State<MainShell> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
-      floatingActionButton: InkWell(
-        onTap: () {
-          if (isEditing) {
-            profileProvider.triggerSave();
-          } else {
-            setState(() {
-              _currentPage = 'My Card';
-            });
-          }
-        },
-        child: Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(shape: BoxShape.circle),
-          child: isEditing
-              ? Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppTheme.primaryBlack,
+      floatingActionButton: Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(shape: BoxShape.circle),
+        child: isEditing
+            ? ClipOval(
+                child: InkWell(
+                  onTap: () {
+                    profileProvider.triggerSave();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppTheme.primaryBlack,
+                    ),
+                    child: const Icon(
+                      Icons.check,
+                      size: 40,
+                      color: Colors.white,
+                    ),
                   ),
-                  child: const Icon(Icons.check, size: 40, color: Colors.white),
-                )
-              : _currentPage == 'My Card'
-              ? profile.profilePhotoUrl == null ||
-                        profile.profilePhotoUrl!.isEmpty
-                    ? Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppTheme.primaryBlack,
-                        ),
-                        child: const Icon(
-                          Icons.ios_share,
-                          size: 40,
-                          color: Colors.white,
-                        ),
-                      )
-                    : ClipOval(
-                        child: Image.network(
-                          profile.profilePhotoUrl ?? "",
-                          fit: BoxFit.cover,
-                        ),
-                      )
-              : ClipOval(
+                ),
+              )
+            : _currentPage == "My Card"
+            ? ClipOval(
+                child: InkWell(
+                  onTap: () {
+                    SharingProfileSheet.show(context, profileUrl: "");
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppTheme.primaryBlack,
+                    ),
+                    child: const Icon(
+                      Icons.ios_share,
+                      size: 40,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              )
+            : profile.profilePhotoUrl == null ||
+                  profile.profilePhotoUrl!.isEmpty
+            ? ClipOval(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _currentPage = 'My Card';
+                    });
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -162,8 +171,101 @@ class _MainShellState extends State<MainShell> {
                     ),
                   ),
                 ),
-        ),
+              )
+            : ClipOval(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      _currentPage = 'My Card';
+                    });
+                  },
+                  child: Image.network(
+                    profile.profilePhotoUrl ?? "",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
       ),
+
+      // floatingActionButton: InkWell(
+      //   onTap: () {
+      //     if (isEditing) {
+      //       profileProvider.triggerSave();
+      //     } else {
+      //       if (_currentPage != 'My Card') {
+      //         profileProvider.setEditingProfile(true);
+      //       }
+      //       setState(() {
+      //         _currentPage = 'My Card';
+      //       });
+      //     }
+      //   },
+      //   child: Container(
+      //     width: 80,
+      //     height: 80,
+      //     decoration: BoxDecoration(shape: BoxShape.circle),
+      //     child: isEditing
+      //         ? Container(
+      //             decoration: BoxDecoration(
+      //               shape: BoxShape.circle,
+      //               color: AppTheme.primaryBlack,
+      //             ),
+      //             child: const Icon(Icons.check, size: 40, color: Colors.white),
+      //           )
+      //         : _currentPage != 'My Card'
+      //         ? profile.profilePhotoUrl == null ||
+      //                   profile.profilePhotoUrl!.isEmpty
+      //               ? Container(
+      //                   decoration: BoxDecoration(
+      //                     shape: BoxShape.circle,
+      //                     color: AppTheme.primaryBlack,
+      //                   ),
+      //                   child: const Icon(
+      //                     Icons.ios_share,
+      //                     size: 40,
+      //                     color: Colors.white,
+      //                   ),
+      //                 )
+      // : ClipOval(
+      //     child: Image.network(
+      //       profile.profilePhotoUrl ?? "",
+      //       fit: BoxFit.cover,
+      //     ),
+      //   )
+      //         : ClipOval(
+      //             child:
+      //                 // Container(
+      //                 //   decoration: BoxDecoration(
+      //                 //     shape: BoxShape.circle,
+      //                 //     color: AppTheme.primaryBlack,
+      //                 //   ),
+      //                 //   child: Center(
+      //                 //     child: Text(
+      //                 //       profile.name.isNotEmpty
+      //                 //           ? profile.name[0].toUpperCase()
+      //                 //           : '?',
+      //                 //       style: const TextStyle(
+      //                 //         color: Colors.white,
+      //                 //         fontSize: 40,
+      //                 //         fontWeight: FontWeight.bold,
+      //                 //       ),
+      //                 //     ),
+      //                 //   ),
+      //                 // ),
+      //                 Container(
+      //                   decoration: BoxDecoration(
+      //                     shape: BoxShape.circle,
+      //                     color: AppTheme.primaryBlack,
+      //                   ),
+      //                   child: Icon(
+      //                     Icons.ios_share,
+      //                     size: 40,
+      //                     color: Colors.white,
+      //                   ),
+      //                 ),
+      //           ),
+      //   ),
+      // ),
     );
   }
 }

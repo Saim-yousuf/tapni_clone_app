@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/links_widget.dart';
 
 class SocialLinksScreen extends StatelessWidget {
   final bool isTab;
@@ -24,28 +25,28 @@ class SocialLinksScreen extends StatelessWidget {
         automaticallyImplyLeading: !isTab,
         actions: [
           IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: () {}),
-          Container(
-            margin: const EdgeInsets.only(right: 12),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              children: const [
-                Text('Go', style: TextStyle(color: Colors.white, fontSize: 12)),
-                SizedBox(width: 4),
-                Text(
-                  'PRO',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   margin: const EdgeInsets.only(right: 12),
+          //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          //   decoration: BoxDecoration(
+          //     color: Colors.black,
+          //     borderRadius: BorderRadius.circular(20),
+          //   ),
+          //   child: Row(
+          //     children: const [
+          //       Text('Go', style: TextStyle(color: Colors.white, fontSize: 12)),
+          //       SizedBox(width: 4),
+          //       Text(
+          //         'PRO',
+          //         style: TextStyle(
+          //           color: Colors.white,
+          //           fontWeight: FontWeight.bold,
+          //           fontSize: 12,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
       body: Stack(
@@ -79,7 +80,8 @@ class SocialLinksScreen extends StatelessWidget {
               alignment: AlignmentDirectional.bottomEnd,
               child: GestureDetector(
                 onTap: () {
-                  _showAddLinkBottomSheet(context, profileProvider);
+                  // _showAddLinkBottomSheet(context, profileProvider);
+                  LinkSheet().showAddLinkBottomSheet(context, profileProvider);
                 },
                 child: Container(
                   padding: EdgeInsets.all(16),
@@ -160,278 +162,10 @@ class SocialLinksScreen extends StatelessWidget {
               const Icon(Icons.chevron_right, color: Colors.grey, size: 20),
             ],
           ),
-          onTap: () => _showEditBottomSheet(context, link, provider, isDark),
+          onTap: () =>
+              LinkSheet().showExistingLinkBottomSheet(context, link, provider),
         ),
       ),
-    );
-  }
-
-  // ─── ADD LINK BOTTOM SHEET ──────────────────────────────────────────────────
-  void _showAddLinkBottomSheet(BuildContext context, ProfileProvider provider) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final categories = [
-      // {
-      //   'title': 'Featured',
-      //   'platforms': [SocialPlatform.website],
-      // },
-      {
-        'title': 'Social media',
-        'platforms': [
-          SocialPlatform.instagram,
-          // SocialPlatform.facebook,
-          // SocialPlatform.youTube,
-          SocialPlatform.linkedIn,
-        ],
-      },
-      {
-        'title': 'Contact',
-        'platforms': [SocialPlatform.whatsApp],
-      },
-    ];
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (ctx) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.92,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          expand: false,
-          builder: (_, scrollController) {
-            return Column(
-              children: [
-                // Drag handle
-                Container(
-                  margin: const EdgeInsets.only(top: 12, bottom: 8),
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade400,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                // Header
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                        onPressed: () => Navigator.pop(ctx),
-                      ),
-                      const Expanded(
-                        child: Center(
-                          child: Text(
-                            'Add Link',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.search_rounded),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-                // Grid content
-                Expanded(
-                  child: ListView(
-                    controller: scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    children: categories.map((cat) {
-                      final platforms =
-                          cat['platforms'] as List<SocialPlatform>;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            child: Text(
-                              cat['title'] as String,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  crossAxisSpacing: 12,
-                                  mainAxisSpacing: 12,
-                                  childAspectRatio: 0.8,
-                                ),
-                            itemCount: platforms.length,
-                            itemBuilder: (context, index) {
-                              final platform = platforms[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(ctx);
-                                  _showNewLinkBottomSheet(
-                                    context,
-                                    platform,
-                                    provider,
-                                  );
-                                },
-                                child: Column(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: Image.asset(
-                                        _getPlatformAsset(platform),
-                                        width: 64,
-                                        height: 64,
-                                        errorBuilder: (_, __, ___) => Container(
-                                          width: 64,
-                                          height: 64,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.shade200,
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
-                                          ),
-                                          child: const Icon(Icons.link),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      _getPlatformName(platform),
-                                      style: const TextStyle(fontSize: 11),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  // ─── NEW LINK BOTTOM SHEET (after selecting platform) ───────────────────────
-  void _showNewLinkBottomSheet(
-    BuildContext context,
-    SocialPlatform platform,
-    ProfileProvider provider,
-  ) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final usernameController = TextEditingController();
-    final labelController = TextEditingController(
-      text: _getPlatformName(platform),
-    );
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (ctx) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(ctx).viewInsets.bottom,
-          ),
-          child: _LinkSettingsSheet(
-            platform: platform,
-            labelController: labelController,
-            usernameController: usernameController,
-            isDark: isDark,
-            isNew: true,
-            onSave: () {
-              if (usernameController.text.trim().isNotEmpty) {
-                provider.addSocialLink(
-                  platform,
-                  usernameController.text.trim(),
-                  true,
-                  context,
-                );
-                Navigator.pop(ctx);
-              }
-            },
-            onDelete: null,
-          ),
-        );
-      },
-    );
-  }
-
-  // ─── EDIT BOTTOM SHEET ───────────────────────────────────────────────────────
-  void _showEditBottomSheet(
-    BuildContext context,
-    SocialLink link,
-    ProfileProvider provider,
-    bool isDark,
-  ) {
-    final usernameController = TextEditingController(text: link.value);
-    final labelController = TextEditingController(text: link.platformName);
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (ctx) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(ctx).viewInsets.bottom,
-          ),
-          child: _LinkSettingsSheet(
-            platform: link.platform,
-            labelController: labelController,
-            usernameController: usernameController,
-            isDark: isDark,
-            isNew: false,
-            onSave: () {
-              if (usernameController.text.trim().isNotEmpty) {
-                // provider.updateSocialLink(
-                //   link.platform,
-
-                //   usernameController.text.trim(),
-                //   showLink,
-                //   context,
-                // );
-                Navigator.pop(ctx);
-              }
-            },
-            onDelete: () {
-              provider.deleteSocialLink(link.id);
-              Navigator.pop(ctx);
-            },
-          ),
-        );
-      },
     );
   }
 
