@@ -1,49 +1,164 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:tapni_app/utils/theme.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 enum ScanMode { paperCard, qrCode, eventBadge }
 
+const _tapniBlue = Color(0xFF2F80ED);
+
 class ScanScreen extends StatefulWidget {
-  const ScanScreen({Key? key}) : super(key: key);
+  const ScanScreen({super.key});
 
   @override
   State<ScanScreen> createState() => _ScanScreenState();
 }
 
-class _ScanScreenState extends State<ScanScreen>
-    with SingleTickerProviderStateMixin {
+class _ScanScreenState extends State<ScanScreen> {
   ScanMode _selectedMode = ScanMode.paperCard;
   bool _flashOn = false;
-  late AnimationController _scanLineController;
-  late Animation<double> _scanLineAnim;
+  bool _cameraGranted = false;
+  bool _permissionChecked = false;
+  bool _scanHandled = false;
+
+  late final MobileScannerController _scannerController;
+
 
   @override
   void initState() {
     super.initState();
-    _scanLineController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat(reverse: true);
-    _scanLineAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _scanLineController, curve: Curves.easeInOut),
+    _scannerController = MobileScannerController(
+      detectionSpeed: DetectionSpeed.noDuplicates,
+      facing: CameraFacing.back,
+      torchEnabled: false,
     );
+    _requestCameraPermission();
+  }
+
+  Future<void> _requestCameraPermission() async {
+    final status = await Permission.camera.request();
+    if (!mounted) return;
+    setState(() {
+      _cameraGranted = status.isGranted;
+      _permissionChecked = true;
+    });
   }
 
   @override
   void dispose() {
-    _scanLineController.dispose();
+    _scannerController.dispose();
     super.dispose();
   }
 
   String get _instructionText {
     switch (_selectedMode) {
       case ScanMode.paperCard:
-        return 'Point the camera at paper card\nand tap the Camera button.';
+        return 'Point the camera at paper card and tap the Camera button.';
       case ScanMode.qrCode:
-        return 'Point the camera at a QR code\nto scan automatically.';
+        return 'Point the camera at a QR code to scan automatically.';
       case ScanMode.eventBadge:
-        return 'Point the camera at an event\nbadge and tap the Camera button.';
+        return 'Point the camera at an event badge and tap the Camera button.';
     }
+  }
+
+  void _onBarcodeDetect(BarcodeCapture capture) {
+    if (_selectedMode != ScanMode.qrCode || _scanHandled) return;
+
+    for (final barcode in capture.barcodes) {
+      final value = barcode.rawValue;
+      if (value == null || value.isEmpty) continue;
+
+      _scanHandled = true;
+      _showScanResult(value);
+      return;
+    }
+  }
+
+  void _showScanResult(String value) {
+    if (!mounted) return;
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Scanned'),
+        content: SelectableText(value),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              setState(() => _scanHandled = false);
+            },
+            child: const Text('Scan again'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    ).then((_) {
+      if (mounted) setState(() => _scanHandled = false);
+    });
+  }
+
+  Future<void> _pickFromGallery() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
+    if (result == null || result.files.isEmpty) return;
+
+    final path = result.files.single.path;
+    if (path == null) return;
+
+    final capture = await _scannerController.analyzeImage(path);
+    if (!mounted) return;
+
+    if (capture == null || capture.barcodes.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No QR code found in this image.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    for (final barcode in capture.barcodes) {
+      final value = barcode.rawValue;
+      if (value != null && value.isNotEmpty) {
+        _showScanResult(value);
+        return;
+      }
+    }
+  }
+
+  Future<void> _onShutterTap() async {
+    if (_selectedMode == ScanMode.qrCode) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Hold the QR code inside the frame — it scans automatically.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    final label = _selectedMode == ScanMode.paperCard
+        ? 'Paper card'
+        : 'Event badge';
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$label captured. Processing...'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  Future<void> _toggleFlash() async {
+    await _scannerController.toggleTorch();
+    if (!mounted) return;
+    setState(() => _flashOn = !_flashOn);
   }
 
   @override
@@ -51,190 +166,182 @@ class _ScanScreenState extends State<ScanScreen>
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
+        fit: StackFit.expand,
         children: [
-          // ── Camera Preview Placeholder ──────────────────────────────────
-          Positioned.fill(
-            child: Container(color: const Color(0xFF1A1A1A)),
-          ),
+          if (_cameraGranted) ...[
+            MobileScanner(
+              controller: _scannerController,
+              fit: BoxFit.cover,
+              onDetect: _onBarcodeDetect,
+              errorBuilder: (context, error) => _CameraErrorView(
+                message: error.errorDetails?.message ?? 'Camera error',
+                onRetry: _requestCameraPermission,
+              ),
+            ),
+            // Dimmed overlay outside viewfinder area
+            IgnorePointer(
+              child: CustomPaint(
+                painter: _ViewfinderMaskPainter(),
+                child: const SizedBox.expand(),
+              ),
+            ),
+          ] else if (_permissionChecked) ...[
+            _CameraErrorView(
+              message: 'Camera permission is required to scan.',
+              onRetry: _requestCameraPermission,
+            ),
+          ] else
+            const Center(
+              child: CircularProgressIndicator(color: Colors.white),
+            ),
 
-          // ── Top controls ────────────────────────────────────────────────
           SafeArea(
             child: Column(
               children: [
-                // Close button
                 Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(14),
                     child: GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
-                          shape: BoxShape.circle,
+                      child: const Icon(Icons.close, color: Colors.white, size: 28),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            _instructionText,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.white,
+                              height: 1.35,
+                            ),
+                          ),
                         ),
-                        child: const Icon(Icons.close,
-                            color: Colors.white, size: 20),
+                        const SizedBox(width: 8),
+                        _LanguageChip(),
+                        const SizedBox(width: 6),
+                        const _AiButton(),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const Spacer(),
+
+                // Viewfinder frame
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  child: AspectRatio(
+                    aspectRatio: _selectedMode == ScanMode.qrCode ? 1 : 1.35,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.85),
+                          width: 2,
+                        ),
                       ),
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 8),
+                const SizedBox(height: 22),
 
-                // ── Instruction Banner ─────────────────────────────────────
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.92),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        // Instruction text
-                        Expanded(
-                          child: Text(
-                            _instructionText,
-                            style: const TextStyle(
-                              fontSize: 13.5,
-                              color: Color(0xFF1A1A1A),
-                              height: 1.4,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-
-                        // Language selector
-                        _LanguageChip(),
-
-                        const SizedBox(width: 8),
-
-                        // AI button
-                        _AiButton(),
-                      ],
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // ── Viewfinder ─────────────────────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _Viewfinder(
-                    scanLineAnim: _scanLineAnim,
-                    mode: _selectedMode,
-                  ),
-                ),
-
-                const SizedBox(height: 28),
-
-                // ── Mode selector tabs ─────────────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
                       _ModeTab(
                         icon: Icons.badge_outlined,
                         label: 'Paper Card',
                         selected: _selectedMode == ScanMode.paperCard,
-                        onTap: () =>
-                            setState(() => _selectedMode = ScanMode.paperCard),
+                        onTap: () => setState(() {
+                          _selectedMode = ScanMode.paperCard;
+                          _scanHandled = false;
+                        }),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 8),
                       _ModeTab(
                         icon: Icons.qr_code_2_rounded,
                         label: 'QR Code',
                         selected: _selectedMode == ScanMode.qrCode,
-                        onTap: () =>
-                            setState(() => _selectedMode = ScanMode.qrCode),
+                        onTap: () => setState(() {
+                          _selectedMode = ScanMode.qrCode;
+                          _scanHandled = false;
+                        }),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 8),
                       _ModeTab(
                         icon: Icons.confirmation_number_outlined,
                         label: 'Event Badge',
                         selected: _selectedMode == ScanMode.eventBadge,
-                        onTap: () =>
-                            setState(() => _selectedMode = ScanMode.eventBadge),
+                        onTap: () => setState(() {
+                          _selectedMode = ScanMode.eventBadge;
+                          _scanHandled = false;
+                        }),
                       ),
                     ],
                   ),
                 ),
 
-                const Spacer(),
+                const SizedBox(height: 28),
 
-                // ── Bottom Row: Gallery | Shutter | Flash ──────────────────
                 Padding(
-                  padding: const EdgeInsets.only(
-                      left: 32, right: 32, bottom: 36),
+                  padding: const EdgeInsets.fromLTRB(28, 0, 28, 32),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Gallery
                       _CircleIconButton(
                         icon: Icons.photo_library_outlined,
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Opening gallery...'),
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
-                        },
+                        onTap: _pickFromGallery,
                       ),
-
-                      // Shutter button
                       GestureDetector(
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  'Scanning ${_selectedMode.name}...'),
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
-                        },
+                        onTap: _onShutterTap,
                         child: Container(
                           width: 72,
                           height: 72,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 4),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.white.withOpacity(0.25),
-                                blurRadius: 20,
-                                spreadRadius: 4,
+                                color: Colors.black.withValues(alpha: 0.35),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),
                           child: const Icon(
                             Icons.camera_alt_rounded,
                             color: Colors.black,
-                            size: 32,
+                            size: 30,
                           ),
                         ),
                       ),
-
-                      // Flash
                       _CircleIconButton(
                         icon: _flashOn
                             ? Icons.flashlight_on_rounded
                             : Icons.flashlight_off_rounded,
                         active: _flashOn,
-                        onTap: () => setState(() => _flashOn = !_flashOn),
+                        onTap: _toggleFlash,
                       ),
                     ],
                   ),
@@ -248,132 +355,68 @@ class _ScanScreenState extends State<ScanScreen>
   }
 }
 
-// ── Viewfinder widget ────────────────────────────────────────────────────────
-class _Viewfinder extends StatelessWidget {
-  final Animation<double> scanLineAnim;
-  final ScanMode mode;
-
-  const _Viewfinder({required this.scanLineAnim, required this.mode});
-
+class _ViewfinderMaskPainter extends CustomPainter {
   @override
-  Widget build(BuildContext context) {
-    final isQr = mode == ScanMode.qrCode;
-    final double height = isQr ? 220 : 180;
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.black.withValues(alpha: 0.45);
 
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.6),
-          width: 1.5,
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Stack(
-          children: [
-            // Corner accents
-            ..._buildCorners(),
+    final holeWidth = size.width - 56;
+    final holeHeight = holeWidth * 0.72;
+    final left = (size.width - holeWidth) / 2;
+    final top = size.height * 0.28;
 
-            // Animated scan line
-            AnimatedBuilder(
-              animation: scanLineAnim,
-              builder: (context, _) {
-                return Positioned(
-                  top: scanLineAnim.value * (height - 4),
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 2,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.transparent,
-                          AppTheme.accentGold.withOpacity(0.8),
-                          Colors.transparent,
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+    final full = Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
+    final hole = Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(left, top, holeWidth, holeHeight),
+          const Radius.circular(18),
         ),
-      ),
+      );
+
+    canvas.drawPath(
+      Path.combine(PathOperation.difference, full, hole),
+      paint,
     );
   }
 
-  List<Widget> _buildCorners() {
-    const double size = 22;
-    const double thickness = 3;
-    final color = Colors.white;
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
 
-    Widget corner({required Alignment align, required double rotDeg}) {
-      return Align(
-        alignment: align,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: SizedBox(
-            width: size,
-            height: size,
-            child: CustomPaint(
-              painter: _CornerPainter(
-                  color: color, thickness: thickness, rotDeg: rotDeg),
-            ),
+class _CameraErrorView extends StatelessWidget {
+  final String message;
+  final VoidCallback onRetry;
+
+  const _CameraErrorView({required this.message, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: const Color(0xFF1A1A1A),
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.videocam_off_rounded, color: Colors.white54, size: 48),
+          const SizedBox(height: 16),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
           ),
-        ),
-      );
-    }
-
-    return [
-      corner(align: Alignment.topLeft, rotDeg: 0),
-      corner(align: Alignment.topRight, rotDeg: 90),
-      corner(align: Alignment.bottomLeft, rotDeg: 270),
-      corner(align: Alignment.bottomRight, rotDeg: 180),
-    ];
+          const SizedBox(height: 20),
+          FilledButton(
+            onPressed: onRetry,
+            child: const Text('Allow camera'),
+          ),
+        ],
+      ),
+    );
   }
 }
 
-class _CornerPainter extends CustomPainter {
-  final Color color;
-  final double thickness;
-  final double rotDeg;
-
-  _CornerPainter(
-      {required this.color,
-      required this.thickness,
-      required this.rotDeg});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = thickness
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke;
-
-    canvas.save();
-    canvas.translate(size.width / 2, size.height / 2);
-    canvas.rotate(rotDeg * 3.14159265 / 180);
-    canvas.translate(-size.width / 2, -size.height / 2);
-
-    final path = Path()
-      ..moveTo(0, size.height)
-      ..lineTo(0, 0)
-      ..lineTo(size.width, 0);
-
-    canvas.drawPath(path, paint);
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(_CornerPainter old) => false;
-}
-
-// ── Mode tab ─────────────────────────────────────────────────────────────────
 class _ModeTab extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -394,17 +437,17 @@ class _ModeTab extends StatelessWidget {
         onTap: onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             color: selected
-                ? Colors.white.withOpacity(0.12)
-                : Colors.white.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(14),
+                ? _tapniBlue.withValues(alpha: 0.22)
+                : Colors.white.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: selected
-                  ? AppTheme.accentGold.withOpacity(0.7)
-                  : Colors.white.withOpacity(0.1),
-              width: selected ? 1.5 : 1,
+                  ? _tapniBlue
+                  : Colors.white.withValues(alpha: 0.15),
+              width: selected ? 2 : 1,
             ),
           ),
           child: Column(
@@ -413,16 +456,15 @@ class _ModeTab extends StatelessWidget {
               Icon(
                 icon,
                 size: 22,
-                color: selected ? Colors.white : Colors.white54,
+                color: selected ? Colors.white : Colors.white60,
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 5),
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 11,
-                  fontWeight:
-                      selected ? FontWeight.w600 : FontWeight.normal,
-                  color: selected ? Colors.white : Colors.white54,
+                  fontSize: 10.5,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                  color: selected ? Colors.white : Colors.white60,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -434,7 +476,6 @@ class _ModeTab extends StatelessWidget {
   }
 }
 
-// ── Circle icon button ────────────────────────────────────────────────────────
 class _CircleIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
@@ -455,12 +496,9 @@ class _CircleIconButton extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           color: active
-              ? Colors.white.withOpacity(0.25)
-              : Colors.white.withOpacity(0.1),
+              ? Colors.white.withValues(alpha: 0.25)
+              : Colors.white.withValues(alpha: 0.12),
           shape: BoxShape.circle,
-          border: Border.all(
-            color: Colors.white.withOpacity(0.2),
-          ),
         ),
         child: Icon(icon, color: Colors.white, size: 22),
       ),
@@ -468,54 +506,46 @@ class _CircleIconButton extends StatelessWidget {
   }
 }
 
-// ── Language chip ─────────────────────────────────────────────────────────────
 class _LanguageChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F0),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black12),
+        color: Colors.white.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white24),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: const [
-          Icon(Icons.translate_rounded, size: 13, color: Color(0xFF333333)),
-          SizedBox(width: 4),
+          Icon(Icons.language, size: 12, color: Colors.white),
+          SizedBox(width: 3),
           Text(
             'Lat',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF333333),
+              color: Colors.white,
             ),
           ),
-          SizedBox(width: 2),
-          Icon(Icons.arrow_drop_down, size: 14, color: Color(0xFF333333)),
+          Icon(Icons.arrow_drop_down, size: 14, color: Colors.white),
         ],
       ),
     );
   }
 }
 
-// ── AI button ─────────────────────────────────────────────────────────────────
 class _AiButton extends StatelessWidget {
+  const _AiButton();
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withOpacity(0.1),
-            blurRadius: 6,
-          ),
-        ],
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -523,14 +553,13 @@ class _AiButton extends StatelessWidget {
           Text(
             'AI',
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: FontWeight.bold,
               color: Color(0xFF1A1AFF),
             ),
           ),
-          SizedBox(width: 3),
-          Icon(Icons.auto_awesome_rounded,
-              size: 13, color: Color(0xFF4A90FF)),
+          SizedBox(width: 2),
+          Icon(Icons.auto_awesome, size: 12, color: Color(0xFF4A90FF)),
         ],
       ),
     );
