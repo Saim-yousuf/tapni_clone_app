@@ -5,6 +5,17 @@ import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 
+class SubcriptionSheet {
+  static void show(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const ProUpgradeSheet(),
+    );
+  }
+}
+
 class ProUpgradeSheet extends StatefulWidget {
   const ProUpgradeSheet({Key? key}) : super(key: key);
 
@@ -79,11 +90,59 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (subscription?.isRequested == true)
-            _statusPanel(
-              isDark: isDark,
-              title: "Request pending",
-              text:
-                  "Your ${subscription!.planName} request is submitted and waiting for approval on ${_date(subscription.requestedAt)}.",
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle
+                Container(
+                  width: 44,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.white24 : Colors.black12,
+                    borderRadius: BorderRadius.circular(2.5),
+                  ),
+                ),
+                const SizedBox(height: 32),
+
+                // Big center icon
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.hourglass_top_rounded,
+                    size: 56,
+                    color: Colors.orange,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Title
+                const Text(
+                  'Request Pending',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+                ),
+
+                const SizedBox(height: 10),
+
+                // Subtitle
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Text(
+                    "Your ${subscription!.planName} request is submitted and waiting for approval on ${_date(subscription.requestedAt)}.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isDark ? Colors.white60 : Colors.black,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+              ],
             )
           else if (subscription?.isRejected == true)
             _statusPanel(
