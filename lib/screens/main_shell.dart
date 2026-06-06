@@ -55,7 +55,9 @@ class _MainShellState extends State<MainShell> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                color: _currentPage == 'Links' ? AppTheme.primaryBlack : Colors.grey,
+                color: _currentPage == 'Links'
+                    ? AppTheme.primaryBlack
+                    : Colors.grey,
                 iconSize: 34,
                 onPressed: () {
                   setState(() {
@@ -68,7 +70,9 @@ class _MainShellState extends State<MainShell> {
                     : const Icon(Icons.link_outlined),
               ),
               IconButton(
-                color: _currentPage == 'Contacts' ? AppTheme.primaryBlack : Colors.grey,
+                color: _currentPage == 'Contacts'
+                    ? AppTheme.primaryBlack
+                    : Colors.grey,
                 iconSize: 34,
                 onPressed: () {
                   setState(() {
@@ -82,7 +86,9 @@ class _MainShellState extends State<MainShell> {
               ),
               const SizedBox(width: 60),
               IconButton(
-                color: _currentPage == 'Explore' ? AppTheme.primaryBlack : Colors.grey,
+                color: _currentPage == 'Explore'
+                    ? AppTheme.primaryBlack
+                    : Colors.grey,
                 iconSize: 34,
                 onPressed: () {
                   setState(() {
@@ -95,7 +101,9 @@ class _MainShellState extends State<MainShell> {
                     : const Icon(Icons.explore_outlined),
               ),
               IconButton(
-                color: _currentPage == 'Settings' ? AppTheme.primaryBlack : Colors.grey,
+                color: _currentPage == 'Settings'
+                    ? AppTheme.primaryBlack
+                    : Colors.grey,
                 iconSize: 34,
                 onPressed: () {
                   setState(() {
@@ -140,7 +148,7 @@ class _MainShellState extends State<MainShell> {
             ? ClipOval(
                 child: InkWell(
                   onTap: () {
-                    SharingProfileSheet.show(context, profileUrl: "");
+                    SharingProfileSheet.show(context);
                   },
                   child: Container(
                     decoration: BoxDecoration(

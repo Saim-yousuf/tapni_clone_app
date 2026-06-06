@@ -37,7 +37,7 @@ class TapniApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
-      title: 'Tapni - Digital Bussiness Card',
+      title: 'BarQody - Digital Bussiness Card',
       debugShowCheckedModeBanner: false,
       themeMode: themeProvider.themeMode,
       theme: AppTheme.lightTheme,

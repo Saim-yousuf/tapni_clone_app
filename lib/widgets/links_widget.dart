@@ -75,6 +75,7 @@ class LinkSheet {
       },
     ];
 
+    bool isSearching = false;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -90,21 +91,20 @@ class LinkSheet {
           expand: false,
           builder: (_, scrollController) {
             final searchController = TextEditingController();
-            bool isSearching = false;
 
             return StatefulBuilder(
               builder: (context, setSheetState) {
                 return Column(
                   children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 12, bottom: 8),
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade400,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 12, bottom: 8),
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade400,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -113,7 +113,10 @@ class LinkSheet {
                       child: Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                            icon: const Icon(
+                              Icons.arrow_back_ios_new,
+                              size: 18,
+                            ),
                             onPressed: () => Navigator.pop(ctx),
                           ),
                           Expanded(
@@ -153,66 +156,77 @@ class LinkSheet {
                         ],
                       ),
                     ),
-                Expanded(
-                  child: Consumer<ProfileProvider>(
-                    builder: (context, watchedProvider, _) {
-                      if (watchedProvider.isLinkCatalogLoading &&
-                          watchedProvider.linkCatalog.isEmpty) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
+                    Expanded(
+                      child: Consumer<ProfileProvider>(
+                        builder: (context, watchedProvider, _) {
+                          if (watchedProvider.isLinkCatalogLoading &&
+                              watchedProvider.linkCatalog.isEmpty) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
 
-                      if (watchedProvider.linkCatalog.isNotEmpty) {
+                          if (watchedProvider.linkCatalog.isNotEmpty) {
                             final query = searchController.text
                                 .trim()
                                 .toLowerCase();
                             final catalog = query.isEmpty
                                 ? watchedProvider.linkCatalog
                                 : watchedProvider.linkCatalog
-                                    .map((category) {
-                                      final templates = category.templates
-                                          .where((template) =>
-                                              template.label
-                                                  .toLowerCase()
-                                                  .contains(query) ||
-                                              category.name
-                                                  .toLowerCase()
-                                                  .contains(query))
-                                          .toList();
-                                      return LinkCategory(
-                                        id: category.id,
-                                        name: category.name,
-                                        templates: templates,
-                                      );
-                                    })
-                                    .where((category) =>
-                                        category.templates.isNotEmpty)
-                                    .toList();
+                                      .map((category) {
+                                        final templates = category.templates
+                                            .where(
+                                              (template) =>
+                                                  template.label
+                                                      .toLowerCase()
+                                                      .contains(query) ||
+                                                  category.name
+                                                      .toLowerCase()
+                                                      .contains(query),
+                                            )
+                                            .toList();
+                                        return LinkCategory(
+                                          id: category.id,
+                                          name: category.name,
+                                          templates: templates,
+                                        );
+                                      })
+                                      .where(
+                                        (category) =>
+                                            category.templates.isNotEmpty,
+                                      )
+                                      .toList();
 
-                        return ListView(
-                          controller: scrollController,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                            return ListView(
+                              controller: scrollController,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               children: catalog
-                              .map(
-                                (category) => _buildTemplateCategory(
-                                  context,
-                                  ctx,
-                                  category,
-                                  provider,
-                                ),
-                              )
-                              .toList(),
-                        );
-                      }
+                                  .map(
+                                    (category) => _buildTemplateCategory(
+                                      context,
+                                      ctx,
+                                      category,
+                                      provider,
+                                    ),
+                                  )
+                                  .toList(),
+                            );
+                          }
 
-                      return const Center(
-                        child: Text(
-                          'No link templates available',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                          return const Center(
+                            child: Text(
+                              'No link templates available',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 );
               },
@@ -341,7 +355,9 @@ class LinkSheet {
     final labelController = TextEditingController(
       text: existingLink?.platformName ?? '',
     );
-    final valueController = TextEditingController(text: existingLink?.value ?? '');
+    final valueController = TextEditingController(
+      text: existingLink?.value ?? '',
+    );
     String logo = existingLink?.logoUrl ?? '';
     bool showLink = existingLink?.isPublic ?? true;
 
@@ -547,12 +563,15 @@ class LinkSheet {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bankDetails = existingLink?.bankDetails ?? {};
     final labelController = TextEditingController(
-      text: existingLink?.platformName ?? (allowCustomMeta ? '' : template.label),
+      text:
+          existingLink?.platformName ?? (allowCustomMeta ? '' : template.label),
     );
     final holderController = TextEditingController(
       text: bankDetails['accountHolderName'] ?? '',
     );
-    final ibanController = TextEditingController(text: bankDetails['iban'] ?? '');
+    final ibanController = TextEditingController(
+      text: bankDetails['iban'] ?? '',
+    );
     final accountController = TextEditingController(
       text: bankDetails['accountNumber'] ?? '',
     );
@@ -635,11 +654,23 @@ class LinkSheet {
                       ],
                     ),
                     const SizedBox(height: 14),
-                    _sheetTextField(holderController, 'Account holder name', TextInputType.name),
+                    _sheetTextField(
+                      holderController,
+                      'Account holder name',
+                      TextInputType.name,
+                    ),
                     const SizedBox(height: 12),
-                    _sheetTextField(ibanController, 'IBAN number', TextInputType.text),
+                    _sheetTextField(
+                      ibanController,
+                      'IBAN number',
+                      TextInputType.text,
+                    ),
                     const SizedBox(height: 12),
-                    _sheetTextField(accountController, 'Account number', TextInputType.number),
+                    _sheetTextField(
+                      accountController,
+                      'Account number',
+                      TextInputType.number,
+                    ),
                     const SizedBox(height: 14),
                     _showPublicToggle(
                       isDark: isDark,
@@ -1510,7 +1541,8 @@ class LinkSheet {
       }
       if (catalogTemplate != null) break;
     }
-    final isCustomLink = link.isCustom ||
+    final isCustomLink =
+        link.isCustom ||
         (catalogTemplate?.isSystem == true &&
             catalogTemplate!.label.toLowerCase().contains('custom'));
     final template = LinkTemplate(

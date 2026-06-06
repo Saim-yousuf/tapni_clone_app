@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tapni_app/models/social_link.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/theme.dart';
 
-/// Tapni-style "Sharing Profile" bottom sheet.
-/// ```dart
-/// SharingProfileSheet.show(
-///   context,
-///   profileUrl: 'https://tapni.com/tltqfl43',
-///   userInitial: 'S',
-///   profilePhotoUrl: profile.profilePhotoUrl,
-/// );
-/// ```
 class SharingProfileSheet {
   static void show(
-    BuildContext context, {
-    required String profileUrl,
-    String? userInitial,
-    Color? initialBgColor,
-    String? profilePhotoUrl,
-    List<Widget>? socialIcons,
-  }) {
+    BuildContext context,
+    // required String profileUrl,
+    // String? userInitial,
+    // Color? initialBgColor,
+    // String? profilePhotoUrl,
+    // List<Widget>? socialIcons,
+  ) {
+    final profile = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).profile;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _SharingProfileSheet(
-        profileUrl: profileUrl,
-        userInitial: userInitial ?? 'S',
-        initialBgColor: initialBgColor ?? const Color(0xFF7B1FA2),
-        profilePhotoUrl: profilePhotoUrl,
-        socialIcons: socialIcons,
+        profileUrl: "${Constants.appDomain}/${profile.username}",
+        userInitial: profile.name?.substring(0, 1).toUpperCase() ?? '?',
+        initialBgColor: AppTheme.primaryBlack,
+        profilePhotoUrl:
+            profile.profilePhotoUrl ??
+            "${Constants.appDomain}/${profile.username}",
+        socialIcons: profile.socialLinks,
       ),
     );
   }
@@ -40,7 +42,7 @@ class _SharingProfileSheet extends StatelessWidget {
   final String userInitial;
   final Color initialBgColor;
   final String? profilePhotoUrl;
-  final List<Widget>? socialIcons;
+  final List<SocialLink>? socialIcons;
 
   const _SharingProfileSheet({
     required this.profileUrl,
@@ -51,7 +53,7 @@ class _SharingProfileSheet extends StatelessWidget {
   });
 
   static const _qrEyeStyle = QrEyeStyle(
-    eyeShape: QrEyeShape.square,
+    eyeShape: QrEyeShape.circle,
     color: Colors.black,
   );
 
@@ -105,6 +107,13 @@ class _SharingProfileSheet extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       QrImageView(
+                        embeddedImage: profilePhotoUrl != null
+                            ? NetworkImage(profilePhotoUrl!)
+                            : null,
+                        embeddedImageStyle: QrEmbeddedImageStyle(
+                          size: const Size(52, 52),
+                      
+                        ),
                         data: profileUrl,
                         version: QrVersions.auto,
                         size: 260,
@@ -115,33 +124,33 @@ class _SharingProfileSheet extends StatelessWidget {
                         dataModuleStyle: _qrDataStyle,
                         gapless: true,
                       ),
-                      Container(
-                        width: 52,
-                        height: 52,
-                        decoration: BoxDecoration(
-                          color: initialBgColor,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.white, width: 3),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          userInitial.toUpperCase(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   width: 52,
+                      //   height: 52,
+                      //   decoration: BoxDecoration(
+                      //     color: initialBgColor,
+                      //     borderRadius: BorderRadius.circular(10),
+                      //     border: Border.all(color: Colors.white, width: 3),
+                      //   ),
+                      //   alignment: Alignment.center,
+                      //   child: Text(
+                      //     userInitial.toUpperCase(),
+                      //     style: const TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: 26,
+                      //       fontWeight: FontWeight.w700,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 18),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: socialIcons ?? _defaultSocialRow(),
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: socialIcons ?? _defaultSocialRow(),
+                // ),
                 const SizedBox(height: 28),
 
                 Row(
@@ -212,7 +221,9 @@ class _SharingProfileSheet extends StatelessWidget {
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Google Wallet integration coming soon'),
+                          content: Text(
+                            'Google Wallet integration coming soon',
+                          ),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );

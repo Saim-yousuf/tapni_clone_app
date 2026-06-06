@@ -15,7 +15,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _opacityAnimation;
@@ -28,13 +29,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       duration: const Duration(milliseconds: 1500),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1.1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
 
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
     _controller.forward();
 
@@ -48,22 +51,30 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     // AuthProvider check for authenticated needs to be valid.
     // If it relies on a token check, wait. authProvider.isAuthenticated doesn't exist?
     // Let's assume there is a token check, or we should use SharedPrefHelper.
-    
+
     // Since I haven't added isAuthenticated to AuthProvider in the recent edits,
     // I should check SharedPrefHelper directly if it is not there.
-    final token = SharedPrefHelper.getString(SharedPrefHelper.utils.authorizedToken);
+    final token = SharedPrefHelper.getString(
+      SharedPrefHelper.utils.authorizedToken,
+    );
     final isLoggedIn = token.isNotEmpty;
 
     if (isLoggedIn) {
-      final subProvider = Provider.of<SubscriptionProvider>(context, listen: false);
+      final subProvider = Provider.of<SubscriptionProvider>(
+        context,
+        listen: false,
+      );
       await subProvider.checkSubscriptionStatus();
-      final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+      final profileProvider = Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      );
       await profileProvider.fetchProfile();
 
       if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const MainShell()),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const MainShell()));
     } else {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const OnboardingScreen()),
@@ -114,15 +125,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                           blurRadius: 20,
                           spreadRadius: 2,
                           offset: const Offset(0, 8),
-                        )
+                        ),
                       ],
                     ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.contactless_outlined,
-                        color: AppTheme.secondaryWhite,
-                        size: 48,
-                      ),
+                    child: Image.asset(
+                      'assets/images/png/app_icon.png',
+                      fit: BoxFit.cover,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -131,7 +139,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'tapni',
+                          text: 'BarQody',
                           style: TextStyle(
                             fontSize: 38,
                             fontWeight: FontWeight.w900,
@@ -152,12 +160,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'DIGITAL NETWORKING PLATFORM',
+                    'DIGITAL BUSINESS - FOR EVERYONE',
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2.0,
-                      color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                      color: isDark
+                          ? AppTheme.textGreyDark
+                          : AppTheme.textGreyLight,
                     ),
                   ),
                 ],

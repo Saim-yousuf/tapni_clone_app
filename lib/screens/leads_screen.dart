@@ -479,13 +479,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 50),
         child: GestureDetector(
           onTap: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(builder: (_) => const ScanScreen()),
-            // );
-            SharingProfileSheet.show(
-              context,
-              profileUrl: 'https://tapni.com/tltqfl43',
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const ScanScreen()),
             );
+            // SharingProfileSheet.show(context);
           },
           child: Container(
             width: double.infinity,

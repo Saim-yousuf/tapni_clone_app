@@ -144,16 +144,8 @@ class HomeDashboard extends StatelessWidget {
               // Digital Card Quick Summary Card
               GestureDetector(
                 onTap: () {
-                  final slug = profile.name
-                      .replaceAll(' ', '')
-                      .toLowerCase();
-                  SharingProfileSheet.show(
-                    context,
-                    profileUrl: 'https://tapni.com/$slug',
-                    userInitial:
-                        profile.name.isNotEmpty ? profile.name[0] : 'S',
-                    profilePhotoUrl: profile.profilePhotoUrl,
-                  );
+                  final slug = profile.name.replaceAll(' ', '').toLowerCase();
+                  SharingProfileSheet.show(context);
                 },
                 child: GlassCard(
                   customBgColor: isDark

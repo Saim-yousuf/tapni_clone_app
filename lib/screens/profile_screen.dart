@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
@@ -118,17 +120,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
-          const Text(
-            'tapni',
-            style: TextStyle(
-              fontSize: 42,
-              fontWeight: FontWeight.w900,
-              letterSpacing: -2,
-            ),
+          // const Text(
+          //   'tapni',
+          //   style: TextStyle(
+          //     fontSize: 42,
+          //     fontWeight: FontWeight.w900,
+          //     letterSpacing: -2,
+          //   ),
+          // ),
+          Image.asset(
+            'assets/images/jpg/barqody_name.jpg',
+            width: 120,
+            // height: 120,
           ),
           const SizedBox(height: 20),
           _buildProfileAvatar(profile),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Text(
             profile.name,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
@@ -185,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   children: [
                     Text(
-                      'tapni.com/${profile.username ?? 'tltqfl43'}',
+                      '${Constants.appDomain}/${profile.username ?? ''}',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -258,18 +265,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
 
             // Logo
-            const Center(
-              child: Text(
-                'tapni',
-                style: TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -2,
-                ),
+            const SizedBox(height: 10),
+            Center(
+              child: Image.asset(
+                "assets/images/jpg/barqody_name.jpg",
+                // width: 100,
+                height: 50,
+                fit: BoxFit.cover,
               ),
             ),
 
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
 
             // Cover and Profile Stack
             Stack(
@@ -502,7 +508,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   const Center(
                     child: Text(
-                      'Drag & Drop links to reorder',
+                      'Add links to your profile below ',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.black,
@@ -563,6 +569,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileAvatar(UserProfile profile) {
+    bool isCover =
+        (profile.coverPhotoUrl != null &&
+        profile.coverPhotoUrl!.trim().isNotEmpty);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -570,11 +579,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Container(
           height: 220,
           width: double.infinity,
-          color: const Color(0xFFF5F5F5),
-          child: coverImageFile != null
-              ? Image.file(coverImageFile!, fit: BoxFit.cover)
-              : (profile.coverPhotoUrl != null &&
-                    profile.coverPhotoUrl!.trim().isNotEmpty)
+          color: isCover ? const Color(0xFFF5F5F5) : Colors.transparent,
+          child: isCover
               ? Image.network(profile.coverPhotoUrl!, fit: BoxFit.cover)
               : null,
         ),
@@ -584,48 +590,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
           bottom: -6,
           left: 0,
           right: 0,
-          child:
-              profile.profilePhotoUrl != null &&
-                  profile.profilePhotoUrl!.trim().isNotEmpty
-              ? Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black),
-                    image: DecorationImage(
-                      image: NetworkImage(profile.profilePhotoUrl!),
-                      fit: BoxFit.cover,
+          child: Column(
+            children: [
+              Container(
+                width: isCover ? 100 : 130,
+                height: isCover ? 100 : 130,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  // border: Border.all(color: Colors.white, width: 4),
+                  color: const Color(0xFF1E2022),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
-                  ),
-                )
-              : Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: const Color(0xFF1E2022),
-                    border: Border.all(color: Colors.black),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    profile.name.isNotEmpty
-                        ? profile.name[0].toUpperCase()
-                        : '?',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 56,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
+                  ], // image: DecorationImage(
+                  //   image: NetworkImage(profile.profilePhotoUrl!),
+                  //   fit: BoxFit.cover,
+                  // ),
                 ),
+                child: ClipOval(
+                  child:
+                      profile.profilePhotoUrl != null &&
+                          profile.profilePhotoUrl!.trim().isNotEmpty
+                      ? Image.network(
+                          profile.profilePhotoUrl!,
+                          fit: BoxFit.cover,
+                        )
+                      : Center(
+                          child: Text(
+                            profile.name.isNotEmpty
+                                ? profile.name[0].toUpperCase()
+                                : '?',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -658,12 +666,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           profileProvider,
                         )
                       : () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Opening: ${link.fullUrl}'),
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
+                          Launcher.openLink(link, context);
+
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content: Text('Opening: ${link.fullUrl}'),
+                          //     behavior: SnackBarBehavior.floating,
+                          //   ),
+                          // );
                         },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -671,7 +681,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF5F5F5),
+                            // color: const Color(0xFFF5F5F5),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: ClipRRect(
