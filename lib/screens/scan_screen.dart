@@ -2,6 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tapni_app/screens/scanned_profile_screen.dart';
+import 'package:tapni_app/utils/profile_url_validator.dart';
 
 enum ScanMode { paperCard, qrCode, eventBadge }
 
@@ -69,35 +71,35 @@ class _ScanScreenState extends State<ScanScreen> {
       if (value == null || value.isEmpty) continue;
 
       _scanHandled = true;
-      _showScanResult(value);
+      _handleScanResult(value);
       return;
     }
   }
 
-  void _showScanResult(String value) {
+  void _handleScanResult(String value) {
     if (!mounted) return;
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Scanned'),
-        content: SelectableText(value),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              setState(() => _scanHandled = false);
-            },
-            child: const Text('Scan again'),
+
+    final username = ProfileUrlValidator.extractUsername(value);
+    if (username == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid profile URL. Scan a valid BarQody card or QR code.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      setState(() => _scanHandled = false);
+      return;
+    }
+
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute(
+            builder: (_) => ScannedProfileScreen(username: username),
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    ).then((_) {
-      if (mounted) setState(() => _scanHandled = false);
-    });
+        )
+        .then((_) {
+          if (mounted) setState(() => _scanHandled = false);
+        });
   }
 
   Future<void> _pickFromGallery() async {
@@ -126,7 +128,7 @@ class _ScanScreenState extends State<ScanScreen> {
     for (final barcode in capture.barcodes) {
       final value = barcode.rawValue;
       if (value != null && value.isNotEmpty) {
-        _showScanResult(value);
+        _handleScanResult(value);
         return;
       }
     }

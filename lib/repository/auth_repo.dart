@@ -43,6 +43,14 @@ class AuthRepo {
     );
   }
 
+  Future<ApiResponse> profileByUsername({required String username}) async {
+    return await ApiHandler.request(
+      api: Api.auth.profileByUsername(username),
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
   Future<ApiResponse> updateProfile({
     required Map<String, dynamic> jsonBody,
   }) async {

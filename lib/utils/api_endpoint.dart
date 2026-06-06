@@ -34,6 +34,8 @@ class _AuthApi {
   String get login => "${Api.baseUrl}/api/user/auth/login";
   String get googleSignIn => "${Api.baseUrl}/api/user/auth/google";
   String get profile => "${Api.baseUrl}/api/user/auth/profile";
+  String profileByUsername(String username) =>
+      "${Api.baseUrl}/api/user/auth/profile/$username";
   String get links => "${Api.baseUrl}/api/user/auth/profile/links";
   String get linkCatalog => "${Api.baseUrl}/api/user/auth/link-catalog";
 }
