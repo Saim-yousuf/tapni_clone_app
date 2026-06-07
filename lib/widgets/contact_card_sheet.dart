@@ -25,22 +25,6 @@ void showContactCardBottomSheet(
   );
 }
 
-// ── App list item model ──────────────────────────────────────────────────────
-class AppItem {
-  final String name;
-  final Color color;
-  final IconData icon;
-  bool enabled;
-
-  AppItem({
-    required this.name,
-    required this.color,
-    required this.icon,
-    this.enabled = true,
-  });
-}
-
-// ── Main BottomSheet ─────────────────────────────────────────────────────────
 class ContactCardBottomSheet extends StatefulWidget {
   final LinkTemplate template;
   final ProfileProvider provider;
@@ -59,47 +43,39 @@ class ContactCardBottomSheet extends StatefulWidget {
 
 class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
   bool isPersonal = true;
-  bool addressExpanded = false;
+  bool personalAddressExpanded = false;
+  bool businessAddressExpanded = false;
   bool showLink = true;
 
-  // Common fields
   late final TextEditingController _labelCtrl;
   late final TextEditingController _firstNameCtrl;
   late final TextEditingController _lastNameCtrl;
   late final TextEditingController _bioCtrl;
 
-  // Personal-only fields
-  late final TextEditingController _personalPhoneCtrl;
-  late final TextEditingController _personalEmailCtrl;
-  late final TextEditingController _personalWebsiteCtrl;
+  late final List<TextEditingController> _personalPhoneCtrls;
+  late final List<TextEditingController> _personalEmailCtrls;
+  late final List<TextEditingController> _personalWebsiteCtrls;
 
-  // Business-only fields
-  late final TextEditingController _businessPhoneCtrl;
-  late final TextEditingController _businessEmailCtrl;
-  late final TextEditingController _businessWebsiteCtrl;
+  late final List<TextEditingController> _businessPhoneCtrls;
+  late final List<TextEditingController> _businessEmailCtrls;
+  late final List<TextEditingController> _businessWebsiteCtrls;
   late final TextEditingController _companyCtrl;
   late final TextEditingController _jobTitleCtrl;
   late final TextEditingController _faxCtrl;
 
-  // Address fields (shared)
-  late final TextEditingController _addressCtrl;
-  late final TextEditingController _streetCtrl;
-  late final TextEditingController _numberCtrl;
-  late final TextEditingController _cityCtrl;
-  late final TextEditingController _zipCtrl;
-  late final TextEditingController _countryCtrl;
+  late final TextEditingController _personalAddressCtrl;
+  late final TextEditingController _personalStreetCtrl;
+  late final TextEditingController _personalNumberCtrl;
+  late final TextEditingController _personalCityCtrl;
+  late final TextEditingController _personalZipCtrl;
+  late final TextEditingController _personalCountryCtrl;
 
-  // App toggles
-  final List<AppItem> _apps = [
-    AppItem(name: 'Saim Y', color: Colors.blue, icon: Icons.person),
-    AppItem(name: 'WhatsApp', color: Colors.green, icon: Icons.message),
-    AppItem(
-      name: 'Telegram',
-      color: Colors.lightBlue,
-      icon: Icons.send,
-      enabled: false,
-    ),
-  ];
+  late final TextEditingController _businessAddressCtrl;
+  late final TextEditingController _businessStreetCtrl;
+  late final TextEditingController _businessNumberCtrl;
+  late final TextEditingController _businessCityCtrl;
+  late final TextEditingController _businessZipCtrl;
+  late final TextEditingController _businessCountryCtrl;
 
   @override
   void initState() {
@@ -117,60 +93,96 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     _firstNameCtrl = TextEditingController(text: details['firstName'] ?? '');
     _lastNameCtrl = TextEditingController(text: details['lastName'] ?? '');
     _bioCtrl = TextEditingController(text: details['bio'] ?? '');
-    _personalPhoneCtrl = TextEditingController(text: details['phone'] ?? '');
-    _personalEmailCtrl = TextEditingController(text: details['email'] ?? '');
-    _personalWebsiteCtrl = TextEditingController(
-      text: details['website'] ?? '',
-    );
-    _businessPhoneCtrl = TextEditingController(
-      text: details['businessPhone'] ?? '',
-    );
-    _businessEmailCtrl = TextEditingController(
-      text: details['businessEmail'] ?? '',
-    );
-    _businessWebsiteCtrl = TextEditingController(
-      text: details['businessWebsite'] ?? '',
-    );
+
+    _personalPhoneCtrls = _controllersFromDetails(details, 'phone');
+    _personalEmailCtrls = _controllersFromDetails(details, 'email');
+    _personalWebsiteCtrls = _controllersFromDetails(details, 'website');
+    _businessPhoneCtrls = _controllersFromDetails(details, 'businessPhone');
+    _businessEmailCtrls = _controllersFromDetails(details, 'businessEmail');
+    _businessWebsiteCtrls = _controllersFromDetails(details, 'businessWebsite');
+
     _companyCtrl = TextEditingController(text: details['company'] ?? '');
     _jobTitleCtrl = TextEditingController(text: details['jobTitle'] ?? '');
     _faxCtrl = TextEditingController(text: details['fax'] ?? '');
-    _addressCtrl = TextEditingController(text: details['address'] ?? '');
-    _streetCtrl = TextEditingController(text: details['street'] ?? '');
-    _numberCtrl = TextEditingController(text: details['number'] ?? '');
-    _cityCtrl = TextEditingController(text: details['city'] ?? '');
-    _zipCtrl = TextEditingController(text: details['zip'] ?? '');
-    _countryCtrl = TextEditingController(text: details['country'] ?? '');
+
+    _personalAddressCtrl = TextEditingController(
+      text: details['address'] ?? '',
+    );
+    _personalStreetCtrl = TextEditingController(text: details['street'] ?? '');
+    _personalNumberCtrl = TextEditingController(text: details['number'] ?? '');
+    _personalCityCtrl = TextEditingController(text: details['city'] ?? '');
+    _personalZipCtrl = TextEditingController(text: details['zip'] ?? '');
+    _personalCountryCtrl = TextEditingController(
+      text: details['country'] ?? '',
+    );
+
+    _businessAddressCtrl = TextEditingController(
+      text: details['businessAddress'] ?? '',
+    );
+    _businessStreetCtrl = TextEditingController(
+      text: details['businessStreet'] ?? '',
+    );
+    _businessNumberCtrl = TextEditingController(
+      text: details['businessNumber'] ?? '',
+    );
+    _businessCityCtrl = TextEditingController(
+      text: details['businessCity'] ?? '',
+    );
+    _businessZipCtrl = TextEditingController(
+      text: details['businessZip'] ?? '',
+    );
+    _businessCountryCtrl = TextEditingController(
+      text: details['businessCountry'] ?? '',
+    );
+  }
+
+  List<TextEditingController> _controllersFromDetails(
+    Map<String, String> details,
+    String key,
+  ) {
+    final values = [
+      details[key],
+      details['${key}2'],
+      details['${key}3'],
+    ].where((value) => value?.isNotEmpty == true).cast<String>().toList();
+    if (values.isEmpty) values.add('');
+    return values.map((value) => TextEditingController(text: value)).toList();
   }
 
   @override
   void dispose() {
-    for (final c in [
+    for (final controller in [
       _labelCtrl,
       _firstNameCtrl,
       _lastNameCtrl,
       _bioCtrl,
-      _personalPhoneCtrl,
-      _personalEmailCtrl,
-      _personalWebsiteCtrl,
-      _businessPhoneCtrl,
-      _businessEmailCtrl,
-      _businessWebsiteCtrl,
       _companyCtrl,
       _jobTitleCtrl,
       _faxCtrl,
-      _addressCtrl,
-      _streetCtrl,
-      _numberCtrl,
-      _cityCtrl,
-      _zipCtrl,
-      _countryCtrl,
+      _personalAddressCtrl,
+      _personalStreetCtrl,
+      _personalNumberCtrl,
+      _personalCityCtrl,
+      _personalZipCtrl,
+      _personalCountryCtrl,
+      _businessAddressCtrl,
+      _businessStreetCtrl,
+      _businessNumberCtrl,
+      _businessCityCtrl,
+      _businessZipCtrl,
+      _businessCountryCtrl,
+      ..._personalPhoneCtrls,
+      ..._personalEmailCtrls,
+      ..._personalWebsiteCtrls,
+      ..._businessPhoneCtrls,
+      ..._businessEmailCtrls,
+      ..._businessWebsiteCtrls,
     ]) {
-      c.dispose();
+      controller.dispose();
     }
     super.dispose();
   }
 
-  // ── Build ──────────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -204,26 +216,14 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
                     const SizedBox(height: 14),
                     _buildToggle(),
                     const SizedBox(height: 12),
-
-                    // ── Tab-specific fields ──
                     if (isPersonal)
                       ..._buildPersonalFields()
                     else
                       ..._buildBusinessFields(),
-
                     const SizedBox(height: 10),
-
-                    // ── Address expandable ──
                     _buildAddressSection(),
-
                     const SizedBox(height: 16),
-
-                    // ── App toggles ──
-                    ..._apps.map((app) => _buildAppToggle(app)),
-
-                    const SizedBox(height: 8),
                     _buildShowLinkToggle(),
-
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -235,8 +235,6 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
       },
     );
   }
-
-  // ── Widgets ────────────────────────────────────────────────────────────────
 
   Widget _buildHandle() => Container(
     margin: const EdgeInsets.only(top: 12, bottom: 8),
@@ -259,7 +257,6 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
   Widget _buildAvatarRow() => Row(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      // Avatar
       Stack(
         children: [
           Container(
@@ -325,16 +322,12 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     ),
     child: Row(
       children: [
-        _toggleTab(
-          'Business',
-          !isPersonal,
-          () => setState(() => isPersonal = false),
-        ),
-        _toggleTab(
-          'Personal',
-          isPersonal,
-          () => setState(() => isPersonal = true),
-        ),
+        _toggleTab('Business', !isPersonal, () {
+          setState(() => isPersonal = false);
+        }),
+        _toggleTab('Personal', isPersonal, () {
+          setState(() => isPersonal = true);
+        }),
       ],
     ),
   );
@@ -361,22 +354,20 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     ),
   );
 
-  // ── Personal Fields ────────────────────────────────────────────────────────
   List<Widget> _buildPersonalFields() => [
-    _buildFieldWithPlus(_personalPhoneCtrl, 'Contact card phone'),
+    _buildMultiField(_personalPhoneCtrls, 'Contact card phone'),
     const SizedBox(height: 10),
-    _buildFieldWithPlus(_personalEmailCtrl, 'Contact card email'),
+    _buildMultiField(_personalEmailCtrls, 'Contact card email'),
     const SizedBox(height: 10),
-    _buildFieldWithPlus(_personalWebsiteCtrl, 'Contact card website'),
+    _buildMultiField(_personalWebsiteCtrls, 'Contact card website'),
   ];
 
-  // ── Business Fields ────────────────────────────────────────────────────────
   List<Widget> _buildBusinessFields() => [
-    _buildFieldWithPlus(_businessPhoneCtrl, 'Business phone number'),
+    _buildMultiField(_businessPhoneCtrls, 'Business phone number'),
     const SizedBox(height: 10),
-    _buildFieldWithPlus(_businessEmailCtrl, 'Business email address'),
+    _buildMultiField(_businessEmailCtrls, 'Business email address'),
     const SizedBox(height: 10),
-    _buildFieldWithPlus(_businessWebsiteCtrl, 'Business website'),
+    _buildMultiField(_businessWebsiteCtrls, 'Business website'),
     const SizedBox(height: 10),
     _buildTextField(_jobTitleCtrl, 'Job title'),
     const SizedBox(height: 10),
@@ -385,117 +376,163 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     _buildTextField(_faxCtrl, 'Business fax'),
   ];
 
-  // ── Address expandable section ─────────────────────────────────────────────
-  Widget _buildAddressSection() => Column(
-    children: [
-      // Header row — tap to expand/collapse
-      Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _addressCtrl,
-              decoration: _inputDecoration('Contact card home address'),
-            ),
-          ),
-          const SizedBox(width: 8),
-          GestureDetector(
-            onTap: () => setState(() => addressExpanded = !addressExpanded),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                addressExpanded
-                    ? Icons.keyboard_arrow_up
-                    : Icons.keyboard_arrow_up,
-                color: Colors.grey[600],
-              ),
-            ),
-          ),
-        ],
-      ),
+  Widget _buildMultiField(
+    List<TextEditingController> controllers,
+    String hint,
+  ) {
+    return Column(
+      children: List.generate(controllers.length, (index) {
+        final isFirst = index == 0;
+        final canAdd = isFirst && controllers.length < 3;
+        final canRemove = !isFirst;
 
-      // Expanded sub-fields
-      AnimatedCrossFade(
-        duration: const Duration(milliseconds: 250),
-        crossFadeState: addressExpanded
-            ? CrossFadeState.showFirst
-            : CrossFadeState.showSecond,
-        firstChild: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Column(
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: index < controllers.length - 1 ? 10 : 0,
+          ),
+          child: Row(
             children: [
-              Row(
-                children: [
-                  Expanded(child: _buildTextField(_streetCtrl, 'Street name')),
-                  const SizedBox(width: 10),
-                  SizedBox(
-                    width: 120,
-                    child: _buildTextField(_numberCtrl, 'Number'),
+              Expanded(
+                child: TextField(
+                  controller: controllers[index],
+                  decoration: _inputDecoration(hint),
+                ),
+              ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () {
+                  if (canAdd) {
+                    setState(() {
+                      controllers.add(TextEditingController());
+                    });
+                  } else if (canRemove) {
+                    setState(() {
+                      controllers[index].dispose();
+                      controllers.removeAt(index);
+                    });
+                  }
+                },
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                ],
+                  child: Icon(
+                    canRemove ? Icons.remove : Icons.add,
+                    color: canAdd || canRemove
+                        ? Colors.grey[700]
+                        : Colors.grey[300],
+                    size: 20,
+                  ),
+                ),
               ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(child: _buildTextField(_cityCtrl, 'City')),
-                  const SizedBox(width: 10),
-                  SizedBox(width: 120, child: _buildTextField(_zipCtrl, 'ZIP')),
-                ],
-              ),
-              const SizedBox(height: 10),
-              _buildTextField(_countryCtrl, 'Country'),
             ],
           ),
-        ),
-        secondChild: const SizedBox.shrink(),
-      ),
-    ],
-  );
+        );
+      }),
+    );
+  }
 
-  // ── App toggle row ─────────────────────────────────────────────────────────
-  Widget _buildAppToggle(AppItem app) => Container(
-    margin: const EdgeInsets.only(bottom: 8),
-    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-    decoration: BoxDecoration(
-      color: Colors.grey[50],
-      borderRadius: BorderRadius.circular(14),
-      border: Border.all(color: Colors.grey[200]!),
-    ),
-    child: Row(
+  Widget _buildAddressSection() {
+    final expanded = isPersonal
+        ? personalAddressExpanded
+        : businessAddressExpanded;
+    final addressCtrl = isPersonal
+        ? _personalAddressCtrl
+        : _businessAddressCtrl;
+    final streetCtrl = isPersonal ? _personalStreetCtrl : _businessStreetCtrl;
+    final numberCtrl = isPersonal ? _personalNumberCtrl : _businessNumberCtrl;
+    final cityCtrl = isPersonal ? _personalCityCtrl : _businessCityCtrl;
+    final zipCtrl = isPersonal ? _personalZipCtrl : _businessZipCtrl;
+    final countryCtrl = isPersonal
+        ? _personalCountryCtrl
+        : _businessCountryCtrl;
+    final hint = isPersonal
+        ? 'Contact card home address'
+        : 'Contact card business address';
+
+    return Column(
       children: [
-        // Icon
-        Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: app.color,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(app.icon, color: Colors.white, size: 22),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: addressCtrl,
+                decoration: _inputDecoration(hint),
+              ),
+            ),
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  if (isPersonal) {
+                    personalAddressExpanded = !personalAddressExpanded;
+                  } else {
+                    businessAddressExpanded = !businessAddressExpanded;
+                  }
+                });
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  expanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            app.name,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+        AnimatedCrossFade(
+          duration: const Duration(milliseconds: 250),
+          crossFadeState: expanded
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          firstChild: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: _buildTextField(streetCtrl, 'Street name')),
+                    const SizedBox(width: 10),
+                    SizedBox(
+                      width: 120,
+                      child: _buildTextField(numberCtrl, 'Number'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(child: _buildTextField(cityCtrl, 'City')),
+                    const SizedBox(width: 10),
+                    SizedBox(
+                      width: 120,
+                      child: _buildTextField(zipCtrl, 'ZIP'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _buildTextField(countryCtrl, 'Country'),
+              ],
+            ),
           ),
-        ),
-        Switch(
-          value: app.enabled,
-          onChanged: (v) => setState(() => app.enabled = v),
-          activeThumbColor: Colors.white,
-          activeTrackColor: Colors.black,
+          secondChild: const SizedBox.shrink(),
         ),
       ],
-    ),
-  );
+    );
+  }
 
-  // ── Bottom bar ─────────────────────────────────────────────────────────────
   Widget _buildBottomBar() => Container(
     padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
     decoration: BoxDecoration(
@@ -550,7 +587,6 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     ),
   );
 
-  // ── Helper builders ────────────────────────────────────────────────────────
   Widget _buildShowLinkToggle() => Container(
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     decoration: BoxDecoration(
@@ -580,40 +616,43 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     final label = _labelCtrl.text.trim();
     final firstName = _firstNameCtrl.text.trim();
     final lastName = _lastNameCtrl.text.trim();
-    final phone = isPersonal
-        ? _personalPhoneCtrl.text.trim()
-        : _businessPhoneCtrl.text.trim();
-    final email = isPersonal
-        ? _personalEmailCtrl.text.trim()
-        : _businessEmailCtrl.text.trim();
+    final phone = _firstFilled(
+      isPersonal ? _personalPhoneCtrls : _businessPhoneCtrls,
+    );
+    final email = _firstFilled(
+      isPersonal ? _personalEmailCtrls : _businessEmailCtrls,
+    );
 
     if (label.isEmpty || (firstName.isEmpty && lastName.isEmpty)) return;
     if (phone.isEmpty && email.isEmpty) return;
 
-    final details = {
+    final details = <String, String>{
       'label': label,
       'cardType': isPersonal ? 'personal' : 'business',
       'firstName': firstName,
       'lastName': lastName,
       'bio': _bioCtrl.text.trim(),
-      'phone': _personalPhoneCtrl.text.trim(),
-      'email': _personalEmailCtrl.text.trim(),
-      'website': _personalWebsiteCtrl.text.trim(),
-      'businessPhone': _businessPhoneCtrl.text.trim(),
-      'businessEmail': _businessEmailCtrl.text.trim(),
-      'businessWebsite': _businessWebsiteCtrl.text.trim(),
+      ..._multiValues('phone', _personalPhoneCtrls),
+      ..._multiValues('email', _personalEmailCtrls),
+      ..._multiValues('website', _personalWebsiteCtrls),
+      ..._multiValues('businessPhone', _businessPhoneCtrls),
+      ..._multiValues('businessEmail', _businessEmailCtrls),
+      ..._multiValues('businessWebsite', _businessWebsiteCtrls),
       'company': _companyCtrl.text.trim(),
       'jobTitle': _jobTitleCtrl.text.trim(),
       'fax': _faxCtrl.text.trim(),
-      'address': _addressCtrl.text.trim(),
-      'street': _streetCtrl.text.trim(),
-      'number': _numberCtrl.text.trim(),
-      'city': _cityCtrl.text.trim(),
-      'zip': _zipCtrl.text.trim(),
-      'country': _countryCtrl.text.trim(),
-      'contactAppEnabled': _apps[0].enabled.toString(),
-      'whatsappEnabled': _apps[1].enabled.toString(),
-      'telegramEnabled': _apps[2].enabled.toString(),
+      'address': _personalAddressCtrl.text.trim(),
+      'street': _personalStreetCtrl.text.trim(),
+      'number': _personalNumberCtrl.text.trim(),
+      'city': _personalCityCtrl.text.trim(),
+      'zip': _personalZipCtrl.text.trim(),
+      'country': _personalCountryCtrl.text.trim(),
+      'businessAddress': _businessAddressCtrl.text.trim(),
+      'businessStreet': _businessStreetCtrl.text.trim(),
+      'businessNumber': _businessNumberCtrl.text.trim(),
+      'businessCity': _businessCityCtrl.text.trim(),
+      'businessZip': _businessZipCtrl.text.trim(),
+      'businessCountry': _businessCountryCtrl.text.trim(),
     };
     final value = email.isNotEmpty ? email : phone;
     final existingLink = widget.existingLink;
@@ -643,6 +682,28 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     if (mounted) Navigator.pop(context);
   }
 
+  String _firstFilled(List<TextEditingController> controllers) {
+    for (final controller in controllers) {
+      final value = controller.text.trim();
+      if (value.isNotEmpty) return value;
+    }
+    return '';
+  }
+
+  Map<String, String> _multiValues(
+    String key,
+    List<TextEditingController> controllers,
+  ) {
+    final values = controllers
+        .map((controller) => controller.text.trim())
+        .toList();
+    return {
+      key: values.isNotEmpty ? values[0] : '',
+      '${key}2': values.length > 1 ? values[1] : '',
+      '${key}3': values.length > 2 ? values[2] : '',
+    };
+  }
+
   InputDecoration _inputDecoration(String hint) => InputDecoration(
     hintText: hint,
     hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
@@ -663,27 +724,5 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     controller: ctrl,
     maxLines: maxLines,
     decoration: _inputDecoration(hint),
-  );
-
-  Widget _buildFieldWithPlus(
-    TextEditingController ctrl,
-    String hint, {
-    IconData icon = Icons.add,
-  }) => Row(
-    children: [
-      Expanded(
-        child: TextField(controller: ctrl, decoration: _inputDecoration(hint)),
-      ),
-      const SizedBox(width: 8),
-      Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Icon(icon, color: Colors.grey[600], size: 20),
-      ),
-    ],
   );
 }
