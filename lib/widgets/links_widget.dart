@@ -9,6 +9,7 @@ import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/contact_card_sheet.dart' as contact_card;
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 class LinkSheet {
@@ -281,7 +282,11 @@ class LinkSheet {
                   return;
                 }
                 if (template.actionType == 'contact_card') {
-                  _showContactCardBottomSheet(context);
+                  contact_card.showContactCardBottomSheet(
+                    context,
+                    template,
+                    provider,
+                  );
                 } else if (_isCustomTemplate(template)) {
                   _showCustomTemplateBottomSheet(context, template, provider);
                 } else if (template.fieldType == 'bank') {
@@ -1123,121 +1128,6 @@ class LinkSheet {
     );
   }
 
-  void _showContactCardBottomSheet(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final nameController = TextEditingController();
-    final phoneController = TextEditingController();
-    final emailController = TextEditingController();
-    final companyController = TextEditingController();
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(ctx).viewInsets.bottom,
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF111111) : Colors.white,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(24),
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 4, bottom: 14),
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                const Text(
-                  'Contact card',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 20),
-                _contactField(nameController, 'Full name', TextInputType.name),
-                const SizedBox(height: 12),
-                _contactField(
-                  phoneController,
-                  'Phone number',
-                  TextInputType.phone,
-                ),
-                const SizedBox(height: 12),
-                _contactField(
-                  emailController,
-                  'Email',
-                  TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 12),
-                _contactField(companyController, 'Company', TextInputType.text),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(ctx);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryBlack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _contactField(
-    TextEditingController controller,
-    String hint,
-    TextInputType keyboardType,
-  ) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        hintText: hint,
-        fillColor: const Color(0xFFF5F5F5),
-        filled: true,
-        border: InputBorder.none,
-        enabledBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide.none,
-        ),
-      ),
-    );
-  }
-
   TextInputType _keyboardTypeFor(String fieldType) {
     switch (fieldType) {
       case 'phone':
@@ -1552,15 +1442,31 @@ class LinkSheet {
       fieldType:
           catalogTemplate?.fieldType ??
           link.fieldType ??
-          (link.bankDetails != null ? 'bank' : 'url'),
+          (link.bankDetails != null
+              ? 'bank'
+              : link.contactCard != null
+              ? 'contact_card'
+              : 'url'),
       fieldLabel: catalogTemplate?.fieldLabel ?? link.fieldLabel ?? 'Link',
       prefix: '',
       logo: link.logoUrl ?? catalogTemplate?.logo ?? '',
       isPro: false,
       isFeatured: false,
       isSystem: isCustomLink,
-      actionType: 'link',
+      actionType:
+          catalogTemplate?.actionType ??
+          (link.contactCard != null ? 'contact_card' : 'link'),
     );
+
+    if (template.actionType == 'contact_card') {
+      contact_card.showContactCardBottomSheet(
+        context,
+        template,
+        provider,
+        existingLink: link,
+      );
+      return;
+    }
 
     if (template.fieldType == 'bank') {
       _showBankTemplateBottomSheet(

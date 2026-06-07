@@ -237,9 +237,7 @@ class ProfileProvider extends ChangeNotifier {
 
     try {
       final repo = AuthRepo();
-      final response = await repo.updateProfile(
-        jsonBody: json,
-      );
+      final response = await repo.updateProfile(jsonBody: json);
 
       if (response.success) {
         if (response.data is Map<String, dynamic>) {
@@ -383,6 +381,7 @@ class ProfileProvider extends ChangeNotifier {
     required BuildContext context,
     String logo = '',
     Map<String, String>? bankDetails,
+    Map<String, String>? contactCard,
   }) async {
     final newLink = SocialLink(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -393,6 +392,7 @@ class ProfileProvider extends ChangeNotifier {
       logoUrl: logo.isNotEmpty ? logo : template.logo,
       value: value,
       bankDetails: bankDetails,
+      contactCard: contactCard,
       isCustom: true,
       isActive: true,
       isPublic: showLink,
@@ -480,6 +480,7 @@ class ProfileProvider extends ChangeNotifier {
     required BuildContext context,
     String? logo,
     Map<String, String>? bankDetails,
+    Map<String, String>? contactCard,
   }) async {
     final updatedLinks = List<SocialLink>.from(_profile.socialLinks);
     final existingIndex = updatedLinks.indexWhere((item) => item.id == link.id);
@@ -490,6 +491,7 @@ class ProfileProvider extends ChangeNotifier {
         value: value,
         logoUrl: logo?.isNotEmpty == true ? logo : link.logoUrl,
         bankDetails: bankDetails,
+        contactCard: contactCard,
         isCustom: true,
         isActive: true,
         isPublic: showLink,

@@ -38,6 +38,7 @@ class SocialLink {
   final String? logoUrl;
   final String? url;
   final Map<String, String>? bankDetails;
+  final Map<String, String>? contactCard;
   final bool isCustom;
   final String value; // username, phone number, or URL
   final bool isActive;
@@ -53,6 +54,7 @@ class SocialLink {
     this.logoUrl,
     this.url,
     this.bankDetails,
+    this.contactCard,
     this.isCustom = false,
     required this.value,
     this.isActive = true,
@@ -69,6 +71,7 @@ class SocialLink {
     String? logoUrl,
     String? url,
     Map<String, String>? bankDetails,
+    Map<String, String>? contactCard,
     bool? isCustom,
     String? value,
     bool? isActive,
@@ -84,6 +87,7 @@ class SocialLink {
       logoUrl: logoUrl ?? this.logoUrl,
       url: url ?? this.url,
       bankDetails: bankDetails ?? this.bankDetails,
+      contactCard: contactCard ?? this.contactCard,
       isCustom: isCustom ?? this.isCustom,
       value: value ?? this.value,
       isActive: isActive ?? this.isActive,
@@ -121,13 +125,15 @@ class SocialLink {
   Map<String, dynamic> toApiJson() {
     return {
       if (RegExp(r'^[a-fA-F0-9]{24}$').hasMatch(id)) '_id': id,
-      if (templateId != null && templateId!.isNotEmpty) 'templateId': templateId,
+      if (templateId != null && templateId!.isNotEmpty)
+        'templateId': templateId,
       'label': platformName,
       'title': platformName,
       'type': fieldType ?? apiType,
       'value': value,
       if (logoUrl != null && logoUrl!.isNotEmpty) 'logo': logoUrl,
       if (bankDetails != null) 'bankDetails': bankDetails,
+      if (contactCard != null) 'contactCard': contactCard,
       'isCustom': isCustom,
       'url': fullUrl,
       'isActive': isActive,
@@ -139,10 +145,11 @@ class SocialLink {
   factory SocialLink.fromApiJson(Map<String, dynamic> json) {
     final type = json['type'] as String? ?? 'custom';
     final url = json['url'] as String? ?? '';
-    final title = json['label'] as String? ?? json['title'] as String? ?? '';
+    final title = json['title'] as String? ?? json['label'] as String? ?? '';
     final value = json['value'] as String? ?? url;
     final logo = json['logo'] as String?;
     final bankDetailsJson = json['bankDetails'] as Map<String, dynamic>?;
+    final contactCardJson = json['contactCard'] as Map<String, dynamic>?;
     final templateId = json['templateId']?.toString();
     final fieldLabel = json['fieldLabel']?.toString();
 
@@ -211,7 +218,8 @@ class SocialLink {
     }
 
     return SocialLink(
-      id: json['_id']?.toString() ??
+      id:
+          json['_id']?.toString() ??
           json['id']?.toString() ??
           (url.isNotEmpty
               ? url
@@ -227,14 +235,18 @@ class SocialLink {
       bankDetails: bankDetailsJson?.map(
         (key, value) => MapEntry(key, value?.toString() ?? ''),
       ),
+      contactCard: contactCardJson?.map(
+        (key, value) => MapEntry(key, value?.toString() ?? ''),
+      ),
       value: value,
       isActive: json['isActive'] as bool? ?? true,
       isPublic: json['isPublic'] as bool? ?? true,
     );
   }
 
-  String get platformName =>
-      customLabel?.isNotEmpty == true ? customLabel! : getPlatformName(platform);
+  String get platformName => customLabel?.isNotEmpty == true
+      ? customLabel!
+      : getPlatformName(platform);
 
   static String getPlatformName(SocialPlatform platform) {
     switch (platform) {
@@ -455,11 +467,16 @@ class SocialLink {
 
   String get fullUrl {
     if (bankDetails != null) {
-      final identifier =
-          bankDetails!['iban']?.isNotEmpty == true
-              ? bankDetails!['iban']!
-              : bankDetails!['accountNumber'] ?? '';
+      final identifier = bankDetails!['iban']?.isNotEmpty == true
+          ? bankDetails!['iban']!
+          : bankDetails!['accountNumber'] ?? '';
       return identifier.isEmpty ? value : 'bank:$identifier';
+    }
+    if (contactCard != null) {
+      final identifier = contactCard!['email']?.isNotEmpty == true
+          ? contactCard!['email']!
+          : contactCard!['phone'] ?? value;
+      return identifier.isEmpty ? value : 'contact:$identifier';
     }
     if (url?.isNotEmpty == true) return url!;
     if (baseUrlPrefix.isEmpty) {

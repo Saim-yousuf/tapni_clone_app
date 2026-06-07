@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/models/link_template.dart';
+import 'package:tapni_app/models/social_link.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
 
-void showContactCardBottomSheet(BuildContext context) {
+void showContactCardBottomSheet(
+  BuildContext context,
+  LinkTemplate template,
+  ProfileProvider provider, {
+  SocialLink? existingLink,
+}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -9,7 +17,11 @@ void showContactCardBottomSheet(BuildContext context) {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
-    builder: (context) => const ContactCardBottomSheet(),
+    builder: (context) => ContactCardBottomSheet(
+      template: template,
+      provider: provider,
+      existingLink: existingLink,
+    ),
   );
 }
 
@@ -30,7 +42,16 @@ class AppItem {
 
 // ── Main BottomSheet ─────────────────────────────────────────────────────────
 class ContactCardBottomSheet extends StatefulWidget {
-  const ContactCardBottomSheet({super.key});
+  final LinkTemplate template;
+  final ProfileProvider provider;
+  final SocialLink? existingLink;
+
+  const ContactCardBottomSheet({
+    super.key,
+    required this.template,
+    required this.provider,
+    this.existingLink,
+  });
 
   @override
   State<ContactCardBottomSheet> createState() => _ContactCardBottomSheetState();
@@ -39,32 +60,34 @@ class ContactCardBottomSheet extends StatefulWidget {
 class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
   bool isPersonal = true;
   bool addressExpanded = false;
+  bool showLink = true;
 
   // Common fields
-  final _labelCtrl = TextEditingController(text: 'Save contact');
-  final _firstNameCtrl = TextEditingController(text: 'Saim');
-  final _lastNameCtrl = TextEditingController(text: 'Y');
-  final _bioCtrl = TextEditingController();
+  late final TextEditingController _labelCtrl;
+  late final TextEditingController _firstNameCtrl;
+  late final TextEditingController _lastNameCtrl;
+  late final TextEditingController _bioCtrl;
 
   // Personal-only fields
-  final _personalPhoneCtrl = TextEditingController();
-  final _personalEmailCtrl = TextEditingController();
-  final _personalWebsiteCtrl = TextEditingController();
+  late final TextEditingController _personalPhoneCtrl;
+  late final TextEditingController _personalEmailCtrl;
+  late final TextEditingController _personalWebsiteCtrl;
 
   // Business-only fields
-  final _businessPhoneCtrl = TextEditingController();
-  final _businessEmailCtrl = TextEditingController();
-  final _businessWebsiteCtrl = TextEditingController();
-  final _companyCtrl = TextEditingController();
-  final _jobTitleCtrl = TextEditingController();
+  late final TextEditingController _businessPhoneCtrl;
+  late final TextEditingController _businessEmailCtrl;
+  late final TextEditingController _businessWebsiteCtrl;
+  late final TextEditingController _companyCtrl;
+  late final TextEditingController _jobTitleCtrl;
+  late final TextEditingController _faxCtrl;
 
   // Address fields (shared)
-  final _addressCtrl = TextEditingController();
-  final _streetCtrl = TextEditingController();
-  final _numberCtrl = TextEditingController();
-  final _cityCtrl = TextEditingController();
-  final _zipCtrl = TextEditingController();
-  final _countryCtrl = TextEditingController();
+  late final TextEditingController _addressCtrl;
+  late final TextEditingController _streetCtrl;
+  late final TextEditingController _numberCtrl;
+  late final TextEditingController _cityCtrl;
+  late final TextEditingController _zipCtrl;
+  late final TextEditingController _countryCtrl;
 
   // App toggles
   final List<AppItem> _apps = [
@@ -77,6 +100,47 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
       enabled: false,
     ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    final details = widget.existingLink?.contactCard ?? {};
+    isPersonal = (details['cardType'] ?? 'personal') != 'business';
+    showLink = widget.existingLink?.isPublic ?? true;
+
+    _labelCtrl = TextEditingController(
+      text:
+          details['label'] ??
+          widget.existingLink?.platformName ??
+          'Save contact',
+    );
+    _firstNameCtrl = TextEditingController(text: details['firstName'] ?? '');
+    _lastNameCtrl = TextEditingController(text: details['lastName'] ?? '');
+    _bioCtrl = TextEditingController(text: details['bio'] ?? '');
+    _personalPhoneCtrl = TextEditingController(text: details['phone'] ?? '');
+    _personalEmailCtrl = TextEditingController(text: details['email'] ?? '');
+    _personalWebsiteCtrl = TextEditingController(
+      text: details['website'] ?? '',
+    );
+    _businessPhoneCtrl = TextEditingController(
+      text: details['businessPhone'] ?? '',
+    );
+    _businessEmailCtrl = TextEditingController(
+      text: details['businessEmail'] ?? '',
+    );
+    _businessWebsiteCtrl = TextEditingController(
+      text: details['businessWebsite'] ?? '',
+    );
+    _companyCtrl = TextEditingController(text: details['company'] ?? '');
+    _jobTitleCtrl = TextEditingController(text: details['jobTitle'] ?? '');
+    _faxCtrl = TextEditingController(text: details['fax'] ?? '');
+    _addressCtrl = TextEditingController(text: details['address'] ?? '');
+    _streetCtrl = TextEditingController(text: details['street'] ?? '');
+    _numberCtrl = TextEditingController(text: details['number'] ?? '');
+    _cityCtrl = TextEditingController(text: details['city'] ?? '');
+    _zipCtrl = TextEditingController(text: details['zip'] ?? '');
+    _countryCtrl = TextEditingController(text: details['country'] ?? '');
+  }
 
   @override
   void dispose() {
@@ -93,6 +157,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
       _businessWebsiteCtrl,
       _companyCtrl,
       _jobTitleCtrl,
+      _faxCtrl,
       _addressCtrl,
       _streetCtrl,
       _numberCtrl,
@@ -155,6 +220,9 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
 
                     // ── App toggles ──
                     ..._apps.map((app) => _buildAppToggle(app)),
+
+                    const SizedBox(height: 8),
+                    _buildShowLinkToggle(),
 
                     const SizedBox(height: 24),
                   ],
@@ -304,15 +372,17 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
 
   // ── Business Fields ────────────────────────────────────────────────────────
   List<Widget> _buildBusinessFields() => [
-    const _MultiFieldRow(hint: 'Business phone number'),
+    _buildFieldWithPlus(_businessPhoneCtrl, 'Business phone number'),
     const SizedBox(height: 10),
-    const _MultiFieldRow(hint: 'Business email address'),
+    _buildFieldWithPlus(_businessEmailCtrl, 'Business email address'),
+    const SizedBox(height: 10),
+    _buildFieldWithPlus(_businessWebsiteCtrl, 'Business website'),
     const SizedBox(height: 10),
     _buildTextField(_jobTitleCtrl, 'Job title'),
     const SizedBox(height: 10),
     _buildTextField(_companyCtrl, 'Contact card company name'),
     const SizedBox(height: 10),
-    _buildTextField(_companyCtrl, 'Business fax'),
+    _buildTextField(_faxCtrl, 'Business fax'),
   ];
 
   // ── Address expandable section ─────────────────────────────────────────────
@@ -418,7 +488,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
         Switch(
           value: app.enabled,
           onChanged: (v) => setState(() => app.enabled = v),
-          activeColor: Colors.white,
+          activeThumbColor: Colors.white,
           activeTrackColor: Colors.black,
         ),
       ],
@@ -443,7 +513,16 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
           ),
           child: IconButton(
             icon: const Icon(Icons.delete_outline),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () async {
+              final existingLink = widget.existingLink;
+              if (existingLink != null) {
+                await widget.provider.deleteSocialLink(
+                  existingLink.id,
+                  context,
+                );
+              }
+              if (mounted) Navigator.pop(context);
+            },
           ),
         ),
         const SizedBox(width: 12),
@@ -451,7 +530,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
           child: SizedBox(
             height: 52,
             child: ElevatedButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: _saveContactCard,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 foregroundColor: Colors.white,
@@ -472,6 +551,98 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
   );
 
   // ── Helper builders ────────────────────────────────────────────────────────
+  Widget _buildShowLinkToggle() => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    decoration: BoxDecoration(
+      color: Colors.grey[50],
+      borderRadius: BorderRadius.circular(14),
+      border: Border.all(color: Colors.grey[200]!),
+    ),
+    child: Row(
+      children: [
+        const Expanded(
+          child: Text(
+            'Show link',
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+          ),
+        ),
+        Switch(
+          value: showLink,
+          onChanged: (value) => setState(() => showLink = value),
+          activeThumbColor: Colors.white,
+          activeTrackColor: Colors.black,
+        ),
+      ],
+    ),
+  );
+
+  Future<void> _saveContactCard() async {
+    final label = _labelCtrl.text.trim();
+    final firstName = _firstNameCtrl.text.trim();
+    final lastName = _lastNameCtrl.text.trim();
+    final phone = isPersonal
+        ? _personalPhoneCtrl.text.trim()
+        : _businessPhoneCtrl.text.trim();
+    final email = isPersonal
+        ? _personalEmailCtrl.text.trim()
+        : _businessEmailCtrl.text.trim();
+
+    if (label.isEmpty || (firstName.isEmpty && lastName.isEmpty)) return;
+    if (phone.isEmpty && email.isEmpty) return;
+
+    final details = {
+      'label': label,
+      'cardType': isPersonal ? 'personal' : 'business',
+      'firstName': firstName,
+      'lastName': lastName,
+      'bio': _bioCtrl.text.trim(),
+      'phone': _personalPhoneCtrl.text.trim(),
+      'email': _personalEmailCtrl.text.trim(),
+      'website': _personalWebsiteCtrl.text.trim(),
+      'businessPhone': _businessPhoneCtrl.text.trim(),
+      'businessEmail': _businessEmailCtrl.text.trim(),
+      'businessWebsite': _businessWebsiteCtrl.text.trim(),
+      'company': _companyCtrl.text.trim(),
+      'jobTitle': _jobTitleCtrl.text.trim(),
+      'fax': _faxCtrl.text.trim(),
+      'address': _addressCtrl.text.trim(),
+      'street': _streetCtrl.text.trim(),
+      'number': _numberCtrl.text.trim(),
+      'city': _cityCtrl.text.trim(),
+      'zip': _zipCtrl.text.trim(),
+      'country': _countryCtrl.text.trim(),
+      'contactAppEnabled': _apps[0].enabled.toString(),
+      'whatsappEnabled': _apps[1].enabled.toString(),
+      'telegramEnabled': _apps[2].enabled.toString(),
+    };
+    final value = email.isNotEmpty ? email : phone;
+    final existingLink = widget.existingLink;
+
+    if (existingLink == null) {
+      await widget.provider.addCustomTemplateLink(
+        template: widget.template,
+        label: label,
+        value: value,
+        showLink: showLink,
+        context: context,
+        logo: widget.template.logo,
+        contactCard: details,
+      );
+    } else {
+      await widget.provider.updateCustomTemplateLink(
+        link: existingLink,
+        label: label,
+        value: value,
+        showLink: showLink,
+        context: context,
+        logo: widget.template.logo,
+        contactCard: details,
+      );
+    }
+
+    if (mounted) Navigator.pop(context);
+  }
+
   InputDecoration _inputDecoration(String hint) => InputDecoration(
     hintText: hint,
     hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
@@ -515,92 +686,4 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
       ),
     ],
   );
-}
-
-class _MultiFieldRow extends StatefulWidget {
-  final String hint;
-  const _MultiFieldRow({required this.hint});
-
-  @override
-  State<_MultiFieldRow> createState() => _MultiFieldRowState();
-}
-
-class _MultiFieldRowState extends State<_MultiFieldRow> {
-  final List<TextEditingController> _controllers = [TextEditingController()];
-
-  @override
-  void dispose() {
-    for (final c in _controllers) c.dispose();
-    super.dispose();
-  }
-
-  void _addField() {
-    if (_controllers.length >= 3) return;
-    setState(
-      () => _controllers.insert(_controllers.length, TextEditingController()),
-    );
-  }
-
-  void _removeField(int index) {
-    if (_controllers.length <= 1) return; // min 1
-    setState(() {
-      _controllers[index].dispose();
-      _controllers.removeAt(index);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: List.generate(_controllers.length, (i) {
-       final isFirst = i == 0;
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: i < _controllers.length - 1 ? 10 : 0,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controllers[i],
-                  decoration: InputDecoration(
-                    hintText: widget.hint,
-                    hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
-                    filled: true,
-                    fillColor: Colors.grey[100],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              // + button
-              GestureDetector(
-                onTap: isFirst ? _addField : () => _removeField(i),
-                child: Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    isFirst ? Icons.add : Icons.remove,
-                    color: Colors.grey[700],
-                    size: 20,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
-    );
-  }
 }
