@@ -3,11 +3,14 @@ import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:provider/provider.dart';
+import 'package:tapni_app/providers/leads_provider.dart';
 
 class ScannedProfileScreen extends StatefulWidget {
-  final String username;
+  final String? username;
+  final String? user;
 
-  const ScannedProfileScreen({super.key, required this.username});
+  const ScannedProfileScreen({super.key, this.username, this.user});
 
   @override
   State<ScannedProfileScreen> createState() => _ScannedProfileScreenState();
@@ -30,7 +33,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       _errorMessage = null;
     });
 
-    final response = await AuthRepo().profileByUsername(username: widget.username);
+    final response = widget.username != null && widget.username!.isNotEmpty
+        ? await AuthRepo().profileByUsername(username: widget.username!)
+        : await AuthRepo().profileById(id: widget.user!);
 
     if (!mounted) return;
 
@@ -43,6 +48,15 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
           _profile = UserProfile.fromApiJson(userJson);
           _isLoading = false;
         });
+        // Automatically add scanned contact to the user's contact list
+        if (mounted) {
+          if (widget.username != null && widget.username!.isNotEmpty) {
+            Provider.of<LeadsProvider>(
+              context,
+              listen: false,
+            ).addScannedContact(widget.username!);
+          }
+        }
         return;
       }
     }
@@ -62,7 +76,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         elevation: 0,
         foregroundColor: Colors.black,
         title: Text(
-          widget.username,
+          widget.username ?? "Profile",
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
@@ -83,7 +97,11 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.person_off_outlined, size: 48, color: Colors.black38),
+            const Icon(
+              Icons.person_off_outlined,
+              size: 48,
+              color: Colors.black38,
+            ),
             const SizedBox(height: 16),
             Text(
               _errorMessage!,
@@ -106,10 +124,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
-          Image.asset(
-            'assets/images/jpg/barqody_name.jpg',
-            width: 120,
-          ),
+          Image.asset('assets/images/jpg/barqody_name.jpg', width: 120),
           const SizedBox(height: 20),
           _buildProfileAvatar(profile),
           const SizedBox(height: 20),
@@ -125,8 +140,49 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
               style: const TextStyle(fontSize: 14, color: Colors.black54),
             ),
           ],
-          const SizedBox(height: 30),
-          Expanded(child: SingleChildScrollView(child: _buildLinkSection(profile))),
+          const SizedBox(height: 16),
+          FilledButton.icon(
+            onPressed: () async {
+              // Call exchange contact API
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Exchanging contact...')),
+              );
+              final res = await AuthRepo().exchangeContact(
+                username: widget.username,
+                id: widget.user,
+              );
+              if (mounted) {
+                if (res.success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Contact exchanged successfully!'),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        res.message ?? 'Failed to exchange contact',
+                      ),
+                    ),
+                  );
+                }
+              }
+            },
+            icon: const Icon(Icons.sync_alt),
+            label: const Text('Exchange Contact'),
+            style: FilledButton.styleFrom(
+              backgroundColor: Colors.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: SingleChildScrollView(child: _buildLinkSection(profile)),
+          ),
         ],
       ),
     );
@@ -134,7 +190,8 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
 
   Widget _buildProfileAvatar(UserProfile profile) {
     final hasCover =
-        profile.coverPhotoUrl != null && profile.coverPhotoUrl!.trim().isNotEmpty;
+        profile.coverPhotoUrl != null &&
+        profile.coverPhotoUrl!.trim().isNotEmpty;
 
     return Stack(
       clipBehavior: Clip.none,

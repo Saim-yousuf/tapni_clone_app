@@ -28,6 +28,12 @@ class SubscriptionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearData() {
+    _plans.clear();
+    _currentSubscription = null;
+    notifyListeners();
+  }
+
   Future<void> fetchPlans() async {
     final response = await _subscriptionRepo.getPlans();
     if (response.success && response.data != null) {

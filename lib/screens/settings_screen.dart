@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
+import 'package:tapni_app/providers/leads_provider.dart';
+import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/edit_profile_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/screens/qr_code_screen.dart';
@@ -31,6 +33,12 @@ class SettingsScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, foregroundColor: Colors.white),
               onPressed: () async {
                 Navigator.of(ctx).pop();
+                
+                // Clear all data from providers
+                Provider.of<ProfileProvider>(context, listen: false).clearData();
+                Provider.of<LeadsProvider>(context, listen: false).clearData();
+                Provider.of<SubscriptionProvider>(context, listen: false).clearData();
+                
                 await authProvider.logout();
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(

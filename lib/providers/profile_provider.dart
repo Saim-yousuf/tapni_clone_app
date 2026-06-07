@@ -130,6 +130,14 @@ class ProfileProvider extends ChangeNotifier {
     _profile = MockDataService.getInitialProfile();
   }
 
+  void clearData() {
+    _profile = MockDataService.getInitialProfile();
+    _isProUser = false;
+    _linkCatalog.clear();
+    _selectedTemplateIndex = 1;
+    notifyListeners();
+  }
+
   Future<void> fetchProfile() async {
     _isLoading = true;
     notifyListeners();

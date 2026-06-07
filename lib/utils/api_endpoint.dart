@@ -27,6 +27,7 @@ class Api {
 
   static final auth = _AuthApi();
   static final subscription = _SubscriptionApi();
+  static final contact = _ContactApi();
 }
 
 class _AuthApi {
@@ -36,6 +37,7 @@ class _AuthApi {
   String get profile => "${Api.baseUrl}/api/user/auth/profile";
   String profileByUsername(String username) =>
       "${Api.baseUrl}/api/user/auth/profile/$username";
+  String profileById(String id) => "${Api.baseUrl}/api/user/auth/getprofile/$id";
   String get links => "${Api.baseUrl}/api/user/auth/profile/links";
   String get linkCatalog => "${Api.baseUrl}/api/user/auth/link-catalog";
 }
@@ -45,4 +47,17 @@ class _SubscriptionApi {
   String get my => "${Api.baseUrl}/api/user/subscription/my";
   String get subscribe => "${Api.baseUrl}/api/user/subscription/subscribe";
   String get cancel => "${Api.baseUrl}/api/user/subscription/cancel";
+}
+
+class _ContactApi {
+  String get getCategories => "${Api.baseUrl}/api/user/category";
+  String get createCategory => "${Api.baseUrl}/api/user/category";
+  String deleteCategory(String id) => "${Api.baseUrl}/api/user/category/$id";
+
+  String get getContacts => "${Api.baseUrl}/api/user/contacts";
+  String get addManual => "${Api.baseUrl}/api/user/contacts/manual";
+  String get addScanned => "${Api.baseUrl}/api/user/contacts/scan";
+  String get exchange => "${Api.baseUrl}/api/user/contacts/exchange";
+  String updateContact(String id) => "${Api.baseUrl}/api/user/contacts/$id";
+  String deleteContact(String id) => "${Api.baseUrl}/api/user/contacts/$id";
 }

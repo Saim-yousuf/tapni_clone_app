@@ -1,99 +1,370 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/lead.dart';
+import 'package:tapni_app/models/contact_category.dart';
 import 'package:tapni_app/models/activity.dart';
-import 'package:tapni_app/services/mock_data_service.dart';
+import 'package:tapni_app/repository/auth_repo.dart';
 
 class LeadsProvider extends ChangeNotifier {
+  final AuthRepo _authRepo = AuthRepo();
+
   List<Lead> _leads = [];
-  List<Activity> _activities = [];
-  List<Map<String, dynamic>> _notifications = [];
+  List<ContactCategory> _categories = [];
+  bool _isLoading = false;
   String _searchQuery = '';
+  String? _activeCategoryId; // null means 'All'
 
-  LeadsProvider() {
-    _leads = MockDataService.getInitialLeads();
-    _activities = MockDataService.getInitialActivities();
-    _notifications = MockDataService.getMockNotifications();
-  }
+  // Filter States
+  String _activeSource = 'All';
+  String _sortBy = 'Creation Date';
+  String _sortOrder = 'Descending';
+  DateTime? _startDate;
+  DateTime? _endDate;
+  List<String> _activeMarkers = [];
 
+  // ── Notifications (local mock state) ────────────────────────────────────────
+  final List<Map<String, dynamic>> _notifications = [];
+
+  // ── Activities (local mock state) ───────────────────────────────────────────
+  final List<Activity> _activities = [];
+
+  // ── Filtered leads ──────────────────────────────────────────────────────────
   List<Lead> get leads {
-    if (_searchQuery.isEmpty) {
-      return _leads;
+    List<Lead> filtered = _leads;
+
+    // Filter by Source
+    if (_activeSource != 'All') {
+      if (_activeSource == 'Manually') {
+        filtered = filtered.where((l) => l.contactUser == null).toList();
+      } else if (_activeSource == 'Scan') {
+        filtered = filtered.where((l) => l.contactUser != null).toList();
+      } else {
+        filtered = []; // Direct, Form
+      }
     }
-    final query = _searchQuery.toLowerCase();
-    return _leads.where((lead) {
-      return lead.name.toLowerCase().contains(query) ||
-          lead.company.toLowerCase().contains(query) ||
-          lead.email.toLowerCase().contains(query) ||
-          lead.phone.contains(query);
-    }).toList();
+
+    // Filter by Date Range
+    if (_startDate != null && _endDate != null) {
+      filtered = filtered.where((l) {
+        return l.timestamp.isAfter(_startDate!.subtract(const Duration(days: 1))) &&
+               l.timestamp.isBefore(_endDate!.add(const Duration(days: 1)));
+      }).toList();
+    }
+
+    // Filter by Category/Markers
+    if (_activeMarkers.isNotEmpty) {
+      filtered = filtered.where((l) => l.category != null && _activeMarkers.contains(l.category!.id)).toList();
+    } else if (_activeCategoryId != null) {
+      filtered = filtered.where((l) => l.category?.id == _activeCategoryId).toList();
+    }
+
+    // Filter by Search Query
+    if (_searchQuery.isNotEmpty) {
+      final q = _searchQuery.toLowerCase();
+      filtered = filtered
+          .where(
+            (l) =>
+                l.name.toLowerCase().contains(q) ||
+                l.email.toLowerCase().contains(q) ||
+                l.company.toLowerCase().contains(q),
+          )
+          .toList();
+    }
+
+    // Sorting
+    filtered.sort((a, b) {
+      int cmp = 0;
+      if (_sortBy == 'Full Name') {
+        cmp = a.name.toLowerCase().compareTo(b.name.toLowerCase());
+      } else {
+        cmp = a.timestamp.compareTo(b.timestamp);
+      }
+      return _sortOrder == 'Descending' ? -cmp : cmp;
+    });
+
+    return filtered;
   }
 
-  List<Activity> get activities => _activities;
+  List<ContactCategory> get categories => _categories;
+  bool get isLoading => _isLoading;
+  String? get activeCategoryId => _activeCategoryId;
+
+  // Filter Getters
+  String get activeSource => _activeSource;
+  String get sortBy => _sortBy;
+  String get sortOrder => _sortOrder;
+  DateTime? get startDate => _startDate;
+  DateTime? get endDate => _endDate;
+  List<String> get activeMarkers => _activeMarkers;
+
+  // ── Notifications getters ───────────────────────────────────────────────────
   List<Map<String, dynamic>> get notifications => _notifications;
   int get unreadNotificationsCount =>
       _notifications.where((n) => n['isRead'] == false).length;
 
-  String get searchQuery => _searchQuery;
+  // ── Activities getter ────────────────────────────────────────────────────────
+  List<Activity> get activities => _activities;
 
+  LeadsProvider() {
+    fetchCategories();
+    fetchLeads();
+  }
+
+  // ── Search / Filter ──────────────────────────────────────────────────────────
   void setSearchQuery(String query) {
     _searchQuery = query;
     notifyListeners();
   }
 
-  void addLead({
+  void setActiveCategory(String? categoryId) {
+    _activeCategoryId = categoryId;
+    _activeMarkers = categoryId == null ? [] : [categoryId];
+    notifyListeners();
+  }
+
+  void applyFilters({
+    required String source,
+    required String sortBy,
+    required String sortOrder,
+    DateTime? startDate,
+    DateTime? endDate,
+    required List<String> activeMarkers,
+  }) {
+    _activeSource = source;
+    _sortBy = sortBy;
+    _sortOrder = sortOrder;
+    _startDate = startDate;
+    _endDate = endDate;
+    _activeMarkers = activeMarkers;
+    
+    // Sync with chip active category if exactly one marker is selected
+    if (activeMarkers.length == 1) {
+      _activeCategoryId = activeMarkers.first;
+    } else if (activeMarkers.isEmpty) {
+      _activeCategoryId = null;
+    }
+
+    notifyListeners();
+  }
+
+  void resetFilters() {
+    _activeSource = 'All';
+    _sortBy = 'Creation Date';
+    _sortOrder = 'Descending';
+    _startDate = null;
+    _endDate = null;
+    _activeMarkers = [];
+    _activeCategoryId = null;
+    notifyListeners();
+  }
+
+  // ── Fetch Categories ─────────────────────────────────────────────────────────
+  Future<void> fetchCategories() async {
+    try {
+      final res = await _authRepo.getContactCategories();
+      if (res.success && res.data is Map) {
+        final List data = (res.data as Map)['categories'] ?? [];
+        _categories = data.map((e) => ContactCategory.fromJson(e)).toList();
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint("Error fetching categories: $e");
+    }
+  }
+
+  // ── Fetch Leads ──────────────────────────────────────────────────────────────
+  Future<void> fetchLeads() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final res = await _authRepo.getContacts();
+      if (res.success && res.data is Map) {
+        final List data = (res.data as Map)['contacts'] ?? [];
+        _leads = data.map((e) => Lead.fromJson(e)).toList();
+      }
+    } catch (e) {
+      debugPrint("Error fetching leads: $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // ── Clear Data on Logout ───────────────────────────────────────────────────
+  void clearData() {
+    _leads.clear();
+    _categories.clear();
+    _notifications.clear();
+    _activities.clear();
+    _activeSource = 'All';
+    _sortBy = 'Creation Date';
+    _sortOrder = 'Descending';
+    _startDate = null;
+    _endDate = null;
+    _activeMarkers = [];
+    _activeCategoryId = null;
+    _searchQuery = '';
+    notifyListeners();
+  }
+
+  // ── Add manual contact ───────────────────────────────────────────────────────
+  Future<bool> addLead({
     required String name,
     required String email,
     required String phone,
     required String company,
-  }) {
-    final newLead = Lead(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      name: name,
-      email: email,
-      phone: phone,
-      company: company,
-      timestamp: DateTime.now(),
-    );
-
-    // Insert at the top of the list
-    _leads.insert(0, newLead);
-
-    // Add corresponding activity
-    final newActivity = Activity(
-      id: 'act_${DateTime.now().millisecondsSinceEpoch}',
-      title: 'New Lead Captured',
-      description: '$name from $company was added',
-      timestamp: DateTime.now(),
-      type: ActivityType.lead,
-    );
-    _activities.insert(0, newActivity);
-
-    // Add mock notification
-    final newNotification = {
-      'id': 'not_${DateTime.now().millisecondsSinceEpoch}',
-      'title': '🤝 Contact Connection',
-      'body': '$name from $company has been added as a lead.',
-      'time': 'Just now',
-      'isRead': false,
-    };
-    _notifications.insert(0, newNotification);
-
-    notifyListeners();
-  }
-
-  void markAllNotificationsAsRead() {
-    for (var i = 0; i < _notifications.length; i++) {
-      _notifications[i]['isRead'] = true;
-    }
-    notifyListeners();
-  }
-
-  void toggleNotificationRead(String id) {
-    for (var i = 0; i < _notifications.length; i++) {
-      if (_notifications[i]['id'] == id) {
-        _notifications[i]['isRead'] = !_notifications[i]['isRead'];
-        break;
+    String jobTitle = '',
+    String website = '',
+    String note = '',
+    String address = '',
+  }) async {
+    try {
+      final res = await _authRepo.addManualContact(
+        name: name,
+        email: email,
+        phone: phone,
+        company: company,
+        jobTitle: jobTitle,
+        website: website,
+        note: note,
+        address: address,
+      );
+      if (res.success && res.data is Map) {
+        final data = (res.data as Map)['contact'];
+        if (data != null) {
+          _leads.insert(0, Lead.fromJson(data));
+          _addActivity(
+            title: 'New Contact Added',
+            description: 'You added $name to your contacts.',
+            type: ActivityType.lead,
+          );
+          notifyListeners();
+          return true;
+        }
       }
+    } catch (e) {
+      debugPrint("Error adding lead: $e");
+    }
+    return false;
+  }
+
+  // ── Add scanned contact ──────────────────────────────────────────────────────
+  Future<bool> addScannedContact(String username) async {
+    try {
+      final res = await _authRepo.addScannedContact(username: username);
+      if (res.success && res.data is Map) {
+        final data = (res.data as Map)['contact'];
+        if (data != null) {
+          final lead = Lead.fromJson(data);
+          // Avoid duplicates
+          if (!_leads.any((l) => l.id == lead.id)) {
+            _leads.insert(0, lead);
+            _addActivity(
+              title: 'Contact Scanned',
+              description: '${lead.name} was added via QR scan.',
+              type: ActivityType.scan,
+            );
+            notifyListeners();
+          }
+          return true;
+        }
+        // "Already in contacts" still returns 200
+        return true;
+      }
+    } catch (e) {
+      debugPrint("Error adding scanned contact: $e");
+    }
+    return false;
+  }
+
+  // ── Update contact ───────────────────────────────────────────────────────────
+  Future<bool> updateLead(String id, Map<String, dynamic> data) async {
+    try {
+      final res = await _authRepo.updateContact(id: id, data: data);
+      if (res.success && res.data is Map) {
+        final updatedData = (res.data as Map)['contact'];
+        if (updatedData != null) {
+          final index = _leads.indexWhere((l) => l.id == id);
+          if (index != -1) {
+            _leads[index] = Lead.fromJson(updatedData);
+            notifyListeners();
+            return true;
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error updating lead: $e");
+    }
+    return false;
+  }
+
+  // ── Delete contact ───────────────────────────────────────────────────────────
+  Future<bool> deleteLead(String id) async {
+    try {
+      final res = await _authRepo.deleteContact(id);
+      if (res.success) {
+        _leads.removeWhere((l) => l.id == id);
+        notifyListeners();
+        return true;
+      }
+    } catch (e) {
+      debugPrint("Error deleting lead: $e");
+    }
+    return false;
+  }
+
+  // ── Create category ──────────────────────────────────────────────────────────
+  Future<bool> createCategory(String name, String color) async {
+    try {
+      final res = await _authRepo.createContactCategory(
+        name: name,
+        color: color,
+      );
+      if (res.success && res.data is Map) {
+        final data = (res.data as Map)['category'];
+        if (data != null) {
+          _categories.insert(0, ContactCategory.fromJson(data));
+          notifyListeners();
+          return true;
+        }
+      }
+    } catch (e) {
+      debugPrint("Error creating category: $e");
+    }
+    return false;
+  }
+
+  // ── Delete category ──────────────────────────────────────────────────────────
+  Future<bool> deleteCategory(String id) async {
+    try {
+      final res = await _authRepo.deleteContactCategory(id);
+      if (res.success) {
+        _categories.removeWhere((c) => c.id == id);
+
+        // Clear category from leads locally
+        for (int i = 0; i < _leads.length; i++) {
+          if (_leads[i].category?.id == id) {
+            _leads[i] = _leads[i].copyWith(category: null);
+          }
+        }
+
+        if (_activeCategoryId == id) {
+          _activeCategoryId = null;
+        }
+
+        notifyListeners();
+        return true;
+      }
+    } catch (e) {
+      debugPrint("Error deleting category: $e");
+    }
+    return false;
+  }
+
+  // ── Notifications management ─────────────────────────────────────────────────
+  void markAllNotificationsAsRead() {
+    for (final n in _notifications) {
+      n['isRead'] = true;
     }
     notifyListeners();
   }
@@ -101,5 +372,49 @@ class LeadsProvider extends ChangeNotifier {
   void clearNotification(String id) {
     _notifications.removeWhere((n) => n['id'] == id);
     notifyListeners();
+  }
+
+  void toggleNotificationRead(String id) {
+    final idx = _notifications.indexWhere((n) => n['id'] == id);
+    if (idx != -1) {
+      _notifications[idx]['isRead'] = !(_notifications[idx]['isRead'] as bool);
+      notifyListeners();
+    }
+  }
+
+  void addNotification({
+    required String title,
+    required String body,
+    String? time,
+  }) {
+    _notifications.insert(0, {
+      'id': DateTime.now().millisecondsSinceEpoch.toString(),
+      'title': title,
+      'body': body,
+      'time': time ?? 'Just now',
+      'isRead': false,
+    });
+    notifyListeners();
+  }
+
+  // ── Activities management ────────────────────────────────────────────────────
+  void _addActivity({
+    required String title,
+    required String description,
+    required ActivityType type,
+  }) {
+    _activities.insert(
+      0,
+      Activity(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        title: title,
+        description: description,
+        timestamp: DateTime.now(),
+        type: type,
+      ),
+    );
+    if (_activities.length > 20) {
+      _activities.removeLast();
+    }
   }
 }
