@@ -113,61 +113,74 @@ class _SplashScreenState extends State<SplashScreen>
               child: Column(
                 children: [
                   // Logo Symbol (Dynamic Custom Design)
-                  Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      gradient: AppTheme.goldGradient,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppTheme.accentGold.withOpacity(0.3),
-                          blurRadius: 20,
-                          spreadRadius: 2,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Image.asset(
-                      'assets/images/png/app_icon.png',
-                      fit: BoxFit.cover,
-                    ),
+                  // Container(
+                  //   width: 90,
+                  //   height: 90,
+                  //   decoration: BoxDecoration(
+                  //     gradient: AppTheme.goldGradient,
+                  //     borderRadius: BorderRadius.circular(24),
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //         color: AppTheme.accentGold.withOpacity(0.3),
+                  //         blurRadius: 20,
+                  //         spreadRadius: 2,
+                  //         offset: const Offset(0, 8),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   child: Image.asset(
+                  //     'assets/images/png/app_icon.png',
+                  //     fit: BoxFit.cover,
+                  //   ),
+                  // ),
+
+                  // const SizedBox(height: 24),
+                  // // Logo Text
+                  // RichText(
+                  //   text: TextSpan(
+                  //     children: [
+                  //       TextSpan(
+                  //         text: 'BarQody',
+                  //         style: TextStyle(
+                  //           fontSize: 38,
+                  //           fontWeight: FontWeight.w900,
+                  //           letterSpacing: -1,
+                  //           color: isDark ? Colors.white : Colors.black,
+                  //         ),
+                  //       ),
+                  //       const TextSpan(
+                  //         text: '.',
+                  //         style: TextStyle(
+                  //           fontSize: 42,
+                  //           fontWeight: FontWeight.w900,
+                  //           color: AppTheme.accentGold,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  Image.asset(
+                    "assets/images/png/en_ar_logo.png",
+                    fit: BoxFit.cover,
+                    height: 180,
                   ),
-                  const SizedBox(height: 24),
-                  // Logo Text
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'BarQody',
-                          style: TextStyle(
-                            fontSize: 38,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -1,
-                            color: isDark ? Colors.white : Colors.black,
-                          ),
-                        ),
-                        const TextSpan(
-                          text: '.',
-                          style: TextStyle(
-                            fontSize: 42,
-                            fontWeight: FontWeight.w900,
-                            color: AppTheme.accentGold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 20),
                   Text(
-                    'DIGITAL BUSINESS - FOR EVERYONE',
+                    'DIGITAL BUSINESS Card',
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2.0,
-                      color: isDark
-                          ? AppTheme.textGreyDark
-                          : AppTheme.textGreyLight,
+                      color: Colors.grey.shade700,  
+                    ),
+                  ),
+                  Text(
+                    ' بطاقة أعمال الرقمية',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2.0,
+                      color: Colors.grey.shade700,
                     ),
                   ),
                 ],
