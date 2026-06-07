@@ -215,14 +215,16 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                 height: hasCover ? 100 : 130,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF1E2022),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+                  color: Colors.grey.shade200
+                  // color: const Color(0xFF1E2022),
+
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.black.withOpacity(0.08),
+                  //     blurRadius: 10,
+                  //     offset: const Offset(0, 4),
+                  //   ),
+                  // ],
                 ),
                 child: ClipOval(
                   child:

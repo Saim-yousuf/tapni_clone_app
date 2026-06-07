@@ -1,5 +1,12 @@
+import 'dart:developer';
+import 'dart:ui' as ui;
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:gal/gal.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/models/social_link.dart';
@@ -37,7 +44,7 @@ class SharingProfileSheet {
   }
 }
 
-class _SharingProfileSheet extends StatelessWidget {
+class _SharingProfileSheet extends StatefulWidget {
   final String profileUrl;
   final String userInitial;
   final Color initialBgColor;
@@ -52,6 +59,11 @@ class _SharingProfileSheet extends StatelessWidget {
     this.socialIcons,
   });
 
+  @override
+  State<_SharingProfileSheet> createState() => _SharingProfileSheetState();
+}
+
+class _SharingProfileSheetState extends State<_SharingProfileSheet> {
   static const _qrEyeStyle = QrEyeStyle(
     eyeShape: QrEyeShape.circle,
     color: Colors.black,
@@ -61,6 +73,62 @@ class _SharingProfileSheet extends StatelessWidget {
     dataModuleShape: QrDataModuleShape.circle,
     color: Colors.black,
   );
+
+  final GlobalKey _globalKey = GlobalKey();
+
+  // Store messenger ref BEFORE async gap to show snackbar even if sheet is closed
+  ScaffoldMessengerState? _messengerRef;
+
+  void _showSnackBar(String message, {Color color = Colors.green}) {
+    _messengerRef?.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: color,
+      ),
+    );
+  }
+
+  Future<void> _downloadQr() async {
+    // Capture BEFORE any await — context may be gone after async
+    _messengerRef = ScaffoldMessenger.of(context);
+    try {
+      RenderRepaintBoundary boundary =
+          _globalKey.currentContext!.findRenderObject()
+              as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData? byteData = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
+      if (byteData != null) {
+        final Uint8List pngBytes = byteData.buffer.asUint8List();
+
+        final tempDir = await getTemporaryDirectory();
+        final file = await File(
+          '${tempDir.path}/Tapni_QR_${DateTime.now().millisecondsSinceEpoch}.png',
+        ).create();
+        await file.writeAsBytes(pngBytes);
+
+        bool hasAccess = await Gal.hasAccess();
+        if (!hasAccess) {
+          hasAccess = await Gal.requestAccess();
+        }
+
+        if (hasAccess) {
+          await Gal.putImage(file.path);
+          _showSnackBar('QR Code saved to gallery!');
+        } else {
+          _showSnackBar(
+            'Gallery permission required. Please enable it in Settings.',
+            color: Colors.red,
+          );
+        }
+      }
+    } catch (e) {
+      log("$e");
+      _showSnackBar('Failed to save QR Code.', color: Colors.red);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,77 +168,103 @@ class _SharingProfileSheet extends StatelessWidget {
                 const SizedBox(height: 22),
 
                 // QR with rounded modules + center initial
-                SizedBox(
-                  width: 260,
-                  height: 260,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      QrImageView(
-                        embeddedImage: profilePhotoUrl != null
-                            ? NetworkImage(profilePhotoUrl!)
-                            : null,
-                        embeddedImageStyle: QrEmbeddedImageStyle(
-                          size: const Size(52, 52),
-                      
-                        ),
-                        data: profileUrl,
-                        version: QrVersions.auto,
-                        size: 260,
-                        padding: EdgeInsets.zero,
-                        backgroundColor: Colors.white,
-                        errorCorrectionLevel: QrErrorCorrectLevel.H,
-                        eyeStyle: _qrEyeStyle,
-                        dataModuleStyle: _qrDataStyle,
-                        gapless: true,
+                RepaintBoundary(
+                  key: _globalKey,
+                  child: Container(
+                    color: Colors.white,
+                    child: SizedBox(
+                      width: 260,
+                      height: 260,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          QrImageView(
+                            data: widget.profileUrl,
+                            version: QrVersions.auto,
+                            size: 260,
+                            padding: EdgeInsets.zero,
+                            backgroundColor: Colors.white,
+                            errorCorrectionLevel: QrErrorCorrectLevel.H,
+                            eyeStyle: _qrEyeStyle,
+                            dataModuleStyle: _qrDataStyle,
+                            gapless: true,
+                          ),
+                          Container(
+                            width: 52,
+                            height: 52,
+                            decoration: BoxDecoration(
+                              color: widget.initialBgColor,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 3),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              widget.userInitial.toUpperCase(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 26,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      // Container(
-                      //   width: 52,
-                      //   height: 52,
-                      //   decoration: BoxDecoration(
-                      //     color: initialBgColor,
-                      //     borderRadius: BorderRadius.circular(10),
-                      //     border: Border.all(color: Colors.white, width: 3),
-                      //   ),
-                      //   alignment: Alignment.center,
-                      //   child: Text(
-                      //     userInitial.toUpperCase(),
-                      //     style: const TextStyle(
-                      //       color: Colors.white,
-                      //       fontSize: 26,
-                      //       fontWeight: FontWeight.w700,
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 18),
 
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: socialIcons ?? _defaultSocialRow(),
-                // ),
-                const SizedBox(height: 28),
+                if (widget.socialIcons != null &&
+                    widget.socialIcons!.where((l) => l.isActive).isNotEmpty)
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    alignment: WrapAlignment.center,
+                    children: widget.socialIcons!
+                        .where((l) => l.isActive)
+                        .map(
+                          (link) => Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey.shade100,
+                            ),
+                            child: ClipOval(
+                              child: Image.asset(
+                                link.assetPath,
+                                fit: BoxFit.cover,
+                                errorBuilder: (ctx, _, __) => const Icon(
+                                  Icons.link,
+                                  size: 20,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                if (widget.socialIcons != null &&
+                    widget.socialIcons!.where((l) => l.isActive).isNotEmpty)
+                  const SizedBox(height: 28),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _circleIconBtn(
                       icon: Icons.download_rounded,
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('QR saved to gallery!'),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      },
+                      onTap: _downloadQr,
                     ),
                     const SizedBox(width: 14),
                     _circleIconBtn(
-                      icon: Icons.link_rounded,
-                      onTap: () => _copyLink(context),
+                      icon: Icons.share_rounded,
+                      onTap: () {
+                        Share.share(
+                          'Check out my Tapni profile: ${widget.profileUrl}',
+                          subject: 'My Tapni Profile',
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -193,7 +287,7 @@ class _SharingProfileSheet extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              profileUrl,
+                              widget.profileUrl,
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Color(0xFF333333),
@@ -262,7 +356,7 @@ class _SharingProfileSheet extends StatelessWidget {
   }
 
   void _copyLink(BuildContext context) {
-    Clipboard.setData(ClipboardData(text: profileUrl));
+    Clipboard.setData(ClipboardData(text: widget.profileUrl));
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Link copied!'),
@@ -282,7 +376,7 @@ class _SharingProfileSheet extends StatelessWidget {
   }
 
   Widget _profileAvatar() {
-    final photo = profilePhotoUrl?.trim();
+    final photo = widget.profilePhotoUrl?.trim();
     return Container(
       width: 44,
       height: 44,
@@ -307,7 +401,7 @@ class _SharingProfileSheet extends StatelessWidget {
       color: Colors.grey.shade300,
       alignment: Alignment.center,
       child: Text(
-        userInitial.toUpperCase(),
+        widget.userInitial.toUpperCase(),
         style: const TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 16,
