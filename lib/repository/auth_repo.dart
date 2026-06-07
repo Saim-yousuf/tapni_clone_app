@@ -53,7 +53,7 @@ class AuthRepo {
 
   Future<ApiResponse> profileById({required String id}) async {
     return await ApiHandler.request(
-      api: Api.auth.profileById("6a22f75c7b8029607d0cbae9"),
+      api: Api.auth.profileById(id),
       method: ApiMethod.get,
       authorization: true,
     );
