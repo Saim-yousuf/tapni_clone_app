@@ -300,7 +300,7 @@ class LinkSheet {
                   _buildTemplateLogo(
                     template.logo,
                     size: 130,
-                    radius: 10,
+                    radius: 30,
                     isPro: template.isPro,
                     context: context,
                   ),

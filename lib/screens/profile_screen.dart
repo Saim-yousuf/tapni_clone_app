@@ -679,21 +679,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Column(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            // color: const Color(0xFFF5F5F5),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: Image.network(
-                              link.logoUrl ?? "",
-                              fit: BoxFit.contain,
-                              height: 130,
-                              width: 130,
-                              errorBuilder: (_, __, ___) =>
-                                  const Icon(Icons.link, size: 32),
-                            ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Image.network(
+                            link.logoUrl ?? "",
+                            fit: BoxFit.contain,
+                            height: 130,
+                            width: 130,
+                            errorBuilder: (_, __, ___) =>
+                                const Icon(Icons.link, size: 32),
                           ),
                         ),
                         SizedBox(height: 8),

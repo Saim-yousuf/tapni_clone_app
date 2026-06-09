@@ -24,7 +24,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => LeadsProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
-      ],
+      ],  
       child: const TapniApp(),
     ),
   );
