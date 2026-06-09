@@ -132,226 +132,217 @@ class _SharingProfileSheetState extends State<_SharingProfileSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.82,
-      minChildSize: 0.5,
-      maxChildSize: 0.92,
-      builder: (ctx, scrollController) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: SingleChildScrollView(
-            controller: scrollController,
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                const SizedBox(height: 18),
-                const Text(
-                  'Sharing Profile',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                    letterSpacing: -0.2,
-                  ),
-                ),
-                const SizedBox(height: 22),
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.8,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 18),
+            const Text(
+              'Sharing Profile',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+                letterSpacing: -0.2,
+              ),
+            ),
+            const SizedBox(height: 22),
 
-                // QR with rounded modules + center initial
-                RepaintBoundary(
-                  key: _globalKey,
-                  child: Container(
-                    color: Colors.white,
-                    child: SizedBox(
-                      width: 260,
-                      height: 260,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          QrImageView(
-                            data: widget.profileUrl,
-                            version: QrVersions.auto,
-                            size: 260,
-                            padding: EdgeInsets.zero,
-                            backgroundColor: Colors.white,
-                            errorCorrectionLevel: QrErrorCorrectLevel.H,
-                            eyeStyle: _qrEyeStyle,
-                            dataModuleStyle: _qrDataStyle,
-                            gapless: true,
-                          ),
-                          Container(
-                            width: 52,
-                            height: 52,
-                            decoration: BoxDecoration(
-                              color: widget.initialBgColor,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.white, width: 3),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              widget.userInitial.toUpperCase(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 26,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ],
+            // QR with rounded modules + center initial
+            RepaintBoundary(
+              key: _globalKey,
+              child: Container(
+                color: Colors.white,
+                child: SizedBox(
+                  width: 260,
+                  height: 260,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      QrImageView(
+                        data: widget.profileUrl,
+                        version: QrVersions.auto,
+                        size: 260,
+                        padding: EdgeInsets.zero,
+                        backgroundColor: Colors.white,
+                        errorCorrectionLevel: QrErrorCorrectLevel.H,
+                        eyeStyle: _qrEyeStyle,
+                        dataModuleStyle: _qrDataStyle,
+                        gapless: true,
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 18),
-
-                if (widget.socialIcons != null &&
-                    widget.socialIcons!.where((l) => l.isActive).isNotEmpty)
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    alignment: WrapAlignment.center,
-                    children: widget.socialIcons!
-                        .where((l) => l.isActive)
-                        .map(
-                          (link) => Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey.shade100,
-                            ),
-                            child: ClipOval(
-                              child: Image.asset(
-                                link.assetPath,
-                                fit: BoxFit.cover,
-                                errorBuilder: (ctx, _, __) => const Icon(
-                                  Icons.link,
-                                  size: 20,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                if (widget.socialIcons != null &&
-                    widget.socialIcons!.where((l) => l.isActive).isNotEmpty)
-                  const SizedBox(height: 28),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _circleIconBtn(
-                      icon: Icons.download_rounded,
-                      onTap: _downloadQr,
-                    ),
-                    const SizedBox(width: 14),
-                    _circleIconBtn(
-                      icon: Icons.share_rounded,
-                      onTap: () {
-                        Share.share(
-                          'Check out my Tapni profile: ${widget.profileUrl}',
-                          subject: 'My Tapni Profile',
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 18),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 28),
-                  child: GestureDetector(
-                    onTap: () => _copyLink(context),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 14,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF2F2F2),
-                        borderRadius: BorderRadius.circular(28),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              widget.profileUrl,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFF333333),
-                                fontWeight: FontWeight.w400,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            Icons.copy_rounded,
-                            size: 18,
-                            color: Colors.grey.shade600,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
-                  child: GestureDetector(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Google Wallet integration coming soon',
-                          ),
-                          behavior: SnackBarBehavior.floating,
+                      Container(
+                        width: 52,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: widget.initialBgColor,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.white, width: 3),
                         ),
-                      );
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 17),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(32),
+                        alignment: Alignment.center,
+                        child: Text(
+                          widget.userInitial.toUpperCase(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _googleWalletIcon(),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'Add to Google Wallet',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+
+            if (widget.socialIcons != null &&
+                widget.socialIcons!.where((l) => l.isActive).isNotEmpty)
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                alignment: WrapAlignment.center,
+                children: widget.socialIcons!
+                    .where((l) => l.isActive)
+                    .map(
+                      (link) => Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey.shade100,
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            link.assetPath,
+                            fit: BoxFit.cover,
+                            errorBuilder: (ctx, _, __) => const Icon(
+                              Icons.link,
+                              size: 20,
+                              color: Colors.black54,
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    )
+                    .toList(),
+              ),
+            if (widget.socialIcons != null &&
+                widget.socialIcons!.where((l) => l.isActive).isNotEmpty)
+              const SizedBox(height: 28),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _circleIconBtn(
+                  icon: Icons.download_rounded,
+                  onTap: _downloadQr,
+                ),
+                const SizedBox(width: 14),
+                _circleIconBtn(
+                  icon: Icons.share_rounded,
+                  onTap: () {
+                    Share.share(
+                      'Check out my Tapni profile: ${widget.profileUrl}',
+                      subject: 'My Tapni Profile',
+                    );
+                  },
                 ),
               ],
             ),
-          ),
-        );
-      },
+            const SizedBox(height: 18),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: GestureDetector(
+                onTap: () => _copyLink(context),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 14,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF2F2F2),
+                    borderRadius: BorderRadius.circular(28),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          widget.profileUrl,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF333333),
+                            fontWeight: FontWeight.w400,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Icon(
+                        Icons.copy_rounded,
+                        size: 18,
+                        color: Colors.grey.shade600,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
+              child: GestureDetector(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Google Wallet integration coming soon'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 17),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(32),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _googleWalletIcon(),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'Add to Google Wallet',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

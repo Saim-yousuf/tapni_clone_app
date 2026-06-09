@@ -51,6 +51,7 @@ class _MainShellState extends State<MainShell> {
     final profile = profileProvider.profile;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: _buildCurrentScreen(),
       bottomNavigationBar: SizedBox(
         height: 80,
@@ -126,6 +127,7 @@ class _MainShellState extends State<MainShell> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       floatingActionButton: Container(
         width: 80,
