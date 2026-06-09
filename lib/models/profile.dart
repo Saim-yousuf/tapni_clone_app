@@ -1,20 +1,18 @@
 import 'package:tapni_app/models/social_link.dart';
 
 class UserProfile {
-  // API fields
   final String? id;
   final String? username;
   final String? profilePhotoUrl;
   final String? coverPhotoUrl;
   final bool isPro;
 
-  // Local + API fields
   final String name;
   final String email;
   final String bio;
+  String? country;
   final List<SocialLink> socialLinks;
 
-  // Local-only fields (not synced with API)
   final String designation;
   final String company;
   final String phone;
@@ -32,6 +30,7 @@ class UserProfile {
     required this.name,
     required this.email,
     required this.bio,
+    this.country ,
     required this.socialLinks,
     this.designation = '',
     this.company = '',
@@ -42,7 +41,6 @@ class UserProfile {
     this.leadsCount = 0,
   });
 
-  /// Map API /profile response to UserProfile.
   factory UserProfile.fromApiJson(Map<String, dynamic> json) {
     final links = (json['links'] as List<dynamic>? ?? [])
         .map((e) => SocialLink.fromApiJson(e as Map<String, dynamic>))
@@ -57,15 +55,16 @@ class UserProfile {
       name: json['name']?.toString() ?? '',
       email: json['email']?.toString() ?? '',
       bio: json['bio']?.toString() ?? '',
+      country: json['country'],
       socialLinks: links,
     );
   }
 
-  /// Build update payload for PUT /api/user/auth/profile.
   Map<String, dynamic> toApiJson() {
     return {
       'name': name,
       'bio': bio,
+      'country': country,
       'links': socialLinks
           .where((l) => l.isActive)
           .map((l) => l.toApiJson())
@@ -81,6 +80,7 @@ class UserProfile {
     String? name,
     String? email,
     String? bio,
+    String? country,
     List<SocialLink>? socialLinks,
     String? designation,
     String? company,
@@ -100,6 +100,7 @@ class UserProfile {
       name: name ?? this.name,
       email: email ?? this.email,
       bio: bio ?? this.bio,
+      country: country ?? this.country,
       socialLinks: socialLinks ?? this.socialLinks,
       designation: designation ?? this.designation,
       company: company ?? this.company,

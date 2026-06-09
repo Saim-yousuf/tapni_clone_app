@@ -241,43 +241,52 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     onPressed: () {
-                      authProvider
-                          .login(
-                            _emailController.text,
-                            _passwordController.text,
-                            context,
-                          )
-                          .then((success) async {
-                            if (success && mounted) {
-                              final subProvider =
-                                  Provider.of<SubscriptionProvider>(
-                                    context,
-                                    listen: false,
-                                  );
-                              await subProvider.checkSubscriptionStatus();
-                              final profileProvider =
-                                  Provider.of<ProfileProvider>(
-                                    context,
-                                    listen: false,
-                                  );
-                              await profileProvider.fetchProfile();
-                              if (!mounted) return;
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (_) => const MainShell(),
-                                ),
-                              );
+                      // authProvider
+                      //     .login(
+                      //       _emailController.text,
+                      //       _passwordController.text,
+                      //       context,
+                      //     )
+                      //     .then((success) async {
+                      //       if (success && mounted) {
+                      //         final subProvider =
+                      //             Provider.of<SubscriptionProvider>(
+                      //               context,
+                      //               listen: false,
+                      //             );
+                      //         await subProvider.checkSubscriptionStatus();
+                      //         final profileProvider =
+                      //             Provider.of<ProfileProvider>(
+                      //               context,
+                      //               listen: false,
+                      //             );
+                      //         await profileProvider.fetchProfile();
+                      //         if (!mounted) return;
+                      //         Navigator.of(context).pushReplacement(
+                      //           MaterialPageRoute(
+                      //             builder: (_) => const MainShell(),
+                      //           ),
+                      //         );
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Logged in with Google (Demo account: Saim Y)',
-                                  ),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          });
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   const SnackBar(
+                      //     content: Text(
+                      //       'Logged in with Google (Demo account: Saim Y)',
+                      //     ),
+                      //     behavior: SnackBarBehavior.floating,
+                      //   ),
+                      // );
+                      //       }
+                      //     });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Under Development - Login via email/password instead. ',
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

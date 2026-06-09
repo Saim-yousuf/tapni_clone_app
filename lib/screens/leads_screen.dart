@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/lead.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
@@ -9,6 +10,7 @@ import 'package:tapni_app/screens/subscription_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 import 'package:tapni_app/widgets/filter_contacts_sheet.dart';
+import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 class LeadsScreen extends StatefulWidget {
   const LeadsScreen({Key? key}) : super(key: key);
@@ -1007,7 +1009,8 @@ class _LeadsScreenState extends State<LeadsScreen> {
     final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final leadsProvider = Provider.of<LeadsProvider>(context);
     final leadsList = leadsProvider.leads;
-
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final profile = profileProvider.profile;
     return Scaffold(
       backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
 
@@ -1036,42 +1039,44 @@ class _LeadsScreenState extends State<LeadsScreen> {
         ),
         actions: [
           // Go PRO badge
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const SubscriptionScreen()),
-              );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(right: 16),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                children: const [
-                  Text(
-                    'Go',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+          if (!profile.isPro)
+            GestureDetector(
+              onTap: () {
+                SubcriptionSheet.show(context);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  children: const [
+                    Text(
+                      'Go',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    'PRO',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                    SizedBox(width: 4),
+                    Text(
+                      'Business',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
         ],
       ),
 
@@ -1138,7 +1143,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
 
                   // Filter icon
                   _topIconBtn(
-                    icon: Icons.tune_rounded, 
+                    icon: Icons.tune_rounded,
                     isDark: isDark,
                     onTap: () {
                       showModalBottomSheet(

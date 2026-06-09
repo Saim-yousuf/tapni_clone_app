@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
@@ -38,6 +40,17 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       if (success && mounted) {
+        final subProvider = Provider.of<SubscriptionProvider>(
+          context,
+          listen: false,
+        );
+        await subProvider.checkSubscriptionStatus();
+        final profileProvider = Provider.of<ProfileProvider>(
+          context,
+          listen: false,
+        );
+        await profileProvider.fetchProfile();
+        if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const MainShell()),
           (route) => false,
@@ -78,9 +91,11 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Start networking smarter with Tapni.',
+                  'Start networking smarter with Barqody.',
                   style: theme.textTheme.bodyLarge?.copyWith(
-                    color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                    color: isDark
+                        ? AppTheme.textGreyDark
+                        : AppTheme.textGreyLight,
                   ),
                 ),
                 const SizedBox(height: 36),
@@ -157,7 +172,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     prefixIcon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        _obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
                       ),
                       onPressed: () {
                         setState(() {
@@ -193,7 +210,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     'By signing up, you agree to our Terms and Conditions.',
                     style: TextStyle(
                       fontSize: 12,
-                      color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                      color: isDark
+                          ? AppTheme.textGreyDark
+                          : AppTheme.textGreyLight,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -207,7 +226,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     Text(
                       "Already have an account? ",
                       style: TextStyle(
-                        color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                        color: isDark
+                            ? AppTheme.textGreyDark
+                            : AppTheme.textGreyLight,
                       ),
                     ),
                     GestureDetector(

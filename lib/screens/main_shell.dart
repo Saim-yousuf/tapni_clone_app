@@ -11,14 +11,20 @@ import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 
 class MainShell extends StatefulWidget {
-  const MainShell({Key? key}) : super(key: key);
+  final String? _currentPage;
+  const MainShell({Key? key, this._currentPage}) : super(key: key);
 
   @override
   State<MainShell> createState() => _MainShellState();
 }
 
 class _MainShellState extends State<MainShell> {
-  String _currentPage = 'Links';
+  String? _currentPage;
+  @override
+  void initState() {
+    _currentPage = widget._currentPage ?? 'My Card';
+    super.initState();
+  }
 
   Widget _buildCurrentScreen() {
     switch (_currentPage) {
@@ -202,6 +208,42 @@ class _MainShellState extends State<MainShell> {
                   child: Image.network(
                     profile.profilePhotoUrl ?? "",
                     fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppTheme.primaryBlack,
+                      ),
+                      child: Center(
+                        child: Text(
+                          profile.name.isNotEmpty
+                              ? profile.name[0].toUpperCase()
+                              : '?',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    loadingBuilder: (_, __, ___) => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppTheme.primaryBlack,
+                      ),
+                      child: Center(
+                        child: Text(
+                          profile.name.isNotEmpty
+                              ? profile.name[0].toUpperCase()
+                              : '?',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),

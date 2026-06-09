@@ -1,44 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
-import 'package:tapni_app/providers/profile_provider.dart';
-import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
-import 'package:tapni_app/screens/edit_profile_screen.dart';
-import 'package:tapni_app/screens/social_links_screen.dart';
-import 'package:tapni_app/screens/qr_code_screen.dart';
+import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/login_screen.dart';
+import 'package:tapni_app/screens/main_shell.dart';
+import 'package:tapni_app/screens/qr_code_screen.dart';
+import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
+import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
+import 'package:tapni_app/widgets/settings_widget.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   void _handleLogout(BuildContext context) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    
+
     showDialog(
       context: context,
       builder: (ctx) {
         return AlertDialog(
           title: const Text('Log Out'),
-          content: const Text('Are you sure you want to log out of Tapni?'),
+          content: const Text('Are you sure you want to log out of Barqody?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
               child: const Text('Cancel'),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, foregroundColor: Colors.white),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () async {
                 Navigator.of(ctx).pop();
-                
+
                 // Clear all data from providers
-                Provider.of<ProfileProvider>(context, listen: false).clearData();
+                Provider.of<ProfileProvider>(
+                  context,
+                  listen: false,
+                ).clearData();
                 Provider.of<LeadsProvider>(context, listen: false).clearData();
-                Provider.of<SubscriptionProvider>(context, listen: false).clearData();
-                
+                Provider.of<SubscriptionProvider>(
+                  context,
+                  listen: false,
+                ).clearData();
+
                 await authProvider.logout();
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(
@@ -61,14 +72,11 @@ class SettingsScreen extends StatelessWidget {
     final profile = Provider.of<ProfileProvider>(context).profile;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
           children: [
-            // User Card Quick Profile view
             GlassCard(
               padding: const EdgeInsets.all(16),
               child: Row(
@@ -80,16 +88,25 @@ class SettingsScreen extends StatelessWidget {
                       gradient: AppTheme.goldGradient,
                       shape: BoxShape.circle,
                     ),
-                    child: Center(
-                      child: Text(
-                        profile.name.isNotEmpty ? profile.name[0] : 'S',
-                        style: const TextStyle(
-                          color: AppTheme.secondaryWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                        ),
-                      ),
-                    ),
+                    child:
+                        profile.profilePhotoUrl != null &&
+                            profile.profilePhotoUrl!.trim().isNotEmpty
+                        ? ClipOval(
+                            child: Image.network(
+                              profile.profilePhotoUrl!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Center(
+                            child: Text(
+                              profile.name.isNotEmpty ? profile.name[0] : 'S',
+                              style: const TextStyle(
+                                color: AppTheme.secondaryWhite,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                              ),
+                            ),
+                          ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -98,38 +115,86 @@ class SettingsScreen extends StatelessWidget {
                       children: [
                         Text(
                           profile.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                         Text(
                           profile.email,
                           style: TextStyle(
-                            fontSize: 12, 
-                            color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                            fontSize: 12,
+                            color: isDark
+                                ? AppTheme.textGreyDark
+                                : AppTheme.textGreyLight,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppTheme.accentGold.withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Text(
-                      'PRO',
-                      style: TextStyle(
-                        color: AppTheme.accentGold,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                      ),
-                    ),
+
+                  IconButton(
+                    onPressed: () {
+                      SettingWidgets.showSettingSheet(context);
+                    },
+                    icon: Icon(Icons.settings),
+                    iconSize: 30,
+                    color: Colors.grey.shade400,
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 24),
+            if (!profile.isPro)
+              InkWell(
+                onTap: () {
+                  SubcriptionSheet.show(context);
+                },
+                child: Container(
+                  height: 56,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: AppTheme.primaryBlack,
+                  ),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Try Business",
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: AppTheme.secondaryWhite,
+                              ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppTheme.secondaryWhite,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            'Pro',
+                            style: TextStyle(
+                              color: AppTheme.accentGold,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
 
+            const SizedBox(height: 24),
             // Settings Categories
             // _buildSectionHeader('Preferences'),
             // _buildToggleItem(
@@ -143,16 +208,22 @@ class SettingsScreen extends StatelessWidget {
             //   },
             // ),
             // const SizedBox(height: 16),
-
             _buildSectionHeader('Profile Configuration'),
             _buildSettingsItem(
               context,
               icon: Icons.person_outline_rounded,
-              title: 'Edit Card Information',
-              subtitle: 'Change name, designation, and bio',
+              title: 'Edit Information',
+              subtitle: 'Change name, profile photo, and bio',
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+                final profileProvider = Provider.of<ProfileProvider>(
+                  context,
+                  listen: false,
+                );
+                profileProvider.setEditingProfile(true);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) => MainShell(currentPage: "My Card"),
+                  ),
                 );
               },
             ),
@@ -173,9 +244,9 @@ class SettingsScreen extends StatelessWidget {
               title: 'Generate Card QR',
               subtitle: 'Share digital business card link',
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const QrCodeScreen()),
-                );
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const QrCodeScreen()));
               },
             ),
             const SizedBox(height: 16),
@@ -203,7 +274,9 @@ class SettingsScreen extends StatelessWidget {
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Thank you! Feedback submissions are mock only.'),
+                    content: Text(
+                      'Thank you! Feedback submissions are mock only.',
+                    ),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
@@ -213,18 +286,30 @@ class SettingsScreen extends StatelessWidget {
 
             // Logout Button
             ListTile(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
               tileColor: Colors.redAccent.withOpacity(0.08),
-              leading: const Icon(Icons.logout_rounded, color: Colors.redAccent),
+              leading: const Icon(
+                Icons.logout_rounded,
+                color: Colors.redAccent,
+              ),
               title: const Text(
                 'Log Out',
-                style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               subtitle: const Text(
-                'Sign out of this Tapni demo session',
+                'Sign out of this session',
                 style: TextStyle(color: Colors.redAccent, fontSize: 11),
               ),
-              trailing: const Icon(Icons.arrow_forward_ios_rounded, color: Colors.redAccent, size: 14),
+              trailing: const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Colors.redAccent,
+                size: 14,
+              ),
               onTap: () => _handleLogout(context),
             ),
             const SizedBox(height: 40),
@@ -232,8 +317,12 @@ class SettingsScreen extends StatelessWidget {
             // Version info footer
             const Center(
               child: Text(
-                'tapni v1.0.0 (Demo Mode)',
-                style: TextStyle(color: Colors.grey, fontSize: 11, fontWeight: FontWeight.bold),
+                'barqody v1.0.0',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -271,11 +360,23 @@ class SettingsScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        tileColor: isDark ? Colors.white.withOpacity(0.02) : Colors.black.withOpacity(0.015),
+        tileColor: isDark
+            ? Colors.white.withOpacity(0.02)
+            : Colors.black.withOpacity(0.015),
         leading: Icon(icon, color: isDark ? Colors.white70 : Colors.black87),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-        subtitle: Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 11)),
-        trailing: Icon(Icons.arrow_forward_ios_rounded, color: isDark ? Colors.white30 : Colors.black38, size: 12),
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: const TextStyle(color: Colors.grey, fontSize: 11),
+        ),
+        trailing: Icon(
+          Icons.arrow_forward_ios_rounded,
+          color: isDark ? Colors.white30 : Colors.black38,
+          size: 12,
+        ),
         onTap: onTap,
       ),
     );
@@ -295,10 +396,18 @@ class SettingsScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        tileColor: isDark ? Colors.white.withOpacity(0.02) : Colors.black.withOpacity(0.015),
+        tileColor: isDark
+            ? Colors.white.withOpacity(0.02)
+            : Colors.black.withOpacity(0.015),
         leading: Icon(icon, color: isDark ? Colors.white70 : Colors.black87),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-        subtitle: Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 11)),
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: const TextStyle(color: Colors.grey, fontSize: 11),
+        ),
         trailing: Switch.adaptive(
           value: value,
           activeColor: AppTheme.accentGold,

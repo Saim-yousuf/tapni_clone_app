@@ -5,58 +5,7 @@ import 'package:tapni_app/models/activity.dart';
 
 class MockDataService {
   static UserProfile getInitialProfile() {
-    return UserProfile(
-      name: 'Saim Y',
-      designation: 'Senior Product Designer',
-      company: 'Antigravity Studio',
-      bio:
-          'Creating immersive digital experiences. Hit the links below to connect with me or download my contact card!',
-      phone: '+1 (555) 019-2834',
-      email: 'saimy@antigravity.io',
-      website: 'www.antigravity.io',
-      // avatarUrl: null, // Custom design initials will be rendered
-      viewsCount: 1420,
-      scansCount: 894,
-      leadsCount: 128,
-      socialLinks: [
-        SocialLink(
-          id: '1',
-          platform: SocialPlatform.linkedIn,
-          value: 'saimy-designer',
-          isActive: true,
-        ),
-        SocialLink(
-          id: '2',
-          platform: SocialPlatform.whatsApp,
-          value: '+15550192834',
-          isActive: true,
-        ),
-        SocialLink(
-          id: '3',
-          platform: SocialPlatform.instagram,
-          value: 'saimy.design',
-          isActive: true,
-        ),
-        // SocialLink(
-        //   id: '4',
-        //   platform: SocialPlatform.facebook,
-        //   value: 'saimy.creative',
-        //   isActive: false,
-        // ),
-        // SocialLink(
-        //   id: '5',
-        //   platform: SocialPlatform.youTube,
-        //   value: '@antigravitystudio',
-        //   isActive: true,
-        // ),
-        // SocialLink(
-        //   id: '6',
-        //   platform: SocialPlatform.website,
-        //   value: 'https://antigravity.io',
-        //   isActive: true,
-        // ),
-      ],
-    );
+    return UserProfile(name: '', email: '', bio: '', socialLinks: []);
   }
 
   static List<Lead> getInitialLeads() {

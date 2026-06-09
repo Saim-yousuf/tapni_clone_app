@@ -126,9 +126,9 @@ class ProfileProvider extends ChangeNotifier {
   bool get isLinkCatalogLoading => _isLinkCatalogLoading;
   List<LinkCategory> get linkCatalog => _linkCatalog;
 
-  ProfileProvider() {
-    _profile = MockDataService.getInitialProfile();
-  }
+  // ProfileProvider() {
+  //   _profile = MockDataService.getInitialProfile();
+  // }
   void clearData() {
     _profile = MockDataService.getInitialProfile();
     _isProUser = false;
@@ -156,6 +156,7 @@ class ProfileProvider extends ChangeNotifier {
           _profile = UserProfile.fromApiJson(data);
           _isProUser = _profile.isPro;
         }
+        notifyListeners();
       } catch (e) {
         // Fallback to mock data if there's an issue mapping
       }
@@ -211,9 +212,10 @@ class ProfileProvider extends ChangeNotifier {
     required String phone,
     required String email,
     required String website,
+    String? country,
     required List<SocialLink> links,
-    required File? profileImage,
-    required File? coverImage,
+    File? profileImage,
+    File? coverImage,
     required BuildContext context,
   }) async {
     _isLoading = true;
@@ -229,6 +231,7 @@ class ProfileProvider extends ChangeNotifier {
       email: email,
       website: website,
       socialLinks: links,
+      country: country,
     );
 
     final json = updatedProfile.toApiJson();

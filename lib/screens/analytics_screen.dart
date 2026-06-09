@@ -32,297 +32,428 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     final totalLeads = leadsCollected.fold<double>(0, (p, c) => p + c).toInt();
 
     // calculate conversion rate (Leads/Views)
-    final double conversionRate = totalViews > 0 ? (totalLeads / totalViews) * 100 : 0.0;
+    final double conversionRate = totalViews > 0
+        ? (totalLeads / totalViews) * 100
+        : 0.0;
 
     final profileProvider = Provider.of<ProfileProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Analytics Dashboard'),
-        actions: [
-          if (!profileProvider.isProUser)
-            GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) => const ProUpgradeSheet(),
-                );
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: isDark ? Colors.white.withOpacity(0.08) : const Color(0xFFF2F2F7),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Go ',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : Colors.black87,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Text(
-                        'PRO',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 8,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.calendar_today_rounded, size: 18),
-            onSelected: (val) {
-              setState(() {
-                _selectedPeriod = val;
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Period changed to $val (Demo data remains the same)'),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            },
-            itemBuilder: (ctx) => [
-              const PopupMenuItem(value: '24 Hours', child: Text('Last 24 Hours')),
-              const PopupMenuItem(value: '7 Days', child: Text('Last 7 Days')),
-              const PopupMenuItem(value: '30 Days', child: Text('Last 30 Days')),
-            ],
-          ),
-        ],
+        // actions: [
+        //   if (!profileProvider.isProUser)
+        //     GestureDetector(
+        //       onTap: () {
+        //         showModalBottomSheet(
+        //           context: context,
+        //           isScrollControlled: true,
+        //           backgroundColor: Colors.transparent,
+        //           builder: (context) => const ProUpgradeSheet(),
+        //         );
+        //       },
+        //       child: Container(
+        //         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        //         padding: const EdgeInsets.symmetric(
+        //           horizontal: 10,
+        //           vertical: 4,
+        //         ),
+        //         decoration: BoxDecoration(
+        //           color: isDark
+        //               ? Colors.white.withOpacity(0.08)
+        //               : const Color(0xFFF2F2F7),
+        //           borderRadius: BorderRadius.circular(16),
+        //         ),
+        //         child: Row(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: [
+        //             Text(
+        //               'Go ',
+        //               style: TextStyle(
+        //                 fontSize: 12,
+        //                 fontWeight: FontWeight.bold,
+        //                 color: isDark ? Colors.white : Colors.black87,
+        //               ),
+        //             ),
+        //             Container(
+        //               padding: const EdgeInsets.symmetric(
+        //                 horizontal: 5,
+        //                 vertical: 2,
+        //               ),
+        //               decoration: BoxDecoration(
+        //                 color: Colors.black,
+        //                 borderRadius: BorderRadius.circular(6),
+        //               ),
+        //               child: const Text(
+        //                 'PRO',
+        //                 style: TextStyle(
+        //                   color: Colors.white,
+        //                   fontSize: 8,
+        //                   fontWeight: FontWeight.w900,
+        //                 ),
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   PopupMenuButton<String>(
+        //     icon: const Icon(Icons.calendar_today_rounded, size: 18),
+        //     onSelected: (val) {
+        //       setState(() {
+        //         _selectedPeriod = val;
+        //       });
+        //       ScaffoldMessenger.of(context).showSnackBar(
+        //         SnackBar(
+        //           content: Text(
+        //             'Period changed to $val (Demo data remains the same)',
+        //           ),
+        //           behavior: SnackBarBehavior.floating,
+        //         ),
+        //       );
+        //     },
+        //     itemBuilder: (ctx) => [
+        //       const PopupMenuItem(
+        //         value: '24 Hours',
+        //         child: Text('Last 24 Hours'),
+        //       ),
+        //       const PopupMenuItem(value: '7 Days', child: Text('Last 7 Days')),
+        //       const PopupMenuItem(
+        //         value: '30 Days',
+        //         child: Text('Last 30 Days'),
+        //       ),
+        //     ],
+        //   ),
+        // ],
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Period tag
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Performance overview',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
-                    ),
+        child: true
+            ? Center(
+                child: Text(
+                  'Comming Soon for Business users',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: isDark
+                        ? AppTheme.textGreyDark
+                        : AppTheme.textGreyLight,
+                    fontSize: 26,
+                    fontWeight: FontWeight.w900,
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppTheme.accentGold.withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      _selectedPeriod,
-                      style: const TextStyle(
-                        color: AppTheme.accentGold,
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              // Main Graphic: Bezier Curve Custom Painted
-              GlassCard(
-                blur: 15,
-                padding: const EdgeInsets.all(20),
+                ),
+              )
+            : SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 12.0,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Period tag
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Profile Views',
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.grey),
-                            ),
-                            Text(
-                              '$totalViews',
-                              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
-                            ),
-                          ],
+                        Text(
+                          'Performance overview',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: isDark
+                                ? AppTheme.textGreyDark
+                                : AppTheme.textGreyLight,
+                          ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.green.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
                           ),
-                          child: const Text(
-                            '+14.8%',
-                            style: TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.bold),
+                          decoration: BoxDecoration(
+                            color: AppTheme.accentGold.withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            _selectedPeriod,
+                            style: const TextStyle(
+                              color: AppTheme.accentGold,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Main Graphic: Bezier Curve Custom Painted
+                    GlassCard(
+                      blur: 15,
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Profile Views',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  Text(
+                                    '$totalViews',
+                                    style: const TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.green.withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Text(
+                                  '+14.8%',
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+                          // Custom Painted Chart
+                          SizedBox(
+                            height: 180,
+                            width: double.infinity,
+                            child: CustomPaint(
+                              painter: SparklinePainter(
+                                points: profileViews,
+                                lineColor: AppTheme.accentGold,
+                                fillColor: AppTheme.accentGold.withOpacity(
+                                  0.06,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          // Days Indicator
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'Mon',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                ),
+                              ),
+                              Text(
+                                'Tue',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                ),
+                              ),
+                              Text(
+                                'Wed',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                ),
+                              ),
+                              Text(
+                                'Thu',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                ),
+                              ),
+                              Text(
+                                'Fri',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                ),
+                              ),
+                              Text(
+                                'Sat',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                ),
+                              ),
+                              Text(
+                                'Sun',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // secondary stats: Scans and Leads
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GlassCard(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Icon(
+                                  Icons.qr_code_2,
+                                  color: AppTheme.accentGold,
+                                  size: 24,
+                                ),
+                                const SizedBox(height: 12),
+                                const Text(
+                                  'QR Scans',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                Text(
+                                  '$totalScans',
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  height: 40,
+                                  child: CustomPaint(
+                                    painter: MiniBarChartPainter(
+                                      data: qrScans,
+                                      barColor: Colors.blueAccent,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: GlassCard(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Icon(
+                                  Icons.person_add_alt_1_rounded,
+                                  color: Colors.green,
+                                  size: 24,
+                                ),
+                                const SizedBox(height: 12),
+                                const Text(
+                                  'Captured Leads',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                Text(
+                                  '$totalLeads',
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  height: 40,
+                                  child: CustomPaint(
+                                    painter: MiniBarChartPainter(
+                                      data: leadsCollected,
+                                      barColor: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 24),
-                    // Custom Painted Chart
-                    SizedBox(
-                      height: 180,
-                      width: double.infinity,
-                      child: CustomPaint(
-                        painter: SparklinePainter(
-                          points: profileViews,
-                          lineColor: AppTheme.accentGold,
-                          fillColor: AppTheme.accentGold.withOpacity(0.06),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    // Days Indicator
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text('Mon', style: TextStyle(color: Colors.grey, fontSize: 10)),
-                        Text('Tue', style: TextStyle(color: Colors.grey, fontSize: 10)),
-                        Text('Wed', style: TextStyle(color: Colors.grey, fontSize: 10)),
-                        Text('Thu', style: TextStyle(color: Colors.grey, fontSize: 10)),
-                        Text('Fri', style: TextStyle(color: Colors.grey, fontSize: 10)),
-                        Text('Sat', style: TextStyle(color: Colors.grey, fontSize: 10)),
-                        Text('Sun', style: TextStyle(color: Colors.grey, fontSize: 10)),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
 
-              // secondary stats: Scans and Leads
-              Row(
-                children: [
-                  Expanded(
-                    child: GlassCard(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    // Connection Conversion Rate Card
+                    GlassCard(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
                         children: [
-                          const Icon(Icons.qr_code_2, color: AppTheme.accentGold, size: 24),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'QR Scans',
-                            style: TextStyle(color: Colors.grey, fontSize: 13),
-                          ),
-                          Text(
-                            '$totalScans',
-                            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
-                          ),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            height: 40,
-                            child: CustomPaint(
-                              painter: MiniBarChartPainter(
-                                data: qrScans,
-                                barColor: Colors.blueAccent,
+                          Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              color: AppTheme.accentGold.withOpacity(0.12),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.bolt,
+                                color: AppTheme.accentGold,
+                                size: 28,
                               ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Conversion Rate',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  '${conversionRate.toStringAsFixed(1)}%',
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                const Text(
+                                  'Views converted to captured leads.',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: GlassCard(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Icon(Icons.person_add_alt_1_rounded, color: Colors.green, size: 24),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'Captured Leads',
-                            style: TextStyle(color: Colors.grey, fontSize: 13),
-                          ),
-                          Text(
-                            '$totalLeads',
-                            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
-                          ),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            height: 40,
-                            child: CustomPaint(
-                              painter: MiniBarChartPainter(
-                                data: leadsCollected,
-                                barColor: Colors.green,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-
-              // Connection Conversion Rate Card
-              GlassCard(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 56,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        color: AppTheme.accentGold.withOpacity(0.12),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Center(
-                        child: Icon(Icons.bolt, color: AppTheme.accentGold, size: 28),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Conversion Rate',
-                            style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600),
-                          ),
-                          Text(
-                            '${conversionRate.toStringAsFixed(1)}%',
-                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
-                          ),
-                          const SizedBox(height: 2),
-                          const Text(
-                            'Views converted to captured leads.',
-                            style: TextStyle(color: Colors.grey, fontSize: 11),
-                          ),
-                        ],
-                      ),
-                    ),
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -353,7 +484,9 @@ class SparklinePainter extends CustomPainter {
     for (int i = 0; i < points.length; i++) {
       final double x = i * widthStep;
       // invert y because canvas origin is top-left
-      final double y = size.height - ((points[i] - minVal) / heightRange * (size.height - 20) + 10);
+      final double y =
+          size.height -
+          ((points[i] - minVal) / heightRange * (size.height - 20) + 10);
       offsets.add(Offset(x, y));
     }
 
@@ -366,9 +499,12 @@ class SparklinePainter extends CustomPainter {
       final controlPoint1 = Offset(p1.dx + widthStep / 2, p1.dy);
       final controlPoint2 = Offset(p2.dx - widthStep / 2, p2.dy);
       path.cubicTo(
-        controlPoint1.dx, controlPoint1.dy,
-        controlPoint2.dx, controlPoint2.dy,
-        p2.dx, p2.dy,
+        controlPoint1.dx,
+        controlPoint1.dy,
+        controlPoint2.dx,
+        controlPoint2.dy,
+        p2.dx,
+        p2.dy,
       );
     }
 
@@ -409,10 +545,7 @@ class MiniBarChartPainter extends CustomPainter {
   final List<double> data;
   final Color barColor;
 
-  MiniBarChartPainter({
-    required this.data,
-    required this.barColor,
-  });
+  MiniBarChartPainter({required this.data, required this.barColor});
 
   @override
   void paint(Canvas canvas, Size size) {
