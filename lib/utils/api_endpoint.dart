@@ -13,7 +13,7 @@ class Api {
     return "https://remake-drained-underarm.ngrok-free.dev";
   }
 
-  static const String _liveBaseUrl = "https://your-production-url.com";
+  static const String _liveBaseUrl = "https://barqody-backend.vercel.app";
 
   static late String baseUrl;
 
@@ -21,6 +21,7 @@ class Api {
     // Environment env
   ) {
     baseUrl = _localBaseUrl;
+    // baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }
@@ -35,11 +36,13 @@ class _AuthApi {
   String get login => "${Api.baseUrl}/api/user/auth/login";
   String get googleSignIn => "${Api.baseUrl}/api/user/auth/google";
   String get profile => "${Api.baseUrl}/api/user/auth/profile";
-  String profileByUsername(String username) =>
-      "${Api.baseUrl}/api/user/auth/profile/$username";
-  String profileById(String id) => "${Api.baseUrl}/api/user/auth/getprofile/$id";
+  String profileByUsername(String username, {bool isScan = false}) =>
+      "${Api.baseUrl}/api/user/auth/profile/$username${isScan ? '?source=scan' : ''}";
+  String profileById(String id, {bool isScan = false}) =>
+      "${Api.baseUrl}/api/user/auth/getprofile/$id${isScan ? '?source=scan' : ''}";
   String get links => "${Api.baseUrl}/api/user/auth/profile/links";
   String get linkCatalog => "${Api.baseUrl}/api/user/auth/link-catalog";
+  String get analytics => "${Api.baseUrl}/api/user/auth/analytics";
 }
 
 class _SubscriptionApi {

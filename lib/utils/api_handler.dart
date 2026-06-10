@@ -32,10 +32,7 @@ class ApiHandler {
       };
 
       final uri = Uri.parse(api).replace(
-        queryParameters: {
-          ...(Uri.parse(api).queryParameters),
-          ...?queryParams,
-        },
+        queryParameters: {...(Uri.parse(api).queryParameters), ...?queryParams},
       );
 
       PrintLog.logMessage("API: $uri");
@@ -120,6 +117,7 @@ class ApiHandler {
 
       return _handleResponse(response);
     } catch (e) {
+      PrintLog.logMessage("Request failed: $e");
       return Future.error("Request failed: $e");
     }
   }

@@ -34,8 +34,8 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     });
 
     final response = widget.username != null && widget.username!.isNotEmpty
-        ? await AuthRepo().profileByUsername(username: widget.username!)
-        : await AuthRepo().profileById(id: widget.user!);
+        ? await AuthRepo().profileByUsername(username: widget.username!, isScan: true)
+        : await AuthRepo().profileById(id: widget.user!, isScan: true);
 
     if (!mounted) return;
 

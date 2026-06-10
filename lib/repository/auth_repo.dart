@@ -43,17 +43,17 @@ class AuthRepo {
     );
   }
 
-  Future<ApiResponse> profileByUsername({required String username}) async {
+  Future<ApiResponse> profileByUsername({required String username, bool isScan = false}) async {
     return await ApiHandler.request(
-      api: Api.auth.profileByUsername(username),
+      api: Api.auth.profileByUsername(username, isScan: isScan),
       method: ApiMethod.get,
       authorization: true,
     );
   }
 
-  Future<ApiResponse> profileById({required String id}) async {
+  Future<ApiResponse> profileById({required String id, bool isScan = false}) async {
     return await ApiHandler.request(
-      api: Api.auth.profileById(id),
+      api: Api.auth.profileById(id, isScan: isScan),
       method: ApiMethod.get,
       authorization: true,
     );
@@ -84,6 +84,14 @@ class AuthRepo {
   Future<ApiResponse> linkCatalog() async {
     return await ApiHandler.request(
       api: Api.auth.linkCatalog,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> getAnalytics() async {
+    return await ApiHandler.request(
+      api: Api.auth.analytics,
       method: ApiMethod.get,
       authorization: true,
     );
