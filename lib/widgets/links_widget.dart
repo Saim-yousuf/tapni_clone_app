@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -18,63 +17,6 @@ class LinkSheet {
     if (provider.linkCatalog.isEmpty && !provider.isLinkCatalogLoading) {
       provider.fetchLinkCatalog();
     }
-
-    final categories = [
-      {
-        'title': 'Featured',
-        'platforms': [
-          // SocialPlatform.website,
-          SocialPlatform.contact,
-          SocialPlatform.calendly,
-          SocialPlatform.googleMaps,
-        ],
-      },
-      {
-        'title': 'Social media',
-        'platforms': [
-          SocialPlatform.instagram,
-          SocialPlatform.linkedIn,
-          SocialPlatform.snapchat,
-          SocialPlatform.tiktok,
-          SocialPlatform.threads,
-          SocialPlatform.github,
-          SocialPlatform.behance,
-          // SocialPlatform.facebook,
-          SocialPlatform.vk,
-          SocialPlatform.vsco,
-        ],
-      },
-      {
-        'title': 'Contact',
-        'platforms': [
-          SocialPlatform.whatsApp,
-          SocialPlatform.email,
-          SocialPlatform.signal,
-        ],
-      },
-      {
-        'title': 'Music & Entertainment',
-        'platforms': [
-          SocialPlatform.spotify,
-          SocialPlatform.yandexMusic,
-          SocialPlatform.soundcloud,
-          SocialPlatform.mixcloud,
-          SocialPlatform.patreon,
-        ],
-      },
-      {
-        'title': 'Business & Dining',
-        'platforms': [
-          SocialPlatform.googleReview,
-          SocialPlatform.meetup,
-          SocialPlatform.eventbrite,
-          SocialPlatform.tripadvisor,
-          SocialPlatform.zillow,
-          SocialPlatform.spoonFork,
-          SocialPlatform.wave,
-        ],
-      },
-    ];
 
     bool isSearching = false;
     showModalBottomSheet(
@@ -106,18 +48,16 @@ class LinkSheet {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
+                    //Header Open
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
-                        vertical: 8,
+                        vertical: 15,
                       ),
                       child: Row(
                         children: [
                           IconButton(
-                            icon: const Icon(
-                              Icons.arrow_back_ios_new,
-                              size: 18,
-                            ),
+                            icon: Icon(Icons.arrow_back_ios_new, size: 24),
                             onPressed: () => Navigator.pop(ctx),
                           ),
                           Expanded(
@@ -135,8 +75,8 @@ class LinkSheet {
                                     child: Text(
                                       'Add Link',
                                       style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ),
@@ -146,6 +86,7 @@ class LinkSheet {
                               isSearching
                                   ? Icons.close_rounded
                                   : Icons.search_rounded,
+                              size: 24,
                             ),
                             onPressed: () {
                               setSheetState(() {
@@ -157,6 +98,7 @@ class LinkSheet {
                         ],
                       ),
                     ),
+                    //Header Close
                     Expanded(
                       child: Consumer<ProfileProvider>(
                         builder: (context, watchedProvider, _) {
@@ -198,21 +140,24 @@ class LinkSheet {
                                       )
                                       .toList();
 
-                            return ListView(
+                            return SingleChildScrollView(
                               controller: scrollController,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                               ),
-                              children: catalog
-                                  .map(
-                                    (category) => _buildTemplateCategory(
-                                      context,
-                                      ctx,
-                                      category,
-                                      provider,
-                                    ),
-                                  )
-                                  .toList(),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: catalog
+                                    .map(
+                                      (category) => _buildTemplateCategory(
+                                        context,
+                                        ctx,
+                                        category,
+                                        provider,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
                             );
                           }
 
@@ -220,7 +165,7 @@ class LinkSheet {
                             child: Text(
                               'No link templates available',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 24,
                                 color: Colors.grey,
                               ),
                             ),
@@ -244,86 +189,97 @@ class LinkSheet {
     LinkCategory category,
     ProfileProvider provider,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          category.name,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 12),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.7,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            category.name,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          itemCount: category.templates.length,
-          itemBuilder: (context, index) {
-            final template = category.templates[index];
-            return GestureDetector(
-              onTap: () {
-                Navigator.pop(sheetContext);
-                final isProUser = Provider.of<ProfileProvider>(
-                  context,
-                  listen: false,
-                ).isProUser;
+          SizedBox(height: 20),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(category.templates.length, (index) {
+                final template = category.templates[index];
+                return Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(sheetContext);
+                      final isProUser = Provider.of<ProfileProvider>(
+                        context,
+                        listen: false,
+                      ).isProUser;
 
-                if (template.isPro && !isProUser) {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => const ProUpgradeSheet(),
-                  );
-                  return;
-                }
-                if (template.actionType == 'contact_card') {
-                  contact_card.showContactCardBottomSheet(
-                    context,
-                    template,
-                    provider,
-                  );
-                } else if (_isCustomTemplate(template)) {
-                  _showCustomTemplateBottomSheet(context, template, provider);
-                } else if (template.fieldType == 'bank') {
-                  _showBankTemplateBottomSheet(context, template, provider);
-                } else {
-                  _showNewTemplateLinkBottomSheet(context, template, provider);
-                }
-              },
-              child: Column(
-                children: [
-                  _buildTemplateLogo(
-                    template.logo,
-                    size: 130,
-                    radius: 30,
-                    isPro: template.isPro,
-                    context: context,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    template.label,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: AppTheme.primaryBlack,
-                      fontWeight: FontWeight.w500,
-                      overflow: TextOverflow.ellipsis,
+                      if (template.isPro && !isProUser) {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => const ProUpgradeSheet(),
+                        );
+                        return;
+                      }
+                      if (template.actionType == 'contact_card') {
+                        contact_card.showContactCardBottomSheet(
+                          context,
+                          template,
+                          provider,
+                        );
+                      } else if (_isCustomTemplate(template)) {
+                        _showCustomTemplateBottomSheet(
+                          context,
+                          template,
+                          provider,
+                        );
+                      } else if (template.fieldType == 'bank') {
+                        _showBankTemplateBottomSheet(
+                          context,
+                          template,
+                          provider,
+                        );
+                      } else {
+                        _showNewTemplateLinkBottomSheet(
+                          context,
+                          template,
+                          provider,
+                        );
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        _buildTemplateLogo(
+                          template.logo,
+                          size: 130,
+                          radius: 30,
+                          isPro: template.isPro,
+                          context: context,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          template.label,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.primaryBlack,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 8),
-      ],
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -403,7 +359,7 @@ class LinkSheet {
                     const Text(
                       'Custom link',
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -620,7 +576,7 @@ class LinkSheet {
                     Text(
                       allowCustomMeta ? 'Custom bank' : template.label,
                       style: const TextStyle(
-                        fontSize: 17,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -952,7 +908,7 @@ class LinkSheet {
                     const Text(
                       'Create new link',
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -1193,7 +1149,7 @@ class LinkSheet {
                     const Text(
                       'Create new link',
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -1533,7 +1489,7 @@ class LinkSheet {
                     const Text(
                       'Link Settings',
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

@@ -18,13 +18,12 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => LeadsProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
-      ],  
+      ],
       child: const TapniApp(),
     ),
   );

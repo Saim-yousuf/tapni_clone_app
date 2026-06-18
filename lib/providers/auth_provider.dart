@@ -58,9 +58,9 @@ class AuthProvider extends ChangeNotifier {
     String password,
     BuildContext context,
   ) async {
-    setLoading(true);
+    // setLoading(true);
     final response = await _authRepo.login(email: email, password: password);
-    setLoading(false);
+    // setLoading(false);
 
     if (response.success && response.data != null) {
       final token = response.data['token'];
@@ -89,13 +89,13 @@ class AuthProvider extends ChangeNotifier {
     String password,
     BuildContext context,
   ) async {
-    setLoading(true);
+    // setLoading(true);
     final response = await _authRepo.register(
       name: name,
       email: email,
       password: password,
     );
-    setLoading(false);
+    // setLoading(false);
 
     if (response.success && response.data != null) {
       final token = response.data['token'];
@@ -148,4 +148,6 @@ class AuthProvider extends ChangeNotifier {
     await SharedPrefHelper.remove(SharedPrefHelper.utils.authorizedToken);
     notifyListeners();
   }
+
+  
 }

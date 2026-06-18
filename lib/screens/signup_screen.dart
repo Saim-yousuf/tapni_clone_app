@@ -32,29 +32,35 @@ class _SignupScreenState extends State<SignupScreen> {
   void _handleSignup() async {
     if (_formKey.currentState!.validate()) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final success = await authProvider.register(
-        _nameController.text.trim(),
-        _emailController.text.trim(),
-        _passwordController.text,
-        context,
-      );
+      try {
+        authProvider.setLoading(true);
+        final success = await authProvider.register(
+          _nameController.text.trim(),
+          _emailController.text.trim(),
+          _passwordController.text,
+          context,
+        );
 
-      if (success && mounted) {
-        final subProvider = Provider.of<SubscriptionProvider>(
-          context,
-          listen: false,
-        );
-        await subProvider.checkSubscriptionStatus();
-        final profileProvider = Provider.of<ProfileProvider>(
-          context,
-          listen: false,
-        );
-        await profileProvider.fetchProfile();
-        if (!mounted) return;
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const MainShell()),
-          (route) => false,
-        );
+        if (success && mounted) {
+          final subProvider = Provider.of<SubscriptionProvider>(
+            context,
+            listen: false,
+          );
+          await subProvider.checkSubscriptionStatus();
+          final profileProvider = Provider.of<ProfileProvider>(
+            context,
+            listen: false,
+          );
+          await profileProvider.fetchProfile();
+          if (!mounted) return;
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const MainShell()),
+            (route) => false,
+          );
+        }
+      } catch (e) {
+      } finally {
+        authProvider.setLoading(false);
       }
     }
   }
@@ -85,8 +91,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Text(
                   'Create Account',
                   style: theme.textTheme.headlineLarge?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -1,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 8),

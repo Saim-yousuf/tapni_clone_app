@@ -40,6 +40,8 @@ class _SplashScreenState extends State<SplashScreen>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
     _controller.forward();
+    // final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    // authProvider.logout();
 
     _navigateToNext();
   }
@@ -171,7 +173,7 @@ class _SplashScreenState extends State<SplashScreen>
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2.0,
-                      color: Colors.grey.shade700,  
+                      color: Colors.grey.shade700,
                     ),
                   ),
                   Text(

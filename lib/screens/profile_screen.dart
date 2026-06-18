@@ -7,8 +7,13 @@ import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/providers/theme_provider.dart';
+import 'package:tapni_app/screens/progress_score_card.dart';
+import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/glass_card.dart';
+import 'package:tapni_app/widgets/go_bussiness_button.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/templates_sheet.dart';
@@ -116,62 +121,219 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildViewMode(ProfileProvider profileProvider, UserProfile profile) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Column(
-        children: [
-          // const Text(
-          //   'tapni',
-          //   style: TextStyle(
-          //     fontSize: 42,
-          //     fontWeight: FontWeight.w900,
-          //     letterSpacing: -2,
-          //   ),
-          // ),
-          Image.asset(
-            'assets/images/jpg/barqody_name.jpg',
-            width: 120,
-            // height: 120,
-          ),
-          const SizedBox(height: 20),
-          _buildProfileAvatar(profile),
-          const SizedBox(height: 20),
-          Text(
-            profile.name,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 30),
-          _buildLinkSection(
-            profile,
-            isEditable: false,
-            profileProvider: profileProvider,
-          ),
-          const SizedBox(height: 80),
-          SizedBox(
-            width: double.infinity,
-            height: 62,
-            child: ElevatedButton(
-              onPressed: () => _enterEditMode(profileProvider),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xfff3f3f3),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(35),
+    final theme = Theme.of(context);
+    final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/images/jpg/barqody_name.jpg',
+              width: 120,
+              // height: 120,
+            ),
+            const SizedBox(height: 20),
+
+            ProfileScoreCard(),
+            // if (profile.isPro == false)
+            //   GestureDetector(
+            //     onTap: () {
+            //       showModalBottomSheet(
+            //         context: context,
+            //         isScrollControlled: true,
+            //         backgroundColor: Colors.transparent,
+            //         builder: (context) => const ProUpgradeSheet(),
+            //       );
+            //     },
+            //     child: Container(
+            //       padding: const EdgeInsets.symmetric(
+            //         horizontal: 16,
+            //         vertical: 16,
+            //       ),
+            //       decoration: BoxDecoration(
+            //         gradient: LinearGradient(
+            //           colors: isDark
+            //               ? [const Color(0xFF2C1E14), const Color(0xFF16100B)]
+            //               : [const Color(0xFFFFF7F0), const Color(0xFFFFF0E5)],
+            //           begin: Alignment.topLeft,
+            //           end: Alignment.bottomRight,
+            //         ),
+            //         borderRadius: BorderRadius.circular(16),
+            //         border: Border.all(
+            //           color: isDark
+            //               ? const Color(0xFF4C3625)
+            //               : const Color(0xFFFFD1B3),
+            //           width: 1.2,
+            //         ),
+            //       ),
+            //       child: Row(
+            //         children: [
+            //           Container(
+            //             padding: const EdgeInsets.all(8),
+            //             decoration: BoxDecoration(
+            //               color: const Color(0xFFFF9500).withOpacity(0.12),
+            //               shape: BoxShape.circle,
+            //             ),
+            //             child: const Icon(
+            //               Icons.star_rounded,
+            //               color: Color(0xFFFF9500),
+            //               size: 24,
+            //             ),
+            //           ),
+            //           const SizedBox(width: 14),
+            //           Expanded(
+            //             child: Column(
+            //               crossAxisAlignment: CrossAxisAlignment.start,
+            //               children: [
+            //                 Text(
+            //                   'Upgrade to Business PRO',
+            //                   style: theme.textTheme.titleMedium?.copyWith(
+            //                     fontWeight: FontWeight.w900,
+            //                     fontSize: 15,
+            //                     color: isDark ? Colors.white : Colors.black87,
+            //                     letterSpacing: -0.2,
+            //                   ),
+            //                 ),
+            //                 const SizedBox(height: 2),
+            //                 Text(
+            //                   'Customize your profile, unlock PRO templates & links, and get unlimited access premium features.',
+            //                   style: TextStyle(
+            //                     fontSize: 12,
+            //                     color: isDark ? Colors.white60 : Colors.black54,
+            //                     height: 1.3,
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //           const SizedBox(width: 8),
+            //           Icon(
+            //             Icons.chevron_right_rounded,
+            //             color: isDark ? Colors.white38 : Colors.black38,
+            //             size: 20,
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+
+            const SizedBox(height: 20),
+            _buildProfileAvatar(profile),
+            const SizedBox(height: 20),
+            Text(
+              profile.name,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 30),
+            _buildLinkSection(
+              profile,
+              isEditable: false,
+              profileProvider: profileProvider,
+            ),
+            const SizedBox(height: 50),
+            SizedBox(
+              width: double.infinity,
+              height: 62,
+              child: ElevatedButton(
+                onPressed: () => _enterEditMode(profileProvider),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xfff3f3f3),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(35),
+                  ),
                 ),
-              ),
-              child: const Text(
-                'Edit profile',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
+                child: const Text(
+                  'Edit profile',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),
-          ),
-          Spacer(),
-          const SizedBox(height: 40),
-        ],
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                SharingProfileSheet.show(context);
+              },
+              child: GlassCard(
+                customBgColor: Colors.black.withOpacity(0.02),
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppTheme.accentGold.withOpacity(0.5),
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              'ACTIVE CARD',
+                              style: TextStyle(
+                                color: AppTheme.accentGold,
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            profile.name,
+                            style: theme.textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          // Text(
+                          //   '${profile.designation} at ${profile.company}',
+                          //   style: theme.textTheme.bodyMedium?.copyWith(
+                          //     color: AppTheme.textGreyLight,
+                          //   ),
+                          // ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.qr_code,
+                                size: 16,
+                                color: AppTheme.accentGold,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                'Tap to share QR code',
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Spacer(),
+            const SizedBox(height: 40),
+          ],
+        ),
       ),
     );
   }
@@ -215,52 +377,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
                 // Go PRO button
-                if (profile.isPro == false)
-                  InkWell(
-                    onTap: () {
-                      SubcriptionSheet.show(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black12),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Go ',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Text(
-                              'BUSINESS',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                GoBussinessButton(),
               ],
             ),
 

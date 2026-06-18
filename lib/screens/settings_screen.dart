@@ -82,8 +82,8 @@ class SettingsScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    width: 54,
-                    height: 54,
+                    width: 60,
+                    height: 60,
                     decoration: const BoxDecoration(
                       gradient: AppTheme.goldGradient,
                       shape: BoxShape.circle,
@@ -99,11 +99,11 @@ class SettingsScreen extends StatelessWidget {
                           )
                         : Center(
                             child: Text(
-                              profile.name.isNotEmpty ? profile.name[0] : 'S',
+                              profile.name.isNotEmpty ? profile.name[0] : '?',
                               style: const TextStyle(
                                 color: AppTheme.secondaryWhite,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 22,
+                                fontSize: 28,
                               ),
                             ),
                           ),
@@ -117,13 +117,13 @@ class SettingsScreen extends StatelessWidget {
                           profile.name,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: 20,
                           ),
                         ),
                         Text(
                           profile.email,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 14,
                             color: isDark
                                 ? AppTheme.textGreyDark
                                 : AppTheme.textGreyLight,
@@ -165,7 +165,7 @@ class SettingsScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 18,
                                 color: AppTheme.secondaryWhite,
                               ),
                         ),
@@ -184,7 +184,7 @@ class SettingsScreen extends StatelessWidget {
                             style: TextStyle(
                               color: AppTheme.accentGold,
                               fontWeight: FontWeight.bold,
-                              fontSize: 12,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -282,7 +282,7 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 15),
 
             // Logout Button
             ListTile(
@@ -339,7 +339,7 @@ class SettingsScreen extends StatelessWidget {
         title,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 12,
+          fontSize: 16,
           color: AppTheme.accentGold,
           letterSpacing: 1.0,
         ),
@@ -357,20 +357,20 @@ class SettingsScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 20),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         tileColor: isDark
             ? Colors.white.withOpacity(0.02)
             : Colors.black.withOpacity(0.015),
-        leading: Icon(icon, color: isDark ? Colors.white70 : Colors.black87),
+        leading: Icon(icon, color: isDark ? Colors.white70 : Colors.black87,size: 35,),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(color: Colors.grey, fontSize: 11),
+          style: const TextStyle(color: Colors.grey, fontSize: 14),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,

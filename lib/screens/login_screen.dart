@@ -30,30 +30,37 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() async {
     // if (_formKey.currentState!.validate()) {
-
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final success = await authProvider.login(
-      _emailController.text.trim(),
-      _passwordController.text,
-      context,
-    );
 
-    if (success && mounted) {
-      final subProvider = Provider.of<SubscriptionProvider>(
+    try {
+      authProvider.setLoading(true);
+      final success = await authProvider.login(
+        _emailController.text.trim(),
+        _passwordController.text,
         context,
-        listen: false,
       );
-      await subProvider.checkSubscriptionStatus();
-      final profileProvider = Provider.of<ProfileProvider>(
-        context,
-        listen: false,
-      );
-      await profileProvider.fetchProfile();
-      if (!mounted) return;
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const MainShell()));
+
+      if (success && mounted) {
+        final subProvider = Provider.of<SubscriptionProvider>(
+          context,
+          listen: false,
+        );
+        await subProvider.checkSubscriptionStatus();
+        final profileProvider = Provider.of<ProfileProvider>(
+          context,
+          listen: false,
+        );
+        await profileProvider.fetchProfile();
+        if (!mounted) return;
+        Navigator.of(
+          context,
+        ).pushReplacement(MaterialPageRoute(builder: (_) => const MainShell()));
+      }
+    } catch (e) {
+    } finally {
+      authProvider.setLoading(false);
     }
+    //
     // }
   }
 
@@ -77,8 +84,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   'Welcome Back',
                   style: theme.textTheme.headlineLarge?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -1,
+                    fontWeight: FontWeight.w700,
+                    // letterSpacing: -1,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -118,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 15),
 
                 // Password
                 Row(
@@ -134,9 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text(
-                              'Demo account: use any email & password to login.',
-                            ),
+                            content: Text('Comming Soon'),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );

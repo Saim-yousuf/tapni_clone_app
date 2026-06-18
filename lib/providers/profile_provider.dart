@@ -161,7 +161,7 @@ class ProfileProvider extends ChangeNotifier {
         // Fallback to mock data if there's an issue mapping
       }
     }
-
+    profileScore();
     _isLoading = false;
     notifyListeners();
   }
@@ -266,7 +266,7 @@ class ProfileProvider extends ChangeNotifier {
         notifyListeners();
       }
       Navigator.pop(context);
-
+      profileScore();
       return response;
     } catch (error) {
       Navigator.pop(context);
@@ -315,6 +315,7 @@ class ProfileProvider extends ChangeNotifier {
           _profile = updatedProfile;
         }
         notifyListeners();
+        profileScore();
         Navigator.pop(context);
       }
 
@@ -528,6 +529,7 @@ class ProfileProvider extends ChangeNotifier {
         .where((link) => link.id != id)
         .toList();
     await updateLinks(links: updatedLinks, context: context);
+    profileScore();
     notifyListeners();
   }
 
@@ -549,6 +551,20 @@ class ProfileProvider extends ChangeNotifier {
 
   void incrementScans() {
     _profile = _profile.copyWith(scansCount: _profile.scansCount + 1);
+    notifyListeners();
+  }
+
+  double score = 0;
+
+  void profileScore() {
+    if (profile.name.isNotEmpty) score += 12.5;
+    if (profile.bio.isNotEmpty) score += 12.5;
+    if (profile.profilePhotoUrl?.isNotEmpty ?? false) score += 12.5;
+    if (profile.coverPhotoUrl?.isNotEmpty ?? false) score += 12.5;
+    if (profile.socialLinks.length >= 3) score += 12.5;
+    // if (profile.introVoiceNoteUrl?.isNotEmpty ?? false) score += 12.5;
+    // if (profile.gallery.isNotEmpty) score += 12.5;
+    if (profile.isPro == true) score += 12.5;
     notifyListeners();
   }
 }

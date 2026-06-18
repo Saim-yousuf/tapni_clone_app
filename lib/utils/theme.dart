@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Brand Colors (UNCHANGED NAMES)
-  static const Color primaryBlack = Color(0xFF000000);
+  static const Color primaryBlack = Colors.black;
   static const Color secondaryWhite = Color(0xFFFFFFFF);
   static const Color accentBlack = Color(0xFF111111);
   static const Color accentDarkGrey = Color(0xFF000000); // forced black only
@@ -69,7 +69,9 @@ class AppTheme {
       primaryColor: primaryBlack,
       scaffoldBackgroundColor: secondaryWhite,
       cardColor: secondaryWhite,
+      fontFamily: GoogleFonts.poppins().fontFamily,
 
+      // fontFamily: "Urbanist",
       colorScheme: const ColorScheme.light(
         primary: primaryBlack,
         secondary: primaryBlack,
@@ -79,46 +81,114 @@ class AppTheme {
         onSecondary: secondaryWhite,
       ),
 
-      textTheme: const TextTheme(
-        headlineLarge: TextStyle(
-          fontFamily: 'Urbanist',
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: primaryBlack,
-        ),
-        headlineMedium: TextStyle(
-          fontFamily: 'Urbanist',
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: primaryBlack,
-        ),
-        titleLarge: TextStyle(
-          fontFamily: 'Urbanist',
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: primaryBlack,
-        ),
-        bodyLarge: TextStyle(
-          fontFamily: 'Urbanist',
-          fontSize: 16,
-          color: primaryBlack,
-        ),
-        bodyMedium: TextStyle(
-          fontFamily: 'Urbanist',
-          fontSize: 14,
-          color: primaryBlack,
-        ),
-      ),
-
-      appBarTheme: const AppBarTheme(
+      // textTheme: TextTheme(
+      //   headlineLarge: GoogleFonts.poppins(
+      //     // fontFamily: 'Urbanist',
+      //     fontSize: 36,
+      //     fontWeight: FontWeight.w800,
+      //     letterSpacing: -0.5,
+      //     color: primaryBlack,
+      //   ),
+      //   headlineMedium: GoogleFonts.poppins(
+      //     // fontFamily: 'Urbanist',
+      //     fontSize: 28,
+      //     fontWeight: FontWeight.w800,
+      //     letterSpacing: -0.3,
+      //     color: primaryBlack,
+      //   ),
+      //   titleLarge: GoogleFonts.poppins(
+      //     // fontFamily: 'Urbanist',
+      //     fontSize: 22,
+      //     fontWeight: FontWeight.w700,
+      //     letterSpacing: -0.2,
+      //     color: primaryBlack,
+      //   ),
+      //   bodyLarge: GoogleFonts.poppins(
+      //     // fontFamily: 'Urbanist',
+      //     fontSize: 18,
+      //     fontWeight: FontWeight.w600,
+      //     color: primaryBlack,
+      //   ),
+      //   bodyMedium: GoogleFonts.poppins(
+      //     // fontFamily: 'Urbanist',
+      //     fontSize: 16,
+      //     fontWeight: FontWeight.w600,
+      //     color: primaryBlack,
+      //   ),
+      // ),
+      textTheme:
+          GoogleFonts.poppinsTextTheme(
+            ThemeData.light().textTheme.apply(bodyColor: primaryBlack),
+          ).copyWith(
+            displayLarge: GoogleFonts.poppins(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              color: primaryBlack,
+            ),
+            displayMedium: GoogleFonts.poppins(
+              fontSize: 34,
+              fontWeight: FontWeight.bold,
+              color: primaryBlack,
+            ),
+            headlineLarge: GoogleFonts.poppins(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: primaryBlack,
+            ),
+            headlineMedium: GoogleFonts.poppins(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: primaryBlack,
+            ),
+            titleLarge: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: primaryBlack,
+            ),
+            bodyLarge: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: primaryBlack,
+            ),
+            bodyMedium: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: primaryBlack,
+            ),
+            labelLarge: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: primaryBlack,
+            ),
+          ),
+      // appBarTheme: const AppBarTheme(
+      //   backgroundColor: secondaryWhite,
+      //   elevation: 0,
+      //   iconTheme: IconThemeData(color: primaryBlack),
+      //   centerTitle: true,
+      //   titleTextStyle: TextStyle(
+      //     color: primaryBlack,
+      //     fontSize: 20,
+      //     fontWeight: FontWeight.bold,
+      //   ),
+      // ),
+      appBarTheme: AppBarTheme(
         backgroundColor: secondaryWhite,
         elevation: 0,
         iconTheme: IconThemeData(color: primaryBlack),
         centerTitle: true,
-        titleTextStyle: TextStyle(
+        // titleTextStyle: TextStyle(
+        //   fontFamily: 'Urbanist',
+        //   color: primaryBlack,
+        //   fontSize: 24,
+        //   fontWeight: FontWeight.w800,
+        //   // letterSpacing: -0.3,
+        // ),
+        titleTextStyle: GoogleFonts.poppins(
           color: primaryBlack,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          // letterSpacing: 1,
         ),
       ),
 
@@ -182,30 +252,35 @@ class AppTheme {
       textTheme: const TextTheme(
         headlineLarge: TextStyle(
           fontFamily: 'Urbanist',
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
+          fontSize: 36,
+          fontWeight: FontWeight.w800,
+          letterSpacing: -0.5,
           color: secondaryWhite,
         ),
         headlineMedium: TextStyle(
           fontFamily: 'Urbanist',
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
+          fontSize: 28,
+          fontWeight: FontWeight.w800,
+          letterSpacing: -0.3,
           color: secondaryWhite,
         ),
         titleLarge: TextStyle(
           fontFamily: 'Urbanist',
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.2,
           color: secondaryWhite,
         ),
         bodyLarge: TextStyle(
           fontFamily: 'Urbanist',
-          fontSize: 16,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
           color: secondaryWhite,
         ),
         bodyMedium: TextStyle(
           fontFamily: 'Urbanist',
-          fontSize: 14,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
           color: secondaryWhite,
         ),
       ),

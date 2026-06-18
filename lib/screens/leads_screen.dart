@@ -6,10 +6,11 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
-import 'package:tapni_app/screens/subscription_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/custom_app_button.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 import 'package:tapni_app/widgets/filter_contacts_sheet.dart';
+import 'package:tapni_app/widgets/go_bussiness_button.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 class LeadsScreen extends StatefulWidget {
@@ -28,12 +29,341 @@ class _LeadsScreenState extends State<LeadsScreen> {
     super.dispose();
   }
 
+  // ── Main Build ─────────────────────────────────────────────────────────────
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
+    final leadsProvider = Provider.of<LeadsProvider>(context);
+    final leadsList = leadsProvider.leads;
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final profile = profileProvider.profile;
+    return Scaffold(
+      backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
+
+      // ── AppBar ──
+      appBar: AppBar(
+        backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
+        elevation: 0,
+        titleSpacing: 20,
+        title: Row(
+          children: [
+            Text(
+              'Contacts',
+              style: TextStyle(color: isDark ? Colors.white : Colors.black),
+            ),
+            const SizedBox(width: 6),
+            Icon(Icons.refresh_rounded, color: Colors.black38),
+          ],
+        ),
+        actions: [GoBussinessButton()],
+      ),
+
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ── Search + Action Icons ──
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Row(
+                children: [
+                  // Search bar
+                  Expanded(
+                    child: Container(
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? Colors.white.withOpacity(0.07)
+                            : Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      child: TextFormField(
+                        controller: _searchController,
+                        onChanged: (val) {
+                          setState(() {});
+                          leadsProvider.setSearchQuery(val);
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Search...',
+                          hintStyle: TextStyle(
+                            fontSize: 18,
+                            color: isDark
+                                ? Colors.white38
+                                : Colors.grey.shade500,
+                          ),
+                          prefixIcon: Icon(
+                            Icons.search_rounded,
+                            size: 20,
+                            color: isDark
+                                ? Colors.white38
+                                : Colors.grey.shade500,
+                          ),
+                          suffixIcon: _searchController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(
+                                    Icons.clear_rounded,
+                                    size: 18,
+                                  ),
+                                  onPressed: () {
+                                    setState(() => _searchController.clear());
+                                    leadsProvider.setSearchQuery('');
+                                  },
+                                )
+                              : null,
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+
+                  // Filter icon
+                  _topIconBtn(
+                    icon: Icons.tune_rounded,
+                    isDark: isDark,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (ctx) => const FilterContactsSheet(),
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 6),
+
+                  // Contacts import icon
+                  _topIconBtn(
+                    icon: Icons.contact_page_outlined,
+                    isDark: isDark,
+                  ),
+                  const SizedBox(width: 6),
+
+                  // Add contact icon
+                  _topIconBtn(
+                    icon: Icons.person_add_alt_1_outlined,
+                    isDark: isDark,
+                    onTap: () => _showAddLeadSheet(context, leadsProvider),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            // ── Filter chips row ──
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => leadsProvider.setActiveCategory(null),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 7,
+                      ),
+                      decoration: BoxDecoration(
+                        color: leadsProvider.activeCategoryId == null
+                            ? (isDark ? Colors.white : Colors.black)
+                            : (isDark ? Colors.white12 : Colors.grey.shade200),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        'All',
+                        style: TextStyle(
+                          color: leadsProvider.activeCategoryId == null
+                              ? (isDark ? Colors.black : Colors.white)
+                              : (isDark ? Colors.white : Colors.black),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+
+                  Expanded(
+                    child: SizedBox(
+                      height: 32,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: leadsProvider.categories.length,
+                        itemBuilder: (context, index) {
+                          final category = leadsProvider.categories[index];
+                          final isActive =
+                              leadsProvider.activeCategoryId == category.id;
+                          return GestureDetector(
+                            onTap: () =>
+                                leadsProvider.setActiveCategory(category.id),
+                            onLongPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: const Text('Delete Category'),
+                                  content: Text('Delete "${category.name}"?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(ctx),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(ctx);
+                                        leadsProvider.deleteCategory(
+                                          category.id,
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Delete',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 7,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isActive
+                                    ? (isDark ? Colors.white : Colors.black)
+                                    : (isDark
+                                          ? Colors.white12
+                                          : Colors.grey.shade200),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: _parseColor(
+                                    category.color,
+                                  ).withOpacity(0.5),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 4,
+                                    backgroundColor: _parseColor(
+                                      category.color,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    category.name,
+                                    style: TextStyle(
+                                      color: isActive
+                                          ? (isDark
+                                                ? Colors.black
+                                                : Colors.white)
+                                          : (isDark
+                                                ? Colors.white
+                                                : Colors.black),
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                  // Plus button
+                  GestureDetector(
+                    onTap: () => _showAddCategoryDialog(context, leadsProvider),
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.white12 : Colors.grey.shade200,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.add,
+                        size: 18,
+                        color: isDark ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            // ── Count label ──
+            if (leadsList.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(left: 20, bottom: 4),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '${leadsList.length} contact${leadsList.length == 1 ? '' : 's'}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: isDark
+                          ? AppTheme.textGreyDark
+                          : AppTheme.textGreyLight,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+
+            // ── Contact List ──
+            Expanded(
+              child: leadsProvider.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : leadsList.isEmpty
+                  ? _buildEmptyState(isDark)
+                  : ListView.builder(
+                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
+                      itemCount: leadsList.length,
+                      itemBuilder: (context, index) {
+                        return _buildContactRow(
+                          context,
+                          leadsList[index],
+                          isDark,
+                          leadsProvider,
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+
+      // ── Scan Button (replaces FAB) ──
+      bottomNavigationBar: // Scan button
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 50),
+        child: CustomAppButton(
+          width: double.infinity,
+          text: 'Scan',
+          icon: Icons.camera_alt_outlined,
+          backgroundColor: AppTheme.primaryBlack,
+          onTap: () {
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const ScanScreen()));
+          },
+        ),
+      ),
+    );
+  }
+
   // ── Add Lead Bottom Sheet ──────────────────────────────────────────────────
   void _showAddLeadSheet(BuildContext context, LeadsProvider provider) {
     final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController();
     final emailController = TextEditingController();
-    final phoneController = TextEditingController();
+    final phoneController = TextEditingController();  
     final companyController = TextEditingController();
     final jobTitleController = TextEditingController();
     final websiteController = TextEditingController();
@@ -1003,407 +1333,6 @@ class _LeadsScreenState extends State<LeadsScreen> {
     );
   }
 
-  // ── Main Build ─────────────────────────────────────────────────────────────
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
-    final leadsProvider = Provider.of<LeadsProvider>(context);
-    final leadsList = leadsProvider.leads;
-    final profileProvider = Provider.of<ProfileProvider>(context);
-    final profile = profileProvider.profile;
-    return Scaffold(
-      backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
-
-      // ── AppBar ──
-      appBar: AppBar(
-        backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
-        elevation: 0,
-        titleSpacing: 20,
-        title: Row(
-          children: [
-            Text(
-              'Contacts',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : Colors.black,
-              ),
-            ),
-            const SizedBox(width: 6),
-            Icon(
-              Icons.refresh_rounded,
-              size: 20,
-              color: isDark ? Colors.white54 : Colors.black38,
-            ),
-          ],
-        ),
-        actions: [
-          // Go PRO badge
-          if (!profile.isPro)
-            GestureDetector(
-              onTap: () {
-                SubcriptionSheet.show(context);
-              },
-              child: Container(
-                margin: const EdgeInsets.only(right: 16),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: const [
-                    Text(
-                      'Go',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(width: 4),
-                    Text(
-                      'Business',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
-
-      body: SafeArea(
-        child: Column(
-          children: [
-            // ── Search + Action Icons ──
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: Row(
-                children: [
-                  // Search bar
-                  Expanded(
-                    child: Container(
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? Colors.white.withOpacity(0.07)
-                            : Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      child: TextFormField(
-                        controller: _searchController,
-                        onChanged: (val) {
-                          setState(() {});
-                          leadsProvider.setSearchQuery(val);
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Search...',
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            color: isDark
-                                ? Colors.white38
-                                : Colors.grey.shade500,
-                          ),
-                          prefixIcon: Icon(
-                            Icons.search_rounded,
-                            size: 20,
-                            color: isDark
-                                ? Colors.white38
-                                : Colors.grey.shade500,
-                          ),
-                          suffixIcon: _searchController.text.isNotEmpty
-                              ? IconButton(
-                                  icon: const Icon(
-                                    Icons.clear_rounded,
-                                    size: 18,
-                                  ),
-                                  onPressed: () {
-                                    setState(() => _searchController.clear());
-                                    leadsProvider.setSearchQuery('');
-                                  },
-                                )
-                              : null,
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
-                  // Filter icon
-                  _topIconBtn(
-                    icon: Icons.tune_rounded,
-                    isDark: isDark,
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (ctx) => const FilterContactsSheet(),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 6),
-
-                  // Contacts import icon
-                  _topIconBtn(
-                    icon: Icons.contact_page_outlined,
-                    isDark: isDark,
-                  ),
-                  const SizedBox(width: 6),
-
-                  // Add contact icon
-                  _topIconBtn(
-                    icon: Icons.person_add_alt_1_outlined,
-                    isDark: isDark,
-                    onTap: () => _showAddLeadSheet(context, leadsProvider),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // ── Filter chips row ──
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  // "All" selected chip
-                  GestureDetector(
-                    onTap: () => leadsProvider.setActiveCategory(null),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 7,
-                      ),
-                      decoration: BoxDecoration(
-                        color: leadsProvider.activeCategoryId == null
-                            ? (isDark ? Colors.white : Colors.black)
-                            : (isDark ? Colors.white12 : Colors.grey.shade200),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        'All',
-                        style: TextStyle(
-                          color: leadsProvider.activeCategoryId == null
-                              ? (isDark ? Colors.black : Colors.white)
-                              : (isDark ? Colors.white : Colors.black),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
-                  // Categories list
-                  Expanded(
-                    child: SizedBox(
-                      height: 32,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: leadsProvider.categories.length,
-                        itemBuilder: (context, index) {
-                          final category = leadsProvider.categories[index];
-                          final isActive =
-                              leadsProvider.activeCategoryId == category.id;
-                          return GestureDetector(
-                            onTap: () =>
-                                leadsProvider.setActiveCategory(category.id),
-                            onLongPress: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => AlertDialog(
-                                  title: const Text('Delete Category'),
-                                  content: Text('Delete "${category.name}"?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(ctx),
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(ctx);
-                                        leadsProvider.deleteCategory(
-                                          category.id,
-                                        );
-                                      },
-                                      child: const Text(
-                                        'Delete',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 8),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 7,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isActive
-                                    ? (isDark ? Colors.white : Colors.black)
-                                    : (isDark
-                                          ? Colors.white12
-                                          : Colors.grey.shade200),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: _parseColor(
-                                    category.color,
-                                  ).withOpacity(0.5),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 4,
-                                    backgroundColor: _parseColor(
-                                      category.color,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    category.name,
-                                    style: TextStyle(
-                                      color: isActive
-                                          ? (isDark
-                                                ? Colors.black
-                                                : Colors.white)
-                                          : (isDark
-                                                ? Colors.white
-                                                : Colors.black),
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-
-                  // Plus button
-                  GestureDetector(
-                    onTap: () => _showAddCategoryDialog(context, leadsProvider),
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.white12 : Colors.grey.shade200,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        size: 18,
-                        color: isDark ? Colors.white : Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            // ── Count label ──
-            if (leadsList.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(left: 20, bottom: 4),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '${leadsList.length} contact${leadsList.length == 1 ? '' : 's'}',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDark
-                          ? AppTheme.textGreyDark
-                          : AppTheme.textGreyLight,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
-            // ── Contact List ──
-            Expanded(
-              child: leadsProvider.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : leadsList.isEmpty
-                  ? _buildEmptyState(isDark)
-                  : ListView.builder(
-                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
-                      itemCount: leadsList.length,
-                      itemBuilder: (context, index) {
-                        return _buildContactRow(
-                          context,
-                          leadsList[index],
-                          isDark,
-                          leadsProvider,
-                        );
-                      },
-                    ),
-            ),
-          ],
-        ),
-      ),
-
-      // ── Scan Button (replaces FAB) ──
-      bottomNavigationBar: // Scan button
-      Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 50),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (_) => const ScanScreen()));
-            // SharingProfileSheet.show(context);
-          },
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  'Scan',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.2,
-                  ),
-                ),
-                SizedBox(width: 8),
-                Icon(Icons.camera_alt_outlined, color: Colors.white, size: 20),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   // ── Top Icon Button Helper ─────────────────────────────────────────────────
   Widget _topIconBtn({
     required IconData icon,
@@ -1495,8 +1424,8 @@ class _LeadsScreenState extends State<LeadsScreen> {
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  width: 52,
-                  height: 52,
+                  width: 65,
+                  height: 65,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: isDark ? Colors.white10 : Colors.grey.shade200,
@@ -1587,7 +1516,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                   Text(
                     displayName,
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: isDark ? Colors.white : Colors.black,
                     ),
@@ -1600,7 +1529,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                               ? displayPhone
                               : 'No contact info'),
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 15,
                       color: isDark ? Colors.white54 : Colors.grey.shade600,
                     ),
                     maxLines: 1,
@@ -1610,7 +1539,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                   Text(
                     _formatDate(lead.timestamp),
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 13,
                       color: isDark ? Colors.white38 : Colors.grey.shade400,
                     ),
                   ),
@@ -1621,7 +1550,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
             // More
             Icon(
               Icons.arrow_forward_ios_rounded,
-              size: 20,
+              size: 30,
               // color: isDark ? Colors.white38 : Colors.grey.shade400,
             ),
           ],

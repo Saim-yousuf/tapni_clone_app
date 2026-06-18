@@ -3,11 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/custom_app_button.dart';
+import 'package:tapni_app/widgets/go_bussiness_button.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 
 class SocialLinksScreen extends StatelessWidget {
   final bool isTab;
-  const SocialLinksScreen({Key? key, this.isTab = false}) : super(key: key);
+  const SocialLinksScreen({super.key, this.isTab = false});
 
   @override
   Widget build(BuildContext context) {
@@ -18,36 +20,18 @@ class SocialLinksScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Links',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+        title: Row(
+          children: [
+            Text('Links'),
+            IconButton(
+              icon: const Icon(Icons.refresh_rounded),
+              onPressed: () {},
+            ),
+          ],
         ),
+        centerTitle: false,
         automaticallyImplyLeading: !isTab,
-        actions: [
-          IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: () {}),
-          // Container(
-          //   margin: const EdgeInsets.only(right: 12),
-          //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          //   decoration: BoxDecoration(
-          //     color: Colors.black,
-          //     borderRadius: BorderRadius.circular(20),
-          //   ),
-          //   child: Row(
-          //     children: const [
-          //       Text('Go', style: TextStyle(color: Colors.white, fontSize: 12)),
-          //       SizedBox(width: 4),
-          //       Text(
-          //         'PRO',
-          //         style: TextStyle(
-          //           color: Colors.white,
-          //           fontWeight: FontWeight.bold,
-          //           fontSize: 12,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-        ],
+        actions: [GoBussinessButton()],
       ),
       body: Stack(
         children: [
@@ -58,6 +42,8 @@ class SocialLinksScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: isDark ? Colors.white54 : Colors.black45,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 )
@@ -78,33 +64,14 @@ class SocialLinksScreen extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 110.0, left: 15, right: 15),
             child: Align(
               alignment: AlignmentDirectional.bottomEnd,
-              child: GestureDetector(
+              child: CustomAppButton(
+                width: double.infinity,
+                text: 'Add link',
+                icon: Icons.add,
+                backgroundColor: AppTheme.primaryBlack,
                 onTap: () {
-                  // _showAddLinkBottomSheet(context, profileProvider);
                   LinkSheet().showAddLinkBottomSheet(context, profileProvider);
                 },
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryBlack,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Add link',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Icon(Icons.add, color: Colors.white),
-                    ],
-                  ),
-                ),
               ),
             ),
           ),
