@@ -6,6 +6,8 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/login_screen.dart';
+import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_screen.dart';
+import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/qr_code_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
@@ -249,6 +251,30 @@ class SettingsScreen extends StatelessWidget {
                 ).push(MaterialPageRoute(builder: (_) => const QrCodeScreen()));
               },
             ),
+            _buildSettingsItem(
+              context,
+              icon: Icons.qr_code_rounded,
+              title: 'Bussiness Loyalty Programs',
+              subtitle: 'Make loyalty programs',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => LoyaltyProgramsScreen()),
+                );
+              },
+            ),
+            _buildSettingsItem(
+              context,
+              icon: Icons.qr_code_rounded,
+              title: 'Loyalty Programs',
+              subtitle: 'Loyalty programs',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => CustomerLoyaltyHomeScreen(),
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: 16),
 
             _buildSectionHeader('Security & Support'),
@@ -363,7 +389,11 @@ class SettingsScreen extends StatelessWidget {
         tileColor: isDark
             ? Colors.white.withOpacity(0.02)
             : Colors.black.withOpacity(0.015),
-        leading: Icon(icon, color: isDark ? Colors.white70 : Colors.black87,size: 35,),
+        leading: Icon(
+          icon,
+          color: isDark ? Colors.white70 : Colors.black87,
+          size: 35,
+        ),
         title: Text(
           title,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
