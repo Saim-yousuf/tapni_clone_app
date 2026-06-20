@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({Key? key}) : super(key: key);
@@ -17,11 +18,25 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   final _transactionController = TextEditingController();
   String _receiptBase64 = '';
 
+  int _step = 0; // 0 = Business Details, 1 = Plan Selection
+  final _businessNameController = TextEditingController();
+  String? _selectedCategory;
+  final List<String> _categories = [
+    'Technology', 'Retail', 'Health', 'Education', 'Finance', 
+    'Real Estate', 'Food & Beverage', 'Entertainment', 'Other'
+  ];
+  bool _isSavingBusinessData = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<SubscriptionProvider>(context, listen: false);
+      final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+      _businessNameController.text = profileProvider.profile.businessName ?? '';
+      if (_categories.contains(profileProvider.profile.businessCategory)) {
+        _selectedCategory = profileProvider.profile.businessCategory;
+      }
       provider.fetchPlans();
       provider.checkSubscriptionStatus();
     });
@@ -29,6 +44,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   @override
   void dispose() {
+    _businessNameController.dispose();
     _transactionController.dispose();
     super.dispose();
   }
@@ -46,6 +62,46 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     if (success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Subscription request submitted.')),
+      );
+    }
+  }
+
+  Future<void> _handleNext() async {
+    final name = _businessNameController.text.trim();
+    if (name.isEmpty || _selectedCategory == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter business details to continue')),
+      );
+      return;
+    }
+
+    setState(() => _isSavingBusinessData = true);
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profile = profileProvider.profile;
+    
+    final response = await profileProvider.updateProfile(
+      name: profile.name,
+      designation: profile.designation,
+      company: profile.company,
+      bio: profile.bio,
+      phone: profile.phone,
+      email: profile.email,
+      website: profile.website,
+      country: profile.country,
+      businessName: name,
+      businessCategory: _selectedCategory,
+      links: profile.socialLinks,
+      context: context,
+    );
+    
+    if (!mounted) return;
+    setState(() => _isSavingBusinessData = false);
+
+    if (response.success) {
+      setState(() => _step = 1);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response.message ?? 'Failed to save business details')),
       );
     }
   }
@@ -91,60 +147,125 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 ),
               if (subscription?.isRequested != true &&
                   subscription?.isActive != true) ...[
-                const Text(
-                  'Choose Plan',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(height: 16),
-                _planTile(
-                  title: 'Yearly',
-                  subtitle: 'Best value',
-                  selected: _isYearlySelected,
-                  onTap: () => setState(() => _isYearlySelected = true),
-                ),
-                const SizedBox(height: 12),
-                _planTile(
-                  title: 'Monthly',
-                  subtitle: 'Pay month by month',
-                  selected: !_isYearlySelected,
-                  onTap: () => setState(() => _isYearlySelected = false),
-                ),
-                const SizedBox(height: 20),
-                _bankPanel(isDark),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _transactionController,
-                  decoration: const InputDecoration(
-                    labelText: 'Transaction reference number (optional)',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                OutlinedButton.icon(
-                  onPressed: _pickReceipt,
-                  icon: const Icon(Icons.receipt_long_outlined),
-                  label: Text(
-                    _receiptBase64.isEmpty
-                        ? 'Upload receipt (optional)'
-                        : 'Receipt attached',
-                  ),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    onPressed: provider.isLoading ? null : _submitRequest,
-                    child: provider.isLoading
-                        ? const CircularProgressIndicator()
-                        : const Text('Request subscription'),
-                  ),
-                ),
+                if (_step == 0) _buildBusinessDetailsStep(isDark)
+                else _buildPlanSelectionStep(isDark, provider),
               ],
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBusinessDetailsStep(bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Business Details',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Please provide your business details before upgrading.',
+          style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
+        ),
+        const SizedBox(height: 24),
+        TextField(
+          controller: _businessNameController,
+          decoration: const InputDecoration(
+            labelText: 'Business Name',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        const SizedBox(height: 16),
+        DropdownButtonFormField<String>(
+          value: _selectedCategory,
+          decoration: const InputDecoration(
+            labelText: 'Business Category',
+            border: OutlineInputBorder(),
+          ),
+          items: _categories.map((category) {
+            return DropdownMenuItem(
+              value: category,
+              child: Text(category),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              _selectedCategory = value;
+            });
+          },
+        ),
+        const SizedBox(height: 24),
+        SizedBox(
+          width: double.infinity,
+          height: 52,
+          child: ElevatedButton(
+            onPressed: _isSavingBusinessData ? null : _handleNext,
+            child: _isSavingBusinessData
+                ? const CircularProgressIndicator()
+                : const Text('Next'),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlanSelectionStep(bool isDark, SubscriptionProvider provider) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Choose Plan',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+        ),
+        const SizedBox(height: 16),
+        _planTile(
+          title: 'Yearly',
+          subtitle: 'Best value',
+          selected: _isYearlySelected,
+          onTap: () => setState(() => _isYearlySelected = true),
+        ),
+        const SizedBox(height: 12),
+        _planTile(
+          title: 'Monthly',
+          subtitle: 'Pay month by month',
+          selected: !_isYearlySelected,
+          onTap: () => setState(() => _isYearlySelected = false),
+        ),
+        const SizedBox(height: 20),
+        _bankPanel(isDark),
+        const SizedBox(height: 16),
+        TextField(
+          controller: _transactionController,
+          decoration: const InputDecoration(
+            labelText: 'Transaction reference number (optional)',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        const SizedBox(height: 12),
+        OutlinedButton.icon(
+          onPressed: _pickReceipt,
+          icon: const Icon(Icons.receipt_long_outlined),
+          label: Text(
+            _receiptBase64.isEmpty
+                ? 'Upload receipt (optional)'
+                : 'Receipt attached',
+          ),
+        ),
+        const SizedBox(height: 24),
+        SizedBox(
+          width: double.infinity,
+          height: 52,
+          child: ElevatedButton(
+            onPressed: provider.isLoading ? null : _submitRequest,
+            child: provider.isLoading
+                ? const CircularProgressIndicator()
+                : const Text('Request subscription'),
+          ),
+        ),
+      ],
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
+import 'package:tapni_app/screens/home_dashboard.dart';
 import 'package:tapni_app/screens/leads_screen.dart';
 import 'package:tapni_app/screens/profile_screen.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
@@ -29,7 +30,9 @@ class _MainShellState extends State<MainShell> {
   Widget _buildCurrentScreen() {
     switch (_currentPage) {
       case 'Links':
-        return const SocialLinksScreen(isTab: true);
+        // return const SocialLinksScreen(isTab: true);
+        return const HomeDashboard();
+
       case 'My Card':
         return const ProfileScreen();
       case 'Contacts':

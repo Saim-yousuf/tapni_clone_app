@@ -28,6 +28,45 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
   final _transactionController = TextEditingController();
   String _receiptBase64 = '';
 
+  int _step = 0; // 0 = Business Details, 1 = Plan Selection
+  final _businessNameController = TextEditingController();
+  String? _selectedCategory;
+  final List<String> _categories = [
+    'Technology',
+    'Retail',
+    'Health',
+    'Education',
+    'Finance',
+    'Real Estate',
+    'Food & Beverage',
+    'Entertainment',
+    'Other',
+  ];
+  bool _isSavingBusinessData = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final profile = Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      ).profile;
+      _businessNameController.text = profile.businessName ?? '';
+      if (_categories.contains(profile.businessCategory)) {
+        _selectedCategory = profile.businessCategory;
+      }
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _businessNameController.dispose();
+    _transactionController.dispose();
+    super.dispose();
+  }
+
   Future<void> _pickReceipt() async {
     final file = await pickFile();
     if (file?.file == null) return;
@@ -55,6 +94,53 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
         const SnackBar(content: Text('Subscription request submitted')),
       );
       Navigator.pop(context);
+    }
+  }
+
+  Future<void> _handleNext() async {
+    final name = _businessNameController.text.trim();
+    if (name.isEmpty || _selectedCategory == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter business details to continue'),
+        ),
+      );
+      return;
+    }
+
+    setState(() => _isSavingBusinessData = true);
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
+    final profile = profileProvider.profile;
+
+    final response = await profileProvider.updateProfile(
+      name: profile.name,
+      designation: profile.designation,
+      company: profile.company,
+      bio: profile.bio,
+      phone: profile.phone,
+      email: profile.email,
+      website: profile.website,
+      country: profile.country,
+      businessName: name,
+      businessCategory: _selectedCategory,
+      links: profile.socialLinks,
+      context: context,
+    );
+
+    if (!mounted) return;
+    setState(() => _isSavingBusinessData = false);
+
+    if (response.success) {
+      setState(() => _step = 1);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response.message ?? 'Failed to save business details'),
+        ),
+      );
     }
   }
 
@@ -169,169 +255,241 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
                 ),
               if (subscription?.isRequested == false &&
                   subscription?.isActive == false)
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    /// HANDLE
-                    Container(
-                      width: 44,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.white24 : Colors.black12,
-                        borderRadius: BorderRadius.circular(2.5),
+                _step == 0
+                    ? _buildBusinessDetailsStep(isDark)
+                    : _buildPlanSelectionStep(
+                        isDark,
+                        theme,
+                        subscriptionProvider,
                       ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    /// TITLE (same UI)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Upgrade to ',
-                          style: theme.textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 24,
-                            color: isDark ? Colors.white : Colors.black,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text(
-                            'PRO',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    /// YEARLY (same UI style)
-                    GestureDetector(
-                      onTap: () => setState(() => _isYearlySelected = true),
-                      child: _planCard(
-                        isDark: isDark,
-                        selected: _isYearlySelected,
-                        title: "Yearly",
-                        subtitle: "Rs 8,300 billed yearly",
-                        price: "PKR 691.66/month",
-                        badge: "7 months free",
-                      ),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    /// MONTHLY
-                    GestureDetector(
-                      onTap: () => setState(() => _isYearlySelected = false),
-                      child: _planCard(
-                        isDark: isDark,
-                        selected: !_isYearlySelected,
-                        title: "Monthly",
-                        subtitle: "Rs 1,600 billed monthly",
-                        price: "PKR 1,600/month",
-                        badge: null,
-                      ),
-                    ),
-
-                    const SizedBox(height: 14),
-
-                    Text(
-                      'Cancel anytime.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white54 : Colors.black54,
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    /// BENEFITS (same UI)
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? Colors.white.withOpacity(0.03)
-                            : const Color(0xFFF2F2F7),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        children: [
-                          _benefit(
-                            Icons.palette_outlined,
-                            "Customize your profile",
-                          ),
-                          _benefit(Icons.qr_code_scanner, "Unlimited AI scans"),
-                          _benefit(
-                            Icons.analytics_outlined,
-                            "Analytics & insights",
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    /// TRANSACTION FIELD (added from subscription screen)
-                    TextField(
-                      controller: _transactionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Transaction reference (optional)',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    /// RECEIPT UPLOAD
-                    OutlinedButton.icon(
-                      onPressed: _pickReceipt,
-                      icon: const Icon(Icons.upload_file),
-                      label: Text(
-                        _receiptBase64.isEmpty
-                            ? "Upload receipt (optional)"
-                            : "Receipt attached",
-                      ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    /// BUTTON (now real subscription)
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: isDark ? Colors.white : Colors.black,
-                          foregroundColor: isDark ? Colors.black : Colors.white,
-                        ),
-                        onPressed: subscriptionProvider.isLoading
-                            ? null
-                            : _submitRequest,
-                        child: subscriptionProvider.isLoading
-                            ? const CircularProgressIndicator()
-                            : const Text("Upgrade now"),
-                      ),
-                    ),
-                  ],
-                ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBusinessDetailsStep(bool isDark) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Center(
+          child: Container(
+            width: 44,
+            height: 5,
+            decoration: BoxDecoration(
+              color: isDark ? Colors.white24 : Colors.black12,
+              borderRadius: BorderRadius.circular(2.5),
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+        const Text(
+          'Business Details',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Please provide your business details before upgrading.',
+          style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 24),
+        TextField(
+          controller: _businessNameController,
+          decoration: const InputDecoration(
+            labelText: 'Business Name',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        const SizedBox(height: 16),
+        DropdownButtonFormField<String>(
+          value: _selectedCategory,
+          decoration: const InputDecoration(
+            labelText: 'Business Category',
+            border: OutlineInputBorder(),
+          ),
+          items: _categories.map((category) {
+            return DropdownMenuItem(value: category, child: Text(category));
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              _selectedCategory = value;
+            });
+          },
+        ),
+        const SizedBox(height: 24),
+        SizedBox(
+          height: 52,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isDark ? Colors.white : Colors.black,
+              foregroundColor: isDark ? Colors.black : Colors.white,
+            ),
+            onPressed: _isSavingBusinessData ? null : _handleNext,
+            child: _isSavingBusinessData
+                ? const CircularProgressIndicator()
+                : const Text("Next"),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlanSelectionStep(
+    bool isDark,
+    ThemeData theme,
+    SubscriptionProvider subscriptionProvider,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        /// HANDLE
+        Container(
+          width: 44,
+          height: 5,
+          decoration: BoxDecoration(
+            color: isDark ? Colors.white24 : Colors.black12,
+            borderRadius: BorderRadius.circular(2.5),
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        /// TITLE (same UI)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Upgrade to ',
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.w900,
+                fontSize: 24,
+                color: isDark ? Colors.white : Colors.black,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                'PRO',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        /// YEARLY (same UI style)
+        GestureDetector(
+          onTap: () => setState(() => _isYearlySelected = true),
+          child: _planCard(
+            isDark: isDark,
+            selected: _isYearlySelected,
+            title: "Yearly",
+            subtitle: "Rs 8,300 billed yearly",
+            price: "PKR 691.66/month",
+            badge: "7 months free",
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
+        /// MONTHLY
+        GestureDetector(
+          onTap: () => setState(() => _isYearlySelected = false),
+          child: _planCard(
+            isDark: isDark,
+            selected: !_isYearlySelected,
+            title: "Monthly",
+            subtitle: "Rs 1,600 billed monthly",
+            price: "PKR 1,600/month",
+            badge: null,
+          ),
+        ),
+
+        const SizedBox(height: 14),
+
+        Text(
+          'Cancel anytime.',
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white54 : Colors.black54,
+          ),
+        ),
+
+        const SizedBox(height: 16),
+
+        /// BENEFITS (same UI)
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isDark
+                ? Colors.white.withOpacity(0.03)
+                : const Color(0xFFF2F2F7),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            children: [
+              _benefit(Icons.palette_outlined, "Customize your profile"),
+              _benefit(Icons.qr_code_scanner, "Unlimited AI scans"),
+              _benefit(Icons.analytics_outlined, "Analytics & insights"),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 18),
+
+        /// TRANSACTION FIELD (added from subscription screen)
+        TextField(
+          controller: _transactionController,
+          decoration: const InputDecoration(
+            labelText: 'Transaction reference (optional)',
+            border: OutlineInputBorder(),
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        /// RECEIPT UPLOAD
+        OutlinedButton.icon(
+          onPressed: _pickReceipt,
+          icon: const Icon(Icons.upload_file),
+          label: Text(
+            _receiptBase64.isEmpty
+                ? "Upload receipt (optional)"
+                : "Receipt attached",
+          ),
+        ),
+
+        const SizedBox(height: 18),
+
+        /// BUTTON (now real subscription)
+        SizedBox(
+          width: double.infinity,
+          height: 52,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isDark ? Colors.white : Colors.black,
+              foregroundColor: isDark ? Colors.black : Colors.white,
+            ),
+            onPressed: subscriptionProvider.isLoading ? null : _submitRequest,
+            child: subscriptionProvider.isLoading
+                ? const CircularProgressIndicator()
+                : const Text("Upgrade now"),
+          ),
+        ),
+      ],
     );
   }
 

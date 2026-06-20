@@ -11,6 +11,8 @@ class UserProfile {
   final String email;
   final String bio;
   String? country;
+  String? businessName;
+  String? businessCategory;
   final List<SocialLink> socialLinks;
 
   final String designation;
@@ -30,7 +32,9 @@ class UserProfile {
     required this.name,
     required this.email,
     required this.bio,
-    this.country ,
+    this.country,
+    this.businessName,
+    this.businessCategory,
     required this.socialLinks,
     this.designation = '',
     this.company = '',
@@ -56,6 +60,8 @@ class UserProfile {
       email: json['email']?.toString() ?? '',
       bio: json['bio']?.toString() ?? '',
       country: json['country'],
+      businessName: json['businessName']?.toString(),
+      businessCategory: json['businessCategory']?.toString(),
       socialLinks: links,
     );
   }
@@ -65,6 +71,8 @@ class UserProfile {
       'name': name,
       'bio': bio,
       'country': country,
+      if (businessName != null) 'businessName': businessName,
+      if (businessCategory != null) 'businessCategory': businessCategory,
       'links': socialLinks
           .where((l) => l.isActive)
           .map((l) => l.toApiJson())
@@ -81,6 +89,8 @@ class UserProfile {
     String? email,
     String? bio,
     String? country,
+    String? businessName,
+    String? businessCategory,
     List<SocialLink>? socialLinks,
     String? designation,
     String? company,
@@ -101,6 +111,8 @@ class UserProfile {
       email: email ?? this.email,
       bio: bio ?? this.bio,
       country: country ?? this.country,
+      businessName: businessName ?? this.businessName,
+      businessCategory: businessCategory ?? this.businessCategory,
       socialLinks: socialLinks ?? this.socialLinks,
       designation: designation ?? this.designation,
       company: company ?? this.company,

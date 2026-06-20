@@ -213,6 +213,8 @@ class ProfileProvider extends ChangeNotifier {
     required String email,
     required String website,
     String? country,
+    String? businessName,
+    String? businessCategory,
     required List<SocialLink> links,
     File? profileImage,
     File? coverImage,
@@ -232,6 +234,8 @@ class ProfileProvider extends ChangeNotifier {
       website: website,
       socialLinks: links,
       country: country,
+      businessName: businessName,
+      businessCategory: businessCategory,
     );
 
     final json = updatedProfile.toApiJson();

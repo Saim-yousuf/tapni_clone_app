@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
+import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/notifications_screen.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
@@ -20,7 +21,9 @@ class HomeDashboard extends StatelessWidget {
     final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final profileProvider = Provider.of<ProfileProvider>(context);
     final leadsProvider = Provider.of<LeadsProvider>(context);
+    final subscriptionProvider = Provider.of<SubscriptionProvider>(context);
     final profile = profileProvider.profile;
+    final subscription = subscriptionProvider.currentSubscription;
 
     return Scaffold(
       body: SafeArea(
@@ -140,6 +143,95 @@ class HomeDashboard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
+
+              // Expired Plan Alert
+              if (subscription?.isExpired == true) ...[
+                Container(
+                  margin: const EdgeInsets.only(bottom: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withOpacity(isDark ? 0.2 : 0.08),
+                    border: Border.all(color: Colors.red.withOpacity(0.5)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Plan Expired',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Your subscription has ended. Tap the info icon for details.',
+                              style: TextStyle(fontSize: 12, color: Colors.red.withOpacity(0.8)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.info_outline, color: Colors.red),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              title: const Row(
+                                children: [
+                                  Icon(Icons.info, color: Colors.red),
+                                  SizedBox(width: 10),
+                                  Text('Plan Expired'),
+                                ],
+                              ),
+                              content: const Text(
+                                'Your PRO subscription has expired.\n\n'
+                                '• Premium features are currently disabled.\n'
+                                '• Pro links are hidden from your public profile.\n'
+                                '• Your business details and data are safe.\n\n'
+                                'Renew your subscription to restore full access to your premium features and data.',
+                                style: TextStyle(height: 1.4),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Close'),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (context) => const ProUpgradeSheet(),
+                                    );
+                                  },
+                                  child: const Text('Renew Plan'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
 
               // Digital Card Quick Summary Card
               GestureDetector(

@@ -59,6 +59,7 @@ class UserSubscription {
   bool get isActive => status == 'active';
   bool get isRequested => status == 'requested';
   bool get isRejected => status == 'rejected';
+  bool get isExpired => status == 'expired' || (endDate != null && endDate!.isBefore(DateTime.now()));
 
   factory UserSubscription.fromJson(Map<String, dynamic> json) {
     return UserSubscription(
