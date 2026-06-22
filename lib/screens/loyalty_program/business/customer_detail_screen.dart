@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/screens/loyalty_program/business/add_points_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/add_stamp_screen.dart';
 
@@ -121,7 +122,16 @@ class CustomerDetailsScreen extends StatelessWidget {
                     child: OutlinedButton.icon(
                       onPressed: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => AddStampScreen()),
+                          MaterialPageRoute(
+                            builder: (_) => AddStampScreen(
+                              enrollment: RewardEnrollment(
+                                id: '',
+                                programId: '',
+                                stamps: 0,
+                                status: 'ACTIVE',
+                              ),
+                            ),
+                          ),
                         );
                       },
                       icon: const Icon(Icons.local_activity),

@@ -1,157 +1,178 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/models/reward.dart';
+import 'package:tapni_app/repository/reward_repo.dart';
+import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
-class AddStampScreen extends StatelessWidget {
-  const AddStampScreen({super.key});
+class AddStampScreen extends StatefulWidget {
+  final RewardEnrollment enrollment;
+  const AddStampScreen({super.key, required this.enrollment});
+
+  @override
+  State<AddStampScreen> createState() => _AddStampScreenState();
+}
+
+class _AddStampScreenState extends State<AddStampScreen> {
+  late RewardEnrollment _enrollment;
+  bool _isLoading = false;
+  bool _justCompleted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _enrollment = widget.enrollment;
+  }
+
+  Future<void> _addStamp() async {
+    if (_isLoading || _enrollment.isCompleted) return;
+    setState(() => _isLoading = true);
+    final res = await RewardRepo().addStamp(_enrollment.id);
+    setState(() => _isLoading = false);
+    if (!mounted) return;
+    if (res.success && res.data != null) {
+      final updated = RewardEnrollment.fromJson(res.data['data'] ?? res.data);
+      setState(() {
+        _enrollment = updated;
+        _justCompleted = updated.isCompleted;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(res.message ?? 'Failed to add stamp')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    const int currentStamps = 7;
-    const int totalStamps = 10;
+    final program = _enrollment.program;
+    final totalStamps = program?.stamps ?? 10;
+    final currentStamps = _enrollment.stamps;
+    final theme = program?.theme ?? RewardTheme();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.screenBackgroundColor,
       appBar: AppBar(
-        title: const Text(
-          'Add Stamp',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: theme.screenBackgroundColor,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.screenTextColor),
+          onPressed: () => Navigator.pop(context, true),
+        ),
+        title: Text(
+          program?.label.isNotEmpty == true ? program!.label : 'Stamp Card',
+          style: TextStyle(color: theme.screenTextColor, fontWeight: FontWeight.bold, fontSize: 18),
+        ),
       ),
-      body: Column(
-        children: [
-          // const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    "https://template.canva.com/EAGOADQey2g/1/0/1600w-BiB84MUi2zQ.jpg",
-                    height: 80,
-                    fit: BoxFit.cover,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              const SizedBox(height: 24),
+
+              // Program Title
+              if (program != null) ...[
+                if (program.logo.isNotEmpty)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: Image.network(program.logo, width: 64, height: 64, fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => const SizedBox()),
                   ),
-                ),
-                SizedBox(width: 10),
-                Text(
-                  "Rembiro",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-                ),
+                const SizedBox(height: 12),
+                Text(program.title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: theme.screenTextColor, fontSize: 22, fontWeight: FontWeight.bold)),
+                if (program.description.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Text(program.description,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: theme.screenTextColor.withOpacity(0.6), fontSize: 13)),
+                ],
               ],
-            ),
-          ),
-          const SizedBox(height: 5),
+              const SizedBox(height: 32),
 
-          /// 🔵 STAMP GRID (Loopy Style)
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(color: Colors.amber),
-
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 14,
-              runSpacing: 14,
-              children: List.generate(totalStamps, (index) {
-                final bool isFilled = index < currentStamps;
-
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    color: isFilled ? Colors.black : Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black, width: 1.5),
-                    boxShadow: [
-                      if (isFilled)
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.coffee,
-                      color: isFilled ? Colors.white : Colors.black,
-                      size: 26,
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ),
-
-          const SizedBox(height: 30),
-
-          /// STATUS TEXT
-          Text(
-            currentStamps == totalStamps
-                ? 'Reward Unlocked 🎉'
-                : '${totalStamps - currentStamps} stamps left',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-
-          const SizedBox(height: 10),
-
-          LinearProgressIndicator(
-            value: currentStamps / totalStamps,
-            backgroundColor: Colors.grey.shade200,
-            color: Colors.black,
-            minHeight: 6,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          const SizedBox(height: 50),
-
-          // const Spacer(),
-
-          /// ADD STAMP BUTTON
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
+              // Stamp progress card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(22),
+                decoration: BoxDecoration(
+                  color: theme.cardBackgroundColor,
+                  borderRadius: BorderRadius.circular(22),
+                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 16, offset: const Offset(0, 4))],
+                ),
+                child: Column(
                   children: [
-                    CircleAvatar(child: Icon(Icons.remove)),
-                    const SizedBox(width: 20),
-                    Text("1", style: TextStyle(fontSize: 28)),
-                    const SizedBox(width: 20),
-                    CircleAvatar(child: Icon(Icons.add)),
-                    const SizedBox(width: 50),
+                    Text('$currentStamps / $totalStamps Stamps',
+                        style: TextStyle(color: theme.cardTextColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                    const SizedBox(height: 18),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      alignment: WrapAlignment.center,
+                      children: List.generate(totalStamps, (i) {
+                        final filled = i < currentStamps;
+                        return RewardStampSlot(
+                          filled: filled,
+                          theme: theme,
+                          animated: true,
+                          stampIconUrl: program?.stampIcon,
+                          unstampIconUrl: program?.unstampIcon,
+                        );
+                      }),
+                    ),
                   ],
                 ),
+              ),
+              const SizedBox(height: 32),
 
-                SizedBox(
-                  // width: double.infinity,
-                  // height: 55,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
+              // Completed Banner
+              if (_justCompleted || _enrollment.isCompleted)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.1),
+                    border: Border.all(color: Colors.green.withOpacity(0.4)),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: const Row(children: [
+                    Icon(Icons.celebration, color: Colors.green),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Text('Reward Completed! 🎉',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
                     ),
-                    onPressed: () {},
-                    child: const Text(
-                      'Add Stamp',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                  ]),
+                ),
+
+              const Spacer(),
+
+              // Add Stamp Button
+              SizedBox(
+                width: double.infinity,
+                height: 58,
+                child: ElevatedButton.icon(
+                  onPressed: _enrollment.isCompleted ? null : (_isLoading ? null : _addStamp),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _enrollment.isCompleted ? Colors.grey.shade300 : Colors.black,
+                    foregroundColor: _enrollment.isCompleted ? Colors.grey : Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    elevation: 0,
+                  ),
+                  icon: _isLoading
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      : Icon(_enrollment.isCompleted ? Icons.done_all : Icons.add_circle_outline),
+                  label: Text(
+                    _enrollment.isCompleted ? 'Card Completed' : 'Add Stamp',
+                    style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 28),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

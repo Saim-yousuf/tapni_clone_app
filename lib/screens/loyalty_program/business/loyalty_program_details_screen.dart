@@ -1,9 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:tapni_app/screens/loyalty_program/business/loyalty_enrollment_screen.dart';
-import 'package:tapni_app/screens/loyalty_program/business/rewards_management_screen.dart';
+import 'package:tapni_app/models/reward.dart';
+import 'package:tapni_app/repository/reward_repo.dart';
+import 'package:tapni_app/screens/loyalty_program/business/create_reward_screen.dart';
 
-class LoyaltyProgramDetailsScreen extends StatelessWidget {
-  const LoyaltyProgramDetailsScreen({super.key});
+class LoyaltyProgramDetailsScreen extends StatefulWidget {
+  final String programId;
+  const LoyaltyProgramDetailsScreen({super.key, required this.programId});
+
+  @override
+  State<LoyaltyProgramDetailsScreen> createState() => _LoyaltyProgramDetailsScreenState();
+}
+
+class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScreen> {
+  RewardProgram? _program;
+  bool _isLoading = true;
+  bool _isToggling = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _isLoading = true);
+    final res = await RewardRepo().getProgramById(widget.programId);
+    if (!mounted) return;
+    setState(() {
+      _isLoading = false;
+      if (res.success && res.data != null) {
+        final data = res.data is Map ? res.data['data'] ?? res.data : res.data;
+        _program = RewardProgram.fromJson(data as Map<String, dynamic>);
+      }
+    });
+  }
+
+  Future<void> _toggleActive() async {
+    if (_program == null) return;
+    setState(() => _isToggling = true);
+    final res = await RewardRepo().toggleActive(_program!.id);
+    setState(() => _isToggling = false);
+    if (!mounted) return;
+    if (res.success) {
+      _load();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message ?? 'Failed')));
+    }
+  }
+
+  Future<void> _delete() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Delete Reward?'),
+        content: const Text('This will permanently delete this reward program and all its enrollments.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    if (confirm != true) return;
+    final res = await RewardRepo().deleteProgram(_program!.id);
+    if (!mounted) return;
+    if (res.success) {
+      Navigator.pop(context, true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message ?? 'Failed')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,272 +83,193 @@ class LoyaltyProgramDetailsScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'Coffee Rewards',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Program Details', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert, color: Colors.black),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Program Card
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Coffee Rewards',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Stamp Program',
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Text(
-                      'Active',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        color: Colors.white70,
-                        size: 16,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'Jan 01, 2026 - Dec 31, 2026',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+          if (_program != null) ...[
+            IconButton(
+              icon: const Icon(Icons.edit_outlined),
+              onPressed: () async {
+                final changed = await Navigator.push<bool>(
+                  context,
+                  MaterialPageRoute(builder: (_) => CreateRewardScreen(existing: _program)),
+                );
+                if (changed == true) _load();
+              },
             ),
-
-            const SizedBox(height: 24),
-
-            const Text(
-              'Statistics',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 16),
-
-            Row(
-              children: [
-                Expanded(
-                  child: _statCard(
-                    title: 'Members',
-                    value: '245',
-                    icon: Icons.people_outline,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _statCard(
-                    title: 'Rewards',
-                    value: '87',
-                    icon: Icons.card_giftcard,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 12),
-
-            _statCard(
-              title: 'Total Stamps Issued',
-              value: '1,240',
-              icon: Icons.local_activity_outlined,
-            ),
-
-            const SizedBox(height: 24),
-
-            const Text(
-              'Quick Actions',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 16),
-
-            SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => LoyaltyEnrollmentScreen(),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.person_add_alt_1),
-                label: const Text('Enroll Customer'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: _actionButton(
-            //         title: 'Add Stamp',
-            //         icon: Icons.add_circle_outline,
-            //       ),
-            //     ),
-            //     const SizedBox(width: 12),
-            //     Expanded(
-            //       child: _actionButton(
-            //         title: 'Add Points',
-            //         icon: Icons.stars_outlined,
-            //       ),
-            //     ),
-            //   ],
-            // ),
-
-            // const SizedBox(height: 12),
-
-            // SizedBox(
-            //   width: double.infinity,
-            //   child: _actionButton(
-            //     title: 'Manage Rewards',
-            //     icon: Icons.card_giftcard_outlined,
-            //     onPressed: () {
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (_) => RewardsManagementScreen(),
-                  //   ),
-                  // );
-            //     },
-            //   ),
-            // ),
-            const SizedBox(height: 30),
-
-            const Text(
-              'Recent Activity',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 12),
-
-            _activityTile(
-              title: 'John Smith earned 1 stamp',
-              time: '2 mins ago',
-            ),
-            _activityTile(title: 'Sarah earned 50 points', time: '15 mins ago'),
-            _activityTile(
-              title: 'Mike redeemed Free Coffee',
-              time: '1 hour ago',
+            IconButton(
+              icon: const Icon(Icons.delete_outline, color: Colors.red),
+              onPressed: _delete,
             ),
           ],
-        ),
+        ],
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _program == null
+              ? const Center(child: Text('Program not found'))
+              : _buildContent(),
+    );
+  }
+
+  Widget _buildContent() {
+    final p = _program!;
+    final stats = p.stats;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Card Preview
+          _buildCardPreview(p),
+          const SizedBox(height: 28),
+
+          // Active / Inactive Toggle
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            decoration: BoxDecoration(
+              color: p.isActive ? Colors.green.withOpacity(0.05) : Colors.red.withOpacity(0.05),
+              border: Border.all(color: p.isActive ? Colors.green.withOpacity(0.3) : Colors.red.withOpacity(0.3)),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Row(
+              children: [
+                Icon(p.isActive ? Icons.check_circle_outline : Icons.cancel_outlined,
+                    color: p.isActive ? Colors.green : Colors.red),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(p.isActive ? 'Active' : 'Inactive',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: p.isActive ? Colors.green : Colors.red)),
+                      Text(p.isActive ? 'Customers can be enrolled and stamped' : 'This program is paused',
+                          style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+                    ],
+                  ),
+                ),
+                _isToggling
+                    ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))
+                    : Switch.adaptive(
+                        value: p.isActive,
+                        onChanged: (_) => _toggleActive(),
+                        activeColor: Colors.green,
+                      ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Stats
+          if (stats != null) ...[
+            const Text('Stats', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            const SizedBox(height: 12),
+            Row(children: [
+              Expanded(child: _statTile('Enrolled', '${stats.totalEnrollments}', Icons.people_outline)),
+              const SizedBox(width: 12),
+              Expanded(child: _statTile('Stamps Given', '${stats.totalStampsGiven}', Icons.star_outline)),
+            ]),
+            const SizedBox(height: 24),
+          ],
+
+          // Details
+          const Text('Details', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const SizedBox(height: 12),
+          _detailRow('Title', p.title),
+          _detailRow('Label', p.label.isNotEmpty ? p.label : '-'),
+          _detailRow('Description', p.description.isNotEmpty ? p.description : '-'),
+          _detailRow('Total Stamps', '${p.stamps}'),
+          if (p.createdAt != null)
+            _detailRow('Created', '${p.createdAt!.day}/${p.createdAt!.month}/${p.createdAt!.year}'),
+          const SizedBox(height: 40),
+        ],
       ),
     );
   }
 
-  static Widget _statCard({
-    required String title,
-    required String value,
-    required IconData icon,
-  }) {
+  Widget _buildCardPreview(RewardProgram p) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      width: double.infinity,
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade300),
+        color: p.theme.cardBackgroundColor,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 14, offset: const Offset(0, 4))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            if (p.logo.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(p.logo, width: 40, height: 40, fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const SizedBox()),
+              ),
+            if (p.logo.isNotEmpty) const SizedBox(width: 10),
+            Text(p.label, style: TextStyle(color: p.theme.cardTextColor.withOpacity(0.6), fontSize: 13)),
+          ]),
+          const SizedBox(height: 10),
+          Text(p.title, style: TextStyle(color: p.theme.cardTextColor, fontSize: 20, fontWeight: FontWeight.bold)),
+          if (p.description.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(p.description, style: TextStyle(color: p.theme.cardTextColor.withOpacity(0.55), fontSize: 12)),
+          ],
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: List.generate(p.stamps.clamp(1, 12), (i) => Container(
+              width: 32, height: 32,
+              decoration: BoxDecoration(
+                color: i < 3 ? p.theme.stampColor : Colors.transparent,
+                shape: BoxShape.circle,
+                border: Border.all(color: p.theme.stampBorderColor, width: 2),
+              ),
+            )),
+          ),
+          const SizedBox(height: 8),
+          Text('${p.stamps} stamps for reward',
+              style: TextStyle(color: p.theme.cardTextColor.withOpacity(0.45), fontSize: 11)),
+        ],
+      ),
+    );
+  }
+
+  Widget _statTile(String label, String value, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.grey.shade200),
       ),
       child: Column(
         children: [
-          Icon(icon, color: Colors.black),
-          const SizedBox(height: 10),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text(title, style: const TextStyle(color: Colors.grey)),
+          Icon(icon, size: 28, color: Colors.black),
+          const SizedBox(height: 8),
+          Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 2),
+          Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
         ],
       ),
     );
   }
 
-  static Widget _actionButton({
-    required String title,
-    required IconData icon,
-    void Function()? onPressed,
-  }) {
-    return OutlinedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon),
-      label: Text(title),
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.black,
-        side: const BorderSide(color: Colors.black12),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      ),
-    );
-  }
-
-  static Widget _activityTile({required String title, required String time}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade200),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: ListTile(
-        leading: const CircleAvatar(
-          backgroundColor: Colors.black,
-          child: Icon(Icons.history, color: Colors.white, size: 18),
-        ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-        subtitle: Text(time),
+  Widget _detailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 110,
+            child: Text(label, style: TextStyle(color: Colors.grey.shade500, fontSize: 13)),
+          ),
+          Expanded(child: Text(value, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
+        ],
       ),
     );
   }

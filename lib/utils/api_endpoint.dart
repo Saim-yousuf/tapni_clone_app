@@ -29,6 +29,9 @@ class Api {
   static final auth = _AuthApi();
   static final subscription = _SubscriptionApi();
   static final contact = _ContactApi();
+  static final loyalty = _LoyaltyApi();
+  static final enrollment = _EnrollmentApi();
+  static final businessEnrollment = _BusinessEnrollmentApi();
 }
 
 class _AuthApi {
@@ -63,4 +66,23 @@ class _ContactApi {
   String get exchange => "${Api.baseUrl}/api/user/contacts/exchange";
   String updateContact(String id) => "${Api.baseUrl}/api/user/contacts/$id";
   String deleteContact(String id) => "${Api.baseUrl}/api/user/contacts/$id";
+}
+
+class _LoyaltyApi {
+  String get programs => "${Api.baseUrl}/api/loyalty/programs";
+  String program(String id) => "${Api.baseUrl}/api/loyalty/programs/$id";
+  String toggleActive(String id) => "${Api.baseUrl}/api/loyalty/programs/$id/toggle";
+}
+
+class _EnrollmentApi {
+  String get enroll => "${Api.baseUrl}/api/loyalty/enrollments";
+  String get myEnrollments => "${Api.baseUrl}/api/loyalty/enrollments/me";
+  String customerEnrollments(String customerId) => "${Api.baseUrl}/api/loyalty/enrollments/customer/$customerId";
+  String addStamp(String enrollmentId) => "${Api.baseUrl}/api/loyalty/enrollments/$enrollmentId/stamp";
+}
+
+class _BusinessEnrollmentApi {
+  String get enroll => "${Api.baseUrl}/api/loyalty/business-enrollments";
+  String customerStatus(String customerId) =>
+      "${Api.baseUrl}/api/loyalty/business-enrollments/customer/$customerId";
 }

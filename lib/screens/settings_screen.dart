@@ -258,7 +258,7 @@ class SettingsScreen extends StatelessWidget {
               subtitle: 'Make loyalty programs',
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => LoyaltyProgramsScreen()),
+                  MaterialPageRoute(builder: (_) => LoyaltyProgramListScreen()),
                 );
               },
             ),

@@ -1,229 +1,223 @@
 import 'package:flutter/material.dart';
-import 'package:tapni_app/screens/loyalty_program/customer/reward_redemption_screen.dart';
+import 'package:tapni_app/models/reward.dart';
+import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
 class CustomerProgramDetailsScreen extends StatelessWidget {
-  const CustomerProgramDetailsScreen({super.key});
+  final RewardEnrollment enrollment;
+
+  const CustomerProgramDetailsScreen({super.key, required this.enrollment});
 
   @override
   Widget build(BuildContext context) {
+    final program = enrollment.program;
+    final theme = program?.theme ?? RewardTheme();
+    final totalStamps = program?.stamps ?? 10;
+    final currentStamps = enrollment.stamps;
+    final remaining = (totalStamps - currentStamps).clamp(0, totalStamps);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.screenBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: theme.screenBackgroundColor,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          "Coffee Rewards",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.screenTextColor),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          program?.label.isNotEmpty == true ? program!.label : 'Reward Program',
+          style: TextStyle(
+            color: theme.screenTextColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // PROGRAM HEADER
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(22),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    "Coffee Rewards",
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (program?.businessPhoto != null &&
+                  program!.businessPhoto!.isNotEmpty)
+                CircleAvatar(
+                  radius: 28,
+                  backgroundImage: NetworkImage(program.businessPhoto!),
+                )
+              else if (program != null)
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: theme.cardBackgroundColor,
+                  child: Text(
+                    program.displayBusinessName.isNotEmpty
+                        ? program.displayBusinessName[0].toUpperCase()
+                        : '?',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
+                      color: theme.cardTextColor,
                       fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
-                  SizedBox(height: 6),
-                  Text(
-                    "Stamp + Points Program",
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                  SizedBox(height: 12),
-                  Text(
-                    "Keep collecting to unlock rewards",
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // STAMP PROGRESS
-            const Text(
-              "Stamp Progress",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 12),
-
-            _ProgressCard(
-              title: "Coffee Stamps",
-              progress: "7 / 10",
-              subtitle: "3 more to get Free Coffee",
-              icon: Icons.local_activity,
-            ),
-
-            const SizedBox(height: 20),
-
-            // POINTS SECTION
-            const Text(
-              "Points Balance",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 12),
-
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black12),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: const [
-                  Icon(Icons.stars, size: 40),
-                  SizedBox(height: 10),
-                  Text(
-                    "1,250 Points",
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 6),
-                  Text(
-                    "Earn more to unlock discounts",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // REWARD PROGRESS
-            const Text(
-              "Next Reward",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 12),
-
-            _ProgressCard(
-              title: "Free Coffee Reward",
-              progress: "7 / 10 Stamps",
-              subtitle: "Almost there 🎉",
-              icon: Icons.card_giftcard,
-            ),
-
-            const SizedBox(height: 20),
-
-            // RECENT ACTIVITY
-            const Text(
-              "Recent Activity",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 12),
-
-            _ActivityTile(title: "Earned 1 Stamp", time: "Today"),
-
-            _ActivityTile(title: "Earned 50 Points", time: "Yesterday"),
-
-            _ActivityTile(title: "Redeemed Free Coffee", time: "2 days ago"),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// PROGRESS CARD
-class _ProgressCard extends StatelessWidget {
-  final String title;
-  final String progress;
-  final String subtitle;
-  final IconData icon;
-
-  const _ProgressCard({
-    required this.title,
-    required this.progress,
-    required this.subtitle,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.black12),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: Colors.black,
-            child: Icon(icon, color: Colors.white),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 4),
-                Text(progress, style: const TextStyle(color: Colors.grey)),
-                const SizedBox(height: 4),
-                Text(subtitle, style: const TextStyle(color: Colors.black87)),
+              const SizedBox(height: 10),
+              Text(
+                program?.displayBusinessName ?? 'Business',
+                style: TextStyle(
+                  color: theme.screenTextColor.withOpacity(0.7),
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              if (program?.logo.isNotEmpty == true)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Image.network(
+                    program!.logo,
+                    width: 72,
+                    height: 72,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const SizedBox(),
+                  ),
+                ),
+              if (program?.logo.isNotEmpty == true) const SizedBox(height: 12),
+
+              Text(
+                program?.title ?? 'Program',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: theme.screenTextColor,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (program?.description.isNotEmpty == true) ...[
+                const SizedBox(height: 8),
+                Text(
+                  program!.description,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: theme.screenTextColor.withOpacity(0.6),
+                    fontSize: 14,
+                  ),
+                ),
               ],
-            ),
+              const SizedBox(height: 28),
+
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(22),
+                decoration: BoxDecoration(
+                  color: theme.cardBackgroundColor,
+                  borderRadius: BorderRadius.circular(22),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      '$currentStamps / $totalStamps Stamps',
+                      style: TextStyle(
+                        color: theme.cardTextColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    Wrap(
+                      spacing: 20,
+                      runSpacing: 20,
+                      alignment: WrapAlignment.center,
+                      children: List.generate(totalStamps, (i) {
+                        final filled = i < currentStamps;
+                        return RewardStampSlot(
+                          filled: filled,
+                          theme: theme,
+                          stampIconUrl: program?.stampIcon,
+                          unstampIconUrl: program?.unstampIcon,
+                          size: 60,
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              if (enrollment.isCompleted)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.1),
+                    border: Border.all(color: Colors.green.withOpacity(0.4)),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.celebration, color: Colors.green),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Reward Completed! Show this card to redeem.',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: theme.screenTextColor.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: theme.screenTextColor.withOpacity(0.1),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.local_activity_outlined,
+                        color: theme.screenTextColor.withOpacity(0.6),
+                        size: 32,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        remaining == 0
+                            ? 'Almost there!'
+                            : '$remaining more stamp${remaining == 1 ? '' : 's'} to complete',
+                        style: TextStyle(
+                          color: theme.screenTextColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Visit ${program?.displayBusinessName ?? 'the business'} to collect stamps',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: theme.screenTextColor.withOpacity(0.6),
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-// ACTIVITY TILE
-class _ActivityTile extends StatelessWidget {
-  final String title;
-  final String time;
-
-  const _ActivityTile({required this.title, required this.time});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (_) => RewardRedemptionScreen()));
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.black12),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.history, color: Colors.black),
-            const SizedBox(width: 10),
-            Expanded(child: Text(title)),
-            Text(time, style: const TextStyle(color: Colors.grey)),
-          ],
         ),
       ),
     );
