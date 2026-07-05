@@ -41,8 +41,8 @@ class _MainShellState extends State<MainShell> {
   Widget _buildCurrentScreen() {
     switch (_currentPage) {
       case 'Links':
-        // return const SocialLinksScreen(isTab: true);
-        return const HomeDashboard();
+        return const SocialLinksScreen(isTab: true);
+        // return const HomeDashboard();
 
       case 'My Card':
         return const ProfileScreen();

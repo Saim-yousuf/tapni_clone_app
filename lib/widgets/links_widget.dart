@@ -150,12 +150,6 @@ class LinkSheet {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (watchedProvider.isProUser)
-                                    _buildBusinessCatalogTile(
-                                      context,
-                                      ctx,
-                                      watchedProvider,
-                                    ),
                                   ...catalog
                                     .map(
                                       (category) => _buildTemplateCategory(
@@ -193,67 +187,19 @@ class LinkSheet {
     );
   }
 
-  Widget _buildBusinessCatalogTile(
+  void _openMenuCatalogFromTemplate(
     BuildContext context,
-    BuildContext sheetContext,
-    ProfileProvider provider,
-  ) {
-    final label = CatalogHelper.labelForCategory(provider.profile.businessCategory);
-    final catalogType = CatalogHelper.typeForCategory(provider.profile.businessCategory);
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Business',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(sheetContext);
-              showMenuCatalogSheet(
-                context: context,
-                catalogLabel: label,
-                catalogType: catalogType,
-                provider: provider,
-              );
-            },
-            child: Column(
-              children: [
-                Container(
-                  width: 130,
-                  height: 130,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F5F5),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Icon(
-                    catalogType == 'menu'
-                        ? Icons.restaurant_menu
-                        : catalogType == 'services'
-                        ? Icons.design_services_outlined
-                        : Icons.inventory_2_outlined,
-                    size: 56,
-                    color: AppTheme.primaryBlack,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppTheme.primaryBlack,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    LinkTemplate template,
+    ProfileProvider provider, {
+    SocialLink? existingLink,
+  }) {
+    showMenuCatalogSheet(
+      context: context,
+      catalogLabel: template.label,
+      catalogType: template.catalogType ?? 'catalog',
+      provider: provider,
+      existingLink: existingLink,
+      template: template,
     );
   }
 
@@ -297,7 +243,13 @@ class LinkSheet {
                         );
                         return;
                       }
-                      if (template.actionType == 'contact_card') {
+                      if (template.actionType == 'menu_catalog') {
+                        _openMenuCatalogFromTemplate(
+                          context,
+                          template,
+                          provider,
+                        );
+                      } else if (template.actionType == 'contact_card') {
                         contact_card.showContactCardBottomSheet(
                           context,
                           template,
@@ -1468,6 +1420,16 @@ class LinkSheet {
         link.url?.startsWith('catalog:') == true;
 
     if (isMenuCatalog) {
+      if (catalogTemplate?.actionType == 'menu_catalog') {
+        _openMenuCatalogFromTemplate(
+          context,
+          catalogTemplate!,
+          provider,
+          existingLink: link,
+        );
+        return;
+      }
+
       final label = link.platformName.isNotEmpty
           ? link.platformName
           : CatalogHelper.labelForCategory(provider.profile.businessCategory);

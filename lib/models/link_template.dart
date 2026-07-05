@@ -32,6 +32,7 @@ class LinkTemplate {
   final bool isFeatured;
   final bool isSystem;
   final String actionType;
+  final String? catalogType;
 
   LinkTemplate({
     required this.id,
@@ -45,6 +46,7 @@ class LinkTemplate {
     required this.isFeatured,
     required this.isSystem,
     required this.actionType,
+    this.catalogType,
   });
 
   factory LinkTemplate.fromJson(Map<String, dynamic> json) {
@@ -60,6 +62,7 @@ class LinkTemplate {
       isFeatured: json['isFeatured'] as bool? ?? false,
       isSystem: json['isSystem'] as bool? ?? false,
       actionType: json['actionType']?.toString() ?? 'link',
+      catalogType: json['catalogType']?.toString(),
     );
   }
 }

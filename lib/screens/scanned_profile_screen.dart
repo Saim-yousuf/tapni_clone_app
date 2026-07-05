@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/reward.dart';
+import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
@@ -208,6 +209,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
           widget.username ?? "Profile",
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
+        actions: [_buildAppBarMenu()],
       ),
       body: SafeArea(
         child: _isLoading
@@ -216,6 +218,56 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             ? _buildErrorView()
             : _buildProfileView(_profile!),
       ),
+    );
+  }
+
+  Widget _buildAppBarMenu() {
+    if (_isLoading || _errorMessage != null || _profile == null) {
+      return const SizedBox.shrink();
+    }
+
+    final isBusinessUser =
+        Provider.of<ProfileProvider>(context, listen: false).isProUser;
+    if (!isBusinessUser || !_employeeStatusChecked || _profile!.id == null) {
+      return const SizedBox.shrink();
+    }
+
+    return PopupMenuButton<String>(
+      icon: const Icon(Icons.more_vert),
+      tooltip: 'Business options',
+      onSelected: (value) {
+        if (value == 'add_employee' && !_isEmployee) {
+          _addAsEmployee(_profile!);
+        }
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem<String>(
+          value: 'add_employee',
+          enabled: !_isEmployee,
+          child: ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(
+              _isEmployee
+                  ? Icons.badge_outlined
+                  : Icons.person_add_alt_1_outlined,
+              color: _isEmployee ? Colors.green.shade700 : Colors.black87,
+            ),
+            title: Text(
+              _isEmployee ? 'Already Employee' : 'Add as Employee',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: _isEmployee ? Colors.green.shade700 : Colors.black87,
+              ),
+            ),
+            subtitle: Text(
+              _isEmployee
+                  ? 'This person is on your team'
+                  : 'Add to your staff for attendance',
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -256,13 +308,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         isBusinessUser &&
         _hasActivePrograms &&
         profile.id != null;
-    final showEmployeeButton = _employeeStatusChecked &&
-        isBusinessUser &&
-        profile.id != null;
     final rewardButtonLabel =
         _isCustomerEnrolledInBusiness ? 'Enrolled' : 'Not Enrolled';
 
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
@@ -355,34 +404,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
               ],
             ],
           ),
-          if (showEmployeeButton) ...[
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: _isEmployee
-                    ? null
-                    : () => _addAsEmployee(profile),
-                icon: Icon(
-                  _isEmployee
-                      ? Icons.badge_outlined
-                      : Icons.person_add_alt_1_outlined,
-                ),
-                label: Text(_isEmployee ? 'Already Employee' : 'Add as Employee'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: _isEmployee ? Colors.green.shade700 : Colors.black,
-                  side: BorderSide(
-                    color: _isEmployee ? Colors.green.shade700 : Colors.black,
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
-            ),
-          ],
           const SizedBox(height: 20),
-          Expanded(
-            child: SingleChildScrollView(child: _buildLinkSection(profile)),
-          ),
+          _buildLinkSection(profile),
+          const SizedBox(height: 24),
         ],
       ),
     );
@@ -461,12 +485,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         .toList();
 
     if (activeLinks.isEmpty) {
-      return const Center(
-        child: Text(
-          'No links available',
-          style: TextStyle(color: Colors.black45),
-        ),
-      );
+      return const SizedBox.shrink();
     }
 
     return Center(
@@ -487,22 +506,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.network(
-                        link.logoUrl ?? '',
-                        fit: BoxFit.contain,
-                        height: 130,
-                        width: 130,
-                        errorBuilder: (_, __, ___) =>
-                            const Icon(Icons.link, size: 32),
-                      ),
-                    ),
-                  ),
+                  _buildLinkIcon(link),
                   const SizedBox(height: 8),
                   Text(
                     link.platformName,
@@ -517,6 +521,44 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             ),
           );
         }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildLinkIcon(SocialLink link) {
+    final isCatalog = link.fieldType == 'menu_catalog' ||
+        link.catalogItems != null ||
+        link.url?.startsWith('catalog:') == true;
+    final logo = link.logoUrl?.trim() ?? '';
+
+    if (logo.isNotEmpty) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Image.network(
+          logo,
+          fit: BoxFit.contain,
+          height: 130,
+          width: 130,
+          errorBuilder: (_, __, ___) => _linkIconFallback(isCatalog),
+        ),
+      );
+    }
+
+    return _linkIconFallback(isCatalog);
+  }
+
+  Widget _linkIconFallback(bool isCatalog) {
+    return Container(
+      width: 130,
+      height: 130,
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Icon(
+        isCatalog ? Icons.restaurant_menu : Icons.link,
+        size: isCatalog ? 56 : 32,
+        color: Colors.black87,
       ),
     );
   }

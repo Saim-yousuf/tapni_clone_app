@@ -2,12 +2,14 @@ class CatalogItem {
   final String name;
   final double price;
   final String description;
+  final String imageUrl;
   final bool isActive;
 
   CatalogItem({
     required this.name,
     this.price = 0,
     this.description = '',
+    this.imageUrl = '',
     this.isActive = true,
   });
 
@@ -16,6 +18,7 @@ class CatalogItem {
       name: json['name']?.toString() ?? '',
       price: (json['price'] is num) ? (json['price'] as num).toDouble() : 0,
       description: json['description']?.toString() ?? '',
+      imageUrl: json['image']?.toString() ?? json['imageUrl']?.toString() ?? '',
       isActive: json['isActive'] as bool? ?? true,
     );
   }
@@ -24,6 +27,7 @@ class CatalogItem {
         'name': name,
         'price': price,
         'description': description,
+        if (imageUrl.isNotEmpty) 'image': imageUrl,
         'isActive': isActive,
       };
 
@@ -31,12 +35,14 @@ class CatalogItem {
     String? name,
     double? price,
     String? description,
+    String? imageUrl,
     bool? isActive,
   }) {
     return CatalogItem(
       name: name ?? this.name,
       price: price ?? this.price,
       description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
       isActive: isActive ?? this.isActive,
     );
   }

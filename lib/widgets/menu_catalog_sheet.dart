@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
+import 'package:tapni_app/screens/catalog/catalog_item_form_screen.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
 
@@ -12,6 +14,7 @@ void showMenuCatalogSheet({
   required String catalogType,
   ProfileProvider? provider,
   SocialLink? existingLink,
+  LinkTemplate? template,
   String? businessId,
   String? businessName,
   bool isCustomerView = false,
@@ -25,6 +28,7 @@ void showMenuCatalogSheet({
       catalogType: catalogType,
       provider: provider,
       existingLink: existingLink,
+      template: template,
       businessId: businessId,
       businessName: businessName,
       isCustomerView: isCustomerView,
@@ -37,6 +41,7 @@ class MenuCatalogSheet extends StatefulWidget {
   final String catalogType;
   final ProfileProvider? provider;
   final SocialLink? existingLink;
+  final LinkTemplate? template;
   final String? businessId;
   final String? businessName;
   final bool isCustomerView;
@@ -47,6 +52,7 @@ class MenuCatalogSheet extends StatefulWidget {
     required this.catalogType,
     this.provider,
     this.existingLink,
+    this.template,
     this.businessId,
     this.businessName,
     this.isCustomerView = false,
@@ -190,6 +196,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       ),
       child: Row(
         children: [
+          _itemImage(item),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,6 +261,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           ),
           child: Row(
             children: [
+              _itemImage(item),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -426,71 +436,54 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   }
 
   Future<void> _addItem() async {
-    final result = await _showItemDialog();
+    final result = await Navigator.push<CatalogItem>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CatalogItemFormScreen(catalogLabel: _catalogLabel),
+      ),
+    );
     if (result != null) {
       setState(() => _items.add(result));
     }
   }
 
   Future<void> _editItem(int index) async {
-    final result = await _showItemDialog(existing: _items[index]);
+    final result = await Navigator.push<CatalogItem>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CatalogItemFormScreen(
+          catalogLabel: _catalogLabel,
+          existingItem: _items[index],
+        ),
+      ),
+    );
     if (result != null) {
       setState(() => _items[index] = result);
     }
   }
 
-  Future<CatalogItem?> _showItemDialog({CatalogItem? existing}) async {
-    final nameCtrl = TextEditingController(text: existing?.name ?? '');
-    final priceCtrl = TextEditingController(
-      text: existing != null && existing.price > 0 ? existing.price.toStringAsFixed(0) : '',
+  Widget _itemImage(CatalogItem item, {double size = 64}) {
+    final image = item.imageUrl.trim();
+    final placeholder = Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(Icons.fastfood_outlined, color: Colors.grey.shade500, size: 28),
     );
-    final descCtrl = TextEditingController(text: existing?.description ?? '');
 
-    return showDialog<CatalogItem>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(existing == null ? 'Add item' : 'Edit item'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameCtrl,
-                decoration: const InputDecoration(labelText: 'Name'),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: priceCtrl,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Price (Rs)'),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: descCtrl,
-                decoration: const InputDecoration(labelText: 'Description (optional)'),
-                maxLines: 2,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          TextButton(
-            onPressed: () {
-              final name = nameCtrl.text.trim();
-              if (name.isEmpty) return;
-              Navigator.pop(
-                ctx,
-                CatalogItem(
-                  name: name,
-                  price: double.tryParse(priceCtrl.text.trim()) ?? 0,
-                  description: descCtrl.text.trim(),
-                ),
-              );
-            },
-            child: const Text('Save'),
-          ),
-        ],
+    if (image.isEmpty) return placeholder;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Image.network(
+        image,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => placeholder,
       ),
     );
   }
@@ -506,11 +499,15 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
 
     setState(() => _isSaving = true);
 
-    final label = _catalogLabel;
+    final label = widget.template?.label ?? _catalogLabel;
+    final templateId = widget.template?.id ?? widget.existingLink?.templateId;
+    final logoUrl = widget.template?.logo ?? widget.existingLink?.logoUrl;
     final link = widget.existingLink != null
         ? widget.existingLink!.copyWith(
             customLabel: label,
             fieldType: 'menu_catalog',
+            templateId: templateId,
+            logoUrl: logoUrl,
             catalogItems: _items,
             catalogType: widget.catalogType,
             value: widget.existingLink!.id,
@@ -519,8 +516,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         : SocialLink(
             id: DateTime.now().millisecondsSinceEpoch.toString(),
             platform: SocialPlatform.spoonFork,
+            templateId: templateId,
             customLabel: label,
             fieldType: 'menu_catalog',
+            logoUrl: logoUrl,
             catalogItems: _items,
             catalogType: widget.catalogType,
             value: 'catalog',
