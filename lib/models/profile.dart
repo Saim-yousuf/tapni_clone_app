@@ -22,6 +22,7 @@ class UserProfile {
   final int viewsCount;
   final int scansCount;
   final int leadsCount;
+  final String cardTemplateId;
 
   UserProfile({
     this.id,
@@ -43,6 +44,7 @@ class UserProfile {
     this.viewsCount = 0,
     this.scansCount = 0,
     this.leadsCount = 0,
+    this.cardTemplateId = 't2',
   });
 
   factory UserProfile.fromApiJson(Map<String, dynamic> json) {
@@ -63,6 +65,7 @@ class UserProfile {
       businessName: json['businessName']?.toString(),
       businessCategory: json['businessCategory']?.toString(),
       socialLinks: links,
+      cardTemplateId: json['cardTemplateId'] as String? ?? 't2',
     );
   }
 
@@ -100,6 +103,7 @@ class UserProfile {
     int? scansCount,
     int? leadsCount,
     bool? isPro,
+    String? cardTemplateId,
   }) {
     return UserProfile(
       id: id ?? this.id,
@@ -121,6 +125,7 @@ class UserProfile {
       viewsCount: viewsCount ?? this.viewsCount,
       scansCount: scansCount ?? this.scansCount,
       leadsCount: leadsCount ?? this.leadsCount,
+      cardTemplateId: cardTemplateId ?? this.cardTemplateId,
     );
   }
 }

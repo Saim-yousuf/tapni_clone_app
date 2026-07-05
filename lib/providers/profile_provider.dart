@@ -11,6 +11,7 @@ import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/services/mock_data_service.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/utils/api_handler.dart';
+import 'package:tapni_app/utils/card_template_catalog.dart';
 
 import '../widgets/loading_widget.dart';
 
@@ -34,88 +35,7 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  final List<CardTemplate> templates = [
-    CardTemplate(
-      id: 't1',
-      name: 'Violet',
-      backgroundColor: const Color(0xFF7A78FF),
-      textColor: Colors.white,
-      labelColor: Colors.white.withOpacity(0.6),
-      brandingColor: Colors.white,
-      isPro: true,
-      isDark: true,
-    ),
-    CardTemplate(
-      id: 't2',
-      name: 'Charcoal',
-      backgroundColor: const Color(0xFF1E2022),
-      textColor: Colors.white,
-      labelColor: Colors.white.withOpacity(0.6),
-      brandingColor: Colors.white,
-      isPro: false,
-      isDark: true,
-    ),
-    CardTemplate(
-      id: 't3',
-      name: 'Vibrant Red',
-      backgroundColor: const Color(0xFFEA2C3B),
-      textColor: Colors.white,
-      labelColor: Colors.white.withOpacity(0.6),
-      brandingColor: Colors.white,
-      isPro: false,
-      isDark: true,
-    ),
-    CardTemplate(
-      id: 't4',
-      name: 'Pure White',
-      backgroundColor: const Color(0xFFFFFFFF),
-      textColor: const Color(0xFF1E2022),
-      labelColor: const Color(0xFF1E2022).withOpacity(0.6),
-      brandingColor: const Color(0xFF1E2022),
-      isPro: false,
-      isDark: false,
-    ),
-    CardTemplate(
-      id: 't5',
-      name: 'Cream Beige',
-      backgroundColor: const Color(0xFFF5EBE1),
-      textColor: const Color(0xFF1E2022),
-      labelColor: const Color(0xFF1E2022).withOpacity(0.6),
-      brandingColor: const Color(0xFF1E2022),
-      isPro: true,
-      isDark: false,
-    ),
-    CardTemplate(
-      id: 't6',
-      name: 'Olive Green',
-      backgroundColor: const Color(0xFF9EBF7B),
-      textColor: Colors.white,
-      labelColor: Colors.white.withOpacity(0.6),
-      brandingColor: Colors.white,
-      isPro: false,
-      isDark: true,
-    ),
-    CardTemplate(
-      id: 't7',
-      name: 'Light Blue',
-      backgroundColor: const Color(0xFF6BB5FF),
-      textColor: Colors.white,
-      labelColor: Colors.white.withOpacity(0.6),
-      brandingColor: Colors.white,
-      isPro: false,
-      isDark: true,
-    ),
-    CardTemplate(
-      id: 't8',
-      name: 'Pitch Black',
-      backgroundColor: const Color(0xFF000000),
-      textColor: Colors.white,
-      labelColor: Colors.white.withOpacity(0.6),
-      brandingColor: Colors.white,
-      isPro: false,
-      isDark: true,
-    ),
-  ];
+  final List<CardTemplate> templates = CardTemplateCatalog.all;
 
   bool _isProUser = false;
   bool _isLoading = false;
@@ -152,9 +72,13 @@ class ProfileProvider extends ChangeNotifier {
             data['user'] as Map<String, dynamic>,
           );
           _isProUser = _profile.isPro;
+          _selectedTemplateIndex =
+              CardTemplateCatalog.indexById(_profile.cardTemplateId);
         } else if (data is Map<String, dynamic>) {
           _profile = UserProfile.fromApiJson(data);
           _isProUser = _profile.isPro;
+          _selectedTemplateIndex =
+              CardTemplateCatalog.indexById(_profile.cardTemplateId);
         }
         notifyListeners();
       } catch (e) {
@@ -202,6 +126,29 @@ class ProfileProvider extends ChangeNotifier {
       _selectedTemplateIndex = index;
       notifyListeners();
     }
+  }
+
+  Future<bool> saveCardTemplate(int index) async {
+    if (index < 0 || index >= templates.length) return false;
+
+    final templateId = templates[index].id;
+    _selectedTemplateIndex = index;
+
+    try {
+      final repo = AuthRepo();
+      final response = await repo.updateProfile(
+        jsonBody: {'cardTemplateId': templateId},
+      );
+
+      if (response.success) {
+        _profile = _profile.copyWith(cardTemplateId: templateId);
+        notifyListeners();
+        return true;
+      }
+    } catch (_) {}
+
+    notifyListeners();
+    return false;
   }
 
   Future<ApiResponse> updateProfile({

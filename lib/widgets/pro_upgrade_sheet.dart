@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 class SubcriptionSheet {
   static void show(BuildContext context) {
@@ -11,6 +12,8 @@ class SubcriptionSheet {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      barrierColor: Colors.black54,
+      useSafeArea: true,
       builder: (_) => const ProUpgradeSheet(),
     );
   }
@@ -76,6 +79,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
   }
 
   Future<void> _submitRequest() async {
+    final messenger = sheetMessenger(context);
     final provider = Provider.of<SubscriptionProvider>(context, listen: false);
 
     final planId = _isYearlySelected ? 'yearly' : 'monthly';
@@ -90,7 +94,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
     if (!mounted) return;
 
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         const SnackBar(content: Text('Subscription request submitted')),
       );
       Navigator.pop(context);
@@ -98,9 +102,10 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
   }
 
   Future<void> _handleNext() async {
+    final messenger = sheetMessenger(context);
     final name = _businessNameController.text.trim();
     if (name.isEmpty || _selectedCategory == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         const SnackBar(
           content: Text('Please enter business details to continue'),
         ),
@@ -136,7 +141,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
     if (response.success) {
       setState(() => _step = 1);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(
           content: Text(response.message ?? 'Failed to save business details'),
         ),
@@ -154,12 +159,14 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
     );
     final subscriptionProvider = Provider.of<SubscriptionProvider>(context);
     final subscription = subscriptionProvider.currentSubscription;
-    return AnimatedPadding(
+    return SheetScaffold(
+      body: AnimatedPadding(
       duration: const Duration(milliseconds: 200),
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
+        width: double.infinity,
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF161618) : Colors.white,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -265,6 +272,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
             ],
           ),
         ),
+      ),
       ),
     );
   }

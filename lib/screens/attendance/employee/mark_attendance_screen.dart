@@ -5,6 +5,7 @@ import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/utils/location_helper.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/face_capture_sheet.dart';
+import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
 
 class MarkAttendanceScreen extends StatefulWidget {
   const MarkAttendanceScreen({super.key});
@@ -135,7 +136,23 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AttendanceUi.appBar('Mark Attendance'),
+      appBar: AttendanceUi.appBar(
+        'Mark Attendance',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.wallet_outlined, size: 30),
+            tooltip: 'My Employee Cards',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const EmployeeBusinessCardsScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(strokeWidth: 3))
           : _employers.isEmpty

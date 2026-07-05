@@ -34,6 +34,7 @@ class Api {
   static final businessEnrollment = _BusinessEnrollmentApi();
   static final catalog = _CatalogApi();
   static final attendance = _AttendanceApi();
+  static final wallet = _WalletApi();
 }
 
 class _AuthApi {
@@ -113,4 +114,11 @@ class _AttendanceApi {
   String get businessRecords => "${Api.baseUrl}/api/attendance/records/business";
   String get myRecords => "${Api.baseUrl}/api/attendance/records/me";
   String get summary => "${Api.baseUrl}/api/attendance/summary";
+}
+
+class _WalletApi {
+  String get companyCards => "${Api.baseUrl}/api/wallet/company-cards";
+  String get myGoogleCard => "${Api.baseUrl}/api/wallet/google/my-card";
+  String googleBusinessCard(String businessUserId) =>
+      "${Api.baseUrl}/api/wallet/google/business-card/$businessUserId";
 }

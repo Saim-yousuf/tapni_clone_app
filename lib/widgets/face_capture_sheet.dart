@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 class FaceCaptureSheet extends StatefulWidget {
   final String title;
@@ -14,11 +15,9 @@ class FaceCaptureSheet extends StatefulWidget {
     return showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        side: BorderSide(color: Colors.black, width: 3),
-      ),
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black54,
+      useSafeArea: true,
       builder: (_) => FaceCaptureSheet(title: title ?? 'Capture Face'),
     );
   }
@@ -57,7 +56,15 @@ class _FaceCaptureSheetState extends State<FaceCaptureSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SheetScaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          border: Border.all(color: Colors.black, width: 3),
+        ),
+        child: Padding(
       padding: EdgeInsets.only(
         left: 20,
         right: 20,
@@ -132,6 +139,8 @@ class _FaceCaptureSheetState extends State<FaceCaptureSheet> {
             ),
           ),
         ],
+      ),
+        ),
       ),
     );
   }

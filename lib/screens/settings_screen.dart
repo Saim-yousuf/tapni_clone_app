@@ -10,6 +10,7 @@ import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
 import 'package:tapni_app/screens/attendance/business/attendance_dashboard_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/mark_attendance_screen.dart';
+import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/screens/qr_code_screen.dart';
@@ -314,6 +315,19 @@ class SettingsScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => const MarkAttendanceScreen(),
+                  ),
+                );
+              },
+            ),
+            _buildSettingsItem(
+              context,
+              icon: Icons.wallet_outlined,
+              title: 'My Employee Cards',
+              subtitle: 'Employer business cards for Google Wallet',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const EmployeeBusinessCardsScreen(),
                   ),
                 );
               },

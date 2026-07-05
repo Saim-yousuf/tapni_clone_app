@@ -153,7 +153,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                   ),
                   elevation: 0,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   final selectedTemplate = templates[_activePage];
                   if (selectedTemplate.isPro && !profileProvider.isProUser) {
                     showModalBottomSheet(
@@ -162,17 +162,25 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                       backgroundColor: Colors.transparent,
                       builder: (context) => const ProUpgradeSheet(),
                     );
-                  } else {
-                    profileProvider.setTemplateIndex(_activePage);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Applied "${selectedTemplate.name}" template'),
-                        duration: const Duration(seconds: 2),
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
-                    Navigator.pop(context);
+                    return;
                   }
+
+                  final saved =
+                      await profileProvider.saveCardTemplate(_activePage);
+                  if (!context.mounted) return;
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        saved
+                            ? 'Applied "${selectedTemplate.name}" template'
+                            : 'Template applied locally. Sync failed.',
+                      ),
+                      duration: const Duration(seconds: 2),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  Navigator.pop(context);
                 },
                 child: const Text(
                   'Apply Template',
