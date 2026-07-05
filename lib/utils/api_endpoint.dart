@@ -33,6 +33,7 @@ class Api {
   static final enrollment = _EnrollmentApi();
   static final businessEnrollment = _BusinessEnrollmentApi();
   static final catalog = _CatalogApi();
+  static final attendance = _AttendanceApi();
 }
 
 class _AuthApi {
@@ -99,4 +100,17 @@ class _CatalogApi {
   String updateStatus(String id) => "${Api.baseUrl}/api/catalog/orders/$id/status";
   String markOrderRead(String id) => "${Api.baseUrl}/api/catalog/orders/$id/read";
   String get markAllRead => "${Api.baseUrl}/api/catalog/orders/read-all";
+}
+
+class _AttendanceApi {
+  String get employees => "${Api.baseUrl}/api/attendance/employees";
+  String employee(String id) => "${Api.baseUrl}/api/attendance/employees/$id";
+  String get myEmployers => "${Api.baseUrl}/api/attendance/employees/me";
+  String employeeStatus(String employeeUserId) =>
+      "${Api.baseUrl}/api/attendance/employees/status/$employeeUserId";
+  String get mark => "${Api.baseUrl}/api/attendance/mark";
+  String get today => "${Api.baseUrl}/api/attendance/today";
+  String get businessRecords => "${Api.baseUrl}/api/attendance/records/business";
+  String get myRecords => "${Api.baseUrl}/api/attendance/records/me";
+  String get summary => "${Api.baseUrl}/api/attendance/summary";
 }

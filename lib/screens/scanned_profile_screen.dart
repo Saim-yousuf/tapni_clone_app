@@ -4,7 +4,9 @@ import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
+import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/business/add_stamp_screen.dart';
+import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -37,6 +39,8 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   bool _isCustomerEnrolledInBusiness = false;
   bool _enrollmentStatusChecked = false;
   List<RewardEnrollment> _customerProgramEnrollments = [];
+  bool _isEmployee = false;
+  bool _employeeStatusChecked = false;
 
   @override
   void initState() {
@@ -73,6 +77,47 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       _customerProgramEnrollments = programEnrollments;
       _enrollmentStatusChecked = true;
     });
+  }
+
+  Future<void> _loadEmployeeStatus(String employeeUserId) async {
+    final isBusinessUser =
+        Provider.of<ProfileProvider>(context, listen: false).isProUser;
+    if (!isBusinessUser) {
+      if (mounted) setState(() => _employeeStatusChecked = true);
+      return;
+    }
+
+    final res = await AttendanceRepo().getEmployeeStatus(employeeUserId);
+    if (!mounted) return;
+
+    var isEmployee = false;
+    if (res.success && res.data != null) {
+      final data = _unwrapApiPayload(res.data);
+      isEmployee = data['isEmployee'] as bool? ?? false;
+    }
+
+    setState(() {
+      _isEmployee = isEmployee;
+      _employeeStatusChecked = true;
+    });
+  }
+
+  Future<void> _addAsEmployee(UserProfile profile) async {
+    if (profile.id == null) return;
+
+    final created = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EmployeeSettingsScreen(
+          employeeUserId: profile.id,
+          employeeName: profile.name,
+        ),
+      ),
+    );
+
+    if (created == true && mounted) {
+      setState(() => _isEmployee = true);
+    }
   }
 
   Future<void> _checkBusinessPrograms() async {
@@ -127,8 +172,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         });
         if (profile.id != null) {
           _loadCustomerEnrollmentStatus(profile.id!);
+          _loadEmployeeStatus(profile.id!);
         } else {
           setState(() => _enrollmentStatusChecked = true);
+          setState(() => _employeeStatusChecked = true);
         }
         // Automatically add scanned contact to the user's contact list
         if (mounted) {
@@ -208,6 +255,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         _enrollmentStatusChecked &&
         isBusinessUser &&
         _hasActivePrograms &&
+        profile.id != null;
+    final showEmployeeButton = _employeeStatusChecked &&
+        isBusinessUser &&
         profile.id != null;
     final rewardButtonLabel =
         _isCustomerEnrolledInBusiness ? 'Enrolled' : 'Not Enrolled';
@@ -305,6 +355,30 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
               ],
             ],
           ),
+          if (showEmployeeButton) ...[
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _isEmployee
+                    ? null
+                    : () => _addAsEmployee(profile),
+                icon: Icon(
+                  _isEmployee
+                      ? Icons.badge_outlined
+                      : Icons.person_add_alt_1_outlined,
+                ),
+                label: Text(_isEmployee ? 'Already Employee' : 'Add as Employee'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: _isEmployee ? Colors.green.shade700 : Colors.black,
+                  side: BorderSide(
+                    color: _isEmployee ? Colors.green.shade700 : Colors.black,
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+          ],
           const SizedBox(height: 20),
           Expanded(
             child: SingleChildScrollView(child: _buildLinkSection(profile)),

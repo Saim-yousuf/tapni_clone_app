@@ -54,9 +54,11 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera access is required to scan QR codes and business cards.</string>
+	<string>Camera access is required to scan QR codes, capture face for attendance, and business cards.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo library access is required to scan QR codes from images.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location access is required to verify attendance at your workplace.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
