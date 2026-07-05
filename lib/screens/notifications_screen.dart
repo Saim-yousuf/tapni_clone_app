@@ -1,17 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
+import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 
-class NotificationsScreen extends StatelessWidget {
+class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
+}
+
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+      Provider.of<LeadsProvider>(context, listen: false).fetchCatalogOrderNotifications(
+        isBusinessUser: profileProvider.isProUser,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final leadsProvider = Provider.of<LeadsProvider>(context);
+    final profileProvider = Provider.of<ProfileProvider>(context);
     final notificationsList = leadsProvider.notifications;
 
     return Scaffold(
@@ -101,7 +121,19 @@ class NotificationsScreen extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 12),
                       child: GestureDetector(
-                        onTap: () => leadsProvider.toggleNotificationRead(item['id']),
+                        onTap: () {
+                          leadsProvider.toggleNotificationRead(item['id']);
+                          if (item['type'] == 'catalog_order' && profileProvider.isProUser) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => OrderDetailScreen(
+                                  orderId: item['id'],
+                                  isBusinessView: true,
+                                ),
+                              ),
+                            );
+                          }
+                        },
                         child: GlassCard(
                           borderOpacity: isRead ? 0.05 : 0.15,
                           customBgColor: isRead 

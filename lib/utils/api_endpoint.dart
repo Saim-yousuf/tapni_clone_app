@@ -8,9 +8,9 @@ class Api {
 
   static String get _localBaseUrl {
     if (Platform.isAndroid) {
-      return "https://remake-drained-underarm.ngrok-free.dev";
+      return "http://192.168.100.203:3000";
     }
-    return "https://remake-drained-underarm.ngrok-free.dev";
+    return "http://192.168.100.203:3000";
   }
 
   static const String _liveBaseUrl = "https://barqody-backend.vercel.app";
@@ -32,6 +32,7 @@ class Api {
   static final loyalty = _LoyaltyApi();
   static final enrollment = _EnrollmentApi();
   static final businessEnrollment = _BusinessEnrollmentApi();
+  static final catalog = _CatalogApi();
 }
 
 class _AuthApi {
@@ -71,18 +72,31 @@ class _ContactApi {
 class _LoyaltyApi {
   String get programs => "${Api.baseUrl}/api/loyalty/programs";
   String program(String id) => "${Api.baseUrl}/api/loyalty/programs/$id";
-  String toggleActive(String id) => "${Api.baseUrl}/api/loyalty/programs/$id/toggle";
+  String toggleActive(String id) =>
+      "${Api.baseUrl}/api/loyalty/programs/$id/toggle";
 }
 
 class _EnrollmentApi {
   String get enroll => "${Api.baseUrl}/api/loyalty/enrollments";
   String get myEnrollments => "${Api.baseUrl}/api/loyalty/enrollments/me";
-  String customerEnrollments(String customerId) => "${Api.baseUrl}/api/loyalty/enrollments/customer/$customerId";
-  String addStamp(String enrollmentId) => "${Api.baseUrl}/api/loyalty/enrollments/$enrollmentId/stamp";
+  String customerEnrollments(String customerId) =>
+      "${Api.baseUrl}/api/loyalty/enrollments/customer/$customerId";
+  String addStamp(String enrollmentId) =>
+      "${Api.baseUrl}/api/loyalty/enrollments/$enrollmentId/stamp";
 }
 
 class _BusinessEnrollmentApi {
   String get enroll => "${Api.baseUrl}/api/loyalty/business-enrollments";
   String customerStatus(String customerId) =>
       "${Api.baseUrl}/api/loyalty/business-enrollments/customer/$customerId";
+}
+
+class _CatalogApi {
+  String get orders => "${Api.baseUrl}/api/catalog/orders";
+  String get incomingOrders => "${Api.baseUrl}/api/catalog/orders/incoming";
+  String get myOrders => "${Api.baseUrl}/api/catalog/orders/my";
+  String order(String id) => "${Api.baseUrl}/api/catalog/orders/$id";
+  String updateStatus(String id) => "${Api.baseUrl}/api/catalog/orders/$id/status";
+  String markOrderRead(String id) => "${Api.baseUrl}/api/catalog/orders/$id/read";
+  String get markAllRead => "${Api.baseUrl}/api/catalog/orders/read-all";
 }

@@ -402,7 +402,13 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         alignment: WrapAlignment.center,
         children: activeLinks.map((link) {
           return GestureDetector(
-            onTap: () => Launcher.openLink(link, context),
+            onTap: () => Launcher.openLink(
+              link,
+              context,
+              businessId: profile.id,
+              businessName: profile.businessName ?? profile.name,
+              businessCategory: profile.businessCategory,
+            ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(

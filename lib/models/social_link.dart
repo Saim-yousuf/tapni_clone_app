@@ -1,3 +1,5 @@
+import 'package:tapni_app/models/catalog_item.dart';
+
 enum SocialPlatform {
   behance,
   calendly,
@@ -39,6 +41,8 @@ class SocialLink {
   final String? url;
   final Map<String, String>? bankDetails;
   final Map<String, String>? contactCard;
+  final List<CatalogItem>? catalogItems;
+  final String? catalogType;
   final bool isCustom;
   final String value; // username, phone number, or URL
   final bool isActive;
@@ -55,6 +59,8 @@ class SocialLink {
     this.url,
     this.bankDetails,
     this.contactCard,
+    this.catalogItems,
+    this.catalogType,
     this.isCustom = false,
     required this.value,
     this.isActive = true,
@@ -72,6 +78,8 @@ class SocialLink {
     String? url,
     Map<String, String>? bankDetails,
     Map<String, String>? contactCard,
+    List<CatalogItem>? catalogItems,
+    String? catalogType,
     bool? isCustom,
     String? value,
     bool? isActive,
@@ -88,6 +96,8 @@ class SocialLink {
       url: url ?? this.url,
       bankDetails: bankDetails ?? this.bankDetails,
       contactCard: contactCard ?? this.contactCard,
+      catalogItems: catalogItems ?? this.catalogItems,
+      catalogType: catalogType ?? this.catalogType,
       isCustom: isCustom ?? this.isCustom,
       value: value ?? this.value,
       isActive: isActive ?? this.isActive,
@@ -129,11 +139,14 @@ class SocialLink {
         'templateId': templateId,
       'label': platformName,
       'title': platformName,
-      'type': fieldType ?? apiType,
+      'type': catalogItems != null ? 'menu_catalog' : (fieldType ?? apiType),
       'value': value,
       if (logoUrl != null && logoUrl!.isNotEmpty) 'logo': logoUrl,
       if (bankDetails != null) 'bankDetails': bankDetails,
       if (contactCard != null) 'contactCard': contactCard,
+      if (catalogItems != null)
+        'catalogItems': catalogItems!.map((e) => e.toJson()).toList(),
+      if (catalogType != null) 'catalogType': catalogType,
       'isCustom': isCustom,
       'url': fullUrl,
       'isActive': isActive,
@@ -150,6 +163,7 @@ class SocialLink {
     final logo = json['logo'] as String?;
     final bankDetailsJson = json['bankDetails'] as Map<String, dynamic>?;
     final contactCardJson = json['contactCard'] as Map<String, dynamic>?;
+    final catalogItemsJson = json['catalogItems'] as List<dynamic>?;
     final templateId = json['templateId']?.toString();
     final fieldLabel = json['fieldLabel']?.toString();
 
@@ -197,6 +211,10 @@ class SocialLink {
         combined.contains('fork') ||
         combined.contains('menu')) {
       platform = SocialPlatform.spoonFork;
+    } else if (combined.contains('menu_catalog') ||
+        combined.contains('catalog:') ||
+        type == 'menu_catalog') {
+      platform = SocialPlatform.spoonFork;
     } else if (combined.contains('spotify')) {
       platform = SocialPlatform.spotify;
     } else if (combined.contains('threads')) {
@@ -238,6 +256,10 @@ class SocialLink {
       contactCard: contactCardJson?.map(
         (key, value) => MapEntry(key, value?.toString() ?? ''),
       ),
+      catalogItems: catalogItemsJson
+          ?.map((e) => CatalogItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      catalogType: json['catalogType']?.toString(),
       value: value,
       isActive: json['isActive'] as bool? ?? true,
       isPublic: json['isPublic'] as bool? ?? true,
@@ -477,6 +499,9 @@ class SocialLink {
           ? contactCard!['email']!
           : contactCard!['phone'] ?? value;
       return identifier.isEmpty ? value : 'contact:$identifier';
+    }
+    if (catalogItems != null && catalogItems!.isNotEmpty) {
+      return 'catalog:$id';
     }
     if (url?.isNotEmpty == true) return url!;
     if (baseUrlPrefix.isEmpty) {

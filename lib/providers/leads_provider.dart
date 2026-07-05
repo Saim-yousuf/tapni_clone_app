@@ -3,9 +3,12 @@ import 'package:tapni_app/models/lead.dart';
 import 'package:tapni_app/models/contact_category.dart';
 import 'package:tapni_app/models/activity.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:tapni_app/repository/catalog_repo.dart';
+import 'package:tapni_app/utils/catalog_helper.dart';
 
 class LeadsProvider extends ChangeNotifier {
   final AuthRepo _authRepo = AuthRepo();
+  final CatalogRepo _catalogRepo = CatalogRepo();
 
   List<Lead> _leads = [];
   List<ContactCategory> _categories = [];
@@ -362,14 +365,67 @@ class LeadsProvider extends ChangeNotifier {
   }
 
   // ── Notifications management ─────────────────────────────────────────────────
+  Future<void> fetchCatalogOrderNotifications({required bool isBusinessUser}) async {
+    if (!isBusinessUser) return;
+
+    try {
+      final orders = await _catalogRepo.getBusinessOrders();
+
+      _notifications.removeWhere((n) => n['type'] == 'catalog_order');
+
+      for (final order in orders) {
+        _notifications.add({
+          'id': order.id,
+          'type': 'catalog_order',
+          'title': CatalogHelper.orderTitleForType(order.catalogType),
+          'body': '${order.customerName} ordered: ${order.itemsSummary}',
+          'time': _formatOrderTime(order.createdAt?.toIso8601String()),
+          'isRead': order.isRead,
+        });
+      }
+
+      _notifications.sort((a, b) {
+        if (a['isRead'] == b['isRead']) return 0;
+        return (a['isRead'] as bool) ? 1 : -1;
+      });
+
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching catalog orders: $e');
+    }
+  }
+
+  String _formatOrderTime(String? iso) {
+    if (iso == null || iso.isEmpty) return 'Just now';
+    try {
+      final dt = DateTime.parse(iso).toLocal();
+      final now = DateTime.now();
+      final diff = now.difference(dt);
+      if (diff.inMinutes < 1) return 'Just now';
+      if (diff.inHours < 1) return '${diff.inMinutes}m ago';
+      if (diff.inDays < 1) return '${diff.inHours}h ago';
+      return '${diff.inDays}d ago';
+    } catch (_) {
+      return 'Just now';
+    }
+  }
+
   void markAllNotificationsAsRead() {
     for (final n in _notifications) {
       n['isRead'] = true;
     }
+    _catalogRepo.markAllOrdersRead();
     notifyListeners();
   }
 
   void clearNotification(String id) {
+    final item = _notifications.firstWhere(
+      (n) => n['id'] == id,
+      orElse: () => {},
+    );
+    if (item['type'] == 'catalog_order') {
+      _catalogRepo.markOrderRead(id);
+    }
     _notifications.removeWhere((n) => n['id'] == id);
     notifyListeners();
   }
@@ -377,7 +433,11 @@ class LeadsProvider extends ChangeNotifier {
   void toggleNotificationRead(String id) {
     final idx = _notifications.indexWhere((n) => n['id'] == id);
     if (idx != -1) {
-      _notifications[idx]['isRead'] = !(_notifications[idx]['isRead'] as bool);
+      final wasRead = _notifications[idx]['isRead'] as bool;
+      _notifications[idx]['isRead'] = !wasRead;
+      if (!wasRead && _notifications[idx]['type'] == 'catalog_order') {
+        _catalogRepo.markOrderRead(id);
+      }
       notifyListeners();
     }
   }

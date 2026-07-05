@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
@@ -25,6 +26,16 @@ class _MainShellState extends State<MainShell> {
   void initState() {
     _currentPage = widget._currentPage ?? 'My Card';
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadCatalogNotifications());
+  }
+
+  void _loadCatalogNotifications() {
+    if (!mounted) return;
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final leadsProvider = Provider.of<LeadsProvider>(context, listen: false);
+    leadsProvider.fetchCatalogOrderNotifications(
+      isBusinessUser: profileProvider.isProUser,
+    );
   }
 
   Widget _buildCurrentScreen() {

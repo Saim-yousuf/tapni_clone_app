@@ -5,6 +5,7 @@ import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/notifications_screen.dart';
+import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/models/activity.dart';
@@ -428,6 +429,43 @@ class HomeDashboard extends StatelessWidget {
               ],
               const SizedBox(height: 28),
 
+              Row(
+                children: [
+                  Expanded(
+                    child: _QuickOrderCard(
+                      icon: Icons.receipt_long_outlined,
+                      title: 'My Orders',
+                      subtitle: 'Track your orders',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const OrdersListScreen(isBusinessView: false),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  if (profileProvider.isProUser) ...[
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _QuickOrderCard(
+                        icon: Icons.storefront_outlined,
+                        title: 'Orders',
+                        subtitle: 'Incoming orders',
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const OrdersListScreen(isBusinessView: true),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 28),
+
               // Stats Grid
               Text(
                 'Performance Overview',
@@ -609,5 +647,39 @@ class HomeDashboard extends StatelessWidget {
     } else {
       return '${diff.inDays}d ago';
     }
+  }
+}
+
+class _QuickOrderCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _QuickOrderCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: GlassCard(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 28),
+            const SizedBox(height: 10),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+            const SizedBox(height: 4),
+            Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -9,6 +9,7 @@ import 'package:tapni_app/screens/login_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
+import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/screens/qr_code_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
@@ -251,6 +252,33 @@ class SettingsScreen extends StatelessWidget {
                 ).push(MaterialPageRoute(builder: (_) => const QrCodeScreen()));
               },
             ),
+            _buildSettingsItem(
+              context,
+              icon: Icons.receipt_long_outlined,
+              title: 'My Orders',
+              subtitle: 'View your placed orders and status',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const OrdersListScreen(isBusinessView: false),
+                  ),
+                );
+              },
+            ),
+            if (profile.isPro)
+              _buildSettingsItem(
+                context,
+                icon: Icons.storefront_outlined,
+                title: 'Incoming Orders',
+                subtitle: 'Manage customer orders and status',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const OrdersListScreen(isBusinessView: true),
+                    ),
+                  );
+                },
+              ),
             _buildSettingsItem(
               context,
               icon: Icons.qr_code_rounded,
