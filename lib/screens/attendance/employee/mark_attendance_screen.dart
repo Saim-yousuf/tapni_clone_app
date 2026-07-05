@@ -141,7 +141,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.wallet_outlined, size: 30),
-            tooltip: 'My Employee Cards',
+            tooltip: 'Company Employee Card',
             onPressed: () {
               Navigator.push(
                 context,

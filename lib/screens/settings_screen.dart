@@ -167,7 +167,7 @@ class SettingsScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Try Business",
+                          "Try Business Pro",
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
@@ -201,25 +201,13 @@ class SettingsScreen extends StatelessWidget {
               ),
 
             const SizedBox(height: 24),
-            // Settings Categories
-            // _buildSectionHeader('Preferences'),
-            // _buildToggleItem(
-            //   context,
-            //   icon: Icons.dark_mode_outlined,
-            //   title: 'Dark Mode Theme',
-            //   subtitle: 'Sleek premium background',
-            //   value: isDark,
-            //   onChanged: (_) {
-            //     Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-            //   },
-            // ),
-            // const SizedBox(height: 16),
-            _buildSectionHeader('Profile Configuration'),
+
+            _buildSectionHeader('Your Profile'),
             _buildSettingsItem(
               context,
               icon: Icons.person_outline_rounded,
-              title: 'Edit Information',
-              subtitle: 'Change name, profile photo, and bio',
+              title: 'Edit Profile',
+              subtitle: 'Change your name, photo, and bio',
               onTap: () {
                 final profileProvider = Provider.of<ProfileProvider>(
                   context,
@@ -236,8 +224,8 @@ class SettingsScreen extends StatelessWidget {
             _buildSettingsItem(
               context,
               icon: Icons.add_link_rounded,
-              title: 'Manage Social Handles',
-              subtitle: 'Activate and link external channels',
+              title: 'Social Links',
+              subtitle: 'Add Instagram, WhatsApp, website and more',
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const SocialLinksScreen()),
@@ -246,20 +234,23 @@ class SettingsScreen extends StatelessWidget {
             ),
             _buildSettingsItem(
               context,
-              icon: Icons.qr_code_rounded,
-              title: 'Generate Card QR',
-              subtitle: 'Share digital business card link',
+              icon: Icons.qr_code_2_rounded,
+              title: 'Share My QR Code',
+              subtitle: 'Let others scan your digital business card',
               onTap: () {
-                Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (_) => const QrCodeScreen()));
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const QrCodeScreen()),
+                );
               },
             ),
+
+            const SizedBox(height: 8),
+            _buildSectionHeader('Shopping & Rewards'),
             _buildSettingsItem(
               context,
               icon: Icons.receipt_long_outlined,
               title: 'My Orders',
-              subtitle: 'View your placed orders and status',
+              subtitle: 'Track orders you placed from shops',
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -268,36 +259,11 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            if (profile.isPro)
-              _buildSettingsItem(
-                context,
-                icon: Icons.storefront_outlined,
-                title: 'Incoming Orders',
-                subtitle: 'Manage customer orders and status',
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const OrdersListScreen(isBusinessView: true),
-                    ),
-                  );
-                },
-              ),
             _buildSettingsItem(
               context,
-              icon: Icons.qr_code_rounded,
-              title: 'Bussiness Loyalty Programs',
-              subtitle: 'Make loyalty programs',
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => LoyaltyProgramListScreen()),
-                );
-              },
-            ),
-            _buildSettingsItem(
-              context,
-              icon: Icons.qr_code_rounded,
-              title: 'Loyalty Programs',
-              subtitle: 'Loyalty programs',
+              icon: Icons.card_giftcard_outlined,
+              title: 'My Reward Cards',
+              subtitle: 'View stamps and points from loyalty programs',
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -306,11 +272,14 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
+
+            const SizedBox(height: 8),
+            _buildSectionHeader('Workplace'),
             _buildSettingsItem(
               context,
               icon: Icons.fact_check_outlined,
-              title: 'Mark Attendance',
-              subtitle: 'Check in and check out at your workplace',
+              title: 'Workplace Check-In',
+              subtitle: 'Clock in and out at your job with location',
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -321,9 +290,9 @@ class SettingsScreen extends StatelessWidget {
             ),
             _buildSettingsItem(
               context,
-              icon: Icons.wallet_outlined,
-              title: 'My Employee Cards',
-              subtitle: 'Employer business cards for Google Wallet',
+              icon: Icons.badge_outlined,
+              title: 'Company Employee Card',
+              subtitle: 'Save your work ID card to phone or wallet',
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -332,12 +301,29 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            if (profile.isPro)
+
+            if (profile.isPro) ...[
+              const SizedBox(height: 8),
+              _buildSectionHeader('Business Tools'),
               _buildSettingsItem(
                 context,
-                icon: Icons.schedule_outlined,
-                title: 'Manage Attendance',
-                subtitle: 'Employees, shifts, location and reports',
+                icon: Icons.storefront_outlined,
+                title: 'Customer Orders',
+                subtitle: 'View and update orders from your customers',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          const OrdersListScreen(isBusinessView: true),
+                    ),
+                  );
+                },
+              ),
+              _buildSettingsItem(
+                context,
+                icon: Icons.groups_outlined,
+                title: 'Team Attendance',
+                subtitle: 'Add employees, set shifts and track presence',
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -346,14 +332,28 @@ class SettingsScreen extends StatelessWidget {
                   );
                 },
               ),
-            const SizedBox(height: 16),
+              _buildSettingsItem(
+                context,
+                icon: Icons.stars_outlined,
+                title: 'Loyalty Programs',
+                subtitle: 'Create stamp or points rewards for customers',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => LoyaltyProgramListScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
 
-            _buildSectionHeader('Security & Support'),
+            const SizedBox(height: 8),
+            _buildSectionHeader('Help & Account'),
             _buildSettingsItem(
               context,
               icon: Icons.help_outline_rounded,
-              title: 'Help Center',
-              subtitle: 'Faq and documentation',
+              title: 'Help & FAQs',
+              subtitle: 'Answers to common questions',
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -366,8 +366,8 @@ class SettingsScreen extends StatelessWidget {
             _buildSettingsItem(
               context,
               icon: Icons.feedback_outlined,
-              title: 'Submit App Feedback',
-              subtitle: 'Report a bug or suggest features',
+              title: 'Send Feedback',
+              subtitle: 'Report a bug or suggest a new feature',
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -379,7 +379,7 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 8),
 
             // Logout Button
             ListTile(
