@@ -6,6 +6,7 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/business_card.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
+import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 
 class AnalyticsScreen extends StatefulWidget {
@@ -83,7 +84,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     final profile = Provider.of<ProfileProvider>(context).profile;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Analytics Dashboard')),
+      appBar: AppBar(
+        title: const Text('Analytics Dashboard'),
+        actions: const [NotificationIconButton()],
+      ),
       body: !profile.isPro
           ? BusinessOnlyCard()
           : _isLoading

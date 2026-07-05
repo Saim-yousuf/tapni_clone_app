@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "335461782414",
+    "project_id": "barqody-2fb4e",
+    "storage_bucket": "barqody-2fb4e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335461782414:android:3ca4867fe13c1857188adf",
+        "android_client_info": {
+          "package_name": "com.example.tapni_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaS-iYGsThfzquD1oYN1E31ux6x61XvCw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

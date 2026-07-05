@@ -10,11 +10,13 @@ import 'package:tapni_app/screens/splash_screen.dart';
 import 'package:tapni_app/utils/api_endpoint.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/services/push_notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefHelper.getInstance();
   Api.init();
+  await PushNotificationService.initialize();
   runApp(
     MultiProvider(
       providers: [
@@ -39,6 +41,7 @@ class TapniApp extends StatelessWidget {
     return MaterialApp(
       title: 'BarQody - Digital Business Card',
       debugShowCheckedModeBanner: false,
+      navigatorKey: PushNotificationService.navigatorKey,
       themeMode: themeProvider.themeMode,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

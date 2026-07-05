@@ -6,6 +6,7 @@ import 'package:tapni_app/widgets/alert.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
+import 'package:tapni_app/services/push_notification_service.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthRepo _authRepo = AuthRepo();
@@ -70,6 +71,7 @@ class AuthProvider extends ChangeNotifier {
           token.toString(),
         );
         await _clearAllUserData(context);
+        await PushNotificationService.syncTokenWithBackend();
         return true;
       }
     }
@@ -105,6 +107,7 @@ class AuthProvider extends ChangeNotifier {
           token.toString(),
         );
         await _clearAllUserData(context);
+        await PushNotificationService.syncTokenWithBackend();
         return true;
       }
     }
@@ -131,6 +134,7 @@ class AuthProvider extends ChangeNotifier {
           jwt.toString(),
         );
         await _clearAllUserData(context);
+        await PushNotificationService.syncTokenWithBackend();
         return true;
       }
     }
@@ -145,6 +149,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logout() async {
+    await PushNotificationService.removeTokenFromBackend();
     await SharedPrefHelper.remove(SharedPrefHelper.utils.authorizedToken);
     notifyListeners();
   }

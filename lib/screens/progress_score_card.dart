@@ -9,7 +9,7 @@ class ProfileScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
-    double progress = profileProvider.score / 100;
+    double progress = (profileProvider.score / 100).clamp(0.0, 1.0);
 
     return GestureDetector(
       onTap: () {

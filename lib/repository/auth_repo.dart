@@ -97,6 +97,27 @@ class AuthRepo {
     );
   }
 
+  Future<ApiResponse> saveFcmToken({
+    required String token,
+    required String platform,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.saveFcmToken,
+      jsonBody: {"token": token, "platform": platform},
+      method: ApiMethod.post,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> removeFcmToken({required String token}) async {
+    return await ApiHandler.request(
+      api: Api.auth.removeFcmToken,
+      jsonBody: {"token": token},
+      method: ApiMethod.delete,
+      authorization: true,
+    );
+  }
+
   Future<ApiResponse> getContactCategories() async {
     return await ApiHandler.request(
       api: Api.contact.getCategories,

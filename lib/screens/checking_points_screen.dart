@@ -191,7 +191,7 @@ class CheckingPointsScreen extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: LinearProgressIndicator(
-                      value: score / 100,
+                      value: (score / 100).clamp(0.0, 1.0),
                       minHeight: 10,
                       backgroundColor: Colors.black12,
                       valueColor: const AlwaysStoppedAnimation<Color>(

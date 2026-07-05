@@ -11,6 +11,7 @@ import 'package:tapni_app/widgets/custom_app_button.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 import 'package:tapni_app/widgets/filter_contacts_sheet.dart';
 import 'package:tapni_app/widgets/go_bussiness_button.dart';
+import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 class LeadsScreen extends StatefulWidget {
@@ -55,7 +56,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
             Icon(Icons.refresh_rounded, color: Colors.black38),
           ],
         ),
-        actions: [GoBussinessButton()],
+        actions: const [
+          NotificationIconButton(),
+          GoBussinessButton(),
+        ],
       ),
 
       body: SafeArea(

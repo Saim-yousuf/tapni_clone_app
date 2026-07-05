@@ -17,6 +17,7 @@ import 'package:tapni_app/screens/qr_code_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
+import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/settings_widget.dart';
 
@@ -78,7 +79,10 @@ class SettingsScreen extends StatelessWidget {
     final profile = Provider.of<ProfileProvider>(context).profile;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+        title: const Text('Settings'),
+        actions: const [NotificationIconButton()],
+      ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),

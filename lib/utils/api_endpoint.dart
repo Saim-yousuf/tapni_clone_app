@@ -49,6 +49,8 @@ class _AuthApi {
   String get links => "${Api.baseUrl}/api/user/auth/profile/links";
   String get linkCatalog => "${Api.baseUrl}/api/user/auth/link-catalog";
   String get analytics => "${Api.baseUrl}/api/user/auth/analytics";
+  String get saveFcmToken => "${Api.baseUrl}/api/user/auth/fcm-token";
+  String get removeFcmToken => "${Api.baseUrl}/api/user/auth/fcm-token";
 }
 
 class _SubscriptionApi {

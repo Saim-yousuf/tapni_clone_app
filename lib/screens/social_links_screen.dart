@@ -6,6 +6,7 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_app_button.dart';
 import 'package:tapni_app/widgets/go_bussiness_button.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
+import 'package:tapni_app/widgets/notification_icon_button.dart';
 
 class SocialLinksScreen extends StatelessWidget {
   final bool isTab;
@@ -31,7 +32,10 @@ class SocialLinksScreen extends StatelessWidget {
         ),
         centerTitle: false,
         automaticallyImplyLeading: !isTab,
-        actions: [GoBussinessButton()],
+        actions: const [
+          NotificationIconButton(),
+          GoBussinessButton(),
+        ],
       ),
       body: Stack(
         children: [

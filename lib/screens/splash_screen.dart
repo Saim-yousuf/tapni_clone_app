@@ -7,6 +7,7 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
+import 'package:tapni_app/services/push_notification_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -72,6 +73,7 @@ class _SplashScreenState extends State<SplashScreen>
         listen: false,
       );
       await profileProvider.fetchProfile();
+      await PushNotificationService.syncTokenWithBackend();
 
       if (!mounted) return;
       Navigator.of(

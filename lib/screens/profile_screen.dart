@@ -15,6 +15,7 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/go_bussiness_button.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
+import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/templates_sheet.dart';
 
@@ -112,6 +113,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('My Card'),
+        actions: const [
+          NotificationIconButton(),
+          GoBussinessButton(),
+        ],
+      ),
       body: SafeArea(
         child: isEditing
             ? _buildEditMode(profileProvider, profile)
@@ -376,8 +384,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                // Go PRO button
-                GoBussinessButton(),
+                const SizedBox(width: 8),
               ],
             ),
 

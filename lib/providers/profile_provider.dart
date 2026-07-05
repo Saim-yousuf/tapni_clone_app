@@ -507,15 +507,17 @@ class ProfileProvider extends ChangeNotifier {
 
   double score = 0;
 
+  static const _scoreItemWeight = 100 / 6;
+
   void profileScore() {
-    if (profile.name.isNotEmpty) score += 12.5;
-    if (profile.bio.isNotEmpty) score += 12.5;
-    if (profile.profilePhotoUrl?.isNotEmpty ?? false) score += 12.5;
-    if (profile.coverPhotoUrl?.isNotEmpty ?? false) score += 12.5;
-    if (profile.socialLinks.length >= 3) score += 12.5;
-    // if (profile.introVoiceNoteUrl?.isNotEmpty ?? false) score += 12.5;
-    // if (profile.gallery.isNotEmpty) score += 12.5;
-    if (profile.isPro == true) score += 12.5;
+    double newScore = 0;
+    if (profile.name.isNotEmpty) newScore += _scoreItemWeight;
+    if (profile.bio.isNotEmpty) newScore += _scoreItemWeight;
+    if (profile.profilePhotoUrl?.isNotEmpty ?? false) newScore += _scoreItemWeight;
+    if (profile.coverPhotoUrl?.isNotEmpty ?? false) newScore += _scoreItemWeight;
+    if (profile.socialLinks.length >= 3) newScore += _scoreItemWeight;
+    if (profile.isPro == true) newScore += _scoreItemWeight;
+    score = newScore.clamp(0, 100);
     notifyListeners();
   }
 }
