@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tapni_app/helper/launcher.dart';
+import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
+import 'package:tapni_app/widgets/bank_widgets.dart';
+import 'package:tapni_app/widgets/loading_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/models/social_link.dart';
@@ -495,13 +498,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         alignment: WrapAlignment.center,
         children: activeLinks.map((link) {
           return GestureDetector(
-            onTap: () => Launcher.openLink(
-              link,
-              context,
-              businessId: profile.id,
-              businessName: profile.businessName ?? profile.name,
-              businessCategory: profile.businessCategory,
-            ),
+            onTap: () => _openScannedLink(link, profile),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
@@ -525,10 +522,43 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     );
   }
 
+  Future<void> _openScannedLink(SocialLink link, UserProfile profile) async {
+    if (link.isCatalogLink) {
+      openCatalogLink(
+        context: context,
+        link: link,
+        businessId: profile.id,
+        businessName: profile.businessName ?? profile.name,
+        businessCategory: profile.businessCategory,
+      );
+      return;
+    }
+
+    if (link.fieldType == 'bank' && link.bankDetails != null) {
+      CustomDialog.showDailog(
+        context: context,
+        child: BlurredDialog(
+          child: BankDetailDialog(
+            bankDetails: Map<String, dynamic>.from(link.bankDetails!),
+          ),
+        ),
+      );
+      return;
+    }
+
+    final target = (link.url?.trim().isNotEmpty == true)
+        ? link.url!.trim()
+        : link.fullUrl;
+    if (target.isEmpty || target.startsWith('bank:')) return;
+
+    final uri = Uri.tryParse(target);
+    if (uri == null) return;
+
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
   Widget _buildLinkIcon(SocialLink link) {
-    final isCatalog = link.fieldType == 'menu_catalog' ||
-        link.catalogItems != null ||
-        link.url?.startsWith('catalog:') == true;
+    final isCatalog = link.isCatalogLink;
     final logo = link.logoUrl?.trim() ?? '';
 
     if (logo.isNotEmpty) {

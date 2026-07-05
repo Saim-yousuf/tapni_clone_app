@@ -1414,10 +1414,7 @@ class LinkSheet {
       if (catalogTemplate != null) break;
     }
 
-    final isMenuCatalog =
-        link.fieldType == 'menu_catalog' ||
-        link.catalogItems != null ||
-        link.url?.startsWith('catalog:') == true;
+    final isMenuCatalog = link.isCatalogLink;
 
     if (isMenuCatalog) {
       if (catalogTemplate?.actionType == 'menu_catalog') {

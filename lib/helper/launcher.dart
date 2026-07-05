@@ -14,9 +14,7 @@ class Launcher {
     String? businessCategory,
   }) async {
     PrintLog.logMessage("model.fieldType: ${model.fieldType}");
-    if (model.fieldType == 'menu_catalog' ||
-        model.catalogItems != null ||
-        model.url?.startsWith('catalog:') == true) {
+    if (model.isCatalogLink) {
       openCatalogLink(
         context: context,
         link: model,

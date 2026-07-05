@@ -37,6 +37,7 @@ class SocialLink {
   final String? customLabel;
   final String? fieldLabel;
   final String? fieldType;
+  final String? actionType;
   final String? logoUrl;
   final String? url;
   final Map<String, String>? bankDetails;
@@ -55,6 +56,7 @@ class SocialLink {
     this.customLabel,
     this.fieldLabel,
     this.fieldType,
+    this.actionType,
     this.logoUrl,
     this.url,
     this.bankDetails,
@@ -74,6 +76,7 @@ class SocialLink {
     String? customLabel,
     String? fieldLabel,
     String? fieldType,
+    String? actionType,
     String? logoUrl,
     String? url,
     Map<String, String>? bankDetails,
@@ -92,6 +95,7 @@ class SocialLink {
       customLabel: customLabel ?? this.customLabel,
       fieldLabel: fieldLabel ?? this.fieldLabel,
       fieldType: fieldType ?? this.fieldType,
+      actionType: actionType ?? this.actionType,
       logoUrl: logoUrl ?? this.logoUrl,
       url: url ?? this.url,
       bankDetails: bankDetails ?? this.bankDetails,
@@ -154,6 +158,16 @@ class SocialLink {
     };
   }
 
+  bool get isCatalogLink {
+    if (actionType == 'menu_catalog') return true;
+    if (actionType == 'link' || actionType == 'contact_card') return false;
+    if (fieldType == 'menu_catalog') {
+      return url?.startsWith('catalog:') == true ||
+          (catalogItems != null && catalogItems!.isNotEmpty);
+    }
+    return false;
+  }
+
   /// Create from API link object.
   factory SocialLink.fromApiJson(Map<String, dynamic> json) {
     final type = json['type'] as String? ?? 'custom';
@@ -166,6 +180,7 @@ class SocialLink {
     final catalogItemsJson = json['catalogItems'] as List<dynamic>?;
     final templateId = json['templateId']?.toString();
     final fieldLabel = json['fieldLabel']?.toString();
+    final actionType = json['actionType'] as String?;
 
     SocialPlatform platform = SocialPlatform.wave;
     final combined = "${type.toLowerCase()} ${title.toLowerCase()}";
@@ -247,6 +262,7 @@ class SocialLink {
       customLabel: title.isNotEmpty ? title : null,
       fieldLabel: fieldLabel,
       fieldType: type,
+      actionType: actionType,
       isCustom: json['isCustom'] as bool? ?? false,
       logoUrl: logo,
       url: url,
@@ -256,9 +272,11 @@ class SocialLink {
       contactCard: contactCardJson?.map(
         (key, value) => MapEntry(key, value?.toString() ?? ''),
       ),
-      catalogItems: catalogItemsJson
-          ?.map((e) => CatalogItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      catalogItems: catalogItemsJson != null && catalogItemsJson.isNotEmpty
+          ? catalogItemsJson
+              .map((e) => CatalogItem.fromJson(e as Map<String, dynamic>))
+              .toList()
+          : null,
       catalogType: json['catalogType']?.toString(),
       value: value,
       isActive: json['isActive'] as bool? ?? true,
