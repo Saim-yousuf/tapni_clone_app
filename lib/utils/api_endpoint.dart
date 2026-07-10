@@ -20,8 +20,8 @@ class Api {
   static void init(
     // Environment env
   ) {
-    baseUrl = _localBaseUrl;
-    // baseUrl = _liveBaseUrl;
+    // baseUrl = _localBaseUrl;
+    baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }
@@ -44,7 +44,11 @@ class _AuthApi {
   String get profile => "${Api.baseUrl}/api/user/auth/profile";
   String searchUsers(String query) =>
       "${Api.baseUrl}/api/user/auth/search?q=${Uri.encodeQueryComponent(query)}";
-  String profileByUsername(String username, {bool isScan = false, String? cardId}) {
+  String profileByUsername(
+    String username, {
+    bool isScan = false,
+    String? cardId,
+  }) {
     final params = <String>[];
     if (isScan) params.add('source=scan');
     if (cardId != null && cardId.isNotEmpty) {
@@ -63,6 +67,7 @@ class _AuthApi {
     final query = params.isEmpty ? '' : '?${params.join('&')}';
     return "${Api.baseUrl}/api/user/auth/getprofile/$id$query";
   }
+
   String get links => "${Api.baseUrl}/api/user/auth/profile/links";
   String get linkCatalog => "${Api.baseUrl}/api/user/auth/link-catalog";
   String get analytics => "${Api.baseUrl}/api/user/auth/analytics";
