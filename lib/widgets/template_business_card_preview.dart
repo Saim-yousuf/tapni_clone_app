@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/models/card_template.dart';
@@ -8,6 +12,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
   final String profileUrl;
   final String userInitial;
   final String? profilePhotoUrl;
+  final String? coverPhotoUrl;
   final String? subtitle;
   final String? bio;
   final double width;
@@ -19,6 +24,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
     required this.profileUrl,
     required this.userInitial,
     this.profilePhotoUrl,
+    this.coverPhotoUrl,
     this.subtitle,
     this.bio,
     this.width = 340,
@@ -27,11 +33,12 @@ class TemplateBusinessCardPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasBorder = template.backgroundColor == const Color(0xFFFFFFFF);
+    final cover = coverPhotoUrl?.trim();
 
     return Container(
       width: width,
       decoration: BoxDecoration(
-        color: template.backgroundColor,
+        color: cover == null || cover.isEmpty ? template.backgroundColor : null,
         borderRadius: BorderRadius.circular(24),
         border: hasBorder
             ? Border.all(color: Colors.black.withValues(alpha: 0.08), width: 1.5)
@@ -43,6 +50,12 @@ class TemplateBusinessCardPreview extends StatelessWidget {
             offset: const Offset(0, 8),
           ),
         ],
+        image: cover != null && cover.isNotEmpty
+            ? DecorationImage(
+                image: _imageProvider(cover),
+                fit: BoxFit.cover,
+              )
+            : null,
       ),
       padding: const EdgeInsets.all(22),
       child: Column(
@@ -60,9 +73,9 @@ class TemplateBusinessCardPreview extends StatelessWidget {
                 'Barqody',
                 style: TextStyle(
                   color: template.brandingColor,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 11,
-                  letterSpacing: 1.2,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  letterSpacing: 0.6,
                 ),
               ),
             ],
@@ -75,10 +88,10 @@ class TemplateBusinessCardPreview extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: template.textColor,
-              fontSize: 24,
-              fontWeight: FontWeight.w900,
-              letterSpacing: -0.5,
-              height: 1.1,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.3,
+              height: 1.2,
             ),
           ),
           if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
@@ -87,22 +100,23 @@ class TemplateBusinessCardPreview extends StatelessWidget {
               subtitle!,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: template.brandingColor,
+                color: template.brandingColor.withValues(alpha: 0.9),
                 fontSize: 14,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ],
           if (bio != null && bio!.trim().isNotEmpty) ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Text(
               bio!,
               textAlign: TextAlign.center,
-              maxLines: 3,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: template.textColor.withValues(alpha: 0.9),
-                fontSize: 13,
+                color: template.textColor.withValues(alpha: 0.85),
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
                 height: 1.35,
               ),
             ),
@@ -129,8 +143,8 @@ class TemplateBusinessCardPreview extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: template.labelColor,
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ],
@@ -141,6 +155,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
   Widget _buildAvatar() {
     final photo = profilePhotoUrl?.trim();
     if (photo != null && photo.isNotEmpty) {
+      ImageProvider imageProvider = _imageProvider(photo);
       return Container(
         width: 78,
         height: 78,
@@ -151,7 +166,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
             width: 2,
           ),
           image: DecorationImage(
-            image: NetworkImage(photo),
+            image: imageProvider,
             fit: BoxFit.cover,
           ),
         ),
@@ -172,10 +187,26 @@ class TemplateBusinessCardPreview extends StatelessWidget {
         userInitial.toUpperCase(),
         style: TextStyle(
           color: template.textColor,
-          fontSize: 30,
-          fontWeight: FontWeight.w900,
+          fontSize: 26,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
+  }
+
+  static ImageProvider _imageProvider(String path) {
+    if (path.startsWith('data:')) {
+      return MemoryImage(_decodeDataUrl(path));
+    }
+    if (path.startsWith('/') || path.contains(':\\')) {
+      return FileImage(File(path));
+    }
+    return NetworkImage(path);
+  }
+
+  static Uint8List _decodeDataUrl(String dataUrl) {
+    final comma = dataUrl.indexOf(',');
+    final base64Data = comma >= 0 ? dataUrl.substring(comma + 1) : dataUrl;
+    return base64Decode(base64Data);
   }
 }

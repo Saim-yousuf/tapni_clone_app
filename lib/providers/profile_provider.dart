@@ -8,16 +8,21 @@ import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/card_template.dart';
+import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/services/mock_data_service.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
+import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/preference_helper.dart';
 
 import '../widgets/loading_widget.dart';
 
 class ProfileProvider extends ChangeNotifier {
   late UserProfile _profile;
   int _selectedTemplateIndex = 1; // Default to Charcoal
+  String _activeCardId = UserCustomCard.primaryId;
+  static const _activeCardPrefKey = 'active_card_id';
 
   bool _isEditingProfile = false;
   bool get isEditingProfile => _isEditingProfile;
@@ -54,11 +59,24 @@ class ProfileProvider extends ChangeNotifier {
     _isProUser = false;
     _linkCatalog.clear();
     _selectedTemplateIndex = 1;
+    _activeCardId = UserCustomCard.primaryId;
     notifyListeners();
+  }
+
+  void _loadActiveCardId() {
+    final saved = SharedPrefHelper.getString(_activeCardPrefKey);
+    if (saved.isNotEmpty) {
+      _activeCardId = saved;
+    }
+  }
+
+  Future<void> _persistActiveCardId() async {
+    await SharedPrefHelper.putString(_activeCardPrefKey, _activeCardId);
   }
 
   Future<void> fetchProfile() async {
     _isLoading = true;
+    _loadActiveCardId();
     notifyListeners();
 
     final repo = AuthRepo();
@@ -74,11 +92,13 @@ class ProfileProvider extends ChangeNotifier {
           _isProUser = _profile.isPro;
           _selectedTemplateIndex =
               CardTemplateCatalog.indexById(_profile.cardTemplateId);
+          _ensureActiveCardExists();
         } else if (data is Map<String, dynamic>) {
           _profile = UserProfile.fromApiJson(data);
           _isProUser = _profile.isPro;
           _selectedTemplateIndex =
               CardTemplateCatalog.indexById(_profile.cardTemplateId);
+          _ensureActiveCardExists();
         }
         notifyListeners();
       } catch (e) {
@@ -115,6 +135,168 @@ class ProfileProvider extends ChangeNotifier {
   int get selectedTemplateIndex => _selectedTemplateIndex;
   CardTemplate get currentTemplate => templates[_selectedTemplateIndex];
   bool get isProUser => _isProUser;
+  String get activeCardId => _activeCardId;
+  List<UserCustomCard> get customCards => _profile.customCards;
+
+  CardDisplayData get primaryCardDisplay {
+    final username = _profile.username ?? '';
+    final allLinkIds = _profile.socialLinks
+        .where((l) => l.isActive)
+        .map((l) => l.id)
+        .toList();
+    return CardDisplayData(
+      id: UserCustomCard.primaryId,
+      title: 'Main Card',
+      name: _profile.businessName?.isNotEmpty == true
+          ? _profile.businessName!
+          : _profile.name,
+      subtitle: _profile.designation.isNotEmpty
+          ? _profile.designation
+          : (_profile.company.isNotEmpty ? _profile.company : null),
+      bio: _profile.bio.isNotEmpty ? _profile.bio : null,
+      template: currentTemplate,
+      profilePhotoUrl: _profile.profilePhotoUrl,
+      coverPhotoUrl: null,
+      enabledLinkIds: allLinkIds,
+      profileUrl: username.isNotEmpty
+          ? '${Constants.appDomain}/$username'
+          : Constants.appDomain,
+      isPrimary: true,
+    );
+  }
+
+  List<CardDisplayData> get allCardDisplays {
+    final username = _profile.username ?? '';
+    final cards = <CardDisplayData>[primaryCardDisplay];
+    for (final card in _profile.customCards) {
+      cards.add(_displayForCustomCard(card, username));
+    }
+    return cards;
+  }
+
+  CardDisplayData get activeCardDisplay {
+    if (_activeCardId == UserCustomCard.primaryId) {
+      return primaryCardDisplay;
+    }
+    for (final card in _profile.customCards) {
+      if (card.id == _activeCardId) {
+        return _displayForCustomCard(card, _profile.username ?? '');
+      }
+    }
+    return primaryCardDisplay;
+  }
+
+  CardDisplayData _displayForCustomCard(UserCustomCard card, String username) {
+    final enabledIds = card.enabledLinkIds.isEmpty
+        ? _profile.socialLinks
+            .where((l) => l.isActive)
+            .map((l) => l.id)
+            .toList()
+        : card.enabledLinkIds;
+    return CardDisplayData(
+      id: card.id,
+      title: card.title,
+      name: card.displayName,
+      subtitle: card.subtitle,
+      bio: card.bio,
+      template: card.effectiveTemplate(),
+      profilePhotoUrl: card.profilePhotoUrl ?? _profile.profilePhotoUrl,
+      coverPhotoUrl: card.coverPhotoUrl,
+      enabledLinkIds: enabledIds,
+      profileUrl: card.profileUrl(username),
+      isPrimary: false,
+    );
+  }
+
+  void _ensureActiveCardExists() {
+    if (_activeCardId == UserCustomCard.primaryId) return;
+    final exists = _profile.customCards.any((c) => c.id == _activeCardId);
+    if (!exists) {
+      _activeCardId = UserCustomCard.primaryId;
+      _persistActiveCardId();
+    }
+  }
+
+  Future<void> setActiveCard(String cardId) async {
+    _activeCardId = cardId;
+    await _persistActiveCardId();
+    notifyListeners();
+  }
+
+  Future<bool> saveCustomCards(List<UserCustomCard> cards) async {
+    try {
+      final repo = AuthRepo();
+      final response = await repo.updateProfile(
+        jsonBody: {
+          'customCards': cards.map((c) => c.toJson()).toList(),
+        },
+      );
+
+      if (response.success) {
+        _profile = _profile.copyWith(customCards: cards);
+        _ensureActiveCardExists();
+        notifyListeners();
+        return true;
+      }
+    } catch (_) {}
+
+    _profile = _profile.copyWith(customCards: cards);
+    _ensureActiveCardExists();
+    notifyListeners();
+    return false;
+  }
+
+  Future<bool> addCustomCard(UserCustomCard card) async {
+    final updated = [..._profile.customCards, card];
+    final saved = await saveCustomCards(updated);
+    if (saved) {
+      await setActiveCard(card.id);
+    }
+    return saved;
+  }
+
+  Future<bool> updateCustomCard(UserCustomCard card) async {
+    final updated = _profile.customCards
+        .map((c) => c.id == card.id ? card : c)
+        .toList();
+    return saveCustomCards(updated);
+  }
+
+  Future<bool> deleteCustomCard(String cardId) async {
+    final updated =
+        _profile.customCards.where((c) => c.id != cardId).toList();
+    if (_activeCardId == cardId) {
+      _activeCardId = UserCustomCard.primaryId;
+      await _persistActiveCardId();
+    }
+    return saveCustomCards(updated);
+  }
+
+  UserCustomCard? customCardById(String? cardId) {
+    if (cardId == null || cardId.isEmpty || cardId == UserCustomCard.primaryId) {
+      return null;
+    }
+    for (final card in _profile.customCards) {
+      if (card.id == cardId) return card;
+    }
+    return null;
+  }
+
+  List<SocialLink> linksForCard(String? cardId) {
+    final activeLinks =
+        _profile.socialLinks.where((link) => link.isActive).toList();
+    if (cardId == null ||
+        cardId.isEmpty ||
+        cardId == UserCustomCard.primaryId) {
+      return activeLinks;
+    }
+    final card = customCardById(cardId);
+    if (card == null || card.enabledLinkIds.isEmpty) {
+      return activeLinks;
+    }
+    final enabled = card.enabledLinkIds.toSet();
+    return activeLinks.where((l) => enabled.contains(l.id)).toList();
+  }
 
   void upgradeToPro() {
     _isProUser = true;

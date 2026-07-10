@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/lead.dart';
+import 'package:tapni_app/models/contact_category.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
-import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
+import 'package:tapni_app/screens/find_user_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
-import 'package:tapni_app/widgets/custom_app_button.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 import 'package:tapni_app/widgets/filter_contacts_sheet.dart';
-import 'package:tapni_app/widgets/go_bussiness_button.dart';
-import 'package:tapni_app/widgets/notification_icon_button.dart';
-import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
+import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 
 class LeadsScreen extends StatefulWidget {
   const LeadsScreen({Key? key}) : super(key: key);
@@ -23,341 +22,343 @@ class LeadsScreen extends StatefulWidget {
 
 class _LeadsScreenState extends State<LeadsScreen> {
   final _searchController = TextEditingController();
+  final _searchFocus = FocusNode();
 
   @override
   void dispose() {
     _searchController.dispose();
+    _searchFocus.dispose();
     super.dispose();
   }
 
-  // ── Main Build ─────────────────────────────────────────────────────────────
+  void _dismissKeyboard() {
+    _searchFocus.unfocus();
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  Future<void> _openScan() async {
+    _dismissKeyboard();
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const ScanScreen()),
+    );
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _dismissKeyboard();
+    });
+  }
+
+  void _openFindUser() {
+    _dismissKeyboard();
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const FindUserScreen()),
+    );
+  }
+
+  String _contactsSubtitle(int count, LeadsProvider provider) {
+    if (count == 0) return 'Start building your network';
+    final parts = <String>['$count contact${count == 1 ? '' : 's'}'];
+    if (provider.activeCategoryId != null) {
+      parts.add(_activeCategoryLabel(provider));
+    }
+    return parts.join(' · ');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final leadsProvider = Provider.of<LeadsProvider>(context);
     final leadsList = leadsProvider.leads;
-    final profileProvider = Provider.of<ProfileProvider>(context);
-    final profile = profileProvider.profile;
-    return Scaffold(
-      backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
+    final isFiltering = _searchController.text.isNotEmpty ||
+        leadsProvider.activeCategoryId != null;
 
-      // ── AppBar ──
-      appBar: AppBar(
-        backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
-        elevation: 0,
-        titleSpacing: 20,
-        title: Row(
+    return Scaffold(
+      backgroundColor: WaUi.toolsScaffold,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 8, right: 4),
+        child: WaContactSpeedDial(
+          onScan: _openScan,
+          onAdd: () => _showAddLeadSheet(context, leadsProvider),
+          onFind: _openFindUser,
+        ),
+      ),
+      body: GestureDetector(
+        onTap: _dismissKeyboard,
+        behavior: HitTestBehavior.translucent,
+        child: SafeArea(
+          child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Contacts',
-              style: TextStyle(color: isDark ? Colors.white : Colors.black),
+            WaChatsHeader(
+              title: 'Contacts',
+              subtitle: _contactsSubtitle(leadsList.length, leadsProvider),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.qr_code_scanner_rounded, size: 24),
+                  color: WaUi.primaryText,
+                  tooltip: 'Scan',
+                  onPressed: _openScan,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.person_search_outlined, size: 24),
+                  color: WaUi.primaryText,
+                  tooltip: 'Find username',
+                  onPressed: _openFindUser,
+                ),
+                PopupMenuButton<String>(
+                  icon: const Icon(
+                    Icons.more_vert,
+                    size: 24,
+                    color: WaUi.primaryText,
+                  ),
+                  color: WaUi.surface,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
+                  ),
+                  onSelected: (value) =>
+                      _onMenuAction(context, value, leadsProvider),
+                  itemBuilder: (_) => [
+                    PopupMenuItem(
+                      value: 'filter',
+                      child: Text('Filter contacts', style: WaUi.body),
+                    ),
+                    PopupMenuItem(
+                      value: 'categories',
+                      child: Text('Manage categories', style: WaUi.body),
+                    ),
+                    PopupMenuItem(
+                      value: 'import',
+                      child: Text('Import contacts', style: WaUi.body),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            const SizedBox(width: 6),
-            Icon(Icons.refresh_rounded, color: Colors.black38),
+            WaChatSearchBar(
+              controller: _searchController,
+              focusNode: _searchFocus,
+              onChanged: (val) {
+                setState(() {});
+                leadsProvider.setSearchQuery(val);
+              },
+              onClear: () {
+                setState(() => _searchController.clear());
+                leadsProvider.setSearchQuery('');
+              },
+            ),
+            WaContactFilterChips(
+              categories: leadsProvider.categories,
+              activeCategoryId: leadsProvider.activeCategoryId,
+              onAllTap: () => leadsProvider.setActiveCategory(null),
+              onCategoryTap: (id) => leadsProvider.setActiveCategory(id),
+              onAddCategory: () =>
+                  _showAddCategoryDialog(context, leadsProvider),
+            ),
+            Expanded(
+              child: leadsProvider.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : leadsList.isEmpty
+                  ? WaContactEmptyState(
+                      isSearching: isFiltering,
+                      onScan: _openScan,
+                      onAdd: () =>
+                          _showAddLeadSheet(context, leadsProvider),
+                    )
+                  : RefreshIndicator(
+                      color: WaUi.accent,
+                      onRefresh: leadsProvider.fetchLeads,
+                      child: ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.only(bottom: 120),
+                        itemCount: leadsList.length,
+                        itemBuilder: (context, index) {
+                          return _buildContactRow(
+                            context,
+                            leadsList[index],
+                            leadsProvider,
+                            isLast: index == leadsList.length - 1,
+                          );
+                        },
+                      ),
+                    ),
+            ),
           ],
         ),
-        actions: const [
-          NotificationIconButton(),
-          GoBussinessButton(),
-        ],
+        ),
       ),
+    );
+  }
 
-      body: SafeArea(
-        child: Column(
-          children: [
-            // ── Search + Action Icons ──
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: Row(
-                children: [
-                  // Search bar
-                  Expanded(
-                    child: Container(
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? Colors.white.withOpacity(0.07)
-                            : Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      child: TextFormField(
-                        controller: _searchController,
-                        onChanged: (val) {
-                          setState(() {});
-                          leadsProvider.setSearchQuery(val);
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Search...',
-                          hintStyle: TextStyle(
-                            fontSize: 18,
-                            color: isDark
-                                ? Colors.white38
-                                : Colors.grey.shade500,
-                          ),
-                          prefixIcon: Icon(
-                            Icons.search_rounded,
-                            size: 20,
-                            color: isDark
-                                ? Colors.white38
-                                : Colors.grey.shade500,
-                          ),
-                          suffixIcon: _searchController.text.isNotEmpty
-                              ? IconButton(
-                                  icon: const Icon(
-                                    Icons.clear_rounded,
-                                    size: 18,
-                                  ),
-                                  onPressed: () {
-                                    setState(() => _searchController.clear());
-                                    leadsProvider.setSearchQuery('');
-                                  },
-                                )
-                              : null,
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
+  String _activeCategoryLabel(LeadsProvider provider) {
+    final id = provider.activeCategoryId;
+    if (id == null) return '';
+    ContactCategory? category;
+    for (final c in provider.categories) {
+      if (c.id == id) {
+        category = c;
+        break;
+      }
+    }
+    return category == null ? 'Filtered' : category.name;
+  }
 
-                  // Filter icon
-                  _topIconBtn(
-                    icon: Icons.tune_rounded,
-                    isDark: isDark,
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (ctx) => const FilterContactsSheet(),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 6),
-
-                  // Contacts import icon
-                  _topIconBtn(
-                    icon: Icons.contact_page_outlined,
-                    isDark: isDark,
-                  ),
-                  const SizedBox(width: 6),
-
-                  // Add contact icon
-                  _topIconBtn(
-                    icon: Icons.person_add_alt_1_outlined,
-                    isDark: isDark,
-                    onTap: () => _showAddLeadSheet(context, leadsProvider),
-                  ),
-                ],
-              ),
+  void _onMenuAction(
+    BuildContext context,
+    String value,
+    LeadsProvider provider,
+  ) {
+    switch (value) {
+      case 'filter':
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (ctx) => const FilterContactsSheet(),
+        );
+        break;
+      case 'categories':
+        _showCategoriesSheet(context, provider);
+        break;
+      case 'import':
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Import contacts is not available yet.',
+              style: WaUi.body.copyWith(color: Colors.white),
             ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: WaUi.primaryText,
+          ),
+        );
+        break;
+    }
+  }
 
-            const SizedBox(height: 12),
-
-            // ── Filter chips row ──
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => leadsProvider.setActiveCategory(null),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 7,
-                      ),
-                      decoration: BoxDecoration(
-                        color: leadsProvider.activeCategoryId == null
-                            ? (isDark ? Colors.white : Colors.black)
-                            : (isDark ? Colors.white12 : Colors.grey.shade200),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        'All',
-                        style: TextStyle(
-                          color: leadsProvider.activeCategoryId == null
-                              ? (isDark ? Colors.black : Colors.white)
-                              : (isDark ? Colors.white : Colors.black),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+  void _showCategoriesSheet(BuildContext context, LeadsProvider provider) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: WaUi.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(WaUi.radiusLg)),
+      ),
+      builder: (ctx) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: WaUi.divider,
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  const SizedBox(width: 8),
-
-                  Expanded(
-                    child: SizedBox(
-                      height: 32,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: leadsProvider.categories.length,
-                        itemBuilder: (context, index) {
-                          final category = leadsProvider.categories[index];
-                          final isActive =
-                              leadsProvider.activeCategoryId == category.id;
-                          return GestureDetector(
-                            onTap: () =>
-                                leadsProvider.setActiveCategory(category.id),
-                            onLongPress: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => AlertDialog(
-                                  title: const Text('Delete Category'),
-                                  content: Text('Delete "${category.name}"?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(ctx),
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(ctx);
-                                        leadsProvider.deleteCategory(
-                                          category.id,
-                                        );
-                                      },
-                                      child: const Text(
-                                        'Delete',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 8),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 7,
+                ),
+                const SizedBox(height: 16),
+                Text('Categories', style: WaUi.sectionHeader),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _categoryChip(
+                      context: ctx,
+                      provider: provider,
+                      label: 'All',
+                      selected: provider.activeCategoryId == null,
+                      color: WaUi.secondaryText,
+                      onTap: () {
+                        provider.setActiveCategory(null);
+                        Navigator.pop(ctx);
+                      },
+                    ),
+                    ...provider.categories.map(
+                      (category) => _categoryChip(
+                        context: ctx,
+                        provider: provider,
+                        label: category.name,
+                        selected: provider.activeCategoryId == category.id,
+                        color: _parseColor(category.color),
+                        onTap: () {
+                          provider.setActiveCategory(category.id);
+                          Navigator.pop(ctx);
+                        },
+                        onLongPress: () {
+                          Navigator.pop(ctx);
+                          showDialog(
+                            context: context,
+                            builder: (dialogCtx) => AlertDialog(
+                              title: Text('Delete Category', style: WaUi.title),
+                              content: Text(
+                                'Delete "${category.name}"?',
+                                style: WaUi.body,
                               ),
-                              decoration: BoxDecoration(
-                                color: isActive
-                                    ? (isDark ? Colors.white : Colors.black)
-                                    : (isDark
-                                          ? Colors.white12
-                                          : Colors.grey.shade200),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: _parseColor(
-                                    category.color,
-                                  ).withOpacity(0.5),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(dialogCtx),
+                                  child: Text('Cancel', style: WaUi.bodyMedium),
                                 ),
-                              ),
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 4,
-                                    backgroundColor: _parseColor(
-                                      category.color,
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(dialogCtx);
+                                    provider.deleteCategory(category.id);
+                                  },
+                                  child: Text(
+                                    'Delete',
+                                    style: WaUi.bodyMedium.copyWith(
+                                      color: Colors.red,
                                     ),
                                   ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    category.name,
-                                    style: TextStyle(
-                                      color: isActive
-                                          ? (isDark
-                                                ? Colors.black
-                                                : Colors.white)
-                                          : (isDark
-                                                ? Colors.white
-                                                : Colors.black),
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           );
                         },
                       ),
                     ),
-                  ),
-
-                  // Plus button
-                  GestureDetector(
-                    onTap: () => _showAddCategoryDialog(context, leadsProvider),
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.white12 : Colors.grey.shade200,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        size: 18,
-                        color: isDark ? Colors.white : Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // ── Count label ──
-            if (leadsList.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(left: 20, bottom: 4),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '${leadsList.length} contact${leadsList.length == 1 ? '' : 's'}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: isDark
-                          ? AppTheme.textGreyDark
-                          : AppTheme.textGreyLight,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
-            // ── Contact List ──
-            Expanded(
-              child: leadsProvider.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : leadsList.isEmpty
-                  ? _buildEmptyState(isDark)
-                  : ListView.builder(
-                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
-                      itemCount: leadsList.length,
-                      itemBuilder: (context, index) {
-                        return _buildContactRow(
-                          context,
-                          leadsList[index],
-                          isDark,
-                          leadsProvider,
-                        );
+                    ActionChip(
+                      label: const Icon(Icons.add, size: 18),
+                      backgroundColor: WaUi.navPill,
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        _showAddCategoryDialog(context, provider);
                       },
                     ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
+    );
+  }
 
-      // ── Scan Button (replaces FAB) ──
-      bottomNavigationBar: // Scan button
-      Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 50),
-        child: CustomAppButton(
-          width: double.infinity,
-          text: 'Scan',
-          icon: Icons.camera_alt_outlined,
-          backgroundColor: AppTheme.primaryBlack,
-          onTap: () {
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (_) => const ScanScreen()));
-          },
+  Widget _categoryChip({
+    required BuildContext context,
+    required LeadsProvider provider,
+    required String label,
+    required bool selected,
+    required Color color,
+    required VoidCallback onTap,
+    VoidCallback? onLongPress,
+  }) {
+    return GestureDetector(
+      onLongPress: onLongPress,
+      child: FilterChip(
+        label: Text(label, style: WaUi.body),
+        selected: selected,
+        showCheckmark: false,
+        backgroundColor: WaUi.navPill,
+        selectedColor: WaUi.buttonDark,
+        labelStyle: WaUi.body.copyWith(
+          color: selected ? Colors.white : WaUi.primaryText,
         ),
+        side: BorderSide(color: color.withValues(alpha: 0.45)),
+        onSelected: (_) => onTap(),
       ),
     );
   }
@@ -1337,249 +1338,61 @@ class _LeadsScreenState extends State<LeadsScreen> {
     );
   }
 
-  // ── Top Icon Button Helper ─────────────────────────────────────────────────
-  Widget _topIconBtn({
-    required IconData icon,
-    required bool isDark,
-    VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: isDark ? Colors.white.withOpacity(0.07) : Colors.grey.shade100,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          icon,
-          size: 20,
-          color: isDark ? Colors.white70 : Colors.black87,
-        ),
-      ),
-    );
+  String _contactPreview(Lead lead) {
+    if (lead.note.trim().isNotEmpty) return lead.note.trim();
+    final company = lead.displayCompany.trim();
+    final job = lead.displayJobTitle.trim();
+    if (job.isNotEmpty && company.isNotEmpty) return '$job · $company';
+    if (company.isNotEmpty) return company;
+    if (lead.displayEmail.trim().isNotEmpty) return lead.displayEmail.trim();
+    if (lead.displayPhone.trim().isNotEmpty) return lead.displayPhone.trim();
+    return lead.isScannedContact ? 'Scanned via QR' : 'No details yet';
   }
 
-  // ── Empty State ────────────────────────────────────────────────────────────
-  Widget _buildEmptyState(bool isDark) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.group_off_outlined,
-            size: 64,
-            color: isDark ? Colors.white24 : Colors.black26,
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'No contacts found',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            _searchController.text.isEmpty
-                ? 'Scan or add connections you meet.'
-                : 'Try searching for something else.',
-            style: TextStyle(
-              color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
-              fontSize: 13,
-            ),
-          ),
-        ],
-      ),
-    );
+  bool _isRecentContact(Lead lead) {
+    return DateTime.now().difference(lead.timestamp).inDays < 7;
   }
 
-  // ── Contact Row (image-style: avatar + name/handle/date + chevron) ─────────
+  Widget? _previewIcon(Lead lead) {
+    if (lead.isScannedContact) {
+      return const Icon(Icons.done_all, size: 16, color: Color(0xFF53BDEB));
+    }
+    return null;
+  }
+
   Widget _buildContactRow(
     BuildContext context,
     Lead lead,
-    bool isDark,
-    LeadsProvider provider,
-  ) {
+    LeadsProvider provider, {
+    bool isLast = false,
+  }) {
     final displayName = lead.displayName;
-    final displayEmail = lead.displayEmail;
-    final displayPhone = lead.displayPhone;
     final photoUrl = lead.displayProfilePhoto;
 
-    return GestureDetector(
-      onLongPress: () => _showLeadOptions(context, lead, provider),
+    return WaChatListTile(
+      name: displayName,
+      preview: _contactPreview(lead),
+      date: waFormatContactDate(lead.timestamp),
+      imageUrl: photoUrl,
+      initial: displayName,
+      avatarColor: waAvatarColorFor(displayName),
+      categoryColor:
+          lead.category != null ? _parseColor(lead.category!.color) : null,
+      highlightDate: _isRecentContact(lead),
+      previewIcon: _previewIcon(lead),
+      showDivider: !isLast,
       onTap: () {
         if (lead.contactUser != null) {
-          // Scanned contact → profile screen
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => ScannedProfileScreen(user: lead.contactUser),
             ),
           );
         } else {
-          // Manual contact → manage contact sheet
           _showManageContactSheet(context, lead, provider);
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Row(
-          children: [
-            // Avatar
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  width: 65,
-                  height: 65,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: isDark ? Colors.white10 : Colors.grey.shade200,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: photoUrl != null && photoUrl.isNotEmpty
-                        ? Image.network(
-                            photoUrl,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Center(
-                              child: Text(
-                                displayName.isNotEmpty
-                                    ? displayName[0].toUpperCase()
-                                    : '?',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: isDark ? Colors.white : Colors.black87,
-                                ),
-                              ),
-                            ),
-                          )
-                        : Center(
-                            child: Text(
-                              displayName.isNotEmpty
-                                  ? displayName[0].toUpperCase()
-                                  : '?',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: isDark ? Colors.white : Colors.black87,
-                              ),
-                            ),
-                          ),
-                  ),
-                ),
-                // Category dot
-                if (lead.category != null)
-                  Positioned(
-                    bottom: -2,
-                    right: -2,
-                    child: Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: _parseColor(lead.category!.color),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isDark ? AppTheme.cardDarkBg : Colors.white,
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                // Scanned badge
-                if (lead.isScannedContact)
-                  Positioned(
-                    top: -4,
-                    right: -4,
-                    child: Container(
-                      width: 18,
-                      height: 18,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isDark ? AppTheme.cardDarkBg : Colors.white,
-                          width: 1.5,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.qr_code,
-                        size: 10,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(width: 14),
-
-            // Name / subtitle / date
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    displayName,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: isDark ? Colors.white : Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    displayEmail.isNotEmpty
-                        ? displayEmail
-                        : (displayPhone.isNotEmpty
-                              ? displayPhone
-                              : 'No contact info'),
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: isDark ? Colors.white54 : Colors.grey.shade600,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    _formatDate(lead.timestamp),
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: isDark ? Colors.white38 : Colors.grey.shade400,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // More
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 30,
-              // color: isDark ? Colors.white38 : Colors.grey.shade400,
-            ),
-          ],
-        ),
-      ),
+      onLongPress: () => _showLeadOptions(context, lead, provider),
     );
-  }
-
-  // ── Date Formatter ─────────────────────────────────────────────────────────
-  String _formatDate(DateTime? date) {
-    if (date == null) return '';
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${date.day.toString().padLeft(2, '0')} ${months[date.month - 1]} ${date.year}';
   }
 }

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
-import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
-import 'package:tapni_app/screens/home_dashboard.dart';
 import 'package:tapni_app/screens/leads_screen.dart';
 import 'package:tapni_app/screens/profile_screen.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/screens/settings_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/wa_tools_widgets.dart';
 
 class MainShell extends StatefulWidget {
   final String? _currentPage;
@@ -57,86 +57,69 @@ class _MainShellState extends State<MainShell> {
     }
   }
 
+  void _switchTab(String page) {
+    setState(() => _currentPage = page);
+    Provider.of<ProfileProvider>(context, listen: false).setEditingProfile(false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final leadsProvider = Provider.of<LeadsProvider>(context);
     final isEditing = profileProvider.isEditingProfile;
     final profile = profileProvider.profile;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: _buildCurrentScreen(),
-      bottomNavigationBar: SizedBox(
-        height: 80,
-        child: BottomAppBar(
-          shape: const CircularNotchedRectangle(),
-          notchMargin: 8,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                color: _currentPage == 'Links'
-                    ? AppTheme.primaryBlack
-                    : Colors.grey,
-                iconSize: 34,
-                onPressed: () {
-                  setState(() {
-                    _currentPage = 'Links';
-                  });
-                  profileProvider.setEditingProfile(false);
-                },
-                icon: _currentPage == 'Links'
-                    ? const Icon(Icons.link)
-                    : const Icon(Icons.link_outlined),
-              ),
-              IconButton(
-                color: _currentPage == 'Contacts'
-                    ? AppTheme.primaryBlack
-                    : Colors.grey,
-                iconSize: 34,
-                onPressed: () {
-                  setState(() {
-                    _currentPage = 'Contacts';
-                  });
-                  profileProvider.setEditingProfile(false);
-                },
-                icon: _currentPage == 'Contacts'
-                    ? const Icon(Icons.people)
-                    : const Icon(Icons.people_outline),
-              ),
-              const SizedBox(width: 60),
-              IconButton(
-                color: _currentPage == 'Explore'
-                    ? AppTheme.primaryBlack
-                    : Colors.grey,
-                iconSize: 34,
-                onPressed: () {
-                  setState(() {
-                    _currentPage = 'Explore';
-                  });
-                  profileProvider.setEditingProfile(false);
-                },
-                icon: _currentPage == 'Explore'
-                    ? const Icon(Icons.explore)
-                    : const Icon(Icons.explore_outlined),
-              ),
-              IconButton(
-                color: _currentPage == 'Settings'
-                    ? AppTheme.primaryBlack
-                    : Colors.grey,
-                iconSize: 34,
-                onPressed: () {
-                  setState(() {
-                    _currentPage = 'Settings';
-                  });
-                  profileProvider.setEditingProfile(false);
-                },
-                icon: _currentPage == 'Settings'
-                    ? const Icon(Icons.settings)
-                    : const Icon(Icons.settings_outlined),
-              ),
-            ],
+      backgroundColor: WaUi.toolsScaffold,
+      body: SafeArea(
+        bottom: false,
+        child: _buildCurrentScreen(),
+      ),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Container(
+          decoration: const BoxDecoration(
+            color: WaUi.navBarBg,
+            border: Border(top: BorderSide(color: WaUi.divider, width: 0.5)),
+          ),
+          padding: const EdgeInsets.only(top: 6, bottom: 4),
+          child: SizedBox(
+            height: 64,
+            child: Row(
+              children: [
+                WaBottomNavItem(
+                  icon: Icons.link_outlined,
+                  selectedIcon: Icons.link,
+                  label: 'Links',
+                  selected: _currentPage == 'Links',
+                  onTap: () => _switchTab('Links'),
+                ),
+                WaBottomNavItem(
+                  icon: Icons.people_outline,
+                  selectedIcon: Icons.people,
+                  label: 'Contacts',
+                  selected: _currentPage == 'Contacts',
+                  onTap: () => _switchTab('Contacts'),
+                ),
+                const SizedBox(width: 72),
+                WaBottomNavItem(
+                  icon: Icons.insights_outlined,
+                  selectedIcon: Icons.insights,
+                  label: 'Explore',
+                  selected: _currentPage == 'Explore',
+                  onTap: () => _switchTab('Explore'),
+                ),
+                WaBottomNavItem(
+                  icon: Icons.storefront_outlined,
+                  selectedIcon: Icons.storefront,
+                  label: 'Tools',
+                  selected: _currentPage == 'Settings',
+                  showDot: leadsProvider.unreadNotificationsCount > 0,
+                  onTap: () => _switchTab('Settings'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

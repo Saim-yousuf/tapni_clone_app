@@ -1,6 +1,34 @@
 import 'package:tapni_app/utils/constant.dart';
 
+class ProfileScanResult {
+  final String username;
+  final String? cardId;
+
+  const ProfileScanResult({required this.username, this.cardId});
+}
+
 class ProfileUrlValidator {
+  static ProfileScanResult? parse(String scannedValue) {
+    final username = extractUsername(scannedValue);
+    if (username == null) return null;
+
+    final trimmed = scannedValue.trim();
+    Uri uri;
+    try {
+      uri = trimmed.contains('://')
+          ? Uri.parse(trimmed)
+          : Uri.parse('https://$trimmed');
+    } catch (_) {
+      return null;
+    }
+
+    final cardId = uri.queryParameters['card']?.trim();
+    return ProfileScanResult(
+      username: username,
+      cardId: cardId != null && cardId.isNotEmpty ? cardId : null,
+    );
+  }
+
   static String? extractUsername(String scannedValue) {
     final trimmed = scannedValue.trim();
     if (trimmed.isEmpty) return null;

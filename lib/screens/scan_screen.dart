@@ -79,8 +79,8 @@ class _ScanScreenState extends State<ScanScreen> {
   void _handleScanResult(String value) {
     if (!mounted) return;
 
-    final username = ProfileUrlValidator.extractUsername(value);
-    if (username == null) {
+    final parsed = ProfileUrlValidator.parse(value);
+    if (parsed == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Invalid profile URL. Scan a valid BarQody card or QR code.'),
@@ -94,7 +94,10 @@ class _ScanScreenState extends State<ScanScreen> {
     Navigator.of(context)
         .push(
           MaterialPageRoute(
-            builder: (_) => ScannedProfileScreen(username: username),
+            builder: (_) => ScannedProfileScreen(
+              username: parsed.username,
+              cardId: parsed.cardId,
+            ),
           ),
         )
         .then((_) {

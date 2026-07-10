@@ -1,4 +1,5 @@
 import 'package:tapni_app/models/social_link.dart';
+import 'package:tapni_app/models/user_custom_card.dart';
 
 class UserProfile {
   final String? id;
@@ -23,6 +24,7 @@ class UserProfile {
   final int scansCount;
   final int leadsCount;
   final String cardTemplateId;
+  final List<UserCustomCard> customCards;
 
   UserProfile({
     this.id,
@@ -45,6 +47,7 @@ class UserProfile {
     this.scansCount = 0,
     this.leadsCount = 0,
     this.cardTemplateId = 't2',
+    this.customCards = const [],
   });
 
   factory UserProfile.fromApiJson(Map<String, dynamic> json) {
@@ -66,6 +69,10 @@ class UserProfile {
       businessCategory: json['businessCategory']?.toString(),
       socialLinks: links,
       cardTemplateId: json['cardTemplateId'] as String? ?? 't2',
+      customCards: (json['customCards'] as List<dynamic>? ?? [])
+          .map((e) => UserCustomCard.fromJson(e as Map<String, dynamic>))
+          .where((card) => card.id.isNotEmpty && !card.isPrimary)
+          .toList(),
     );
   }
 
@@ -104,6 +111,7 @@ class UserProfile {
     int? leadsCount,
     bool? isPro,
     String? cardTemplateId,
+    List<UserCustomCard>? customCards,
   }) {
     return UserProfile(
       id: id ?? this.id,
@@ -126,6 +134,7 @@ class UserProfile {
       scansCount: scansCount ?? this.scansCount,
       leadsCount: leadsCount ?? this.leadsCount,
       cardTemplateId: cardTemplateId ?? this.cardTemplateId,
+      customCards: customCards ?? this.customCards,
     );
   }
 }

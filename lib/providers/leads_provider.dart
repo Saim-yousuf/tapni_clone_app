@@ -66,9 +66,10 @@ class LeadsProvider extends ChangeNotifier {
       filtered = filtered
           .where(
             (l) =>
-                l.name.toLowerCase().contains(q) ||
-                l.email.toLowerCase().contains(q) ||
-                l.company.toLowerCase().contains(q),
+                l.displayName.toLowerCase().contains(q) ||
+                l.displayEmail.toLowerCase().contains(q) ||
+                l.displayPhone.toLowerCase().contains(q) ||
+                l.displayCompany.toLowerCase().contains(q),
           )
           .toList();
     }

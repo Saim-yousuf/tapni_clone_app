@@ -1,4 +1,5 @@
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/service_schedule.dart';
 
 enum SocialPlatform {
   behance,
@@ -43,7 +44,9 @@ class SocialLink {
   final Map<String, String>? bankDetails;
   final Map<String, String>? contactCard;
   final List<CatalogItem>? catalogItems;
+  final List<String>? catalogCategories;
   final String? catalogType;
+  final ServiceSchedule? serviceSchedule;
   final bool isCustom;
   final String value; // username, phone number, or URL
   final bool isActive;
@@ -62,7 +65,9 @@ class SocialLink {
     this.bankDetails,
     this.contactCard,
     this.catalogItems,
+    this.catalogCategories,
     this.catalogType,
+    this.serviceSchedule,
     this.isCustom = false,
     required this.value,
     this.isActive = true,
@@ -82,7 +87,9 @@ class SocialLink {
     Map<String, String>? bankDetails,
     Map<String, String>? contactCard,
     List<CatalogItem>? catalogItems,
+    List<String>? catalogCategories,
     String? catalogType,
+    ServiceSchedule? serviceSchedule,
     bool? isCustom,
     String? value,
     bool? isActive,
@@ -101,7 +108,9 @@ class SocialLink {
       bankDetails: bankDetails ?? this.bankDetails,
       contactCard: contactCard ?? this.contactCard,
       catalogItems: catalogItems ?? this.catalogItems,
+      catalogCategories: catalogCategories ?? this.catalogCategories,
       catalogType: catalogType ?? this.catalogType,
+      serviceSchedule: serviceSchedule ?? this.serviceSchedule,
       isCustom: isCustom ?? this.isCustom,
       value: value ?? this.value,
       isActive: isActive ?? this.isActive,
@@ -150,7 +159,10 @@ class SocialLink {
       if (contactCard != null) 'contactCard': contactCard,
       if (catalogItems != null)
         'catalogItems': catalogItems!.map((e) => e.toJson()).toList(),
+      if (catalogCategories != null && catalogCategories!.isNotEmpty)
+        'catalogCategories': catalogCategories,
       if (catalogType != null) 'catalogType': catalogType,
+      if (serviceSchedule != null) 'serviceSchedule': serviceSchedule!.toJson(),
       'isCustom': isCustom,
       'url': fullUrl,
       'isActive': isActive,
@@ -278,6 +290,15 @@ class SocialLink {
               .toList()
           : null,
       catalogType: json['catalogType']?.toString(),
+      catalogCategories: (json['catalogCategories'] as List<dynamic>?)
+          ?.map((e) => e.toString().trim())
+          .where((e) => e.isNotEmpty)
+          .toList(),
+      serviceSchedule: json['serviceSchedule'] != null
+          ? ServiceSchedule.fromJson(
+              json['serviceSchedule'] as Map<String, dynamic>,
+            )
+          : null,
       value: value,
       isActive: json['isActive'] as bool? ?? true,
       isPublic: json['isPublic'] as bool? ?? true,

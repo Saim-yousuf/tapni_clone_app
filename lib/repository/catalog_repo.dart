@@ -1,4 +1,5 @@
 import 'package:tapni_app/models/catalog_order.dart';
+import 'package:tapni_app/models/service_schedule.dart';
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/api_endpoint.dart';
 
@@ -16,6 +17,8 @@ class CatalogRepo {
     required String businessLinkId,
     required String catalogType,
     required List<Map<String, dynamic>> items,
+    String? bookingDate,
+    String? bookingTime,
   }) async {
     return ApiHandler.request(
       api: Api.catalog.orders,
@@ -26,8 +29,37 @@ class CatalogRepo {
         'businessLinkId': businessLinkId,
         'catalogType': catalogType,
         'items': items,
+        if (bookingDate != null && bookingDate.isNotEmpty)
+          'bookingDate': bookingDate,
+        if (bookingTime != null && bookingTime.isNotEmpty)
+          'bookingTime': bookingTime,
       },
     );
+  }
+
+  Future<List<TimeSlot>> getAvailability({
+    required String businessId,
+    required String businessLinkId,
+    required String date,
+  }) async {
+    final res = await ApiHandler.request(
+      api: Api.catalog.availability,
+      method: ApiMethod.get,
+      authorization: true,
+      queryParams: {
+        'businessId': businessId,
+        'businessLinkId': businessLinkId,
+        'date': date,
+      },
+    );
+    if (!res.success || res.data == null) return [];
+    final payload = res.data is Map && res.data['data'] != null
+        ? res.data['data'] as Map<String, dynamic>
+        : res.data as Map<String, dynamic>;
+    final slots = payload['slots'] as List<dynamic>? ?? [];
+    return slots
+        .map((e) => TimeSlot.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<List<CatalogOrder>> getBusinessOrders({String? status}) async {

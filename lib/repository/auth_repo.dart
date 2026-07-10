@@ -43,17 +43,33 @@ class AuthRepo {
     );
   }
 
-  Future<ApiResponse> profileByUsername({required String username, bool isScan = false}) async {
+  Future<ApiResponse> searchPublicUsers({required String query}) async {
     return await ApiHandler.request(
-      api: Api.auth.profileByUsername(username, isScan: isScan),
+      api: Api.auth.searchUsers(query),
       method: ApiMethod.get,
       authorization: true,
     );
   }
 
-  Future<ApiResponse> profileById({required String id, bool isScan = false}) async {
+  Future<ApiResponse> profileByUsername({
+    required String username,
+    bool isScan = false,
+    String? cardId,
+  }) async {
     return await ApiHandler.request(
-      api: Api.auth.profileById(id, isScan: isScan),
+      api: Api.auth.profileByUsername(username, isScan: isScan, cardId: cardId),
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> profileById({
+    required String id,
+    bool isScan = false,
+    String? cardId,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.profileById(id, isScan: isScan, cardId: cardId),
       method: ApiMethod.get,
       authorization: true,
     );

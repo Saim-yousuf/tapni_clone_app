@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/models/social_link.dart';
+import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
@@ -27,8 +28,14 @@ Map<String, dynamic> _unwrapApiPayload(dynamic data) {
 class ScannedProfileScreen extends StatefulWidget {
   final String? username;
   final String? user;
+  final String? cardId;
 
-  const ScannedProfileScreen({super.key, this.username, this.user});
+  const ScannedProfileScreen({
+    super.key,
+    this.username,
+    this.user,
+    this.cardId,
+  });
 
   @override
   State<ScannedProfileScreen> createState() => _ScannedProfileScreenState();
@@ -36,6 +43,7 @@ class ScannedProfileScreen extends StatefulWidget {
 
 class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   UserProfile? _profile;
+  UserCustomCard? _scannedCard;
   bool _isLoading = true;
   String? _errorMessage;
   bool _hasActivePrograms = false;
@@ -159,8 +167,16 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     });
 
     final response = widget.username != null && widget.username!.isNotEmpty
-        ? await AuthRepo().profileByUsername(username: widget.username!, isScan: true)
-        : await AuthRepo().profileById(id: widget.user!, isScan: true);
+        ? await AuthRepo().profileByUsername(
+            username: widget.username!,
+            isScan: true,
+            cardId: widget.cardId,
+          )
+        : await AuthRepo().profileById(
+            id: widget.user!,
+            isScan: true,
+            cardId: widget.cardId,
+          );
 
     if (!mounted) return;
 
@@ -170,8 +186,18 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
 
       if (userJson != null) {
         final profile = UserProfile.fromApiJson(userJson);
+        UserCustomCard? scannedCard;
+        if (widget.cardId != null && widget.cardId!.isNotEmpty) {
+          for (final card in profile.customCards) {
+            if (card.id == widget.cardId) {
+              scannedCard = card;
+              break;
+            }
+          }
+        }
         setState(() {
           _profile = profile;
+          _scannedCard = scannedCard;
           _isLoading = false;
         });
         if (profile.id != null) {
@@ -306,6 +332,15 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   Widget _buildProfileView(UserProfile profile) {
     final isBusinessUser =
         Provider.of<ProfileProvider>(context, listen: false).isProUser;
+    final card = _scannedCard;
+    final displayName = card?.displayName.isNotEmpty == true
+        ? card!.displayName
+        : profile.name;
+    final displayBio = card?.bio?.isNotEmpty == true
+        ? card!.bio!
+        : profile.bio;
+    final displayPhoto = card?.profilePhotoUrl ?? profile.profilePhotoUrl;
+    final displayCover = card?.coverPhotoUrl ?? profile.coverPhotoUrl;
     final showRewardsButton = _programsChecked &&
         _enrollmentStatusChecked &&
         isBusinessUser &&
@@ -320,16 +355,16 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         children: [
           Image.asset('assets/images/jpg/barqody_name.jpg', width: 120),
           const SizedBox(height: 20),
-          _buildProfileAvatar(profile),
+          _buildProfileAvatar(profile, displayPhoto, displayCover),
           const SizedBox(height: 20),
           Text(
-            profile.name,
+            displayName,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
           ),
-          if (profile.bio.isNotEmpty) ...[
+          if (displayBio.isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(
-              profile.bio,
+              displayBio,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 14, color: Colors.black54),
             ),
@@ -408,17 +443,19 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             ],
           ),
           const SizedBox(height: 20),
-          _buildLinkSection(profile),
+          _buildLinkSection(profile, card),
           const SizedBox(height: 24),
         ],
       ),
     );
   }
 
-  Widget _buildProfileAvatar(UserProfile profile) {
-    final hasCover =
-        profile.coverPhotoUrl != null &&
-        profile.coverPhotoUrl!.trim().isNotEmpty;
+  Widget _buildProfileAvatar(
+    UserProfile profile,
+    String? photoUrl,
+    String? coverUrl,
+  ) {
+    final hasCover = coverUrl != null && coverUrl.trim().isNotEmpty;
 
     return Stack(
       clipBehavior: Clip.none,
@@ -428,7 +465,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
           width: double.infinity,
           color: hasCover ? const Color(0xFFF5F5F5) : Colors.transparent,
           child: hasCover
-              ? Image.network(profile.coverPhotoUrl!, fit: BoxFit.cover)
+              ? Image.network(coverUrl!, fit: BoxFit.cover)
               : null,
         ),
         Positioned(
@@ -455,10 +492,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                 ),
                 child: ClipOval(
                   child:
-                      profile.profilePhotoUrl != null &&
-                          profile.profilePhotoUrl!.trim().isNotEmpty
+                      photoUrl != null && photoUrl.trim().isNotEmpty
                       ? Image.network(
-                          profile.profilePhotoUrl!,
+                          photoUrl,
                           fit: BoxFit.cover,
                         )
                       : Center(
@@ -482,10 +518,15 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     );
   }
 
-  Widget _buildLinkSection(UserProfile profile) {
-    final activeLinks = profile.socialLinks
+  Widget _buildLinkSection(UserProfile profile, UserCustomCard? card) {
+    var activeLinks = profile.socialLinks
         .where((link) => link.isActive && link.isPublic)
         .toList();
+
+    if (card != null && card.enabledLinkIds.isNotEmpty) {
+      final enabled = card.enabledLinkIds.toSet();
+      activeLinks = activeLinks.where((l) => enabled.contains(l.id)).toList();
+    }
 
     if (activeLinks.isEmpty) {
       return const SizedBox.shrink();

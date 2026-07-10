@@ -14,6 +14,8 @@ class CatalogOrder {
   final String catalogType;
   final List<CatalogOrderLineItem> items;
   final double totalAmount;
+  final String? bookingDate;
+  final String? bookingTime;
   final OrderStatus status;
   final bool isRead;
   final DateTime? createdAt;
@@ -33,6 +35,8 @@ class CatalogOrder {
     this.catalogType = 'catalog',
     required this.items,
     this.totalAmount = 0,
+    this.bookingDate,
+    this.bookingTime,
     this.status = OrderStatus.pending,
     this.isRead = false,
     this.createdAt,
@@ -58,6 +62,8 @@ class CatalogOrder {
       totalAmount: (json['totalAmount'] is num)
           ? (json['totalAmount'] as num).toDouble()
           : 0,
+      bookingDate: json['bookingDate']?.toString(),
+      bookingTime: json['bookingTime']?.toString(),
       status: _parseStatus(json['status']?.toString()),
       isRead: json['isRead'] as bool? ?? false,
       createdAt: _parseDate(json['createdAt']),
@@ -108,11 +114,13 @@ class CatalogOrderLineItem {
   final String name;
   final double price;
   final int quantity;
+  final String notes;
 
   CatalogOrderLineItem({
     required this.name,
     required this.price,
     this.quantity = 1,
+    this.notes = '',
   });
 
   factory CatalogOrderLineItem.fromJson(Map<String, dynamic> json) {
@@ -120,6 +128,7 @@ class CatalogOrderLineItem {
       name: json['name']?.toString() ?? '',
       price: (json['price'] is num) ? (json['price'] as num).toDouble() : 0,
       quantity: (json['quantity'] is num) ? (json['quantity'] as num).toInt() : 1,
+      notes: json['notes']?.toString() ?? '',
     );
   }
 

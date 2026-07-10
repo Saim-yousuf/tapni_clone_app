@@ -4,25 +4,31 @@ import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
-import 'package:tapni_app/providers/theme_provider.dart';
+import 'package:tapni_app/screens/attendance/business/attendance_dashboard_screen.dart';
+import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
+import 'package:tapni_app/screens/attendance/employee/mark_attendance_screen.dart';
 import 'package:tapni_app/screens/login_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
-import 'package:tapni_app/screens/attendance/business/attendance_dashboard_screen.dart';
-import 'package:tapni_app/screens/attendance/employee/mark_attendance_screen.dart';
-import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
+import 'package:tapni_app/screens/notifications_screen.dart';
 import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/screens/qr_code_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
-import 'package:tapni_app/utils/theme.dart';
-import 'package:tapni_app/widgets/glass_card.dart';
-import 'package:tapni_app/widgets/notification_icon_button.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/settings_widget.dart';
+import 'package:tapni_app/widgets/wa_tools_widgets.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _promoDismissed = false;
 
   void _handleLogout(BuildContext context) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -31,32 +37,25 @@ class SettingsScreen extends StatelessWidget {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          title: const Text('Log Out'),
-          content: const Text('Are you sure you want to log out of Barqody?'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(WaUi.radiusLg),
+          ),
+          title: Text('Log Out', style: WaUi.title),
+          content: Text(
+            'Are you sure you want to log out of Barqody?',
+            style: WaUi.body,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Cancel'),
+              child: Text('Cancel', style: WaUi.bodyMedium),
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                foregroundColor: Colors.white,
-              ),
+            TextButton(
               onPressed: () async {
                 Navigator.of(ctx).pop();
-
-                // Clear all data from providers
-                Provider.of<ProfileProvider>(
-                  context,
-                  listen: false,
-                ).clearData();
+                Provider.of<ProfileProvider>(context, listen: false).clearData();
                 Provider.of<LeadsProvider>(context, listen: false).clearData();
-                Provider.of<SubscriptionProvider>(
-                  context,
-                  listen: false,
-                ).clearData();
-
+                Provider.of<SubscriptionProvider>(context, listen: false).clearData();
                 await authProvider.logout();
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(
@@ -65,7 +64,10 @@ class SettingsScreen extends StatelessWidget {
                   );
                 }
               },
-              child: const Text('Log Out'),
+              child: Text(
+                'Log Out',
+                style: WaUi.bodyMedium.copyWith(color: Colors.redAccent),
+              ),
             ),
           ],
         );
@@ -73,143 +75,85 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
+  int _catalogOrderBadge(LeadsProvider leadsProvider) {
+    return leadsProvider.notifications
+        .where((n) => n['type'] == 'catalog_order' && n['isRead'] == false)
+        .length;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final profile = Provider.of<ProfileProvider>(context).profile;
+    final leadsProvider = Provider.of<LeadsProvider>(context);
+    final orderBadge = _catalogOrderBadge(leadsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-        actions: const [NotificationIconButton()],
-      ),
+      backgroundColor: WaUi.toolsScaffold,
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+          padding: const EdgeInsets.only(bottom: 24),
           children: [
-            GlassCard(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: const BoxDecoration(
-                      gradient: AppTheme.goldGradient,
-                      shape: BoxShape.circle,
-                    ),
-                    child:
-                        profile.profilePhotoUrl != null &&
-                            profile.profilePhotoUrl!.trim().isNotEmpty
-                        ? ClipOval(
-                            child: Image.network(
-                              profile.profilePhotoUrl!,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : Center(
-                            child: Text(
-                              profile.name.isNotEmpty ? profile.name[0] : '?',
-                              style: const TextStyle(
-                                color: AppTheme.secondaryWhite,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 28,
-                              ),
-                            ),
-                          ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          profile.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        Text(
-                          profile.email,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: isDark
-                                ? AppTheme.textGreyDark
-                                : AppTheme.textGreyLight,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  IconButton(
-                    onPressed: () {
-                      SettingWidgets.showSettingSheet(context);
-                    },
-                    icon: Icon(Icons.settings),
-                    iconSize: 30,
-                    color: Colors.grey.shade400,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            if (!profile.isPro)
-              InkWell(
-                onTap: () {
-                  SubcriptionSheet.show(context);
-                },
-                child: Container(
-                  height: 56,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: AppTheme.primaryBlack,
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Try Business Pro",
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: AppTheme.secondaryWhite,
-                              ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppTheme.secondaryWhite,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            'Pro',
-                            style: TextStyle(
-                              color: AppTheme.accentGold,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+            WaToolsHeader(
+              title: 'Tools',
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.photo_camera_outlined, size: 24),
+                  color: WaUi.primaryText,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const QrCodeScreen()),
+                    );
+                  },
                 ),
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert, size: 24, color: WaUi.primaryText),
+                  color: WaUi.surface,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
+                  ),
+                  onSelected: (value) {
+                    switch (value) {
+                      case 'account':
+                        SettingWidgets.showSettingSheet(context);
+                        break;
+                      case 'notifications':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const NotificationsScreen(),
+                          ),
+                        );
+                        break;
+                    }
+                  },
+                  itemBuilder: (_) => [
+                    PopupMenuItem(
+                      value: 'account',
+                      child: Text('Account settings', style: WaUi.body),
+                    ),
+                    PopupMenuItem(
+                      value: 'notifications',
+                      child: Text('Notifications', style: WaUi.body),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
+            if (!profile.isPro && !_promoDismissed) ...[
+              const WaSectionHeader('For you'),
+              WaForYouCard(
+                title: 'Try Business Pro.',
+                description:
+                    'Unlock customer orders, team attendance, loyalty programs, and more for your business.',
+                buttonLabel: 'Try Business Pro',
+                onTap: () => SubcriptionSheet.show(context),
+                onDismiss: () => setState(() => _promoDismissed = true),
               ),
+            ],
 
-            const SizedBox(height: 24),
-
-            _buildSectionHeader('Your Profile'),
-            _buildSettingsItem(
-              context,
-              icon: Icons.person_outline_rounded,
+            const WaSectionHeader('Your profile'),
+            WaToolsListTile(
+              icon: Icons.person_outline,
               title: 'Edit Profile',
               subtitle: 'Change your name, photo, and bio',
               onTap: () {
@@ -220,14 +164,13 @@ class SettingsScreen extends StatelessWidget {
                 profileProvider.setEditingProfile(true);
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (_) => MainShell(currentPage: "My Card"),
+                    builder: (_) => const MainShell(currentPage: 'My Card'),
                   ),
                 );
               },
             ),
-            _buildSettingsItem(
-              context,
-              icon: Icons.add_link_rounded,
+            WaToolsListTile(
+              icon: Icons.link,
               title: 'Social Links',
               subtitle: 'Add Instagram, WhatsApp, website and more',
               onTap: () {
@@ -236,9 +179,8 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            _buildSettingsItem(
-              context,
-              icon: Icons.qr_code_2_rounded,
+            WaToolsListTile(
+              icon: Icons.qr_code_2_outlined,
               title: 'Share My QR Code',
               subtitle: 'Let others scan your digital business card',
               onTap: () {
@@ -248,10 +190,8 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
 
-            const SizedBox(height: 8),
-            _buildSectionHeader('Shopping & Rewards'),
-            _buildSettingsItem(
-              context,
+            const WaSectionHeader('Shopping & rewards'),
+            WaToolsListTile(
               icon: Icons.receipt_long_outlined,
               title: 'My Orders',
               subtitle: 'Track orders you placed from shops',
@@ -263,8 +203,7 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            _buildSettingsItem(
-              context,
+            WaToolsListTile(
               icon: Icons.card_giftcard_outlined,
               title: 'My Reward Cards',
               subtitle: 'View stamps and points from loyalty programs',
@@ -277,10 +216,8 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
 
-            const SizedBox(height: 8),
-            _buildSectionHeader('Workplace'),
-            _buildSettingsItem(
-              context,
+            const WaSectionHeader('Workplace'),
+            WaToolsListTile(
               icon: Icons.fact_check_outlined,
               title: 'Workplace Check-In',
               subtitle: 'Clock in and out at your job with location',
@@ -292,8 +229,7 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            _buildSettingsItem(
-              context,
+            WaToolsListTile(
               icon: Icons.badge_outlined,
               title: 'Company Employee Card',
               subtitle: 'Save your work ID card to phone or wallet',
@@ -307,24 +243,21 @@ class SettingsScreen extends StatelessWidget {
             ),
 
             if (profile.isPro) ...[
-              const SizedBox(height: 8),
-              _buildSectionHeader('Business Tools'),
-              _buildSettingsItem(
-                context,
+              const WaSectionHeader('Grow your business'),
+              WaToolsListTile(
                 icon: Icons.storefront_outlined,
                 title: 'Customer Orders',
                 subtitle: 'View and update orders from your customers',
+                showBadge: orderBadge > 0,
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) =>
-                          const OrdersListScreen(isBusinessView: true),
+                      builder: (_) => const OrdersListScreen(isBusinessView: true),
                     ),
                   );
                 },
               ),
-              _buildSettingsItem(
-                context,
+              WaToolsListTile(
                 icon: Icons.groups_outlined,
                 title: 'Team Attendance',
                 subtitle: 'Add employees, set shifts and track presence',
@@ -336,8 +269,7 @@ class SettingsScreen extends StatelessWidget {
                   );
                 },
               ),
-              _buildSettingsItem(
-                context,
+              WaToolsListTile(
                 icon: Icons.stars_outlined,
                 title: 'Loyalty Programs',
                 subtitle: 'Create stamp or points rewards for customers',
@@ -351,172 +283,54 @@ class SettingsScreen extends StatelessWidget {
               ),
             ],
 
-            const SizedBox(height: 8),
-            _buildSectionHeader('Help & Account'),
-            _buildSettingsItem(
-              context,
-              icon: Icons.help_outline_rounded,
+            const WaSectionHeader('Help & account'),
+            WaToolsListTile(
+              icon: Icons.help_outline,
               title: 'Help & FAQs',
               subtitle: 'Answers to common questions',
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Help Center is disabled in this UI demo.'),
+                  SnackBar(
+                    content: Text(
+                      'Help Center is disabled in this UI demo.',
+                      style: WaUi.body.copyWith(color: Colors.white),
+                    ),
                     behavior: SnackBarBehavior.floating,
+                    backgroundColor: WaUi.primaryText,
                   ),
                 );
               },
             ),
-            _buildSettingsItem(
-              context,
+            WaToolsListTile(
               icon: Icons.feedback_outlined,
               title: 'Send Feedback',
               subtitle: 'Report a bug or suggest a new feature',
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text(
                       'Thank you! Feedback submissions are mock only.',
+                      style: WaUi.body.copyWith(color: Colors.white),
                     ),
                     behavior: SnackBarBehavior.floating,
+                    backgroundColor: WaUi.primaryText,
                   ),
                 );
               },
             ),
-            const SizedBox(height: 8),
-
-            // Logout Button
-            ListTile(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              tileColor: Colors.redAccent.withOpacity(0.08),
-              leading: const Icon(
-                Icons.logout_rounded,
-                color: Colors.redAccent,
-              ),
-              title: const Text(
-                'Log Out',
-                style: TextStyle(
-                  color: Colors.redAccent,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              subtitle: const Text(
-                'Sign out of this session',
-                style: TextStyle(color: Colors.redAccent, fontSize: 11),
-              ),
-              trailing: const Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: Colors.redAccent,
-                size: 14,
-              ),
+            WaToolsListTile(
+              icon: Icons.logout,
+              title: 'Log Out',
+              subtitle: 'Sign out of this session',
+              titleColor: Colors.redAccent,
               onTap: () => _handleLogout(context),
             ),
-            const SizedBox(height: 40),
 
-            // Version info footer
-            const Center(
-              child: Text(
-                'barqody v1.0.0',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            const SizedBox(height: 24),
+            Center(
+              child: Text('barqody v1.0.0', style: WaUi.label),
             ),
-            const SizedBox(height: 20),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, bottom: 10.0),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-          color: AppTheme.accentGold,
-          letterSpacing: 1.0,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSettingsItem(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-  }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        tileColor: isDark
-            ? Colors.white.withOpacity(0.02)
-            : Colors.black.withOpacity(0.015),
-        leading: Icon(
-          icon,
-          color: isDark ? Colors.white70 : Colors.black87,
-          size: 35,
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: const TextStyle(color: Colors.grey, fontSize: 14),
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios_rounded,
-          color: isDark ? Colors.white30 : Colors.black38,
-          size: 12,
-        ),
-        onTap: onTap,
-      ),
-    );
-  }
-
-  Widget _buildToggleItem(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required bool value,
-    required ValueChanged<bool> onChanged,
-  }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        tileColor: isDark
-            ? Colors.white.withOpacity(0.02)
-            : Colors.black.withOpacity(0.015),
-        leading: Icon(icon, color: isDark ? Colors.white70 : Colors.black87),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: const TextStyle(color: Colors.grey, fontSize: 11),
-        ),
-        trailing: Switch.adaptive(
-          value: value,
-          activeColor: AppTheme.accentGold,
-          onChanged: onChanged,
         ),
       ),
     );

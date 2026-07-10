@@ -8,11 +8,15 @@ import 'package:tapni_app/utils/theme.dart';
 class CatalogItemFormScreen extends StatefulWidget {
   final String catalogLabel;
   final CatalogItem? existingItem;
+  final List<String> existingCategories;
+  final bool requireCategory;
 
   const CatalogItemFormScreen({
     super.key,
     required this.catalogLabel,
     this.existingItem,
+    this.existingCategories = const [],
+    this.requireCategory = false,
   });
 
   @override
@@ -23,6 +27,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   late final TextEditingController _nameCtrl;
   late final TextEditingController _priceCtrl;
   late final TextEditingController _descCtrl;
+  String? _selectedCategory;
   String? _pickedImagePath;
   String? _savedImageUrl;
   bool _isSaving = false;
@@ -40,6 +45,8 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
           : '',
     );
     _descCtrl = TextEditingController(text: existing?.description ?? '');
+    final existingCat = existing?.category.trim() ?? '';
+    _selectedCategory = existingCat.isNotEmpty ? existingCat : null;
     _savedImageUrl = existing?.imageUrl ?? '';
   }
 
@@ -69,6 +76,14 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       return;
     }
 
+    final category = _selectedCategory?.trim() ?? '';
+    if (widget.requireCategory && category.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a category')),
+      );
+      return;
+    }
+
     setState(() => _isSaving = true);
 
     var imageValue = _savedImageUrl ?? '';
@@ -84,6 +99,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
         name: name,
         price: double.tryParse(_priceCtrl.text.trim()) ?? 0,
         description: _descCtrl.text.trim(),
+        category: category,
         imageUrl: imageValue,
         isActive: widget.existingItem?.isActive ?? true,
       ),
@@ -157,6 +173,36 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 16),
+                    if (widget.existingCategories.isNotEmpty)
+                      DropdownButtonFormField<String>(
+                        value: widget.existingCategories.contains(_selectedCategory)
+                            ? _selectedCategory
+                            : null,
+                        decoration: InputDecoration(
+                          labelText: 'Category *',
+                          filled: true,
+                          fillColor: const Color(0xFFF5F5F5),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        items: widget.existingCategories
+                            .map(
+                              (cat) => DropdownMenuItem(
+                                value: cat,
+                                child: Text(cat),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (val) => setState(() => _selectedCategory = val),
+                      )
+                    else
+                      Text(
+                        'Add categories in your catalog settings first.',
+                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                      ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: _descCtrl,

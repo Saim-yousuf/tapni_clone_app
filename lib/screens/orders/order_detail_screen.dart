@@ -130,6 +130,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       label: 'Date',
                       value: _formatDate(_order!.createdAt!),
                     ),
+                  if (_order!.bookingDate != null &&
+                      _order!.bookingDate!.isNotEmpty) ...[
+                    _InfoRow(label: 'Booking date', value: _order!.bookingDate!),
+                    if (_order!.bookingTime != null &&
+                        _order!.bookingTime!.isNotEmpty)
+                      _InfoRow(label: 'Booking time', value: _order!.bookingTime!),
+                  ],
                   const SizedBox(height: 24),
                   const _SectionTitle('Items'),
                   const SizedBox(height: 10),
@@ -144,9 +151,26 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              '${item.quantity}x ${item.name}',
-                              style: const TextStyle(fontWeight: FontWeight.w500),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${item.quantity}x ${item.name}',
+                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                                if (item.notes.isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Text(
+                                      item.notes,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey.shade600,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
                           Text('Rs ${item.lineTotal.toStringAsFixed(0)}'),

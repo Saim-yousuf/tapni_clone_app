@@ -5,9 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/models/profile.dart';
-import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
-import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/progress_score_card.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/utils/constant.dart';
@@ -130,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildViewMode(ProfileProvider profileProvider, UserProfile profile) {
     final theme = Theme.of(context);
-    final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
+    final activeCard = profileProvider.activeCardDisplay;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -299,7 +297,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            profile.name,
+                            activeCard.title,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: AppTheme.textGreyLight,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            activeCard.name,
                             style: theme.textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.w900,
                               letterSpacing: -0.5,
@@ -311,7 +317,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           //     color: AppTheme.textGreyLight,
                           //   ),
                           // ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 8),
+                          Text(
+                            '${activeCard.template.name} template',
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
                           Row(
                             children: [
                               const Icon(
@@ -393,7 +408,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Center(
               child: Image.asset(
                 "assets/images/jpg/barqody_name.jpg",
-                // width: 100,
                 height: 50,
                 fit: BoxFit.cover,
               ),

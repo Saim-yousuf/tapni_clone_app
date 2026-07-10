@@ -16,6 +16,7 @@ class TemplatesSheet extends StatefulWidget {
 class _TemplatesSheetState extends State<TemplatesSheet> {
   late PageController _pageController;
   int _activePage = 0;
+  bool _isApplying = false;
 
   @override
   void initState() {
@@ -153,43 +154,64 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                   ),
                   elevation: 0,
                 ),
-                onPressed: () async {
-                  final selectedTemplate = templates[_activePage];
-                  if (selectedTemplate.isPro && !profileProvider.isProUser) {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) => const ProUpgradeSheet(),
-                    );
-                    return;
-                  }
+                onPressed: _isApplying
+                    ? null
+                    : () async {
+                        final selectedTemplate = templates[_activePage];
+                        if (selectedTemplate.isPro &&
+                            !profileProvider.isProUser) {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => const ProUpgradeSheet(),
+                          );
+                          return;
+                        }
 
-                  final saved =
-                      await profileProvider.saveCardTemplate(_activePage);
-                  if (!context.mounted) return;
+                        setState(() => _isApplying = true);
+                        bool saved = false;
+                        try {
+                          saved = await profileProvider.saveCardTemplate(
+                            _activePage,
+                          );
+                        } finally {
+                          if (mounted) {
+                            setState(() => _isApplying = false);
+                          }
+                        }
+                        if (!context.mounted) return;
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        saved
-                            ? 'Applied "${selectedTemplate.name}" template'
-                            : 'Template applied locally. Sync failed.',
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              saved
+                                  ? 'Applied "${selectedTemplate.name}" template'
+                                  : 'Template applied locally. Sync failed.',
+                            ),
+                            duration: const Duration(seconds: 2),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      },
+                child: _isApplying
+                    ? SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: isDark ? Colors.black : Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        'Apply Template',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: -0.2,
+                        ),
                       ),
-                      duration: const Duration(seconds: 2),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  'Apply Template',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.2,
-                  ),
-                ),
               ),
             ),
           ),

@@ -3,6 +3,7 @@ class CatalogItem {
   final double price;
   final String description;
   final String imageUrl;
+  final String category;
   final bool isActive;
 
   CatalogItem({
@@ -10,6 +11,7 @@ class CatalogItem {
     this.price = 0,
     this.description = '',
     this.imageUrl = '',
+    this.category = '',
     this.isActive = true,
   });
 
@@ -19,6 +21,7 @@ class CatalogItem {
       price: (json['price'] is num) ? (json['price'] as num).toDouble() : 0,
       description: json['description']?.toString() ?? '',
       imageUrl: json['image']?.toString() ?? json['imageUrl']?.toString() ?? '',
+      category: json['category']?.toString() ?? '',
       isActive: json['isActive'] as bool? ?? true,
     );
   }
@@ -27,6 +30,7 @@ class CatalogItem {
         'name': name,
         'price': price,
         'description': description,
+        if (category.isNotEmpty) 'category': category,
         if (imageUrl.isNotEmpty) 'image': imageUrl,
         'isActive': isActive,
       };
@@ -36,6 +40,7 @@ class CatalogItem {
     double? price,
     String? description,
     String? imageUrl,
+    String? category,
     bool? isActive,
   }) {
     return CatalogItem(
@@ -43,6 +48,7 @@ class CatalogItem {
       price: price ?? this.price,
       description: description ?? this.description,
       imageUrl: imageUrl ?? this.imageUrl,
+      category: category ?? this.category,
       isActive: isActive ?? this.isActive,
     );
   }
@@ -52,11 +58,13 @@ class CatalogOrderItem {
   final String name;
   final double price;
   final int quantity;
+  final String notes;
 
   CatalogOrderItem({
     required this.name,
     required this.price,
     this.quantity = 1,
+    this.notes = '',
   });
 
   double get lineTotal => price * quantity;
@@ -65,5 +73,6 @@ class CatalogOrderItem {
         'name': name,
         'price': price,
         'quantity': quantity,
+        if (notes.isNotEmpty) 'notes': notes,
       };
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/models/company_business_card.dart';
-import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/widgets/my_cards_share_sheet.dart';
 import 'package:tapni_app/repository/wallet_repo.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
@@ -20,6 +19,7 @@ class BusinessCardShareSheet extends StatefulWidget {
   final String displayName;
   final String userInitial;
   final String? profilePhotoUrl;
+  final String? coverPhotoUrl;
   final String? businessUserId;
   final bool useMyCardWallet;
   final CardTemplate template;
@@ -39,6 +39,7 @@ class BusinessCardShareSheet extends StatefulWidget {
     required this.userInitial,
     required this.template,
     this.profilePhotoUrl,
+    this.coverPhotoUrl,
     this.businessUserId,
     this.useMyCardWallet = false,
     this.subtitle,
@@ -58,6 +59,7 @@ class BusinessCardShareSheet extends StatefulWidget {
     required String userInitial,
     required CardTemplate template,
     String? profilePhotoUrl,
+    String? coverPhotoUrl,
     String? businessUserId,
     bool useMyCardWallet = false,
     String? subtitle,
@@ -81,6 +83,7 @@ class BusinessCardShareSheet extends StatefulWidget {
         userInitial: userInitial,
         template: template,
         profilePhotoUrl: profilePhotoUrl,
+        coverPhotoUrl: coverPhotoUrl,
         businessUserId: businessUserId,
         useMyCardWallet: useMyCardWallet,
         subtitle: subtitle,
@@ -132,28 +135,7 @@ class BusinessCardShareSheet extends StatefulWidget {
   }
 
   static void showMyCard(BuildContext context) {
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
-    final profile = profileProvider.profile;
-    final template = profileProvider.currentTemplate;
-    final profileUrl = '${Constants.appDomain}/${profile.username}';
-
-    show(
-      context,
-      profileUrl: profileUrl,
-      displayName: profile.businessName?.isNotEmpty == true
-          ? profile.businessName!
-          : profile.name,
-      userInitial:
-          profile.name.isNotEmpty ? profile.name[0].toUpperCase() : '?',
-      template: template,
-      profilePhotoUrl: profile.profilePhotoUrl,
-      useMyCardWallet: true,
-      subtitle: profile.designation.isNotEmpty
-          ? profile.designation
-          : (profile.company.isNotEmpty ? profile.company : null),
-      bio: profile.bio,
-    );
+    MyCardsShareSheet.show(context);
   }
 
   @override
@@ -320,6 +302,7 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
                       profileUrl: widget.profileUrl,
                       userInitial: widget.userInitial,
                       profilePhotoUrl: widget.profilePhotoUrl,
+                      coverPhotoUrl: widget.coverPhotoUrl,
                       subtitle: widget.subtitle,
                       bio: widget.bio,
                     ),
