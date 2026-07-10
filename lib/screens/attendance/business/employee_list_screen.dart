@@ -166,12 +166,29 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                                 employee.employee.displayName,
                                 style: AttendanceUi.cardTitle,
                               ),
-                              subtitle: Text(
-                                '@${employee.employee.username}\n'
-                                '${employee.shiftStart} - ${employee.shiftEnd}',
-                                style: AttendanceUi.bodyMuted.copyWith(
-                                  fontSize: 16,
-                                ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (employee.isPendingInvitation)
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 4),
+                                      child: Text(
+                                        'PENDING ACCEPTANCE',
+                                        style: AttendanceUi.bodyMuted.copyWith(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w800,
+                                          color: Colors.orange.shade800,
+                                        ),
+                                      ),
+                                    ),
+                                  Text(
+                                    '@${employee.employee.username}\n'
+                                    '${employee.shiftStart} - ${employee.shiftEnd}',
+                                    style: AttendanceUi.bodyMuted.copyWith(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
                               ),
                               isThreeLine: true,
                               trailing: PopupMenuButton<String>(
@@ -241,7 +258,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
             elevation: 0,
             extendedPadding: const EdgeInsets.symmetric(horizontal: 24),
             icon: const Icon(Icons.qr_code_scanner, size: 28),
-            label: Text('Scan to Add', style: AttendanceUi.buttonLabel),
+            label: Text('Scan to Invite', style: AttendanceUi.buttonLabel),
           ),
         ),
       ),

@@ -70,6 +70,7 @@ class AttendanceEmployee {
   final List<int> weekendDays;
   final String facePhoto;
   final bool isActive;
+  final String invitationStatus;
 
   AttendanceEmployee({
     required this.id,
@@ -81,7 +82,11 @@ class AttendanceEmployee {
     this.weekendDays = const [0, 6],
     this.facePhoto = '',
     this.isActive = true,
+    this.invitationStatus = 'accepted',
   });
+
+  bool get isPendingInvitation => invitationStatus == 'pending';
+  bool get isAccepted => invitationStatus == 'accepted';
 
   factory AttendanceEmployee.fromJson(Map<String, dynamic> json) {
     final businessJson = json['business'];
@@ -106,6 +111,7 @@ class AttendanceEmployee {
           const [0, 6],
       facePhoto: json['facePhoto'] as String? ?? '',
       isActive: json['isActive'] as bool? ?? true,
+      invitationStatus: json['invitationStatus'] as String? ?? 'accepted',
     );
   }
 

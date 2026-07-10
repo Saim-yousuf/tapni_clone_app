@@ -193,7 +193,9 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
       SnackBar(
         content: Text(
           res.success
-              ? 'Employee settings saved'
+              ? (widget.employee != null
+                  ? 'Employee settings saved'
+                  : 'Invitation sent. Employee will be added after they accept.')
               : (res.message ?? 'Failed to save'),
         ),
       ),
@@ -276,7 +278,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
   Widget build(BuildContext context) {
     final title = widget.employee?.employee.displayName ??
         widget.employeeName ??
-        'New Employee';
+        'Invite Employee';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -385,8 +387,10 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
           ),
           const SizedBox(height: 24),
           AttendanceUi.primaryButton(
-            label: 'Save Settings',
-            icon: Icons.save_outlined,
+            label: widget.employee != null ? 'Save Settings' : 'Send Invitation',
+            icon: widget.employee != null
+                ? Icons.save_outlined
+                : Icons.send_outlined,
             loading: _isSaving,
             onPressed: _save,
             height: 68,

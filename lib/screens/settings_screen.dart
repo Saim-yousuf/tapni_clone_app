@@ -6,7 +6,10 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/attendance/business/attendance_dashboard_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
+import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/mark_attendance_screen.dart';
+import 'package:tapni_app/repository/attendance_repo.dart';
+import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/screens/login_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
@@ -29,6 +32,25 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _promoDismissed = false;
+  int _pendingInvitationCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPendingInvitations();
+  }
+
+  Future<void> _loadPendingInvitations() async {
+    final res = await AttendanceRepo().getMyInvitations();
+    if (!mounted) return;
+    if (res.success) {
+      final invitations = parseAttendanceList(
+        res.data,
+        AttendanceEmployee.fromJson,
+      );
+      setState(() => _pendingInvitationCount = invitations.length);
+    }
+  }
 
   void _handleLogout(BuildContext context) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -218,6 +240,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             const WaSectionHeader('Workplace'),
             WaToolsListTile(
+              icon: Icons.mail_outline,
+              title: 'Employee Invitations',
+              subtitle: 'Accept or decline team invitations from businesses',
+              showBadge: _pendingInvitationCount > 0,
+              onTap: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const EmployeeInvitationsScreen(),
+                  ),
+                );
+                _loadPendingInvitations();
+              },
+            ),
+            WaToolsListTile(
               icon: Icons.fact_check_outlined,
               title: 'Workplace Check-In',
               subtitle: 'Clock in and out at your job with location',
@@ -260,7 +296,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               WaToolsListTile(
                 icon: Icons.groups_outlined,
                 title: 'Team Attendance',
-                subtitle: 'Add employees, set shifts and track presence',
+                subtitle: 'Invite employees, set shifts and track presence',
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(

@@ -11,6 +11,7 @@ import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
@@ -48,15 +49,15 @@ class PushNotificationService {
       name: 'Leads & Scans',
       description: 'Card scans and contact exchanges',
     ),
-    'account': (
-      id: 'account',
-      name: 'Account',
-      description: 'Subscription updates and expiry reminders',
-    ),
     'loyalty': (
       id: 'loyalty',
       name: 'Loyalty Rewards',
       description: 'Stamp updates and reward completions',
+    ),
+    'account': (
+      id: 'account',
+      name: 'Account',
+      description: 'Subscription updates and employee invitations',
     ),
   };
 
@@ -211,6 +212,8 @@ class PushNotificationService {
         return 'leads';
       case 'subscription':
         return 'account';
+      case 'employee_invitation':
+        return 'account';
       case 'loyalty_stamp':
         return 'loyalty';
       case 'catalog_order':
@@ -280,6 +283,8 @@ class PushNotificationService {
         _openSubscriptionScreen(context);
       case 'loyalty_stamp':
         _openLoyaltyHome(context);
+      case 'employee_invitation':
+        _openEmployeeInvitations(context);
       default:
         break;
     }
@@ -318,6 +323,12 @@ class PushNotificationService {
   static void _openLoyaltyHome(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const CustomerLoyaltyHomeScreen()),
+    );
+  }
+
+  static void _openEmployeeInvitations(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const EmployeeInvitationsScreen()),
     );
   }
 

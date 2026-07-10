@@ -52,6 +52,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   bool _enrollmentStatusChecked = false;
   List<RewardEnrollment> _customerProgramEnrollments = [];
   bool _isEmployee = false;
+  bool _isPendingEmployee = false;
   bool _employeeStatusChecked = false;
 
   @override
@@ -103,13 +104,16 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     if (!mounted) return;
 
     var isEmployee = false;
+    var isPending = false;
     if (res.success && res.data != null) {
       final data = _unwrapApiPayload(res.data);
       isEmployee = data['isEmployee'] as bool? ?? false;
+      isPending = data['isPending'] as bool? ?? false;
     }
 
     setState(() {
       _isEmployee = isEmployee;
+      _isPendingEmployee = isPending;
       _employeeStatusChecked = true;
     });
   }
@@ -128,7 +132,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     );
 
     if (created == true && mounted) {
-      setState(() => _isEmployee = true);
+      setState(() {
+        _isPendingEmployee = true;
+        _isEmployee = false;
+      });
     }
   }
 
@@ -265,33 +272,49 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       icon: const Icon(Icons.more_vert),
       tooltip: 'Business options',
       onSelected: (value) {
-        if (value == 'add_employee' && !_isEmployee) {
+        if (value == 'add_employee' && !_isEmployee && !_isPendingEmployee) {
           _addAsEmployee(_profile!);
         }
       },
       itemBuilder: (context) => [
         PopupMenuItem<String>(
           value: 'add_employee',
-          enabled: !_isEmployee,
+          enabled: !_isEmployee && !_isPendingEmployee,
           child: ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Icon(
               _isEmployee
                   ? Icons.badge_outlined
-                  : Icons.person_add_alt_1_outlined,
-              color: _isEmployee ? Colors.green.shade700 : Colors.black87,
+                  : _isPendingEmployee
+                      ? Icons.hourglass_top_outlined
+                      : Icons.person_add_alt_1_outlined,
+              color: _isEmployee
+                  ? Colors.green.shade700
+                  : _isPendingEmployee
+                      ? Colors.orange.shade800
+                      : Colors.black87,
             ),
             title: Text(
-              _isEmployee ? 'Already Employee' : 'Add as Employee',
+              _isEmployee
+                  ? 'Already Employee'
+                  : _isPendingEmployee
+                      ? 'Invitation Pending'
+                      : 'Invite as Employee',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: _isEmployee ? Colors.green.shade700 : Colors.black87,
+                color: _isEmployee
+                    ? Colors.green.shade700
+                    : _isPendingEmployee
+                        ? Colors.orange.shade800
+                        : Colors.black87,
               ),
             ),
             subtitle: Text(
               _isEmployee
                   ? 'This person is on your team'
-                  : 'Add to your staff for attendance',
+                  : _isPendingEmployee
+                      ? 'Waiting for them to accept'
+                      : 'Send invitation for attendance',
               style: const TextStyle(fontSize: 12),
             ),
           ),

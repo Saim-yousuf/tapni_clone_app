@@ -137,6 +137,11 @@ class _AttendanceApi {
       "${Api.baseUrl}/api/attendance/records/business";
   String get myRecords => "${Api.baseUrl}/api/attendance/records/me";
   String get summary => "${Api.baseUrl}/api/attendance/summary";
+  String get myInvitations => "${Api.baseUrl}/api/attendance/invitations/me";
+  String acceptInvitation(String id) =>
+      "${Api.baseUrl}/api/attendance/invitations/$id/accept";
+  String declineInvitation(String id) =>
+      "${Api.baseUrl}/api/attendance/invitations/$id/decline";
 }
 
 class _WalletApi {

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/progress_score_card.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/go_bussiness_button.dart';
@@ -25,11 +27,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  static const _profileStrengthCardPrefKey = 'profile_strength_card_shown_count';
+  static const _maxProfileStrengthCardShows = 2;
+
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
   late final TextEditingController _bioController;
   File? profileImageFile;
   File? coverImageFile;
+  bool _showProfileStrengthCard = false;
 
   @override
   void initState() {
@@ -40,6 +46,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ).profile;
     _nameController = TextEditingController(text: profile.name);
     _bioController = TextEditingController(text: profile.bio);
+    _showProfileStrengthCard = _resolveProfileStrengthCardVisibility();
+  }
+
+  bool _resolveProfileStrengthCardVisibility() {
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
+
+    if (profileProvider.score >= 100) {
+      return false;
+    }
+
+    final shownCount = SharedPrefHelper.getInt(_profileStrengthCardPrefKey);
+    if (shownCount >= _maxProfileStrengthCardShows) {
+      return false;
+    }
+
+    final shouldShow = Random().nextDouble() < 0.4;
+    if (shouldShow) {
+      SharedPrefHelper.putInt(_profileStrengthCardPrefKey, shownCount + 1);
+    }
+    return shouldShow;
   }
 
   @override
@@ -141,7 +170,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 20),
 
-            ProfileScoreCard(),
+            if (_showProfileStrengthCard) ...[
+              const ProfileScoreCard(),
+              const SizedBox(height: 20),
+            ],
             // if (profile.isPro == false)
             //   GestureDetector(
             //     onTap: () {

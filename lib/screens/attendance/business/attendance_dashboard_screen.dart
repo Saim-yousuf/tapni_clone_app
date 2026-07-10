@@ -40,7 +40,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
         _employees = parseAttendanceList(
           employeesRes.data,
           AttendanceEmployee.fromJson,
-        );
+        ).where((e) => e.isAccepted).toList();
       }
       if (recordsRes.success) {
         _todayRecords = parseAttendanceList(

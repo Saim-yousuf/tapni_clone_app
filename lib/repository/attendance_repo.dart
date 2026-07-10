@@ -55,6 +55,30 @@ class AttendanceRepo {
     );
   }
 
+  Future<ApiResponse> getMyInvitations() async {
+    return ApiHandler.request(
+      api: Api.attendance.myInvitations,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> acceptInvitation(String id) async {
+    return ApiHandler.request(
+      api: Api.attendance.acceptInvitation(id),
+      method: ApiMethod.post,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> declineInvitation(String id) async {
+    return ApiHandler.request(
+      api: Api.attendance.declineInvitation(id),
+      method: ApiMethod.post,
+      authorization: true,
+    );
+  }
+
   Future<ApiResponse> markAttendance(Map<String, dynamic> body) async {
     return ApiHandler.request(
       api: Api.attendance.mark,
