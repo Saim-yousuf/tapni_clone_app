@@ -11,6 +11,7 @@ import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/screens/subscription_screen.dart';
@@ -51,6 +52,11 @@ class PushNotificationService {
       id: 'account',
       name: 'Account',
       description: 'Subscription updates and expiry reminders',
+    ),
+    'loyalty': (
+      id: 'loyalty',
+      name: 'Loyalty Rewards',
+      description: 'Stamp updates and reward completions',
     ),
   };
 
@@ -205,6 +211,8 @@ class PushNotificationService {
         return 'leads';
       case 'subscription':
         return 'account';
+      case 'loyalty_stamp':
+        return 'loyalty';
       case 'catalog_order':
       default:
         return 'orders';
@@ -270,6 +278,8 @@ class PushNotificationService {
         _openMainShell(context, 'Contacts');
       case 'subscription':
         _openSubscriptionScreen(context);
+      case 'loyalty_stamp':
+        _openLoyaltyHome(context);
       default:
         break;
     }
@@ -302,6 +312,12 @@ class PushNotificationService {
         .checkSubscriptionStatus();
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const SubscriptionScreen()),
+    );
+  }
+
+  static void _openLoyaltyHome(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const CustomerLoyaltyHomeScreen()),
     );
   }
 
