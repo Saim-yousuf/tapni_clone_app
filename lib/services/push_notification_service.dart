@@ -344,10 +344,14 @@ class PushNotificationService {
     if (type == 'catalog_order') {
       final profileProvider =
           Provider.of<ProfileProvider>(context, listen: false);
-      Provider.of<LeadsProvider>(context, listen: false)
-          .fetchCatalogOrderNotifications(
+      Provider.of<LeadsProvider>(context, listen: false).refreshNotifications(
         isBusinessUser: profileProvider.isProUser,
       );
+    }
+
+    if (type == 'employee_invitation') {
+      Provider.of<LeadsProvider>(context, listen: false)
+          .fetchEmployeeInvitationNotifications();
     }
 
     if (type == 'subscription') {

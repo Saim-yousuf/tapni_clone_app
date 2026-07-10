@@ -142,6 +142,8 @@ class _AttendanceApi {
       "${Api.baseUrl}/api/attendance/invitations/$id/accept";
   String declineInvitation(String id) =>
       "${Api.baseUrl}/api/attendance/invitations/$id/decline";
+  String employeeCardTemplate(String employeeRefId) =>
+      "${Api.baseUrl}/api/attendance/employees/me/$employeeRefId/card-template";
 }
 
 class _WalletApi {

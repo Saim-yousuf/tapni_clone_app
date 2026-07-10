@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
+import 'package:tapni_app/widgets/employee_card_template_sheet.dart';
 import 'package:tapni_app/widgets/employee_company_card_preview.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 import 'package:tapni_app/widgets/template_business_card_preview.dart';
@@ -31,6 +32,9 @@ class BusinessCardShareSheet extends StatefulWidget {
   final String? employeePhotoUrl;
   final String? employeeId;
   final String? companyName;
+  final String? employeeRefId;
+  final CompanyBusinessCard? companyCard;
+  final ValueChanged<CompanyBusinessCard>? onTemplateChanged;
 
   const BusinessCardShareSheet({
     super.key,
@@ -50,6 +54,9 @@ class BusinessCardShareSheet extends StatefulWidget {
     this.employeePhotoUrl,
     this.employeeId,
     this.companyName,
+    this.employeeRefId,
+    this.companyCard,
+    this.onTemplateChanged,
   });
 
   static void show(
@@ -70,6 +77,9 @@ class BusinessCardShareSheet extends StatefulWidget {
     String? employeePhotoUrl,
     String? employeeId,
     String? companyName,
+    String? employeeRefId,
+    CompanyBusinessCard? companyCard,
+    ValueChanged<CompanyBusinessCard>? onTemplateChanged,
   }) {
     showModalBottomSheet(
       context: context,
@@ -94,14 +104,18 @@ class BusinessCardShareSheet extends StatefulWidget {
         employeePhotoUrl: employeePhotoUrl,
         employeeId: employeeId,
         companyName: companyName,
+        employeeRefId: employeeRefId,
+        companyCard: companyCard,
+        onTemplateChanged: onTemplateChanged,
       ),
     );
   }
 
   static void showForCompanyCard(
     BuildContext context,
-    CompanyBusinessCard card,
-  ) {
+    CompanyBusinessCard card, {
+    ValueChanged<CompanyBusinessCard>? onTemplateChanged,
+  }) {
     final template = CardTemplateCatalog.byId(card.cardTemplateId);
     final employeeName = card.employeeName.isNotEmpty
         ? card.employeeName
@@ -131,6 +145,9 @@ class BusinessCardShareSheet extends StatefulWidget {
           card.employeePhoto.isNotEmpty ? card.employeePhoto : null,
       employeeId: card.employeeDisplayId,
       companyName: card.displayName,
+      employeeRefId: card.employeeRefId,
+      companyCard: card,
+      onTemplateChanged: onTemplateChanged,
     );
   }
 
@@ -147,6 +164,29 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
   bool _walletLoading = false;
   bool _pngLoading = false;
   bool _jpgLoading = false;
+  late CardTemplate _template;
+
+  @override
+  void initState() {
+    super.initState();
+    _template = widget.template;
+  }
+
+  Future<void> _openCustomizeDesign() async {
+    final card = widget.companyCard;
+    if (card == null) return;
+
+    await EmployeeCardTemplateSheet.show(
+      context,
+      card: card.copyWith(cardTemplateId: _template.id),
+      onApplied: (updated) {
+        setState(() {
+          _template = CardTemplateCatalog.byId(updated.cardTemplateId);
+        });
+        widget.onTemplateChanged?.call(updated);
+      },
+    );
+  }
 
   void _snack(
     ScaffoldMessengerState messenger,
@@ -278,8 +318,8 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
             const SizedBox(height: 6),
             Text(
               widget.isEmployeeCard
-                  ? '${widget.companyName ?? ''} • ${widget.template.name} template'
-                  : '${widget.template.name} template',
+                  ? '${widget.companyName ?? ''} • ${_template.name} template'
+                  : '${_template.name} template',
               textAlign: TextAlign.center,
               style: AttendanceUi.bodyMuted,
             ),
@@ -289,7 +329,7 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
                 key: _cardKey,
                 child: widget.isEmployeeCard
                   ? EmployeeCompanyCardPreview(
-                      template: widget.template,
+                      template: _template,
                       employeeName: widget.employeeName ?? 'Employee',
                       employeeId: widget.employeeId ?? '',
                       employeeInitial: widget.employeeInitial ?? 'E',
@@ -297,7 +337,7 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
                       profileUrl: widget.profileUrl,
                     )
                   : TemplateBusinessCardPreview(
-                      template: widget.template,
+                      template: _template,
                       name: widget.displayName,
                       profileUrl: widget.profileUrl,
                       userInitial: widget.userInitial,
@@ -348,6 +388,15 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
                 ),
               ],
             ),
+            if (widget.isEmployeeCard && widget.companyCard != null) ...[
+              const SizedBox(height: 14),
+              AttendanceUi.secondaryButton(
+                label: 'Customize Design',
+                icon: Icons.palette_outlined,
+                height: 56,
+                onPressed: _openCustomizeDesign,
+              ),
+            ],
             const SizedBox(height: 14),
             AttendanceUi.primaryButton(
               label: 'Add to Google Wallet',

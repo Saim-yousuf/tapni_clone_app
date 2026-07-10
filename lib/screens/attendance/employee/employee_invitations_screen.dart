@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tapni_app/models/attendance.dart';
+import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 
@@ -57,7 +59,11 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
       ),
     );
 
-    if (res.success) _load();
+    if (res.success) {
+      Provider.of<LeadsProvider>(context, listen: false)
+          .fetchEmployeeInvitationNotifications();
+      _load();
+    }
   }
 
   @override

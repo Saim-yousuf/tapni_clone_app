@@ -11,6 +11,7 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
   final String profileUrl;
   final String? employeePhotoUrl;
   final double width;
+  final bool compact;
 
   const EmployeeCompanyCardPreview({
     super.key,
@@ -21,7 +22,16 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
     required this.profileUrl,
     this.employeePhotoUrl,
     this.width = 340,
+    this.compact = false,
   });
+
+  double get _avatarSize => compact ? 56 : 80;
+  double get _qrSize => compact ? 100 : 132;
+  double get _nameFontSize => compact ? 20 : 24;
+  double get _idFontSize => compact ? 13 : 15;
+  EdgeInsets get _contentPadding => compact
+      ? const EdgeInsets.fromLTRB(14, 14, 14, 16)
+      : const EdgeInsets.fromLTRB(20, 20, 20, 22);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +66,7 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
             color: template.brandingColor.withValues(alpha: 0.85),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 22),
+            padding: _contentPadding,
             child: SizedBox(
               width: double.infinity,
               child: Column(
@@ -64,9 +74,9 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: compact ? 10 : 12,
+                      vertical: compact ? 4 : 6,
                     ),
                     decoration: BoxDecoration(
                       color: accentPanel,
@@ -81,7 +91,7 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.badge_outlined,
-                          size: 16,
+                          size: compact ? 14 : 16,
                           color: template.textColor,
                         ),
                         const SizedBox(width: 6),
@@ -89,7 +99,7 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
                           'EMPLOYEE CARD',
                           style: TextStyle(
                             color: template.textColor,
-                            fontSize: 11,
+                            fontSize: compact ? 10 : 11,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.1,
                           ),
@@ -97,49 +107,53 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  _avatar(employeePhotoUrl, employeeInitial, size: 80),
-                  const SizedBox(height: 16),
+                  SizedBox(height: compact ? 12 : 20),
+                  _avatar(employeePhotoUrl, employeeInitial, size: _avatarSize),
+                  SizedBox(height: compact ? 10 : 16),
                   Text(
                     employeeName,
                     textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: template.textColor,
-                      fontSize: 24,
+                      fontSize: _nameFontSize,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: compact ? 4 : 6),
                   Text(
                     employeeId,
                     textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: template.labelColor,
-                      fontSize: 15,
+                      fontSize: _idFontSize,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: compact ? 12 : 20),
                   Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: EdgeInsets.all(compact ? 8 : 10),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(compact ? 12 : 14),
                     ),
                     child: QrImageView(
                       data: profileUrl,
-                      size: 132,
+                      size: _qrSize,
                       backgroundColor: Colors.white,
                       errorCorrectionLevel: QrErrorCorrectLevel.H,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: compact ? 6 : 8),
                   Text(
                     'Scan employee profile',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: template.labelColor,
-                      fontSize: 11,
+                      fontSize: compact ? 10 : 11,
                       fontWeight: FontWeight.w700,
                     ),
                   ),

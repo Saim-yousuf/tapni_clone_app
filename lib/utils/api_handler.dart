@@ -42,6 +42,12 @@ class ApiHandler {
 
       http.Response response;
 
+      String? encodedBody;
+      final payload = jsonBody ?? body;
+      if (payload != null) {
+        encodedBody = jsonEncode(payload);
+      }
+
       switch (method) {
         case ApiMethod.get:
           response = await http.get(uri, headers: headers);
@@ -51,7 +57,7 @@ class ApiHandler {
           response = await http.post(
             uri,
             headers: headers,
-            body: jsonEncode(jsonBody ?? body),
+            body: encodedBody,
           );
           break;
 
@@ -59,7 +65,7 @@ class ApiHandler {
           response = await http.put(
             uri,
             headers: headers,
-            body: jsonEncode(jsonBody ?? body),
+            body: encodedBody,
           );
           break;
 
@@ -67,7 +73,7 @@ class ApiHandler {
           response = await http.delete(
             uri,
             headers: headers,
-            body: jsonEncode(jsonBody ?? body),
+            body: encodedBody,
           );
           break;
 
@@ -118,13 +124,31 @@ class ApiHandler {
       return _handleResponse(response);
     } catch (e) {
       PrintLog.logMessage("Request failed: $e");
-      return Future.error("Request failed: $e");
+      return ApiResponse<dynamic>(
+        success: false,
+        statusCode: 0,
+        message: 'Request failed: $e',
+      );
     }
   }
 
   static ApiResponse<dynamic> _handleResponse(http.Response response) {
     final statusCode = response.statusCode;
-    final decoded = response.body.isNotEmpty ? jsonDecode(response.body) : null;
+    dynamic decoded;
+
+    if (response.body.isNotEmpty) {
+      try {
+        decoded = jsonDecode(response.body);
+      } catch (_) {
+        return ApiResponse<dynamic>(
+          success: false,
+          statusCode: statusCode,
+          message: statusCode >= 400
+              ? 'Request failed ($statusCode)'
+              : 'Invalid server response',
+        );
+      }
+    }
 
     return ApiResponse.fromJson(statusCode, decoded);
   }

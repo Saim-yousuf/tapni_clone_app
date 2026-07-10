@@ -13,6 +13,8 @@ class CompanyBusinessCard {
   final String shiftStart;
   final String shiftEnd;
   final String cardTemplateId;
+  final String businessCardTemplateId;
+  final String employeeCardTemplateId;
   final String employeeName;
   final String employeePhoto;
   final String employeeUsername;
@@ -31,6 +33,8 @@ class CompanyBusinessCard {
     this.shiftStart = '09:00',
     this.shiftEnd = '18:00',
     this.cardTemplateId = CardTemplateCatalog.defaultTemplateId,
+    this.businessCardTemplateId = CardTemplateCatalog.defaultTemplateId,
+    this.employeeCardTemplateId = '',
     this.employeeName = '',
     this.employeePhoto = '',
     this.employeeUsername = '',
@@ -52,6 +56,10 @@ class CompanyBusinessCard {
       shiftEnd: json['shiftEnd'] as String? ?? '18:00',
       cardTemplateId: json['cardTemplateId'] as String? ??
           CardTemplateCatalog.defaultTemplateId,
+      businessCardTemplateId: json['businessCardTemplateId'] as String? ??
+          json['cardTemplateId'] as String? ??
+          CardTemplateCatalog.defaultTemplateId,
+      employeeCardTemplateId: json['employeeCardTemplateId'] as String? ?? '',
       employeeName: json['employeeName'] as String? ?? '',
       employeePhoto: json['employeePhoto'] as String? ?? '',
       employeeUsername: json['employeeUsername'] as String? ?? '',
@@ -66,6 +74,34 @@ class CompanyBusinessCard {
     if (employeeUsername.isNotEmpty) return '@$employeeUsername';
     if (employeeRefId.isNotEmpty) return 'ID: $employeeRefId';
     return '';
+  }
+
+  CompanyBusinessCard copyWith({
+    String? cardTemplateId,
+    String? employeeCardTemplateId,
+  }) {
+    return CompanyBusinessCard(
+      employeeRefId: employeeRefId,
+      businessId: businessId,
+      name: name,
+      businessName: businessName,
+      username: username,
+      profilePhoto: profilePhoto,
+      bio: bio,
+      businessCategory: businessCategory,
+      profileUrl: profileUrl,
+      shiftStart: shiftStart,
+      shiftEnd: shiftEnd,
+      cardTemplateId: cardTemplateId ?? this.cardTemplateId,
+      businessCardTemplateId:
+          businessCardTemplateId ?? this.businessCardTemplateId,
+      employeeCardTemplateId:
+          employeeCardTemplateId ?? this.employeeCardTemplateId,
+      employeeName: employeeName,
+      employeePhoto: employeePhoto,
+      employeeUsername: employeeUsername,
+      employeeProfileUrl: employeeProfileUrl,
+    );
   }
 }
 

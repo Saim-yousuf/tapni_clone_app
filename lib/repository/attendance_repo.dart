@@ -133,6 +133,18 @@ class AttendanceRepo {
     );
   }
 
+  Future<ApiResponse> updateEmployeeCardTemplate({
+    required String employeeRefId,
+    required String cardTemplateId,
+  }) async {
+    return ApiHandler.request(
+      api: Api.attendance.employeeCardTemplate(employeeRefId),
+      method: ApiMethod.put,
+      authorization: true,
+      jsonBody: {'cardTemplateId': cardTemplateId},
+    );
+  }
+
   Future<ApiResponse> getSummary({
     required String employeeRefId,
     required int month,

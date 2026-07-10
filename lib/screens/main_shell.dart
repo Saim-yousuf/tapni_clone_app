@@ -33,7 +33,7 @@ class _MainShellState extends State<MainShell> {
     if (!mounted) return;
     final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     final leadsProvider = Provider.of<LeadsProvider>(context, listen: false);
-    leadsProvider.fetchCatalogOrderNotifications(
+    leadsProvider.refreshNotifications(
       isBusinessUser: profileProvider.isProUser,
     );
   }

@@ -4,11 +4,14 @@ import 'package:tapni_app/models/contact_category.dart';
 import 'package:tapni_app/models/activity.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
+import 'package:tapni_app/repository/attendance_repo.dart';
+import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 
 class LeadsProvider extends ChangeNotifier {
   final AuthRepo _authRepo = AuthRepo();
   final CatalogRepo _catalogRepo = CatalogRepo();
+  final AttendanceRepo _attendanceRepo = AttendanceRepo();
 
   List<Lead> _leads = [];
   List<ContactCategory> _categories = [];
@@ -366,6 +369,51 @@ class LeadsProvider extends ChangeNotifier {
   }
 
   // ── Notifications management ─────────────────────────────────────────────────
+  Future<void> refreshNotifications({required bool isBusinessUser}) async {
+    await fetchEmployeeInvitationNotifications();
+    if (isBusinessUser) {
+      await fetchCatalogOrderNotifications(isBusinessUser: true);
+    }
+  }
+
+  Future<void> fetchEmployeeInvitationNotifications() async {
+    try {
+      final res = await _attendanceRepo.getMyInvitations();
+      if (!res.success) return;
+
+      _notifications.removeWhere((n) => n['type'] == 'employee_invitation');
+
+      final invitations = parseAttendanceList(
+        res.data,
+        AttendanceEmployee.fromJson,
+      );
+
+      for (final invitation in invitations) {
+        _notifications.add({
+          'id': invitation.id,
+          'type': 'employee_invitation',
+          'title': 'Employee Invitation',
+          'body':
+              '${invitation.business.displayName} invited you to join their team',
+          'time': 'Just now',
+          'isRead': false,
+        });
+      }
+
+      _sortNotifications();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching employee invitations: $e');
+    }
+  }
+
+  void _sortNotifications() {
+    _notifications.sort((a, b) {
+      if (a['isRead'] == b['isRead']) return 0;
+      return (a['isRead'] as bool) ? 1 : -1;
+    });
+  }
+
   Future<void> fetchCatalogOrderNotifications({required bool isBusinessUser}) async {
     if (!isBusinessUser) return;
 
@@ -385,10 +433,7 @@ class LeadsProvider extends ChangeNotifier {
         });
       }
 
-      _notifications.sort((a, b) {
-        if (a['isRead'] == b['isRead']) return 0;
-        return (a['isRead'] as bool) ? 1 : -1;
-      });
+      _sortNotifications();
 
       notifyListeners();
     } catch (e) {

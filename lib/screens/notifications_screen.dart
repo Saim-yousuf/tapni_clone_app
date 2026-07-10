@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
-import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
+import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 
@@ -21,7 +21,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
-      Provider.of<LeadsProvider>(context, listen: false).fetchCatalogOrderNotifications(
+      Provider.of<LeadsProvider>(context, listen: false).refreshNotifications(
         isBusinessUser: profileProvider.isProUser,
       );
     });
@@ -123,13 +123,21 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       child: GestureDetector(
                         onTap: () {
                           leadsProvider.toggleNotificationRead(item['id']);
-                          if (item['type'] == 'catalog_order' && profileProvider.isProUser) {
+                          if (item['type'] == 'catalog_order' &&
+                              profileProvider.isProUser) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => OrderDetailScreen(
                                   orderId: item['id'],
                                   isBusinessView: true,
                                 ),
+                              ),
+                            );
+                          } else if (item['type'] == 'employee_invitation') {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    const EmployeeInvitationsScreen(),
                               ),
                             );
                           }
