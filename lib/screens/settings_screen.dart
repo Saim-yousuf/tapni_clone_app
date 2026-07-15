@@ -10,6 +10,8 @@ import 'package:tapni_app/screens/attendance/employee/employee_invitations_scree
 import 'package:tapni_app/screens/attendance/employee/mark_attendance_screen.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/models/attendance.dart';
+import 'package:tapni_app/screens/linked_devices/account_switcher_sheet.dart';
+import 'package:tapni_app/screens/linked_devices/linked_devices_screen.dart';
 import 'package:tapni_app/screens/login_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
@@ -55,6 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _handleLogout(BuildContext context) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final hasOthers = authProvider.hasMultipleAccounts;
 
     showDialog(
       context: context,
@@ -65,7 +68,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           title: Text('Log Out', style: WaUi.title),
           content: Text(
-            'Are you sure you want to log out of Barqody?',
+            hasOthers
+                ? 'Log out of this account only? Other accounts will stay on this phone.'
+                : 'Are you sure you want to log out of Barqody?',
             style: WaUi.body,
           ),
           actions: [
@@ -73,28 +78,67 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () => Navigator.of(ctx).pop(),
               child: Text('Cancel', style: WaUi.bodyMedium),
             ),
+            if (hasOthers)
+              TextButton(
+                onPressed: () async {
+                  Navigator.of(ctx).pop();
+                  await _performLogout(context, logoutAll: true);
+                },
+                child: Text(
+                  'Log out all',
+                  style: WaUi.bodyMedium.copyWith(color: Colors.redAccent),
+                ),
+              ),
             TextButton(
               onPressed: () async {
                 Navigator.of(ctx).pop();
-                Provider.of<ProfileProvider>(context, listen: false).clearData();
-                Provider.of<LeadsProvider>(context, listen: false).clearData();
-                Provider.of<SubscriptionProvider>(context, listen: false).clearData();
-                await authProvider.logout();
-                if (context.mounted) {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (_) => const LoginScreen()),
-                    (route) => false,
-                  );
-                }
+                await _performLogout(context, logoutAll: false);
               },
               child: Text(
-                'Log Out',
+                hasOthers ? 'This account' : 'Log Out',
                 style: WaUi.bodyMedium.copyWith(color: Colors.redAccent),
               ),
             ),
           ],
         );
       },
+    );
+  }
+
+  Future<void> _performLogout(
+    BuildContext context, {
+    required bool logoutAll,
+  }) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    Provider.of<ProfileProvider>(context, listen: false).clearData();
+    Provider.of<LeadsProvider>(context, listen: false).clearData();
+    Provider.of<SubscriptionProvider>(context, listen: false).clearData();
+
+    final switched = await authProvider.logout(logoutAll: logoutAll);
+    if (!context.mounted) return;
+
+    if (switched && !logoutAll) {
+      final subProvider = Provider.of<SubscriptionProvider>(
+        context,
+        listen: false,
+      );
+      await subProvider.checkSubscriptionStatus();
+      final profileProvider = Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      );
+      await profileProvider.fetchProfile();
+      if (!context.mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const MainShell()),
+        (route) => false,
+      );
+      return;
+    }
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
     );
   }
 
@@ -331,6 +375,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
             ],
+
+            const WaSectionHeader('Accounts & devices'),
+            WaToolsListTile(
+              icon: Icons.devices_outlined,
+              title: 'Linked devices',
+              subtitle: 'Link another phone like WhatsApp',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const LinkedDevicesScreen(),
+                  ),
+                );
+              },
+            ),
+            WaToolsListTile(
+              icon: Icons.switch_account_outlined,
+              title: 'Accounts',
+              subtitle: Provider.of<AuthProvider>(context).hasMultipleAccounts
+                  ? 'Switch between ${Provider.of<AuthProvider>(context).accounts.length} accounts'
+                  : 'Add or switch accounts',
+              onTap: () => AccountSwitcherSheet.show(context),
+            ),
 
             const WaSectionHeader('Help & account'),
             WaToolsListTile(

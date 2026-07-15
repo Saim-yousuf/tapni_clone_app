@@ -73,6 +73,19 @@ class _AuthApi {
   String get analytics => "${Api.baseUrl}/api/user/auth/analytics";
   String get saveFcmToken => "${Api.baseUrl}/api/user/auth/fcm-token";
   String get removeFcmToken => "${Api.baseUrl}/api/user/auth/fcm-token";
+
+  String get createDevicePairing =>
+      "${Api.baseUrl}/api/user/auth/device/pairing";
+  String devicePairingStatus(String code) =>
+      "${Api.baseUrl}/api/user/auth/device/pairing/${Uri.encodeComponent(code)}/status";
+  String get approveDevicePairing =>
+      "${Api.baseUrl}/api/user/auth/device/pairing/approve";
+  String get deviceSessions =>
+      "${Api.baseUrl}/api/user/auth/device/sessions";
+  String revokeDeviceSession(String sessionId) =>
+      "${Api.baseUrl}/api/user/auth/device/sessions/$sessionId";
+  String get registerDeviceSession =>
+      "${Api.baseUrl}/api/user/auth/device/sessions/register";
 }
 
 class _SubscriptionApi {

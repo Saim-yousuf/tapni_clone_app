@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
+import 'package:tapni_app/screens/linked_devices/qr_login_screen.dart';
 import 'package:tapni_app/screens/signup_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key, this.addAccount = false}) : super(key: key);
+
+  final bool addAccount;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -38,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _emailController.text.trim(),
         _passwordController.text,
         context,
+        addAccount: widget.addAccount,
       );
 
       if (success && mounted) {
@@ -195,6 +200,35 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: _handleLogin,
                   // isGold: true,
                   isLoading: authProvider.isLoading,
+                ),
+                const SizedBox(height: 24),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: WaUi.primaryText,
+                      side: const BorderSide(color: WaUi.divider, width: 1.2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => QrLoginScreen(
+                            addAccount: widget.addAccount,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.qr_code_2, color: WaUi.accent),
+                    label: Text(
+                      'Log in with QR code',
+                      style: WaUi.bodyMedium,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 24),
 

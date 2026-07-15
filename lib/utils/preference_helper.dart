@@ -7,6 +7,9 @@ class PrefUtils {
   String loginType = "login-type";
   String authorizedToken = "authorizedToken";
   String authorizedTokenTemp = "authorizedTokenTemp";
+  String linkedAccounts = "linked_accounts";
+  String activeAccountId = "active_account_id";
+  String activeDeviceSessionId = "active_device_session_id";
 }
 
 class SharedPrefHelper {

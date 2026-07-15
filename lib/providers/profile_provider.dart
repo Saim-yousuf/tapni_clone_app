@@ -15,6 +15,7 @@ import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
+import 'package:tapni_app/services/account_storage.dart';
 
 import '../widgets/loading_widget.dart';
 
@@ -100,6 +101,13 @@ class ProfileProvider extends ChangeNotifier {
               CardTemplateCatalog.indexById(_profile.cardTemplateId);
           _ensureActiveCardExists();
         }
+        await AccountStorage.updateActiveProfileMeta(
+          userId: _profile.id,
+          name: _profile.name,
+          email: _profile.email,
+          username: _profile.username,
+          profilePhoto: _profile.profilePhotoUrl,
+        );
         notifyListeners();
       } catch (e) {
         // Fallback to mock data if there's an issue mapping

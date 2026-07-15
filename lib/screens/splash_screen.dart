@@ -51,18 +51,16 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 2800));
     if (!mounted) return;
 
-    // AuthProvider check for authenticated needs to be valid.
-    // If it relies on a token check, wait. authProvider.isAuthenticated doesn't exist?
-    // Let's assume there is a token check, or we should use SharedPrefHelper.
-
-    // Since I haven't added isAuthenticated to AuthProvider in the recent edits,
-    // I should check SharedPrefHelper directly if it is not there.
     final token = SharedPrefHelper.getString(
       SharedPrefHelper.utils.authorizedToken,
     );
     final isLoggedIn = token.isNotEmpty;
 
     if (isLoggedIn) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      authProvider.refreshAccounts();
+      await authProvider.ensureDeviceSessionRegistered();
+
       final subProvider = Provider.of<SubscriptionProvider>(
         context,
         listen: false,

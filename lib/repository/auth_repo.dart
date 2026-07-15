@@ -134,6 +134,69 @@ class AuthRepo {
     );
   }
 
+  Future<ApiResponse> createDevicePairing({
+    required String deviceName,
+    required String platform,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.createDevicePairing,
+      jsonBody: {"deviceName": deviceName, "platform": platform},
+      method: ApiMethod.post,
+    );
+  }
+
+  Future<ApiResponse> getDevicePairingStatus({required String code}) async {
+    return await ApiHandler.request(
+      api: Api.auth.devicePairingStatus(code),
+      method: ApiMethod.get,
+    );
+  }
+
+  Future<ApiResponse> approveDevicePairing({
+    required String code,
+    required String deviceName,
+    required String platform,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.approveDevicePairing,
+      jsonBody: {
+        "code": code,
+        "deviceName": deviceName,
+        "platform": platform,
+      },
+      method: ApiMethod.post,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> listDeviceSessions() async {
+    return await ApiHandler.request(
+      api: Api.auth.deviceSessions,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> revokeDeviceSession(String sessionId) async {
+    return await ApiHandler.request(
+      api: Api.auth.revokeDeviceSession(sessionId),
+      method: ApiMethod.delete,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> registerDeviceSession({
+    required String deviceName,
+    required String platform,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.registerDeviceSession,
+      jsonBody: {"deviceName": deviceName, "platform": platform},
+      method: ApiMethod.post,
+      authorization: true,
+    );
+  }
+
   Future<ApiResponse> getContactCategories() async {
     return await ApiHandler.request(
       api: Api.contact.getCategories,
