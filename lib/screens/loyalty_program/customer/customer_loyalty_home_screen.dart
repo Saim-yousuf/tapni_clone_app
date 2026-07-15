@@ -3,8 +3,8 @@ import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_program_details_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
-import 'package:tapni_app/utils/theme.dart';
-import 'package:tapni_app/widgets/custom_app_button.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/wa_tools_widgets.dart';
 
 class CustomerLoyaltyHomeScreen extends StatefulWidget {
   const CustomerLoyaltyHomeScreen({super.key});
@@ -72,15 +72,13 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
     final completedCount = _enrollments.where((e) => e.isCompleted).length;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: WaUi.toolsScaffold,
+        surfaceTintColor: WaUi.toolsScaffold,
         elevation: 0,
-        title: const Text(
-          'My Rewards',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
+        iconTheme: const IconThemeData(color: WaUi.primaryText),
+        title: Text('My Rewards', style: WaUi.headline),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -91,32 +89,29 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
               child: _enrollments.isEmpty
                   ? ListView(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      children: const [
-                        SizedBox(height: 120),
+                      children: [
+                        const SizedBox(height: 120),
                         Center(
                           child: Column(
                             children: [
                               Icon(
                                 Icons.card_giftcard_outlined,
                                 size: 56,
-                                color: Colors.black26,
+                                color: WaUi.secondaryText.withOpacity(0.4),
                               ),
-                              SizedBox(height: 16),
+                              const SizedBox(height: 16),
                               Text(
                                 'No reward programs yet',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black54,
-                                ),
+                                style: WaUi.listTitle,
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 40),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 40),
                                 child: Text(
                                   'When a business enrolls you in their reward program, it will appear here.',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.black38),
+                                  style: WaUi.listSubtitle,
                                 ),
                               ),
                             ],
@@ -125,35 +120,34 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
                       ],
                     )
                   : ListView(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.only(bottom: 24),
                       physics: const AlwaysScrollableScrollPhysics(),
                       children: [
-                        _SummaryCard(
-                          businessCount: grouped.length,
-                          activeCount: activeCount,
-                          completedCount: completedCount,
-                        ),
-                        const SizedBox(height: 24),
-                        const Text(
-                          'Enrolled Businesses',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                          child: _SummaryCard(
+                            businessCount: grouped.length,
+                            activeCount: activeCount,
+                            completedCount: completedCount,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const WaSectionHeader('Enrolled Businesses'),
                         ...grouped.entries.map(
-                          (entry) => _BusinessSection(
-                            enrollments: entry.value,
-                            onProgramTap: (enrollment) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => CustomerProgramDetailsScreen(
-                                    enrollment: enrollment,
+                          (entry) => Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                            child: _BusinessSection(
+                              enrollments: entry.value,
+                              onProgramTap: (enrollment) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        CustomerProgramDetailsScreen(
+                                      enrollment: enrollment,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -169,11 +163,27 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(_errorMessage!, textAlign: TextAlign.center),
+            Text(
+              _errorMessage!,
+              textAlign: TextAlign.center,
+              style: WaUi.body,
+            ),
             const SizedBox(height: 16),
-            FilledButton(
+            TextButton(
               onPressed: _loadEnrollments,
-              child: const Text('Try again'),
+              style: TextButton.styleFrom(
+                backgroundColor: WaUi.buttonDark,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(WaUi.radiusPill),
+                ),
+                elevation: 0,
+              ),
+              child: Text('Try again', style: WaUi.promoButton),
             ),
           ],
         ),
@@ -199,26 +209,25 @@ class _SummaryCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(22),
+        color: WaUi.buttonDark,
+        borderRadius: BorderRadius.circular(WaUi.radiusLg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Your Rewards', style: TextStyle(color: Colors.white70)),
+          Text(
+            'Your Rewards',
+            style: WaUi.caption.copyWith(color: Colors.white70),
+          ),
           const SizedBox(height: 10),
           Text(
             '$businessCount ${businessCount == 1 ? 'Business' : 'Businesses'}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
+            style: WaUi.toolsTitle.copyWith(color: Colors.white, fontSize: 30),
           ),
           const SizedBox(height: 6),
           Text(
             '$activeCount active · $completedCount completed',
-            style: const TextStyle(color: Colors.white70),
+            style: WaUi.listSubtitle.copyWith(color: Colors.white70),
           ),
         ],
       ),
@@ -226,7 +235,7 @@ class _SummaryCard extends StatelessWidget {
   }
 }
 
-class _BusinessSection extends StatelessWidget {
+class _BusinessSection extends StatefulWidget {
   final List<RewardEnrollment> enrollments;
   final void Function(RewardEnrollment enrollment) onProgramTap;
 
@@ -236,17 +245,20 @@ class _BusinessSection extends StatelessWidget {
   });
 
   @override
+  State<_BusinessSection> createState() => _BusinessSectionState();
+}
+
+class _BusinessSectionState extends State<_BusinessSection> {
+  bool _expanded = false;
+
+  @override
   Widget build(BuildContext context) {
-    final program = enrollments.first.program;
+    final program = widget.enrollments.first.program;
     final businessName = program?.displayBusinessName ?? 'Business';
     final businessPhoto = program?.businessPhoto;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black12),
-        borderRadius: BorderRadius.circular(16),
-      ),
+      decoration: WaUi.promoCardDecoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -254,44 +266,55 @@ class _BusinessSection extends StatelessWidget {
             padding: const EdgeInsets.all(14),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Colors.grey.shade200,
-                  backgroundImage:
-                      businessPhoto != null && businessPhoto.isNotEmpty
-                      ? NetworkImage(businessPhoto)
-                      : null,
-                  child: businessPhoto == null || businessPhoto.isEmpty
-                      ? Text(
-                          businessName.isNotEmpty
-                              ? businessName[0].toUpperCase()
-                              : '?',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      : null,
-                ),
-                const SizedBox(width: 12),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        businessName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                  child: InkWell(
+                    onTap: () => setState(() => _expanded = !_expanded),
+                    borderRadius: BorderRadius.circular(WaUi.radiusSm),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 22,
+                          backgroundColor: WaUi.navPill,
+                          backgroundImage:
+                              businessPhoto != null && businessPhoto.isNotEmpty
+                              ? NetworkImage(businessPhoto)
+                              : null,
+                          child: businessPhoto == null || businessPhoto.isEmpty
+                              ? Text(
+                                  businessName.isNotEmpty
+                                      ? businessName[0].toUpperCase()
+                                      : '?',
+                                  style: WaUi.avatarInitial,
+                                )
+                              : null,
                         ),
-                      ),
-                      Text(
-                        '${enrollments.length} ${enrollments.length == 1 ? 'program' : 'programs'}',
-                        style: const TextStyle(
-                          color: Colors.black45,
-                          fontSize: 12,
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(businessName, style: WaUi.chatName),
+                              const SizedBox(height: 2),
+                              Text(
+                                '${widget.enrollments.length} ${widget.enrollments.length == 1 ? 'program' : 'programs'}',
+                                style: WaUi.listSubtitle,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        AnimatedRotation(
+                          turns: _expanded ? 0.5 : 0,
+                          duration: const Duration(milliseconds: 200),
+                          child: const Icon(
+                            Icons.keyboard_arrow_down,
+                            color: WaUi.secondaryText,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -301,33 +324,34 @@ class _BusinessSection extends StatelessWidget {
                       ),
                     );
                   },
+                  borderRadius: BorderRadius.circular(WaUi.radiusPill),
                   child: Container(
-                    // height: 30,
-                    // width: 100,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryBlack,
-                      borderRadius: BorderRadius.circular(12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
                     ),
-                    child: Center(
-                      child: Text(
-                        "View Profile",
-                        style: TextStyle(
-                          color: AppTheme.secondaryWhite,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                        ),
-                      ),
+                    decoration: BoxDecoration(
+                      color: WaUi.buttonDark,
+                      borderRadius: BorderRadius.circular(WaUi.radiusPill),
+                    ),
+                    child: Text(
+                      'View Profile',
+                      style: WaUi.button.copyWith(color: Colors.white),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          const Divider(height: 1),
-          ...enrollments.map(
-            (e) => _ProgramTile(enrollment: e, onTap: () => onProgramTap(e)),
-          ),
+          if (_expanded) ...[
+            const Divider(height: 1, color: WaUi.divider),
+            ...widget.enrollments.map(
+              (e) => _ProgramTile(
+                enrollment: e,
+                onTap: () => widget.onProgramTap(e),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -345,48 +369,51 @@ class _ProgramTile extends StatelessWidget {
     final program = enrollment.program;
     final theme = program?.theme ?? RewardTheme();
 
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: theme.cardBackgroundColor.withOpacity(0.08),
-        ),
-        child: Row(
-          children: [
-            if (program?.logo.isNotEmpty == true)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  program!.logo,
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const SizedBox(),
+    return Material(
+      color: theme.cardBackgroundColor.withOpacity(0.08),
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          child: Row(
+            children: [
+              if (program?.logo.isNotEmpty == true)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(WaUi.radiusSm),
+                  child: Image.network(
+                    program!.logo,
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const SizedBox(),
+                  ),
+                ),
+              if (program?.logo.isNotEmpty == true) const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      program?.title ?? 'Program',
+                      style: WaUi.listTitle,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${enrollment.stamps} / ${program?.stamps ?? '?'} stamps',
+                      style: WaUi.listSubtitle,
+                    ),
+                  ],
                 ),
               ),
-            if (program?.logo.isNotEmpty == true) const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    program?.title ?? 'Program',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${enrollment.stamps} / ${program?.stamps ?? '?'} stamps',
-                    style: const TextStyle(color: Colors.black45, fontSize: 12),
-                  ),
-                ],
-              ),
-            ),
-            if (enrollment.isCompleted)
-              const Icon(Icons.check_circle, color: Colors.green, size: 20)
-            else
-              const Icon(Icons.chevron_right, color: Colors.black38),
-          ],
+              if (enrollment.isCompleted)
+                const Icon(Icons.check_circle, color: WaUi.accent, size: 20)
+              else
+                const Icon(
+                  Icons.chevron_right,
+                  color: WaUi.secondaryText,
+                ),
+            ],
+          ),
         ),
       ),
     );

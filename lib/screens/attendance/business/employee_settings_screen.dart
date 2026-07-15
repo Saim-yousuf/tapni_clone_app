@@ -6,6 +6,7 @@ import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/business/map_location_picker_screen.dart';
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/location_helper.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/face_capture_sheet.dart';
 
@@ -215,7 +216,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.map_outlined, size: 48, color: Colors.black54),
+            const Icon(Icons.map_outlined, size: 40, color: WaUi.promoIconFg),
             const SizedBox(height: 10),
             Text('Location not set yet', style: AttendanceUi.bodyMuted),
           ],
@@ -281,7 +282,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
         'Invite Employee';
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AttendanceUi.scaffoldBg,
       appBar: AttendanceUi.appBar(title),
       body: ListView(
         padding: const EdgeInsets.all(20),

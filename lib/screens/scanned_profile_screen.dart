@@ -625,34 +625,42 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     final isCatalog = link.isCatalogLink;
     final logo = link.logoUrl?.trim() ?? '';
 
-    if (logo.isNotEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Image.network(
-          logo,
-          fit: BoxFit.contain,
-          height: 130,
-          width: 130,
-          errorBuilder: (_, __, ___) => _linkIconFallback(isCatalog),
-        ),
-      );
-    }
-
-    return _linkIconFallback(isCatalog);
-  }
-
-  Widget _linkIconFallback(bool isCatalog) {
     return Container(
       width: 130,
       height: 130,
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: Colors.grey.shade300,
+          width: 1,
+        ),
       ),
-      child: Icon(
-        isCatalog ? Icons.restaurant_menu : Icons.link,
-        size: isCatalog ? 56 : 32,
-        color: Colors.black87,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(23),
+        child: logo.isNotEmpty
+            ? Image.network(
+                logo,
+                fit: BoxFit.cover,
+                width: 130,
+                height: 130,
+                alignment: Alignment.center,
+                errorBuilder: (_, __, ___) => _linkIconFallback(isCatalog),
+              )
+            : _linkIconFallback(isCatalog),
+      ),
+    );
+  }
+
+  Widget _linkIconFallback(bool isCatalog) {
+    return ColoredBox(
+      color: const Color(0xFFF5F5F5),
+      child: Center(
+        child: Icon(
+          isCatalog ? Icons.restaurant_menu : Icons.link,
+          size: isCatalog ? 56 : 32,
+          color: Colors.black87,
+        ),
       ),
     );
   }

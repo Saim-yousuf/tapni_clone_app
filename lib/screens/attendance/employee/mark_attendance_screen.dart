@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
+import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
 import 'package:tapni_app/utils/location_helper.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/face_capture_sheet.dart';
-import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
 
 class MarkAttendanceScreen extends StatefulWidget {
   const MarkAttendanceScreen({super.key});
@@ -125,7 +126,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               : (res.message ?? 'Attendance failed'),
           style: AttendanceUi.body.copyWith(color: Colors.white),
         ),
-        backgroundColor: res.success ? Colors.green.shade700 : Colors.red.shade700,
+        backgroundColor:
+            res.success ? Colors.green.shade700 : Colors.red.shade700,
       ),
     );
 
@@ -135,12 +137,12 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AttendanceUi.scaffoldBg,
       appBar: AttendanceUi.appBar(
         'Mark Attendance',
         actions: [
           IconButton(
-            icon: const Icon(Icons.wallet_outlined, size: 30),
+            icon: const Icon(Icons.wallet_outlined, size: 24),
             tooltip: 'Company Employee Card',
             onPressed: () {
               Navigator.push(
@@ -154,19 +156,19 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(strokeWidth: 3))
+          ? const Center(child: CircularProgressIndicator())
           : _employers.isEmpty
               ? _emptyState()
               : RefreshIndicator(
                   onRefresh: _loadEmployers,
                   child: ListView(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
                     children: [
                       AttendanceUi.sectionHeader('Select Company'),
                       ..._employers.map((employer) {
                         final selected = _selectedEmployer?.id == employer.id;
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 14),
+                          padding: const EdgeInsets.only(bottom: 10),
                           child: InkWell(
                             onTap: () async {
                               setState(() => _selectedEmployer = employer);
@@ -175,24 +177,24 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                             borderRadius:
                                 BorderRadius.circular(AttendanceUi.radius),
                             child: Container(
-                              padding: const EdgeInsets.all(18),
+                              padding: const EdgeInsets.all(14),
                               decoration: selected
                                   ? AttendanceUi.thickCardFilled()
                                   : AttendanceUi.thickCard,
                               child: Row(
                                 children: [
                                   CircleAvatar(
-                                    radius: 30,
-                                    backgroundColor:
-                                        selected ? Colors.white : Colors.black,
+                                    radius: 24,
+                                    backgroundColor: selected
+                                        ? Colors.white
+                                        : WaUi.navPill,
                                     backgroundImage: employer
                                             .business.profilePhoto.isNotEmpty
                                         ? NetworkImage(
                                             employer.business.profilePhoto,
                                           )
                                         : null,
-                                    child: employer
-                                            .business.profilePhoto.isEmpty
+                                    child: employer.business.profilePhoto.isEmpty
                                         ? Text(
                                             employer.business.displayName
                                                     .isNotEmpty
@@ -200,17 +202,15 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                                                     .business.displayName[0]
                                                     .toUpperCase()
                                                 : '?',
-                                            style: TextStyle(
+                                            style: WaUi.avatarInitial.copyWith(
                                               color: selected
-                                                  ? Colors.black
-                                                  : Colors.white,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.w900,
+                                                  ? WaUi.primaryText
+                                                  : WaUi.primaryText,
                                             ),
                                           )
                                         : null,
                                   ),
-                                  const SizedBox(width: 16),
+                                  const SizedBox(width: 14),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -218,20 +218,20 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                                       children: [
                                         Text(
                                           employer.business.displayName,
-                                          style: AttendanceUi.cardTitle.copyWith(
+                                          style:
+                                              AttendanceUi.cardTitle.copyWith(
                                             color: selected
                                                 ? Colors.white
-                                                : Colors.black,
+                                                : WaUi.primaryText,
                                           ),
                                         ),
-                                        const SizedBox(height: 6),
+                                        const SizedBox(height: 4),
                                         Text(
                                           'Shift ${employer.shiftStart} - ${employer.shiftEnd}',
                                           style: AttendanceUi.bodyMuted.copyWith(
                                             color: selected
                                                 ? Colors.white70
-                                                : Colors.grey.shade700,
-                                            fontSize: 16,
+                                                : WaUi.secondaryText,
                                           ),
                                         ),
                                       ],
@@ -240,8 +240,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                                   if (selected)
                                     const Icon(
                                       Icons.check_circle,
-                                      color: Colors.white,
-                                      size: 32,
+                                      color: WaUi.accent,
+                                      size: 22,
                                     ),
                                 ],
                               ),
@@ -249,9 +249,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                           ),
                         );
                       }),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 12),
                       if (_todayStatus != null) _buildTodayCard(),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 12),
                       if (_summary != null) _buildSummaryCard(),
                     ],
                   ),
@@ -264,16 +264,16 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     final record = status.record;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: AttendanceUi.thickCard,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'TODAY • ${DateFormat('EEE, MMM d').format(DateTime.now()).toUpperCase()}',
-            style: AttendanceUi.sectionTitle.copyWith(fontSize: 20),
+            'Today • ${DateFormat('EEE, MMM d').format(DateTime.now())}',
+            style: AttendanceUi.sectionTitle,
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           if (status.isWeekend)
             Text('Today is your weekend', style: AttendanceUi.body)
           else ...[
@@ -292,26 +292,24 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                 'Not checked in yet',
                 style: AttendanceUi.body.copyWith(
                   color: Colors.red.shade700,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
           ],
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           if (!status.isWeekend && status.canCheckIn)
             AttendanceUi.primaryButton(
-              label: 'CHECK IN',
+              label: 'Check in',
               icon: Icons.login,
               loading: _isMarking,
-              height: 68,
               onPressed: () => _markAttendance('check_in'),
             ),
           if (!status.isWeekend && status.canCheckOut) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             AttendanceUi.secondaryButton(
-              label: 'CHECK OUT',
+              label: 'Check out',
               icon: Icons.logout,
               loading: _isMarking,
-              height: 68,
               onPressed: () => _markAttendance('check_out'),
             ),
           ],
@@ -323,7 +321,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               'Attendance completed for today',
               style: AttendanceUi.body.copyWith(
                 color: Colors.green.shade700,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w500,
               ),
             ),
         ],
@@ -334,25 +332,23 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   Widget _buildSummaryCard() {
     final summary = _summary!;
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: AttendanceUi.thickCard,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'THIS MONTH',
-            style: AttendanceUi.sectionTitle.copyWith(fontSize: 20),
-          ),
+          Text('This month', style: AttendanceUi.sectionTitle),
+          const SizedBox(height: 2),
           Text(
             DateFormat('MMMM yyyy').format(DateTime.now()),
             style: AttendanceUi.bodyMuted,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           Row(
             children: [
-              _miniStat('PRESENT', summary.present, Colors.green.shade700),
-              _miniStat('ABSENT', summary.absent, Colors.red.shade700),
-              _miniStat('PARTIAL', summary.partial, Colors.orange.shade800),
+              _miniStat('Present', summary.present, Colors.green.shade700),
+              _miniStat('Absent', summary.absent, Colors.red.shade700),
+              _miniStat('Partial', summary.partial, Colors.orange.shade800),
             ],
           ),
         ],
@@ -365,8 +361,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       child: Column(
         children: [
           Text('$value', style: AttendanceUi.statNumber.copyWith(color: color)),
-          const SizedBox(height: 8),
-          Text(label, style: AttendanceUi.statLabel.copyWith(fontSize: 13)),
+          const SizedBox(height: 6),
+          Text(label, style: AttendanceUi.statLabel),
         ],
       ),
     );
@@ -377,15 +373,19 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Container(
-          padding: const EdgeInsets.all(28),
+          padding: const EdgeInsets.all(24),
           decoration: AttendanceUi.thickCard,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.work_off_outlined, size: 72, color: Colors.black54),
+              Icon(
+                Icons.work_off_outlined,
+                size: 48,
+                color: WaUi.promoIconFg,
+              ),
               const SizedBox(height: 16),
               Text('No employer found', style: AttendanceUi.sectionTitle),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               Text(
                 'Ask your business to scan your QR and add you as an employee',
                 textAlign: TextAlign.center,

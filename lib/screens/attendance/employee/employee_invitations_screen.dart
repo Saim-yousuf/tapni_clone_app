@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 
 class EmployeeInvitationsScreen extends StatefulWidget {
@@ -69,10 +70,10 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AttendanceUi.scaffoldBg,
       appBar: AttendanceUi.appBar('Employee Invitations'),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(strokeWidth: 3))
+          ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _load,
               child: _invitations.isEmpty
@@ -89,7 +90,7 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   const Icon(Icons.mail_outline,
-                                      size: 72, color: Colors.black54),
+                                      size: 48, color: WaUi.promoIconFg),
                                   const SizedBox(height: 16),
                                   Text(
                                     'No pending invitations',
@@ -125,8 +126,8 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                                 Row(
                                   children: [
                                     CircleAvatar(
-                                      radius: 28,
-                                      backgroundColor: Colors.black,
+                                      radius: 26,
+                                      backgroundColor: WaUi.navPill,
                                       backgroundImage: invitation
                                               .business.profilePhoto.isNotEmpty
                                           ? NetworkImage(
@@ -142,11 +143,7 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                                                       .business.displayName[0]
                                                       .toUpperCase()
                                                   : '?',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.w900,
-                                              ),
+                                              style: WaUi.avatarInitial,
                                             )
                                           : null,
                                     ),

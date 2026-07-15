@@ -125,10 +125,10 @@ class _MapLocationPickerScreenState extends State<MapLocationPickerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AttendanceUi.scaffoldBg,
       appBar: AttendanceUi.appBar('Pick Location'),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(strokeWidth: 3))
+          ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
                 Padding(

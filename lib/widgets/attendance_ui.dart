@@ -1,98 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 
-/// Bold, chunky attendance UI — large text and thick buttons.
+/// Attendance screens — WhatsApp Business–style surfaces and typography.
 class AttendanceUi {
-  static const String fontFamily = 'Urbanist';
+  static String get fontFamily => WaUi.fontFamily;
 
-  static const double buttonHeight = 62;
-  static const double borderWidth = 3;
-  static const double radius = 18;
+  static const double buttonHeight = 52;
+  static const double borderWidth = 1;
+  static const double radius = WaUi.radiusLg;
 
-  static TextStyle get pageTitle => const TextStyle(
-        fontFamily: fontFamily,
+  static Color get scaffoldBg => WaUi.toolsScaffold;
+  static Color get primaryText => WaUi.primaryText;
+  static Color get secondaryText => WaUi.secondaryText;
+  static Color get divider => WaUi.divider;
+  static Color get surface => WaUi.surface;
+  static Color get buttonDark => WaUi.buttonDark;
+
+  static TextStyle get pageTitle => WaUi.headline;
+
+  static TextStyle get sectionTitle => WaUi.sectionHeader;
+
+  static TextStyle get cardTitle => WaUi.chatName;
+
+  static TextStyle get body => WaUi.body;
+
+  static TextStyle get bodyMuted => WaUi.listSubtitle;
+
+  static TextStyle get statNumber => WaUi.toolsTitle.copyWith(
         fontSize: 28,
-        fontWeight: FontWeight.w900,
-        color: Colors.black,
-        height: 1.1,
+        color: primaryText,
       );
 
-  static TextStyle get sectionTitle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 22,
-        fontWeight: FontWeight.w900,
-        color: Colors.black,
-      );
+  static TextStyle get statLabel => WaUi.label.copyWith(color: primaryText);
 
-  static TextStyle get cardTitle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 20,
-        fontWeight: FontWeight.w800,
-        color: Colors.black,
-      );
-
-  static TextStyle get body => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        color: Colors.black87,
-        height: 1.35,
-      );
-
-  static TextStyle get bodyMuted => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 17,
-        fontWeight: FontWeight.w600,
-        color: Colors.grey.shade700,
-        height: 1.35,
-      );
-
-  static TextStyle get statNumber => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 34,
-        fontWeight: FontWeight.w900,
-        height: 1,
-      );
-
-  static TextStyle get statLabel => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w800,
-        color: Colors.black,
-      );
-
-  static TextStyle get buttonLabel => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 20,
-        fontWeight: FontWeight.w900,
-      );
+  static TextStyle get buttonLabel => WaUi.button.copyWith(color: Colors.white);
 
   static BoxDecoration get thickCard => BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.black, width: borderWidth),
+        color: surface,
         borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: divider, width: borderWidth),
       );
 
-  static BoxDecoration thickCardFilled({Color fill = Colors.black}) =>
+  static BoxDecoration thickCardFilled({Color fill = WaUi.buttonDark}) =>
       BoxDecoration(
         color: fill,
-        border: Border.all(color: Colors.black, width: borderWidth),
         borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: fill, width: borderWidth),
       );
 
   static AppBar appBar(String title, {List<Widget>? actions}) {
     return AppBar(
-      backgroundColor: Colors.white,
-      surfaceTintColor: Colors.white,
+      backgroundColor: scaffoldBg,
+      surfaceTintColor: scaffoldBg,
       elevation: 0,
-      iconTheme: const IconThemeData(color: Colors.black, size: 28),
-      title: Text(title, style: pageTitle.copyWith(fontSize: 24)),
+      iconTheme: const IconThemeData(color: WaUi.primaryText, size: 24),
+      title: Text(title, style: pageTitle),
       actions: actions,
     );
   }
 
   static Widget sectionHeader(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Text(text, style: sectionTitle),
     );
   }
@@ -109,21 +78,20 @@ class AttendanceUi {
       height: height ?? buttonHeight,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
+          backgroundColor: buttonDark,
           foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius),
-            side: const BorderSide(color: Colors.black, width: borderWidth),
+            borderRadius: BorderRadius.circular(WaUi.radiusPill),
           ),
         ),
         onPressed: loading ? null : onPressed,
         child: loading
             ? const SizedBox(
-                width: 28,
-                height: 28,
+                width: 22,
+                height: 22,
                 child: CircularProgressIndicator(
-                  strokeWidth: 3,
+                  strokeWidth: 2.5,
                   color: Colors.white,
                 ),
               )
@@ -131,8 +99,8 @@ class AttendanceUi {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: 26),
-                    const SizedBox(width: 10),
+                    Icon(icon, size: 22),
+                    const SizedBox(width: 8),
                   ],
                   Text(label, style: buttonLabel),
                 ],
@@ -153,27 +121,30 @@ class AttendanceUi {
       height: height ?? buttonHeight,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          foregroundColor: Colors.black,
-          side: const BorderSide(color: Colors.black, width: borderWidth),
+          foregroundColor: primaryText,
+          side: const BorderSide(color: WaUi.divider, width: 1),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius),
+            borderRadius: BorderRadius.circular(WaUi.radiusPill),
           ),
         ),
         onPressed: loading ? null : onPressed,
         child: loading
             ? const SizedBox(
-                width: 28,
-                height: 28,
-                child: CircularProgressIndicator(strokeWidth: 3),
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(strokeWidth: 2.5),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: 26),
-                    const SizedBox(width: 10),
+                    Icon(icon, size: 22),
+                    const SizedBox(width: 8),
                   ],
-                  Text(label, style: buttonLabel),
+                  Text(
+                    label,
+                    style: WaUi.button.copyWith(color: primaryText),
+                  ),
                 ],
               ),
       ),
@@ -183,23 +154,21 @@ class AttendanceUi {
   static InputDecoration inputDecoration(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 17,
-        fontWeight: FontWeight.w700,
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+      labelStyle: WaUi.bodyMedium.copyWith(color: secondaryText),
+      filled: true,
+      fillColor: WaUi.navBarBg,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radius),
-        borderSide: const BorderSide(color: Colors.black, width: borderWidth),
+        borderRadius: BorderRadius.circular(WaUi.radiusMd),
+        borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radius),
-        borderSide: const BorderSide(color: Colors.black, width: borderWidth),
+        borderRadius: BorderRadius.circular(WaUi.radiusMd),
+        borderSide: const BorderSide(color: WaUi.divider),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radius),
-        borderSide: const BorderSide(color: Colors.black, width: borderWidth),
+        borderRadius: BorderRadius.circular(WaUi.radiusMd),
+        borderSide: const BorderSide(color: WaUi.buttonDark, width: 1.2),
       ),
     );
   }
@@ -214,19 +183,15 @@ class AttendanceUi {
         onTap: onTap,
         borderRadius: BorderRadius.circular(radius),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 14),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
           decoration: thickCard,
           child: Column(
             children: [
-              Text(label, style: statLabel.copyWith(fontSize: 14)),
+              Text(label, style: WaUi.label),
               const SizedBox(height: 8),
               Text(
                 value,
-                style: const TextStyle(
-                  fontFamily: fontFamily,
-                  fontSize: 26,
-                  fontWeight: FontWeight.w900,
-                ),
+                style: WaUi.headline.copyWith(fontSize: 22),
               ),
             ],
           ),

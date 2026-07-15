@@ -3,6 +3,7 @@ import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 
 class EmployeeListScreen extends StatefulWidget {
@@ -42,8 +43,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AttendanceUi.radius),
-          side: const BorderSide(color: Colors.black, width: 3),
+          borderRadius: BorderRadius.circular(WaUi.radiusLg),
         ),
         title: Text('Remove Employee', style: AttendanceUi.sectionTitle),
         content: Text(
@@ -53,13 +53,16 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancel', style: AttendanceUi.buttonLabel),
+            child: Text('Cancel', style: WaUi.bodyMedium),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
-              minimumSize: const Size(100, 48),
+              minimumSize: const Size(100, 44),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(WaUi.radiusPill),
+              ),
             ),
             onPressed: () => Navigator.pop(ctx, true),
             child: Text('Remove', style: AttendanceUi.buttonLabel),
@@ -86,10 +89,10 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AttendanceUi.scaffoldBg,
       appBar: AttendanceUi.appBar('Employees'),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(strokeWidth: 3))
+          ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _load,
               child: _employees.isEmpty
@@ -106,7 +109,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   const Icon(Icons.person_search_outlined,
-                                      size: 72, color: Colors.black54),
+                                      size: 48, color: WaUi.promoIconFg),
                                   const SizedBox(height: 16),
                                   Text(
                                     'No employees added',
@@ -140,8 +143,8 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                                 vertical: 10,
                               ),
                               leading: CircleAvatar(
-                                radius: 28,
-                                backgroundColor: Colors.black,
+                                radius: 26,
+                                backgroundColor: WaUi.navPill,
                                 backgroundImage: employee
                                         .employee.profilePhoto.isNotEmpty
                                     ? NetworkImage(
@@ -154,11 +157,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                                             ? employee.employee.name[0]
                                                 .toUpperCase()
                                             : '?',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w900,
-                                        ),
+                                        style: WaUi.avatarInitial,
                                       )
                                     : null,
                               ),
@@ -253,11 +252,11 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                 MaterialPageRoute(builder: (_) => const ScanScreen()),
               );
             },
-            backgroundColor: Colors.black,
+            backgroundColor: WaUi.buttonDark,
             foregroundColor: Colors.white,
             elevation: 0,
             extendedPadding: const EdgeInsets.symmetric(horizontal: 24),
-            icon: const Icon(Icons.qr_code_scanner, size: 28),
+            icon: const Icon(Icons.qr_code_scanner, size: 22),
             label: Text('Scan to Invite', style: AttendanceUi.buttonLabel),
           ),
         ),

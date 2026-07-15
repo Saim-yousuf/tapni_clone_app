@@ -4,6 +4,7 @@ import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/business/employee_list_screen.dart';
 import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 
 class AttendanceDashboardScreen extends StatefulWidget {
@@ -87,12 +88,12 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
         _todayRecords.where((r) => r.checkInTime != null).length;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AttendanceUi.scaffoldBg,
       appBar: AttendanceUi.appBar(
         'Attendance',
         actions: [
           IconButton(
-            icon: const Icon(Icons.people_outline, size: 30),
+            icon: const Icon(Icons.people_outline, size: 24),
             onPressed: () async {
               await Navigator.push(
                 context,
@@ -104,7 +105,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(strokeWidth: 3))
+          ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _load,
               child: ListView(
@@ -149,8 +150,8 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                             child: Row(
                               children: [
                                 CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Colors.black,
+                                  radius: 26,
+                                  backgroundColor: WaUi.navPill,
                                   backgroundImage: employee
                                           .employee.profilePhoto.isNotEmpty
                                       ? NetworkImage(
@@ -163,11 +164,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                                               ? employee.employee.name[0]
                                                   .toUpperCase()
                                               : '?',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w900,
-                                          ),
+                                          style: WaUi.avatarInitial,
                                         )
                                       : null,
                                 ),
@@ -234,11 +231,11 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
               );
               _load();
             },
-            backgroundColor: Colors.black,
+            backgroundColor: WaUi.buttonDark,
             foregroundColor: Colors.white,
             elevation: 0,
             extendedPadding: const EdgeInsets.symmetric(horizontal: 24),
-            icon: const Icon(Icons.person_add_alt_1, size: 28),
+            icon: const Icon(Icons.person_add_alt_1, size: 22),
             label: Text('Manage Employees', style: AttendanceUi.buttonLabel),
           ),
         ),
@@ -273,7 +270,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
       decoration: AttendanceUi.thickCard,
       child: Column(
         children: [
-          const Icon(Icons.groups_outlined, size: 72, color: Colors.black54),
+          const Icon(Icons.groups_outlined, size: 48, color: WaUi.promoIconFg),
           const SizedBox(height: 16),
           Text('No employees yet', style: AttendanceUi.sectionTitle),
           const SizedBox(height: 10),

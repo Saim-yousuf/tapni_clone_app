@@ -61,17 +61,17 @@ class AppTheme {
     );
   }
 
-  // LIGHT THEME (BLACK & WHITE ONLY)
+  // LIGHT THEME — WhatsApp-style Roboto typography
   static ThemeData get lightTheme {
+    final baseText = ThemeData.light().textTheme.apply(bodyColor: primaryBlack);
+
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       primaryColor: primaryBlack,
       scaffoldBackgroundColor: secondaryWhite,
       cardColor: secondaryWhite,
-      fontFamily: GoogleFonts.poppins().fontFamily,
-
-      // fontFamily: "Urbanist",
+      fontFamily: GoogleFonts.roboto().fontFamily,
       colorScheme: const ColorScheme.light(
         primary: primaryBlack,
         secondary: primaryBlack,
@@ -80,115 +80,76 @@ class AppTheme {
         onPrimary: secondaryWhite,
         onSecondary: secondaryWhite,
       ),
-
-      // textTheme: TextTheme(
-      //   headlineLarge: GoogleFonts.poppins(
-      //     // fontFamily: 'Urbanist',
-      //     fontSize: 36,
-      //     fontWeight: FontWeight.w800,
-      //     letterSpacing: -0.5,
-      //     color: primaryBlack,
-      //   ),
-      //   headlineMedium: GoogleFonts.poppins(
-      //     // fontFamily: 'Urbanist',
-      //     fontSize: 28,
-      //     fontWeight: FontWeight.w800,
-      //     letterSpacing: -0.3,
-      //     color: primaryBlack,
-      //   ),
-      //   titleLarge: GoogleFonts.poppins(
-      //     // fontFamily: 'Urbanist',
-      //     fontSize: 22,
-      //     fontWeight: FontWeight.w700,
-      //     letterSpacing: -0.2,
-      //     color: primaryBlack,
-      //   ),
-      //   bodyLarge: GoogleFonts.poppins(
-      //     // fontFamily: 'Urbanist',
-      //     fontSize: 18,
-      //     fontWeight: FontWeight.w600,
-      //     color: primaryBlack,
-      //   ),
-      //   bodyMedium: GoogleFonts.poppins(
-      //     // fontFamily: 'Urbanist',
-      //     fontSize: 16,
-      //     fontWeight: FontWeight.w600,
-      //     color: primaryBlack,
-      //   ),
-      // ),
-      textTheme:
-          GoogleFonts.poppinsTextTheme(
-            ThemeData.light().textTheme.apply(bodyColor: primaryBlack),
-          ).copyWith(
-            displayLarge: GoogleFonts.poppins(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: primaryBlack,
-            ),
-            displayMedium: GoogleFonts.poppins(
-              fontSize: 34,
-              fontWeight: FontWeight.bold,
-              color: primaryBlack,
-            ),
-            headlineLarge: GoogleFonts.poppins(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: primaryBlack,
-            ),
-            headlineMedium: GoogleFonts.poppins(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: primaryBlack,
-            ),
-            titleLarge: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: primaryBlack,
-            ),
-            bodyLarge: GoogleFonts.poppins(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: primaryBlack,
-            ),
-            bodyMedium: GoogleFonts.poppins(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: primaryBlack,
-            ),
-            labelLarge: GoogleFonts.poppins(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: primaryBlack,
-            ),
-          ),
-      // appBarTheme: const AppBarTheme(
-      //   backgroundColor: secondaryWhite,
-      //   elevation: 0,
-      //   iconTheme: IconThemeData(color: primaryBlack),
-      //   centerTitle: true,
-      //   titleTextStyle: TextStyle(
-      //     color: primaryBlack,
-      //     fontSize: 20,
-      //     fontWeight: FontWeight.bold,
-      //   ),
-      // ),
+      textTheme: GoogleFonts.robotoTextTheme(baseText).copyWith(
+        displayLarge: GoogleFonts.roboto(
+          fontSize: 40,
+          fontWeight: FontWeight.w700,
+          color: primaryBlack,
+          letterSpacing: -0.3,
+        ),
+        displayMedium: GoogleFonts.roboto(
+          fontSize: 34,
+          fontWeight: FontWeight.w700,
+          color: primaryBlack,
+          letterSpacing: -0.3,
+        ),
+        headlineLarge: GoogleFonts.roboto(
+          fontSize: 28,
+          fontWeight: FontWeight.w700,
+          color: primaryBlack,
+          letterSpacing: -0.3,
+        ),
+        headlineMedium: GoogleFonts.roboto(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: primaryBlack,
+          letterSpacing: -0.2,
+        ),
+        titleLarge: GoogleFonts.roboto(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: primaryBlack,
+          letterSpacing: -0.2,
+        ),
+        titleMedium: GoogleFonts.roboto(
+          fontSize: 17,
+          fontWeight: FontWeight.w500,
+          color: primaryBlack,
+        ),
+        bodyLarge: GoogleFonts.roboto(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: primaryBlack,
+          height: 1.35,
+        ),
+        bodyMedium: GoogleFonts.roboto(
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+          color: primaryBlack,
+          height: 1.35,
+        ),
+        bodySmall: GoogleFonts.roboto(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: primaryBlack,
+          height: 1.35,
+        ),
+        labelLarge: GoogleFonts.roboto(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          color: primaryBlack,
+        ),
+      ),
       appBarTheme: AppBarTheme(
         backgroundColor: secondaryWhite,
         elevation: 0,
-        iconTheme: IconThemeData(color: primaryBlack),
+        iconTheme: const IconThemeData(color: primaryBlack),
         centerTitle: true,
-        // titleTextStyle: TextStyle(
-        //   fontFamily: 'Urbanist',
-        //   color: primaryBlack,
-        //   fontSize: 24,
-        //   fontWeight: FontWeight.w800,
-        //   // letterSpacing: -0.3,
-        // ),
-        titleTextStyle: GoogleFonts.poppins(
+        titleTextStyle: GoogleFonts.roboto(
           color: primaryBlack,
-          fontSize: 24,
-          fontWeight: FontWeight.w700,
-          // letterSpacing: 1,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -0.2,
         ),
       ),
 
@@ -231,15 +192,17 @@ class AppTheme {
     );
   }
 
-  // DARK THEME (PURE BLACK ONLY)
+  // DARK THEME — WhatsApp-style Roboto typography
   static ThemeData get darkTheme {
+    final baseText = ThemeData.dark().textTheme.apply(bodyColor: secondaryWhite);
+
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       primaryColor: secondaryWhite,
       scaffoldBackgroundColor: primaryBlack,
       cardColor: primaryBlack,
-
+      fontFamily: GoogleFonts.roboto().fontFamily,
       colorScheme: const ColorScheme.dark(
         primary: secondaryWhite,
         secondary: secondaryWhite,
@@ -248,52 +211,76 @@ class AppTheme {
         onPrimary: primaryBlack,
         onSecondary: primaryBlack,
       ),
-
-      textTheme: const TextTheme(
-        headlineLarge: TextStyle(
-          fontFamily: 'Urbanist',
-          fontSize: 36,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -0.5,
-          color: secondaryWhite,
-        ),
-        headlineMedium: TextStyle(
-          fontFamily: 'Urbanist',
-          fontSize: 28,
-          fontWeight: FontWeight.w800,
-          letterSpacing: -0.3,
-          color: secondaryWhite,
-        ),
-        titleLarge: TextStyle(
-          fontFamily: 'Urbanist',
-          fontSize: 22,
+      textTheme: GoogleFonts.robotoTextTheme(baseText).copyWith(
+        displayLarge: GoogleFonts.roboto(
+          fontSize: 40,
           fontWeight: FontWeight.w700,
+          color: secondaryWhite,
+          letterSpacing: -0.3,
+        ),
+        displayMedium: GoogleFonts.roboto(
+          fontSize: 34,
+          fontWeight: FontWeight.w700,
+          color: secondaryWhite,
+          letterSpacing: -0.3,
+        ),
+        headlineLarge: GoogleFonts.roboto(
+          fontSize: 28,
+          fontWeight: FontWeight.w700,
+          color: secondaryWhite,
+          letterSpacing: -0.3,
+        ),
+        headlineMedium: GoogleFonts.roboto(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: secondaryWhite,
           letterSpacing: -0.2,
-          color: secondaryWhite,
         ),
-        bodyLarge: TextStyle(
-          fontFamily: 'Urbanist',
-          fontSize: 18,
+        titleLarge: GoogleFonts.roboto(
+          fontSize: 20,
           fontWeight: FontWeight.w600,
           color: secondaryWhite,
+          letterSpacing: -0.2,
         ),
-        bodyMedium: TextStyle(
-          fontFamily: 'Urbanist',
+        titleMedium: GoogleFonts.roboto(
+          fontSize: 17,
+          fontWeight: FontWeight.w500,
+          color: secondaryWhite,
+        ),
+        bodyLarge: GoogleFonts.roboto(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w400,
+          color: secondaryWhite,
+          height: 1.35,
+        ),
+        bodyMedium: GoogleFonts.roboto(
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+          color: secondaryWhite,
+          height: 1.35,
+        ),
+        bodySmall: GoogleFonts.roboto(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: secondaryWhite,
+          height: 1.35,
+        ),
+        labelLarge: GoogleFonts.roboto(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
           color: secondaryWhite,
         ),
       ),
-
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: primaryBlack,
         elevation: 0,
-        iconTheme: IconThemeData(color: secondaryWhite),
+        iconTheme: const IconThemeData(color: secondaryWhite),
         centerTitle: true,
-        titleTextStyle: TextStyle(
+        titleTextStyle: GoogleFonts.roboto(
           color: secondaryWhite,
           fontSize: 20,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -0.2,
         ),
       ),
 
