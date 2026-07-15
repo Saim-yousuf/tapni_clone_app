@@ -16,11 +16,46 @@ import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/screens/subscription_screen.dart';
+import 'package:tapni_app/services/account_storage.dart';
+import 'package:tapni_app/services/device_session_guard.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await SharedPrefHelper.getInstance();
+  await SharedPrefHelper.reload();
+
+  final type = message.data['type']?.toString() ?? '';
+  final action = message.data['action']?.toString() ?? '';
+  if (type != 'device_session' || action != 'logged_out') return;
+
+  final sessionId = message.data['deviceSessionId']?.toString() ?? '';
+  final activeSession = SharedPrefHelper.getString(
+    SharedPrefHelper.utils.activeDeviceSessionId,
+  );
+  if (sessionId.isNotEmpty &&
+      activeSession.isNotEmpty &&
+      sessionId != activeSession) {
+    return;
+  }
+
+  await SharedPrefHelper.putBool(
+    SharedPrefHelper.utils.pendingRemoteLogout,
+    true,
+  );
+  if (sessionId.isNotEmpty) {
+    await SharedPrefHelper.putString(
+      SharedPrefHelper.utils.pendingRemoteLogoutSessionId,
+      sessionId,
+    );
+  }
+
+  // Clear local session so app cannot continue authenticated offline.
+  final active = AccountStorage.getActiveAccount();
+  if (active != null) {
+    await AccountStorage.removeActive();
+  }
 }
 
 class PushNotificationService {
@@ -151,8 +186,16 @@ class PushNotificationService {
 
   static void _listenForMessages() {
     FirebaseMessaging.onMessage.listen((message) async {
+      final data = message.data;
+      if (data['type']?.toString() == 'device_session' &&
+          data['action']?.toString() == 'logged_out') {
+        await DeviceSessionGuard.instance.handlePushLogout(
+          deviceSessionId: data['deviceSessionId']?.toString(),
+        );
+        return;
+      }
       await _showLocalNotification(message);
-      _refreshInAppState(message.data);
+      _refreshInAppState(data);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
@@ -260,8 +303,16 @@ class PushNotificationService {
   }
 
   static void _handleMessage(RemoteMessage message) {
-    _routeNotification(message.data);
-    _refreshInAppState(message.data);
+    final data = message.data;
+    if (data['type']?.toString() == 'device_session' &&
+        data['action']?.toString() == 'logged_out') {
+      DeviceSessionGuard.instance.handlePushLogout(
+        deviceSessionId: data['deviceSessionId']?.toString(),
+      );
+      return;
+    }
+    _routeNotification(data);
+    _refreshInAppState(data);
   }
 
   static void _routeNotification(Map<String, dynamic> data) {

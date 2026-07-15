@@ -54,8 +54,9 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
     _pollTimer?.cancel();
 
     final res = await _repo.createDevicePairing(
-      deviceName: AccountStorage.defaultDeviceName(),
+      deviceName: await AccountStorage.defaultDeviceName(),
       platform: AccountStorage.devicePlatformLabel(),
+      deviceKey: await AccountStorage.deviceKey(),
     );
 
     if (!mounted) return;

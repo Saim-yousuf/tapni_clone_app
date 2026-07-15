@@ -20,8 +20,8 @@ class Api {
   static void init(
     // Environment env
   ) {
-    baseUrl = _localBaseUrl;
-    // baseUrl = _liveBaseUrl;
+    // baseUrl = _localBaseUrl;
+    baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }
@@ -82,6 +82,8 @@ class _AuthApi {
       "${Api.baseUrl}/api/user/auth/device/pairing/approve";
   String get deviceSessions =>
       "${Api.baseUrl}/api/user/auth/device/sessions";
+  String get revokeCurrentDeviceSession =>
+      "${Api.baseUrl}/api/user/auth/device/sessions/current";
   String revokeDeviceSession(String sessionId) =>
       "${Api.baseUrl}/api/user/auth/device/sessions/$sessionId";
   String get registerDeviceSession =>

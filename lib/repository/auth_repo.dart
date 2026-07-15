@@ -137,10 +137,15 @@ class AuthRepo {
   Future<ApiResponse> createDevicePairing({
     required String deviceName,
     required String platform,
+    required String deviceKey,
   }) async {
     return await ApiHandler.request(
       api: Api.auth.createDevicePairing,
-      jsonBody: {"deviceName": deviceName, "platform": platform},
+      jsonBody: {
+        "deviceName": deviceName,
+        "platform": platform,
+        "deviceKey": deviceKey,
+      },
       method: ApiMethod.post,
     );
   }
@@ -156,6 +161,7 @@ class AuthRepo {
     required String code,
     required String deviceName,
     required String platform,
+    required String deviceKey,
   }) async {
     return await ApiHandler.request(
       api: Api.auth.approveDevicePairing,
@@ -163,6 +169,7 @@ class AuthRepo {
         "code": code,
         "deviceName": deviceName,
         "platform": platform,
+        "deviceKey": deviceKey,
       },
       method: ApiMethod.post,
       authorization: true,
@@ -185,13 +192,26 @@ class AuthRepo {
     );
   }
 
+  Future<ApiResponse> revokeCurrentDeviceSession() async {
+    return await ApiHandler.request(
+      api: Api.auth.revokeCurrentDeviceSession,
+      method: ApiMethod.delete,
+      authorization: true,
+    );
+  }
+
   Future<ApiResponse> registerDeviceSession({
     required String deviceName,
     required String platform,
+    required String deviceKey,
   }) async {
     return await ApiHandler.request(
       api: Api.auth.registerDeviceSession,
-      jsonBody: {"deviceName": deviceName, "platform": platform},
+      jsonBody: {
+        "deviceName": deviceName,
+        "platform": platform,
+        "deviceKey": deviceKey,
+      },
       method: ApiMethod.post,
       authorization: true,
     );

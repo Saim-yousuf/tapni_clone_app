@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:tapni_app/models/stored_account.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 
@@ -219,7 +220,118 @@ class AccountStorage {
     return 'Mobile';
   }
 
-  static String defaultDeviceName() {
+  /// Stable id for this install/hardware — one account session per device.
+  static Future<String> deviceKey() async {
+    try {
+      final plugin = DeviceInfoPlugin();
+      if (Platform.isAndroid) {
+        final info = await plugin.androidInfo;
+        final id = info.id.trim();
+        if (id.isNotEmpty && id.toLowerCase() != 'unknown') {
+          return 'android_$id';
+        }
+      } else if (Platform.isIOS) {
+        final info = await plugin.iosInfo;
+        final id = (info.identifierForVendor ?? '').trim();
+        if (id.isNotEmpty) return 'ios_$id';
+      }
+    } catch (_) {}
+    return '${devicePlatformLabel().toLowerCase()}_fallback';
+  }
+
+  static StoredAccount? findAccountByEmailOrId({
+    String? email,
+    String? userId,
+  }) {
+    final accounts = getAccounts();
+    final emailLower = email?.trim().toLowerCase() ?? '';
+    final id = userId?.trim() ?? '';
+    for (final a in accounts) {
+      if (id.isNotEmpty && a.userId == id) return a;
+      if (emailLower.isNotEmpty &&
+          a.email.trim().toLowerCase() == emailLower) {
+        return a;
+      }
+    }
+    return null;
+  }
+
+  static bool isGenericDeviceName(String? value) {
+    final v = (value ?? '').trim().toLowerCase();
+    if (v.isEmpty) return true;
+    const generic = {
+      'android',
+      'android device',
+      'ios',
+      'ios device',
+      'mobile',
+      'mobile device',
+      'this device',
+      'new device',
+      'linked device',
+      'linked android',
+      'linked ios',
+      'device',
+      'unknown',
+      'phone',
+    };
+    return generic.contains(v);
+  }
+
+  /// Human-readable phone name shown on Linked Devices (e.g. "Samsung SM-A325F").
+  static Future<String> defaultDeviceName() async {
+    try {
+      final plugin = DeviceInfoPlugin();
+      if (Platform.isAndroid) {
+        final info = await plugin.androidInfo;
+        for (final candidate in [
+          _joinBrandModel(info.brand, info.model),
+          _joinBrandModel(info.manufacturer, info.model),
+          info.model,
+          info.name,
+          info.device,
+          info.product,
+        ]) {
+          final cleaned = _cleanDeviceLabel(candidate);
+          if (cleaned != null) return cleaned;
+        }
+      } else if (Platform.isIOS) {
+        final info = await plugin.iosInfo;
+        for (final candidate in [
+          info.modelName,
+          info.name,
+          info.localizedModel,
+          info.model,
+        ]) {
+          final cleaned = _cleanDeviceLabel(candidate);
+          if (cleaned != null) return cleaned;
+        }
+      }
+    } catch (_) {}
     return '${devicePlatformLabel()} device';
+  }
+
+  static String? _joinBrandModel(String brand, String model) {
+    final b = brand.trim();
+    final m = model.trim();
+    if (b.isEmpty && m.isEmpty) return null;
+    if (b.isEmpty) return m;
+    if (m.isEmpty) return _capitalizeWords(b);
+    if (m.toLowerCase().startsWith(b.toLowerCase())) return m;
+    return '${_capitalizeWords(b)} $m';
+  }
+
+  static String? _cleanDeviceLabel(String? raw) {
+    final v = (raw ?? '').trim().replaceAll(RegExp(r'\s+'), ' ');
+    if (v.isEmpty || isGenericDeviceName(v)) return null;
+    return v;
+  }
+
+  static String _capitalizeWords(String value) {
+    return value
+        .split(RegExp(r'\s+'))
+        .where((w) => w.isNotEmpty)
+        .map((w) => '${w[0].toUpperCase()}${w.substring(1).toLowerCase()}')
+        .join(' ');
   }
 }

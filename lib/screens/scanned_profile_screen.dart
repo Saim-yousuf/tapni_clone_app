@@ -556,34 +556,46 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       return const SizedBox.shrink();
     }
 
-    return Center(
-      child: Wrap(
-        spacing: 16,
-        runSpacing: 16,
-        alignment: WrapAlignment.center,
-        children: activeLinks.map((link) {
-          return GestureDetector(
-            onTap: () => _openScannedLink(link, profile),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                children: [
-                  _buildLinkIcon(link),
-                  const SizedBox(height: 8),
-                  Text(
-                    link.platformName,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const columns = 3;
+        const spacing = 12.0;
+        final cellWidth =
+            (constraints.maxWidth - spacing * (columns - 1)) / columns;
+        // Keep original ~130 look; only shrink if needed to fit 3 per row
+        final iconSize = cellWidth > 130 ? 130.0 : cellWidth;
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: 16,
+          alignment: WrapAlignment.center,
+          children: activeLinks.map((link) {
+            return SizedBox(
+              width: cellWidth,
+              child: GestureDetector(
+                onTap: () => _openScannedLink(link, profile),
+                child: Column(
+                  children: [
+                    _buildLinkIcon(link, size: iconSize),
+                    const SizedBox(height: 8),
+                    Text(
+                      link.platformName,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        }).toList(),
-      ),
+            );
+          }).toList(),
+        );
+      },
     );
   }
 
@@ -622,44 +634,46 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  Widget _buildLinkIcon(SocialLink link) {
+  Widget _buildLinkIcon(SocialLink link, {required double size}) {
     final isCatalog = link.isCatalogLink;
     final logo = link.logoUrl?.trim() ?? '';
+    final radius = 24.0 * (size / 130.0);
 
     return Container(
-      width: 130,
-      height: 130,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(radius),
         border: Border.all(
           color: Colors.grey.shade300,
           width: 1,
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(23),
+        borderRadius: BorderRadius.circular(radius - 1),
         child: logo.isNotEmpty
             ? Image.network(
                 logo,
                 fit: BoxFit.cover,
-                width: 130,
-                height: 130,
+                width: size,
+                height: size,
                 alignment: Alignment.center,
-                errorBuilder: (_, __, ___) => _linkIconFallback(isCatalog),
+                errorBuilder: (_, __, ___) =>
+                    _linkIconFallback(isCatalog, size: size),
               )
-            : _linkIconFallback(isCatalog),
+            : _linkIconFallback(isCatalog, size: size),
       ),
     );
   }
 
-  Widget _linkIconFallback(bool isCatalog) {
+  Widget _linkIconFallback(bool isCatalog, {required double size}) {
     return ColoredBox(
       color: const Color(0xFFF5F5F5),
       child: Center(
         child: Icon(
           isCatalog ? Icons.restaurant_menu : Icons.link,
-          size: isCatalog ? 56 : 32,
+          size: isCatalog ? 56.0 * (size / 130.0) : 32,
           color: Colors.black87,
         ),
       ),

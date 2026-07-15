@@ -10,6 +10,8 @@ class PrefUtils {
   String linkedAccounts = "linked_accounts";
   String activeAccountId = "active_account_id";
   String activeDeviceSessionId = "active_device_session_id";
+  String pendingRemoteLogout = "pending_remote_logout";
+  String pendingRemoteLogoutSessionId = "pending_remote_logout_session_id";
 }
 
 class SharedPrefHelper {

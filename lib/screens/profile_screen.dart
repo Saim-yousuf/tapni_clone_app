@@ -800,128 +800,145 @@ class _ProfileScreenState extends State<ProfileScreen> {
         .where((link) => link.isActive)
         .toList();
 
-    return Center(
-      child: Wrap(
-        spacing: 16,
-        runSpacing: 16,
-        alignment: WrapAlignment.center,
-        children: [
-          ...activeLinks.map((link) {
-            return Stack(
-              clipBehavior: Clip.none,
-              children: [
-                GestureDetector(
-                  onTap: isEditable
-                      ? () => LinkSheet().showExistingLinkBottomSheet(
-                          context,
-                          link,
-                          profileProvider,
-                        )
-                      : () {
-                          Launcher.openLink(link, context);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const columns = 3;
+        const spacing = 12.0;
+        final cellWidth =
+            (constraints.maxWidth - spacing * (columns - 1)) / columns;
+        // Keep original ~130 look; only shrink if needed to fit 3 per row
+        final iconSize = cellWidth > 130 ? 130.0 : cellWidth;
+        final radius = 24.0 * (iconSize / 130.0);
 
-                          // ScaffoldMessenger.of(context).showSnackBar(
-                          //   SnackBar(
-                          //     content: Text('Opening: ${link.fullUrl}'),
-                          //     behavior: SnackBarBehavior.floating,
-                          //   ),
-                          // );
-                        },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 130,
-                          height: 130,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1,
+        return Wrap(
+          spacing: spacing,
+          runSpacing: 16,
+          alignment: WrapAlignment.center,
+          children: [
+            ...activeLinks.map((link) {
+              return SizedBox(
+                width: cellWidth,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.topCenter,
+                  children: [
+                    GestureDetector(
+                      onTap: isEditable
+                          ? () => LinkSheet().showExistingLinkBottomSheet(
+                              context,
+                              link,
+                              profileProvider,
+                            )
+                          : () {
+                              Launcher.openLink(link, context);
+                            },
+                      child: Column(
+                        children: [
+                          Container(
+                            width: iconSize,
+                            height: iconSize,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(radius),
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1,
+                              ),
                             ),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(23),
-                            child: Image.network(
-                              link.logoUrl ?? "",
-                              fit: BoxFit.cover,
-                              width: 130,
-                              height: 130,
-                              alignment: Alignment.center,
-                              errorBuilder: (_, __, ___) => Center(
-                                child: Icon(Icons.link, size: 32),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(radius - 1),
+                              child: Image.network(
+                                link.logoUrl ?? "",
+                                fit: BoxFit.cover,
+                                width: iconSize,
+                                height: iconSize,
+                                alignment: Alignment.center,
+                                errorBuilder: (_, __, ___) => const Center(
+                                  child: Icon(Icons.link, size: 32),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          link.platformName,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                          const SizedBox(height: 8),
+                          Text(
+                            link.platformName,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (isEditable)
+                      Positioned(
+                        top: -4,
+                        right: (cellWidth - iconSize) / 2 - 2,
+                        child: GestureDetector(
+                          onTap: () =>
+                              LinkSheet().showExistingLinkBottomSheet(
+                            context,
+                            link,
+                            profileProvider,
+                          ),
+                          child: Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.12),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.edit,
+                              size: 12,
+                              color: Colors.black54,
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                if (isEditable)
-                  Positioned(
-                    top: -4,
-                    right: 2,
-                    child: GestureDetector(
-                      onTap: () => LinkSheet().showExistingLinkBottomSheet(
-                        context,
-                        link,
-                        profileProvider,
                       ),
-                      child: Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.12),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.edit,
-                          size: 12,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            );
-          }),
-          if (isEditable)
-            GestureDetector(
-              onTap: () =>
-                  LinkSheet().showAddLinkBottomSheet(context, profileProvider),
-              child: Container(
-                width: 130,
-                height: 130,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.grey.shade200),
+                  ],
                 ),
+              );
+            }),
+            if (isEditable)
+              SizedBox(
+                width: cellWidth,
                 child: Center(
-                  child: Icon(Icons.add, size: 70, color: Colors.black),
+                  child: GestureDetector(
+                    onTap: () => LinkSheet()
+                        .showAddLinkBottomSheet(context, profileProvider),
+                    child: Container(
+                      width: iconSize,
+                      height: iconSize,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(radius),
+                        border: Border.all(color: Colors.grey.shade200),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.add,
+                          size: iconSize * 0.54,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 }

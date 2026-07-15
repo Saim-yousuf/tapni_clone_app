@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/screens/onboarding_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
+import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -55,7 +56,23 @@ class _SplashScreenState extends State<SplashScreen>
     final token = SharedPrefHelper.getString(
       SharedPrefHelper.utils.authorizedToken,
     );
-    final isLoggedIn = token.isNotEmpty;
+    final pendingRemoteLogout = SharedPrefHelper.getBool(
+      SharedPrefHelper.utils.pendingRemoteLogout,
+    );
+    final isLoggedIn = token.isNotEmpty && !pendingRemoteLogout;
+
+    if (pendingRemoteLogout) {
+      await SharedPrefHelper.remove(
+        SharedPrefHelper.utils.pendingRemoteLogout,
+      );
+      await SharedPrefHelper.remove(
+        SharedPrefHelper.utils.pendingRemoteLogoutSessionId,
+      );
+      // Background FCM may already have cleared the account.
+      if (AccountStorage.getActiveAccount() != null) {
+        await AccountStorage.removeActive();
+      }
+    }
 
     if (isLoggedIn) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);

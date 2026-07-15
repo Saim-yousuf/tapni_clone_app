@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:tapni_app/helper/log_helper.dart';
+import 'package:tapni_app/services/device_session_guard.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 
 enum ApiMethod { get, post, put, delete, multipartPost, multipartPut }
@@ -150,7 +151,19 @@ class ApiHandler {
       }
     }
 
-    return ApiResponse.fromJson(statusCode, decoded);
+    final apiResponse = ApiResponse.fromJson(statusCode, decoded);
+
+    if (statusCode == 401) {
+      final message = (apiResponse.message ?? '').toLowerCase();
+      if (message.contains('device session') ||
+          message.contains('logged out')) {
+        Future.microtask(() {
+          DeviceSessionGuard.instance.handleApiUnauthorized();
+        });
+      }
+    }
+
+    return apiResponse;
   }
 }
 

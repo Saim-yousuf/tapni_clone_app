@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/profile_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/settings_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
+import 'package:tapni_app/services/device_session_guard.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/wa_tools_widgets.dart';
@@ -27,6 +28,7 @@ class _MainShellState extends State<MainShell> {
   void initState() {
     _currentPage = widget._currentPage ?? 'My Card';
     super.initState();
+    DeviceSessionGuard.instance.start();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadCatalogNotifications());
   }
 

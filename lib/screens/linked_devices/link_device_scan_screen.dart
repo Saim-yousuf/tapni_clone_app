@@ -103,6 +103,7 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
       code: code,
       deviceName: 'Linked ${AccountStorage.devicePlatformLabel()}',
       platform: AccountStorage.devicePlatformLabel(),
+      deviceKey: await AccountStorage.deviceKey(),
     );
 
     if (!mounted) return;

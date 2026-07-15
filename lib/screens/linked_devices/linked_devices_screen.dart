@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/screens/linked_devices/link_device_scan_screen.dart';
+import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+
 class LinkedDevicesScreen extends StatefulWidget {
   const LinkedDevicesScreen({super.key});
 
@@ -17,6 +21,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
   final AuthRepo _repo = AuthRepo();
   bool _loading = true;
   List<Map<String, dynamic>> _devices = [];
+  String? _localDeviceName;
 
   @override
   void initState() {
@@ -26,6 +31,17 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
 
   Future<void> _load() async {
     setState(() => _loading = true);
+
+    // Resolve + push real phone name before listing sessions.
+    final localName = await AccountStorage.defaultDeviceName();
+    if (!mounted) return;
+    _localDeviceName = localName;
+
+    try {
+      await context.read<AuthProvider>().ensureDeviceSessionRegistered();
+    } catch (_) {}
+
+    if (!mounted) return;
     final res = await _repo.listDeviceSessions();
     if (!mounted) return;
 
@@ -47,6 +63,18 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
     });
   }
 
+  String _deviceLabel(Map<String, dynamic> device) {
+    final serverName = device['deviceName']?.toString() ?? 'Device';
+    final isCurrent = device['isCurrent'] == true;
+    final local = _localDeviceName;
+    if (isCurrent &&
+        local != null &&
+        !AccountStorage.isGenericDeviceName(local)) {
+      return local;
+    }
+    return serverName;
+  }
+
   Future<void> _linkDevice() async {
     final linked = await Navigator.of(context).push<bool>(
       MaterialPageRoute(builder: (_) => LinkDeviceScanScreen()),
@@ -66,7 +94,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
         ),
         title: Text(context.l10n.logOutDevice, style: WaUi.title),
         content: Text(
-          '“${device['deviceName'] ?? 'Device'}” will be removed from your account.',
+          '“${_deviceLabel(device)}” will be removed from your account.',
           style: WaUi.body,
         ),
         actions: [
@@ -230,7 +258,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
                           ),
                         ),
                         title: Text(
-                          device['deviceName']?.toString() ?? 'Device',
+                          _deviceLabel(device),
                           style: WaUi.listTitle,
                         ),
                         subtitle: Text(
