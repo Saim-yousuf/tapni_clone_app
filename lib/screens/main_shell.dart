@@ -5,7 +5,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
 import 'package:tapni_app/screens/leads_screen.dart';
 import 'package:tapni_app/screens/profile_screen.dart';
-import 'package:tapni_app/screens/qr_code_sheet.dart';
+import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/settings_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
@@ -153,7 +153,9 @@ class _MainShellState extends State<MainShell> {
             ? ClipOval(
                 child: InkWell(
                   onTap: () {
-                    SharingProfileSheet.show(context);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const ScanScreen()),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -161,7 +163,7 @@ class _MainShellState extends State<MainShell> {
                       color: AppTheme.primaryBlack,
                     ),
                     child: const Icon(
-                      Icons.ios_share,
+                      Icons.qr_code_scanner_rounded,
                       size: 40,
                       color: Colors.white,
                     ),

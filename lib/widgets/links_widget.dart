@@ -280,7 +280,7 @@ class LinkSheet {
                         _buildTemplateLogo(
                           template.logo,
                           size: 130,
-                          radius: 30,
+                          radius: 24,
                           isPro: template.isPro,
                           context: context,
                         ),
@@ -825,43 +825,49 @@ class LinkSheet {
       context,
       listen: false,
     ).isProUser;
-    // log("Building template logo for$logo");
-    final placeholder = Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(radius),
-      ),
-      child: const Icon(Icons.link),
+    final innerRadius = (radius - 1).clamp(0.0, radius);
+
+    Widget logoImage({required Widget errorWidget}) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(radius),
+          border: Border.all(
+            color: Colors.grey.shade300,
+            width: 1,
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(innerRadius),
+          child: logo.isEmpty
+              ? errorWidget
+              : Image.network(
+                  logo.replaceAll(" ", ""),
+                  width: size,
+                  height: size,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                  errorBuilder: (_, __, ___) => errorWidget,
+                ),
+        ),
+      );
+    }
+
+    final placeholder = ColoredBox(
+      color: Colors.grey.shade200,
+      child: const Center(child: Icon(Icons.link)),
     );
 
-    if (logo.isEmpty) return placeholder;
+    final image = logoImage(errorWidget: placeholder);
 
     if (isPro && !isProUser) {
       return Stack(
         alignment: Alignment.topRight,
         clipBehavior: Clip.none,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(radius),
-            child: Image.network(
-              logo.replaceAll(" ", ""),
-              width: size,
-              height: size,
-              fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => placeholder,
-            ),
-          ),
-          // Container(
-          //   width: size,
-          //   height: size,
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(radius),
-          //     color: Colors.white.withOpacity(0.8),
-          //   ),
-          //   // child:
-          // ),
+          image,
           CircleAvatar(
             radius: 15,
             backgroundColor: Colors.black,
@@ -876,16 +882,7 @@ class LinkSheet {
       );
     }
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius),
-      child: Image.network(
-        logo.replaceAll(" ", ""),
-        width: size,
-        height: size,
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => placeholder,
-      ),
-    );
+    return image;
   }
 
   void _showNewTemplateLinkBottomSheet(

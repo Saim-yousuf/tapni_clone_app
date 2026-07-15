@@ -13,7 +13,6 @@ import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
-import 'package:tapni_app/widgets/go_bussiness_button.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
@@ -141,10 +140,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('My Card'),
+        centerTitle: false,
+        titleSpacing: 16,
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Image.asset(
+          'assets/images/jpg/barqody_name.jpg',
+          height: 40,
+          fit: BoxFit.contain,
+        ),
         actions: const [
           NotificationIconButton(),
-          GoBussinessButton(),
         ],
       ),
       body: SafeArea(
@@ -163,13 +171,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Column(
           children: [
-            Image.asset(
-              'assets/images/jpg/barqody_name.jpg',
-              width: 120,
-              // height: 120,
-            ),
-            const SizedBox(height: 20),
-
             if (_showProfileStrengthCard) ...[
               const ProfileScoreCard(),
               const SizedBox(height: 20),
@@ -433,16 +434,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(width: 8),
               ],
-            ),
-
-            // Logo
-            const SizedBox(height: 10),
-            Center(
-              child: Image.asset(
-                "assets/images/jpg/barqody_name.jpg",
-                height: 50,
-                fit: BoxFit.cover,
-              ),
             ),
 
             const SizedBox(height: 20),
@@ -739,71 +730,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileAvatar(UserProfile profile) {
-    bool isCover =
+    final isCover =
         (profile.coverPhotoUrl != null &&
         profile.coverPhotoUrl!.trim().isNotEmpty);
+    final avatar = Container(
+      width: isCover ? 100 : 130,
+      height: isCover ? 100 : 130,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF1E2022),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipOval(
+        child: profile.profilePhotoUrl != null &&
+                profile.profilePhotoUrl!.trim().isNotEmpty
+            ? Image.network(
+                profile.profilePhotoUrl!,
+                fit: BoxFit.cover,
+              )
+            : Center(
+                child: Text(
+                  profile.name.isNotEmpty
+                      ? profile.name[0].toUpperCase()
+                      : '?',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+      ),
+    );
+
+    // No cover photo: skip the tall empty cover area to avoid white space.
+    if (!isCover) {
+      return Center(child: avatar);
+    }
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        // COVER PHOTO (always check separately)
         Container(
           height: 220,
           width: double.infinity,
-          color: isCover ? const Color(0xFFF5F5F5) : Colors.transparent,
-          child: isCover
-              ? Image.network(profile.coverPhotoUrl!, fit: BoxFit.cover)
-              : null,
+          color: const Color(0xFFF5F5F5),
+          child: Image.network(profile.coverPhotoUrl!, fit: BoxFit.cover),
         ),
-
-        // PROFILE PHOTO OR INITIAL
         Positioned(
           bottom: -6,
           left: 0,
           right: 0,
-          child: Column(
-            children: [
-              Container(
-                width: isCover ? 100 : 130,
-                height: isCover ? 100 : 130,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  // border: Border.all(color: Colors.white, width: 4),
-                  color: const Color(0xFF1E2022),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ], // image: DecorationImage(
-                  //   image: NetworkImage(profile.profilePhotoUrl!),
-                  //   fit: BoxFit.cover,
-                  // ),
-                ),
-                child: ClipOval(
-                  child:
-                      profile.profilePhotoUrl != null &&
-                          profile.profilePhotoUrl!.trim().isNotEmpty
-                      ? Image.network(
-                          profile.profilePhotoUrl!,
-                          fit: BoxFit.cover,
-                        )
-                      : Center(
-                          child: Text(
-                            profile.name.isNotEmpty
-                                ? profile.name[0].toUpperCase()
-                                : '?',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                ),
-              ),
-            ],
-          ),
+          child: Center(child: avatar),
         ),
       ],
     );
@@ -849,15 +833,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Column(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(30),
-                          child: Image.network(
-                            link.logoUrl ?? "",
-                            fit: BoxFit.contain,
-                            height: 130,
-                            width: 130,
-                            errorBuilder: (_, __, ___) =>
-                                const Icon(Icons.link, size: 32),
+                        Container(
+                          width: 130,
+                          height: 130,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                              width: 1,
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(23),
+                            child: Image.network(
+                              link.logoUrl ?? "",
+                              fit: BoxFit.cover,
+                              width: 130,
+                              height: 130,
+                              alignment: Alignment.center,
+                              errorBuilder: (_, __, ___) => const Center(
+                                child: Icon(Icons.link, size: 32),
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(height: 8),
