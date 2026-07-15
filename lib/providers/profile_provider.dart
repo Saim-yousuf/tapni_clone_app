@@ -415,6 +415,55 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  Future<ApiResponse> updateUsername({
+    required String username,
+    required BuildContext context,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    CustomDialog.loadingDialog(context);
+
+    final cleaned = username.trim().toLowerCase();
+    final updatedProfile = _profile.copyWith(username: cleaned);
+
+    try {
+      final repo = AuthRepo();
+      final response = await repo.updateProfile(
+        jsonBody: {'username': cleaned},
+      );
+
+      if (response.success) {
+        if (response.data is Map<String, dynamic>) {
+          final data = response.data as Map<String, dynamic>;
+          final profileData = data['user'] is Map<String, dynamic>
+              ? data['user'] as Map<String, dynamic>
+              : data;
+          try {
+            _profile = UserProfile.fromApiJson(profileData);
+          } catch (_) {
+            _profile = updatedProfile;
+          }
+        } else {
+          _profile = updatedProfile;
+        }
+        notifyListeners();
+      }
+      Navigator.pop(context);
+      return response;
+    } catch (error) {
+      Navigator.pop(context);
+      return ApiResponse<dynamic>(
+        success: false,
+        statusCode: 0,
+        message: error.toString(),
+        data: null,
+      );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<ApiResponse> updateLinks({
     required List<SocialLink> links,
     required BuildContext context,

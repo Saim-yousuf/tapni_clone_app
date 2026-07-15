@@ -17,6 +17,7 @@ import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/notifications_screen.dart';
 import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/screens/qr_code_screen.dart';
+import 'package:tapni_app/screens/set_username_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
@@ -188,6 +189,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   MaterialPageRoute(
                     builder: (_) => const MainShell(currentPage: 'My Card'),
                   ),
+                );
+              },
+            ),
+            WaToolsListTile(
+              icon: Icons.alternate_email,
+              title: 'Username',
+              subtitle: profile.username != null && profile.username!.isNotEmpty
+                  ? '@${profile.username}'
+                  : 'Set your unique profile username',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const SetUsernameScreen()),
                 );
               },
             ),
