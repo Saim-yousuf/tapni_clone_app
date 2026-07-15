@@ -5,6 +5,7 @@ import 'package:tapni_app/models/service_schedule.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/utils/theme.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 Future<bool?> showServiceBookingSheet({
   required BuildContext context,
   required CatalogItem item,
@@ -90,7 +91,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 60)),
+      lastDate: DateTime.now().add(Duration(days: 60)),
     );
     if (picked != null && picked != _selectedDate) {
       setState(() => _selectedDate = picked);
@@ -101,7 +102,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
   Future<void> _book() async {
     if (_selectedTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a time slot')),
+        SnackBar(content: Text(context.l10n.pleaseSelectATimeSlot)),
       );
       return;
     }
@@ -138,7 +139,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Booking failed')),
+        SnackBar(content: Text(res.message ?? context.l10n.bookingFailed)),
       );
     }
   }
@@ -155,7 +156,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
           maxHeight: MediaQuery.of(context).size.height * 0.9,
         ),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF111111) : Colors.white,
+          color: isDark ? Color(0xFF111111) : Colors.white,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: SafeArea(
@@ -184,19 +185,19 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                       child: Text(
                         'Book ${widget.item.name}',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48),
+                    SizedBox(width: 48),
                   ],
                 ),
               ),
               Flexible(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -204,51 +205,49 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                         widget.item.price > 0
                             ? 'Rs ${widget.item.price.toStringAsFixed(0)}'
                             : 'Free',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Select date',
+                      SizedBox(height: 20),
+                      Text(context.l10n.selectDate,
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       InkWell(
                         onTap: _pickDate,
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.all(14),
+                          padding: EdgeInsets.all(14),
                           decoration: BoxDecoration(
                             color: isDark
-                                ? const Color(0xFF1E1E1E)
-                                : const Color(0xFFF5F5F5),
+                                ? Color(0xFF1E1E1E)
+                                : Color(0xFFF5F5F5),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.calendar_month_outlined),
-                              const SizedBox(width: 12),
+                              Icon(Icons.calendar_month_outlined),
+                              SizedBox(width: 12),
                               Text(
-                                DateFormat('EEE, d MMM yyyy').format(_selectedDate),
-                                style: const TextStyle(fontWeight: FontWeight.w500),
+                                DateFormat(context.l10n.eeeDMMMYyyy).format(_selectedDate),
+                                style: TextStyle(fontWeight: FontWeight.w500),
                               ),
-                              const Spacer(),
-                              const Icon(Icons.chevron_right),
+                              Spacer(),
+                              Icon(Icons.chevron_right),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Available slots',
+                      SizedBox(height: 20),
+                      Text(context.l10n.availableSlots,
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
                       if (_loadingSlots)
-                        const Center(
+                        Center(
                           child: Padding(
                             padding: EdgeInsets.all(24),
                             child: CircularProgressIndicator(),
@@ -256,9 +255,9 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                         )
                       else if (_slots.isEmpty)
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: EdgeInsets.symmetric(vertical: 16),
                           child: Text(
-                            'No slots available on this day',
+                            context.l10n.noSlotsAvailableOnThisDay,
                             style: TextStyle(color: Colors.grey.shade600),
                           ),
                         )
@@ -288,26 +287,25 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                                 fontWeight: FontWeight.w500,
                               ),
                               backgroundColor: isDark
-                                  ? const Color(0xFF1E1E1E)
-                                  : const Color(0xFFF5F5F5),
+                                  ? Color(0xFF1E1E1E)
+                                  : Color(0xFFF5F5F5),
                               disabledColor: Colors.grey.shade200,
                             );
                           }).toList(),
                         ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Notes (optional)',
+                      SizedBox(height: 20),
+                      Text(context.l10n.notesOptional,
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       TextField(
                         controller: _notesCtrl,
                         maxLines: 2,
                         decoration: InputDecoration(
-                          hintText: 'Any special requests...',
+                          hintText: context.l10n.anySpecialRequests,
                           filled: true,
                           fillColor: isDark
-                              ? const Color(0xFF1E1E1E)
+                              ? Color(0xFF1E1E1E)
                               : const Color(0xFFF5F5F5),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -320,7 +318,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                padding: EdgeInsets.fromLTRB(20, 8, 20, 16),
                 child: SizedBox(
                   width: double.infinity,
                   height: 52,
@@ -333,7 +331,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                       ),
                     ),
                     child: _isBooking
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 22,
                             height: 22,
                             child: CircularProgressIndicator(
@@ -341,8 +339,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text(
-                            'Confirm Booking',
+                        : Text(context.l10n.confirmBooking,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,

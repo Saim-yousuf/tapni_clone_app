@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class CustomerRewardScreen extends StatelessWidget {
-  const CustomerRewardScreen({super.key});
+  CustomerRewardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const int currentStamps = 7;
-    const int totalStamps = 10;
+    int currentStamps = 7;
+    int totalStamps = 10;
 
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        // title: const Text(
-        //   'Add Stamp',
+        // title: Text(
+        //   context.l10n.addStamp,
         //   style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         // ),
         // backgroundColor: Colors.white,
@@ -23,9 +24,9 @@ class CustomerRewardScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // const SizedBox(height: 20),
+          // SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.all(15),
+            padding: EdgeInsets.all(15),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -39,7 +40,7 @@ class CustomerRewardScreen extends StatelessWidget {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  "Rembiro",
+                  context.l10n.rembiro,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
@@ -77,7 +78,7 @@ class CustomerRewardScreen extends StatelessWidget {
                         BoxShadow(
                           color: Colors.black.withOpacity(0.15),
                           blurRadius: 10,
-                          offset: const Offset(0, 5),
+                          offset: Offset(0, 5),
                         ),
                     ],
                   ),
@@ -93,14 +94,14 @@ class CustomerRewardScreen extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 30),
+          SizedBox(height: 30),
 
           /// STATUS TEXT
           Text(
             currentStamps == totalStamps
-                ? 'Reward Unlocked 🎉'
+                ? context.l10n.rewardUnlocked
                 : '${totalStamps - currentStamps} stamps left',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -133,17 +134,17 @@ class CustomerRewardScreen extends StatelessWidget {
 
                 //       backgroundColor: Colors.white,
                 //     ),
-                //     const SizedBox(width: 20),
+                //     SizedBox(width: 20),
                 //     Text(
                 //       "1",
                 //       style: TextStyle(fontSize: 28, color: Colors.white),
                 //     ),
-                //     const SizedBox(width: 20),
+                //     SizedBox(width: 20),
                 //     CircleAvatar(
                 //       child: Icon(Icons.add, color: Colors.black),
                 //       backgroundColor: Colors.white,
                 //     ),
-                //     const SizedBox(width: 50),
+                //     SizedBox(width: 50),
                 //   ],
                 // ),
 
@@ -159,8 +160,8 @@ class CustomerRewardScreen extends StatelessWidget {
                 //       ),
                 //     ),
                 //     onPressed: () {},
-                //     child: const Text(
-                //       'Add Stamp',
+                //     child: Text(
+                //       context.l10n.addStamp,
                 //       style: TextStyle(
                 //         fontSize: 16,
                 //         fontWeight: FontWeight.w600,

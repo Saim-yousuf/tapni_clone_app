@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class BankDetailDialog extends StatelessWidget {
   final Map<String, dynamic> bankDetails;
 
-  const BankDetailDialog({super.key, required this.bankDetails});
+  BankDetailDialog({super.key, required this.bankDetails});
 
   void _copy(BuildContext context, String value) {
     Clipboard.setData(ClipboardData(text: value));
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text("Copied")));
+    ).showSnackBar(SnackBar(content: Text(context.l10n.copied)));
   }
 
   Widget _buildRow(BuildContext context, String label, String value) {
@@ -30,12 +31,12 @@ class BankDetailDialog extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   value.isEmpty ? "-" : value,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
@@ -46,7 +47,7 @@ class BankDetailDialog extends StatelessWidget {
           ),
           IconButton(
             onPressed: () => _copy(context, value),
-            icon: const Icon(Icons.copy, color: Colors.black),
+            icon: Icon(Icons.copy, color: Colors.black),
           ),
         ],
       ),
@@ -59,7 +60,7 @@ class BankDetailDialog extends StatelessWidget {
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -67,8 +68,7 @@ class BankDetailDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Bank Details",
+                Text(context.l10n.bankDetails,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -77,12 +77,12 @@ class BankDetailDialog extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, color: Colors.black),
+                  icon: Icon(Icons.close, color: Colors.black),
                 ),
               ],
             ),
 
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
 
             _buildRow(
               context,
@@ -96,7 +96,7 @@ class BankDetailDialog extends StatelessWidget {
               bankDetails["accountNumber"] ?? "",
             ),
 
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
 
             // Close Button
             SizedBox(
@@ -105,13 +105,13 @@ class BankDetailDialog extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 onPressed: () => Navigator.pop(context),
-                child: const Text("Close"),
+                child: Text(context.l10n.close),
               ),
             ),
           ],

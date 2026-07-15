@@ -8,6 +8,7 @@ import 'package:tapni_app/widgets/go_bussiness_button.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class SocialLinksScreen extends StatelessWidget {
   final bool isTab;
   const SocialLinksScreen({super.key, this.isTab = false});
@@ -25,14 +26,14 @@ class SocialLinksScreen extends StatelessWidget {
           children: [
             Text('Links'),
             IconButton(
-              icon: const Icon(Icons.refresh_rounded),
+              icon: Icon(Icons.refresh_rounded),
               onPressed: () {},
             ),
           ],
         ),
         centerTitle: false,
         automaticallyImplyLeading: !isTab,
-        actions: const [
+        actions: [
           NotificationIconButton(),
           GoBussinessButton(),
         ],
@@ -42,7 +43,7 @@ class SocialLinksScreen extends StatelessWidget {
           currentLinks.isEmpty
               ? Center(
                   child: Text(
-                    'No links added yet.\nTap "Add link" to get started.',
+                    context.l10n.noLinksAddedYetNTapAddLinkToGetStarted,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: isDark ? Colors.white54 : Colors.black45,
@@ -52,7 +53,7 @@ class SocialLinksScreen extends StatelessWidget {
                   ),
                 )
               : ListView.builder(
-                  padding: const EdgeInsets.only(top: 8, bottom: 100),
+                  padding: EdgeInsets.only(top: 8, bottom: 100),
                   itemCount: currentLinks.length,
                   itemBuilder: (context, index) {
                     final link = currentLinks[index];
@@ -65,12 +66,12 @@ class SocialLinksScreen extends StatelessWidget {
                   },
                 ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 110.0, left: 15, right: 15),
+            padding: EdgeInsets.only(bottom: 110.0, left: 15, right: 15),
             child: Align(
               alignment: AlignmentDirectional.bottomEnd,
               child: CustomAppButton(
                 width: double.infinity,
-                text: 'Add link',
+                text: context.l10n.addLink2,
                 icon: Icons.add,
                 backgroundColor: AppTheme.primaryBlack,
                 onTap: () {
@@ -120,7 +121,7 @@ class SocialLinksScreen extends StatelessWidget {
           ),
           title: Text(
             link.platformName,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -170,7 +171,7 @@ class _LinkSettingsSheet extends StatefulWidget {
   final VoidCallback onSave;
   final VoidCallback? onDelete;
 
-  const _LinkSettingsSheet({
+  _LinkSettingsSheet({
     required this.platform,
     required this.labelController,
     required this.usernameController,
@@ -194,9 +195,9 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
   String _getUsernameHint(SocialPlatform platform) {
     switch (platform) {
       case SocialPlatform.whatsApp:
-        return 'Enter your phone number';
+        return context.l10n.enterYourPhoneNumber;
       // case SocialPlatform.website:
-      //   return 'Enter your website URL';
+      //   return context.l10n.enterYourWebsiteURL;
       default:
         return 'Enter your ${_getPlatformNameStr(platform)} username';
     }
@@ -209,15 +210,15 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     final fieldColor = widget.isDark
-        ? const Color(0xFF222222)
-        : const Color(0xFFF5F5F5);
+        ? Color(0xFF222222)
+        : Color(0xFFF5F5F5);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         // Drag handle
         Container(
-          margin: const EdgeInsets.only(top: 12, bottom: 16),
+          margin: EdgeInsets.only(top: 12, bottom: 16),
           width: 40,
           height: 4,
           decoration: BoxDecoration(
@@ -226,11 +227,10 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
           ),
         ),
 
-        const Text(
-          'Link settings',
+        Text(context.l10n.linkSettings2,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -252,17 +252,17 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
                           color: Colors.grey.shade300,
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        child: const Icon(Icons.link),
+                        child: Icon(Icons.link),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                             horizontal: 14,
                             vertical: 10,
                           ),
@@ -272,17 +272,17 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
                           ),
                           child: TextField(
                             controller: widget.labelController,
-                            decoration: const InputDecoration.collapsed(
-                              hintText: 'Label',
+                            decoration: InputDecoration.collapsed(
+                              hintText: context.l10n.label,
                             ),
-                            style: const TextStyle(fontWeight: FontWeight.w500),
+                            style: TextStyle(fontWeight: FontWeight.w500),
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Padding(
+                        SizedBox(height: 4),
+                        Padding(
                           padding: EdgeInsets.only(left: 4),
                           child: Text(
-                            'Set text under the link icon',
+                            context.l10n.setTextUnderTheLinkIcon,
                             style: TextStyle(fontSize: 11, color: Colors.grey),
                           ),
                         ),
@@ -291,7 +291,7 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               // Username field
               Container(
@@ -305,22 +305,22 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
                 ),
                 child: TextField(
                   controller: widget.usernameController,
-                  decoration: const InputDecoration.collapsed(hintText: ''),
-                  style: const TextStyle(fontWeight: FontWeight.w500),
+                  decoration: InputDecoration.collapsed(hintText: ''),
+                  style: TextStyle(fontWeight: FontWeight.w500),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 4, top: 4),
+                padding: EdgeInsets.only(left: 4, top: 4),
                 child: Text(
                   _getUsernameHint(widget.platform),
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  style: TextStyle(fontSize: 11, color: Colors.grey),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               // Show link toggle
               Container(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 4,
                 ),
@@ -330,9 +330,9 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
                 ),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'Show link',
+                        context.l10n.showLink,
                         style: TextStyle(fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -344,14 +344,14 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
                   ],
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 4, top: 4),
                 child: Text(
-                  "When turned off this link won't be shown on your profile",
+                  context.l10n.whenTurnedOffThisLinkWontBeShownOnYourProfile,
                   style: TextStyle(fontSize: 11, color: Colors.grey),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Bottom actions
               Row(
@@ -363,23 +363,23 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
                         shape: BoxShape.circle,
                       ),
                       child: IconButton(
-                        icon: const Icon(Icons.delete_outline_rounded),
+                        icon: Icon(Icons.delete_outline_rounded),
                         onPressed: widget.onDelete,
                       ),
                     ),
-                  if (widget.onDelete != null) const SizedBox(width: 12),
+                  if (widget.onDelete != null) SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: widget.onSave,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         foregroundColor: Colors.white,
-                        shape: const StadiumBorder(),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: StadiumBorder(),
+                        padding: EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: Text(
-                        widget.isNew ? 'Add' : 'Save',
-                        style: const TextStyle(
+                        widget.isNew ? context.l10n.add : context.l10n.save,
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),

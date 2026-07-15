@@ -3,8 +3,9 @@ import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/screens/loyalty_program/business/add_points_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/add_stamp_screen.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class CustomerDetailsScreen extends StatelessWidget {
-  const CustomerDetailsScreen({super.key});
+  CustomerDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,64 +15,61 @@ class CustomerDetailsScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'Customer Details',
+        title: Text(context.l10n.customerDetails,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
             // Customer Card
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 35,
                     backgroundColor: Colors.white,
                     child: Icon(Icons.person, size: 35, color: Colors.black),
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'John Smith',
+                  SizedBox(height: 12),
+                  Text(context.l10n.johnSmith,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'Joined: Jan 15, 2026',
+                  SizedBox(height: 6),
+                  Text(context.l10n.joinedJan152026,
                     style: TextStyle(color: Colors.white70),
                   ),
                 ],
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // Stats
             Row(
               children: [
                 Expanded(
                   child: _statCard(
-                    title: 'Points',
+                    title: context.l10n.points,
                     value: '450',
                     icon: Icons.stars_outlined,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: _statCard(
-                    title: 'Stamps',
+                    title: context.l10n.stamps,
                     value: '7 / 10',
                     icon: Icons.local_activity_outlined,
                   ),
@@ -79,16 +77,16 @@ class CustomerDetailsScreen extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             _statCard(
-              title: 'Rewards Earned',
+              title: context.l10n.rewardsEarned,
               value: '3',
               icon: Icons.card_giftcard,
               fullWidth: true,
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             // Quick Actions
             Row(
@@ -102,8 +100,8 @@ class CustomerDetailsScreen extends StatelessWidget {
                           MaterialPageRoute(builder: (_) => AddPointsScreen()),
                         );
                       },
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add Points'),
+                      icon: Icon(Icons.add),
+                      label: Text(context.l10n.addPoints),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         foregroundColor: Colors.white,
@@ -115,7 +113,7 @@ class CustomerDetailsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: SizedBox(
                     height: 55,
@@ -128,17 +126,17 @@ class CustomerDetailsScreen extends StatelessWidget {
                                 id: '',
                                 programId: '',
                                 stamps: 0,
-                                status: 'ACTIVE',
+                                status: context.l10n.active2,
                               ),
                             ),
                           ),
                         );
                       },
-                      icon: const Icon(Icons.local_activity),
-                      label: const Text('Add Stamp'),
+                      icon: Icon(Icons.local_activity),
+                      label: Text(context.l10n.addStamp),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.black,
-                        side: const BorderSide(color: Colors.black12),
+                        side: BorderSide(color: Colors.black12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
                         ),
@@ -149,34 +147,34 @@ class CustomerDetailsScreen extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 30),
+            SizedBox(height: 30),
 
             // Recent Activity
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Recent Activity',
+                context.l10n.recentActivity,
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             _activityTile(
-              title: 'Earned 50 Points',
-              subtitle: 'Today • 3:15 PM',
+              title: context.l10n.earned50Points,
+              subtitle: context.l10n.today315PM,
             ),
 
             _activityTile(
-              title: 'Received 1 Stamp',
-              subtitle: 'Yesterday • 5:42 PM',
+              title: context.l10n.received1Stamp,
+              subtitle: context.l10n.yesterday542PM,
             ),
 
             _activityTile(
-              title: 'Redeemed Free Coffee',
-              subtitle: '2 Days Ago',
+              title: context.l10n.redeemedFreeCoffee,
+              subtitle: context.l10n.n2DaysAgo,
             ),
           ],
         ),
@@ -203,10 +201,10 @@ class CustomerDetailsScreen extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             value,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
-          Text(title, style: const TextStyle(color: Colors.grey)),
+          Text(title, style: TextStyle(color: Colors.grey)),
         ],
       ),
     );

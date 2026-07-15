@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class CatalogProductCard extends StatelessWidget {
   final CatalogItem item;
   final VoidCallback onTap;
@@ -20,7 +21,7 @@ class CatalogProductCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Material(
-      color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+      color: isDark ? Color(0xFF1E1E1E) : Colors.white,
       borderRadius: BorderRadius.circular(14),
       elevation: 0,
       child: InkWell(
@@ -60,7 +61,7 @@ class CatalogProductCard extends StatelessWidget {
                           ),
                           child: Text(
                             '$cartQty',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -80,12 +81,12 @@ class CatalogProductCard extends StatelessWidget {
                       item.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       item.price > 0
                           ? 'Rs ${item.price.toStringAsFixed(0)}'
@@ -97,7 +98,7 @@ class CatalogProductCard extends StatelessWidget {
                       ),
                     ),
                     if (isService) ...[
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Row(
                         children: [
                           Icon(
@@ -105,9 +106,9 @@ class CatalogProductCard extends StatelessWidget {
                             size: 12,
                             color: Colors.grey.shade600,
                           ),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4),
                           Text(
-                            'Book',
+                            context.l10n.book,
                             style: TextStyle(
                               fontSize: 11,
                               color: Colors.grey.shade600,

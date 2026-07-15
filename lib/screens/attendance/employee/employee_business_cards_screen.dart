@@ -7,6 +7,7 @@ import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/employee_card_template_sheet.dart';
 import 'package:tapni_app/widgets/business_card_share_sheet.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class EmployeeBusinessCardsScreen extends StatefulWidget {
   const EmployeeBusinessCardsScreen({super.key});
 
@@ -61,20 +62,20 @@ class _EmployeeBusinessCardsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AttendanceUi.scaffoldBg,
-      appBar: AttendanceUi.appBar('Employee Cards'),
+      appBar: AttendanceUi.appBar(context.l10n.employeeCards),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _load,
               child: _cards.isEmpty
                   ? ListView(
-                      padding: const EdgeInsets.all(20),
+                      padding: EdgeInsets.all(20),
                       children: [
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.5,
                           child: Center(
                             child: Container(
-                              padding: const EdgeInsets.all(24),
+                              padding: EdgeInsets.all(24),
                               decoration: AttendanceUi.thickCard,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -84,14 +85,14 @@ class _EmployeeBusinessCardsScreenState
                                     size: 48,
                                     color: WaUi.promoIconFg,
                                   ),
-                                  const SizedBox(height: 16),
+                                  SizedBox(height: 16),
                                   Text(
-                                    'No employee cards yet',
+                                    context.l10n.noEmployeeCardsYet,
                                     style: AttendanceUi.sectionTitle,
                                   ),
-                                  const SizedBox(height: 8),
+                                  SizedBox(height: 8),
                                   Text(
-                                    'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.',
+                                    context.l10n.whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe,
                                     textAlign: TextAlign.center,
                                     style: AttendanceUi.bodyMuted,
                                   ),
@@ -103,10 +104,10 @@ class _EmployeeBusinessCardsScreenState
                       ],
                     )
                   : ListView(
-                      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                      padding: EdgeInsets.fromLTRB(20, 8, 20, 24),
                       children: [
                         Text(
-                          'Your employee cards from employers',
+                          context.l10n.yourEmployeeCardsFromEmployers,
                           style: AttendanceUi.bodyMuted,
                         ),
                         const SizedBox(height: 16),
@@ -161,7 +162,7 @@ class _EmployeeBusinessCardsScreenState
                           right: -4,
                           bottom: -2,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
+                            padding: EdgeInsets.symmetric(
                               horizontal: 6,
                               vertical: 2,
                             ),
@@ -173,7 +174,7 @@ class _EmployeeBusinessCardsScreenState
                                 width: 1,
                               ),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.badge_outlined,
                               size: 14,
                               color: Colors.white,
@@ -182,16 +183,16 @@ class _EmployeeBusinessCardsScreenState
                         ),
                       ],
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: 14),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Employee Card',
+                            context.l10n.employeeCard,
                             style: AttendanceUi.bodyMuted,
                           ),
-                          const SizedBox(height: 2),
+                          SizedBox(height: 2),
                           Text(employeeLabel, style: AttendanceUi.cardTitle),
                           const SizedBox(height: 4),
                           if (card.employeeDisplayId.isNotEmpty)
@@ -207,7 +208,7 @@ class _EmployeeBusinessCardsScreenState
                         ],
                       ),
                     ),
-                    const Icon(
+                    Icon(
                       Icons.wallet_outlined,
                       size: 24,
                       color: WaUi.promoIconFg,
@@ -216,26 +217,26 @@ class _EmployeeBusinessCardsScreenState
                 ),
               ),
             ),
-            const Divider(height: 1, color: WaUi.divider),
+            Divider(height: 1, color: WaUi.divider),
             InkWell(
               onTap: () => _customizeCard(card),
-              borderRadius: const BorderRadius.vertical(
+              borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(AttendanceUi.radius),
               ),
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.palette_outlined,
                       size: 20,
                       color: WaUi.promoIconFg,
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Text(
-                      'Customize Design',
+                      context.l10n.customizeDesign,
                       style: WaUi.button.copyWith(color: WaUi.primaryText),
                     ),
                   ],

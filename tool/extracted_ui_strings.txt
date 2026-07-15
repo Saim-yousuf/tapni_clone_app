@@ -1,0 +1,1265 @@
+TOTAL_UNIQUE=522
+FILES=74
+
+=== screens/analytics_screen.dart (7)
+  Analytics Dashboard
+  GUEST
+  No one has viewed your profile yet.
+  Profile Viewers
+  Profile Views
+  QR Scans
+  USER
+
+=== screens/attendance/business/attendance_dashboard_screen.dart (3)
+  Manage Employees
+  No employees yet
+  Scan a user QR code to add them as employee
+
+=== screens/attendance/business/employee_list_screen.dart (10)
+  @${employee.employee.username}\n
+  Cancel
+  Edit Settings
+  No employees added
+  PENDING ACCEPTANCE
+  Remove
+  Remove ${employee.employee.displayName} from your team?
+  Remove Employee
+  Scan any user or business QR to add employee
+  Scan to Invite
+
+=== screens/attendance/business/employee_settings_screen.dart (7)
+  Could not get location. Please enable GPS permission.
+  END
+  Employee Face Photo
+  Location not set yet
+  Pick on Map
+  Please set work location first
+  START
+
+=== screens/attendance/business/map_location_picker_screen.dart (5)
+  Confirm Location
+  Lat: ${_selectedPoint.latitude.toStringAsFixed(5)}\n
+  Location permission required
+  My Location
+  Tap on the map or use your current location
+
+=== screens/attendance/employee/employee_business_cards_screen.dart (5)
+  Customize Design
+  Employee Card
+  No employee cards yet
+  When a business adds you as employee, your employee card will appear here. You can customize its design anytime.
+  Your employee cards from employers
+
+=== screens/attendance/employee/employee_invitations_screen.dart (6)
+  Accept
+  Decline
+  Invited you to join as employee
+  No pending invitations
+  Shift: ${invitation.shiftStart} - ${invitation.shiftEnd}
+  When a business invites you to their team, it will appear here.
+
+=== screens/attendance/employee/mark_attendance_screen.dart (14)
+  Ask your business to scan your QR and add you as an employee
+  Attendance completed for today
+  Check in
+  Check out
+  Check-in: ${DateFormat(
+  Check-out: ${DateFormat(
+  Company Employee Card
+  Location permission required for attendance
+  No employer found
+  Not checked in yet
+  Shift ${employer.shiftStart} - ${employer.shiftEnd}
+  This month
+  Today is your weekend
+  Today • ${DateFormat(
+
+=== screens/catalog/catalog_item_form_screen.dart (8)
+  Add categories in your catalog settings first.
+  Category *
+  Description (optional)
+  Name
+  Please enter item name
+  Please select a category
+  Price (Rs)
+  Tap to add photo
+
+=== screens/checking_points_screen.dart (3)
+  Complete these steps
+  Profile Check
+  Profile Strength
+
+=== screens/digital_card_screen.dart (12)
+  Call
+  Choose Template
+  Connected Accounts
+  Edit Details
+  Email
+  No active links connected yet
+  Opening mock link: ${link.fullUrl}
+  PRO
+  Social Links
+  Tap "Social Links" above to add and activate profiles.
+  Website
+  tapni.com/${profile.name.replaceAll(
+
+=== screens/edit_profile_screen.dart (5)
+  Bio
+  Edit Profile
+  Edit your profile details
+  Name
+  Only cover, profile photo, name and bio are editable here.
+
+=== screens/find_user_screen.dart (9)
+  @${user.username}
+  Find User
+  Find people on BarQody
+  No public profile matches "@$query".
+  No users found
+  Only public profiles are shown
+  Search by username...
+  Something went wrong
+  Type at least 2 characters of a username to search.
+
+=== screens/home_dashboard.dart (21)
+  ACTIVE CARD
+  Close
+  Contacts
+  Customize your profile, unlock PRO templates, and get unlimited leads.
+  Hello,
+  Incoming orders
+  My Orders
+  Orders
+  Performance Overview
+  Plan Expired
+  QR Scans
+  Recent Activity
+  Renew Plan
+  See All
+  See all activity is mocked. New activities will appear as leads are added.
+  Tap to share QR code
+  Track your orders
+  Upgrade to Tapni PRO
+  Views
+  Your PRO subscription has expired.\n\n
+  Your subscription has ended. Tap the info icon for details.
+
+=== screens/leads_screen.dart (45)
+  123 Main St, City
+  Add a note...
+  Address
+  All
+  Assign Category
+  Cancel
+  Capture New Contact
+  Categories
+  Category Name
+  Company
+  Company Inc.
+  Contact added successfully!
+  Contact updated successfully!
+  Contacts
+  Create
+  Delete
+  Delete "${category.name}"?
+  Delete Category
+  Delete Contact
+  Edit
+  Email
+  Enter networking contact details below.
+  Failed to update contact.
+  Filter contacts
+  Find username
+  Full Name
+  Import contacts
+  Import contacts is not available yet.
+  Jane Doe
+  Job Title
+  Manage categories
+  Manage contact
+  Name is required
+  New Category
+  None
+  Note
+  Options for ${lead.name}
+  Phone
+  Read only
+  Remove "${lead.name}" from your contacts?
+  Save
+  Scan
+  Software Engineer
+  Website
+  jane@company.com
+
+=== screens/linked_devices/account_switcher_sheet.dart (8)
+  Accounts
+  Add account
+  Could not switch account
+  Email & password
+  Email login or scan QR
+  Link by QR on another phone
+  Scan QR / show QR
+  Switched to ${account.displayName}
+
+=== screens/linked_devices/link_device_scan_screen.dart (13)
+  AABBCCDD
+  Allow this device to access your Barqody account? You can remove it anytime from Linked devices.
+  Cancel
+  Continue
+  Device linked
+  Enter code
+  Enter code instead
+  Invalid QR code. Use a Barqody link QR.
+  Link
+  Link a device
+  Link this device?
+  Point your camera at the QR code on the other device
+  Type the 8-character code shown under the QR.
+
+=== screens/linked_devices/linked_devices_screen.dart (13)
+  Active
+  Cancel
+  Device logged out
+  Device status
+  Keep your account safe. Only scan QR codes when you want to link a device you trust.
+  Link a device
+  Linked devices
+  Log out
+  Log out device?
+  Only this phone is using your account right now.
+  Scan QR shown on the other device
+  Use Barqody on other phones or tablets. You stay in control — log out any device anytime.
+  “${device[
+
+=== screens/linked_devices/qr_login_screen.dart (5)
+  Code copied
+  Code: $_code
+  Copy code
+  Refresh QR
+  Use Barqody on your phone to scan this code
+
+=== screens/login_screen.dart (14)
+  Comming Soon
+  Don't have an account? 
+  Email Address
+  Enter your password
+  Forgot?
+  Log in to manage your digital card and network.
+  Log in with QR code
+  OR CONTINUE WITH
+  Password
+  Sign Up
+  Sign in with Google
+  Under Development - Login via email/password instead. 
+  Welcome Back
+  name@company.com
+
+=== screens/loyalty_program/business/add_points_screen.dart (6)
+  1 Point = 100 PKR (example rule)
+  Add Points
+  Bill Amount
+  Confirm & Add Points
+  Enter bill amount
+  Points Earned
+
+=== screens/loyalty_program/business/add_stamp_screen.dart (2)
+  Reward Completed! 🎉
+  Stamp Card
+
+=== screens/loyalty_program/business/create_loyalty_program_screen.dart (8)
+  Create Loyalty Program
+  Create Program
+  Description
+  End Date
+  Program Name
+  Program Type
+  Reward Details
+  Start Date
+
+=== screens/loyalty_program/business/create_reward_screen.dart (11)
+  #${current.value.toRadixString(16).padLeft(8, 
+  Add Logo
+  Apply
+  Custom images for stamped and unstamped slots. Defaults are used if not set.
+  Empty slot
+  Filled slot
+  Hex: #
+  Pick Color
+  Stamp Icon
+  Unstamp Icon
+  Use default icon
+
+=== screens/loyalty_program/business/customer_detail_screen.dart (15)
+  2 Days Ago
+  Add Points
+  Add Stamp
+  Customer Details
+  Earned 50 Points
+  John Smith
+  Joined: Jan 15, 2026
+  Points
+  Received 1 Stamp
+  Recent Activity
+  Redeemed Free Coffee
+  Rewards Earned
+  Stamps
+  Today • 3:15 PM
+  Yesterday • 5:42 PM
+
+=== screens/loyalty_program/business/loyalty_enrollment_screen.dart (4)
+  Enroll Customer
+  John Smith
+  Scan Customer QR Code
+  john@email.com
+
+=== screens/loyalty_program/business/loyalty_program_details_screen.dart (8)
+  Cancel
+  Delete
+  Delete Reward?
+  Details
+  Program Details
+  Program not found
+  Stats
+  This will permanently delete this reward program and all its enrollments.
+
+=== screens/loyalty_program/business/loyalty_program_list_screen.dart (5)
+  Create Reward
+  Create your first reward card for customers
+  New Reward
+  No reward programs yet
+  Reward Programs
+
+=== screens/loyalty_program/business/rewards_management_screen.dart (4)
+  Create Reward
+  Delete
+  Edit
+  Rewards
+
+=== screens/loyalty_program/customer/customer_loyalty_home_screen.dart (6)
+  My Rewards
+  No reward programs yet
+  Try again
+  View Profile
+  When a business enrolls you in their reward program, it will appear here.
+  Your Rewards
+
+=== screens/loyalty_program/customer/customer_program_details_screen.dart (3)
+  Reward Completed! Show this card to redeem.
+  Reward Program
+  Visit ${program?.displayBusinessName ?? 
+
+=== screens/loyalty_program/customer/customer_reward_screen.dart (1)
+  Rembiro
+
+=== screens/loyalty_program/customer/reward_redemption_screen.dart (8)
+  10 Stamps Required
+  Confirm Redemption
+  Free Coffee
+  Redeem Another Reward
+  Redeem Reward
+  Reward Redeemed!
+  Scan Business QR to Redeem
+  Your Free Coffee has been successfully redeemed.
+
+=== screens/main_shell.dart (4)
+  Contacts
+  Explore
+  Links
+  Tools
+
+=== screens/notifications_screen.dart (6)
+  All caught up!
+  All notifications marked as read!
+  No new notifications at this time.
+  Notification cleared
+  Notifications
+  Read All
+
+=== screens/onboarding_screen.dart (2)
+  BarQody
+  Skip
+
+=== screens/orders/order_detail_screen.dart (17)
+  @$username
+  Booking date
+  Booking time
+  Cancel Order
+  Customer No Show
+  Date
+  Mark Completed
+  Order Details
+  Order ID
+  Order not found
+  Rs ${_order!.totalAmount.toStringAsFixed(0)}
+  Rs ${item.lineTotal.toStringAsFixed(0)}
+  Status
+  Status updated to ${CatalogHelper.statusLabel(status)}
+  Total
+  Type
+  View Profile
+
+=== screens/orders/orders_list_screen.dart (3)
+  No ${CatalogHelper.statusLabel(_tabs[_tabController.index]).toLowerCase()} orders
+  Order
+  Rs ${order.totalAmount.toStringAsFixed(0)}
+
+=== screens/profile_screen.dart (8)
+  ACTIVE CARD
+  Add links to your profile below 
+  Edit profile
+  Enter your name
+  Opening: ${link.fullUrl}
+  Tap to share QR code
+  Templates
+  Write something about you or your brand
+
+=== screens/progress_score_card.dart (1)
+  Profile Strength
+
+=== screens/qr_code_screen.dart (4)
+  Let others point their phone camera to this QR code to instantly view your networking profile.
+  Link copied to clipboard
+  Scan QR Code
+  Share Profile
+
+=== screens/scan_screen.dart (10)
+  AI
+  Allow camera
+  Camera permission is required to scan.
+  Event Badge
+  Hold the QR code inside the frame — it scans automatically.
+  Invalid profile URL. Scan a valid BarQody card or QR code.
+  Lat
+  No QR code found in this image.
+  Paper Card
+  QR Code
+
+=== screens/scanned_profile_screen.dart (15)
+  Add Program
+  Assigned Programs
+  Business Programs
+  Business options
+  Contact exchanged successfully!
+  Customer enrolled successfully
+  Customer is not enrolled yet
+  Enroll ${widget.customer.name} in your business rewards, then assign programs below.
+  Enroll Customer
+  Exchange Contact
+  Exchanging contact...
+  No active reward programs available.
+  No programs assigned yet. Add programs below.
+  Rewards for ${widget.customer.name}
+  Try again
+
+=== screens/set_username_screen.dart (5)
+  3–30 characters. Letters, numbers, underscores and hyphens only.
+  Choose a unique username for your profile link.
+  This is already your username.
+  Username
+  yourname
+
+=== screens/settings_screen.dart (16)
+  Cancel
+  Company Employee Card
+  Create stamp or points rewards for customers
+  Customer Orders
+  Help Center is disabled in this UI demo.
+  Invite employees, set shifts and track presence
+  Log Out
+  Log out all
+  Loyalty Programs
+  Save your work ID card to phone or wallet
+  Team Attendance
+  Thank you! Feedback submissions are mock only.
+  Try Business Pro
+  Try Business Pro.
+  View and update orders from your customers
+  barqody v1.0.0
+
+=== screens/signup_screen.dart (11)
+  Already have an account? 
+  At least 6 characters
+  By signing up, you agree to our Terms and Conditions.
+  Create Account
+  Email Address
+  Full Name
+  John Doe
+  Log In
+  Password
+  Start networking smarter with Barqody.
+  name@company.com
+
+=== screens/social_links_screen.dart (7)
+  Label
+  Link settings
+  Links
+  No links added yet.\nTap "Add link" to get started.
+  Set text under the link icon
+  Show link
+  When turned off this link won't be shown on your profile
+
+=== screens/splash_screen.dart (2)
+   بطاقة أعمال الرقمية
+  DIGITAL BUSINESS Card
+
+=== screens/subscription_screen.dart (22)
+  Account / IBAN: Add account number here
+  Account Title: Tapni
+  Bank Account
+  Bank: Add bank name here
+  Best value
+  Business Category
+  Business Details
+  Business Name
+  Choose Plan
+  Monthly
+  Next
+  Pay month by month
+  Please enter business details to continue
+  Please provide your business details before upgrading.
+  Premium active
+  Request pending
+  Request rejected
+  Request subscription
+  Subscription
+  Subscription request submitted.
+  Transaction reference number (optional)
+  Yearly
+
+=== widgets/bank_widgets.dart (3)
+  Bank Details
+  Close
+  Copied
+
+=== widgets/business_card.dart (5)
+  ACCESS RESTRICTED
+  Business Users Only
+  Go Business
+  Not available on your current plan
+  This feature is exclusively available to Business users. 
+
+=== widgets/business_card_share_sheet.dart (5)
+  Add to Google Wallet
+  Customize Design
+  JPG
+  PNG
+  Share
+
+=== widgets/catalog_item_detail_sheet.dart (3)
+  Quantity
+  Special instructions
+  e.g. No sugar, extra hot...
+
+=== widgets/catalog_product_card.dart (1)
+  Book
+
+=== widgets/contact_card_sheet.dart (4)
+  Contact card
+  Save
+  Set text under the link icon
+  Show link
+
+=== widgets/custom_card_editor_sheet.dart (18)
+  Add links to your profile first, then enable them here.
+  Background
+  Background color
+  Cancel
+  Customize yourself
+  Delete
+  Delete card?
+  How do you want to design this card?
+  Links on this card
+  Only enabled links show when someone scans this card.
+  Photos
+  Pick a ready-made color theme. Quick and clean.
+  Profile
+  Set your own colors, photos and background.
+  Show on this card
+  Template
+  This card and its QR code will be removed.
+  Use a template
+
+=== widgets/employee_card_template_sheet.dart (4)
+  Applied "${selected.name}" design
+  Apply Design
+  Customize Card Design
+  PRO template
+
+=== widgets/employee_company_card_preview.dart (2)
+  EMPLOYEE CARD
+  Scan employee profile
+
+=== widgets/face_capture_sheet.dart (3)
+  Skip for now
+  Take a quick selfie for attendance verification
+  Use This Photo
+
+=== widgets/filter_contacts_sheet.dart (11)
+  Ascending
+  Contact Source
+  Creation Date
+  Date Range
+  Descending
+  Filter Contacts
+  Full Name
+  Reset
+  Save
+  Select Markers
+  Sort Options
+
+=== widgets/go_bussiness_button.dart (2)
+  BUSINESS
+  Go 
+
+=== widgets/links_widget.dart (12)
+  Add Link
+  Create new link
+  Custom link
+  Enter your ${SocialLink.getPlatformName(platform)} username
+  Label
+  Link Settings
+  No link templates available
+  Save
+  Search links
+  Set text under the link icon
+  Show link
+  When turned off this link won't be shown on your profile
+
+=== widgets/menu_catalog_sheet.dart (19)
+  Add $_catalogLabel item
+  Add at least one $_catalogLabel item
+  Add at least one category first
+  Add categories in display order (e.g. Fast Food, then Desi)
+  Booking schedule
+  Category already exists
+  End hour
+  No $_catalogLabel items available.
+  No items in this category.
+  No items yet. Add your first $_catalogLabel item.
+  Order placed with ${widget.businessName ?? "business"}!
+  Place Order
+  Save
+  Show link
+  Slot (min)
+  Start hour
+  Total: Rs ${total.toStringAsFixed(0)}
+  Your categories
+  e.g. Fast Food
+
+=== widgets/my_cards_carousel.dart (3)
+  ACTIVE
+  My Cards
+  New Card
+
+=== widgets/my_cards_share_sheet.dart (5)
+  Add to Google Wallet
+  JPG
+  PNG
+  Share
+  Share card
+
+=== widgets/notification_icon_button.dart (1)
+  Notifications
+
+=== widgets/pro_upgrade_sheet.dart (20)
+  Business Category
+  Business Details
+  Business Name
+  Cancel anytime.
+  Monthly
+  Next
+  PRO
+  Please enter business details to continue
+  Please provide your business details before upgrading.
+  Premium active
+  Request Pending
+  Request rejected
+  Rs 1,600 billed monthly
+  Rs 8,300 billed yearly
+  Subscription request submitted
+  Transaction reference (optional)
+  Upgrade now
+  Upgrade to 
+  Yearly
+  Your ${subscription!.planName} request is submitted and waiting for approval on ${_date(subscription.requestedAt)}.
+
+=== widgets/qr_card_stack_carousel.dart (7)
+  Create your first card
+  Edit card
+  New card
+  Next card
+  Previous card
+  Share different links on each card
+  Swipe to browse cards
+
+=== widgets/service_booking_sheet.dart (9)
+  Any special requests...
+  Available slots
+  Book ${widget.item.name}
+  Booked ${widget.item.name} with ${widget.businessName}!
+  Confirm Booking
+  No slots available on this day
+  Notes (optional)
+  Please select a time slot
+  Select date
+
+=== widgets/settings_widget.dart (11)
+  (Read only)
+  General
+  Manage your personal details & other preferences
+  Name
+  Personal Details
+  Region
+  SAVE
+  Select Region
+  Version: 1.0.1
+  Welcome to Account Center
+  saimyousuf.y@gmail.com
+
+=== widgets/social_icon_button.dart (1)
+  in
+
+=== widgets/template_business_card_preview.dart (1)
+  Barqody
+
+=== widgets/templates_sheet.dart (7)
+  Apply Template
+  BIO
+  Digital Business Card
+  NAME
+  PRO
+  Templates
+  tapni
+
+=== widgets/wa_chats_widgets.dart (7)
+  Add
+  Add contact
+  All
+  Find user
+  Scan
+  Scan QR
+  Search name, email or company
+
+=== ALL UNIQUE ===
+ بطاقة أعمال الرقمية
+#${current.value.toRadixString(16).padLeft(8, 
+(Read only)
+1 Point = 100 PKR (example rule)
+10 Stamps Required
+123 Main St, City
+2 Days Ago
+3–30 characters. Letters, numbers, underscores and hyphens only.
+@$username
+@${employee.employee.username}\n
+@${user.username}
+AABBCCDD
+Accept
+ACCESS RESTRICTED
+Account / IBAN: Add account number here
+Account Title: Tapni
+Accounts
+Active
+ACTIVE
+ACTIVE CARD
+Add
+Add $_catalogLabel item
+Add a note...
+Add account
+Add at least one $_catalogLabel item
+Add at least one category first
+Add categories in display order (e.g. Fast Food, then Desi)
+Add categories in your catalog settings first.
+Add contact
+Add Link
+Add links to your profile below 
+Add links to your profile first, then enable them here.
+Add Logo
+Add Points
+Add Program
+Add Stamp
+Add to Google Wallet
+Address
+AI
+All
+All caught up!
+All notifications marked as read!
+Allow camera
+Allow this device to access your Barqody account? You can remove it anytime from Linked devices.
+Already have an account? 
+Analytics Dashboard
+Any special requests...
+Applied "${selected.name}" design
+Apply
+Apply Design
+Apply Template
+Ascending
+Ask your business to scan your QR and add you as an employee
+Assign Category
+Assigned Programs
+At least 6 characters
+Attendance completed for today
+Available slots
+Background
+Background color
+Bank Account
+Bank Details
+Bank: Add bank name here
+BarQody
+Barqody
+barqody v1.0.0
+Best value
+Bill Amount
+BIO
+Bio
+Book
+Book ${widget.item.name}
+Booked ${widget.item.name} with ${widget.businessName}!
+Booking date
+Booking schedule
+Booking time
+BUSINESS
+Business Category
+Business Details
+Business Name
+Business options
+Business Programs
+Business Users Only
+By signing up, you agree to our Terms and Conditions.
+Call
+Camera permission is required to scan.
+Cancel
+Cancel anytime.
+Cancel Order
+Capture New Contact
+Categories
+Category *
+Category already exists
+Category Name
+Check in
+Check out
+Check-in: ${DateFormat(
+Check-out: ${DateFormat(
+Choose a unique username for your profile link.
+Choose Plan
+Choose Template
+Close
+Code copied
+Code: $_code
+Comming Soon
+Company
+Company Employee Card
+Company Inc.
+Complete these steps
+Confirm & Add Points
+Confirm Booking
+Confirm Location
+Confirm Redemption
+Connected Accounts
+Contact added successfully!
+Contact card
+Contact exchanged successfully!
+Contact Source
+Contact updated successfully!
+Contacts
+Continue
+Copied
+Copy code
+Could not get location. Please enable GPS permission.
+Could not switch account
+Create
+Create Account
+Create Loyalty Program
+Create new link
+Create Program
+Create Reward
+Create stamp or points rewards for customers
+Create your first card
+Create your first reward card for customers
+Creation Date
+Custom images for stamped and unstamped slots. Defaults are used if not set.
+Custom link
+Customer Details
+Customer enrolled successfully
+Customer is not enrolled yet
+Customer No Show
+Customer Orders
+Customize Card Design
+Customize Design
+Customize your profile, unlock PRO templates, and get unlimited leads.
+Customize yourself
+Date
+Date Range
+Decline
+Delete
+Delete "${category.name}"?
+Delete card?
+Delete Category
+Delete Contact
+Delete Reward?
+Descending
+Description
+Description (optional)
+Details
+Device linked
+Device logged out
+Device status
+Digital Business Card
+DIGITAL BUSINESS Card
+Don't have an account? 
+e.g. Fast Food
+e.g. No sugar, extra hot...
+Earned 50 Points
+Edit
+Edit card
+Edit Details
+Edit profile
+Edit Profile
+Edit Settings
+Edit your profile details
+Email
+Email & password
+Email Address
+Email login or scan QR
+Employee Card
+EMPLOYEE CARD
+Employee Face Photo
+Empty slot
+END
+End Date
+End hour
+Enroll ${widget.customer.name} in your business rewards, then assign programs below.
+Enroll Customer
+Enter bill amount
+Enter code
+Enter code instead
+Enter networking contact details below.
+Enter your ${SocialLink.getPlatformName(platform)} username
+Enter your name
+Enter your password
+Event Badge
+Exchange Contact
+Exchanging contact...
+Explore
+Failed to update contact.
+Filled slot
+Filter contacts
+Filter Contacts
+Find people on BarQody
+Find user
+Find User
+Find username
+Forgot?
+Free Coffee
+Full Name
+General
+Go 
+Go Business
+GUEST
+Hello,
+Help Center is disabled in this UI demo.
+Hex: #
+Hold the QR code inside the frame — it scans automatically.
+How do you want to design this card?
+Import contacts
+Import contacts is not available yet.
+in
+Incoming orders
+Invalid profile URL. Scan a valid BarQody card or QR code.
+Invalid QR code. Use a Barqody link QR.
+Invite employees, set shifts and track presence
+Invited you to join as employee
+Jane Doe
+jane@company.com
+Job Title
+John Doe
+John Smith
+john@email.com
+Joined: Jan 15, 2026
+JPG
+Keep your account safe. Only scan QR codes when you want to link a device you trust.
+Label
+Lat
+Lat: ${_selectedPoint.latitude.toStringAsFixed(5)}\n
+Let others point their phone camera to this QR code to instantly view your networking profile.
+Link
+Link a device
+Link by QR on another phone
+Link copied to clipboard
+Link Settings
+Link settings
+Link this device?
+Linked devices
+Links
+Links on this card
+Location not set yet
+Location permission required
+Location permission required for attendance
+Log In
+Log in to manage your digital card and network.
+Log in with QR code
+Log Out
+Log out
+Log out all
+Log out device?
+Loyalty Programs
+Manage categories
+Manage contact
+Manage Employees
+Manage your personal details & other preferences
+Mark Completed
+Monthly
+My Cards
+My Location
+My Orders
+My Rewards
+Name
+NAME
+Name is required
+name@company.com
+New Card
+New card
+New Category
+New Reward
+Next
+Next card
+No $_catalogLabel items available.
+No ${CatalogHelper.statusLabel(_tabs[_tabController.index]).toLowerCase()} orders
+No active links connected yet
+No active reward programs available.
+No employee cards yet
+No employees added
+No employees yet
+No employer found
+No items in this category.
+No items yet. Add your first $_catalogLabel item.
+No link templates available
+No links added yet.\nTap "Add link" to get started.
+No new notifications at this time.
+No one has viewed your profile yet.
+No pending invitations
+No programs assigned yet. Add programs below.
+No public profile matches "@$query".
+No QR code found in this image.
+No reward programs yet
+No slots available on this day
+No users found
+None
+Not available on your current plan
+Not checked in yet
+Note
+Notes (optional)
+Notification cleared
+Notifications
+Only cover, profile photo, name and bio are editable here.
+Only enabled links show when someone scans this card.
+Only public profiles are shown
+Only this phone is using your account right now.
+Opening mock link: ${link.fullUrl}
+Opening: ${link.fullUrl}
+Options for ${lead.name}
+OR CONTINUE WITH
+Order
+Order Details
+Order ID
+Order not found
+Order placed with ${widget.businessName ?? "business"}!
+Orders
+Paper Card
+Password
+Pay month by month
+PENDING ACCEPTANCE
+Performance Overview
+Personal Details
+Phone
+Photos
+Pick a ready-made color theme. Quick and clean.
+Pick Color
+Pick on Map
+Place Order
+Plan Expired
+Please enter business details to continue
+Please enter item name
+Please provide your business details before upgrading.
+Please select a category
+Please select a time slot
+Please set work location first
+PNG
+Point your camera at the QR code on the other device
+Points
+Points Earned
+Premium active
+Previous card
+Price (Rs)
+PRO
+PRO template
+Profile
+Profile Check
+Profile Strength
+Profile Viewers
+Profile Views
+Program Details
+Program Name
+Program not found
+Program Type
+QR Code
+QR Scans
+Quantity
+Read All
+Read only
+Received 1 Stamp
+Recent Activity
+Redeem Another Reward
+Redeem Reward
+Redeemed Free Coffee
+Refresh QR
+Region
+Rembiro
+Remove
+Remove "${lead.name}" from your contacts?
+Remove ${employee.employee.displayName} from your team?
+Remove Employee
+Renew Plan
+Request pending
+Request Pending
+Request rejected
+Request subscription
+Reset
+Reward Completed! Show this card to redeem.
+Reward Completed! 🎉
+Reward Details
+Reward Program
+Reward Programs
+Reward Redeemed!
+Rewards
+Rewards Earned
+Rewards for ${widget.customer.name}
+Rs ${_order!.totalAmount.toStringAsFixed(0)}
+Rs ${item.lineTotal.toStringAsFixed(0)}
+Rs ${order.totalAmount.toStringAsFixed(0)}
+Rs 1,600 billed monthly
+Rs 8,300 billed yearly
+saimyousuf.y@gmail.com
+Save
+SAVE
+Save your work ID card to phone or wallet
+Scan
+Scan a user QR code to add them as employee
+Scan any user or business QR to add employee
+Scan Business QR to Redeem
+Scan Customer QR Code
+Scan employee profile
+Scan QR
+Scan QR / show QR
+Scan QR Code
+Scan QR shown on the other device
+Scan to Invite
+Search by username...
+Search links
+Search name, email or company
+See All
+See all activity is mocked. New activities will appear as leads are added.
+Select date
+Select Markers
+Select Region
+Set text under the link icon
+Set your own colors, photos and background.
+Share
+Share card
+Share different links on each card
+Share Profile
+Shift ${employer.shiftStart} - ${employer.shiftEnd}
+Shift: ${invitation.shiftStart} - ${invitation.shiftEnd}
+Show link
+Show on this card
+Sign in with Google
+Sign Up
+Skip
+Skip for now
+Slot (min)
+Social Links
+Software Engineer
+Something went wrong
+Sort Options
+Special instructions
+Stamp Card
+Stamp Icon
+Stamps
+START
+Start Date
+Start hour
+Start networking smarter with Barqody.
+Stats
+Status
+Status updated to ${CatalogHelper.statusLabel(status)}
+Subscription
+Subscription request submitted
+Subscription request submitted.
+Swipe to browse cards
+Switched to ${account.displayName}
+Take a quick selfie for attendance verification
+Tap "Social Links" above to add and activate profiles.
+Tap on the map or use your current location
+Tap to add photo
+Tap to share QR code
+tapni
+tapni.com/${profile.name.replaceAll(
+Team Attendance
+Template
+Templates
+Thank you! Feedback submissions are mock only.
+This card and its QR code will be removed.
+This feature is exclusively available to Business users. 
+This is already your username.
+This month
+This will permanently delete this reward program and all its enrollments.
+Today is your weekend
+Today • ${DateFormat(
+Today • 3:15 PM
+Tools
+Total
+Total: Rs ${total.toStringAsFixed(0)}
+Track your orders
+Transaction reference (optional)
+Transaction reference number (optional)
+Try again
+Try Business Pro
+Try Business Pro.
+Type
+Type at least 2 characters of a username to search.
+Type the 8-character code shown under the QR.
+Under Development - Login via email/password instead. 
+Unstamp Icon
+Upgrade now
+Upgrade to 
+Upgrade to Tapni PRO
+Use a template
+Use Barqody on other phones or tablets. You stay in control — log out any device anytime.
+Use Barqody on your phone to scan this code
+Use default icon
+Use This Photo
+USER
+Username
+Version: 1.0.1
+View and update orders from your customers
+View Profile
+Views
+Visit ${program?.displayBusinessName ?? 
+Website
+Welcome Back
+Welcome to Account Center
+When a business adds you as employee, your employee card will appear here. You can customize its design anytime.
+When a business enrolls you in their reward program, it will appear here.
+When a business invites you to their team, it will appear here.
+When turned off this link won't be shown on your profile
+Write something about you or your brand
+Yearly
+Yesterday • 5:42 PM
+Your ${subscription!.planName} request is submitted and waiting for approval on ${_date(subscription.requestedAt)}.
+Your categories
+Your employee cards from employers
+Your Free Coffee has been successfully redeemed.
+Your PRO subscription has expired.\n\n
+Your Rewards
+Your subscription has ended. Tap the info icon for details.
+yourname
+“${device[

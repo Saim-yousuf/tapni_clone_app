@@ -1,0 +1,591 @@
+FILES=56
+
+=== widgets/contact_card_sheet.dart (62)
+  L85: cardType
+  L85: personal
+  L85: business
+  L90: label
+  L94: firstName
+  L95: lastName
+  L96: bio
+  L98: phone
+  L99: email
+  L100: website
+  L101: businessPhone
+  L102: businessEmail
+  L103: businessWebsite
+  L105: company
+  L106: jobTitle
+  L107: fax
+  L110: address
+  L112: street
+  L113: number
+  L114: city
+  L115: zip
+  L117: country
+  L121: businessAddress
+  L124: businessStreet
+  L127: businessNumber
+  L130: businessCity
+  L133: businessZip
+  L136: businessCountry
+  L326: Business
+  L329: Personal
+  L511: Number
+  L518: City
+  L522: ZIP
+  L527: Country
+  L630: label
+  L631: cardType
+  L631: personal
+  L631: business
+  L632: firstName
+  L633: lastName
+  L634: bio
+  L635: phone
+  L636: email
+  L637: website
+  L638: businessPhone
+  L639: businessEmail
+  L640: businessWebsite
+  L641: company
+  L642: jobTitle
+  L643: fax
+  L644: address
+  L645: street
+  L646: number
+  L647: city
+  L648: zip
+  L649: country
+  L650: businessAddress
+  L651: businessStreet
+  L652: businessNumber
+  L653: businessCity
+  L654: businessZip
+  L655: businessCountry
+
+=== screens/checking_points_screen.dart (27)
+  L20: completed
+  L21: onTap
+  L21: name
+  L26: completed
+  L29: onTap
+  L29: photo
+  L33: completed
+  L35: onTap
+  L35: cover
+  L39: completed
+  L40: onTap
+  L40: social
+  L46: completed
+  L47: onTap
+  L47: pro
+  L54: name
+  L65: bio
+  L77: photo
+  L89: cover
+  L101: social
+  L108: voice
+  L120: gallery
+  L124: pro
+  L232: title
+  L233: completed
+  L235: completed
+  L236: onTap
+
+=== widgets/links_widget.dart (24)
+  L200: catalog
+  L247: menu_catalog
+  L253: contact_card
+  L265: bank
+  L316: custom link
+  L316: custom bank
+  L331: bank
+  L559: accountHolderName
+  L562: iban
+  L565: accountNumber
+  L697: accountHolderName
+  L698: iban
+  L699: accountNumber
+  L1271: Enter your ${SocialLink.getPlatformName(platform)} username
+  L1417: menu_catalog
+  L1445: custom
+  L1454: bank
+  L1456: contact_card
+  L1457: url
+  L1466: contact_card
+  L1466: link
+  L1469: contact_card
+  L1479: bank
+  L1648: Enter your ${SocialLink.getPlatformName(link.platform)} username
+
+=== screens/scanned_profile_screen.dart (21)
+  L22: data
+  L82: isBusinessEnrolled
+  L83: programEnrollments
+  L111: isEmployee
+  L112: isPending
+  L158: data
+  L161: isActive
+  L193: user
+  L276: add_employee
+  L282: add_employee
+  L602: bank
+  L617: bank:
+  L688: data
+  L697: isBusinessEnrolled
+  L698: programEnrollments
+  L820: data
+  L877: Rewards for ${widget.customer.name}
+  L932: Enroll ${widget.customer.name} in your business rewards, then assign programs below.
+  L973: Enroll
+  L1063: Program
+  L1065: } stamps
+
+=== screens/loyalty_program/business/create_reward_screen.dart (20)
+  L81: data:image/$ext;base64,$base64Str
+  L95: label
+  L96: title
+  L97: description
+  L98: stamps
+  L99: theme
+  L100: logo
+  L101: logo
+  L105: stampIcon
+  L106: unstampIcon
+  L108: stampIcon
+  L109: unstampIcon
+  L155: Logo
+  L230: e.g. Coffee Club
+  L234: Title
+  L236: e.g. Buy 10 Get 1 Free
+  L253: Required
+  L477: ).substring(2).toUpperCase()}
+  L546: FF${hexController.text}
+  L576: Required
+
+=== screens/linked_devices/linked_devices_screen.dart (19)
+  L34: devices
+  L58: id
+  L69: “${device[
+  L69: }” will be removed from your account.
+  L111: Last active ${diff.inHours == 0 ? 
+  L111: } ago
+  L113: Last active ${DateFormat(
+  L113: ).format(dt)}
+  L118: ios
+  L118: iphone
+  L119: android
+  L120: web
+  L120: desktop
+  L219: isCurrent
+  L228: platform
+  L233: deviceName
+  L233: Device
+  L238: This device · ${_formatActive(device[
+  L239: lastActiveAt
+
+=== screens/attendance/business/employee_settings_screen.dart (18)
+  L44: Sunday
+  L45: Monday
+  L46: Tuesday
+  L47: Wednesday
+  L48: Thursday
+  L49: Friday
+  L50: Saturday
+  L169: shiftStart
+  L170: shiftEnd
+  L171: weekendDays
+  L172: location
+  L173: latitude
+  L174: longitude
+  L175: address
+  L176: radiusMeters
+  L178: facePhoto
+  L187: employeeId
+  L245: com.barqody.tapni_app
+
+=== screens/attendance/employee/mark_attendance_screen.dart (18)
+  L110: employeeRefId
+  L111: type
+  L112: latitude
+  L113: longitude
+  L114: facePhoto
+  L124: check_in
+  L231: Shift ${employer.shiftStart} - ${employer.shiftEnd}
+  L274: Today • ${DateFormat(
+  L274: ).format(DateTime.now())}
+  L283: Check-in: ${DateFormat(
+  L283: ).format(record!.checkInTime!.toLocal())}
+  L288: Check-out: ${DateFormat(
+  L288: ).format(record!.checkOutTime!.toLocal())}
+  L306: check_in
+  L314: check_out
+  L350: Present
+  L351: Absent
+  L352: Partial
+
+=== widgets/pro_upgrade_sheet.dart (18)
+  L39: Technology
+  L40: Retail
+  L41: Health
+  L42: Education
+  L43: Finance
+  L44: Real Estate
+  L45: Food & Beverage
+  L46: Entertainment
+  L47: Other
+  L86: yearly
+  L86: monthly
+  L237: Your ${subscription!.planName} request is submitted and waiting for approval on ${_date(subscription.requestedAt)}.
+  L406: PKR 691.66/month
+  L407: 7 months free
+  L421: PKR 1,600/month
+  L450: Customize your profile
+  L451: Unlimited AI scans
+  L452: Analytics & insights
+
+=== screens/leads_screen.dart (17)
+  L92: Contacts
+  L121: filter
+  L125: categories
+  L129: import
+  L201: Filtered
+  L920: name
+  L922: email
+  L924: phone
+  L926: company
+  L928: jobTitle
+  L931: website
+  L933: address
+  L935: note
+  L1084: Enter $label
+  L1124: Options for ${lead.name}
+  L1213: category
+  L1226: category
+
+=== screens/analytics_screen.dart (13)
+  L37: analytics
+  L40: totalProfileViews
+  L41: totalCardScans
+  L42: profileViews
+  L70: profilePhoto
+  L71: profilePhoto
+  L77: profilePhoto
+  L199: isGuest
+  L200: viewerId
+  L201: timestamp
+  L202: timestamp
+  L210: username
+  L211: ]} • $timestamp
+
+=== screens/linked_devices/qr_login_screen.dart (13)
+  L74: code
+  L75: qrPayload
+  L76: code
+  L77: barqody://link-device?code=${data[
+  L79: expiresAt
+  L103: status
+  L104: approved
+  L104: token
+  L106: expired
+  L106: cancelled
+  L116: token
+  L117: user
+  L130: deviceSessionId
+
+=== widgets/menu_catalog_sheet.dart (13)
+  L83: services
+  L545: Rs ${item.price.toStringAsFixed(0)}
+  L545: Free
+  L689: business
+  L744: Total: Rs ${total.toStringAsFixed(0)}
+  L945: menu_catalog
+  L960: menu_catalog
+  L966: catalog
+  L994: name
+  L995: price
+  L996: quantity
+  L997: notes
+  L1014: business
+
+=== screens/subscription_screen.dart (12)
+  L26: Technology
+  L27: Retail
+  L28: Health
+  L29: Education
+  L30: Finance
+  L31: Real Estate
+  L32: Food & Beverage
+  L33: Entertainment
+  L34: Other
+  L62: yearly
+  L62: monthly
+  L142: Your ${subscription!.planName} request was submitted on ${_date(subscription.requestedAt)}.
+
+=== widgets/wa_chats_widgets.dart (12)
+  L517: contacts_more
+  L534: contacts_scan
+  L606: PM
+  L606: AM
+  L610: Yesterday
+  L612: Mon
+  L612: Tue
+  L612: Wed
+  L612: Thu
+  L612: Fri
+  L612: Sat
+  L612: Sun
+
+=== screens/notifications_screen.dart (11)
+  L97: isRead
+  L112: id
+  L124: id
+  L125: type
+  L125: catalog_order
+  L130: id
+  L135: type
+  L135: employee_invitation
+  L172: title
+  L183: time
+  L193: body
+
+=== screens/onboarding_screen.dart (11)
+  L21: description
+  L22: Share your digital card instantly via NFC or QR Code. No app required for others to view your details.
+  L23: icon
+  L28: description
+  L29: Keep your info updated in real time. Modify your social handles, title, or phone number and watch it update immediately.
+  L30: icon
+  L35: description
+  L37: icon
+  L196: icon
+  L205: title
+  L214: description
+
+=== widgets/filter_contacts_sheet.dart (10)
+  L144: Direct
+  L145: Form
+  L146: Manually
+  L187: All
+  L213: Creation Date
+  L222: Full Name
+  L235: Descending
+  L244: Ascending
+  L278: ).format(_startDate!)} - ${DateFormat(
+  L278: ).format(_endDate!)}
+
+=== widgets/service_booking_sheet.dart (10)
+  L57: yyyy-MM-dd
+  L115: services
+  L120: name
+  L121: price
+  L122: quantity
+  L123: notes
+  L136: Booked ${widget.item.name} with ${widget.businessName}!
+  L186: Book ${widget.item.name}
+  L206: Rs ${widget.item.price.toStringAsFixed(0)}
+  L207: Free
+
+=== widgets/business_card_share_sheet.dart (9)
+  L123: Employee
+  L259: saveUrl
+  L260: configured
+  L274: message
+  L322: } • ${_template.name} template
+  L334: Employee
+  L382: Employee card - ${widget.employeeName}: ${widget.profileUrl}
+  L383: Business card: ${widget.profileUrl}
+  L385: Employee Card - ${widget.employeeName}
+
+=== widgets/settings_widget.dart (9)
+  L100: Saim Y
+  L160: Language
+  L169: English
+  L169: Urdu
+  L169: Arabic
+  L169: Spanish
+  L177: Translate the app on your preferred language.
+  L365: Security
+  L366: Billing
+
+=== screens/loyalty_program/business/rewards_management_screen.dart (8)
+  L15: type
+  L15: Both
+  L16: requirement
+  L16: 8 Stamps + 300 Points
+  L78: title
+  L86: ]} • ${reward[
+  L100: edit
+  L103: delete
+
+=== screens/find_user_screen.dart (7)
+  L30: id
+  L31: name
+  L32: username
+  L33: profilePhoto
+  L34: bio
+  L35: businessName
+  L109: users
+
+=== screens/settings_screen.dart (7)
+  L152: type
+  L152: catalog_order
+  L152: isRead
+  L194: en
+  L236: account
+  L240: notifications
+  L253: Unlock customer orders, team attendance, loyalty programs, and more for your business.
+
+=== screens/orders/order_detail_screen.dart (7)
+  L59: Status updated to ${CatalogHelper.statusLabel(status)}
+  L100: Customer
+  L100: Business
+  L142: Items
+  L177: Rs ${item.lineTotal.toStringAsFixed(0)}
+  L190: Rs ${_order!.totalAmount.toStringAsFixed(0)}
+  L233: )}:${dt.minute.toString().padLeft(2, 
+
+=== screens/attendance/business/attendance_dashboard_screen.dart (7)
+  L33: yyyy-MM-dd
+  L64: ABSENT
+  L66: PRESENT
+  L94: Attendance
+  L117: PRESENT
+  L121: ABSENT
+  L203: hh:mm a
+
+=== screens/attendance/business/employee_list_screen.dart (6)
+  L51: Remove ${employee.employee.displayName} from your team?
+  L94: Employees
+  L197: edit
+  L207: remove
+  L213: edit
+  L220: remove
+
+=== screens/loyalty_program/business/loyalty_program_details_screen.dart (6)
+  L33: data
+  L48: Failed
+  L75: Failed
+  L171: Enrolled
+  L181: Title
+  L186: Created
+
+=== widgets/bank_widgets.dart (6)
+  L89: Account Holder Name
+  L90: accountHolderName
+  L92: IBAN
+  L92: iban
+  L95: Account Number
+  L96: accountNumber
+
+=== screens/loyalty_program/customer/customer_loyalty_home_screen.dart (5)
+  L41: data
+  L63: unknown
+  L258: Business
+  L398: Program
+  L403: } stamps
+
+=== screens/loyalty_program/customer/customer_program_details_screen.dart (5)
+  L67: Business
+  L89: Program
+  L202: } to complete
+  L210: Visit ${program?.displayBusinessName ?? 
+  L210: } to collect stamps
+
+=== widgets/custom_card_editor_sheet.dart (5)
+  L113: My Card
+  L144: data:
+  L149: data:
+  L301: preview
+  L572: FF${hex.replaceAll(
+
+=== screens/digital_card_screen.dart (3)
+  L27: tapni.com/${profile.name.replaceAll(
+  L27: ).toLowerCase()}
+  L335: Opening mock link: ${link.fullUrl}
+
+=== screens/profile_screen.dart (3)
+  L30: profile_strength_card_shown_count
+  L240: Customize your profile, unlock PRO templates & links, and get unlimited access premium features.
+  L825: Opening: ${link.fullUrl}
+
+=== screens/loyalty_program/business/create_loyalty_program_screen.dart (3)
+  L14: Stamp
+  L68: Stamp
+  L72: Both
+
+=== widgets/my_cards_share_sheet.dart (3)
+  L93: Business card: ${card.profileUrl}
+  L110: saveUrl
+  L111: configured
+
+=== screens/progress_score_card.dart (2)
+  L71: Complete your profile to get more visibility
+  L72: Great! Your profile is complete 🎉
+
+=== screens/qr_code_screen.dart (2)
+  L322: Check out my Tapni profile: $profileLink
+  L333: Download
+
+=== screens/social_links_screen.dart (2)
+  L27: Links
+  L202: Enter your ${_getPlatformNameStr(platform)} username
+
+=== screens/linked_devices/link_device_scan_screen.dart (2)
+  L38: code
+  L104: Linked ${AccountStorage.devicePlatformLabel()}
+
+=== screens/orders/orders_list_screen.dart (2)
+  L95: No ${CatalogHelper.statusLabel(_tabs[_tabController.index]).toLowerCase()} orders
+  L191: Rs ${order.totalAmount.toStringAsFixed(0)}
+
+=== screens/attendance/business/map_location_picker_screen.dart (2)
+  L159: com.barqody.tapni_app
+  L202: Lng: ${_selectedPoint.longitude.toStringAsFixed(5)}
+
+=== screens/attendance/employee/employee_invitations_screen.dart (2)
+  L57: You joined ${invitation.business.displayName}
+  L169: Shift: ${invitation.shiftStart} - ${invitation.shiftEnd}
+
+=== widgets/catalog_item_detail_sheet.dart (2)
+  L105: Rs ${widget.item.price.toStringAsFixed(0)}
+  L106: Free
+
+=== widgets/catalog_product_card.dart (2)
+  L92: Rs ${item.price.toStringAsFixed(0)}
+  L93: Free
+
+=== widgets/template_business_card_preview.dart (2)
+  L199: data:
+  L202: ) || path.contains(
+
+=== screens/home_dashboard.dart (1)
+  L504: Contacts
+
+=== screens/set_username_screen.dart (1)
+  L100: username
+
+=== screens/linked_devices/account_switcher_sheet.dart (1)
+  L116: Switched to ${account.displayName}
+
+=== screens/attendance/employee/employee_business_cards_screen.dart (1)
+  L124: You
+
+=== screens/loyalty_program/business/add_stamp_screen.dart (1)
+  L33: data
+
+=== screens/loyalty_program/business/loyalty_program_list_screen.dart (1)
+  L32: data
+
+=== widgets/employee_card_template_sheet.dart (1)
+  L71: You
+
+=== widgets/face_capture_sheet.dart (1)
+  L13: Capture Face
+
+=== widgets/loading_widget.dart (1)
+  L17: Dismiss
+
+=== widgets/social_icon_button.dart (1)
+  L80: in

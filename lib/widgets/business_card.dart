@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class BusinessOnlyCard extends StatelessWidget {
-  const BusinessOnlyCard({super.key});
+  BusinessOnlyCard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
         width: 340,
-        padding: const EdgeInsets.all(28),
+        padding: EdgeInsets.all(28),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -25,15 +26,15 @@ class BusinessOnlyCard extends StatelessWidget {
                 color: Colors.grey.shade100,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.store_outlined,
                 size: 26,
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
-              'ACCESS RESTRICTED',
+              context.l10n.accessRESTRICTED,
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
@@ -41,19 +42,18 @@ class BusinessOnlyCard extends StatelessWidget {
                 letterSpacing: 1.2,
               ),
             ),
-            const SizedBox(height: 6),
-            const Text(
-              'Business Users Only',
+            SizedBox(height: 6),
+            Text(context.l10n.businessUsersOnly,
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.w500,
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Text(
-              'This feature is exclusively available to Business users. '
-              'Switch to a Business account to unlock full access.',
+              '${context.l10n.thisFeatureIsExclusivelyAvailableToBusinessUsers2} '
+              '${context.l10n.switchToABusinessAccountToUnlockFullAccess}',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13,
@@ -61,9 +61,9 @@ class BusinessOnlyCard extends StatelessWidget {
                 height: 1.6,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(20),
@@ -76,30 +76,29 @@ class BusinessOnlyCard extends StatelessWidget {
                     size: 13,
                     color: Colors.grey.shade500,
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6),
                   Text(
-                    'Not available on your current plan',
+                    context.l10n.notAvailableOnYourCurrentPlan,
                     style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Divider(color: Colors.grey.shade200, thickness: 0.5),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
                   SubcriptionSheet.show(context);
                 },
-                icon: const Icon(
+                icon: Icon(
                   Icons.business_outlined,
                   size: 18,
                   color: Colors.white,
                 ),
-                label: const Text(
-                  'Go Business',
+                label: Text(context.l10n.goBusiness,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,

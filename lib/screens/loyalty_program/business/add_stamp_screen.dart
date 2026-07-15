@@ -3,9 +3,10 @@ import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class AddStampScreen extends StatefulWidget {
   final RewardEnrollment enrollment;
-  const AddStampScreen({super.key, required this.enrollment});
+  AddStampScreen({super.key, required this.enrollment});
 
   @override
   State<AddStampScreen> createState() => _AddStampScreenState();
@@ -36,7 +37,7 @@ class _AddStampScreenState extends State<AddStampScreen> {
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Failed to add stamp')),
+        SnackBar(content: Text(res.message ?? context.l10n.failedToAddStamp)),
       );
     }
   }
@@ -59,7 +60,7 @@ class _AddStampScreenState extends State<AddStampScreen> {
           onPressed: () => Navigator.pop(context, true),
         ),
         title: Text(
-          program?.label.isNotEmpty == true ? program!.label : 'Stamp Card',
+          program?.label.isNotEmpty == true ? program!.label : context.l10n.stampCard,
           style: TextStyle(color: theme.screenTextColor, fontWeight: FontWeight.bold, fontSize: 18),
         ),
       ),
@@ -123,30 +124,30 @@ class _AddStampScreenState extends State<AddStampScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               // Completed Banner
               if (_justCompleted || _enrollment.isCompleted)
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.only(bottom: 20),
+                  padding: EdgeInsets.all(16),
+                  margin: EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     color: Colors.green.withOpacity(0.1),
                     border: Border.all(color: Colors.green.withOpacity(0.4)),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Row(children: [
+                  child: Row(children: [
                     Icon(Icons.celebration, color: Colors.green),
                     SizedBox(width: 10),
                     Expanded(
-                      child: Text('Reward Completed! 🎉',
+                      child: Text(context.l10n.rewardCompleted,
                           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
                     ),
                   ]),
                 ),
 
-              const Spacer(),
+              Spacer(),
 
               // Add Stamp Button
               SizedBox(
@@ -161,11 +162,11 @@ class _AddStampScreenState extends State<AddStampScreen> {
                     elevation: 0,
                   ),
                   icon: _isLoading
-                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                       : Icon(_enrollment.isCompleted ? Icons.done_all : Icons.add_circle_outline),
                   label: Text(
-                    _enrollment.isCompleted ? 'Card Completed' : 'Add Stamp',
-                    style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                    _enrollment.isCompleted ? context.l10n.cardCompleted : context.l10n.addStamp,
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),

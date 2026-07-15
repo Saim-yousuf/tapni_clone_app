@@ -5,6 +5,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/theme.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class SettingWidgets {
   static void showSettingSheet(BuildContext context) {
     _showTapniAccountBottomSheet(context);
@@ -21,7 +22,7 @@ void _generalBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
+    shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (context) {
@@ -37,7 +38,7 @@ void _generalBottomSheet(BuildContext context) {
               children: [
                 // Drag Handle
                 Container(
-                  margin: const EdgeInsets.only(top: 12),
+                  margin: EdgeInsets.only(top: 12),
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
@@ -48,11 +49,11 @@ void _generalBottomSheet(BuildContext context) {
 
                 // Header
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
                   child: Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back_ios, size: 20),
+                        icon: Icon(Icons.arrow_back_ios, size: 20),
                         onPressed: () => Navigator.pop(context),
                       ),
                       Expanded(
@@ -63,40 +64,37 @@ void _generalBottomSheet(BuildContext context) {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 40),
+                      SizedBox(width: 40),
                     ],
                   ),
                 ),
 
-                const Text(
-                  "General",
+                Text(context.l10n.general,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
 
-                const SizedBox(height: 8),
-                const Text(
-                  "Manage your personal details & other preferences",
+                SizedBox(height: 8),
+                Text(context.l10n.manageYourPersonalDetailsOtherPreferences,
                   style: TextStyle(color: Colors.grey, fontSize: 15),
                   textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(height: 30),
+                SizedBox(height: 30),
 
                 // Content
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 100),
+                    padding: EdgeInsets.symmetric(horizontal: 100),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Personal Details",
+                        Text(context.l10n.personalDetails,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12),
 
                         // Name Field
                         // _buildTextField("Saim Y"),
@@ -106,7 +104,7 @@ void _generalBottomSheet(BuildContext context) {
 
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
-                            hintText: 'Name',
+                            hintText: context.l10n.name,
                             fillColor: Colors.grey[100],
                             filled: true,
                             border: OutlineInputBorder(
@@ -124,23 +122,22 @@ void _generalBottomSheet(BuildContext context) {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your name';
+                              return context.l10n.pleaseEnterYourName;
                             }
 
                             return null;
                           },
                         ),
 
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12),
 
                         // Email Field
-                        _buildTextField(profile.email),
+                        _buildTextField(context, profile.email),
 
-                        const SizedBox(height: 30),
+                        SizedBox(height: 30),
 
                         // Region
-                        const Text(
-                          "Region",
+                        Text(context.l10n.region,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -148,6 +145,7 @@ void _generalBottomSheet(BuildContext context) {
                         ),
                         const SizedBox(height: 12),
                         _buildDropdown(
+                          context: context,
                           value: selectedRegion,
                           items: Constants.countries,
                           onChanged: (val) {
@@ -221,16 +219,15 @@ void _generalBottomSheet(BuildContext context) {
                                   SnackBar(
                                     content: Text(
                                       response.success
-                                          ? 'Profile updated successfully!'
+                                          ? context.l10n.profileUpdatedSuccessfully
                                           : response.message ??
-                                                'Unable to save profile. Try again.',
+                                                context.l10n.unableToSaveProfileTryAgain,
                                     ),
                                     behavior: SnackBarBehavior.floating,
                                   ),
                                 );
                               },
-                              child: const Text(
-                                "SAVE",
+                              child: Text(context.l10n.save2,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -255,21 +252,21 @@ void _generalBottomSheet(BuildContext context) {
   );
 }
 
-Widget _buildTextField(String text) {
+Widget _buildTextField(BuildContext context, String text) {
   return Container(
     width: double.infinity,
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     decoration: BoxDecoration(
       color: Colors.grey[100],
       borderRadius: BorderRadius.circular(12),
     ),
     child: Row(
       children: [
-        Text(text, style: const TextStyle(fontSize: 16)),
+        Text(text, style: TextStyle(fontSize: 16)),
         SizedBox(width: 8),
         Text(
-          "(Read only)",
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          context.l10n.readOnly,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ],
     ),
@@ -277,12 +274,13 @@ Widget _buildTextField(String text) {
 }
 
 Widget _buildDropdown({
+  required BuildContext context,
   required String? value,
   required List<String> items,
   required void Function(String?)? onChanged,
 }) {
   return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
+    padding: EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
       color: Colors.grey[100],
       borderRadius: BorderRadius.circular(12),
@@ -290,7 +288,7 @@ Widget _buildDropdown({
     child: DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         value: value,
-        hint: const Text("Select Region"),
+        hint: Text(context.l10n.selectRegion),
         isExpanded: true,
         icon: const Icon(Icons.keyboard_arrow_down),
         items: items.map((String item) {
@@ -309,13 +307,13 @@ void _showTapniAccountBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
+    shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (context) {
       return Container(
         height: MediaQuery.of(context).size.height * 0.60,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
@@ -323,7 +321,7 @@ void _showTapniAccountBottomSheet(BuildContext context) {
           children: [
             // Drag Handle
             Container(
-              margin: const EdgeInsets.only(top: 12),
+              margin: EdgeInsets.only(top: 12),
               width: 40,
               height: 4,
               decoration: BoxDecoration(
@@ -332,11 +330,11 @@ void _showTapniAccountBottomSheet(BuildContext context) {
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // Logo
-            // const Text(
-            //   "tapni",
+            // Text(
+            //   context.l10n.tapni,
             //   style: TextStyle(
             //     fontSize: 28,
             //     fontWeight: FontWeight.bold,
@@ -345,37 +343,35 @@ void _showTapniAccountBottomSheet(BuildContext context) {
             // ),
             Image.asset('assets/images/jpg/barqody_name.jpg', height: 60),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
-            const Text(
-              "Welcome to Account Center",
+            Text(context.l10n.welcomeToAccountCenter,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
 
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
 
-            const Text(
-              "saimyousuf.y@gmail.com",
+            Text(context.l10n.saimyousufYGmailCom,
               style: TextStyle(color: Colors.grey, fontSize: 15),
             ),
 
-            const SizedBox(height: 30),
+            SizedBox(height: 30),
 
             // Menu Items
-            _buildMenuItem(Icons.person_outline, "General", () {
+            _buildMenuItem(Icons.person_outline, context.l10n.general, () {
               Navigator.pop(context);
               _generalBottomSheet(context);
             }),
             _buildMenuItem(Icons.security, "Security", () {}),
             _buildMenuItem(Icons.credit_card, "Billing", () {}),
 
-            const Spacer(),
+            Spacer(),
 
             // Version
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(bottom: 20),
               child: Text(
-                "Version: 1.0.1",
+                context.l10n.version101,
                 style: TextStyle(color: Colors.grey, fontSize: 13),
               ),
             ),
@@ -405,7 +401,7 @@ Widget _buildMenuItem(IconData icon, String title, void Function()? onTap) {
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: onTap,

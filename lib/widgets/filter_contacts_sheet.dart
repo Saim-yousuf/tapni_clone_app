@@ -4,8 +4,9 @@ import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:intl/intl.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class FilterContactsSheet extends StatefulWidget {
-  const FilterContactsSheet({Key? key}) : super(key: key);
+  FilterContactsSheet({Key? key}) : super(key: key);
 
   @override
   State<FilterContactsSheet> createState() => _FilterContactsSheetState();
@@ -33,9 +34,9 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
 
   void _onReset() {
     setState(() {
-      _selectedSource = 'All';
-      _sortBy = 'Creation Date';
-      _sortOrder = 'Descending';
+      _selectedSource = context.l10n.all;
+      _sortBy = context.l10n.creationDate;
+      _sortOrder = context.l10n.descending;
       _startDate = null;
       _endDate = null;
       _selectedMarkers.clear();
@@ -87,15 +88,15 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        color: isDark ? Color(0xFF1E1E1E) : Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -111,39 +112,39 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               
               // Title
-              const Center(
+              Center(
                 child: Text(
-                  'Filter Contacts',
+                  context.l10n.filterContacts2,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Contact Source
               Text(
-                'Contact Source',
+                context.l10n.contactSource,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: isDark ? Colors.white70 : Colors.black87,
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    'All',
+                    context.l10n.all,
                     'Direct',
                     'Form',
                     'Manually',
-                    'Scan'
+                    context.l10n.scan
                   ].map((source) {
                     final isSelected = _selectedSource == source;
                     return Padding(
@@ -180,11 +181,11 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Center(
                 child: Text(
                   _selectedSource == 'All' 
-                      ? 'All contact types'
+                      ? context.l10n.allContactTypes
                       : '$_selectedSource contacts only',
                   style: TextStyle(
                     fontSize: 12,
@@ -192,77 +193,77 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Sort Options
               Text(
-                'Sort Options',
+                context.l10n.sortOptions,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: isDark ? Colors.white70 : Colors.black87,
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
                     child: _buildSortOption(
-                      label: 'Creation Date',
+                      label: context.l10n.creationDate,
                       isSelected: _sortBy == 'Creation Date',
-                      onTap: () => setState(() => _sortBy = 'Creation Date'),
+                      onTap: () => setState(() => _sortBy = context.l10n.creationDate),
                       isDark: isDark,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Expanded(
                     child: _buildSortOption(
-                      label: 'Full Name',
+                      label: context.l10n.fullName,
                       isSelected: _sortBy == 'Full Name',
-                      onTap: () => setState(() => _sortBy = 'Full Name'),
+                      onTap: () => setState(() => _sortBy = context.l10n.fullName),
                       isDark: isDark,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
                     child: _buildSortOption(
-                      label: 'Descending',
+                      label: context.l10n.descending,
                       isSelected: _sortOrder == 'Descending',
-                      onTap: () => setState(() => _sortOrder = 'Descending'),
+                      onTap: () => setState(() => _sortOrder = context.l10n.descending),
                       isDark: isDark,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Expanded(
                     child: _buildSortOption(
-                      label: 'Ascending',
+                      label: context.l10n.ascending,
                       isSelected: _sortOrder == 'Ascending',
-                      onTap: () => setState(() => _sortOrder = 'Ascending'),
+                      onTap: () => setState(() => _sortOrder = context.l10n.ascending),
                       isDark: isDark,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Date Range
               Text(
-                'Date Range',
+                context.l10n.dateRange,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: isDark ? Colors.white70 : Colors.black87,
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               GestureDetector(
                 onTap: _pickDateRange,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: isDark ? Colors.white12 : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(16),
@@ -270,12 +271,12 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
                   child: Row(
                     children: [
                       Icon(Icons.calendar_today_outlined, size: 20, color: isDark ? Colors.white70 : Colors.black87),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           _startDate != null && _endDate != null
                               ? '${DateFormat('dd.MM.yyyy').format(_startDate!)} - ${DateFormat('dd.MM.yyyy').format(_endDate!)}'
-                              : 'Select Date Range',
+                              : context.l10n.selectDateRange,
                           style: TextStyle(
                             fontSize: 14,
                             color: (_startDate != null && _endDate != null)
@@ -298,11 +299,11 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Select Markers
               Text(
-                'Select Markers',
+                context.l10n.selectMarkers,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -363,7 +364,7 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
 
               // Action Buttons
               Row(
@@ -372,14 +373,14 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
                     child: GestureDetector(
                       onTap: _onReset,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
                           color: isDark ? Colors.white12 : Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(24),
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          'Reset',
+                          context.l10n.reset,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -389,19 +390,19 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   Expanded(
                     child: GestureDetector(
                       onTap: _onSave,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
                           color: isDark ? Colors.white : Colors.black,
                           borderRadius: BorderRadius.circular(24),
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          'Save',
+                          context.l10n.save,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

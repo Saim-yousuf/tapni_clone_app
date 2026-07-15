@@ -5,6 +5,7 @@ import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/template_business_card_preview.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class QrCardStackCarousel extends StatefulWidget {
   final List<CardDisplayData> cards;
   final int initialIndex;
@@ -296,26 +297,26 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
                 ],
               ),
             ),
-            const SizedBox(height: 8),
-            Text('Swipe to browse cards', style: WaUi.caption),
-            const SizedBox(height: 10),
+            SizedBox(height: 8),
+            Text(context.l10n.swipeToBrowseCards, style: WaUi.caption),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _IconCircleButton(
                   icon: Icons.chevron_left,
-                  tooltip: 'Previous card',
+                  tooltip: context.l10n.previousCard,
                   onTap: cards.length > 1
                       ? () => _bringPreviousToFront()
                       : () {},
                   enabled: cards.length > 1 && !_isAnimating,
                 ),
-                const SizedBox(width: 6),
+                SizedBox(width: 6),
                 ...List.generate(cards.length, (i) {
                   final active = i == topIndex;
                   return AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    duration: Duration(milliseconds: 200),
+                    margin: EdgeInsets.symmetric(horizontal: 3),
                     width: active ? 18 : 6,
                     height: 6,
                     decoration: BoxDecoration(
@@ -324,25 +325,25 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
                     ),
                   );
                 }),
-                const SizedBox(width: 6),
+                SizedBox(width: 6),
                 _IconCircleButton(
                   icon: Icons.chevron_right,
-                  tooltip: 'Next card',
+                  tooltip: context.l10n.nextCard,
                   onTap: cards.length > 1 ? () => _bringNextToFront() : () {},
                   enabled: cards.length > 1 && !_isAnimating,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 _IconCircleButton(
                   icon: Icons.add,
-                  tooltip: 'New card',
+                  tooltip: context.l10n.newCard2,
                   onTap: widget.onAddCard,
                 ),
                 if (widget.onEditCard != null &&
                     !cards[topIndex].isPrimary) ...[
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   _IconCircleButton(
                     icon: Icons.edit_outlined,
-                    tooltip: 'Edit card',
+                    tooltip: context.l10n.editCard,
                     onTap: widget.onEditCard!,
                   ),
                 ],
@@ -497,7 +498,7 @@ class _IconCircleButton extends StatelessWidget {
 class _AddOnlyCard extends StatelessWidget {
   final VoidCallback onAdd;
 
-  const _AddOnlyCard({required this.onAdd});
+  _AddOnlyCard({required this.onAdd});
 
   @override
   Widget build(BuildContext context) {
@@ -517,18 +518,18 @@ class _AddOnlyCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: WaUi.chipBg,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.add, color: WaUi.accent, size: 32),
+                    child: Icon(Icons.add, color: WaUi.accent, size: 32),
                   ),
-                  const SizedBox(height: 14),
-                  Text('Create your first card', style: WaUi.title),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 14),
+                  Text(context.l10n.createYourFirstCard, style: WaUi.title),
+                  SizedBox(height: 4),
                   Text(
-                    'Share different links on each card',
+                    context.l10n.shareDifferentLinksOnEachCard,
                     style: WaUi.caption,
                   ),
                 ],

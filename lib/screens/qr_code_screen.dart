@@ -15,6 +15,7 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class QrCodeScreen extends StatefulWidget {
   const QrCodeScreen({Key? key}) : super(key: key);
 
@@ -62,17 +63,17 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
 
         if (hasAccess) {
           await Gal.putImage(file.path);
-          _showSnackBar('QR Code saved to gallery!');
+          _showSnackBar(context.l10n.qrCodeSavedToGallery);
         } else {
           _showSnackBar(
-            'Gallery permission required. Please enable it in Settings.',
+            context.l10n.galleryPermissionRequiredPleaseEnableItInSettings,
             color: Colors.red,
           );
         }
       }
     } catch (e) {
       log("$e");
-      _showSnackBar('Failed to save QR Code.', color: Colors.red);
+      _showSnackBar(context.l10n.failedToSaveQRCode, color: Colors.red);
     }
 
   }
@@ -89,29 +90,29 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Share Profile'),
+        title: Text(context.l10n.shareProfile),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
           child: Column(
             children: [
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               // Subtitle instruction
               Text(
-                'Scan QR Code',
+                context.l10n.scanQRCode,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.5,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
-                'Let others point their phone camera to this QR code to instantly view your networking profile.',
+                context.l10n.letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile,
                 style: TextStyle(
                   color: isDark
                       ? AppTheme.textGreyDark
@@ -155,7 +156,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                                 const SizedBox(width: 6),
                                 Text(
                                   profile.name,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: AppTheme.secondaryWhite,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 11,
@@ -215,7 +216,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                                   profile.name.isNotEmpty
                                       ? profile.name[0].toUpperCase()
                                       : 'S',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: AppTheme.secondaryWhite,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
@@ -226,7 +227,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // Card link label
                       Row(
@@ -242,15 +243,15 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                                   : AppTheme.accentGoldDark,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           GestureDetector(
                             onTap: () {
                               Clipboard.setData(
                                 ClipboardData(text: profileLink),
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Link copied to clipboard'),
+                                SnackBar(
+                                  content: Text(context.l10n.linkCopiedToClipboard),
                                   behavior: SnackBarBehavior.floating,
                                 ),
                               );
@@ -308,18 +309,18 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 48),
+              SizedBox(height: 48),
 
               // Action Utilities (Share & Download UI only)
               Row(
                 children: [
                   Expanded(
                     child: CustomButton(
-                      text: 'Share Link',
+                      text: context.l10n.shareLink,
                       onTap: () {
                         Share.share(
                           'Check out my Tapni profile: $profileLink',
-                          subject: 'My Tapni Profile',
+                          subject: context.l10n.myTapniProfile,
                         );
                       },
                       isGold: true,

@@ -12,6 +12,10 @@ import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/screens/linked_devices/account_switcher_sheet.dart';
 import 'package:tapni_app/screens/linked_devices/linked_devices_screen.dart';
+import 'package:tapni_app/l10n/app_languages.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/providers/locale_provider.dart';
+import 'package:tapni_app/screens/app_language_screen.dart';
 import 'package:tapni_app/screens/login_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
@@ -67,17 +71,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(WaUi.radiusLg),
           ),
-          title: Text('Log Out', style: WaUi.title),
+          title: Text(ctx.l10n.logOut, style: WaUi.title),
           content: Text(
             hasOthers
-                ? 'Log out of this account only? Other accounts will stay on this phone.'
-                : 'Are you sure you want to log out of Barqody?',
+                ? context.l10n.logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone
+                : context.l10n.areYouSureYouWantToLogOutOfBarqody,
             style: WaUi.body,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: Text('Cancel', style: WaUi.bodyMedium),
+              child: Text(ctx.l10n.cancel, style: WaUi.bodyMedium),
             ),
             if (hasOthers)
               TextButton(
@@ -86,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   await _performLogout(context, logoutAll: true);
                 },
                 child: Text(
-                  'Log out all',
+                  context.l10n.logOutAll,
                   style: WaUi.bodyMedium.copyWith(color: Colors.redAccent),
                 ),
               ),
@@ -96,7 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 await _performLogout(context, logoutAll: false);
               },
               child: Text(
-                hasOthers ? 'This account' : 'Log Out',
+                hasOthers ? context.l10n.thisAccount : context.l10n.logOut,
                 style: WaUi.bodyMedium.copyWith(color: Colors.redAccent),
               ),
             ),
@@ -138,7 +142,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      MaterialPageRoute(builder: (_) => LoginScreen()),
       (route) => false,
     );
   }
@@ -168,7 +172,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           content: Text(
             errorMessage.isNotEmpty
                 ? errorMessage
-                : 'Could not update profile visibility',
+                : context.l10n.couldNotUpdateProfileVisibility,
             style: WaUi.body.copyWith(color: Colors.white),
           ),
           behavior: SnackBarBehavior.floating,
@@ -182,28 +186,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final profile = Provider.of<ProfileProvider>(context).profile;
     final leadsProvider = Provider.of<LeadsProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
     final orderBadge = _catalogOrderBadge(leadsProvider);
+    final languageSubtitle = localeProvider.isSystemLanguage
+        ? context.l10n.phoneLanguage
+        : (localeProvider.selectedLanguage?.displayName ??
+            AppLanguages.findByCode('en')!.displayName);
 
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.only(bottom: 24),
+          padding: EdgeInsets.only(bottom: 24),
           children: [
             WaToolsHeader(
-              title: 'Tools',
+              title: context.l10n.tools,
               actions: [
                 IconButton(
                   icon: const Icon(Icons.photo_camera_outlined, size: 24),
                   color: WaUi.primaryText,
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const QrCodeScreen()),
+                      MaterialPageRoute(builder: (_) => QrCodeScreen()),
                     );
                   },
                 ),
                 PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert, size: 24, color: WaUi.primaryText),
+                  icon: Icon(Icons.more_vert, size: 24, color: WaUi.primaryText),
                   color: WaUi.surface,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(WaUi.radiusMd),
@@ -216,7 +225,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       case 'notifications':
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const NotificationsScreen(),
+                            builder: (_) => NotificationsScreen(),
                           ),
                         );
                         break;
@@ -225,11 +234,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   itemBuilder: (_) => [
                     PopupMenuItem(
                       value: 'account',
-                      child: Text('Account settings', style: WaUi.body),
+                      child: Text(context.l10n.accountSettings, style: WaUi.body),
                     ),
                     PopupMenuItem(
                       value: 'notifications',
-                      child: Text('Notifications', style: WaUi.body),
+                      child: Text(context.l10n.notifications, style: WaUi.body),
                     ),
                   ],
                 ),
@@ -237,22 +246,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
 
             if (!profile.isPro && !_promoDismissed) ...[
-              const WaSectionHeader('For you'),
+              WaSectionHeader(context.l10n.forYou),
               WaForYouCard(
-                title: 'Try Business Pro.',
+                title: context.l10n.tryBusinessPro2,
                 description:
                     'Unlock customer orders, team attendance, loyalty programs, and more for your business.',
-                buttonLabel: 'Try Business Pro',
+                buttonLabel: context.l10n.tryBusinessPro,
                 onTap: () => SubcriptionSheet.show(context),
                 onDismiss: () => setState(() => _promoDismissed = true),
               ),
             ],
 
-            const WaSectionHeader('Your profile'),
+            WaSectionHeader(context.l10n.yourProfile),
             WaToolsListTile(
               icon: Icons.person_outline,
-              title: 'Edit Profile',
-              subtitle: 'Change your name, photo, and bio',
+              title: context.l10n.editProfile,
+              subtitle: context.l10n.editProfileSubtitle,
               onTap: () {
                 final profileProvider = Provider.of<ProfileProvider>(
                   context,
@@ -261,30 +270,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 profileProvider.setEditingProfile(true);
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (_) => const MainShell(currentPage: 'My Card'),
+                    builder: (_) => MainShell(currentPage: 'My Card'),
                   ),
                 );
               },
             ),
             WaToolsListTile(
               icon: Icons.alternate_email,
-              title: 'Username',
+              title: context.l10n.username,
               subtitle: profile.username != null && profile.username!.isNotEmpty
                   ? '@${profile.username}'
-                  : 'Set your unique profile username',
+                  : context.l10n.setUsernameSubtitle,
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const SetUsernameScreen()),
+                  MaterialPageRoute(builder: (_) => SetUsernameScreen()),
                 );
               },
             ),
             WaToolsListTile(
               icon: Icons.link,
-              title: 'Social Links',
-              subtitle: 'Add Instagram, WhatsApp, website and more',
+              title: context.l10n.socialLinks,
+              subtitle: context.l10n.socialLinksSubtitle,
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const SocialLinksScreen()),
+                  MaterialPageRoute(builder: (_) => SocialLinksScreen()),
                 );
               },
             ),
@@ -292,12 +301,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: profile.isPublic
                   ? Icons.public_outlined
                   : Icons.lock_outline,
-              title: 'Public profile',
+              title: context.l10n.publicProfile,
               subtitle: profile.isPublic
-                  ? 'Anyone can find and view your profile'
-                  : 'Hidden from search — others can\'t discover you',
+                  ? context.l10n.publicProfileOn
+                  : context.l10n.publicProfileOff,
               trailing: _updatingVisibility
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 24,
                       height: 24,
                       child: Padding(
@@ -313,32 +322,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             WaToolsListTile(
               icon: Icons.qr_code_2_outlined,
-              title: 'Share My QR Code',
-              subtitle: 'Let others scan your digital business card',
+              title: context.l10n.shareQr,
+              subtitle: context.l10n.shareQrSubtitle,
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const QrCodeScreen()),
+                  MaterialPageRoute(builder: (_) => QrCodeScreen()),
                 );
               },
             ),
 
-            const WaSectionHeader('Shopping & rewards'),
+            WaSectionHeader(context.l10n.shoppingRewards),
             WaToolsListTile(
               icon: Icons.receipt_long_outlined,
-              title: 'My Orders',
-              subtitle: 'Track orders you placed from shops',
+              title: context.l10n.myOrders,
+              subtitle: context.l10n.myOrdersSubtitle,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => const OrdersListScreen(isBusinessView: false),
+                    builder: (_) => OrdersListScreen(isBusinessView: false),
                   ),
                 );
               },
             ),
             WaToolsListTile(
               icon: Icons.card_giftcard_outlined,
-              title: 'My Reward Cards',
-              subtitle: 'View stamps and points from loyalty programs',
+              title: context.l10n.myRewardCards,
+              subtitle: context.l10n.myRewardCardsSubtitle,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -348,16 +357,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
 
-            const WaSectionHeader('Workplace'),
+            WaSectionHeader(context.l10n.workplace),
             WaToolsListTile(
               icon: Icons.mail_outline,
-              title: 'Employee Invitations',
-              subtitle: 'Accept or decline team invitations from businesses',
+              title: context.l10n.employeeInvitations,
+              subtitle: context.l10n.employeeInvitationsSubtitle,
               showBadge: _pendingInvitationCount > 0,
               onTap: () async {
                 await Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => const EmployeeInvitationsScreen(),
+                    builder: (_) => EmployeeInvitationsScreen(),
                   ),
                 );
                 _loadPendingInvitations();
@@ -365,60 +374,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             WaToolsListTile(
               icon: Icons.fact_check_outlined,
-              title: 'Workplace Check-In',
-              subtitle: 'Clock in and out at your job with location',
+              title: context.l10n.workplaceCheckIn,
+              subtitle: context.l10n.workplaceCheckInSubtitle,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => const MarkAttendanceScreen(),
+                    builder: (_) => MarkAttendanceScreen(),
                   ),
                 );
               },
             ),
             WaToolsListTile(
               icon: Icons.badge_outlined,
-              title: 'Company Employee Card',
-              subtitle: 'Save your work ID card to phone or wallet',
+              title: context.l10n.companyEmployeeCard,
+              subtitle: context.l10n.saveYourWorkIDCardToPhoneOrWallet,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => const EmployeeBusinessCardsScreen(),
+                    builder: (_) => EmployeeBusinessCardsScreen(),
                   ),
                 );
               },
             ),
 
             if (profile.isPro) ...[
-              const WaSectionHeader('Grow your business'),
+              WaSectionHeader(context.l10n.growYourBusiness),
               WaToolsListTile(
                 icon: Icons.storefront_outlined,
-                title: 'Customer Orders',
-                subtitle: 'View and update orders from your customers',
+                title: context.l10n.customerOrders,
+                subtitle: context.l10n.viewAndUpdateOrdersFromYourCustomers,
                 showBadge: orderBadge > 0,
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => const OrdersListScreen(isBusinessView: true),
+                      builder: (_) => OrdersListScreen(isBusinessView: true),
                     ),
                   );
                 },
               ),
               WaToolsListTile(
                 icon: Icons.groups_outlined,
-                title: 'Team Attendance',
-                subtitle: 'Invite employees, set shifts and track presence',
+                title: context.l10n.teamAttendance,
+                subtitle: context.l10n.inviteEmployeesSetShiftsAndTrackPresence,
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => const AttendanceDashboardScreen(),
+                      builder: (_) => AttendanceDashboardScreen(),
                     ),
                   );
                 },
               ),
               WaToolsListTile(
                 icon: Icons.stars_outlined,
-                title: 'Loyalty Programs',
-                subtitle: 'Create stamp or points rewards for customers',
+                title: context.l10n.loyaltyPrograms,
+                subtitle: context.l10n.createStampOrPointsRewardsForCustomers,
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -429,38 +438,52 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ],
 
-            const WaSectionHeader('Accounts & devices'),
+            WaSectionHeader(context.l10n.accountsAndDevices),
             WaToolsListTile(
               icon: Icons.devices_outlined,
-              title: 'Linked devices',
-              subtitle: 'Link another phone like WhatsApp',
+              title: context.l10n.linkedDevices,
+              subtitle: context.l10n.linkedDevicesSubtitle,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => const LinkedDevicesScreen(),
+                    builder: (_) => LinkedDevicesScreen(),
                   ),
                 );
               },
             ),
             WaToolsListTile(
               icon: Icons.switch_account_outlined,
-              title: 'Accounts',
+              title: context.l10n.accounts,
               subtitle: Provider.of<AuthProvider>(context).hasMultipleAccounts
-                  ? 'Switch between ${Provider.of<AuthProvider>(context).accounts.length} accounts'
-                  : 'Add or switch accounts',
+                  ? context.l10n.accountsSwitchSubtitle(
+                      Provider.of<AuthProvider>(context).accounts.length,
+                    )
+                  : context.l10n.accountsSubtitle,
               onTap: () => AccountSwitcherSheet.show(context),
             ),
 
-            const WaSectionHeader('Help & account'),
+            WaSectionHeader(context.l10n.helpAndAccount),
+            WaToolsListTile(
+              icon: Icons.language,
+              title: context.l10n.appLanguage,
+              subtitle: languageSubtitle,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => AppLanguageScreen(),
+                  ),
+                );
+              },
+            ),
             WaToolsListTile(
               icon: Icons.help_outline,
-              title: 'Help & FAQs',
-              subtitle: 'Answers to common questions',
+              title: context.l10n.helpFaqs,
+              subtitle: context.l10n.helpFaqsSubtitle,
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Help Center is disabled in this UI demo.',
+                      context.l10n.helpCenterIsDisabledInThisUIDemo,
                       style: WaUi.body.copyWith(color: Colors.white),
                     ),
                     behavior: SnackBarBehavior.floating,
@@ -471,13 +494,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             WaToolsListTile(
               icon: Icons.feedback_outlined,
-              title: 'Send Feedback',
-              subtitle: 'Report a bug or suggest a new feature',
+              title: context.l10n.sendFeedback,
+              subtitle: context.l10n.sendFeedbackSubtitle,
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Thank you! Feedback submissions are mock only.',
+                      context.l10n.thankYouFeedbackSubmissionsAreMockOnly,
                       style: WaUi.body.copyWith(color: Colors.white),
                     ),
                     behavior: SnackBarBehavior.floating,
@@ -488,15 +511,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             WaToolsListTile(
               icon: Icons.logout,
-              title: 'Log Out',
-              subtitle: 'Sign out of this session',
+              title: context.l10n.logOut,
+              subtitle: context.l10n.logOutSubtitle,
               titleColor: Colors.redAccent,
               onTap: () => _handleLogout(context),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             Center(
-              child: Text('barqody v1.0.0', style: WaUi.label),
+              child: Text(context.l10n.barqodyV100, style: WaUi.label),
             ),
           ],
         ),

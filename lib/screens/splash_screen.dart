@@ -9,6 +9,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/services/push_notification_service.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -126,7 +127,7 @@ class _SplashScreenState extends State<SplashScreen>
                   //         color: AppTheme.accentGold.withOpacity(0.3),
                   //         blurRadius: 20,
                   //         spreadRadius: 2,
-                  //         offset: const Offset(0, 8),
+                  //         offset: Offset(0, 8),
                   //       ),
                   //     ],
                   //   ),
@@ -136,13 +137,13 @@ class _SplashScreenState extends State<SplashScreen>
                   //   ),
                   // ),
 
-                  // const SizedBox(height: 24),
+                  // SizedBox(height: 24),
                   // // Logo Text
                   // RichText(
                   //   text: TextSpan(
                   //     children: [
                   //       TextSpan(
-                  //         text: 'BarQody',
+                  //         text: context.l10n.appTitle,
                   //         style: TextStyle(
                   //           fontSize: 38,
                   //           fontWeight: FontWeight.w900,
@@ -150,7 +151,7 @@ class _SplashScreenState extends State<SplashScreen>
                   //           color: isDark ? Colors.white : Colors.black,
                   //         ),
                   //       ),
-                  //       const TextSpan(
+                  //       TextSpan(
                   //         text: '.',
                   //         style: TextStyle(
                   //           fontSize: 42,
@@ -166,9 +167,9 @@ class _SplashScreenState extends State<SplashScreen>
                     fit: BoxFit.cover,
                     height: 180,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   Text(
-                    'DIGITAL BUSINESS Card',
+                    context.l10n.digitalBUSINESSCard,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

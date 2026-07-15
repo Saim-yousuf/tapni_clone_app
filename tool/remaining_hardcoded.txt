@@ -1,0 +1,11 @@
+FILES=3
+STRINGS=3
+
+=== screens/splash_screen.dart (1)
+   بطاقة أعمال الرقمية
+
+=== screens/orders/order_detail_screen.dart (1)
+  @$username
+
+=== widgets/social_icon_button.dart (1)
+  in

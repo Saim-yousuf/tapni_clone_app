@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/loyalty_program/business/create_reward_screen.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class RewardsManagementScreen extends StatelessWidget {
-  const RewardsManagementScreen({super.key});
+  RewardsManagementScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final rewards = [
-      {"title": "Free Coffee", "type": "Stamp", "requirement": "10 Stamps"},
-      {"title": "10% Discount", "type": "Points", "requirement": "500 Points"},
+      {"title": context.l10n.freeCoffee, "type": "Stamp", "requirement": "10 Stamps"},
+      {"title": context.l10n.n10Discount, "type": context.l10n.points, "requirement": "500 Points"},
       {
-        "title": "Free Dessert",
+        "title": context.l10n.freeDessert,
         "type": "Both",
         "requirement": "8 Stamps + 300 Points",
       },
@@ -19,8 +20,7 @@ class RewardsManagementScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Rewards',
+        title: Text(context.l10n.rewards,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -52,7 +52,7 @@ class RewardsManagementScreen extends StatelessWidget {
                 BoxShadow(
                   color: Colors.black.withOpacity(0.04),
                   blurRadius: 10,
-                  offset: const Offset(0, 4),
+                  offset: Offset(0, 4),
                 ),
               ],
             ),
@@ -65,10 +65,10 @@ class RewardsManagementScreen extends StatelessWidget {
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.card_giftcard, color: Colors.white),
+                  child: Icon(Icons.card_giftcard, color: Colors.white),
                 ),
 
-                const SizedBox(width: 14),
+                SizedBox(width: 14),
 
                 Expanded(
                   child: Column(
@@ -76,12 +76,12 @@ class RewardsManagementScreen extends StatelessWidget {
                     children: [
                       Text(
                         reward["title"]!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         "${reward["type"]} • ${reward["requirement"]}",
                         style: TextStyle(color: Colors.grey.shade600),
@@ -91,10 +91,10 @@ class RewardsManagementScreen extends StatelessWidget {
                 ),
 
                 PopupMenuButton(
-                  icon: const Icon(Icons.more_vert),
+                  icon: Icon(Icons.more_vert),
                   itemBuilder: (context) => [
-                    const PopupMenuItem(value: "edit", child: Text("Edit")),
-                    const PopupMenuItem(value: "delete", child: Text("Delete")),
+                    PopupMenuItem(value: "edit", child: Text(context.l10n.edit)),
+                    PopupMenuItem(value: "delete", child: Text(context.l10n.delete)),
                   ],
                   onSelected: (value) {
                     if (value == "edit") {
@@ -119,8 +119,8 @@ class RewardsManagementScreen extends StatelessWidget {
             context,
           ).push(MaterialPageRoute(builder: (_) => CreateRewardScreen()));
         },
-        icon: const Icon(Icons.add),
-        label: const Text("Create Reward"),
+        icon: Icon(Icons.add),
+        label: Text(context.l10n.createReward),
       ),
     );
   }

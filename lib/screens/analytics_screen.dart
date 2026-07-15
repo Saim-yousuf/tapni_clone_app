@@ -9,6 +9,7 @@ import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({Key? key}) : super(key: key);
 
@@ -58,7 +59,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   String _formatDate(String isoString) {
     try {
       final date = DateTime.parse(isoString).toLocal();
-      return DateFormat('MMM d, yyyy - h:mm a').format(date);
+      return DateFormat(context.l10n.mmmDYyyyHMmA).format(date);
     } catch (_) {
       return '';
     }
@@ -68,7 +69,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     if (viewer == null ||
         viewer['profilePhoto'] == null ||
         viewer['profilePhoto'].isEmpty) {
-      return const CircleAvatar(
+      return CircleAvatar(
         backgroundColor: Colors.grey,
         child: Icon(Icons.person, color: Colors.white),
       );
@@ -85,18 +86,18 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Analytics Dashboard'),
-        actions: const [NotificationIconButton()],
+        title: Text(context.l10n.analyticsDashboard),
+        actions: [NotificationIconButton()],
       ),
       body: !profile.isPro
           ? BusinessOnlyCard()
           : _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _fetchAnalytics,
               child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(
+                physics: AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(
                   horizontal: 20.0,
                   vertical: 12.0,
                 ),
@@ -108,18 +109,17 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       children: [
                         Expanded(
                           child: GlassCard(
-                            padding: const EdgeInsets.all(16),
+                            padding: EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.remove_red_eye_rounded,
                                   color: AppTheme.accentGold,
                                   size: 28,
                                 ),
-                                const SizedBox(height: 12),
-                                const Text(
-                                  'Profile Views',
+                                SizedBox(height: 12),
+                                Text(context.l10n.profileViews,
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 13,
@@ -127,7 +127,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                 ),
                                 Text(
                                   '$_totalProfileViews',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.w900,
                                   ),
@@ -136,21 +136,20 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         Expanded(
                           child: GlassCard(
-                            padding: const EdgeInsets.all(16),
+                            padding: EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.qr_code_2,
                                   color: Colors.blueAccent,
                                   size: 28,
                                 ),
-                                const SizedBox(height: 12),
-                                const Text(
-                                  'QR Scans',
+                                SizedBox(height: 12),
+                                Text(context.l10n.qrScans,
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 13,
@@ -158,7 +157,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                 ),
                                 Text(
                                   '$_totalCardScans',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.w900,
                                   ),
@@ -169,22 +168,22 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32),
 
                     Text(
-                      'Profile Viewers',
+                      context.l10n.profileViewers,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
                     if (_profileViews.isEmpty)
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(top: 40),
                         child: Center(
                           child: Text(
-                            'No one has viewed your profile yet.',
+                            context.l10n.noOneHasViewedYourProfileYet,
                             style: TextStyle(color: Colors.grey),
                           ),
                         ),
@@ -192,9 +191,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     else
                       ListView.separated(
                         shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: _profileViews.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        separatorBuilder: (_, __) => SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final view = _profileViews[index];
                           final isGuest = view['isGuest'] ?? true;
@@ -203,11 +202,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                               ? _formatDate(view['timestamp'])
                               : '';
 
-                          String title = 'Guest User';
+                          String title = context.l10n.guestUser;
                           String subtitle = timestamp;
 
                           if (!isGuest && viewer != null) {
-                            title = viewer['name'] ?? 'Unknown User';
+                            title = viewer['name'] ?? context.l10n.unknownUser;
                             if (viewer['username'] != null) {
                               subtitle = '@${viewer['username']} • $timestamp';
                             }
@@ -221,7 +220,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             child: Row(
                               children: [
                                 _buildViewerAvatar(viewer),
-                                const SizedBox(width: 16),
+                                SizedBox(width: 16),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -229,15 +228,15 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                     children: [
                                       Text(
                                         title,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 15,
                                         ),
                                       ),
-                                      const SizedBox(height: 4),
+                                      SizedBox(height: 4),
                                       Text(
                                         subtitle,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: 12,
                                         ),
@@ -247,7 +246,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                 ),
                                 if (isGuest)
                                   Container(
-                                    padding: const EdgeInsets.symmetric(
+                                    padding: EdgeInsets.symmetric(
                                       horizontal: 8,
                                       vertical: 4,
                                     ),
@@ -255,8 +254,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                       color: Colors.grey.withOpacity(0.2),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
-                                    child: const Text(
-                                      'GUEST',
+                                    child: Text(context.l10n.guest,
                                       style: TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold,
@@ -265,7 +263,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                   )
                                 else
                                   Container(
-                                    padding: const EdgeInsets.symmetric(
+                                    padding: EdgeInsets.symmetric(
                                       horizontal: 8,
                                       vertical: 4,
                                     ),
@@ -275,8 +273,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                       ),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
-                                    child: const Text(
-                                      'USER',
+                                    child: Text(context.l10n.user,
                                       style: TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold,

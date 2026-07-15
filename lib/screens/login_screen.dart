@@ -10,6 +10,7 @@ import 'package:tapni_app/widgets/custom_button.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key, this.addAccount = false}) : super(key: key);
 
@@ -59,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (!mounted) return;
         Navigator.of(
           context,
-        ).pushReplacement(MaterialPageRoute(builder: (_) => const MainShell()));
+        ).pushReplacement(MaterialPageRoute(builder: (_) => MainShell()));
       }
     } catch (e) {
     } finally {
@@ -78,66 +79,66 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 40),
+                SizedBox(height: 40),
                 // Heading
                 Text(
-                  'Welcome Back',
+                  context.l10n.welcomeBack,
                   style: theme.textTheme.headlineLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                     // letterSpacing: -1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
-                  'Log in to manage your digital card and network.',
+                  context.l10n.logInToManageYourDigitalCardAndNetwork,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: isDark
                         ? AppTheme.textGreyDark
                         : AppTheme.textGreyLight,
                   ),
                 ),
-                const SizedBox(height: 48),
+                SizedBox(height: 48),
 
                 // Email
                 Text(
-                  'Email Address',
+                  context.l10n.emailAddress,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    hintText: 'name@company.com',
+                  decoration: InputDecoration(
+                    hintText: context.l10n.nameCompanyCom,
                     prefixIcon: Icon(Icons.email_outlined),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return context.l10n.pleaseEnterYourEmail;
                     }
                     if (!value.contains('@')) {
-                      return 'Please enter a valid email address';
+                      return context.l10n.pleaseEnterAValidEmailAddress;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 15),
+                SizedBox(height: 15),
 
                 // Password
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Password',
+                      context.l10n.password,
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -145,14 +146,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextButton(
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Comming Soon'),
+                          SnackBar(
+                            content: Text(context.l10n.commingSoon),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
                       },
-                      child: const Text(
-                        'Forgot?',
+                      child: Text(context.l10n.forgot,
                         style: TextStyle(
                           color: AppTheme.accentGold,
                           fontWeight: FontWeight.bold,
@@ -167,8 +167,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) => _handleLogin(),
                   decoration: InputDecoration(
-                    hintText: 'Enter your password',
-                    prefixIcon: const Icon(Icons.lock_outline),
+                    hintText: context.l10n.enterYourPassword,
+                    prefixIcon: Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword
@@ -184,35 +184,35 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
+                      return context.l10n.pleaseEnterYourPassword;
                     }
                     if (value.length < 4) {
-                      return 'Password must be at least 4 characters';
+                      return context.l10n.passwordMustBeAtLeast4Characters;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: 32),
 
                 // Login Button
                 CustomButton(
-                  text: 'Log In',
+                  text: context.l10n.logIn,
                   onTap: _handleLogin,
                   // isGold: true,
                   isLoading: authProvider.isLoading,
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
 
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       foregroundColor: WaUi.primaryText,
-                      side: const BorderSide(color: WaUi.divider, width: 1.2),
+                      side: BorderSide(color: WaUi.divider, width: 1.2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: EdgeInsets.symmetric(vertical: 16),
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
@@ -223,14 +223,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       );
                     },
-                    icon: const Icon(Icons.qr_code_2, color: WaUi.accent),
+                    icon: Icon(Icons.qr_code_2, color: WaUi.accent),
                     label: Text(
-                      'Log in with QR code',
+                      context.l10n.logInWithQRCode,
                       style: WaUi.bodyMedium,
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
 
                 // Divider
                 Row(
@@ -241,9 +241,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        'OR CONTINUE WITH',
+                        context.l10n.orCONTINUEWITH,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -303,14 +303,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       //         if (!mounted) return;
                       //         Navigator.of(context).pushReplacement(
                       //           MaterialPageRoute(
-                      //             builder: (_) => const MainShell(),
+                      //             builder: (_) => MainShell(),
                       //           ),
                       //         );
 
                       // ScaffoldMessenger.of(context).showSnackBar(
-                      //   const SnackBar(
+                      //   SnackBar(
                       //     content: Text(
-                      //       'Logged in with Google (Demo account: Saim Y)',
+                      //       context.l10n.loggedInWithGoogleDemoAccountSaimY,
                       //     ),
                       //     behavior: SnackBarBehavior.floating,
                       //   ),
@@ -319,9 +319,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       //     });
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           content: Text(
-                            'Under Development - Login via email/password instead. ',
+                            context.l10n.underDevelopmentLoginViaEmailPasswordInstead2,
                           ),
                           behavior: SnackBarBehavior.floating,
                         ),
@@ -333,13 +333,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                           width: 22,
                           height: 22,
-                          margin: const EdgeInsets.only(right: 12),
+                          margin: EdgeInsets.only(right: 12),
                           child: CustomPaint(
                             painter: GoogleIconPainter(isDark: isDark),
                           ),
                         ),
-                        const Text(
-                          'Sign in with Google',
+                        Text(context.l10n.signInWithGoogle,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -350,14 +349,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 40),
+                SizedBox(height: 40),
 
                 // Register Footer
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account? ",
+                      context.l10n.dontHaveAnAccount2,
                       style: TextStyle(
                         color: isDark
                             ? AppTheme.textGreyDark
@@ -368,12 +367,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const SignupScreen(),
+                            builder: (_) => SignupScreen(),
                           ),
                         );
                       },
-                      child: const Text(
-                        'Sign Up',
+                      child: Text(context.l10n.signUp,
                         style: TextStyle(
                           color: AppTheme.accentGold,
                           fontWeight: FontWeight.bold,

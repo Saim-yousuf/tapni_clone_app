@@ -7,6 +7,7 @@ import 'package:tapni_app/screens/attendance/business/employee_settings_screen.d
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class AttendanceDashboardScreen extends StatefulWidget {
   const AttendanceDashboardScreen({super.key});
 
@@ -61,7 +62,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
 
   String _statusLabel(AttendanceRecord? record) {
     if (record == null || record.checkInTime == null) return 'ABSENT';
-    if (record.checkOutTime == null) return 'IN OFFICE';
+    if (record.checkOutTime == null) return context.l10n.inOFFICE;
     return 'PRESENT';
   }
 
@@ -93,11 +94,11 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
         'Attendance',
         actions: [
           IconButton(
-            icon: const Icon(Icons.people_outline, size: 24),
+            icon: Icon(Icons.people_outline, size: 24),
             onPressed: () async {
               await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const EmployeeListScreen()),
+                MaterialPageRoute(builder: (_) => EmployeeListScreen()),
               );
               _load();
             },
@@ -105,17 +106,17 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _load,
               child: ListView(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
                 children: [
                   Row(
                     children: [
                       _statCard('PRESENT', presentCount, Colors.green.shade700),
-                      const SizedBox(width: 12),
-                      _statCard('IN OFFICE', checkedInCount, Colors.orange.shade800),
+                      SizedBox(width: 12),
+                      _statCard(context.l10n.inOFFICE, checkedInCount, Colors.orange.shade800),
                       const SizedBox(width: 12),
                       _statCard('ABSENT', absentCount, Colors.red.shade700),
                     ],
@@ -215,28 +216,28 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                         ),
                       );
                     }),
-                  const SizedBox(height: 80),
+                  SizedBox(height: 80),
                 ],
               ),
             ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: EdgeInsets.symmetric(horizontal: 8),
         child: SizedBox(
           width: double.infinity,
           child: FloatingActionButton.extended(
             onPressed: () async {
               await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const EmployeeListScreen()),
+                MaterialPageRoute(builder: (_) => EmployeeListScreen()),
               );
               _load();
             },
             backgroundColor: WaUi.buttonDark,
             foregroundColor: Colors.white,
             elevation: 0,
-            extendedPadding: const EdgeInsets.symmetric(horizontal: 24),
-            icon: const Icon(Icons.person_add_alt_1, size: 22),
-            label: Text('Manage Employees', style: AttendanceUi.buttonLabel),
+            extendedPadding: EdgeInsets.symmetric(horizontal: 24),
+            icon: Icon(Icons.person_add_alt_1, size: 22),
+            label: Text(context.l10n.manageEmployees, style: AttendanceUi.buttonLabel),
           ),
         ),
       ),
@@ -247,12 +248,12 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
   Widget _statCard(String label, int count, Color color) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
         decoration: AttendanceUi.thickCard,
         child: Column(
           children: [
             Text('$count', style: AttendanceUi.statNumber.copyWith(color: color)),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               label,
               textAlign: TextAlign.center,
@@ -266,16 +267,16 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
 
   Widget _emptyState() {
     return Container(
-      padding: const EdgeInsets.all(28),
+      padding: EdgeInsets.all(28),
       decoration: AttendanceUi.thickCard,
       child: Column(
         children: [
-          const Icon(Icons.groups_outlined, size: 48, color: WaUi.promoIconFg),
-          const SizedBox(height: 16),
-          Text('No employees yet', style: AttendanceUi.sectionTitle),
-          const SizedBox(height: 10),
+          Icon(Icons.groups_outlined, size: 48, color: WaUi.promoIconFg),
+          SizedBox(height: 16),
+          Text(context.l10n.noEmployeesYet, style: AttendanceUi.sectionTitle),
+          SizedBox(height: 10),
           Text(
-            'Scan a user QR code to add them as employee',
+            context.l10n.scanAUserQRCodeToAddThemAsEmployee,
             textAlign: TextAlign.center,
             style: AttendanceUi.bodyMuted,
           ),

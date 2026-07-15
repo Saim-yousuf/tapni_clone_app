@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/loyalty_program/business/customer_detail_screen.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LoyaltyEnrollmentScreen extends StatelessWidget {
-  const LoyaltyEnrollmentScreen({super.key});
+  LoyaltyEnrollmentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Enroll Customer',
+        title: Text(context.l10n.enrollCustomer,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -18,7 +18,7 @@ class LoyaltyEnrollmentScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         child: Column(
           children: [
             // QR Scanner Section
@@ -31,11 +31,11 @@ class LoyaltyEnrollmentScreen extends StatelessWidget {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(Icons.qr_code_scanner, size: 70, color: Colors.black),
                   SizedBox(height: 12),
                   Text(
-                    'Scan Customer QR Code',
+                    context.l10n.scanCustomerQRCode,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -52,7 +52,7 @@ class LoyaltyEnrollmentScreen extends StatelessWidget {
                 );
               },
               child: Container(
-                padding: const EdgeInsets.all(18),
+                padding: EdgeInsets.all(18),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(18),
@@ -61,24 +61,24 @@ class LoyaltyEnrollmentScreen extends StatelessWidget {
                     BoxShadow(
                       color: Colors.black.withOpacity(.04),
                       blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      offset: Offset(0, 4),
                     ),
                   ],
                 ),
                 child: Row(
                   children: [
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 28,
                       backgroundColor: Colors.black,
                       child: Icon(Icons.person, color: Colors.white),
                     ),
-                    const SizedBox(width: 15),
+                    SizedBox(width: 15),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            'John Smith',
+                            context.l10n.johnSmith,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -86,7 +86,7 @@ class LoyaltyEnrollmentScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            'john@email.com',
+                            context.l10n.johnEmailCom,
                             style: TextStyle(color: Colors.grey),
                           ),
                         ],
@@ -97,7 +97,7 @@ class LoyaltyEnrollmentScreen extends StatelessWidget {
               ),
             ),
 
-            const Spacer(),
+            Spacer(),
 
             SizedBox(
               width: double.infinity,
@@ -112,8 +112,7 @@ class LoyaltyEnrollmentScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(14),
                   ),
                 ),
-                child: const Text(
-                  'Enroll Customer',
+                child: Text(context.l10n.enrollCustomer,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),

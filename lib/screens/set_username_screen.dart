@@ -6,8 +6,9 @@ import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class SetUsernameScreen extends StatefulWidget {
-  const SetUsernameScreen({super.key});
+  SetUsernameScreen({super.key});
 
   @override
   State<SetUsernameScreen> createState() => _SetUsernameScreenState();
@@ -35,16 +36,16 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
   String? _validateUsername(String? value) {
     final username = (value ?? '').trim().toLowerCase();
     if (username.isEmpty) {
-      return 'Please enter a username';
+      return context.l10n.pleaseEnterAUsername;
     }
     if (username.length < 3) {
-      return 'Username must be at least 3 characters';
+      return context.l10n.usernameMustBeAtLeast3Characters;
     }
     if (username.length > 30) {
-      return 'Username must be at most 30 characters';
+      return context.l10n.usernameMustBeAtMost30Characters;
     }
     if (!RegExp(r'^[a-z0-9][a-z0-9_-]*$').hasMatch(username)) {
-      return 'Use letters, numbers, underscores or hyphens only';
+      return context.l10n.useLettersNumbersUnderscoresOrHyphensOnly;
     }
     return null;
   }
@@ -57,7 +58,7 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'This is already your username.',
+            context.l10n.thisIsAlreadyYourUsername,
             style: WaUi.body.copyWith(color: Colors.white),
           ),
           behavior: SnackBarBehavior.floating,
@@ -79,8 +80,8 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
       SnackBar(
         content: Text(
           response.success
-              ? 'Username updated successfully!'
-              : response.message ?? 'Unable to update username. Try again.',
+              ? context.l10n.usernameUpdatedSuccessfully
+              : response.message ?? context.l10n.unableToUpdateUsernameTryAgain,
           style: WaUi.body.copyWith(color: Colors.white),
         ),
         behavior: SnackBarBehavior.floating,
@@ -106,42 +107,42 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new, size: 20),
           color: WaUi.primaryText,
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Username', style: WaUi.headline),
+        title: Text(context.l10n.username, style: WaUi.headline),
         centerTitle: false,
       ),
       body: SafeArea(
         child: Form(
           key: _formKey,
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+            padding: EdgeInsets.fromLTRB(20, 8, 20, 24),
             children: [
               Text(
-                'Choose a unique username for your profile link.',
+                context.l10n.chooseAUniqueUsernameForYourProfileLink,
                 style: WaUi.body.copyWith(color: WaUi.secondaryText),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Text(
-                'Username',
+                context.l10n.username,
                 style: WaUi.title,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               TextFormField(
                 controller: _usernameController,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
-                autofillHints: const [AutofillHints.username],
+                autofillHints: [AutofillHints.username],
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9_-]')),
                   LengthLimitingTextInputFormatter(30),
                 ],
                 style: WaUi.body,
                 decoration: InputDecoration(
-                  hintText: 'yourname',
-                  prefixIcon: const Icon(Icons.alternate_email, size: 22),
+                  hintText: context.l10n.yourname,
+                  prefixIcon: Icon(Icons.alternate_email, size: 22),
                   prefixIconColor: WaUi.secondaryText,
                   filled: true,
                   fillColor: WaUi.navBarBg,
@@ -163,21 +164,21 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                    borderSide: const BorderSide(color: Colors.redAccent),
+                    borderSide: BorderSide(color: Colors.redAccent),
                   ),
                   focusedErrorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                    borderSide: const BorderSide(color: Colors.redAccent),
+                    borderSide: BorderSide(color: Colors.redAccent),
                   ),
                 ),
                 validator: _validateUsername,
                 onChanged: (_) => setState(() {}),
                 onFieldSubmitted: (_) => _saveUsername(),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 12,
                 ),
@@ -190,14 +191,14 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
                   style: WaUi.bodyMedium.copyWith(color: WaUi.secondaryText),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
-                '3–30 characters. Letters, numbers, underscores and hyphens only.',
+                context.l10n.n330CharactersLettersNumbersUnderscoresAndHyphensOnly,
                 style: WaUi.label,
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
               CustomButton(
-                text: 'Save Username',
+                text: context.l10n.saveUsername,
                 onTap: _saveUsername,
               ),
             ],

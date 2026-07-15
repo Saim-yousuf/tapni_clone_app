@@ -10,8 +10,9 @@ import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/social_icon_button.dart';
 import 'package:tapni_app/widgets/templates_sheet.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class DigitalCardScreen extends StatelessWidget {
-  const DigitalCardScreen({Key? key}) : super(key: key);
+  DigitalCardScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +27,8 @@ class DigitalCardScreen extends StatelessWidget {
         title: Text('tapni.com/${profile.name.replaceAll(' ', '').toLowerCase()}'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.palette_outlined),
-            tooltip: 'Choose Template',
+            icon: Icon(Icons.palette_outlined),
+            tooltip: context.l10n.chooseTemplate,
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -53,7 +54,7 @@ class DigitalCardScreen extends StatelessWidget {
           children: [
             // Colored and themed Card Container representing the Business Card itself based on selected template
             AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
+              duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               decoration: BoxDecoration(
                 color: currentTemplate.backgroundColor,
@@ -65,11 +66,11 @@ class DigitalCardScreen extends StatelessWidget {
                   BoxShadow(
                     color: Colors.black.withOpacity(0.12),
                     blurRadius: 15,
-                    offset: const Offset(0, 5),
+                    offset: Offset(0, 5),
                   ),
                 ],
               ),
-              padding: const EdgeInsets.all(24.0),
+              padding: EdgeInsets.all(24.0),
               child: Column(
                 children: [
                   // Logo/NFC Symbol
@@ -84,7 +85,7 @@ class DigitalCardScreen extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            currentTemplate.isPro ? 'tapni PRO' : 'tapni',
+                            currentTemplate.isPro ? 'tapni PRO' : context.l10n.tapni,
                             style: TextStyle(
                               color: currentTemplate.brandingColor,
                               fontWeight: FontWeight.bold,
@@ -93,15 +94,15 @@ class DigitalCardScreen extends StatelessWidget {
                             ),
                           ),
                           if (currentTemplate.isPro) ...[
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                               decoration: BoxDecoration(
                                 color: currentTemplate.textColor,
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
-                                'PRO',
+                                context.l10n.pro,
                                 style: TextStyle(
                                   color: currentTemplate.backgroundColor,
                                   fontWeight: FontWeight.w900,
@@ -114,7 +115,7 @@ class DigitalCardScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   
                   // Profile Photo Initial
                   // Profile Photo Initial
@@ -181,7 +182,7 @@ class DigitalCardScreen extends StatelessWidget {
                       color: currentTemplate.labelColor,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   
                   // Bio
                   Text(
@@ -192,9 +193,9 @@ class DigitalCardScreen extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   Divider(color: currentTemplate.textColor.withOpacity(0.15)),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   
                   // Quick Actions Bar (Phone, Email, Web)
                   Row(
@@ -203,33 +204,33 @@ class DigitalCardScreen extends StatelessWidget {
                       _buildQuickAction(
                         context,
                         icon: Icons.phone_outlined,
-                        label: 'Call',
+                        label: context.l10n.call,
                         textColor: currentTemplate.textColor,
                         labelColor: currentTemplate.labelColor,
-                        onTap: () => _copyToClipboard(context, profile.phone, 'Phone number'),
+                        onTap: () => _copyToClipboard(context, profile.phone, context.l10n.phoneNumber2),
                       ),
                       _buildQuickAction(
                         context,
                         icon: Icons.email_outlined,
-                        label: 'Email',
+                        label: context.l10n.email,
                         textColor: currentTemplate.textColor,
                         labelColor: currentTemplate.labelColor,
-                        onTap: () => _copyToClipboard(context, profile.email, 'Email address'),
+                        onTap: () => _copyToClipboard(context, profile.email, context.l10n.emailAddress2),
                       ),
                       _buildQuickAction(
                         context,
                         icon: Icons.language_outlined,
-                        label: 'Website',
+                        label: context.l10n.website,
                         textColor: currentTemplate.textColor,
                         labelColor: currentTemplate.labelColor,
-                        onTap: () => _copyToClipboard(context, profile.website, 'Website URL'),
+                        onTap: () => _copyToClipboard(context, profile.website, context.l10n.websiteURL),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 28),
+            SizedBox(height: 28),
 
             // Edit Shortcuts Area
             Row(
@@ -239,55 +240,55 @@ class DigitalCardScreen extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: isDark ? Colors.white12 : Colors.black12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+                        MaterialPageRoute(builder: (_) => EditProfileScreen()),
                       );
                     },
-                    icon: const Icon(Icons.edit_outlined, size: 18),
-                    label: const Text('Edit Details'),
+                    icon: Icon(Icons.edit_outlined, size: 18),
+                    label: Text(context.l10n.editDetails),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: isDark ? Colors.white12 : Colors.black12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const SocialLinksScreen()),
+                        MaterialPageRoute(builder: (_) => SocialLinksScreen()),
                       );
                     },
-                    icon: const Icon(Icons.add_link_rounded, size: 18),
-                    label: const Text('Social Links'),
+                    icon: Icon(Icons.add_link_rounded, size: 18),
+                    label: Text(context.l10n.socialLinks),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
 
             // Active Social Links List
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Connected Accounts',
+                context.l10n.connectedAccounts,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.5,
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             
             // Check if there are any active links
             profile.socialLinks.where((l) => l.isActive).isEmpty
                 ? Container(
-                    padding: const EdgeInsets.all(24),
+                    padding: EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: isDark ? Colors.white.withOpacity(0.02) : Colors.black.withOpacity(0.01),
                       borderRadius: BorderRadius.circular(16),
@@ -295,15 +296,14 @@ class DigitalCardScreen extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        const Icon(Icons.link_off, size: 36, color: Colors.grey),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'No active links connected yet',
+                        Icon(Icons.link_off, size: 36, color: Colors.grey),
+                        SizedBox(height: 12),
+                        Text(context.l10n.noActiveLinksConnectedYet,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4),
                         Text(
-                          'Tap "Social Links" above to add and activate profiles.',
+                          context.l10n.tapSocialLinksAboveToAddAndActivateProfiles,
                           style: TextStyle(
                             fontSize: 12,
                             color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,

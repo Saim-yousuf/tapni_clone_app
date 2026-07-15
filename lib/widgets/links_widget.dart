@@ -13,6 +13,7 @@ import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LinkSheet {
   void showAddLinkBottomSheet(BuildContext context, ProfileProvider provider) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -42,7 +43,7 @@ class LinkSheet {
                 return Column(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(top: 12, bottom: 8),
+                      margin: EdgeInsets.only(top: 12, bottom: 8),
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
@@ -52,7 +53,7 @@ class LinkSheet {
                     ),
                     //Header Open
                     Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 15,
                       ),
@@ -67,15 +68,15 @@ class LinkSheet {
                                 ? TextField(
                                     controller: searchController,
                                     autofocus: true,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Search links',
+                                    decoration: InputDecoration(
+                                      hintText: ctx.l10n.searchLinks,
                                       border: InputBorder.none,
                                     ),
                                     onChanged: (_) => setSheetState(() {}),
                                   )
-                                : const Center(
+                                : Center(
                                     child: Text(
-                                      'Add Link',
+                                      ctx.l10n.addLink,
                                       style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.w600,
@@ -106,7 +107,7 @@ class LinkSheet {
                         builder: (context, watchedProvider, _) {
                           if (watchedProvider.isLinkCatalogLoading &&
                               watchedProvider.linkCatalog.isEmpty) {
-                            return const Center(
+                            return Center(
                               child: CircularProgressIndicator(),
                             );
                           }
@@ -144,7 +145,7 @@ class LinkSheet {
 
                             return SingleChildScrollView(
                               controller: scrollController,
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                 horizontal: 16,
                               ),
                               child: Column(
@@ -165,9 +166,9 @@ class LinkSheet {
                             );
                           }
 
-                          return const Center(
+                          return Center(
                             child: Text(
-                              'No link templates available',
+                              context.l10n.noLinkTemplatesAvailable,
                               style: TextStyle(
                                 fontSize: 24,
                                 color: Colors.grey,
@@ -216,7 +217,7 @@ class LinkSheet {
         children: [
           Text(
             category.name,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
           SingleChildScrollView(
@@ -287,7 +288,7 @@ class LinkSheet {
                         const SizedBox(height: 4),
                         Text(
                           template.label,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             color: AppTheme.primaryBlack,
                             fontWeight: FontWeight.w500,
@@ -361,12 +362,12 @@ class LinkSheet {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF111111) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(
+                  color: isDark ? Color(0xFF111111) : Colors.white,
+                  borderRadius: BorderRadius.vertical(
                     top: Radius.circular(24),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 14,
                 ),
@@ -374,7 +375,7 @@ class LinkSheet {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(top: 4, bottom: 14),
+                      margin: EdgeInsets.only(top: 4, bottom: 14),
                       width: 36,
                       height: 4,
                       decoration: BoxDecoration(
@@ -382,14 +383,13 @@ class LinkSheet {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    const Text(
-                      'Custom link',
+                    Text(ctx.l10n.customLink,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     Row(
                       children: [
                         GestureDetector(
@@ -401,20 +401,21 @@ class LinkSheet {
                           },
                           child: _selectedLogoTile(logo),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14),
                         Expanded(
                           child: _sheetTextField(
                             labelController,
-                            'Label',
+                            context.l10n.label,
                             TextInputType.text,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
-                    _sheetTextField(valueController, 'Link', TextInputType.url),
+                    SizedBox(height: 14),
+                    _sheetTextField(valueController, context.l10n.link, TextInputType.url),
                     const SizedBox(height: 14),
                     _showPublicToggle(
+                      context: context,
                       isDark: isDark,
                       value: showLink,
                       onChanged: (value) => setState(() => showLink = value),
@@ -434,6 +435,7 @@ class LinkSheet {
                         ],
                         Expanded(
                           child: _saveButton(
+                            context: context,
                             onPressed: () async {
                               final label = labelController.text.trim();
                               final value = valueController.text.trim();
@@ -578,12 +580,12 @@ class LinkSheet {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF111111) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(
+                  color: isDark ? Color(0xFF111111) : Colors.white,
+                  borderRadius: BorderRadius.vertical(
                     top: Radius.circular(24),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 14,
                 ),
@@ -591,7 +593,7 @@ class LinkSheet {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(top: 4, bottom: 14),
+                      margin: EdgeInsets.only(top: 4, bottom: 14),
                       width: 36,
                       height: 4,
                       decoration: BoxDecoration(
@@ -600,8 +602,8 @@ class LinkSheet {
                       ),
                     ),
                     Text(
-                      allowCustomMeta ? 'Custom bank' : template.label,
-                      style: const TextStyle(
+                      allowCustomMeta ? context.l10n.customBank : template.label,
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
@@ -629,37 +631,38 @@ class LinkSheet {
                                   context: context,
                                 ),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14),
                         Expanded(
                           child: _sheetTextField(
                             labelController,
-                            'Label',
+                            context.l10n.label,
                             TextInputType.text,
                             readOnly: !allowCustomMeta,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
                     _sheetTextField(
                       holderController,
-                      'Account holder name',
+                      context.l10n.accountHolderName,
                       TextInputType.name,
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     _sheetTextField(
                       ibanController,
-                      'IBAN number',
+                      context.l10n.ibanNumber,
                       TextInputType.text,
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     _sheetTextField(
                       accountController,
-                      'Account number',
+                      context.l10n.accountNumber,
                       TextInputType.number,
                     ),
                     const SizedBox(height: 14),
                     _showPublicToggle(
+                      context: context,
                       isDark: isDark,
                       value: showLink,
                       onChanged: (value) => setState(() => showLink = value),
@@ -679,6 +682,7 @@ class LinkSheet {
                         ],
                         Expanded(
                           child: _saveButton(
+                            context: context,
                             onPressed: () async {
                               final label = labelController.text.trim();
                               final holder = holderController.text.trim();
@@ -744,14 +748,14 @@ class LinkSheet {
       keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: hint,
-        fillColor: const Color(0xFFF5F5F5),
+        fillColor: Color(0xFFF5F5F5),
         filled: true,
         border: InputBorder.none,
-        enabledBorder: const OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide.none,
         ),
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide.none,
         ),
@@ -760,28 +764,28 @@ class LinkSheet {
   }
 
   Widget _showPublicToggle({
+    required BuildContext context,
     required bool isDark,
     required bool value,
     required ValueChanged<bool> onChanged,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF5F5F5),
+        color: isDark ? Color(0xFF1E1E1E) : Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey.shade200, width: 0.5),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Show link',
+          Text(context.l10n.showLink,
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
           ),
           Switch(
             value: value,
             activeColor: Colors.white,
-            activeTrackColor: const Color(0xFF1E2022),
+            activeTrackColor: Color(0xFF1E2022),
             onChanged: onChanged,
           ),
         ],
@@ -789,7 +793,10 @@ class LinkSheet {
     );
   }
 
-  Widget _saveButton({required VoidCallback onPressed}) {
+  Widget _saveButton({
+    required BuildContext context,
+    required VoidCallback onPressed,
+  }) {
     return SizedBox(
       width: double.infinity,
       height: 60,
@@ -802,8 +809,7 @@ class LinkSheet {
           ),
           elevation: 0,
         ),
-        child: const Text(
-          'Save',
+        child: Text(context.l10n.save,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -857,7 +863,7 @@ class LinkSheet {
 
     final placeholder = ColoredBox(
       color: Colors.grey.shade200,
-      child: const Center(child: Icon(Icons.link)),
+      child: Center(child: Icon(Icons.link)),
     );
 
     final image = logoImage(errorWidget: placeholder);
@@ -907,12 +913,12 @@ class LinkSheet {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF111111) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(
+                  color: isDark ? Color(0xFF111111) : Colors.white,
+                  borderRadius: BorderRadius.vertical(
                     top: Radius.circular(24),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 14,
                 ),
@@ -920,7 +926,7 @@ class LinkSheet {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(top: 4, bottom: 14),
+                      margin: EdgeInsets.only(top: 4, bottom: 14),
                       width: 36,
                       height: 4,
                       decoration: BoxDecoration(
@@ -928,14 +934,13 @@ class LinkSheet {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    const Text(
-                      'Create new link',
+                    Text(ctx.l10n.createNewLink,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -946,7 +951,7 @@ class LinkSheet {
                           isPro: template.isPro,
                           context: context,
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -954,12 +959,12 @@ class LinkSheet {
                               TextFormField(
                                 readOnly: true,
                                 initialValue: template.label,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                 ),
-                                decoration: const InputDecoration(
-                                  hintText: 'Label',
+                                decoration: InputDecoration(
+                                  hintText: ctx.l10n.label,
                                   fillColor: Color(0xFFF5F5F5),
                                   filled: true,
                                   border: InputBorder.none,
@@ -977,9 +982,9 @@ class LinkSheet {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 5),
+                              SizedBox(height: 5),
                               Text(
-                                'Set text under the link icon',
+                                ctx.l10n.setTextUnderTheLinkIcon,
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey.shade800,
@@ -995,7 +1000,7 @@ class LinkSheet {
                       controller: valueController,
                       autofocus: true,
                       keyboardType: _keyboardTypeFor(template.fieldType),
-                      style: const TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 15),
                       decoration: InputDecoration(
                         hintText: template.fieldLabel,
                         hintStyle: TextStyle(color: Colors.grey.shade400),
@@ -1012,7 +1017,7 @@ class LinkSheet {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Text(
                       template.fieldLabel,
                       style: TextStyle(
@@ -1020,27 +1025,26 @@ class LinkSheet {
                         color: Colors.grey.shade800,
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
                     Container(
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF1E1E1E)
-                            : const Color(0xFFF5F5F5),
+                            ? Color(0xFF1E1E1E)
+                            : Color(0xFFF5F5F5),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: Colors.grey.shade200,
                           width: 0.5,
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 4,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Show link',
+                          Text(ctx.l10n.showLink,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
@@ -1083,8 +1087,7 @@ class LinkSheet {
                                 ),
                                 elevation: 0,
                               ),
-                              child: const Text(
-                                'Save',
+                              child: Text(context.l10n.save,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -1145,12 +1148,12 @@ class LinkSheet {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF111111) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(
+                  color: isDark ? Color(0xFF111111) : Colors.white,
+                  borderRadius: BorderRadius.vertical(
                     top: Radius.circular(24),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 14,
                 ),
@@ -1159,7 +1162,7 @@ class LinkSheet {
                   children: [
                     // Drag handle
                     Container(
-                      margin: const EdgeInsets.only(top: 4, bottom: 14),
+                      margin: EdgeInsets.only(top: 4, bottom: 14),
                       width: 36,
                       height: 4,
                       decoration: BoxDecoration(
@@ -1169,8 +1172,7 @@ class LinkSheet {
                     ),
 
                     // Title
-                    const Text(
-                      'Create new link',
+                    Text(ctx.l10n.createNewLink,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
@@ -1190,10 +1192,10 @@ class LinkSheet {
                             SocialLink.getAssetPath(platform),
                             fit: BoxFit.contain,
                             errorBuilder: (_, __, ___) =>
-                                const Icon(Icons.link, size: 28),
+                                Icon(Icons.link, size: 28),
                           ),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14),
 
                         Expanded(
                           child: Column(
@@ -1203,13 +1205,13 @@ class LinkSheet {
                                 readOnly: true,
 
                                 controller: labelController,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                 ),
-                                decoration: const InputDecoration(
-                                  hintText: 'Label',
-                                  fillColor: const Color(0xFFF5F5F5),
+                                decoration: InputDecoration(
+                                  hintText: ctx.l10n.label,
+                                  fillColor: Color(0xFFF5F5F5),
                                   filled: true,
                                   border: InputBorder.none,
                                   enabledBorder: OutlineInputBorder(
@@ -1226,9 +1228,9 @@ class LinkSheet {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 5),
+                              SizedBox(height: 5),
                               Text(
-                                'Set text under the link icon',
+                                ctx.l10n.setTextUnderTheLinkIcon,
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey.shade800,
@@ -1245,7 +1247,7 @@ class LinkSheet {
                     TextField(
                       controller: usernameController,
                       autofocus: true,
-                      style: const TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 15),
 
                       decoration: InputDecoration(
                         hintText:
@@ -1272,29 +1274,28 @@ class LinkSheet {
                         color: Colors.grey.shade800,
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
 
                     // Show link toggle
                     Container(
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF1E1E1E)
-                            : const Color(0xFFF5F5F5),
+                            ? Color(0xFF1E1E1E)
+                            : Color(0xFFF5F5F5),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: Colors.grey.shade200,
                           width: 0.5,
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 4,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Show link',
+                          Text(ctx.l10n.showLink,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
@@ -1303,15 +1304,15 @@ class LinkSheet {
                           Switch(
                             value: showLink,
                             activeColor: Colors.white,
-                            activeTrackColor: const Color(0xFF1E2022),
+                            activeTrackColor: Color(0xFF1E2022),
                             onChanged: (val) => setState(() => showLink = val),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Text(
-                      "When turned off this link won't be shown on your profile",
+                      ctx.l10n.whenTurnedOffThisLinkWontBeShownOnYourProfile,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
@@ -1371,8 +1372,7 @@ class LinkSheet {
                                 ),
                                 elevation: 0,
                               ),
-                              child: const Text(
-                                'Save',
+                              child: Text(context.l10n.save,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -1455,7 +1455,7 @@ class LinkSheet {
               : link.contactCard != null
               ? 'contact_card'
               : 'url'),
-      fieldLabel: catalogTemplate?.fieldLabel ?? link.fieldLabel ?? 'Link',
+      fieldLabel: catalogTemplate?.fieldLabel ?? link.fieldLabel ?? context.l10n.link,
       prefix: '',
       logo: link.logoUrl ?? catalogTemplate?.logo ?? '',
       isPro: false,
@@ -1514,12 +1514,12 @@ class LinkSheet {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF111111) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(
+                  color: isDark ? Color(0xFF111111) : Colors.white,
+                  borderRadius: BorderRadius.vertical(
                     top: Radius.circular(24),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 14,
                 ),
@@ -1528,7 +1528,7 @@ class LinkSheet {
                   children: [
                     // Drag handle
                     Container(
-                      margin: const EdgeInsets.only(top: 4, bottom: 14),
+                      margin: EdgeInsets.only(top: 4, bottom: 14),
                       width: 36,
                       height: 4,
                       decoration: BoxDecoration(
@@ -1538,8 +1538,7 @@ class LinkSheet {
                     ),
 
                     // Title
-                    const Text(
-                      'Link Settings',
+                    Text(ctx.l10n.linkSettings,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
@@ -1566,10 +1565,10 @@ class LinkSheet {
                                   SocialLink.getAssetPath(link.platform),
                                   fit: BoxFit.contain,
                                   errorBuilder: (_, __, ___) =>
-                                      const Icon(Icons.link, size: 28),
+                                      Icon(Icons.link, size: 28),
                                 ),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14),
 
                         Expanded(
                           child: Column(
@@ -1581,13 +1580,13 @@ class LinkSheet {
                                 controller: TextEditingController(
                                   text: link.platformName,
                                 ),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                 ),
-                                decoration: const InputDecoration(
-                                  hintText: 'Label',
-                                  fillColor: const Color(0xFFF5F5F5),
+                                decoration: InputDecoration(
+                                  hintText: ctx.l10n.label,
+                                  fillColor: Color(0xFFF5F5F5),
                                   filled: true,
                                   border: InputBorder.none,
                                   enabledBorder: OutlineInputBorder(
@@ -1604,9 +1603,9 @@ class LinkSheet {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 5),
+                              SizedBox(height: 5),
                               Text(
-                                'Set text under the link icon',
+                                ctx.l10n.setTextUnderTheLinkIcon,
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey.shade800,
@@ -1623,7 +1622,7 @@ class LinkSheet {
                     TextField(
                       controller: valueController,
                       autofocus: true,
-                      style: const TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 15),
 
                       decoration: InputDecoration(
                         hintText:
@@ -1652,29 +1651,28 @@ class LinkSheet {
                         color: Colors.grey.shade800,
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
 
                     // Show link toggle
                     Container(
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF1E1E1E)
-                            : const Color(0xFFF5F5F5),
+                            ? Color(0xFF1E1E1E)
+                            : Color(0xFFF5F5F5),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: Colors.grey.shade200,
                           width: 0.5,
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 4,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Show link',
+                          Text(ctx.l10n.showLink,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
@@ -1683,15 +1681,15 @@ class LinkSheet {
                           Switch(
                             value: showLink,
                             activeColor: Colors.white,
-                            activeTrackColor: const Color(0xFF1E2022),
+                            activeTrackColor: Color(0xFF1E2022),
                             onChanged: (val) => setState(() => showLink = val),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Text(
-                      "When turned off this link won't be shown on your profile",
+                      ctx.l10n.whenTurnedOffThisLinkWontBeShownOnYourProfile,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
@@ -1761,8 +1759,7 @@ class LinkSheet {
                                 ),
                                 elevation: 0,
                               ),
-                              child: const Text(
-                                'Save',
+                              child: Text(context.l10n.save,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,

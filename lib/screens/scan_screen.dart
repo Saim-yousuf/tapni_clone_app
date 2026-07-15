@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/profile_url_validator.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 enum ScanMode { paperCard, qrCode, eventBadge }
 
 const _tapniBlue = Color(0xFF2F80ED);
@@ -55,11 +56,11 @@ class _ScanScreenState extends State<ScanScreen> {
   String get _instructionText {
     switch (_selectedMode) {
       case ScanMode.paperCard:
-        return 'Point the camera at paper card and tap the Camera button.';
+        return context.l10n.pointTheCameraAtPaperCardAndTapTheCameraButton;
       case ScanMode.qrCode:
-        return 'Point the camera at a QR code to scan automatically.';
+        return context.l10n.pointTheCameraAtAQRCodeToScanAutomatically;
       case ScanMode.eventBadge:
-        return 'Point the camera at an event badge and tap the Camera button.';
+        return context.l10n.pointTheCameraAtAnEventBadgeAndTapTheCameraButton;
     }
   }
 
@@ -82,8 +83,8 @@ class _ScanScreenState extends State<ScanScreen> {
     final parsed = ProfileUrlValidator.parse(value);
     if (parsed == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid profile URL. Scan a valid BarQody card or QR code.'),
+        SnackBar(
+          content: Text(context.l10n.invalidProfileURLScanAValidBarQodyCardOrQRCode),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -120,8 +121,8 @@ class _ScanScreenState extends State<ScanScreen> {
 
     if (capture == null || capture.barcodes.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No QR code found in this image.'),
+        SnackBar(
+          content: Text(context.l10n.noQRCodeFoundInThisImage),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -140,8 +141,8 @@ class _ScanScreenState extends State<ScanScreen> {
   Future<void> _onShutterTap() async {
     if (_selectedMode == ScanMode.qrCode) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Hold the QR code inside the frame — it scans automatically.'),
+        SnackBar(
+          content: Text(context.l10n.holdTheQRCodeInsideTheFrameItScansAutomatically),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -149,8 +150,8 @@ class _ScanScreenState extends State<ScanScreen> {
     }
 
     final label = _selectedMode == ScanMode.paperCard
-        ? 'Paper card'
-        : 'Event badge';
+        ? context.l10n.paperCard2
+        : context.l10n.eventBadge2;
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -179,7 +180,7 @@ class _ScanScreenState extends State<ScanScreen> {
               fit: BoxFit.cover,
               onDetect: _onBarcodeDetect,
               errorBuilder: (context, error) => _CameraErrorView(
-                message: error.errorDetails?.message ?? 'Camera error',
+                message: error.errorDetails?.message ?? context.l10n.cameraError,
                 onRetry: _requestCameraPermission,
               ),
             ),
@@ -187,16 +188,16 @@ class _ScanScreenState extends State<ScanScreen> {
             IgnorePointer(
               child: CustomPaint(
                 painter: _ViewfinderMaskPainter(),
-                child: const SizedBox.expand(),
+                child: SizedBox.expand(),
               ),
             ),
           ] else if (_permissionChecked) ...[
             _CameraErrorView(
-              message: 'Camera permission is required to scan.',
+              message: context.l10n.cameraPermissionIsRequiredToScan,
               onRetry: _requestCameraPermission,
             ),
           ] else
-            const Center(
+            Center(
               child: CircularProgressIndicator(color: Colors.white),
             ),
 
@@ -209,7 +210,7 @@ class _ScanScreenState extends State<ScanScreen> {
                     padding: const EdgeInsets.all(14),
                     child: GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.close, color: Colors.white, size: 28),
+                      child: Icon(Icons.close, color: Colors.white, size: 28),
                     ),
                   ),
                 ),
@@ -232,7 +233,7 @@ class _ScanScreenState extends State<ScanScreen> {
                         Expanded(
                           child: Text(
                             _instructionText,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
                               color: Colors.white,
                               height: 1.35,
@@ -241,18 +242,18 @@ class _ScanScreenState extends State<ScanScreen> {
                         ),
                         const SizedBox(width: 8),
                         _LanguageChip(),
-                        const SizedBox(width: 6),
-                        const _AiButton(),
+                        SizedBox(width: 6),
+                        _AiButton(),
                       ],
                     ),
                   ),
                 ),
 
-                const Spacer(),
+                Spacer(),
 
                 // Viewfinder frame
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  padding: EdgeInsets.symmetric(horizontal: 28),
                   child: AspectRatio(
                     aspectRatio: _selectedMode == ScanMode.qrCode ? 1 : 1.35,
                     child: Container(
@@ -267,35 +268,35 @@ class _ScanScreenState extends State<ScanScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 22),
+                SizedBox(height: 22),
 
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
                       _ModeTab(
                         icon: Icons.badge_outlined,
-                        label: 'Paper Card',
+                        label: context.l10n.paperCard,
                         selected: _selectedMode == ScanMode.paperCard,
                         onTap: () => setState(() {
                           _selectedMode = ScanMode.paperCard;
                           _scanHandled = false;
                         }),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       _ModeTab(
                         icon: Icons.qr_code_2_rounded,
-                        label: 'QR Code',
+                        label: context.l10n.qrCode,
                         selected: _selectedMode == ScanMode.qrCode,
                         onTap: () => setState(() {
                           _selectedMode = ScanMode.qrCode;
                           _scanHandled = false;
                         }),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       _ModeTab(
                         icon: Icons.confirmation_number_outlined,
-                        label: 'Event Badge',
+                        label: context.l10n.eventBadge,
                         selected: _selectedMode == ScanMode.eventBadge,
                         onTap: () => setState(() {
                           _selectedMode = ScanMode.eventBadge;
@@ -375,7 +376,7 @@ class _ViewfinderMaskPainter extends CustomPainter {
       ..addRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(left, top, holeWidth, holeHeight),
-          const Radius.circular(18),
+          Radius.circular(18),
         ),
       );
 
@@ -393,28 +394,28 @@ class _CameraErrorView extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
 
-  const _CameraErrorView({required this.message, required this.onRetry});
+  _CameraErrorView({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF1A1A1A),
+      color: Color(0xFF1A1A1A),
       alignment: Alignment.center,
-      padding: const EdgeInsets.all(32),
+      padding: EdgeInsets.all(32),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.videocam_off_rounded, color: Colors.white54, size: 48),
-          const SizedBox(height: 16),
+          Icon(Icons.videocam_off_rounded, color: Colors.white54, size: 48),
+          SizedBox(height: 16),
           Text(
             message,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.white70, fontSize: 14),
+            style: TextStyle(color: Colors.white70, fontSize: 14),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           FilledButton(
             onPressed: onRetry,
-            child: const Text('Allow camera'),
+            child: Text(context.l10n.allowCamera),
           ),
         ],
       ),
@@ -486,7 +487,7 @@ class _CircleIconButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool active;
 
-  const _CircleIconButton({
+  _CircleIconButton({
     required this.icon,
     required this.onTap,
     this.active = false,
@@ -515,7 +516,7 @@ class _LanguageChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(16),
@@ -523,11 +524,11 @@ class _LanguageChip extends StatelessWidget {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: const [
+        children: [
           Icon(Icons.language, size: 12, color: Colors.white),
           SizedBox(width: 3),
           Text(
-            'Lat',
+            context.l10n.lat,
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
@@ -542,21 +543,21 @@ class _LanguageChip extends StatelessWidget {
 }
 
 class _AiButton extends StatelessWidget {
-  const _AiButton();
+  _AiButton();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: const [
+        children: [
           Text(
-            'AI',
+            context.l10n.ai,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,

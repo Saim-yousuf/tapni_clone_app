@@ -12,6 +12,7 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/wa_tools_widgets.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class MainShell extends StatefulWidget {
   final String? _currentPage;
   const MainShell({Key? key, this._currentPage}) : super(key: key);
@@ -79,7 +80,7 @@ class _MainShellState extends State<MainShell> {
       bottomNavigationBar: SafeArea(
         top: false,
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: WaUi.navBarBg,
             border: Border(top: BorderSide(color: WaUi.divider, width: 0.5)),
           ),
@@ -91,29 +92,29 @@ class _MainShellState extends State<MainShell> {
                 WaBottomNavItem(
                   icon: Icons.link_outlined,
                   selectedIcon: Icons.link,
-                  label: 'Links',
+                  label: context.l10n.links,
                   selected: _currentPage == 'Links',
                   onTap: () => _switchTab('Links'),
                 ),
                 WaBottomNavItem(
                   icon: Icons.people_outline,
                   selectedIcon: Icons.people,
-                  label: 'Contacts',
+                  label: context.l10n.contacts,
                   selected: _currentPage == 'Contacts',
                   onTap: () => _switchTab('Contacts'),
                 ),
-                const SizedBox(width: 72),
+                SizedBox(width: 72),
                 WaBottomNavItem(
                   icon: Icons.insights_outlined,
                   selectedIcon: Icons.insights,
-                  label: 'Explore',
+                  label: context.l10n.explore,
                   selected: _currentPage == 'Explore',
                   onTap: () => _switchTab('Explore'),
                 ),
                 WaBottomNavItem(
                   icon: Icons.storefront_outlined,
                   selectedIcon: Icons.storefront,
-                  label: 'Tools',
+                  label: context.l10n.tools,
                   selected: _currentPage == 'Settings',
                   showDot: leadsProvider.unreadNotificationsCount > 0,
                   onTap: () => _switchTab('Settings'),
@@ -189,7 +190,7 @@ class _MainShellState extends State<MainShell> {
                         profile.name.isNotEmpty
                             ? profile.name[0].toUpperCase()
                             : '?',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
@@ -219,7 +220,7 @@ class _MainShellState extends State<MainShell> {
                           profile.name.isNotEmpty
                               ? profile.name[0].toUpperCase()
                               : '?',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
@@ -237,7 +238,7 @@ class _MainShellState extends State<MainShell> {
                           profile.name.isNotEmpty
                               ? profile.name[0].toUpperCase()
                               : '?',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
@@ -307,7 +308,7 @@ class _MainShellState extends State<MainShell> {
       //                 //       profile.name.isNotEmpty
       //                 //           ? profile.name[0].toUpperCase()
       //                 //           : '?',
-      //                 //       style: const TextStyle(
+      //                 //       style: TextStyle(
       //                 //         color: Colors.white,
       //                 //         fontSize: 40,
       //                 //         fontWeight: FontWeight.bold,

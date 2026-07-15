@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/utils/theme.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class SocialIconButton extends StatelessWidget {
   final SocialLink socialLink;
   final VoidCallback onTap;
@@ -57,19 +58,19 @@ class SocialIconButton extends StatelessWidget {
   Widget _buildIcon(bool isDark) {
     if (socialLink.logoUrl?.isNotEmpty == true) {
       return Padding(
-        padding: const EdgeInsets.all(6.0),
+        padding: EdgeInsets.all(6.0),
         child: Image.network(
           socialLink.logoUrl!,
           fit: BoxFit.contain,
           errorBuilder: (_, __, ___) =>
-              const Icon(Icons.link, color: Colors.white, size: 24),
+              Icon(Icons.link, color: Colors.white, size: 24),
         ),
       );
     }
 
     switch (socialLink.platform) {
       case SocialPlatform.whatsApp:
-        return const Icon(
+        return Icon(
           Icons.chat_bubble_outline,
           color: Colors.white,
           size: 24,

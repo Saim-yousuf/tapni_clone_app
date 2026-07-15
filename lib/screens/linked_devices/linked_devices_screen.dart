@@ -5,6 +5,7 @@ import 'package:tapni_app/screens/linked_devices/link_device_scan_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LinkedDevicesScreen extends StatefulWidget {
   const LinkedDevicesScreen({super.key});
 
@@ -48,7 +49,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
 
   Future<void> _linkDevice() async {
     final linked = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(builder: (_) => const LinkDeviceScanScreen()),
+      MaterialPageRoute(builder: (_) => LinkDeviceScanScreen()),
     );
     if (linked == true) _load();
   }
@@ -63,7 +64,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(WaUi.radiusLg),
         ),
-        title: Text('Log out device?', style: WaUi.title),
+        title: Text(context.l10n.logOutDevice, style: WaUi.title),
         content: Text(
           '“${device['deviceName'] ?? 'Device'}” will be removed from your account.',
           style: WaUi.body,
@@ -71,12 +72,12 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancel', style: WaUi.bodyMedium),
+            child: Text(context.l10n.cancel, style: WaUi.bodyMedium),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
-              'Log out',
+              context.l10n.logOut2,
               style: WaUi.bodyMedium.copyWith(color: Colors.redAccent),
             ),
           ),
@@ -89,11 +90,11 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
     final res = await _repo.revokeDeviceSession(id);
     if (!mounted) return;
     if (res.success) {
-      ShowAlert.success(message: 'Device logged out', context: context);
+      ShowAlert.success(message: context.l10n.deviceLoggedOut, context: context);
       _load();
     } else {
       ShowAlert.error(
-        message: res.message ?? 'Could not log out device',
+        message: res.message ?? context.l10n.couldNotLogOutDevice,
         context: context,
       );
     }
@@ -105,7 +106,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
     if (dt == null) return '';
     final now = DateTime.now();
     final diff = now.difference(dt);
-    if (diff.inMinutes < 2) return 'Active now';
+    if (diff.inMinutes < 2) return context.l10n.activeNow;
     if (diff.inHours < 24) {
       return 'Last active ${diff.inHours == 0 ? '${diff.inMinutes}m' : '${diff.inHours}h'} ago';
     }
@@ -128,22 +129,22 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
         backgroundColor: WaUi.toolsScaffold,
         elevation: 0,
         foregroundColor: WaUi.primaryText,
-        title: Text('Linked devices', style: WaUi.headline),
+        title: Text(context.l10n.linkedDevices, style: WaUi.headline),
       ),
       body: _loading
-          ? const Center(
+          ? Center(
               child: CircularProgressIndicator(color: WaUi.accent),
             )
           : RefreshIndicator(
               color: WaUi.accent,
               onRefresh: _load,
               child: ListView(
-                padding: const EdgeInsets.only(bottom: 32),
+                padding: EdgeInsets.only(bottom: 32),
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                    padding: EdgeInsets.fromLTRB(20, 8, 20, 16),
                     child: Text(
-                      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.',
+                      context.l10n.useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime,
                       style: WaUi.body.copyWith(color: WaUi.secondaryText),
                     ),
                   ),
@@ -156,7 +157,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
                         borderRadius: BorderRadius.circular(WaUi.radiusLg),
                         onTap: _linkDevice,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 18,
                           ),
@@ -165,30 +166,30 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
                               Container(
                                 width: 44,
                                 height: 44,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: WaUi.accent,
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.qr_code_scanner,
                                   color: Colors.white,
                                 ),
                               ),
-                              const SizedBox(width: 14),
+                              SizedBox(width: 14),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Link a device', style: WaUi.listTitle),
-                                    const SizedBox(height: 2),
+                                    Text(context.l10n.linkADevice, style: WaUi.listTitle),
+                                    SizedBox(height: 2),
                                     Text(
-                                      'Scan QR shown on the other device',
+                                      context.l10n.scanQRShownOnTheOtherDevice,
                                       style: WaUi.listSubtitle,
                                     ),
                                   ],
                                 ),
                               ),
-                              const Icon(
+                              Icon(
                                 Icons.chevron_right,
                                 color: WaUi.secondaryText,
                               ),
@@ -199,17 +200,17 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 28, 20, 8),
-                    child: Text('Device status', style: WaUi.sectionHeader),
+                    padding: EdgeInsets.fromLTRB(20, 28, 20, 8),
+                    child: Text(context.l10n.deviceStatus, style: WaUi.sectionHeader),
                   ),
                   if (_devices.isEmpty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 24,
                       ),
                       child: Text(
-                        'Only this phone is using your account right now.',
+                        context.l10n.onlyThisPhoneIsUsingYourAccountRightNow,
                         style: WaUi.caption,
                       ),
                     )
@@ -217,7 +218,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
                     ..._devices.map((device) {
                       final isCurrent = device['isCurrent'] == true;
                       return ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
+                        contentPadding: EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 4,
                         ),
@@ -240,14 +241,14 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
                         ),
                         trailing: isCurrent
                             ? Text(
-                                'Active',
+                                context.l10n.active,
                                 style: WaUi.caption.copyWith(
                                   color: WaUi.accent,
                                   fontWeight: FontWeight.w600,
                                 ),
                               )
                             : IconButton(
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.logout,
                                   color: Colors.redAccent,
                                   size: 20,
@@ -256,11 +257,11 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
                               ),
                       );
                     }),
-                  const Divider(height: 32),
+                  Divider(height: 32),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      'Keep your account safe. Only scan QR codes when you want to link a device you trust.',
+                      context.l10n.keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust,
                       style: WaUi.caption,
                     ),
                   ),

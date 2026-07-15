@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/models/card_template.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class TemplateBusinessCardPreview extends StatelessWidget {
   final CardTemplate template;
   final String name;
@@ -47,7 +48,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.14),
             blurRadius: 18,
-            offset: const Offset(0, 8),
+            offset: Offset(0, 8),
           ),
         ],
         image: cover != null && cover.isNotEmpty
@@ -57,7 +58,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
               )
             : null,
       ),
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -70,7 +71,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
                 size: 26,
               ),
               Text(
-                'Barqody',
+                context.l10n.barqody,
                 style: TextStyle(
                   color: template.brandingColor,
                   fontWeight: FontWeight.w600,

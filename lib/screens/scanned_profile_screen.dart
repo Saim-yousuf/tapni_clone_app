@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 Map<String, dynamic> _unwrapApiPayload(dynamic data) {
   if (data is Map<String, dynamic>) {
     final inner = data['data'];
@@ -229,7 +230,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
 
     setState(() {
       _isLoading = false;
-      _errorMessage = response.message ?? 'Profile not found.';
+      _errorMessage = response.message ?? context.l10n.profileNotFound;
     });
   }
 
@@ -242,14 +243,14 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         elevation: 0,
         foregroundColor: Colors.black,
         title: Text(
-          widget.username ?? "Profile",
-          style: const TextStyle(fontWeight: FontWeight.w600),
+          widget.username ?? context.l10n.profile,
+          style: TextStyle(fontWeight: FontWeight.w600),
         ),
         actions: [_buildAppBarMenu()],
       ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator())
             : _errorMessage != null
             ? _buildErrorView()
             : _buildProfileView(_profile!),
@@ -259,18 +260,18 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
 
   Widget _buildAppBarMenu() {
     if (_isLoading || _errorMessage != null || _profile == null) {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
 
     final isBusinessUser =
         Provider.of<ProfileProvider>(context, listen: false).isProUser;
     if (!isBusinessUser || !_employeeStatusChecked || _profile!.id == null) {
-      return const SizedBox.shrink();
+      return SizedBox.shrink();
     }
 
     return PopupMenuButton<String>(
-      icon: const Icon(Icons.more_vert),
-      tooltip: 'Business options',
+      icon: Icon(Icons.more_vert),
+      tooltip: context.l10n.businessOptions,
       onSelected: (value) {
         if (value == 'add_employee' && !_isEmployee && !_isPendingEmployee) {
           _addAsEmployee(_profile!);
@@ -296,10 +297,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             ),
             title: Text(
               _isEmployee
-                  ? 'Already Employee'
+                  ? context.l10n.alreadyEmployee
                   : _isPendingEmployee
-                      ? 'Invitation Pending'
-                      : 'Invite as Employee',
+                      ? context.l10n.invitationPending
+                      : context.l10n.inviteAsEmployee,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: _isEmployee
@@ -311,11 +312,11 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             ),
             subtitle: Text(
               _isEmployee
-                  ? 'This person is on your team'
+                  ? context.l10n.thisPersonIsOnYourTeam
                   : _isPendingEmployee
-                      ? 'Waiting for them to accept'
-                      : 'Send invitation for attendance',
-              style: const TextStyle(fontSize: 12),
+                      ? context.l10n.waitingForThemToAccept
+                      : context.l10n.sendInvitationForAttendance,
+              style: TextStyle(fontSize: 12),
             ),
           ),
         ),
@@ -326,25 +327,25 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   Widget _buildErrorView() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
+            Icon(
               Icons.person_off_outlined,
               size: 48,
               color: Colors.black38,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               _errorMessage!,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 15, color: Colors.black54),
+              style: TextStyle(fontSize: 15, color: Colors.black54),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             FilledButton(
               onPressed: _fetchProfile,
-              child: const Text('Try again'),
+              child: Text(context.l10n.tryAgain),
             ),
           ],
         ),
@@ -370,36 +371,36 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         _hasActivePrograms &&
         profile.id != null;
     final rewardButtonLabel =
-        _isCustomerEnrolledInBusiness ? 'Enrolled' : 'Not Enrolled';
+        _isCustomerEnrolledInBusiness ? 'Enrolled' : context.l10n.notEnrolled;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
           Image.asset('assets/images/jpg/barqody_name.jpg', width: 120),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           _buildProfileAvatar(profile, displayPhoto, displayCover),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Text(
             displayName,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
           ),
           if (displayBio.isNotEmpty) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               displayBio,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 14, color: Colors.black54),
+              style: TextStyle(fontSize: 14, color: Colors.black54),
             ),
           ],
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               FilledButton.icon(
                 onPressed: () async {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Exchanging contact...')),
+                    SnackBar(content: Text(context.l10n.exchangingContact)),
                   );
                   final res = await AuthRepo().exchangeContact(
                     username: widget.username,
@@ -408,23 +409,23 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                   if (mounted) {
                     if (res.success) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Contact exchanged successfully!'),
+                        SnackBar(
+                          content: Text(context.l10n.contactExchangedSuccessfully),
                         ),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            res.message ?? 'Failed to exchange contact',
+                            res.message ?? context.l10n.failedToExchangeContact,
                           ),
                         ),
                       );
                     }
                   }
                 },
-                icon: const Icon(Icons.sync_alt),
-                label: const Text('Exchange Contact'),
+                icon: Icon(Icons.sync_alt),
+                label: Text(context.l10n.exchangeContact),
                 style: FilledButton.styleFrom(
                   backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
@@ -525,7 +526,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                             profile.name.isNotEmpty
                                 ? profile.name[0].toUpperCase()
                                 : '?',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.white,
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
@@ -571,7 +572,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                   const SizedBox(height: 8),
                   Text(
                     link.platformName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -795,12 +796,12 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
       widget.onEnrollmentUpdated?.call(true, _enrollments);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Customer enrolled successfully')),
+          SnackBar(content: Text(context.l10n.customerEnrolledSuccessfully)),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Failed to enroll customer')),
+        SnackBar(content: Text(res.message ?? context.l10n.failedToEnrollCustomer)),
       );
     }
   }
@@ -833,7 +834,7 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
       widget.onEnrollmentUpdated?.call(true, _enrollments);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Failed to add program')),
+        SnackBar(content: Text(res.message ?? context.l10n.failedToAddProgram)),
       );
     }
   }
@@ -858,7 +859,7 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
             ),
             const SizedBox(height: 16),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
                   Icon(
@@ -867,20 +868,20 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
                         : Icons.card_giftcard_outlined,
                     color: _isBusinessEnrolled ? Colors.green.shade700 : null,
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Rewards for ${widget.customer.name}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
                         Text(
-                          _isBusinessEnrolled ? 'Enrolled' : 'Not Enrolled',
+                          _isBusinessEnrolled ? 'Enrolled' : context.l10n.notEnrolled,
                           style: TextStyle(
                             fontSize: 12,
                             color: _isBusinessEnrolled
@@ -894,11 +895,11 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
                 ],
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Expanded(
               child: ListView(
                 controller: widget.scrollController,
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+                padding: EdgeInsets.fromLTRB(16, 8, 16, 20),
                 children: _isBusinessEnrolled
                     ? _buildEnrolledContent()
                     : _buildNotEnrolledContent(),
@@ -913,8 +914,8 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
     return [
       Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.only(bottom: 16),
+        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: Colors.grey.shade50,
           borderRadius: BorderRadius.circular(14),
@@ -923,16 +924,15 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Customer is not enrolled yet',
+            Text(context.l10n.customerIsNotEnrolledYet,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Text(
               'Enroll ${widget.customer.name} in your business rewards, then assign programs below.',
               style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
@@ -944,7 +944,7 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
                   ),
                 ),
                 child: _isEnrollingBusiness
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
@@ -952,17 +952,17 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
                           color: Colors.white,
                         ),
                       )
-                    : const Text('Enroll Customer'),
+                    : Text(context.l10n.enrollCustomer),
               ),
             ),
           ],
         ),
       ),
       if (_notEnrolled.isNotEmpty) ...[
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
-            'Business Programs',
+            context.l10n.businessPrograms,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 13,
@@ -972,11 +972,11 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
         ),
         ..._notEnrolled.map((p) => _availableTile(p, enrollLabel: 'Enroll')),
       ] else
-        const Padding(
+        Padding(
           padding: EdgeInsets.all(24),
           child: Center(
             child: Text(
-              'No active reward programs available.',
+              context.l10n.noActiveRewardProgramsAvailable,
               style: TextStyle(color: Colors.black38),
             ),
           ),
@@ -987,10 +987,10 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
   List<Widget> _buildEnrolledContent() {
     return [
       if (_enrollments.isNotEmpty) ...[
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(left: 4, bottom: 8, top: 6),
           child: Text(
-            'Assigned Programs',
+            context.l10n.assignedPrograms,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 13,
@@ -1001,17 +1001,17 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
         ..._enrollments.map((e) => _enrolledTile(e)),
       ] else
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: EdgeInsets.symmetric(vertical: 12),
           child: Text(
-            'No programs assigned yet. Add programs below.',
+            context.l10n.noProgramsAssignedYetAddProgramsBelow,
             style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
           ),
         ),
       if (_notEnrolled.isNotEmpty) ...[
         Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 8, top: 16),
+          padding: EdgeInsets.only(left: 4, bottom: 8, top: 16),
           child: Text(
-            'Add Program',
+            context.l10n.addProgram,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 13,
@@ -1019,14 +1019,14 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
             ),
           ),
         ),
-        ..._notEnrolled.map((p) => _availableTile(p, enrollLabel: 'Add')),
+        ..._notEnrolled.map((p) => _availableTile(p, enrollLabel: context.l10n.add)),
       ],
       if (_enrollments.isEmpty && _notEnrolled.isEmpty)
-        const Padding(
+        Padding(
           padding: EdgeInsets.all(40),
           child: Center(
             child: Text(
-              'No active reward programs available.',
+              context.l10n.noActiveRewardProgramsAvailable,
               style: TextStyle(color: Colors.black38),
             ),
           ),
@@ -1102,7 +1102,7 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(program.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(program.title, style: TextStyle(fontWeight: FontWeight.bold)),
               Text(
                 '${program.stamps} stamps required',
                 style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
@@ -1127,7 +1127,7 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                 ),
-                child: Text(enrollLabel, style: const TextStyle(fontSize: 13)),
+                child: Text(enrollLabel, style: TextStyle(fontSize: 13)),
               ),
       ]),
     );

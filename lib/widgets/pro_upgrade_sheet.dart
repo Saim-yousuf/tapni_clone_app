@@ -6,6 +6,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class SubcriptionSheet {
   static void show(BuildContext context) {
     showModalBottomSheet(
@@ -14,7 +15,7 @@ class SubcriptionSheet {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
       useSafeArea: true,
-      builder: (_) => const ProUpgradeSheet(),
+      builder: (_) => ProUpgradeSheet(),
     );
   }
 }
@@ -34,7 +35,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
   int _step = 0; // 0 = Business Details, 1 = Plan Selection
   final _businessNameController = TextEditingController();
   String? _selectedCategory;
-  final List<String> _categories = [
+  final List<String> _categories = const [
     'Technology',
     'Retail',
     'Health',
@@ -95,7 +96,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
 
     if (success) {
       messenger.showSnackBar(
-        const SnackBar(content: Text('Subscription request submitted')),
+        SnackBar(content: Text(context.l10n.subscriptionRequestSubmitted)),
       );
       Navigator.pop(context);
     }
@@ -106,8 +107,8 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
     final name = _businessNameController.text.trim();
     if (name.isEmpty || _selectedCategory == null) {
       messenger.showSnackBar(
-        const SnackBar(
-          content: Text('Please enter business details to continue'),
+        SnackBar(
+          content: Text(context.l10n.pleaseEnterBusinessDetailsToContinue),
         ),
       );
       return;
@@ -143,7 +144,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
     } else {
       messenger.showSnackBar(
         SnackBar(
-          content: Text(response.message ?? 'Failed to save business details'),
+          content: Text(response.message ?? context.l10n.failedToSaveBusinessDetails),
         ),
       );
     }
@@ -161,7 +162,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
     final subscription = subscriptionProvider.currentSubscription;
     return SheetScaffold(
       body: AnimatedPadding(
-      duration: const Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 200),
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
@@ -201,38 +202,37 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
                         borderRadius: BorderRadius.circular(2.5),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32),
 
                     // Big center icon
                     Container(
-                      padding: const EdgeInsets.all(24),
+                      padding: EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         color: Colors.orange.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.hourglass_top_rounded,
                         size: 56,
                         color: Colors.orange,
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
 
                     // Title
-                    const Text(
-                      'Request Pending',
+                    Text(context.l10n.requestPending2,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
 
                     // Subtitle
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      padding: EdgeInsets.symmetric(horizontal: 24),
                       child: Text(
                         "Your ${subscription!.planName} request is submitted and waiting for approval on ${_date(subscription.requestedAt)}.",
                         textAlign: TextAlign.center,
@@ -243,20 +243,20 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
                       ),
                     ),
 
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32),
                   ],
                 )
               else if (subscription?.isRejected == true)
                 _statusPanel(
                   isDark: isDark,
-                  title: "Request rejected",
+                  title: context.l10n.requestRejected,
                   text:
-                      "${subscription!.rejectionReason.isEmpty ? "No reason provided." : subscription.rejectionReason}\nYou can try again below.",
+                      "${subscription!.rejectionReason.isEmpty ? context.l10n.noReasonProvided : subscription.rejectionReason}\nYou can try again below.",
                 )
               else if (subscription?.isActive == true)
                 _statusPanel(
                   isDark: isDark,
-                  title: "Premium active",
+                  title: context.l10n.premiumActive,
                   text:
                       "${subscription!.planName} is active until ${_date(subscription.endDate)}.\nPlease cancel current plan before buying another.",
                 ),
@@ -292,31 +292,30 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
             ),
           ),
         ),
-        const SizedBox(height: 24),
-        const Text(
-          'Business Details',
+        SizedBox(height: 24),
+        Text(context.l10n.businessDetails,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Text(
-          'Please provide your business details before upgrading.',
+          context.l10n.pleaseProvideYourBusinessDetailsBeforeUpgrading,
           style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         TextField(
           controller: _businessNameController,
-          decoration: const InputDecoration(
-            labelText: 'Business Name',
+          decoration: InputDecoration(
+            labelText: context.l10n.businessName,
             border: OutlineInputBorder(),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         DropdownButtonFormField<String>(
           value: _selectedCategory,
-          decoration: const InputDecoration(
-            labelText: 'Business Category',
+          decoration: InputDecoration(
+            labelText: context.l10n.businessCategory,
             border: OutlineInputBorder(),
           ),
           items: _categories.map((category) {
@@ -328,7 +327,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
             });
           },
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         SizedBox(
           height: 52,
           child: ElevatedButton(
@@ -338,8 +337,8 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
             ),
             onPressed: _isSavingBusinessData ? null : _handleNext,
             child: _isSavingBusinessData
-                ? const CircularProgressIndicator()
-                : const Text("Next"),
+                ? CircularProgressIndicator()
+                : Text(context.l10n.next),
           ),
         ),
       ],
@@ -363,14 +362,14 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
             borderRadius: BorderRadius.circular(2.5),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
 
         /// TITLE (same UI)
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Upgrade to ',
+              context.l10n.upgradeTo2,
               style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w900,
                 fontSize: 24,
@@ -378,13 +377,12 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Text(
-                'PRO',
+              child: Text(context.l10n.pro,
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w900,
@@ -395,7 +393,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           ],
         ),
 
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
 
         /// YEARLY (same UI style)
         GestureDetector(
@@ -403,14 +401,14 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           child: _planCard(
             isDark: isDark,
             selected: _isYearlySelected,
-            title: "Yearly",
-            subtitle: "Rs 8,300 billed yearly",
+            title: context.l10n.yearly,
+            subtitle: context.l10n.rs8300BilledYearly,
             price: "PKR 691.66/month",
             badge: "7 months free",
           ),
         ),
 
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
 
         /// MONTHLY
         GestureDetector(
@@ -418,17 +416,17 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           child: _planCard(
             isDark: isDark,
             selected: !_isYearlySelected,
-            title: "Monthly",
-            subtitle: "Rs 1,600 billed monthly",
+            title: context.l10n.monthly,
+            subtitle: context.l10n.rs1600BilledMonthly,
             price: "PKR 1,600/month",
             badge: null,
           ),
         ),
 
-        const SizedBox(height: 14),
+        SizedBox(height: 14),
 
         Text(
-          'Cancel anytime.',
+          context.l10n.cancelAnytime,
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
@@ -436,15 +434,15 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           ),
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         /// BENEFITS (same UI)
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: isDark
                 ? Colors.white.withOpacity(0.03)
-                : const Color(0xFFF2F2F7),
+                : Color(0xFFF2F2F7),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
@@ -456,31 +454,31 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           ),
         ),
 
-        const SizedBox(height: 18),
+        SizedBox(height: 18),
 
         /// TRANSACTION FIELD (added from subscription screen)
         TextField(
           controller: _transactionController,
-          decoration: const InputDecoration(
-            labelText: 'Transaction reference (optional)',
+          decoration: InputDecoration(
+            labelText: context.l10n.transactionReferenceOptional,
             border: OutlineInputBorder(),
           ),
         ),
 
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
 
         /// RECEIPT UPLOAD
         OutlinedButton.icon(
           onPressed: _pickReceipt,
-          icon: const Icon(Icons.upload_file),
+          icon: Icon(Icons.upload_file),
           label: Text(
             _receiptBase64.isEmpty
-                ? "Upload receipt (optional)"
-                : "Receipt attached",
+                ? context.l10n.uploadReceiptOptional
+                : context.l10n.receiptAttached,
           ),
         ),
 
-        const SizedBox(height: 18),
+        SizedBox(height: 18),
 
         /// BUTTON (now real subscription)
         SizedBox(
@@ -493,8 +491,8 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
             ),
             onPressed: subscriptionProvider.isLoading ? null : _submitRequest,
             child: subscriptionProvider.isLoading
-                ? const CircularProgressIndicator()
-                : const Text("Upgrade now"),
+                ? CircularProgressIndicator()
+                : Text(context.l10n.upgradeNow),
           ),
         ),
       ],
@@ -532,14 +530,14 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(fontWeight: FontWeight.w900),
+                      style: TextStyle(fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 2),
-                    Text(subtitle, style: const TextStyle(fontSize: 12)),
+                    Text(subtitle, style: TextStyle(fontSize: 12)),
                   ],
                 ),
               ),
-              Text(price, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(price, style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(width: 10),
               Icon(selected ? Icons.check_circle : Icons.radio_button_off),
             ],
@@ -558,7 +556,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
               ),
               child: Text(
                 badge,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: 9,
                   fontWeight: FontWeight.w900,
@@ -602,7 +600,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 6),
           Text(text),

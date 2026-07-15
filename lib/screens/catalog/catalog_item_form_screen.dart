@@ -5,6 +5,7 @@ import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/utils/theme.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class CatalogItemFormScreen extends StatefulWidget {
   final String catalogLabel;
   final CatalogItem? existingItem;
@@ -71,7 +72,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
     final name = _nameCtrl.text.trim();
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter item name')),
+        SnackBar(content: Text(context.l10n.pleaseEnterItemName)),
       );
       return;
     }
@@ -79,7 +80,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
     final category = _selectedCategory?.trim() ?? '';
     if (widget.requireCategory && category.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a category')),
+        SnackBar(content: Text(context.l10n.pleaseSelectACategory)),
       );
       return;
     }
@@ -108,7 +109,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final title = _isEditing ? 'Edit item' : 'Add ${widget.catalogLabel} item';
+    final title = _isEditing ? context.l10n.editItem : 'Add ${widget.catalogLabel} item';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -118,7 +119,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
         elevation: 0,
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.w700),
+          style: TextStyle(fontWeight: FontWeight.w700),
         ),
       ),
       body: SafeArea(
@@ -126,63 +127,63 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                padding: EdgeInsets.fromLTRB(20, 8, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Center(child: _buildImagePicker()),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     Center(
                       child: TextButton.icon(
                         onPressed: _pickImage,
-                        icon: const Icon(Icons.photo_outlined),
+                        icon: Icon(Icons.photo_outlined),
                         label: Text(
                           _pickedImagePath != null ||
                                   (_savedImageUrl?.isNotEmpty == true)
-                              ? 'Change photo'
-                              : 'Add photo',
+                              ? context.l10n.changePhoto
+                              : context.l10n.addPhoto,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
                     TextField(
                       controller: _nameCtrl,
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                        labelText: 'Name',
+                        labelText: context.l10n.name,
                         filled: true,
-                        fillColor: const Color(0xFFF5F5F5),
+                        fillColor: Color(0xFFF5F5F5),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     TextField(
                       controller: _priceCtrl,
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                        labelText: 'Price (Rs)',
+                        labelText: context.l10n.priceRs,
                         filled: true,
-                        fillColor: const Color(0xFFF5F5F5),
+                        fillColor: Color(0xFFF5F5F5),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     if (widget.existingCategories.isNotEmpty)
                       DropdownButtonFormField<String>(
                         value: widget.existingCategories.contains(_selectedCategory)
                             ? _selectedCategory
                             : null,
                         decoration: InputDecoration(
-                          labelText: 'Category *',
+                          labelText: context.l10n.category,
                           filled: true,
-                          fillColor: const Color(0xFFF5F5F5),
+                          fillColor: Color(0xFFF5F5F5),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide.none,
@@ -200,16 +201,16 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                       )
                     else
                       Text(
-                        'Add categories in your catalog settings first.',
+                        context.l10n.addCategoriesInYourCatalogSettingsFirst,
                         style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
                       ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     TextField(
                       controller: _descCtrl,
                       maxLines: 4,
                       textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
-                        labelText: 'Description (optional)',
+                        labelText: context.l10n.descriptionOptional,
                         alignLabelWithHint: true,
                         filled: true,
                         fillColor: const Color(0xFFF5F5F5),
@@ -224,7 +225,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+              padding: EdgeInsets.fromLTRB(20, 8, 20, 20),
               child: SizedBox(
                 height: 54,
                 width: double.infinity,
@@ -237,7 +238,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                     ),
                   ),
                   child: _isSaving
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 22,
                           height: 22,
                           child: CircularProgressIndicator(
@@ -246,8 +247,8 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                           ),
                         )
                       : Text(
-                          _isEditing ? 'Update item' : 'Add item',
-                          style: const TextStyle(
+                          _isEditing ? context.l10n.updateItem : context.l10n.addItem,
+                          style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
                             fontSize: 16,
@@ -302,7 +303,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
+        color: Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.shade300),
       ),
@@ -310,9 +311,9 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.add_a_photo_outlined, color: Colors.grey.shade500, size: 40),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
-            'Tap to add photo',
+            context.l10n.tapToAddPhoto,
             style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
           ),
         ],

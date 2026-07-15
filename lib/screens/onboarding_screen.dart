@@ -3,6 +3,7 @@ import 'package:tapni_app/screens/login_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
 
@@ -14,23 +15,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final List<Map<String, dynamic>> _pages = [
+  List<Map<String, dynamic>> _pages(BuildContext context) => [
     {
-      'title': 'One Tap To Share',
+      'title': context.l10n.oneTapToShare,
       'description':
           'Share your digital card instantly via NFC or QR Code. No app required for others to view your details.',
       'icon': Icons.contactless_rounded,
       'gradient': [Color(0xFF1E1E24), Color(0xFF0D0D0E)],
     },
     {
-      'title': 'Always Up To Date',
+      'title': context.l10n.alwaysUpToDate,
       'description':
           'Keep your info updated in real time. Modify your social handles, title, or phone number and watch it update immediately.',
       'icon': Icons.sync_lock_rounded,
       'gradient': [Color(0xFF251F14), Color(0xFF0D0D0E)],
     },
     {
-      'title': 'Smart Contact Capture',
+      'title': context.l10n.smartContactCapture,
       'description':
           'Collect contacts during meetings. Let prospects fill out their details directly on your profile page to save them instantly.',
       'icon': Icons.people_outline_rounded,
@@ -45,7 +46,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _onNextPage() {
-    if (_currentPage < _pages.length - 1) {
+    if (_currentPage < _pages(context).length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -71,11 +72,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           // Background Gradient Transition
           AnimatedContainer(
-            duration: const Duration(milliseconds: 400),
+            duration: Duration(milliseconds: 400),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: isDark
-                    ? _pages[_currentPage]['gradient']
+                    ? _pages(context)[_currentPage]['gradient']
                     : [Colors.white, const Color(0xFFF3F3F7)],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -88,7 +89,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: [
                 // Top Header with Skip Button
                 Padding(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 16.0,
                     vertical: 8.0,
                   ),
@@ -104,15 +105,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               gradient: AppTheme.goldGradient,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            // child: const Icon(Icons.contactless, color: Colors.black, size: 18),
+                            // child: Icon(Icons.contactless, color: Colors.black, size: 18),
                             child: Image.asset(
                               "assets/images/png/app_icon.png",
                               fit: BoxFit.cover,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           Text(
-                            'BarQody',
+                            context.l10n.appTitle,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -124,7 +125,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       TextButton(
                         onPressed: _goToLogin,
                         child: Text(
-                          'Skip',
+                          context.l10n.skip,
                           style: TextStyle(
                             color: isDark
                                 ? AppTheme.textGreyDark
@@ -146,9 +147,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         _currentPage = index;
                       });
                     },
-                    itemCount: _pages.length,
+                    itemCount: _pages(context).length,
                     itemBuilder: (context, index) {
-                      final item = _pages[index];
+                      final item = _pages(context)[index];
                       return Padding(
                         padding: const EdgeInsets.all(32.0),
                         child: Column(
@@ -235,10 +236,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
-                          _pages.length,
+                          _pages(context).length,
                           (index) => AnimatedContainer(
-                            duration: const Duration(milliseconds: 350),
-                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                            duration: Duration(milliseconds: 350),
+                            margin: EdgeInsets.symmetric(horizontal: 4.0),
                             height: 8.0,
                             width: _currentPage == index ? 24.0 : 8.0,
                             decoration: BoxDecoration(
@@ -250,16 +251,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      SizedBox(height: 32),
 
                       // Action Button
                       Row(
                         children: [
                           Expanded(
                             child: CustomButton(
-                              text: _currentPage == _pages.length - 1
-                                  ? 'Get Started'
-                                  : 'Next',
+                              text: _currentPage == _pages(context).length - 1
+                                  ? context.l10n.getStarted
+                                  : context.l10n.next,
                               onTap: _onNextPage,
                             ),
                           ),

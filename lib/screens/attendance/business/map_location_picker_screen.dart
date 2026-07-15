@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:tapni_app/utils/location_helper.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class MapLocationResult {
   final double latitude;
   final double longitude;
@@ -98,7 +99,7 @@ class _MapLocationPickerScreenState extends State<MapLocationPickerScreen> {
 
     if (location == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Location permission required')),
+        SnackBar(content: Text(context.l10n.locationPermissionRequired)),
       );
       return;
     }
@@ -126,15 +127,15 @@ class _MapLocationPickerScreenState extends State<MapLocationPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AttendanceUi.scaffoldBg,
-      appBar: AttendanceUi.appBar('Pick Location'),
+      appBar: AttendanceUi.appBar(context.l10n.pickLocation),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+                  padding: EdgeInsets.fromLTRB(20, 8, 20, 12),
                   child: Text(
-                    'Tap on the map or use your current location',
+                    context.l10n.tapOnTheMapOrUseYourCurrentLocation,
                     style: AttendanceUi.body,
                   ),
                 ),
@@ -175,7 +176,7 @@ class _MapLocationPickerScreenState extends State<MapLocationPickerScreen> {
                                 point: _selectedPoint,
                                 width: 56,
                                 height: 56,
-                                child: const Icon(
+                                child: Icon(
                                   Icons.location_on,
                                   color: Colors.black,
                                   size: 48,
@@ -189,12 +190,12 @@ class _MapLocationPickerScreenState extends State<MapLocationPickerScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20),
                   child: Column(
                     children: [
                       Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.all(16),
+                        padding: EdgeInsets.all(16),
                         decoration: AttendanceUi.thickCard,
                         child: Text(
                           'Lat: ${_selectedPoint.latitude.toStringAsFixed(5)}\n'
@@ -204,16 +205,16 @@ class _MapLocationPickerScreenState extends State<MapLocationPickerScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14),
                       AttendanceUi.secondaryButton(
-                        label: 'My Location',
+                        label: context.l10n.myLocation,
                         icon: Icons.my_location,
                         loading: _isLocating,
                         onPressed: _goToMyLocation,
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       AttendanceUi.primaryButton(
-                        label: 'Confirm Location',
+                        label: context.l10n.confirmLocation,
                         icon: Icons.check_rounded,
                         onPressed: _confirm,
                       ),

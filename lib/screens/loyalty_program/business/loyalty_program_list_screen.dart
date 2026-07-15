@@ -4,8 +4,9 @@ import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/business/create_reward_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_details_screen.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LoyaltyProgramListScreen extends StatefulWidget {
-  const LoyaltyProgramListScreen({super.key});
+  LoyaltyProgramListScreen({super.key});
 
   @override
   State<LoyaltyProgramListScreen> createState() => _LoyaltyProgramListScreenState();
@@ -42,14 +43,14 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen> {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         elevation: 0,
-        title: const Text('Reward Programs', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: Text(context.l10n.rewardPrograms, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
               final created = await Navigator.push<bool>(
                 context,
-                MaterialPageRoute(builder: (_) => const CreateRewardScreen()),
+                MaterialPageRoute(builder: (_) => CreateRewardScreen()),
               );
               if (created == true) _load();
             },
@@ -57,13 +58,13 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen> {
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _programs.isEmpty
               ? _buildEmpty()
               : RefreshIndicator(
                   onRefresh: _load,
                   child: ListView.builder(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16),
                     itemCount: _programs.length,
                     itemBuilder: (_, i) => _buildCard(_programs[i]),
                   ),
@@ -73,14 +74,14 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen> {
               onPressed: () async {
                 final created = await Navigator.push<bool>(
                   context,
-                  MaterialPageRoute(builder: (_) => const CreateRewardScreen()),
+                  MaterialPageRoute(builder: (_) => CreateRewardScreen()),
                 );
                 if (created == true) _load();
               },
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,
-              icon: const Icon(Icons.add),
-              label: const Text('New Reward'),
+              icon: Icon(Icons.add),
+              label: Text(context.l10n.newReward),
             )
           : null,
     );
@@ -92,16 +93,16 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.card_giftcard_outlined, size: 64, color: Colors.grey.shade300),
-          const SizedBox(height: 16),
-          const Text('No reward programs yet', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-          const SizedBox(height: 8),
-          Text('Create your first reward card for customers', style: TextStyle(color: Colors.grey.shade500, fontSize: 13)),
-          const SizedBox(height: 24),
+          SizedBox(height: 16),
+          Text(context.l10n.noRewardProgramsYet, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          SizedBox(height: 8),
+          Text(context.l10n.createYourFirstRewardCardForCustomers, style: TextStyle(color: Colors.grey.shade500, fontSize: 13)),
+          SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: () async {
               final created = await Navigator.push<bool>(
                 context,
-                MaterialPageRoute(builder: (_) => const CreateRewardScreen()),
+                MaterialPageRoute(builder: (_) => CreateRewardScreen()),
               );
               if (created == true) _load();
             },
@@ -110,8 +111,8 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen> {
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
-            icon: const Icon(Icons.add),
-            label: const Text('Create Reward'),
+            icon: Icon(Icons.add),
+            label: Text(context.l10n.createReward),
           ),
         ],
       ),
@@ -134,7 +135,7 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen> {
           color: program.theme.cardBackgroundColor,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 10, offset: const Offset(0, 3))
+            BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 10, offset: Offset(0, 3))
           ],
         ),
         child: Column(
@@ -146,21 +147,21 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(program.logo, width: 36, height: 36, fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => const SizedBox()),
+                        errorBuilder: (_, __, ___) => SizedBox()),
                   ),
-                if (program.logo.isNotEmpty) const SizedBox(width: 10),
+                if (program.logo.isNotEmpty) SizedBox(width: 10),
                 Expanded(
                   child: Text(program.label.isNotEmpty ? program.label : program.title,
                       style: TextStyle(color: program.theme.cardTextColor.withOpacity(0.6), fontSize: 12)),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color: program.isActive ? Colors.green.withOpacity(0.15) : Colors.red.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    program.isActive ? 'Active' : 'Inactive',
+                    program.isActive ? context.l10n.active : 'Inactive',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,

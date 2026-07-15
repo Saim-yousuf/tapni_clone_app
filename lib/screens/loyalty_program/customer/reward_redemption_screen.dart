@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class RewardRedemptionScreen extends StatefulWidget {
-  const RewardRedemptionScreen({super.key});
+  RewardRedemptionScreen({super.key});
 
   @override
   State<RewardRedemptionScreen> createState() => _RewardRedemptionScreenState();
@@ -18,13 +19,12 @@ class _RewardRedemptionScreenState extends State<RewardRedemptionScreen> {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          "Redeem Reward",
+        title: Text(context.l10n.redeemReward,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: redeemed ? _successView() : _redeemView(),
       ),
     );
@@ -37,17 +37,17 @@ class _RewardRedemptionScreenState extends State<RewardRedemptionScreen> {
         // Reward Card
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
-            children: const [
+            children: [
               Icon(Icons.card_giftcard, color: Colors.white, size: 40),
               SizedBox(height: 10),
               Text(
-                "Free Coffee",
+                context.l10n.freeCoffee,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
@@ -56,14 +56,14 @@ class _RewardRedemptionScreenState extends State<RewardRedemptionScreen> {
               ),
               SizedBox(height: 6),
               Text(
-                "10 Stamps Required",
+                context.l10n.n10StampsRequired,
                 style: TextStyle(color: Colors.white70),
               ),
             ],
           ),
         ),
 
-        const SizedBox(height: 30),
+        SizedBox(height: 30),
 
         // QR SCAN BOX
         Container(
@@ -73,20 +73,20 @@ class _RewardRedemptionScreenState extends State<RewardRedemptionScreen> {
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: Colors.black12),
           ),
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.qr_code_scanner, size: 70, color: Colors.black),
               SizedBox(height: 10),
               Text(
-                "Scan Business QR to Redeem",
+                context.l10n.scanBusinessQRToRedeem,
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ],
           ),
         ),
 
-        const Spacer(),
+        Spacer(),
 
         SizedBox(
           width: double.infinity,
@@ -104,8 +104,7 @@ class _RewardRedemptionScreenState extends State<RewardRedemptionScreen> {
                 borderRadius: BorderRadius.circular(14),
               ),
             ),
-            child: const Text(
-              "Confirm Redemption",
+            child: Text(context.l10n.confirmRedemption,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
@@ -119,19 +118,17 @@ class _RewardRedemptionScreenState extends State<RewardRedemptionScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.check_circle, color: Colors.black, size: 90),
-        const SizedBox(height: 20),
-        const Text(
-          "Reward Redeemed!",
+        Icon(Icons.check_circle, color: Colors.black, size: 90),
+        SizedBox(height: 20),
+        Text(context.l10n.rewardRedeemed,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 10),
-        const Text(
-          "Your Free Coffee has been successfully redeemed.",
+        SizedBox(height: 10),
+        Text(context.l10n.yourFreeCoffeeHasBeenSuccessfullyRedeemed,
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.grey),
         ),
-        const SizedBox(height: 30),
+        SizedBox(height: 30),
 
         SizedBox(
           width: double.infinity,
@@ -144,9 +141,9 @@ class _RewardRedemptionScreenState extends State<RewardRedemptionScreen> {
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.black,
-              side: const BorderSide(color: Colors.black12),
+              side: BorderSide(color: Colors.black12),
             ),
-            child: const Text("Redeem Another Reward"),
+            child: Text(context.l10n.redeemAnotherReward),
           ),
         ),
       ],

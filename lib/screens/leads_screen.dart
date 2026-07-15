@@ -13,6 +13,7 @@ import 'package:tapni_app/widgets/custom_button.dart';
 import 'package:tapni_app/widgets/filter_contacts_sheet.dart';
 import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LeadsScreen extends StatefulWidget {
   const LeadsScreen({Key? key}) : super(key: key);
 
@@ -39,7 +40,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
   Future<void> _openScan() async {
     _dismissKeyboard();
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ScanScreen()),
+      MaterialPageRoute(builder: (_) => ScanScreen()),
     );
     if (!mounted) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -50,12 +51,12 @@ class _LeadsScreenState extends State<LeadsScreen> {
   void _openFindUser() {
     _dismissKeyboard();
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const FindUserScreen()),
+      MaterialPageRoute(builder: (_) => FindUserScreen()),
     );
   }
 
   String _contactsSubtitle(int count, LeadsProvider provider) {
-    if (count == 0) return 'Start building your network';
+    if (count == 0) return context.l10n.startBuildingYourNetwork;
     final parts = <String>['$count contact${count == 1 ? '' : 's'}'];
     if (provider.activeCategoryId != null) {
       parts.add(_activeCategoryLabel(provider));
@@ -73,7 +74,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 8, right: 4),
+        padding: EdgeInsets.only(bottom: 8, right: 4),
         child: WaContactSpeedDial(
           onScan: _openScan,
           onAdd: () => _showAddLeadSheet(context, leadsProvider),
@@ -92,19 +93,19 @@ class _LeadsScreenState extends State<LeadsScreen> {
               subtitle: _contactsSubtitle(leadsList.length, leadsProvider),
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.qr_code_scanner_rounded, size: 24),
+                  icon: Icon(Icons.qr_code_scanner_rounded, size: 24),
                   color: WaUi.primaryText,
-                  tooltip: 'Scan',
+                  tooltip: context.l10n.scan,
                   onPressed: _openScan,
                 ),
                 IconButton(
-                  icon: const Icon(Icons.person_search_outlined, size: 24),
+                  icon: Icon(Icons.person_search_outlined, size: 24),
                   color: WaUi.primaryText,
-                  tooltip: 'Find username',
+                  tooltip: context.l10n.findUsername,
                   onPressed: _openFindUser,
                 ),
                 PopupMenuButton<String>(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.more_vert,
                     size: 24,
                     color: WaUi.primaryText,
@@ -118,15 +119,15 @@ class _LeadsScreenState extends State<LeadsScreen> {
                   itemBuilder: (_) => [
                     PopupMenuItem(
                       value: 'filter',
-                      child: Text('Filter contacts', style: WaUi.body),
+                      child: Text(context.l10n.filterContacts, style: WaUi.body),
                     ),
                     PopupMenuItem(
                       value: 'categories',
-                      child: Text('Manage categories', style: WaUi.body),
+                      child: Text(context.l10n.manageCategories, style: WaUi.body),
                     ),
                     PopupMenuItem(
                       value: 'import',
-                      child: Text('Import contacts', style: WaUi.body),
+                      child: Text(context.l10n.importContacts, style: WaUi.body),
                     ),
                   ],
                 ),
@@ -154,7 +155,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
             ),
             Expanded(
               child: leadsProvider.isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? Center(child: CircularProgressIndicator())
                   : leadsList.isEmpty
                   ? WaContactEmptyState(
                       isSearching: isFiltering,
@@ -211,7 +212,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
           context: context,
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
-          builder: (ctx) => const FilterContactsSheet(),
+          builder: (ctx) => FilterContactsSheet(),
         );
         break;
       case 'categories':
@@ -221,7 +222,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Import contacts is not available yet.',
+              context.l10n.importContactsIsNotAvailableYet,
               style: WaUi.body.copyWith(color: Colors.white),
             ),
             behavior: SnackBarBehavior.floating,
@@ -236,13 +237,13 @@ class _LeadsScreenState extends State<LeadsScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: WaUi.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(WaUi.radiusLg)),
       ),
       builder: (ctx) {
         return SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+            padding: EdgeInsets.fromLTRB(20, 12, 20, 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,9 +258,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
-                Text('Categories', style: WaUi.sectionHeader),
-                const SizedBox(height: 12),
+                SizedBox(height: 16),
+                Text(ctx.l10n.categories, style: WaUi.sectionHeader),
+                SizedBox(height: 12),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -267,7 +268,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     _categoryChip(
                       context: ctx,
                       provider: provider,
-                      label: 'All',
+                      label: ctx.l10n.all,
                       selected: provider.activeCategoryId == null,
                       color: WaUi.secondaryText,
                       onTap: () {
@@ -291,7 +292,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                           showDialog(
                             context: context,
                             builder: (dialogCtx) => AlertDialog(
-                              title: Text('Delete Category', style: WaUi.title),
+                              title: Text(context.l10n.deleteCategory, style: WaUi.title),
                               content: Text(
                                 'Delete "${category.name}"?',
                                 style: WaUi.body,
@@ -299,7 +300,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(dialogCtx),
-                                  child: Text('Cancel', style: WaUi.bodyMedium),
+                                  child: Text(context.l10n.cancel, style: WaUi.bodyMedium),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -307,7 +308,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                     provider.deleteCategory(category.id);
                                   },
                                   child: Text(
-                                    'Delete',
+                                    context.l10n.delete,
                                     style: WaUi.bodyMedium.copyWith(
                                       color: Colors.red,
                                     ),
@@ -391,7 +392,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
           child: Container(
             decoration: BoxDecoration(
               color: isDark ? AppTheme.cardDarkBg : Colors.white,
-              borderRadius: const BorderRadius.vertical(
+              borderRadius: BorderRadius.vertical(
                 top: Radius.circular(24),
               ),
               border: Border.all(
@@ -400,7 +401,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     : AppTheme.greyBorderLight,
               ),
             ),
-            padding: const EdgeInsets.all(24.0),
+            padding: EdgeInsets.all(24.0),
             child: Form(
               key: formKey,
               child: SingleChildScrollView(
@@ -419,122 +420,120 @@ class _LeadsScreenState extends State<LeadsScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Capture New Contact',
+                    SizedBox(height: 20),
+                    Text(ctx.l10n.captureNewContact,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Enter networking contact details below.',
+                    SizedBox(height: 4),
+                    Text(ctx.l10n.enterNetworkingContactDetailsBelow,
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
 
-                    _buildFieldLabel('Full Name'),
+                    _buildFieldLabel(ctx.l10n.fullName),
                     TextFormField(
                       controller: nameController,
                       keyboardType: TextInputType.name,
                       textCapitalization: TextCapitalization.words,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: Icon(Icons.person_outline),
-                        hintText: 'Jane Doe',
+                        hintText: ctx.l10n.janeDoe,
                       ),
                       validator: (v) =>
-                          v == null || v.isEmpty ? 'Name is required' : null,
+                          v == null || v.isEmpty ? ctx.l10n.nameIsRequired : null,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
-                    _buildFieldLabel('Email Address'),
+                    _buildFieldLabel(ctx.l10n.emailAddress),
                     TextFormField(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: Icon(Icons.email_outlined),
-                        hintText: 'jane@company.com',
+                        hintText: ctx.l10n.janeCompanyCom,
                       ),
                       validator: (v) {
-                        if (v == null || v.isEmpty) return 'Email is required';
-                        if (!v.contains('@')) return 'Enter a valid email';
+                        if (v == null || v.isEmpty) return context.l10n.emailIsRequired;
+                        if (!v.contains('@')) return context.l10n.enterAValidEmail;
                         return null;
                       },
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
-                    _buildFieldLabel('Phone Number'),
+                    _buildFieldLabel(context.l10n.phoneNumber),
                     TextFormField(
                       controller: phoneController,
                       keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: Icon(Icons.phone_outlined),
                         hintText: '+1 (555) 123-4567',
                       ),
                       validator: (v) =>
-                          v == null || v.isEmpty ? 'Phone is required' : null,
+                          v == null || v.isEmpty ? context.l10n.phoneIsRequired : null,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
-                    _buildFieldLabel('Company'),
+                    _buildFieldLabel(context.l10n.company),
                     TextFormField(
                       controller: companyController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: Icon(Icons.business_outlined),
-                        hintText: 'Company Inc.',
+                        hintText: context.l10n.companyInc,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
-                    _buildFieldLabel('Job Title'),
+                    _buildFieldLabel(context.l10n.jobTitle),
                     TextFormField(
                       controller: jobTitleController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: Icon(Icons.work_outline),
-                        hintText: 'Software Engineer',
+                        hintText: context.l10n.softwareEngineer,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
-                    _buildFieldLabel('Website'),
+                    _buildFieldLabel(context.l10n.website),
                     TextFormField(
                       controller: websiteController,
                       keyboardType: TextInputType.url,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: Icon(Icons.language_outlined),
                         hintText: 'https://example.com',
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
-                    _buildFieldLabel('Address'),
+                    _buildFieldLabel(context.l10n.address),
                     TextFormField(
                       controller: addressController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: Icon(Icons.location_on_outlined),
-                        hintText: '123 Main St, City',
+                        hintText: context.l10n.n123MainStCity,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
 
-                    _buildFieldLabel('Note'),
+                    _buildFieldLabel(context.l10n.note),
                     TextFormField(
                       controller: noteController,
                       maxLines: 3,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: Icon(Icons.note_alt_outlined),
-                        hintText: 'Add a note...',
+                        hintText: context.l10n.addANote,
                         alignLabelWithHint: true,
                       ),
                     ),
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28),
 
                     Row(
                       children: [
                         Expanded(
                           child: CustomButton(
-                            text: 'Save Contact',
+                            text: context.l10n.saveContact,
                             onTap: () {
                               if (formKey.currentState!.validate()) {
                                 provider.addLead(
@@ -549,9 +548,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                 );
                                 Navigator.of(ctx).pop();
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                                  SnackBar(
                                     content: Text(
-                                      'Contact added successfully!',
+                                      context.l10n.contactAddedSuccessfully,
                                     ),
                                     behavior: SnackBarBehavior.floating,
                                   ),
@@ -619,7 +618,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                         : AppTheme.greyBorderLight,
                   ),
                 ),
-                padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+                padding: EdgeInsets.fromLTRB(24, 16, 24, 24),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -636,14 +635,13 @@ class _LeadsScreenState extends State<LeadsScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       // Title row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Manage contact',
+                          Text(ctx.l10n.manageContact,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -651,7 +649,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                           ),
                           if (!isEditing)
                             Container(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 4,
                               ),
@@ -670,9 +668,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                         ? Colors.white38
                                         : Colors.grey,
                                   ),
-                                  const SizedBox(width: 4),
+                                  SizedBox(width: 4),
                                   Text(
-                                    'Read only',
+                                    ctx.l10n.readOnly2,
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: isDark
@@ -721,70 +719,70 @@ class _LeadsScreenState extends State<LeadsScreen> {
                         ),
                       ],
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       // ── Fields ──
                       _buildManageField(
-                        label: 'Full Name',
+                        label: ctx.l10n.fullName,
                         controller: nameController,
                         icon: Icons.person_outline,
                         isEditing: isEditing,
                         isDark: isDark,
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14),
                       _buildManageField(
-                        label: 'Email',
+                        label: ctx.l10n.email,
                         controller: emailController,
                         icon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
                         isEditing: isEditing,
                         isDark: isDark,
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14),
                       _buildManageField(
-                        label: 'Phone',
+                        label: ctx.l10n.phone,
                         controller: phoneController,
                         icon: Icons.phone_outlined,
                         keyboardType: TextInputType.phone,
                         isEditing: isEditing,
                         isDark: isDark,
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14),
                       _buildManageField(
-                        label: 'Company',
+                        label: ctx.l10n.company,
                         controller: companyController,
                         icon: Icons.business_outlined,
                         isEditing: isEditing,
                         isDark: isDark,
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14),
                       _buildManageField(
-                        label: 'Job Title',
+                        label: ctx.l10n.jobTitle,
                         controller: jobTitleController,
                         icon: Icons.work_outline,
                         isEditing: isEditing,
                         isDark: isDark,
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14),
                       _buildManageField(
-                        label: 'Website',
+                        label: ctx.l10n.website,
                         controller: websiteController,
                         icon: Icons.language_outlined,
                         keyboardType: TextInputType.url,
                         isEditing: isEditing,
                         isDark: isDark,
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14),
                       _buildManageField(
-                        label: 'Address',
+                        label: ctx.l10n.address,
                         controller: addressController,
                         icon: Icons.location_on_outlined,
                         isEditing: isEditing,
                         isDark: isDark,
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14),
                       _buildManageField(
-                        label: 'Note',
+                        label: ctx.l10n.note,
                         controller: noteController,
                         icon: Icons.note_alt_outlined,
                         maxLines: 3,
@@ -832,7 +830,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                     color: Colors.black,
                                     borderRadius: BorderRadius.circular(14),
                                   ),
-                                  child: const Center(
+                                  child: Center(
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -843,7 +841,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                         ),
                                         SizedBox(width: 8),
                                         Text(
-                                          'Edit',
+                                          context.l10n.edit,
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 16,
@@ -893,7 +891,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12),
                             // Save
                             Expanded(
                               child: GestureDetector(
@@ -906,8 +904,8 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                           ScaffoldMessenger.of(
                                             context,
                                           ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text('Name is required'),
+                                            SnackBar(
+                                              content: Text(context.l10n.nameIsRequired),
                                               behavior:
                                                   SnackBarBehavior.floating,
                                             ),
@@ -946,9 +944,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                             ScaffoldMessenger.of(
                                               scaffoldCtx,
                                             ).showSnackBar(
-                                              const SnackBar(
+                                              SnackBar(
                                                 content: Text(
-                                                  'Contact updated successfully!',
+                                                  context.l10n.contactUpdatedSuccessfully,
                                                 ),
                                                 behavior:
                                                     SnackBarBehavior.floating,
@@ -960,9 +958,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                             ScaffoldMessenger.of(
                                               scaffoldCtx,
                                             ).showSnackBar(
-                                              const SnackBar(
+                                              SnackBar(
                                                 content: Text(
-                                                  'Failed to update contact.',
+                                                  context.l10n.failedToUpdateContact,
                                                 ),
                                                 behavior:
                                                     SnackBarBehavior.floating,
@@ -981,7 +979,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                   ),
                                   child: Center(
                                     child: isSaving
-                                        ? const SizedBox(
+                                        ? SizedBox(
                                             width: 22,
                                             height: 22,
                                             child: CircularProgressIndicator(
@@ -989,7 +987,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                               strokeWidth: 2.5,
                                             ),
                                           )
-                                        : const Row(
+                                        : Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Icon(
@@ -999,7 +997,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                               ),
                                               SizedBox(width: 8),
                                               Text(
-                                                'Save',
+                                                context.l10n.save,
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 16,
@@ -1104,7 +1102,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
   ) {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (ctx) {
@@ -1112,7 +1110,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Container(
                 width: 40,
                 height: 4,
@@ -1121,27 +1119,26 @@ class _LeadsScreenState extends State<LeadsScreen> {
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Text(
                 'Options for ${lead.name}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               ListTile(
-                leading: const Icon(Icons.label_outline),
-                title: const Text('Assign Category'),
+                leading: Icon(Icons.label_outline),
+                title: Text(ctx.l10n.assignCategory),
                 onTap: () {
                   Navigator.pop(ctx);
                   _showAssignCategoryDialog(context, lead, provider);
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.delete_outline, color: Colors.red),
-                title: const Text(
-                  'Delete Contact',
+                leading: Icon(Icons.delete_outline, color: Colors.red),
+                title: Text(context.l10n.deleteContact,
                   style: TextStyle(color: Colors.red),
                 ),
                 onTap: () {
@@ -1149,7 +1146,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                   _confirmDeleteLead(context, lead, provider);
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
             ],
           ),
         );
@@ -1165,12 +1162,12 @@ class _LeadsScreenState extends State<LeadsScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Contact'),
+        title: Text(context.l10n.deleteContact),
         content: Text('Remove "${lead.name}" from your contacts?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           TextButton(
             onPressed: () async {
@@ -1185,7 +1182,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                 );
               }
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            child: Text(context.l10n.delete, style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -1201,7 +1198,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          title: const Text('Assign Category'),
+          title: Text(ctx.l10n.assignCategory),
           content: SizedBox(
             width: double.maxFinite,
             child: ListView.builder(
@@ -1210,7 +1207,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return ListTile(
-                    title: const Text('None'),
+                    title: Text(ctx.l10n.none),
                     onTap: () async {
                       Navigator.pop(ctx);
                       await provider.updateLead(lead.id, {'category': ''});
@@ -1258,17 +1255,17 @@ class _LeadsScreenState extends State<LeadsScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text('New Category'),
+              title: Text(ctx.l10n.newCategory),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: nameCtrl,
-                    decoration: const InputDecoration(
-                      labelText: 'Category Name',
+                    decoration: InputDecoration(
+                      labelText: ctx.l10n.categoryName,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -1283,7 +1280,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                           backgroundColor: _parseColor(colorStr),
                           radius: 16,
                           child: selectedColor == colorStr
-                              ? const Icon(
+                              ? Icon(
                                   Icons.check,
                                   color: Colors.white,
                                   size: 16,
@@ -1298,7 +1295,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(ctx),
-                  child: const Text('Cancel'),
+                  child: Text(context.l10n.cancel),
                 ),
                 TextButton(
                   onPressed: () async {
@@ -1310,7 +1307,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                       );
                     }
                   },
-                  child: const Text('Create'),
+                  child: Text(context.l10n.create),
                 ),
               ],
             );
@@ -1330,10 +1327,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
 
   Widget _buildFieldLabel(String text) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4.0, bottom: 6.0),
+      padding: EdgeInsets.only(left: 4.0, bottom: 6.0),
       child: Text(
         text,
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
       ),
     );
   }
@@ -1346,7 +1343,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     if (company.isNotEmpty) return company;
     if (lead.displayEmail.trim().isNotEmpty) return lead.displayEmail.trim();
     if (lead.displayPhone.trim().isNotEmpty) return lead.displayPhone.trim();
-    return lead.isScannedContact ? 'Scanned via QR' : 'No details yet';
+    return lead.isScannedContact ? context.l10n.scannedViaQR : context.l10n.noDetailsYet;
   }
 
   bool _isRecentContact(Lead lead) {

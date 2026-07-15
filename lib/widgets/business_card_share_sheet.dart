@@ -15,6 +15,7 @@ import 'package:tapni_app/widgets/sheet_scaffold.dart';
 import 'package:tapni_app/widgets/template_business_card_preview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class BusinessCardShareSheet extends StatefulWidget {
   final String profileUrl;
   final String displayName;
@@ -213,7 +214,7 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
     setState(() => _pngLoading = false);
     _snack(
       messenger,
-      ok ? 'Card saved as PNG' : 'Failed to save PNG',
+      ok ? context.l10n.cardSavedAsPNG : context.l10n.failedToSavePNG,
       color: ok ? Colors.green : Colors.red,
     );
   }
@@ -229,7 +230,7 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
     setState(() => _jpgLoading = false);
     _snack(
       messenger,
-      ok ? 'Card saved as JPG' : 'Failed to save JPG',
+      ok ? context.l10n.cardSavedAsJPG : context.l10n.failedToSaveJPG,
       color: ok ? Colors.green : Colors.red,
     );
   }
@@ -248,7 +249,7 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
     if (!res.success) {
       _snack(
         messenger,
-        res.message ?? 'Could not open Google Wallet',
+        res.message ?? context.l10n.couldNotOpenGoogleWallet,
         color: Colors.red,
       );
       return;
@@ -263,7 +264,7 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
       if (await canLaunchUrl(uri)) {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
       } else {
-        _snack(messenger, 'Could not open Google Wallet', color: Colors.red);
+        _snack(messenger, context.l10n.couldNotOpenGoogleWallet, color: Colors.red);
       }
       return;
     }
@@ -271,7 +272,7 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
     _snack(
       messenger,
       data['message'] as String? ??
-          'Google Wallet setup pending. Profile link copied.',
+          context.l10n.googleWalletSetupPendingProfileLinkCopied,
     );
     await Clipboard.setData(ClipboardData(text: widget.profileUrl));
   }
@@ -287,7 +288,7 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
         constraints: BoxConstraints(maxHeight: maxHeight),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           border: Border.all(
             color: Colors.black,
             width: AttendanceUi.borderWidth,
@@ -309,13 +310,13 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
                 borderRadius: BorderRadius.circular(3),
               ),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
             Text(
-              widget.isEmployeeCard ? 'Employee Card' : widget.displayName,
+              widget.isEmployeeCard ? context.l10n.employeeCard : widget.displayName,
               textAlign: TextAlign.center,
               style: AttendanceUi.sectionTitle,
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Text(
               widget.isEmployeeCard
                   ? '${widget.companyName ?? ''} • ${_template.name} template'
@@ -348,32 +349,32 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
                     ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
                   child: AttendanceUi.secondaryButton(
-                    label: 'PNG',
+                    label: context.l10n.png,
                     icon: Icons.image_outlined,
                     loading: _pngLoading,
                     height: 56,
                     onPressed: _downloadPng,
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: AttendanceUi.secondaryButton(
-                    label: 'JPG',
+                    label: context.l10n.jpg,
                     icon: Icons.photo_outlined,
                     loading: _jpgLoading,
                     height: 56,
                     onPressed: _downloadJpg,
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: AttendanceUi.secondaryButton(
-                    label: 'Share',
+                    label: context.l10n.share,
                     icon: Icons.share_rounded,
                     height: 56,
                     onPressed: () => Share.share(
@@ -389,17 +390,17 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
               ],
             ),
             if (widget.isEmployeeCard && widget.companyCard != null) ...[
-              const SizedBox(height: 14),
+              SizedBox(height: 14),
               AttendanceUi.secondaryButton(
-                label: 'Customize Design',
+                label: context.l10n.customizeDesign,
                 icon: Icons.palette_outlined,
                 height: 56,
                 onPressed: _openCustomizeDesign,
               ),
             ],
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             AttendanceUi.primaryButton(
-              label: 'Add to Google Wallet',
+              label: context.l10n.addToGoogleWallet,
               icon: Icons.account_balance_wallet_outlined,
               loading: _walletLoading,
               onPressed: _addToGoogleWallet,

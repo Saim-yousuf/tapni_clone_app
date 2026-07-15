@@ -6,6 +6,7 @@ import 'package:tapni_app/utils/theme.dart';
 
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class TemplatesSheet extends StatefulWidget {
   const TemplatesSheet({Key? key}) : super(key: key);
 
@@ -45,8 +46,8 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF161618) : Colors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        color: isDark ? Color(0xFF161618) : Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.15),
@@ -71,11 +72,11 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
               borderRadius: BorderRadius.circular(2.5),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           
           // Title
           Text(
-            'Templates',
+            context.l10n.templates,
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: 22,
@@ -164,7 +165,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                             context: context,
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
-                            builder: (context) => const ProUpgradeSheet(),
+                            builder: (context) => ProUpgradeSheet(),
                           );
                           return;
                         }
@@ -187,9 +188,9 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                             content: Text(
                               saved
                                   ? 'Applied "${selectedTemplate.name}" template'
-                                  : 'Template applied locally. Sync failed.',
+                                  : context.l10n.templateAppliedLocallySyncFailed,
                             ),
-                            duration: const Duration(seconds: 2),
+                            duration: Duration(seconds: 2),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
@@ -204,8 +205,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                           color: isDark ? Colors.black : Colors.white,
                         ),
                       )
-                    : const Text(
-                        'Apply Template',
+                    : Text(context.l10n.applyTemplate,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -235,7 +235,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
           BoxShadow(
             color: Colors.black.withOpacity(0.12),
             blurRadius: 12,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           )
         ],
       ),
@@ -269,10 +269,10 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Digital Business Card',
+                        context.l10n.digitalBusinessCard,
                         style: TextStyle(
                           color: template.textColor,
                           fontSize: 10,
@@ -285,11 +285,11 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
 
                 // Name Details
                 Text(
-                  'NAME',
+                  context.l10n.name2,
                   style: TextStyle(
                     color: template.labelColor,
                     fontSize: 8,
@@ -297,7 +297,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                     letterSpacing: 0.5,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   name,
                   style: TextStyle(
@@ -307,11 +307,11 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                     letterSpacing: -0.5,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 // Bio details
                 Text(
-                  'BIO',
+                  context.l10n.bio,
                   style: TextStyle(
                     color: template.labelColor,
                     fontSize: 8,
@@ -319,7 +319,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                     letterSpacing: 0.5,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 // Simple high fidelity bio line visualizers
                 Container(
                   width: 32,
@@ -337,7 +337,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                     child: Container(
                       width: 100,
                       height: 100,
-                      padding: const EdgeInsets.all(6),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -354,7 +354,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // branding logo
                 Center(
@@ -366,9 +366,9 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                         size: 16, 
                         color: template.brandingColor.withOpacity(0.7),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
-                        'tapni',
+                        context.l10n.tapni,
                         style: TextStyle(
                           color: template.brandingColor,
                           fontSize: 17,
@@ -389,7 +389,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
               top: 14,
               right: 14,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3.5),
+                padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3.5),
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(10),
@@ -400,8 +400,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                     )
                   ],
                 ),
-                child: const Text(
-                  'PRO',
+                child: Text(context.l10n.pro,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 7.5,

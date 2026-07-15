@@ -13,6 +13,7 @@ import 'package:tapni_app/widgets/qr_card_stack_carousel.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class MyCardsShareSheet extends StatefulWidget {
   const MyCardsShareSheet({super.key});
 
@@ -58,7 +59,7 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   void _snack(String message, {Color color = WaUi.accent}) {
     sheetMessenger(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: const TextStyle(fontSize: 14)),
+        content: Text(message, style: TextStyle(fontSize: 14)),
         behavior: SnackBarBehavior.floating,
         backgroundColor: color == WaUi.accent ? WaUi.primaryText : color,
       ),
@@ -72,7 +73,7 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
     final ok = await BusinessCardExportHelper.savePng(_cardKey, fileName: card.name);
     if (!mounted) return;
     setState(() => _pngLoading = false);
-    _snack(ok ? 'Card saved as PNG' : 'Failed to save PNG', color: Colors.red);
+    _snack(ok ? context.l10n.cardSavedAsPNG : context.l10n.failedToSavePNG, color: Colors.red);
   }
 
   Future<void> _downloadJpg() async {
@@ -82,7 +83,7 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
     final ok = await BusinessCardExportHelper.saveJpg(_cardKey, fileName: card.name);
     if (!mounted) return;
     setState(() => _jpgLoading = false);
-    _snack(ok ? 'Card saved as JPG' : 'Failed to save JPG', color: Colors.red);
+    _snack(ok ? context.l10n.cardSavedAsJPG : context.l10n.failedToSaveJPG, color: Colors.red);
   }
 
   Future<void> _shareCard() async {
@@ -101,7 +102,7 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
     setState(() => _walletLoading = false);
 
     if (!res.success) {
-      _snack(res.message ?? 'Could not open Google Wallet', color: Colors.red);
+      _snack(res.message ?? context.l10n.couldNotOpenGoogleWallet, color: Colors.red);
       return;
     }
 
@@ -115,12 +116,12 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
       if (await canLaunchUrl(uri)) {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
       } else {
-        _snack('Could not open Google Wallet', color: Colors.red);
+        _snack(context.l10n.couldNotOpenGoogleWallet, color: Colors.red);
       }
       return;
     }
 
-    _snack(data['message'] as String? ?? 'Google Wallet setup pending.');
+    _snack(data['message'] as String? ?? context.l10n.googleWalletSetupPending);
     if (card != null) {
       await Clipboard.setData(ClipboardData(text: card.profileUrl));
     }
@@ -155,7 +156,7 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
         decoration: WaUi.sheetDecoration,
         child: Column(
           children: [
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Container(
               width: 36,
               height: 4,
@@ -165,19 +166,19 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+              padding: EdgeInsets.fromLTRB(20, 16, 20, 4),
               child: Row(
                 children: [
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Share card', style: WaUi.headline),
-                        const SizedBox(height: 2),
+                        Text(context.l10n.shareCard, style: WaUi.headline),
+                        SizedBox(height: 2),
                         Text(
                           card != null
                               ? '${card.template.name} · Swipe for more cards'
-                              : 'Create a card to share your profile',
+                              : context.l10n.createACardToShareYourProfile,
                           style: WaUi.caption,
                         ),
                       ],
@@ -209,37 +210,37 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
                             }
                           : null,
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     Row(
                       children: [
                         Expanded(
                           child: _ActionChip(
-                            label: 'PNG',
+                            label: context.l10n.png,
                             icon: Icons.image_outlined,
                             loading: _pngLoading,
                             onTap: _downloadPng,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Expanded(
                           child: _ActionChip(
-                            label: 'JPG',
+                            label: context.l10n.jpg,
                             icon: Icons.photo_outlined,
                             loading: _jpgLoading,
                             onTap: _downloadJpg,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Expanded(
                           child: _ActionChip(
-                            label: 'Share',
+                            label: context.l10n.share,
                             icon: Icons.ios_share,
                             onTap: _shareCard,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     SizedBox(
                       width: double.infinity,
                       height: 48,
@@ -254,7 +255,7 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
                           ),
                         ),
                         icon: _walletLoading
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 18,
                                 height: 18,
                                 child: CircularProgressIndicator(
@@ -262,8 +263,8 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
                                   color: Colors.white,
                                 ),
                               )
-                            : const Icon(Icons.account_balance_wallet_outlined, size: 20),
-                        label: Text('Add to Google Wallet', style: WaUi.button.copyWith(color: Colors.white)),
+                            : Icon(Icons.account_balance_wallet_outlined, size: 20),
+                        label: Text(context.l10n.addToGoogleWallet, style: WaUi.button.copyWith(color: Colors.white)),
                       ),
                     ),
                   ],

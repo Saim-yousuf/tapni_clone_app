@@ -6,39 +6,43 @@ import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class CheckingPointsScreen extends StatelessWidget {
-  const CheckingPointsScreen({super.key});
+  CheckingPointsScreen({super.key});
 
-  List<Map<String, dynamic>> getChecklist(UserProfile profile) {
+  List<Map<String, dynamic>> getChecklist(
+    BuildContext context,
+    UserProfile profile,
+  ) {
     return [
       {
-        "title": "Add Profile Name",
+        "title": context.l10n.addProfileName,
         "completed": profile.name.isNotEmpty,
         "onTap": "name",
       },
-      {"title": "Add Bio", "completed": profile.bio.isNotEmpty, "onTap": "bio"},
+      {"title": context.l10n.addBio, "completed": profile.bio.isNotEmpty, "onTap": "bio"},
       {
-        "title": "Add Profile Photo",
+        "title": context.l10n.addProfilePhoto,
         "completed":
             profile.profilePhotoUrl != null &&
             profile.profilePhotoUrl!.isNotEmpty,
         "onTap": "photo",
       },
       {
-        "title": "Add Cover Photo",
+        "title": context.l10n.addCoverPhoto,
         "completed":
             profile.coverPhotoUrl != null && profile.coverPhotoUrl!.isNotEmpty,
         "onTap": "cover",
       },
       {
-        "title": "Add Social Links (3+)",
+        "title": context.l10n.addSocialLinks3,
         "completed": profile.socialLinks.length >= 3,
         "onTap": "social",
       },
-      {"title": "Add Intro Voice Note", "completed": false, "onTap": "voice"},
-      {"title": "Create Gallery", "completed": false, "onTap": "gallery"},
+      {"title": context.l10n.addIntroVoiceNote, "completed": false, "onTap": "voice"},
+      {"title": context.l10n.createGallery, "completed": false, "onTap": "gallery"},
       {
-        "title": "Business Verified",
+        "title": context.l10n.businessVerified,
         "completed": profile.isPro == true,
         "onTap": "pro",
       },
@@ -142,24 +146,24 @@ class CheckingPointsScreen extends StatelessWidget {
     // // if (profile.gallery.isNotEmpty) score += 12.5;
     // if (profile.isPro == true) score += 12.5;
 
-    final checklist = getChecklist(profile);
+    final checklist = getChecklist(context, profile);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text("Profile Check"),
+        title: Text(context.l10n.profileCheck),
         backgroundColor: Colors.white,
         elevation: 0,
         foregroundColor: Colors.black,
       ),
 
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
             // SCORE CARD (PRO UI)
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -167,7 +171,7 @@ class CheckingPointsScreen extends StatelessWidget {
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
                     blurRadius: 10,
-                    offset: const Offset(0, 4),
+                    offset: Offset(0, 4),
                   ),
                 ],
               ),
@@ -175,18 +179,17 @@ class CheckingPointsScreen extends StatelessWidget {
                 children: [
                   Text(
                     "${score.toStringAsFixed(0)}%",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 42,
                       fontWeight: FontWeight.w800,
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    "Profile Strength",
+                  SizedBox(height: 6),
+                  Text(context.l10n.profileStrength,
                     style: TextStyle(fontSize: 14, color: Colors.black54),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
 
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -194,7 +197,7 @@ class CheckingPointsScreen extends StatelessWidget {
                       value: (score / 100).clamp(0.0, 1.0),
                       minHeight: 10,
                       backgroundColor: Colors.black12,
-                      valueColor: const AlwaysStoppedAnimation<Color>(
+                      valueColor: AlwaysStoppedAnimation<Color>(
                         Colors.black,
                       ),
                     ),
@@ -203,12 +206,12 @@ class CheckingPointsScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Complete these steps",
+                context.l10n.completeTheseSteps,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,

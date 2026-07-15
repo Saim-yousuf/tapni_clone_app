@@ -13,6 +13,7 @@ import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
 import 'package:tapni_app/widgets/catalog_product_card.dart';
 import 'package:tapni_app/widgets/service_booking_sheet.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 void showMenuCatalogSheet({
   required BuildContext context,
   required String catalogLabel,
@@ -90,7 +91,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     );
     if (_catalogCategories.isEmpty && _items.isNotEmpty) {
       _catalogCategories = CatalogHelper.orderedCategories(
-        catalogCategories: const [],
+        catalogCategories: [],
         items: _items,
       );
     }
@@ -171,7 +172,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                                 ? widget.businessName ?? _catalogLabel
                                 : _catalogLabel,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
                             ),
@@ -220,7 +221,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                     size: 48, color: Colors.grey.shade400),
                 const SizedBox(height: 12),
                 Text(
-                  'No items yet. Add your first $_catalogLabel item.',
+                  context.l10n.noItemsYetAddFirstCatalogItem(_catalogLabel),
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey.shade600),
                 ),
@@ -235,7 +236,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 padding: const EdgeInsets.only(top: 8, bottom: 8),
                 child: Text(
                   category,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -247,47 +248,46 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               }),
             ];
           }),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         OutlinedButton.icon(
           onPressed: _addItem,
-          icon: const Icon(Icons.add),
-          label: Text('Add $_catalogLabel item'),
+          icon: Icon(Icons.add),
+          label: Text(context.l10n.addCatalogItem(_catalogLabel)),
           style: OutlinedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 48),
+            minimumSize: Size(double.infinity, 48),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
         if (_isServices) ...[
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           _buildServiceScheduleSettings(isDark),
         ],
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         _showPublicToggle(isDark),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
       ],
     );
   }
 
   Widget _buildCategoryManager(bool isDark) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF5F5F5),
+        color: isDark ? Color(0xFF1E1E1E) : Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Your categories',
+          Text(context.l10n.yourCategories,
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
-            'Add categories in display order (e.g. Fast Food, then Desi)',
+            context.l10n.addCategoriesInDisplayOrderEGFastFoodThenDesi,
             style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -296,7 +296,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                   textInputAction: TextInputAction.done,
                   onSubmitted: (_) => _addCategory(),
                   decoration: InputDecoration(
-                    hintText: 'e.g. Fast Food',
+                    hintText: context.l10n.eGFastFood,
                     isDense: true,
                     filled: true,
                     fillColor: isDark ? const Color(0xFF111111) : Colors.white,
@@ -346,17 +346,17 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                     Expanded(
                       child: Text(
                         cat,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
+                        style: TextStyle(fontWeight: FontWeight.w500),
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.arrow_upward, size: 18),
+                      icon: Icon(Icons.arrow_upward, size: 18),
                       onPressed: index > 0
                           ? () => _moveCategory(index, index - 1)
                           : null,
                     ),
                     IconButton(
-                      icon: const Icon(Icons.arrow_downward, size: 18),
+                      icon: Icon(Icons.arrow_downward, size: 18),
                       onPressed: index < _catalogCategories.length - 1
                           ? () => _moveCategory(index, index + 1)
                           : null,
@@ -384,7 +384,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     );
     if (exists) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Category already exists')),
+        SnackBar(content: Text(context.l10n.categoryAlreadyExists)),
       );
       return;
     }
@@ -418,24 +418,23 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
 
   Widget _buildServiceScheduleSettings(bool isDark) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF5F5F5),
+        color: isDark ? Color(0xFF1E1E1E) : Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Booking schedule',
+          Text(context.l10n.bookingSchedule,
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               Expanded(
                 child: _scheduleField(
-                  label: 'Start hour',
+                  label: context.l10n.startHour,
                   value: _serviceSchedule.startHour,
                   onChanged: (v) => setState(
                     () => _serviceSchedule =
@@ -443,10 +442,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: _scheduleField(
-                  label: 'End hour',
+                  label: context.l10n.endHour,
                   value: _serviceSchedule.endHour,
                   onChanged: (v) => setState(
                     () => _serviceSchedule =
@@ -454,10 +453,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: _scheduleField(
-                  label: 'Slot (min)',
+                  label: context.l10n.slotMin,
                   value: _serviceSchedule.slotMinutes,
                   onChanged: (v) => setState(
                     () => _serviceSchedule =
@@ -492,7 +491,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               child: Text(
                 '$value',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontWeight: FontWeight.w600),
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
             InkWell(
@@ -524,7 +523,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(item.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+                Text(item.name, style: TextStyle(fontWeight: FontWeight.w600)),
                 if (category.isNotEmpty) ...[
                   const SizedBox(height: 2),
                   Text(
@@ -544,17 +543,17 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 const SizedBox(height: 4),
                 Text(
                   item.price > 0 ? 'Rs ${item.price.toStringAsFixed(0)}' : 'Free',
-                  style: const TextStyle(fontWeight: FontWeight.w500),
+                  style: TextStyle(fontWeight: FontWeight.w500),
                 ),
               ],
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.edit_outlined, size: 20),
+            icon: Icon(Icons.edit_outlined, size: 20),
             onPressed: () => _editItem(index),
           ),
           IconButton(
-            icon: const Icon(Icons.delete_outline, size: 20),
+            icon: Icon(Icons.delete_outline, size: 20),
             onPressed: () => setState(() => _items.removeAt(index)),
           ),
         ],
@@ -566,7 +565,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     if (_items.where((i) => i.isActive).isEmpty) {
       return Center(
         child: Text(
-          'No $_catalogLabel items available.',
+          context.l10n.noCatalogItemsAvailable(_catalogLabel),
           style: TextStyle(color: Colors.grey.shade600),
         ),
       );
@@ -585,7 +584,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         (_selectedCategory != null && _filteredActiveItems.isEmpty)) {
       return Center(
         child: Text(
-          'No items in this category.',
+          context.l10n.noItemsInThisCategory,
           style: TextStyle(color: Colors.grey.shade600),
         ),
       );
@@ -600,9 +599,9 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               height: 44,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  _categoryChip('All', _selectedCategory == null, () {
+                  _categoryChip(context.l10n.all, _selectedCategory == null, () {
                     setState(() => _selectedCategory = null);
                   }),
                   ..._categories.map(
@@ -623,7 +622,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                 child: Text(
                   category,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -731,7 +730,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         12 + MediaQuery.of(context).padding.bottom,
       ),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF111111) : Colors.white,
+        color: isDark ? Color(0xFF111111) : Colors.white,
         border: Border(top: BorderSide(color: Colors.grey.shade200)),
       ),
       child: Row(
@@ -743,7 +742,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 Text('$itemCount items'),
                 Text(
                   'Total: Rs ${total.toStringAsFixed(0)}',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ],
             ),
@@ -757,12 +756,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
               ),
               child: _isOrdering
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                     )
-                  : const Text('Place Order', style: TextStyle(color: Colors.white)),
+                  : Text(context.l10n.placeOrder, style: TextStyle(color: Colors.white)),
             ),
           ),
         ],
@@ -782,7 +781,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         children: [
           if (widget.existingLink != null) ...[
             _deleteButton(),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
           ],
           Expanded(
             child: SizedBox(
@@ -794,12 +793,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                 ),
                 child: _isSaving
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                       )
-                    : const Text('Save', style: TextStyle(color: Colors.white)),
+                    : Text(context.l10n.save, style: TextStyle(color: Colors.white)),
               ),
             ),
           ),
@@ -814,11 +813,11 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       height: 48,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: const Color(0xFFF5F5F5),
+        color: Color(0xFFF5F5F5),
         border: Border.all(color: Colors.grey.shade200),
       ),
       child: IconButton(
-        icon: const Icon(Icons.delete_forever_outlined),
+        icon: Icon(Icons.delete_forever_outlined),
         onPressed: () async {
           if (widget.provider == null || widget.existingLink == null) return;
           await widget.provider!.deleteSocialLink(widget.existingLink!.id, context);
@@ -831,18 +830,18 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   Widget _showPublicToggle(bool isDark) {
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF5F5F5),
+        color: isDark ? Color(0xFF1E1E1E) : Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(10),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Show link', style: TextStyle(fontWeight: FontWeight.w500)),
+          Text(context.l10n.showLink, style: TextStyle(fontWeight: FontWeight.w500)),
           Switch(
             value: showLink,
             activeColor: Colors.white,
-            activeTrackColor: const Color(0xFF1E2022),
+            activeTrackColor: Color(0xFF1E2022),
             onChanged: (val) => setState(() => showLink = val),
           ),
         ],
@@ -853,7 +852,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   Future<void> _addItem() async {
     if (_catalogCategories.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Add at least one category first')),
+        SnackBar(content: Text(context.l10n.addAtLeastOneCategoryFirst)),
       );
       return;
     }
@@ -925,7 +924,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     if (widget.provider == null) return;
     if (_items.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Add at least one $_catalogLabel item')),
+        SnackBar(content: Text(context.l10n.addAtLeastOneCatalogItem(_catalogLabel))),
       );
       return;
     }
@@ -1016,7 +1015,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Failed to place order')),
+        SnackBar(content: Text(res.message ?? context.l10n.failedToPlaceOrder)),
       );
     }
   }

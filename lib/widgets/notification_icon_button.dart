@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/screens/notifications_screen.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class NotificationIconButton extends StatelessWidget {
-  const NotificationIconButton({super.key});
+  NotificationIconButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +16,8 @@ class NotificationIconButton extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         IconButton(
-          icon: const Icon(Icons.notifications_outlined, size: 26),
-          tooltip: 'Notifications',
+          icon: Icon(Icons.notifications_outlined, size: 26),
+          tooltip: context.l10n.notifications,
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const NotificationsScreen()),
@@ -36,7 +37,7 @@ class NotificationIconButton extends StatelessWidget {
               constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
               child: Text(
                 unreadCount > 9 ? '9+' : '$unreadCount',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: 9,
                   fontWeight: FontWeight.bold,

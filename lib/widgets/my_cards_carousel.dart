@@ -5,8 +5,9 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_card_editor_sheet.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class MyCardsCarousel extends StatelessWidget {
-  const MyCardsCarousel({super.key});
+  MyCardsCarousel({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +18,10 @@ class MyCardsCarousel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(left: 4, bottom: 10),
           child: Text(
-            'My Cards',
+            context.l10n.myCards,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
           ),
         ),
@@ -78,7 +79,7 @@ class _CardTile extends StatelessWidget {
       onTap: onTap,
       onLongPress: onEdit,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: Duration(milliseconds: 200),
         width: 96,
         decoration: BoxDecoration(
           color: card.template.backgroundColor,
@@ -125,7 +126,7 @@ class _CardTile extends StatelessWidget {
                   ),
               ],
             ),
-            const Spacer(),
+            Spacer(),
             Text(
               card.name,
               maxLines: 2,
@@ -137,16 +138,15 @@ class _CardTile extends StatelessWidget {
                 height: 1.1,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             if (isActive)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppTheme.accentGold.withValues(alpha: 0.9),
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: const Text(
-                  'ACTIVE',
+                child: Text(context.l10n.active2,
                   style: TextStyle(
                     fontSize: 7,
                     fontWeight: FontWeight.w900,
@@ -164,7 +164,7 @@ class _CardTile extends StatelessWidget {
 class _AddCardTile extends StatelessWidget {
   final VoidCallback onTap;
 
-  const _AddCardTile({required this.onTap});
+  _AddCardTile({required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -173,17 +173,17 @@ class _AddCardTile extends StatelessWidget {
       child: Container(
         width: 96,
         decoration: BoxDecoration(
-          color: const Color(0xFFF3F3F3),
+          color: Color(0xFFF3F3F3),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.black12),
         ),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.add_circle_outline, size: 32, color: Colors.black87),
             SizedBox(height: 6),
             Text(
-              'New Card',
+              context.l10n.newCard,
               style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
             ),
           ],

@@ -8,6 +8,7 @@ import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class CreateRewardScreen extends StatefulWidget {
   final RewardProgram? existing;
   const CreateRewardScreen({super.key, this.existing});
@@ -84,7 +85,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
     if (!_formKey.currentState!.validate()) return;
     final stamps = int.tryParse(_stampsController.text.trim());
     if (stamps == null || stamps < 1) {
-      _showSnack('Please enter a valid number of stamps');
+      _showSnack(context.l10n.pleaseEnterAValidNumberOfStamps);
       return;
     }
 
@@ -122,7 +123,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
     if (res.success) {
       Navigator.pop(context, true);
     } else {
-      _showSnack(res.message ?? 'Failed to save');
+      _showSnack(res.message ?? context.l10n.failedToSave);
     }
   }
 
@@ -139,20 +140,20 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
         surfaceTintColor: Colors.white,
         elevation: 0,
         title: Text(
-          isEdit ? 'Edit Reward' : 'Create Reward',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          isEdit ? context.l10n.editReward : context.l10n.createReward,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
       ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Logo
               _sectionTitle('Logo'),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               GestureDetector(
                 onTap: _pickLogo,
                 child: Container(
@@ -166,22 +167,22 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                   child: _buildLogoWidget(),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Stamp Icons (optional)
-              _sectionTitle('Stamp Icons (Optional)'),
-              const SizedBox(height: 6),
+              _sectionTitle(context.l10n.stampIconsOptional),
+              SizedBox(height: 6),
               Text(
-                'Custom images for stamped and unstamped slots. Defaults are used if not set.',
+                context.l10n.customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet,
                 style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
                     child: _iconPickerTile(
-                      label: 'Stamp Icon',
-                      subtitle: 'Filled slot',
+                      label: context.l10n.stampIcon,
+                      subtitle: context.l10n.filledSlot,
                       base64: _stampIconBase64,
                       existingUrl: _existingStampIconUrl,
                       onTap: _pickStampIcon,
@@ -198,11 +199,11 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: _iconPickerTile(
-                      label: 'Unstamp Icon',
-                      subtitle: 'Empty slot',
+                      label: context.l10n.unstampIcon,
+                      subtitle: context.l10n.emptySlot,
                       base64: _unstampIconBase64,
                       existingUrl: _existingUnstampIconUrl,
                       onTap: _pickUnstampIcon,
@@ -221,29 +222,29 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Card Label Name
-              _sectionTitle('Card Label Name'),
-              const SizedBox(height: 8),
+              _sectionTitle(context.l10n.cardLabelName),
+              SizedBox(height: 8),
               _buildTextField(_labelController, 'e.g. Coffee Club', required: true),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
 
               // Title
               _sectionTitle('Title'),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               _buildTextField(_titleController, 'e.g. Buy 10 Get 1 Free', required: true),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
 
               // Description
-              _sectionTitle('Description'),
-              const SizedBox(height: 8),
-              _buildTextField(_descController, 'Briefly describe this reward...', maxLines: 3),
-              const SizedBox(height: 20),
+              _sectionTitle(context.l10n.description),
+              SizedBox(height: 8),
+              _buildTextField(_descController, context.l10n.brieflyDescribeThisReward, maxLines: 3),
+              SizedBox(height: 20),
 
               // Stamps
-              _sectionTitle('Number of Stamps'),
-              const SizedBox(height: 8),
+              _sectionTitle(context.l10n.numberOfStamps),
+              SizedBox(height: 8),
               TextFormField(
                 controller: _stampsController,
                 keyboardType: TextInputType.number,
@@ -251,45 +252,45 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                 decoration: _inputDecoration('e.g. 10'),
                 validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               // Card Theme
-              _themeSectionTitle('Card Theme'),
-              const SizedBox(height: 14),
-              _colorRow('Background Color', _theme.cardBackgroundColor, (c) {
+              _themeSectionTitle(context.l10n.cardTheme),
+              SizedBox(height: 14),
+              _colorRow(context.l10n.backgroundColor2, _theme.cardBackgroundColor, (c) {
                 setState(() => _theme = _theme.copyWith(cardBackgroundColor: c));
               }),
-              const SizedBox(height: 12),
-              _colorRow('Text Color', _theme.cardTextColor, (c) {
+              SizedBox(height: 12),
+              _colorRow(context.l10n.textColor, _theme.cardTextColor, (c) {
                 setState(() => _theme = _theme.copyWith(cardTextColor: c));
               }),
-              const SizedBox(height: 12),
-              _colorRow('Stamp Color', _theme.stampColor, (c) {
+              SizedBox(height: 12),
+              _colorRow(context.l10n.stampColor, _theme.stampColor, (c) {
                 setState(() => _theme = _theme.copyWith(stampColor: c));
               }),
-              const SizedBox(height: 12),
-              _colorRow('Stamp Border Color', _theme.stampBorderColor, (c) {
+              SizedBox(height: 12),
+              _colorRow(context.l10n.stampBorderColor, _theme.stampBorderColor, (c) {
                 setState(() => _theme = _theme.copyWith(stampBorderColor: c));
               }),
-              const SizedBox(height: 28),
+              SizedBox(height: 28),
 
               // Screen Theme
-              _themeSectionTitle('Screen Theme'),
-              const SizedBox(height: 14),
-              _colorRow('Background Color', _theme.screenBackgroundColor, (c) {
+              _themeSectionTitle(context.l10n.screenTheme),
+              SizedBox(height: 14),
+              _colorRow(context.l10n.backgroundColor2, _theme.screenBackgroundColor, (c) {
                 setState(() => _theme = _theme.copyWith(screenBackgroundColor: c));
               }),
-              const SizedBox(height: 12),
-              _colorRow('Text Color', _theme.screenTextColor, (c) {
+              SizedBox(height: 12),
+              _colorRow(context.l10n.textColor, _theme.screenTextColor, (c) {
                 setState(() => _theme = _theme.copyWith(screenTextColor: c));
               }),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               // Live Card Preview
-              _sectionTitle('Card Preview'),
-              const SizedBox(height: 12),
+              _sectionTitle(context.l10n.cardPreview),
+              SizedBox(height: 12),
               _buildCardPreview(),
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
 
               // Save Button
               SizedBox(
@@ -304,14 +305,14 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                     elevation: 0,
                   ),
                   child: _isLoading
-                      ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      ? SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                       : Text(
-                          isEdit ? 'Save Changes' : 'Create Reward',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          isEdit ? context.l10n.saveChanges : context.l10n.createReward,
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
             ],
           ),
         ),
@@ -340,8 +341,8 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Icon(Icons.add_photo_alternate_outlined, size: 28, color: Colors.grey.shade400),
-      const SizedBox(height: 4),
-      Text('Add Logo', style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+      SizedBox(height: 4),
+      Text(context.l10n.addLogo, style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
     ],
   );
 
@@ -364,7 +365,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
           onTap: onTap,
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Colors.grey.shade50,
               border: Border.all(color: Colors.grey.shade300),
@@ -373,18 +374,18 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
             child: Column(
               children: [
                 preview,
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
                   label,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
                 ),
                 Text(
                   subtitle,
                   style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
-                  hasImage ? 'Tap to change' : 'Tap to add image',
+                  hasImage ? context.l10n.tapToChange : context.l10n.tapToAddImage,
                   style: TextStyle(fontSize: 11, color: Colors.grey.shade700),
                 ),
               ],
@@ -395,7 +396,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
           TextButton(
             onPressed: onClear,
             child: Text(
-              'Use default icon',
+              context.l10n.useDefaultIcon,
               style: TextStyle(fontSize: 12, color: Colors.red.shade400),
             ),
           ),
@@ -406,11 +407,11 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
   Widget _buildCardPreview() {
     final stampCount = int.tryParse(_stampsController.text) ?? 10;
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: _theme.cardBackgroundColor,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12, offset: const Offset(0, 4))],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12, offset: Offset(0, 4))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -420,17 +421,17 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(_existingLogoUrl!, width: 36, height: 36, fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => const SizedBox()),
+                    errorBuilder: (_, __, ___) => SizedBox()),
               ),
-            if (_existingLogoUrl != null && _existingLogoUrl!.isNotEmpty) const SizedBox(width: 10),
+            if (_existingLogoUrl != null && _existingLogoUrl!.isNotEmpty) SizedBox(width: 10),
             Text(
-              _labelController.text.isEmpty ? 'Card Label' : _labelController.text,
+              _labelController.text.isEmpty ? context.l10n.cardLabel : _labelController.text,
               style: TextStyle(color: _theme.cardTextColor.withOpacity(0.6), fontSize: 12),
             ),
           ]),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
-            _titleController.text.isEmpty ? 'Reward Title' : _titleController.text,
+            _titleController.text.isEmpty ? context.l10n.rewardTitle : _titleController.text,
             style: TextStyle(color: _theme.cardTextColor, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
@@ -457,7 +458,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
   Widget _colorRow(String label, Color current, ValueChanged<Color> onChanged) {
     return Row(
       children: [
-        Expanded(child: Text(label, style: const TextStyle(fontSize: 14))),
+        Expanded(child: Text(label, style: TextStyle(fontSize: 14))),
         GestureDetector(
           onTap: () => _showColorPicker(current, onChanged),
           child: Container(
@@ -486,15 +487,15 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
       text: current.value.toRadixString(16).padLeft(8, '0').substring(2).toUpperCase(),
     );
     final colors = [
-      Colors.black, Colors.white, const Color(0xFFFFD700), const Color(0xFFFF6B35),
-      const Color(0xFF3B82F6), const Color(0xFF10B981), const Color(0xFFEF4444),
-      const Color(0xFF8B5CF6), const Color(0xFFF59E0B), Colors.grey.shade200,
-      const Color(0xFF1F2937), const Color(0xFFF0FDF4),
+      Colors.black, Colors.white, Color(0xFFFFD700), Color(0xFFFF6B35),
+      Color(0xFF3B82F6), Color(0xFF10B981), Color(0xFFEF4444),
+      Color(0xFF8B5CF6), Color(0xFFF59E0B), Colors.grey.shade200,
+      Color(0xFF1F2937), Color(0xFFF0FDF4),
     ];
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setS) => Padding(
           padding: EdgeInsets.only(
@@ -505,8 +506,8 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Pick Color', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              const SizedBox(height: 16),
+              Text(context.l10n.pickColor, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              SizedBox(height: 16),
               Wrap(
                 spacing: 12,
                 runSpacing: 12,
@@ -522,10 +523,10 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                   ),
                 )).toList(),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               Row(children: [
-                const Text('Hex: #', style: TextStyle(fontWeight: FontWeight.w600)),
-                const SizedBox(width: 6),
+                Text(context.l10n.hex, style: TextStyle(fontWeight: FontWeight.w600)),
+                SizedBox(width: 6),
                 Expanded(
                   child: TextField(
                     controller: hexController,
@@ -533,12 +534,12 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                     inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9A-Fa-f]'))],
                     decoration: InputDecoration(
                       counterText: '',
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
                     try {
@@ -548,7 +549,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                     } catch (_) {}
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.black, foregroundColor: Colors.white),
-                  child: const Text('Apply'),
+                  child: Text(context.l10n.apply),
                 ),
               ]),
               const SizedBox(height: 8),
@@ -559,12 +560,12 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
     );
   }
 
-  Widget _sectionTitle(String t) => Text(t, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15));
+  Widget _sectionTitle(String t) => Text(t, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15));
 
   Widget _themeSectionTitle(String t) => Row(children: [
     Container(width: 4, height: 18, decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(2))),
     const SizedBox(width: 10),
-    Text(t, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+    Text(t, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
   ]);
 
   Widget _buildTextField(TextEditingController ctrl, String hint, {int maxLines = 1, bool required = false}) {

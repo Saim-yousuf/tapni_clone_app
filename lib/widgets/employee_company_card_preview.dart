@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/models/card_template.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 /// Employee card — business template colors, employee profile QR and details.
 class EmployeeCompanyCardPreview extends StatelessWidget {
   final CardTemplate template;
@@ -52,7 +53,7 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.14),
             blurRadius: 18,
-            offset: const Offset(0, 8),
+            offset: Offset(0, 8),
           ),
         ],
       ),
@@ -94,9 +95,9 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
                           size: compact ? 14 : 16,
                           color: template.textColor,
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6),
                         Text(
-                          'EMPLOYEE CARD',
+                          context.l10n.employeeCARD,
                           style: TextStyle(
                             color: template.textColor,
                             fontSize: compact ? 10 : 11,
@@ -149,7 +150,7 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
                   ),
                   SizedBox(height: compact ? 6 : 8),
                   Text(
-                    'Scan employee profile',
+                    context.l10n.scanEmployeeProfile,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: template.labelColor,

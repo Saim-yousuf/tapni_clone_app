@@ -5,6 +5,7 @@ import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class OrderDetailScreen extends StatefulWidget {
   final String orderId;
   final bool isBusinessView;
@@ -60,7 +61,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Failed to update status')),
+        SnackBar(content: Text(res.message ?? context.l10n.failedToUpdateStatus)),
       );
     }
   }
@@ -82,23 +83,23 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order Details'),
+        title: Text(context.l10n.orderDetails),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _order == null
-          ? const Center(child: Text('Order not found'))
+          ? Center(child: Text(context.l10n.orderNotFound))
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _StatusBanner(status: _order!.status),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   _SectionTitle(
                     widget.isBusinessView ? 'Customer' : 'Business',
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   _PersonCard(
                     name: widget.isBusinessView
                         ? _order!.customerName
@@ -109,7 +110,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     photoUrl: widget.isBusinessView
                         ? _order!.customerPhoto
                         : _order!.businessPhoto,
-                    buttonLabel: 'View Profile',
+                    buttonLabel: context.l10n.viewProfile,
                     onViewProfile: () => _viewProfile(
                       userId: widget.isBusinessView
                           ? _order!.customerId
@@ -119,25 +120,25 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           : _order!.businessUsername,
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  const _SectionTitle('Order Info'),
-                  const SizedBox(height: 10),
-                  _InfoRow(label: 'Order ID', value: '#${_order!.id.substring(_order!.id.length > 6 ? _order!.id.length - 6 : 0)}'),
-                  _InfoRow(label: 'Type', value: CatalogHelper.orderTitleForType(_order!.catalogType).replaceAll('New ', '')),
-                  _InfoRow(label: 'Status', value: CatalogHelper.statusLabel(_order!.status)),
+                  SizedBox(height: 24),
+                  _SectionTitle(context.l10n.orderInfo),
+                  SizedBox(height: 10),
+                  _InfoRow(label: context.l10n.orderID, value: '#${_order!.id.substring(_order!.id.length > 6 ? _order!.id.length - 6 : 0)}'),
+                  _InfoRow(label: context.l10n.type, value: CatalogHelper.orderTitleForType(_order!.catalogType).replaceAll(context.l10n.newLabel, '')),
+                  _InfoRow(label: context.l10n.status, value: CatalogHelper.statusLabel(_order!.status)),
                   if (_order!.createdAt != null)
                     _InfoRow(
-                      label: 'Date',
+                      label: context.l10n.date,
                       value: _formatDate(_order!.createdAt!),
                     ),
                   if (_order!.bookingDate != null &&
                       _order!.bookingDate!.isNotEmpty) ...[
-                    _InfoRow(label: 'Booking date', value: _order!.bookingDate!),
+                    _InfoRow(label: context.l10n.bookingDate, value: _order!.bookingDate!),
                     if (_order!.bookingTime != null &&
                         _order!.bookingTime!.isNotEmpty)
-                      _InfoRow(label: 'Booking time', value: _order!.bookingTime!),
+                      _InfoRow(label: context.l10n.bookingTime, value: _order!.bookingTime!),
                   ],
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   const _SectionTitle('Items'),
                   const SizedBox(height: 10),
                   ..._order!.items.map(
@@ -156,11 +157,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               children: [
                                 Text(
                                   '${item.quantity}x ${item.name}',
-                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                  style: TextStyle(fontWeight: FontWeight.w500),
                                 ),
                                 if (item.notes.isNotEmpty)
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 4),
+                                    padding: EdgeInsets.only(top: 4),
                                     child: Text(
                                       item.notes,
                                       style: TextStyle(
@@ -178,17 +179,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Total',
+                      Text(context.l10n.total,
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Rs ${_order!.totalAmount.toStringAsFixed(0)}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -196,27 +196,27 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     ],
                   ),
                   if (widget.isBusinessView && _order!.status == OrderStatus.pending) ...[
-                    const SizedBox(height: 28),
-                    const _SectionTitle('Update Status'),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 28),
+                    _SectionTitle(context.l10n.updateStatus),
+                    SizedBox(height: 12),
                     _StatusButton(
-                      label: 'Mark Completed',
+                      label: context.l10n.markCompleted,
                       icon: Icons.check_circle_outline,
                       color: Colors.green,
                       isLoading: _isUpdating,
                       onPressed: () => _updateStatus(OrderStatus.completed),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     _StatusButton(
-                      label: 'Cancel Order',
+                      label: context.l10n.cancelOrder,
                       icon: Icons.cancel_outlined,
                       color: Colors.red,
                       isLoading: _isUpdating,
                       onPressed: () => _updateStatus(OrderStatus.cancelled),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     _StatusButton(
-                      label: 'Customer No Show',
+                      label: context.l10n.customerNoShow,
                       icon: Icons.person_off_outlined,
                       color: Colors.grey.shade700,
                       isLoading: _isUpdating,
@@ -242,7 +242,7 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
     );
   }
 }
@@ -325,7 +325,7 @@ class _PersonCard extends StatelessWidget {
             child: photoUrl == null || photoUrl!.isEmpty
                 ? Text(
                     name.isNotEmpty ? name[0].toUpperCase() : '?',
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   )
                 : null,
           ),
@@ -334,7 +334,7 @@ class _PersonCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                Text(name, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                 if (username.isNotEmpty)
                   Text('@$username', style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
               ],
@@ -364,7 +364,7 @@ class _InfoRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: TextStyle(color: Colors.grey.shade600)),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
+          Text(value, style: TextStyle(fontWeight: FontWeight.w500)),
         ],
       ),
     );

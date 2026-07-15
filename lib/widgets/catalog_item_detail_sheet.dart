@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/utils/theme.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 Future<({int quantity, String notes})?> showCatalogItemDetailSheet({
   required BuildContext context,
   required CatalogItem item,
@@ -66,7 +67,7 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
           maxHeight: MediaQuery.of(context).size.height * 0.85,
         ),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF111111) : Colors.white,
+          color: isDark ? Color(0xFF111111) : Colors.white,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: SafeArea(
@@ -93,23 +94,23 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
                       const SizedBox(height: 16),
                       Text(
                         widget.item.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6),
                       Text(
                         widget.item.price > 0
                             ? 'Rs ${widget.item.price.toStringAsFixed(0)}'
                             : 'Free',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       if (widget.item.description.isNotEmpty) ...[
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12),
                         Text(
                           widget.item.description,
                           style: TextStyle(
@@ -118,35 +119,34 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
                           ),
                         ),
                       ],
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
                       Text(
-                        'Special instructions',
+                        context.l10n.specialInstructions,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.grey.shade700,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       TextField(
                         controller: _notesCtrl,
                         maxLines: 3,
                         decoration: InputDecoration(
-                          hintText: 'e.g. No sugar, extra hot...',
+                          hintText: context.l10n.eGNoSugarExtraHot,
                           filled: true,
                           fillColor: isDark
-                              ? const Color(0xFF1E1E1E)
-                              : const Color(0xFFF5F5F5),
+                              ? Color(0xFF1E1E1E)
+                              : Color(0xFFF5F5F5),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide.none,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
                       Row(
                         children: [
-                          const Text(
-                            'Quantity',
+                          Text(context.l10n.quantity,
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                           const Spacer(),
@@ -158,14 +158,14 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
                           ),
                           Text(
                             '$_qty',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
                           IconButton(
                             onPressed: () => setState(() => _qty++),
-                            icon: const Icon(Icons.add_circle_outline),
+                            icon: Icon(Icons.add_circle_outline),
                           ),
                         ],
                       ),
@@ -174,7 +174,7 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                padding: EdgeInsets.fromLTRB(20, 8, 20, 16),
                 child: SizedBox(
                   width: double.infinity,
                   height: 52,
@@ -190,8 +190,8 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
                       ),
                     ),
                     child: Text(
-                      widget.initialQty > 0 ? 'Update cart' : 'Add to cart',
-                      style: const TextStyle(
+                      widget.initialQty > 0 ? context.l10n.updateCart : context.l10n.addToCart,
+                      style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
                         fontSize: 16,

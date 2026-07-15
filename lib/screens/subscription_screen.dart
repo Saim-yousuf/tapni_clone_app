@@ -6,8 +6,9 @@ import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class SubscriptionScreen extends StatefulWidget {
-  const SubscriptionScreen({Key? key}) : super(key: key);
+  SubscriptionScreen({Key? key}) : super(key: key);
 
   @override
   State<SubscriptionScreen> createState() => _SubscriptionScreenState();
@@ -21,9 +22,16 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   int _step = 0; // 0 = Business Details, 1 = Plan Selection
   final _businessNameController = TextEditingController();
   String? _selectedCategory;
-  final List<String> _categories = [
-    'Technology', 'Retail', 'Health', 'Education', 'Finance', 
-    'Real Estate', 'Food & Beverage', 'Entertainment', 'Other'
+  final List<String> _categories = const [
+    'Technology',
+    'Retail',
+    'Health',
+    'Education',
+    'Finance',
+    'Real Estate',
+    'Food & Beverage',
+    'Entertainment',
+    'Other',
   ];
   bool _isSavingBusinessData = false;
 
@@ -61,7 +69,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
     if (success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Subscription request submitted.')),
+        SnackBar(content: Text(context.l10n.subscriptionRequestSubmitted2)),
       );
     }
   }
@@ -70,7 +78,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     final name = _businessNameController.text.trim();
     if (name.isEmpty || _selectedCategory == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter business details to continue')),
+        SnackBar(content: Text(context.l10n.pleaseEnterBusinessDetailsToContinue)),
       );
       return;
     }
@@ -101,7 +109,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       setState(() => _step = 1);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response.message ?? 'Failed to save business details')),
+        SnackBar(content: Text(response.message ?? context.l10n.failedToSaveBusinessDetails)),
       );
     }
   }
@@ -120,28 +128,28 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Subscription')),
+      appBar: AppBar(title: Text(context.l10n.subscription)),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (subscription?.isRequested == true)
                 _statusPanel(
-                  title: 'Request pending',
+                  title: context.l10n.requestPending,
                   text:
                       'Your ${subscription!.planName} request was submitted on ${_date(subscription.requestedAt)}.',
                 )
               else if (subscription?.isRejected == true)
                 _statusPanel(
-                  title: 'Request rejected',
+                  title: context.l10n.requestRejected,
                   text:
-                      '${subscription!.rejectionReason.isEmpty ? 'No reason provided.' : subscription.rejectionReason}\nYou can submit a new request below.',
+                      '${subscription!.rejectionReason.isEmpty ? context.l10n.noReasonProvided : subscription.rejectionReason}\nYou can submit a new request below.',
                 )
               else if (subscription?.isActive == true)
                 _statusPanel(
-                  title: 'Premium active',
+                  title: context.l10n.premiumActive,
                   text:
                       '${subscription!.planName} is active until ${_date(subscription.endDate)}. Cancel your current subscription before buying another plan.',
                 ),
@@ -161,28 +169,27 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Business Details',
+        Text(context.l10n.businessDetails,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Text(
-          'Please provide your business details before upgrading.',
+          context.l10n.pleaseProvideYourBusinessDetailsBeforeUpgrading,
           style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         TextField(
           controller: _businessNameController,
-          decoration: const InputDecoration(
-            labelText: 'Business Name',
+          decoration: InputDecoration(
+            labelText: context.l10n.businessName,
             border: OutlineInputBorder(),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         DropdownButtonFormField<String>(
           value: _selectedCategory,
-          decoration: const InputDecoration(
-            labelText: 'Business Category',
+          decoration: InputDecoration(
+            labelText: context.l10n.businessCategory,
             border: OutlineInputBorder(),
           ),
           items: _categories.map((category) {
@@ -197,15 +204,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             });
           },
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         SizedBox(
           width: double.infinity,
           height: 52,
           child: ElevatedButton(
             onPressed: _isSavingBusinessData ? null : _handleNext,
             child: _isSavingBusinessData
-                ? const CircularProgressIndicator()
-                : const Text('Next'),
+                ? CircularProgressIndicator()
+                : Text(context.l10n.next),
           ),
         ),
       ],
@@ -216,53 +223,52 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Choose Plan',
+        Text(context.l10n.choosePlan,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         _planTile(
-          title: 'Yearly',
-          subtitle: 'Best value',
+          title: context.l10n.yearly,
+          subtitle: context.l10n.bestValue,
           selected: _isYearlySelected,
           onTap: () => setState(() => _isYearlySelected = true),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         _planTile(
-          title: 'Monthly',
-          subtitle: 'Pay month by month',
+          title: context.l10n.monthly,
+          subtitle: context.l10n.payMonthByMonth,
           selected: !_isYearlySelected,
           onTap: () => setState(() => _isYearlySelected = false),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
         _bankPanel(isDark),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         TextField(
           controller: _transactionController,
-          decoration: const InputDecoration(
-            labelText: 'Transaction reference number (optional)',
+          decoration: InputDecoration(
+            labelText: context.l10n.transactionReferenceNumberOptional,
             border: OutlineInputBorder(),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         OutlinedButton.icon(
           onPressed: _pickReceipt,
-          icon: const Icon(Icons.receipt_long_outlined),
+          icon: Icon(Icons.receipt_long_outlined),
           label: Text(
             _receiptBase64.isEmpty
-                ? 'Upload receipt (optional)'
-                : 'Receipt attached',
+                ? context.l10n.uploadReceiptOptional
+                : context.l10n.receiptAttached,
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         SizedBox(
           width: double.infinity,
           height: 52,
           child: ElevatedButton(
             onPressed: provider.isLoading ? null : _submitRequest,
             child: provider.isLoading
-                ? const CircularProgressIndicator()
-                : const Text('Request subscription'),
+                ? CircularProgressIndicator()
+                : Text(context.l10n.requestSubscription),
           ),
         ),
       ],
@@ -279,7 +285,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: selected ? Colors.black : Colors.black12),
@@ -290,8 +296,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
-                  const SizedBox(height: 4),
+                  Text(title, style: TextStyle(fontWeight: FontWeight.w800)),
+                  SizedBox(height: 4),
                   Text(subtitle),
                 ],
               ),
@@ -306,19 +312,19 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   Widget _bankPanel(bool isDark) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? Colors.white10 : const Color(0xFFF5F5F5),
+        color: isDark ? Colors.white10 : Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Bank Account', style: TextStyle(fontWeight: FontWeight.w900)),
+          Text(context.l10n.bankAccount, style: TextStyle(fontWeight: FontWeight.w900)),
           SizedBox(height: 8),
-          Text('Account Title: Tapni'),
-          Text('Bank: Add bank name here'),
-          Text('Account / IBAN: Add account number here'),
+          Text(context.l10n.accountTitleTapni),
+          Text(context.l10n.bankAddBankNameHere),
+          Text(context.l10n.accountIBANAddAccountNumberHere),
         ],
       ),
     );
@@ -336,7 +342,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
+          Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
           const SizedBox(height: 8),
           Text(text),
         ],

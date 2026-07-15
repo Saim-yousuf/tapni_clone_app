@@ -5,6 +5,7 @@ import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LinkDeviceScanScreen extends StatefulWidget {
   const LinkDeviceScanScreen({super.key});
 
@@ -55,7 +56,7 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
     if (code == null) {
       if (mounted) {
         ShowAlert.error(
-          message: 'Invalid QR code. Use a Barqody link QR.',
+          message: context.l10n.invalidQRCodeUseABarqodyLinkQR,
           context: context,
         );
       }
@@ -71,20 +72,20 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(WaUi.radiusLg),
         ),
-        title: Text('Link this device?', style: WaUi.title),
+        title: Text(context.l10n.linkThisDevice, style: WaUi.title),
         content: Text(
-          'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.',
+          context.l10n.allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices,
           style: WaUi.body,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancel', style: WaUi.bodyMedium),
+            child: Text(context.l10n.cancel, style: WaUi.bodyMedium),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
-              'Link',
+              context.l10n.link,
               style: WaUi.bodyMedium.copyWith(color: WaUi.accent),
             ),
           ),
@@ -107,11 +108,11 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
     if (!mounted) return;
 
     if (res.success) {
-      ShowAlert.success(message: 'Device linked', context: context);
+      ShowAlert.success(message: context.l10n.deviceLinked, context: context);
       Navigator.of(context).pop(true);
     } else {
       ShowAlert.error(
-        message: res.message ?? 'Could not link device',
+        message: res.message ?? context.l10n.couldNotLinkDevice,
         context: context,
       );
       setState(() => _handling = false);
@@ -124,7 +125,7 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: WaUi.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (ctx) {
@@ -139,18 +140,18 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Enter code instead', style: WaUi.headline),
-              const SizedBox(height: 8),
+              Text(ctx.l10n.enterCodeInstead, style: WaUi.headline),
+              SizedBox(height: 8),
               Text(
-                'Type the 8-character code shown under the QR.',
+                ctx.l10n.typeThe8CharacterCodeShownUnderTheQR,
                 style: WaUi.caption,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextField(
                 controller: _manualController,
                 textCapitalization: TextCapitalization.characters,
                 decoration: InputDecoration(
-                  hintText: 'AABBCCDD',
+                  hintText: ctx.l10n.aabbccdd,
                   filled: true,
                   fillColor: WaUi.navBarBg,
                   border: OutlineInputBorder(
@@ -159,12 +160,12 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: WaUi.buttonDark,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(WaUi.radiusMd),
                   ),
@@ -174,7 +175,7 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
                   Navigator.pop(ctx);
                   _handleRaw(code);
                 },
-                child: Text('Continue', style: WaUi.bodyMedium.copyWith(color: Colors.white)),
+                child: Text(context.l10n.continueLabel, style: WaUi.bodyMedium.copyWith(color: Colors.white)),
               ),
             ],
           ),
@@ -190,12 +191,12 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text('Link a device'),
+        title: Text(context.l10n.linkADevice),
         actions: [
           IconButton(
-            icon: const Icon(Icons.keyboard_alt_outlined),
+            icon: Icon(Icons.keyboard_alt_outlined),
             onPressed: _showManualEntry,
-            tooltip: 'Enter code',
+            tooltip: context.l10n.enterCode,
           ),
         ],
       ),
@@ -225,7 +226,7 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
             right: 24,
             bottom: 48,
             child: Text(
-              'Point your camera at the QR code on the other device',
+              context.l10n.pointYourCameraAtTheQRCodeOnTheOtherDevice,
               textAlign: TextAlign.center,
               style: WaUi.body.copyWith(color: Colors.white),
             ),
@@ -233,7 +234,7 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
           if (_handling)
             Container(
               color: Colors.black54,
-              child: const Center(
+              child: Center(
                 child: CircularProgressIndicator(color: WaUi.accent),
               ),
             ),

@@ -7,6 +7,7 @@ import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class PublicUserResult {
   final String id;
   final String name;
@@ -80,7 +81,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
       return;
     }
 
-    _debounce = Timer(const Duration(milliseconds: 400), () {
+    _debounce = Timer(Duration(milliseconds: 400), () {
       _searchUsers(query);
     });
   }
@@ -99,7 +100,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
       setState(() {
         _isSearching = false;
         _results = [];
-        _errorMessage = res.message ?? 'Search failed. Try again.';
+        _errorMessage = res.message ?? context.l10n.searchFailedTryAgain;
       });
       return;
     }
@@ -139,7 +140,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
         elevation: 0,
         iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black),
         title: Text(
-          'Find User',
+          context.l10n.findUser2,
           style: TextStyle(color: isDark ? Colors.white : Colors.black),
         ),
       ),
@@ -147,7 +148,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              padding: EdgeInsets.fromLTRB(16, 8, 16, 12),
               child: Container(
                 height: 48,
                 decoration: BoxDecoration(
@@ -166,7 +167,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
                     if (q.length >= 2) _searchUsers(q);
                   },
                   decoration: InputDecoration(
-                    hintText: 'Search by username...',
+                    hintText: context.l10n.searchByUsername,
                     hintStyle: TextStyle(
                       color: isDark ? Colors.white38 : Colors.grey.shade500,
                     ),
@@ -177,7 +178,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
                     ),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
-                            icon: const Icon(Icons.clear_rounded, size: 18),
+                            icon: Icon(Icons.clear_rounded, size: 18),
                             onPressed: () {
                               _searchController.clear();
                               _onSearchChanged('');
@@ -185,18 +186,18 @@ class _FindUserScreenState extends State<FindUserScreen> {
                           )
                         : null,
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    contentPadding: EdgeInsets.symmetric(vertical: 12),
                   ),
                   style: TextStyle(color: isDark ? Colors.white : Colors.black),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Only public profiles are shown',
+                  context.l10n.onlyPublicProfilesAreShown,
                   style: TextStyle(
                     fontSize: 13,
                     color: isDark ? Colors.white38 : Colors.grey.shade600,
@@ -204,7 +205,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Expanded(child: _buildBody(isDark, query)),
           ],
         ),
@@ -217,20 +218,20 @@ class _FindUserScreenState extends State<FindUserScreen> {
       return _buildHint(
         isDark,
         icon: Icons.person_search_outlined,
-        title: 'Find people on BarQody',
-        subtitle: 'Type at least 2 characters of a username to search.',
+        title: context.l10n.findPeopleOnBarQody,
+        subtitle: context.l10n.typeAtLeast2CharactersOfAUsernameToSearch,
       );
     }
 
     if (_isSearching) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
       return _buildHint(
         isDark,
         icon: Icons.error_outline,
-        title: 'Something went wrong',
+        title: context.l10n.somethingWentWrong,
         subtitle: _errorMessage!,
       );
     }
@@ -239,8 +240,8 @@ class _FindUserScreenState extends State<FindUserScreen> {
       return _buildHint(
         isDark,
         icon: Icons.search_off_rounded,
-        title: 'No users found',
-        subtitle: 'No public profile matches "@$query".',
+        title: context.l10n.noUsersFound,
+        subtitle: context.l10n.noPublicProfileMatchesQuery(query),
       );
     }
 
@@ -276,7 +277,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
             Text(

@@ -13,6 +13,7 @@ import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/stat_card.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class HomeDashboard extends StatelessWidget {
   const HomeDashboard({Key? key}) : super(key: key);
 
@@ -66,7 +67,7 @@ class HomeDashboard extends StatelessWidget {
                                   profile.name.isNotEmpty
                                       ? profile.name[0].toUpperCase()
                                       : 'S',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: AppTheme.secondaryWhite,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
@@ -74,12 +75,12 @@ class HomeDashboard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hello,',
+                            context.l10n.hello,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: isDark
                                   ? AppTheme.textGreyDark
@@ -120,7 +121,7 @@ class HomeDashboard extends StatelessWidget {
                           top: 8,
                           child: Container(
                             padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               color: Colors.red,
                               shape: BoxShape.circle,
                             ),
@@ -130,7 +131,7 @@ class HomeDashboard extends StatelessWidget {
                             ),
                             child: Text(
                               '${leadsProvider.unreadNotificationsCount}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 9,
                                 fontWeight: FontWeight.bold,
@@ -143,13 +144,13 @@ class HomeDashboard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               // Expired Plan Alert
               if (subscription?.isExpired == true) ...[
                 Container(
-                  margin: const EdgeInsets.only(bottom: 24),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  margin: EdgeInsets.only(bottom: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: Colors.red.withOpacity(isDark ? 0.2 : 0.08),
                     border: Border.all(color: Colors.red.withOpacity(0.5)),
@@ -157,30 +158,29 @@ class HomeDashboard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
-                      const SizedBox(width: 14),
+                      Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+                      SizedBox(width: 14),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Plan Expired',
+                            Text(context.l10n.planExpired,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.red,
                                 fontSize: 16,
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            SizedBox(height: 2),
                             Text(
-                              'Your subscription has ended. Tap the info icon for details.',
+                              context.l10n.yourSubscriptionHasEndedTapTheInfoIconForDetails,
                               style: TextStyle(fontSize: 12, color: Colors.red.withOpacity(0.8)),
                             ),
                           ],
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.info_outline, color: Colors.red),
+                        icon: Icon(Icons.info_outline, color: Colors.red),
                         onPressed: () {
                           showDialog(
                             context: context,
@@ -188,25 +188,25 @@ class HomeDashboard extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                              title: const Row(
+                              title: Row(
                                 children: [
                                   Icon(Icons.info, color: Colors.red),
                                   SizedBox(width: 10),
-                                  Text('Plan Expired'),
+                                  Text(context.l10n.planExpired),
                                 ],
                               ),
-                              content: const Text(
-                                'Your PRO subscription has expired.\n\n'
-                                '• Premium features are currently disabled.\n'
-                                '• Pro links are hidden from your public profile.\n'
-                                '• Your business details and data are safe.\n\n'
-                                'Renew your subscription to restore full access to your premium features and data.',
+                              content: Text(
+                                '${context.l10n.yourPROSubscriptionHasExpired}\n\n'
+                                '• ${context.l10n.premiumFeaturesAreCurrentlyDisabled}\n'
+                                '• ${context.l10n.proLinksAreHiddenFromYourPublicProfile}\n'
+                                '• ${context.l10n.yourBusinessDetailsAndDataAreSafe}\n\n'
+                                '${context.l10n.renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData}',
                                 style: TextStyle(height: 1.4),
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: const Text('Close'),
+                                  child: Text(context.l10n.close),
                                 ),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -219,10 +219,10 @@ class HomeDashboard extends StatelessWidget {
                                       context: context,
                                       isScrollControlled: true,
                                       backgroundColor: Colors.transparent,
-                                      builder: (context) => const ProUpgradeSheet(),
+                                      builder: (context) => ProUpgradeSheet(),
                                     );
                                   },
-                                  child: const Text('Renew Plan'),
+                                  child: Text(context.l10n.renewPlan),
                                 ),
                               ],
                             ),
@@ -244,7 +244,7 @@ class HomeDashboard extends StatelessWidget {
                   customBgColor: isDark
                       ? Colors.white.withOpacity(0.03)
                       : Colors.black.withOpacity(0.02),
-                  padding: const EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(20.0),
                   child: Row(
                     children: [
                       Expanded(
@@ -252,7 +252,7 @@ class HomeDashboard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 4,
                               ),
@@ -262,8 +262,7 @@ class HomeDashboard extends StatelessWidget {
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: const Text(
-                                'ACTIVE CARD',
+                              child: Text(context.l10n.activeCARD,
                                 style: TextStyle(
                                   color: AppTheme.accentGold,
                                   fontSize: 9,
@@ -272,7 +271,7 @@ class HomeDashboard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 12),
+                            SizedBox(height: 12),
                             Text(
                               profile.name,
                               style: theme.textTheme.headlineMedium?.copyWith(
@@ -288,17 +287,17 @@ class HomeDashboard extends StatelessWidget {
                                     : AppTheme.textGreyLight,
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16),
                             Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.qr_code,
                                   size: 16,
                                   color: AppTheme.accentGold,
                                 ),
-                                const SizedBox(width: 6),
+                                SizedBox(width: 6),
                                 Text(
-                                  'Tap to share QR code',
+                                  context.l10n.tapToShareQRCode,
                                   style: TextStyle(
                                     color: isDark
                                         ? Colors.white70
@@ -327,7 +326,7 @@ class HomeDashboard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Icon(
                             Icons.contactless,
                             color: AppTheme.secondaryWhite,
@@ -358,7 +357,7 @@ class HomeDashboard extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: isDark
-                            ? [const Color(0xFF2C1E14), const Color(0xFF16100B)]
+                            ? [Color(0xFF2C1E14), const Color(0xFF16100B)]
                             : [
                                 const Color(0xFFFFF7F0),
                                 const Color(0xFFFFF0E5),
@@ -369,32 +368,32 @@ class HomeDashboard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: isDark
-                            ? const Color(0xFF4C3625)
-                            : const Color(0xFFFFD1B3),
+                            ? Color(0xFF4C3625)
+                            : Color(0xFFFFD1B3),
                         width: 1.2,
                       ),
                     ),
                     child: Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFF9500).withOpacity(0.12),
+                            color: Color(0xFFFF9500).withOpacity(0.12),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.star_rounded,
                             color: Color(0xFFFF9500),
                             size: 24,
                           ),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Upgrade to Tapni PRO',
+                                context.l10n.upgradeToTapniPRO,
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w900,
                                   fontSize: 15,
@@ -402,9 +401,9 @@ class HomeDashboard extends StatelessWidget {
                                   letterSpacing: -0.2,
                                 ),
                               ),
-                              const SizedBox(height: 2),
+                              SizedBox(height: 2),
                               Text(
-                                'Customize your profile, unlock PRO templates, and get unlimited leads.',
+                                context.l10n.customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads,
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: isDark
@@ -416,7 +415,7 @@ class HomeDashboard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Icon(
                           Icons.chevron_right_rounded,
                           color: isDark ? Colors.white38 : Colors.black38,
@@ -427,35 +426,35 @@ class HomeDashboard extends StatelessWidget {
                   ),
                 ),
               ],
-              const SizedBox(height: 28),
+              SizedBox(height: 28),
 
               Row(
                 children: [
                   Expanded(
                     child: _QuickOrderCard(
                       icon: Icons.receipt_long_outlined,
-                      title: 'My Orders',
-                      subtitle: 'Track your orders',
+                      title: context.l10n.myOrders,
+                      subtitle: context.l10n.trackYourOrders,
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const OrdersListScreen(isBusinessView: false),
+                            builder: (_) => OrdersListScreen(isBusinessView: false),
                           ),
                         );
                       },
                     ),
                   ),
                   if (profileProvider.isProUser) ...[
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: _QuickOrderCard(
                         icon: Icons.storefront_outlined,
-                        title: 'Orders',
-                        subtitle: 'Incoming orders',
+                        title: context.l10n.orders,
+                        subtitle: context.l10n.incomingOrders,
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => const OrdersListScreen(isBusinessView: true),
+                              builder: (_) => OrdersListScreen(isBusinessView: true),
                             ),
                           );
                         },
@@ -464,27 +463,27 @@ class HomeDashboard extends StatelessWidget {
                   ],
                 ],
               ),
-              const SizedBox(height: 28),
+              SizedBox(height: 28),
 
               // Stats Grid
               Text(
-                'Performance Overview',
+                context.l10n.performanceOverview,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.5,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               GridView.count(
                 crossAxisCount: 3,
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
                 childAspectRatio: 0.8,
                 children: [
                   StatCard(
-                    title: 'Views',
+                    title: context.l10n.views,
                     value: '${profile.viewsCount}',
                     trend: '+12%',
                     icon: Icons.visibility_outlined,
@@ -493,7 +492,7 @@ class HomeDashboard extends StatelessWidget {
                     },
                   ),
                   StatCard(
-                    title: 'QR Scans',
+                    title: context.l10n.qrScans,
                     value: '${profile.scansCount}',
                     trend: '+8%',
                     icon: Icons.qr_code_scanner_rounded,
@@ -509,14 +508,14 @@ class HomeDashboard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               // Recent Activity Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Recent Activity',
+                    context.l10n.recentActivity,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
@@ -525,16 +524,15 @@ class HomeDashboard extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           content: Text(
-                            'See all activity is mocked. New activities will appear as leads are added.',
+                            context.l10n.seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded,
                           ),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
                     },
-                    child: const Text(
-                      'See All',
+                    child: Text(context.l10n.seeAll,
                       style: TextStyle(
                         color: AppTheme.accentGold,
                         fontWeight: FontWeight.bold,
@@ -599,7 +597,7 @@ class HomeDashboard extends StatelessWidget {
                               children: [
                                 Text(
                                   activity.title,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
@@ -674,7 +672,7 @@ class _QuickOrderCard extends StatelessWidget {
           children: [
             Icon(icon, size: 28),
             const SizedBox(height: 10),
-            Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+            Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
             const SizedBox(height: 4),
             Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
           ],

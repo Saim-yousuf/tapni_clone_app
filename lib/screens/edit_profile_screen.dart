@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
 
@@ -58,8 +59,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     //   SnackBar(
     //     content: Text(
     //       response.success
-    //           ? 'Profile updated successfully!'
-    //           : response.message ?? 'Unable to save profile. Try again.',
+    //           ? context.l10n.profileUpdatedSuccessfully
+    //           : response.message ?? context.l10n.unableToSaveProfileTryAgain,
     //     ),
     //     behavior: SnackBarBehavior.floating,
     //   ),
@@ -82,10 +83,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Edit Profile'),
+        title: Text(context.l10n.editProfile),
       ),
       body: SafeArea(
         child: Form(
@@ -115,7 +116,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               )
                             : Container(
                                 color: Colors.grey.shade300,
-                                child: const Center(
+                                child: Center(
                                   child: Icon(
                                     Icons.photo_size_select_large_outlined,
                                     size: 54,
@@ -142,7 +143,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         children: [
                           CircleAvatar(
                             radius: 44,
-                            backgroundColor: const Color(0xFF1E2022),
+                            backgroundColor: Color(0xFF1E2022),
                             backgroundImage: profile.profilePhotoUrl != null && profile.profilePhotoUrl!.isNotEmpty
                                 ? NetworkImage(profile.profilePhotoUrl!) as ImageProvider
                                 : null,
@@ -151,7 +152,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     profile.name.isNotEmpty
                                         ? profile.name[0].toUpperCase()
                                         : '?',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 32,
                                       fontWeight: FontWeight.bold,
@@ -174,47 +175,47 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 62),
+                SizedBox(height: 62),
                 Text(
-                  'Edit your profile details',
+                  context.l10n.editYourProfileDetails,
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
-                  'Only cover, profile photo, name and bio are editable here.',
+                  context.l10n.onlyCoverProfilePhotoNameAndBioAreEditableHere,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.grey.shade600,
                     height: 1.5,
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Name',
+                  decoration: InputDecoration(
+                    labelText: context.l10n.name,
                     prefixIcon: Icon(Icons.person_outline),
                   ),
-                  validator: (value) => value == null || value.isEmpty ? 'Enter your name' : null,
+                  validator: (value) => value == null || value.isEmpty ? context.l10n.enterYourName : null,
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _bioController,
                   maxLines: 4,
-                  decoration: const InputDecoration(
-                    labelText: 'Bio',
+                  decoration: InputDecoration(
+                    labelText: context.l10n.bio2,
                     prefixIcon: Padding(
                       padding: EdgeInsets.only(bottom: 8.0),
                       child: Icon(Icons.edit_outlined),
                     ),
                     alignLabelWithHint: true,
                   ),
-                  validator: (value) => value == null || value.isEmpty ? 'Enter your bio' : null,
+                  validator: (value) => value == null || value.isEmpty ? context.l10n.enterYourBio : null,
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: 32),
                 CustomButton(
-                  text: 'Save Profile',
+                  text: context.l10n.saveProfile,
                   onTap: _saveProfile,
                   isGold: true,
                 ),
@@ -278,7 +279,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           const Spacer(),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),

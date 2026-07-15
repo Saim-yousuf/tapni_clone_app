@@ -7,6 +7,7 @@ import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
@@ -54,7 +55,7 @@ class _SignupScreenState extends State<SignupScreen> {
           await profileProvider.fetchProfile();
           if (!mounted) return;
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const MainShell()),
+            MaterialPageRoute(builder: (_) => MainShell()),
             (route) => false,
           );
         }
@@ -74,107 +75,107 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+          padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 // Heading
                 Text(
-                  'Create Account',
+                  context.l10n.createAccount,
                   style: theme.textTheme.headlineLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
-                  'Start networking smarter with Barqody.',
+                  context.l10n.startNetworkingSmarterWithBarqody,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: isDark
                         ? AppTheme.textGreyDark
                         : AppTheme.textGreyLight,
                   ),
                 ),
-                const SizedBox(height: 36),
+                SizedBox(height: 36),
 
                 // Name
                 Text(
-                  'Full Name',
+                  context.l10n.fullName,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 TextFormField(
                   controller: _nameController,
                   keyboardType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    hintText: 'John Doe',
+                  decoration: InputDecoration(
+                    hintText: context.l10n.johnDoe,
                     prefixIcon: Icon(Icons.person_outline),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
+                      return context.l10n.pleaseEnterYourName;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Email
                 Text(
-                  'Email Address',
+                  context.l10n.emailAddress,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    hintText: 'name@company.com',
+                  decoration: InputDecoration(
+                    hintText: context.l10n.nameCompanyCom,
                     prefixIcon: Icon(Icons.email_outlined),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return context.l10n.pleaseEnterYourEmail;
                     }
                     if (!value.contains('@')) {
-                      return 'Please enter a valid email address';
+                      return context.l10n.pleaseEnterAValidEmailAddress;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 // Password
                 Text(
-                  'Password',
+                  context.l10n.password,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) => _handleSignup(),
                   decoration: InputDecoration(
-                    hintText: 'At least 6 characters',
-                    prefixIcon: const Icon(Icons.lock_outline),
+                    hintText: context.l10n.atLeast6Characters,
+                    prefixIcon: Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword
@@ -190,29 +191,29 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a password';
+                      return context.l10n.pleaseEnterAPassword;
                     }
                     if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
+                      return context.l10n.passwordMustBeAtLeast6Characters;
                     }
                     return null;
                   },
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: 32),
 
                 // Sign Up Button
                 CustomButton(
-                  text: 'Create Account',
+                  text: context.l10n.createAccount,
                   onTap: _handleSignup,
                   // isGold: true,
                   isLoading: authProvider.isLoading,
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: 32),
 
                 // Terms Notice
                 Center(
                   child: Text(
-                    'By signing up, you agree to our Terms and Conditions.',
+                    context.l10n.bySigningUpYouAgreeToOurTermsAndConditions,
                     style: TextStyle(
                       fontSize: 12,
                       color: isDark
@@ -222,14 +223,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
 
                 // Login Footer
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Already have an account? ",
+                      context.l10n.alreadyHaveAnAccount2,
                       style: TextStyle(
                         color: isDark
                             ? AppTheme.textGreyDark
@@ -240,8 +241,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text(
-                        'Log In',
+                      child: Text(context.l10n.logIn,
                         style: TextStyle(
                           color: AppTheme.accentGold,
                           fontWeight: FontWeight.bold,

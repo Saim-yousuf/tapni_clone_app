@@ -5,6 +5,7 @@ import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class OrdersListScreen extends StatefulWidget {
   final bool isBusinessView;
 
@@ -67,7 +68,7 @@ class _OrdersListScreenState extends State<OrdersListScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isBusinessView ? 'Orders' : 'My Orders'),
+        title: Text(widget.isBusinessView ? context.l10n.orders : context.l10n.myOrders),
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
@@ -83,7 +84,7 @@ class _OrdersListScreenState extends State<OrdersListScreen>
       body: RefreshIndicator(
         onRefresh: _loadOrders,
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator())
             : _orders.isEmpty
             ? ListView(
                 children: [
@@ -128,7 +129,7 @@ class _OrderTile extends StatelessWidget {
   final bool isBusinessView;
   final VoidCallback onTap;
 
-  const _OrderTile({
+  _OrderTile({
     required this.order,
     required this.isBusinessView,
     required this.onTap,
@@ -146,13 +147,13 @@ class _OrderTile extends StatelessWidget {
         : order.itemsSummary;
 
     return Material(
-      color: const Color(0xFFF5F5F5),
+      color: Color(0xFFF5F5F5),
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: EdgeInsets.all(14),
           child: Row(
             children: [
               Expanded(
@@ -160,8 +161,8 @@ class _OrderTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title.isNotEmpty ? title : 'Order',
-                      style: const TextStyle(
+                      title.isNotEmpty ? title : context.l10n.order,
+                      style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
@@ -188,7 +189,7 @@ class _OrderTile extends StatelessWidget {
                 children: [
                   Text(
                     'Rs ${order.totalAmount.toStringAsFixed(0)}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
                   _StatusChip(status: order.status),

@@ -13,6 +13,7 @@ import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 /// WhatsApp Web style: this device shows a QR, another logged-in phone scans it.
 class QrLoginScreen extends StatefulWidget {
   const QrLoginScreen({super.key, this.addAccount = false});
@@ -62,7 +63,7 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
     if (!res.success || res.data is! Map) {
       setState(() {
         _loading = false;
-        _error = res.message ?? 'Could not create QR code';
+        _error = res.message ?? context.l10n.couldNotCreateQRCode;
       });
       return;
     }
@@ -79,7 +80,7 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
       _expiresAt = exp != null ? DateTime.tryParse(exp)?.toLocal() : null;
     });
 
-    _pollTimer = Timer.periodic(const Duration(seconds: 2), (_) {
+    _pollTimer = Timer.periodic(Duration(seconds: 2), (_) {
       _checkStatus();
     });
   }
@@ -90,7 +91,7 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
     if (_expiresAt != null && DateTime.now().isAfter(_expiresAt!)) {
       _pollTimer?.cancel();
       if (mounted) {
-        setState(() => _error = 'QR code expired');
+        setState(() => _error = context.l10n.qrCodeExpired);
       }
       return;
     }
@@ -104,7 +105,7 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
       await _onApproved(data);
     } else if (status == 'expired' || status == 'cancelled') {
       _pollTimer?.cancel();
-      setState(() => _error = 'QR code expired. Tap refresh.');
+      setState(() => _error = context.l10n.qrCodeExpiredTapRefresh);
     }
   }
 
@@ -116,7 +117,7 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
     final user = data['user'];
     if (token.isEmpty || user is! Map) {
       setState(() {
-        _error = 'Login failed. Try again.';
+        _error = context.l10n.loginFailedTryAgain;
         _completing = false;
       });
       return;
@@ -133,7 +134,7 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
     if (!mounted) return;
     if (!ok) {
       setState(() {
-        _error = 'Could not complete login';
+        _error = context.l10n.couldNotCompleteLogin;
         _completing = false;
       });
       return;
@@ -152,7 +153,7 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
 
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const MainShell()),
+      MaterialPageRoute(builder: (_) => MainShell()),
       (_) => false,
     );
   }
@@ -166,31 +167,31 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
         elevation: 0,
         foregroundColor: WaUi.primaryText,
         title: Text(
-          widget.addAccount ? 'Add account' : 'Log in with QR',
+          widget.addAccount ? context.l10n.addAccount : context.l10n.logInWithQR,
           style: WaUi.headline,
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
+          padding: EdgeInsets.symmetric(horizontal: 28),
           child: Column(
             children: [
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
-                'Use Barqody on your phone to scan this code',
+                context.l10n.useBarqodyOnYourPhoneToScanThisCode,
                 textAlign: TextAlign.center,
                 style: WaUi.body.copyWith(color: WaUi.secondaryText),
               ),
-              const SizedBox(height: 28),
+              SizedBox(height: 28),
               Expanded(
                 child: Center(
                   child: _buildQrArea(),
                 ),
               ),
               if (_code != null && _error == null) ...[
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Text(
-                  'Code: $_code',
+                  context.l10n.codeWithValue(_code!),
                   style: WaUi.caption.copyWith(
                     letterSpacing: 1.2,
                     fontWeight: FontWeight.w600,
@@ -200,21 +201,21 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: _code!));
                     ShowAlert.success(
-                      message: 'Code copied',
+                      message: context.l10n.codeCopied,
                       context: context,
                     );
                   },
                   child: Text(
-                    'Copy code',
+                    context.l10n.copyCode,
                     style: WaUi.bodyMedium.copyWith(color: WaUi.accent),
                   ),
                 ),
               ],
-              const SizedBox(height: 8),
-              _howtoStep('1', 'Open Barqody on your other phone'),
-              _howtoStep('2', 'Go to Tools → Linked devices'),
-              _howtoStep('3', 'Tap Link a device and scan this QR'),
-              const SizedBox(height: 28),
+              SizedBox(height: 8),
+              _howtoStep('1', context.l10n.openBarqodyOnYourOtherPhone),
+              _howtoStep('2', context.l10n.goToToolsLinkedDevices),
+              _howtoStep('3', context.l10n.tapLinkADeviceAndScanThisQR),
+              SizedBox(height: 28),
             ],
           ),
         ),
@@ -227,7 +228,7 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(
+          SizedBox(
             width: 36,
             height: 36,
             child: CircularProgressIndicator(
@@ -235,9 +236,9 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
               color: WaUi.accent,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            _completing ? 'Logging you in…' : 'Preparing QR code…',
+            _completing ? context.l10n.loggingYouIn : context.l10n.preparingQRCode,
             style: WaUi.caption,
           ),
         ],
@@ -249,18 +250,18 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.qr_code_2, size: 64, color: Colors.grey.shade400),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            _error ?? 'Something went wrong',
+            _error ?? context.l10n.somethingWentWrong,
             textAlign: TextAlign.center,
             style: WaUi.body,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           TextButton.icon(
             onPressed: _startPairing,
-            icon: const Icon(Icons.refresh, color: WaUi.accent),
+            icon: Icon(Icons.refresh, color: WaUi.accent),
             label: Text(
-              'Refresh QR',
+              context.l10n.refreshQR,
               style: WaUi.bodyMedium.copyWith(color: WaUi.accent),
             ),
           ),

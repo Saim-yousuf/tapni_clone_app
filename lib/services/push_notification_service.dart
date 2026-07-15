@@ -316,7 +316,7 @@ class PushNotificationService {
     Provider.of<SubscriptionProvider>(context, listen: false)
         .checkSubscriptionStatus();
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const SubscriptionScreen()),
+      MaterialPageRoute(builder: (_) =>  SubscriptionScreen()),
     );
   }
 

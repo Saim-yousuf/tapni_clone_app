@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class CustomerProgramDetailsScreen extends StatelessWidget {
   final RewardEnrollment enrollment;
 
-  const CustomerProgramDetailsScreen({super.key, required this.enrollment});
+  CustomerProgramDetailsScreen({super.key, required this.enrollment});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          program?.label.isNotEmpty == true ? program!.label : 'Reward Program',
+          program?.label.isNotEmpty == true ? program!.label : context.l10n.rewardProgram,
           style: TextStyle(
             color: theme.screenTextColor,
             fontWeight: FontWeight.bold,
@@ -149,24 +150,24 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
               if (enrollment.isCompleted)
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.green.withOpacity(0.1),
                     border: Border.all(color: Colors.green.withOpacity(0.4)),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
                       Icon(Icons.celebration, color: Colors.green),
                       SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'Reward Completed! Show this card to redeem.',
+                          context.l10n.rewardCompletedShowThisCardToRedeem,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.green,
@@ -179,7 +180,7 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
               else
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: theme.screenTextColor.withOpacity(0.05),
                     borderRadius: BorderRadius.circular(14),
@@ -194,10 +195,10 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
                         color: theme.screenTextColor.withOpacity(0.6),
                         size: 32,
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       Text(
                         remaining == 0
-                            ? 'Almost there!'
+                            ? context.l10n.almostThere
                             : '$remaining more stamp${remaining == 1 ? '' : 's'} to complete',
                         style: TextStyle(
                           color: theme.screenTextColor,

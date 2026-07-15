@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/models/contact_category.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class WaChatsHeader extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -47,7 +48,7 @@ class WaChatSearchBar extends StatelessWidget {
   final VoidCallback onClear;
   final bool autofocus;
 
-  const WaChatSearchBar({
+  WaChatSearchBar({
     super.key,
     required this.controller,
     this.focusNode,
@@ -59,7 +60,7 @@ class WaChatSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
+      padding: EdgeInsets.fromLTRB(16, 10, 16, 6),
       child: Container(
         height: 42,
         decoration: BoxDecoration(
@@ -74,7 +75,7 @@ class WaChatSearchBar extends StatelessWidget {
           style: WaUi.body,
           textInputAction: TextInputAction.search,
           decoration: InputDecoration(
-            hintText: 'Search name, email or company',
+            hintText: context.l10n.searchNameEmailOrCompany,
             hintStyle: WaUi.caption.copyWith(fontSize: 15),
             prefixIcon: const Icon(
               Icons.search,
@@ -83,13 +84,13 @@ class WaChatSearchBar extends StatelessWidget {
             ),
             suffixIcon: controller.text.isNotEmpty
                 ? IconButton(
-                    icon: const Icon(Icons.close, size: 18),
+                    icon: Icon(Icons.close, size: 18),
                     color: WaUi.secondaryText,
                     onPressed: onClear,
                   )
                 : null,
             border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(vertical: 11),
+            contentPadding: EdgeInsets.symmetric(vertical: 11),
           ),
         ),
       ),
@@ -104,7 +105,7 @@ class WaContactFilterChips extends StatelessWidget {
   final ValueChanged<String> onCategoryTap;
   final VoidCallback onAddCategory;
 
-  const WaContactFilterChips({
+  WaContactFilterChips({
     super.key,
     required this.categories,
     required this.activeCategoryId,
@@ -119,10 +120,10 @@ class WaContactFilterChips extends StatelessWidget {
       height: 38,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+        padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
         children: [
           _chip(
-            label: 'All',
+            label: context.l10n.all,
             selected: activeCategoryId == null,
             onTap: onAllTap,
           ),
@@ -375,7 +376,7 @@ class WaContactEmptyState extends StatelessWidget {
   final VoidCallback onScan;
   final VoidCallback onAdd;
 
-  const WaContactEmptyState({
+  WaContactEmptyState({
     super.key,
     required this.isSearching,
     required this.onScan,
@@ -386,7 +387,7 @@ class WaContactEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+        padding: EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -403,34 +404,34 @@ class WaContactEmptyState extends StatelessWidget {
                 color: WaUi.secondaryText.withValues(alpha: 0.7),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Text(
-              isSearching ? 'No matches' : 'No contacts yet',
+              isSearching ? context.l10n.noMatches : context.l10n.noContactsYet,
               style: WaUi.title,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               isSearching
-                  ? 'Try a different name, email, or company.'
-                  : 'Scan a QR code or add someone you met to build your network.',
+                  ? context.l10n.tryADifferentNameEmailOrCompany
+                  : context.l10n.scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork,
               style: WaUi.caption,
               textAlign: TextAlign.center,
             ),
             if (!isSearching) ...[
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FilledButton.icon(
                     onPressed: onScan,
-                    icon: const Icon(Icons.qr_code_scanner_rounded, size: 18),
+                    icon: Icon(Icons.qr_code_scanner_rounded, size: 18),
                     label: Text(
-                      'Scan QR',
+                      context.l10n.scanQR,
                       style: WaUi.bodyMedium.copyWith(color: Colors.white),
                     ),
                     style: FilledButton.styleFrom(
                       backgroundColor: WaUi.buttonDark,
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 18,
                         vertical: 10,
                       ),
@@ -439,11 +440,11 @@ class WaContactEmptyState extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   OutlinedButton.icon(
                     onPressed: onAdd,
-                    icon: const Icon(Icons.person_add_outlined, size: 18),
-                    label: Text('Add', style: WaUi.bodyMedium),
+                    icon: Icon(Icons.person_add_outlined, size: 18),
+                    label: Text(context.l10n.add, style: WaUi.bodyMedium),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: WaUi.primaryText,
                       side: const BorderSide(color: WaUi.divider),
@@ -471,7 +472,7 @@ class WaContactSpeedDial extends StatefulWidget {
   final VoidCallback onAdd;
   final VoidCallback onFind;
 
-  const WaContactSpeedDial({
+  WaContactSpeedDial({
     super.key,
     required this.onScan,
     required this.onAdd,
@@ -500,17 +501,17 @@ class _WaContactSpeedDialState extends State<WaContactSpeedDial> {
       children: [
         if (_open) ...[
           _speedAction(
-            label: 'Find user',
+            label: context.l10n.findUser,
             icon: Icons.person_search_outlined,
             onTap: () => _run(widget.onFind),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           _speedAction(
-            label: 'Add contact',
+            label: context.l10n.addContact,
             icon: Icons.person_add_outlined,
             onTap: () => _run(widget.onAdd),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
         ],
         FloatingActionButton.small(
           heroTag: 'contacts_more',
@@ -520,23 +521,23 @@ class _WaContactSpeedDialState extends State<WaContactSpeedDial> {
           foregroundColor: WaUi.primaryText,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
-            side: const BorderSide(color: WaUi.divider),
+            side: BorderSide(color: WaUi.divider),
           ),
           child: AnimatedRotation(
             turns: _open ? 0.125 : 0,
-            duration: const Duration(milliseconds: 200),
+            duration: Duration(milliseconds: 200),
             child: Icon(_open ? Icons.close : Icons.add, size: 22),
           ),
         ),
-        const SizedBox(height: 14),
+        SizedBox(height: 14),
         FloatingActionButton.extended(
           heroTag: 'contacts_scan',
           onPressed: widget.onScan,
           elevation: 3,
           backgroundColor: WaUi.buttonDark,
           foregroundColor: Colors.white,
-          icon: const Icon(Icons.qr_code_scanner_rounded, size: 24),
-          label: Text('Scan', style: WaUi.bodyMedium.copyWith(color: Colors.white)),
+          icon: Icon(Icons.qr_code_scanner_rounded, size: 24),
+          label: Text(context.l10n.scan, style: WaUi.bodyMedium.copyWith(color: Colors.white)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

@@ -6,10 +6,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class FaceCaptureSheet extends StatefulWidget {
   final String title;
 
-  const FaceCaptureSheet({super.key, this.title = 'Capture Face'});
+  FaceCaptureSheet({super.key, this.title = 'Capture Face'});
 
   static Future<String?> show(BuildContext context, {String? title}) {
     return showModalBottomSheet<String>(
@@ -18,7 +19,7 @@ class FaceCaptureSheet extends StatefulWidget {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
       useSafeArea: true,
-      builder: (_) => FaceCaptureSheet(title: title ?? 'Capture Face'),
+      builder: (_) => FaceCaptureSheet(title: title ?? context.l10n.captureFace),
     );
   }
 
@@ -61,7 +62,7 @@ class _FaceCaptureSheetState extends State<FaceCaptureSheet> {
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           border: Border.all(color: Colors.black, width: 3),
         ),
         child: Padding(
@@ -82,15 +83,15 @@ class _FaceCaptureSheetState extends State<FaceCaptureSheet> {
               borderRadius: BorderRadius.circular(3),
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Text(widget.title, style: AttendanceUi.sectionTitle),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Text(
-            'Take a quick selfie for attendance verification',
+            context.l10n.takeAQuickSelfieForAttendanceVerification,
             textAlign: TextAlign.center,
             style: AttendanceUi.bodyMuted,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           Container(
             width: 160,
             height: 160,
@@ -105,23 +106,23 @@ class _FaceCaptureSheetState extends State<FaceCaptureSheet> {
                   : null,
             ),
             child: _imageFile == null
-                ? const Icon(
+                ? Icon(
                     Icons.face_retouching_natural,
                     size: 72,
                     color: Colors.black54,
                   )
                 : null,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           AttendanceUi.secondaryButton(
-            label: _imageFile == null ? 'Open Camera' : 'Retake Photo',
+            label: _imageFile == null ? context.l10n.openCamera : context.l10n.retakePhoto,
             icon: Icons.camera_alt_outlined,
             loading: _isCapturing,
             onPressed: _capture,
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           AttendanceUi.primaryButton(
-            label: 'Use This Photo',
+            label: context.l10n.useThisPhoto,
             icon: Icons.check_rounded,
             onPressed: _imageFile == null
                 ? null
@@ -130,11 +131,11 @@ class _FaceCaptureSheetState extends State<FaceCaptureSheet> {
                     if (context.mounted) Navigator.pop(context, base64);
                   },
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           TextButton(
             onPressed: () => Navigator.pop(context, ''),
             child: Text(
-              'Skip for now',
+              context.l10n.skipForNow,
               style: AttendanceUi.body.copyWith(fontWeight: FontWeight.w800),
             ),
           ),

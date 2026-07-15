@@ -6,6 +6,7 @@ import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/wa_tools_widgets.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class CustomerLoyaltyHomeScreen extends StatefulWidget {
   const CustomerLoyaltyHomeScreen({super.key});
 
@@ -49,7 +50,7 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
 
     setState(() {
       _isLoading = false;
-      _errorMessage = res.message ?? 'Failed to load programs';
+      _errorMessage = res.message ?? context.l10n.failedToLoadPrograms;
     });
   }
 
@@ -77,20 +78,20 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
         backgroundColor: WaUi.toolsScaffold,
         surfaceTintColor: WaUi.toolsScaffold,
         elevation: 0,
-        iconTheme: const IconThemeData(color: WaUi.primaryText),
-        title: Text('My Rewards', style: WaUi.headline),
+        iconTheme: IconThemeData(color: WaUi.primaryText),
+        title: Text(context.l10n.myRewards, style: WaUi.headline),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _errorMessage != null
           ? _buildErrorView()
           : RefreshIndicator(
               onRefresh: _loadEnrollments,
               child: _enrollments.isEmpty
                   ? ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
+                      physics: AlwaysScrollableScrollPhysics(),
                       children: [
-                        const SizedBox(height: 120),
+                        SizedBox(height: 120),
                         Center(
                           child: Column(
                             children: [
@@ -99,17 +100,17 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
                                 size: 56,
                                 color: WaUi.secondaryText.withOpacity(0.4),
                               ),
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16),
                               Text(
-                                'No reward programs yet',
+                                context.l10n.noRewardProgramsYet,
                                 style: WaUi.listTitle,
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 40),
+                                    EdgeInsets.symmetric(horizontal: 40),
                                 child: Text(
-                                  'When a business enrolls you in their reward program, it will appear here.',
+                                  context.l10n.whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere,
                                   textAlign: TextAlign.center,
                                   style: WaUi.listSubtitle,
                                 ),
@@ -120,18 +121,18 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
                       ],
                     )
                   : ListView(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.only(bottom: 24),
+                      physics: AlwaysScrollableScrollPhysics(),
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                          padding: EdgeInsets.fromLTRB(20, 8, 20, 0),
                           child: _SummaryCard(
                             businessCount: grouped.length,
                             activeCount: activeCount,
                             completedCount: completedCount,
                           ),
                         ),
-                        const WaSectionHeader('Enrolled Businesses'),
+                        WaSectionHeader(context.l10n.enrolledBusinesses),
                         ...grouped.entries.map(
                           (entry) => Padding(
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
@@ -159,7 +160,7 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
   Widget _buildErrorView() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -168,13 +169,13 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
               textAlign: TextAlign.center,
               style: WaUi.body,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             TextButton(
               onPressed: _loadEnrollments,
               style: TextButton.styleFrom(
                 backgroundColor: WaUi.buttonDark,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 12,
                 ),
@@ -183,7 +184,7 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
                 ),
                 elevation: 0,
               ),
-              child: Text('Try again', style: WaUi.promoButton),
+              child: Text(context.l10n.tryAgain, style: WaUi.promoButton),
             ),
           ],
         ),
@@ -197,7 +198,7 @@ class _SummaryCard extends StatelessWidget {
   final int activeCount;
   final int completedCount;
 
-  const _SummaryCard({
+  _SummaryCard({
     required this.businessCount,
     required this.activeCount,
     required this.completedCount,
@@ -207,7 +208,7 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: WaUi.buttonDark,
         borderRadius: BorderRadius.circular(WaUi.radiusLg),
@@ -216,7 +217,7 @@ class _SummaryCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Your Rewards',
+            context.l10n.yourRewards,
             style: WaUi.caption.copyWith(color: Colors.white70),
           ),
           const SizedBox(height: 10),
@@ -305,7 +306,7 @@ class _BusinessSectionState extends State<_BusinessSection> {
                         AnimatedRotation(
                           turns: _expanded ? 0.5 : 0,
                           duration: const Duration(milliseconds: 200),
-                          child: const Icon(
+                          child: Icon(
                             Icons.keyboard_arrow_down,
                             color: WaUi.secondaryText,
                           ),
@@ -314,7 +315,7 @@ class _BusinessSectionState extends State<_BusinessSection> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -326,7 +327,7 @@ class _BusinessSectionState extends State<_BusinessSection> {
                   },
                   borderRadius: BorderRadius.circular(WaUi.radiusPill),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 14,
                       vertical: 10,
                     ),
@@ -335,7 +336,7 @@ class _BusinessSectionState extends State<_BusinessSection> {
                       borderRadius: BorderRadius.circular(WaUi.radiusPill),
                     ),
                     child: Text(
-                      'View Profile',
+                      context.l10n.viewProfile,
                       style: WaUi.button.copyWith(color: Colors.white),
                     ),
                   ),

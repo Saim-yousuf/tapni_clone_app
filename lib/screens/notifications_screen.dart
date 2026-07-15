@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/attendance/employee/employee_invitations_scree
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
 
@@ -36,9 +37,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text(context.l10n.notifications),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
@@ -47,14 +48,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               onPressed: () {
                 leadsProvider.markAllNotificationsAsRead();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('All notifications marked as read!'),
+                  SnackBar(
+                    content: Text(context.l10n.allNotificationsMarkedAsRead),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
               },
-              child: const Text(
-                'Read All',
+              child: Text(context.l10n.readAll,
                 style: TextStyle(color: AppTheme.accentGold, fontWeight: FontWeight.bold),
               ),
             ),
@@ -71,17 +71,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       size: 64,
                       color: isDark ? Colors.white24 : Colors.black26,
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'All caught up!',
+                    SizedBox(height: 16),
+                    Text(context.l10n.allCaughtUp,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     Text(
-                      'No new notifications at this time.',
+                      context.l10n.noNewNotificationsAtThisTime,
                       style: TextStyle(
                         color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
                         fontSize: 13,
@@ -91,7 +90,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 ),
               )
             : ListView.builder(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
                 itemCount: notificationsList.length,
                 itemBuilder: (context, index) {
                   final item = notificationsList[index];
@@ -102,18 +101,18 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     direction: DismissDirection.endToStart,
                     background: Container(
                       alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
                         color: Colors.redAccent,
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
+                      child: Icon(Icons.delete_outline_rounded, color: Colors.white),
                     ),
                     onDismissed: (direction) {
                       leadsProvider.clearNotification(item['id']);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Notification cleared'),
+                        SnackBar(
+                          content: Text(context.l10n.notificationCleared),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );

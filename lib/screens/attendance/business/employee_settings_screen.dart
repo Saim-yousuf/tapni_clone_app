@@ -10,6 +10,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/face_capture_sheet.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class EmployeeSettingsScreen extends StatefulWidget {
   final AttendanceEmployee? employee;
   final String? employeeUserId;
@@ -77,7 +78,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
 
   TimeOfDay _parseTime(String value) {
     final parts = value.split(':');
-    if (parts.length < 2) return const TimeOfDay(hour: 9, minute: 0);
+    if (parts.length < 2) return TimeOfDay(hour: 9, minute: 0);
     return TimeOfDay(
       hour: int.tryParse(parts[0]) ?? 9,
       minute: int.tryParse(parts[1]) ?? 0,
@@ -113,8 +114,8 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
 
     if (location == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not get location. Please enable GPS permission.'),
+        SnackBar(
+          content: Text(context.l10n.couldNotGetLocationPleaseEnableGPSPermission),
         ),
       );
       return;
@@ -145,7 +146,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
   Future<void> _captureFace() async {
     final photo = await FaceCaptureSheet.show(
       context,
-      title: 'Employee Face Photo',
+      title: context.l10n.employeeFacePhoto,
     );
     if (photo != null && photo.isNotEmpty) {
       setState(() => _facePhotoBase64 = photo);
@@ -157,7 +158,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
 
     if (_latitude == null || _longitude == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please set work location first')),
+        SnackBar(content: Text(context.l10n.pleaseSetWorkLocationFirst)),
       );
       return;
     }
@@ -195,9 +196,9 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
         content: Text(
           res.success
               ? (widget.employee != null
-                  ? 'Employee settings saved'
-                  : 'Invitation sent. Employee will be added after they accept.')
-              : (res.message ?? 'Failed to save'),
+                  ? context.l10n.employeeSettingsSaved
+                  : context.l10n.invitationSentEmployeeWillBeAddedAfterTheyAccept)
+              : (res.message ?? context.l10n.failedToSave),
         ),
       ),
     );
@@ -216,9 +217,9 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.map_outlined, size: 40, color: WaUi.promoIconFg),
-            const SizedBox(height: 10),
-            Text('Location not set yet', style: AttendanceUi.bodyMuted),
+            Icon(Icons.map_outlined, size: 40, color: WaUi.promoIconFg),
+            SizedBox(height: 10),
+            Text(context.l10n.locationNotSetYet, style: AttendanceUi.bodyMuted),
           ],
         ),
       );
@@ -261,7 +262,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
                   point: point,
                   width: 44,
                   height: 44,
-                  child: const Icon(
+                  child: Icon(
                     Icons.location_on,
                     color: Colors.black,
                     size: 40,
@@ -279,62 +280,62 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
   Widget build(BuildContext context) {
     final title = widget.employee?.employee.displayName ??
         widget.employeeName ??
-        'Invite Employee';
+        context.l10n.inviteEmployee;
 
     return Scaffold(
       backgroundColor: AttendanceUi.scaffoldBg,
       appBar: AttendanceUi.appBar(title),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         children: [
-          AttendanceUi.sectionHeader('Shift Timing'),
+          AttendanceUi.sectionHeader(context.l10n.shiftTiming),
           Row(
             children: [
               AttendanceUi.timeChip(
-                label: 'START',
+                label: context.l10n.start,
                 value: _formatTime(_shiftStart),
                 onTap: () => _pickTime(isStart: true),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               AttendanceUi.timeChip(
-                label: 'END',
+                label: context.l10n.end,
                 value: _formatTime(_shiftEnd),
                 onTap: () => _pickTime(isStart: false),
               ),
             ],
           ),
-          const SizedBox(height: 28),
-          AttendanceUi.sectionHeader('Work Location'),
+          SizedBox(height: 28),
+          AttendanceUi.sectionHeader(context.l10n.workLocation),
           _buildMapPreview(),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           AttendanceUi.primaryButton(
-            label: 'Pick on Map',
+            label: context.l10n.pickOnMap,
             icon: Icons.map_outlined,
             onPressed: _pickOnMap,
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           AttendanceUi.secondaryButton(
-            label: _latitude != null ? 'Update GPS Location' : 'Use My Location',
+            label: _latitude != null ? context.l10n.updateGPSLocation : context.l10n.useMyLocation,
             icon: Icons.my_location,
             loading: _isLoadingLocation,
             onPressed: _useCurrentLocation,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           TextField(
             controller: _addressController,
             style: AttendanceUi.body,
-            decoration: AttendanceUi.inputDecoration('Address (optional)'),
+            decoration: AttendanceUi.inputDecoration(context.l10n.addressOptional),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           TextField(
             controller: _radiusController,
             keyboardType: TextInputType.number,
             style: AttendanceUi.body,
             onChanged: (_) => setState(() {}),
-            decoration: AttendanceUi.inputDecoration('Allowed radius (meters)'),
+            decoration: AttendanceUi.inputDecoration(context.l10n.allowedRadiusMeters),
           ),
-          const SizedBox(height: 28),
-          AttendanceUi.sectionHeader('Weekend Days'),
+          SizedBox(height: 28),
+          AttendanceUi.sectionHeader(context.l10n.weekendDays),
           ...List.generate(7, (index) {
             final selected = _weekendDays.contains(index);
             return Padding(
@@ -363,7 +364,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
                         color: selected ? Colors.white : Colors.black,
                         size: 28,
                       ),
-                      const SizedBox(width: 14),
+                      SizedBox(width: 14),
                       Text(
                         _dayNames[index],
                         style: AttendanceUi.cardTitle.copyWith(
@@ -377,18 +378,18 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
               ),
             );
           }),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           AttendanceUi.secondaryButton(
             label: _facePhotoBase64 != null ||
                     widget.employee?.facePhoto.isNotEmpty == true
-                ? 'Face Photo Added'
-                : 'Add Face Photo',
+                ? context.l10n.facePhotoAdded
+                : context.l10n.addFacePhoto,
             icon: Icons.face_retouching_natural,
             onPressed: _captureFace,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           AttendanceUi.primaryButton(
-            label: widget.employee != null ? 'Save Settings' : 'Send Invitation',
+            label: widget.employee != null ? context.l10n.saveSettings : context.l10n.sendInvitation,
             icon: widget.employee != null
                 ? Icons.save_outlined
                 : Icons.send_outlined,

@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class AccountSwitcherSheet {
   static Future<void> show(BuildContext context) {
     return showModalBottomSheet(
@@ -23,7 +24,7 @@ class AccountSwitcherSheet {
 }
 
 class _AccountSwitcherBody extends StatelessWidget {
-  const _AccountSwitcherBody({required this.hostContext});
+  _AccountSwitcherBody({required this.hostContext});
 
   /// Context of the screen that opened the sheet (stays mounted after pop).
   final BuildContext hostContext;
@@ -36,7 +37,7 @@ class _AccountSwitcherBody extends StatelessWidget {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 12, 8, 16),
+        padding: EdgeInsets.fromLTRB(8, 12, 8, 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -48,12 +49,12 @@ class _AccountSwitcherBody extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text('Accounts', style: WaUi.headline),
+                child: Text(context.l10n.accounts, style: WaUi.headline),
               ),
             ),
             const SizedBox(height: 8),
@@ -73,22 +74,22 @@ class _AccountSwitcherBody extends StatelessWidget {
                         style: WaUi.listSubtitle,
                       ),
                       trailing: selected
-                          ? const Icon(Icons.check_circle, color: WaUi.accent)
+                          ? Icon(Icons.check_circle, color: WaUi.accent)
                           : null,
                       onTap: selected
                           ? () => Navigator.pop(context)
                           : () => _switch(context, account),
                     );
                   }),
-                  const Divider(),
+                  Divider(),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundColor: WaUi.navPill,
-                      child: const Icon(Icons.add, color: WaUi.promoIconFg),
+                      child: Icon(Icons.add, color: WaUi.promoIconFg),
                     ),
-                    title: Text('Add account', style: WaUi.listTitle),
+                    title: Text(context.l10n.addAccount, style: WaUi.listTitle),
                     subtitle: Text(
-                      'Email login or scan QR',
+                      context.l10n.emailLoginOrScanQR,
                       style: WaUi.listSubtitle,
                     ),
                     onTap: () => _addAccount(context),
@@ -116,12 +117,12 @@ class _AccountSwitcherBody extends StatelessWidget {
         context: hostContext,
       );
       Navigator.of(hostContext).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const MainShell()),
+        MaterialPageRoute(builder: (_) => MainShell()),
         (_) => false,
       );
     } else {
       ShowAlert.error(
-        message: 'Could not switch account',
+        message: hostContext.l10n.couldNotSwitchAccount,
         context: hostContext,
       );
     }
@@ -134,7 +135,7 @@ class _AccountSwitcherBody extends StatelessWidget {
     showModalBottomSheet(
       context: hostContext,
       backgroundColor: WaUi.surface,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (ctx) => SafeArea(
@@ -142,10 +143,10 @@ class _AccountSwitcherBody extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.qr_code_2, color: WaUi.promoIconFg),
-              title: Text('Scan QR / show QR', style: WaUi.listTitle),
+              leading: Icon(Icons.qr_code_2, color: WaUi.promoIconFg),
+              title: Text(hostContext.l10n.scanQRShowQR, style: WaUi.listTitle),
               subtitle: Text(
-                'Link by QR on another phone',
+                hostContext.l10n.linkByQROnAnotherPhone,
                 style: WaUi.listSubtitle,
               ),
               onTap: () {
@@ -153,14 +154,14 @@ class _AccountSwitcherBody extends StatelessWidget {
                 if (!hostContext.mounted) return;
                 Navigator.of(hostContext).push(
                   MaterialPageRoute(
-                    builder: (_) => const QrLoginScreen(addAccount: true),
+                    builder: (_) => QrLoginScreen(addAccount: true),
                   ),
                 );
               },
             ),
             ListTile(
-              leading: const Icon(Icons.email_outlined, color: WaUi.promoIconFg),
-              title: Text('Email & password', style: WaUi.listTitle),
+              leading: Icon(Icons.email_outlined, color: WaUi.promoIconFg),
+              title: Text(hostContext.l10n.emailPassword, style: WaUi.listTitle),
               onTap: () {
                 Navigator.pop(ctx);
                 if (!hostContext.mounted) return;

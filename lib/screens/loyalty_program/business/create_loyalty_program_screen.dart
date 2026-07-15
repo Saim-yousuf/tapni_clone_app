@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class CreateLoyaltyProgramScreen extends StatefulWidget {
-  const CreateLoyaltyProgramScreen({super.key});
+  CreateLoyaltyProgramScreen({super.key});
 
   @override
   State<CreateLoyaltyProgramScreen> createState() =>
@@ -21,8 +22,7 @@ class _CreateLoyaltyProgramScreenState
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Create Loyalty Program',
+        title: Text(context.l10n.createLoyaltyProgram,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -30,86 +30,80 @@ class _CreateLoyaltyProgramScreenState
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Program Name',
+            Text(context.l10n.programName,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             TextField(
               controller: programNameController,
-              decoration: _inputDecoration('Enter program name'),
+              decoration: _inputDecoration(context.l10n.enterProgramName),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
-            const Text(
-              'Description',
+            Text(context.l10n.description,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             TextField(
               controller: descriptionController,
               maxLines: 4,
-              decoration: _inputDecoration('Describe your loyalty program'),
+              decoration: _inputDecoration(context.l10n.describeYourLoyaltyProgram),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
-            const Text(
-              'Program Type',
+            Text(context.l10n.programType,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Row(
               children: [
                 _typeChip('Stamp'),
-                const SizedBox(width: 10),
-                _typeChip('Points'),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
+                _typeChip(context.l10n.points),
+                SizedBox(width: 10),
                 _typeChip('Both'),
               ],
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
-            const Text(
-              'Reward Details',
+            Text(context.l10n.rewardDetails,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             TextField(
               controller: rewardController,
               maxLines: 3,
-              decoration: _inputDecoration('Example: 10 Stamps = Free Coffee'),
+              decoration: _inputDecoration(context.l10n.example10StampsFreeCoffee),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
-            const Text(
-              'Start Date',
+            Text(context.l10n.startDate,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
-            _dateField('Select Start Date'),
+            _dateField(context.l10n.selectStartDate),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
-            const Text(
-              'End Date',
+            Text(context.l10n.endDate,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
-            _dateField('Select End Date'),
+            _dateField(context.l10n.selectEndDate),
 
-            const SizedBox(height: 40),
+            SizedBox(height: 40),
 
             SizedBox(
               width: double.infinity,
@@ -124,8 +118,7 @@ class _CreateLoyaltyProgramScreenState
                   ),
                 ),
                 onPressed: () {},
-                child: const Text(
-                  'Create Program',
+                child: Text(context.l10n.createProgram,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),

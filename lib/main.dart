@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
+import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
@@ -25,6 +27,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => LeadsProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ],
       child: const TapniApp(),
     ),
@@ -37,6 +40,7 @@ class TapniApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
 
     return MaterialApp(
       title: 'BarQody - Digital Business Card',
@@ -45,6 +49,10 @@ class TapniApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
+      locale: localeProvider.locale,
+      supportedLocales: AppLocalizationSetup.supportedLocales,
+      localizationsDelegates: AppLocalizationSetup.localizationsDelegates,
+      localeResolutionCallback: AppLocalizationSetup.localeResolutionCallback,
       home: const SplashScreen(),
       builder: (context, child) => ResponsiveWrapper.builder(
         BouncingScrollWrapper.builder(context, child!),

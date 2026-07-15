@@ -10,6 +10,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/template_business_card_preview.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 enum _CardSetupMode { pick, template, customize }
 
 class CustomCardEditorSheet extends StatefulWidget {
@@ -64,7 +65,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     final existing = widget.existing;
 
     _titleController = TextEditingController(
-      text: existing?.title ?? 'New Card',
+      text: existing?.title ?? context.l10n.newCard,
     );
     _nameController = TextEditingController(
       text: existing?.displayName ?? profile.name,
@@ -112,7 +113,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
           ? 'My Card'
           : _titleController.text.trim(),
       displayName: _nameController.text.trim().isEmpty
-          ? 'My Name'
+          ? context.l10n.myName
           : _nameController.text.trim(),
       subtitle: _subtitleController.text.trim().isEmpty
           ? null
@@ -167,8 +168,8 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
       SnackBar(
         content: Text(
           ok
-              ? (_isEditing ? 'Card updated' : 'Card created')
-              : 'Saved locally. Sync may have failed.',
+              ? (_isEditing ? context.l10n.cardUpdated : context.l10n.cardCreated)
+              : context.l10n.savedLocallySyncMayHaveFailed,
           style: WaUi.body.copyWith(color: Colors.white),
         ),
         behavior: SnackBarBehavior.floating,
@@ -183,14 +184,14 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Delete card?', style: WaUi.title),
-        content: Text('This card and its QR code will be removed.', style: WaUi.body),
+        title: Text(context.l10n.deleteCard, style: WaUi.title),
+        content: Text(context.l10n.thisCardAndItsQRCodeWillBeRemoved, style: WaUi.body),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(context.l10n.cancel)),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: FilledButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(context.l10n.delete),
           ),
         ],
       ),
@@ -231,7 +232,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
                 if (_step != _CardSetupMode.pick && !_isEditing)
                   IconButton(
                     onPressed: () => setState(() => _step = _CardSetupMode.pick),
-                    icon: const Icon(Icons.arrow_back, color: WaUi.secondaryText),
+                    icon: Icon(Icons.arrow_back, color: WaUi.secondaryText),
                   ),
                 Expanded(
                   child: Text(
@@ -242,11 +243,11 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
                 if (_isEditing)
                   IconButton(
                     onPressed: _delete,
-                    icon: const Icon(Icons.delete_outline, color: Colors.red),
+                    icon: Icon(Icons.delete_outline, color: Colors.red),
                   ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, color: WaUi.secondaryText),
+                  icon: Icon(Icons.close, color: WaUi.secondaryText),
                 ),
               ],
             ),
@@ -265,28 +266,28 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
   }
 
   String get _headerTitle {
-    if (_step == _CardSetupMode.pick) return 'New card';
-    if (_isEditing) return 'Edit card';
-    return _step == _CardSetupMode.template ? 'Choose template' : 'Customize card';
+    if (_step == _CardSetupMode.pick) return context.l10n.newCard2;
+    if (_isEditing) return context.l10n.editCard;
+    return _step == _CardSetupMode.template ? context.l10n.chooseTemplate2 : context.l10n.customizeCard;
   }
 
   Widget _buildModePicker() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('How do you want to design this card?', style: WaUi.body),
-        const SizedBox(height: 16),
+        Text(context.l10n.howDoYouWantToDesignThisCard, style: WaUi.body),
+        SizedBox(height: 16),
         _ModeTile(
           icon: Icons.palette_outlined,
-          title: 'Use a template',
-          subtitle: 'Pick a ready-made color theme. Quick and clean.',
+          title: context.l10n.useATemplate,
+          subtitle: context.l10n.pickAReadyMadeColorThemeQuickAndClean,
           onTap: () => setState(() => _step = _CardSetupMode.template),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         _ModeTile(
           icon: Icons.tune_rounded,
-          title: 'Customize yourself',
-          subtitle: 'Set your own colors, photos and background.',
+          title: context.l10n.customizeYourself,
+          subtitle: context.l10n.setYourOwnColorsPhotosAndBackground,
           onTap: () => setState(() => _step = _CardSetupMode.customize),
         ),
       ],
@@ -320,16 +321,16 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
             width: 300,
           ),
         ),
-        const SizedBox(height: 20),
-        _field('Card name', _titleController, hint: 'e.g. Work, Events'),
-        const SizedBox(height: 10),
-        _field('Display name', _nameController),
-        const SizedBox(height: 10),
-        _field('Subtitle', _subtitleController, hint: 'Role or company'),
-        const SizedBox(height: 10),
-        _field('Bio', _bioController, maxLines: 2),
-        const SizedBox(height: 16),
-        Text('Template', style: WaUi.bodyMedium),
+        SizedBox(height: 20),
+        _field(context.l10n.cardName, _titleController, hint: 'e.g. Work, Events'),
+        SizedBox(height: 10),
+        _field(context.l10n.displayName, _nameController),
+        SizedBox(height: 10),
+        _field('Subtitle', _subtitleController, hint: context.l10n.roleOrCompany),
+        SizedBox(height: 10),
+        _field(context.l10n.bio2, _bioController, maxLines: 2),
+        SizedBox(height: 16),
+        Text(context.l10n.template, style: WaUi.bodyMedium),
         const SizedBox(height: 8),
         SizedBox(
           height: 42,
@@ -347,14 +348,14 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
                       context: context,
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
-                      builder: (_) => const ProUpgradeSheet(),
+                      builder: (_) => ProUpgradeSheet(),
                     );
                     return;
                   }
                   setState(() => _templateId = template.id);
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  padding: EdgeInsets.symmetric(horizontal: 14),
                   decoration: BoxDecoration(
                     color: template.backgroundColor,
                     borderRadius: BorderRadius.circular(21),
@@ -378,13 +379,13 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
           ),
         ),
         if (isCustomize) ...[
-          const SizedBox(height: 16),
-          Text('Photos', style: WaUi.bodyMedium),
-          const SizedBox(height: 8),
+          SizedBox(height: 16),
+          Text(context.l10n.photos, style: WaUi.bodyMedium),
+          SizedBox(height: 8),
           Row(
             children: [
               _photoPicker(
-                label: 'Profile',
+                label: context.l10n.profile,
                 path: _profilePhotoPath,
                 onPick: () async {
                   final file = await pickFile();
@@ -393,9 +394,9 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
                   }
                 },
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               _photoPicker(
-                label: 'Background',
+                label: context.l10n.background,
                 path: _coverPhotoPath,
                 onPick: () async {
                   final file = await pickFile();
@@ -406,36 +407,36 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Text('Background color', style: WaUi.bodyMedium),
-          const SizedBox(height: 8),
+          SizedBox(height: 16),
+          Text(context.l10n.backgroundColor, style: WaUi.bodyMedium),
+          SizedBox(height: 8),
           Wrap(
             spacing: 10,
             runSpacing: 10,
             children: [
-              _colorDot(null, label: 'Template'),
+              _colorDot(null, label: context.l10n.template),
               ..._colorPresets.map(_colorDot),
             ],
           ),
         ],
-        const SizedBox(height: 16),
-        Text('Links on this card', style: WaUi.bodyMedium),
-        const SizedBox(height: 4),
+        SizedBox(height: 16),
+        Text(context.l10n.linksOnThisCard, style: WaUi.bodyMedium),
+        SizedBox(height: 4),
         Text(
-          'Only enabled links show when someone scans this card.',
+          context.l10n.onlyEnabledLinksShowWhenSomeoneScansThisCard,
           style: WaUi.caption,
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         if (links.isEmpty)
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: WaUi.scaffold,
               borderRadius: BorderRadius.circular(WaUi.radiusMd),
             ),
             child: Text(
-              'Add links to your profile first, then enable them here.',
+              context.l10n.addLinksToYourProfileFirstThenEnableThemHere,
               style: WaUi.caption,
             ),
           )
@@ -457,7 +458,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
               },
             );
           }),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
         SizedBox(
           width: double.infinity,
           height: 48,
@@ -470,7 +471,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
               ),
             ),
             child: _saving
-                ? const SizedBox(
+                ? SizedBox(
                     width: 22,
                     height: 22,
                     child: CircularProgressIndicator(
@@ -479,7 +480,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
                     ),
                   )
                 : Text(
-                    _isEditing ? 'Save card' : 'Create card',
+                    _isEditing ? context.l10n.saveCard : context.l10n.createCard,
                     style: WaUi.button.copyWith(color: Colors.white),
                   ),
           ),
@@ -618,7 +619,7 @@ class _LinkToggleRow extends StatelessWidget {
       color: WaUi.surface,
       borderRadius: BorderRadius.circular(WaUi.radiusMd),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
         child: Row(
           children: [
             if (logoUrl?.isNotEmpty == true)
@@ -630,18 +631,18 @@ class _LinkToggleRow extends StatelessWidget {
                   height: 40,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) =>
-                      const Icon(Icons.link, color: WaUi.secondaryText),
+                      Icon(Icons.link, color: WaUi.secondaryText),
                 ),
               )
             else
-              const Icon(Icons.link, color: WaUi.secondaryText, size: 40),
-            const SizedBox(width: 12),
+              Icon(Icons.link, color: WaUi.secondaryText, size: 40),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(linkName, style: WaUi.bodyMedium),
-                  Text('Show on this card', style: WaUi.caption),
+                  Text(context.l10n.showOnThisCard, style: WaUi.caption),
                 ],
               ),
             ),

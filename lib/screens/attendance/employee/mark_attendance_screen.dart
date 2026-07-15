@@ -8,6 +8,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/face_capture_sheet.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class MarkAttendanceScreen extends StatefulWidget {
   const MarkAttendanceScreen({super.key});
 
@@ -91,8 +92,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     if (location == null) {
       setState(() => _isMarking = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Location permission required for attendance'),
+        SnackBar(
+          content: Text(context.l10n.locationPermissionRequiredForAttendance),
         ),
       );
       return;
@@ -100,7 +101,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
     final facePhoto = await FaceCaptureSheet.show(
       context,
-      title: type == 'check_in' ? 'Check-in Face' : 'Check-out Face',
+      title: type == 'check_in' ? context.l10n.checkInFace : context.l10n.checkOutFace,
     );
 
     if (!mounted) return;
@@ -121,9 +122,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         content: Text(
           res.success
               ? (type == 'check_in'
-                  ? 'Check-in successful'
-                  : 'Check-out successful')
-              : (res.message ?? 'Attendance failed'),
+                  ? context.l10n.checkInSuccessful
+                  : context.l10n.checkOutSuccessful)
+              : (res.message ?? context.l10n.attendanceFailed),
           style: AttendanceUi.body.copyWith(color: Colors.white),
         ),
         backgroundColor:
@@ -139,16 +140,16 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     return Scaffold(
       backgroundColor: AttendanceUi.scaffoldBg,
       appBar: AttendanceUi.appBar(
-        'Mark Attendance',
+        context.l10n.markAttendance,
         actions: [
           IconButton(
-            icon: const Icon(Icons.wallet_outlined, size: 24),
-            tooltip: 'Company Employee Card',
+            icon: Icon(Icons.wallet_outlined, size: 24),
+            tooltip: context.l10n.companyEmployeeCard,
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const EmployeeBusinessCardsScreen(),
+                  builder: (_) => EmployeeBusinessCardsScreen(),
                 ),
               );
             },
@@ -156,15 +157,15 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _employers.isEmpty
               ? _emptyState()
               : RefreshIndicator(
                   onRefresh: _loadEmployers,
                   child: ListView(
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                    padding: EdgeInsets.fromLTRB(20, 8, 20, 24),
                     children: [
-                      AttendanceUi.sectionHeader('Select Company'),
+                      AttendanceUi.sectionHeader(context.l10n.selectCompany),
                       ..._employers.map((employer) {
                         final selected = _selectedEmployer?.id == employer.id;
                         return Padding(
@@ -249,9 +250,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                           ),
                         );
                       }),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       if (_todayStatus != null) _buildTodayCard(),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       if (_summary != null) _buildSummaryCard(),
                     ],
                   ),
@@ -264,7 +265,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     final record = status.record;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: AttendanceUi.thickCard,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,9 +274,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
             'Today • ${DateFormat('EEE, MMM d').format(DateTime.now())}',
             style: AttendanceUi.sectionTitle,
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           if (status.isWeekend)
-            Text('Today is your weekend', style: AttendanceUi.body)
+            Text(context.l10n.todayIsYourWeekend, style: AttendanceUi.body)
           else ...[
             if (record?.checkInTime != null)
               Text(
@@ -289,25 +290,25 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               ),
             if (record == null || record.checkInTime == null)
               Text(
-                'Not checked in yet',
+                context.l10n.notCheckedInYet,
                 style: AttendanceUi.body.copyWith(
                   color: Colors.red.shade700,
                   fontWeight: FontWeight.w500,
                 ),
               ),
           ],
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           if (!status.isWeekend && status.canCheckIn)
             AttendanceUi.primaryButton(
-              label: 'Check in',
+              label: context.l10n.checkIn,
               icon: Icons.login,
               loading: _isMarking,
               onPressed: () => _markAttendance('check_in'),
             ),
           if (!status.isWeekend && status.canCheckOut) ...[
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             AttendanceUi.secondaryButton(
-              label: 'Check out',
+              label: context.l10n.checkOut,
               icon: Icons.logout,
               loading: _isMarking,
               onPressed: () => _markAttendance('check_out'),
@@ -318,7 +319,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               !status.canCheckOut &&
               record?.checkOutTime != null)
             Text(
-              'Attendance completed for today',
+              context.l10n.attendanceCompletedForToday,
               style: AttendanceUi.body.copyWith(
                 color: Colors.green.shade700,
                 fontWeight: FontWeight.w500,
@@ -332,15 +333,15 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   Widget _buildSummaryCard() {
     final summary = _summary!;
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: AttendanceUi.thickCard,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('This month', style: AttendanceUi.sectionTitle),
-          const SizedBox(height: 2),
+          Text(context.l10n.thisMonth, style: AttendanceUi.sectionTitle),
+          SizedBox(height: 2),
           Text(
-            DateFormat('MMMM yyyy').format(DateTime.now()),
+            DateFormat(context.l10n.mmmmYyyy).format(DateTime.now()),
             style: AttendanceUi.bodyMuted,
           ),
           const SizedBox(height: 16),
@@ -361,7 +362,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       child: Column(
         children: [
           Text('$value', style: AttendanceUi.statNumber.copyWith(color: color)),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(label, style: AttendanceUi.statLabel),
         ],
       ),
@@ -371,9 +372,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   Widget _emptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         child: Container(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(24),
           decoration: AttendanceUi.thickCard,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -383,11 +384,11 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                 size: 48,
                 color: WaUi.promoIconFg,
               ),
-              const SizedBox(height: 16),
-              Text('No employer found', style: AttendanceUi.sectionTitle),
-              const SizedBox(height: 8),
+              SizedBox(height: 16),
+              Text(context.l10n.noEmployerFound, style: AttendanceUi.sectionTitle),
+              SizedBox(height: 8),
               Text(
-                'Ask your business to scan your QR and add you as an employee',
+                context.l10n.askYourBusinessToScanYourQRAndAddYouAsAnEmployee,
                 textAlign: TextAlign.center,
                 style: AttendanceUi.bodyMuted,
               ),

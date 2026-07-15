@@ -6,6 +6,7 @@ import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class EmployeeListScreen extends StatefulWidget {
   const EmployeeListScreen({super.key});
 
@@ -45,7 +46,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(WaUi.radiusLg),
         ),
-        title: Text('Remove Employee', style: AttendanceUi.sectionTitle),
+        title: Text(context.l10n.removeEmployee, style: AttendanceUi.sectionTitle),
         content: Text(
           'Remove ${employee.employee.displayName} from your team?',
           style: AttendanceUi.body,
@@ -53,19 +54,19 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancel', style: WaUi.bodyMedium),
+            child: Text(context.l10n.cancel, style: WaUi.bodyMedium),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
-              minimumSize: const Size(100, 44),
+              minimumSize: Size(100, 44),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(WaUi.radiusPill),
               ),
             ),
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text('Remove', style: AttendanceUi.buttonLabel),
+            child: Text(context.l10n.remove, style: AttendanceUi.buttonLabel),
           ),
         ],
       ),
@@ -79,7 +80,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          res.success ? 'Employee removed' : (res.message ?? 'Failed to remove'),
+          res.success ? context.l10n.employeeRemoved : (res.message ?? context.l10n.failedToRemove),
         ),
       ),
     );
@@ -92,32 +93,32 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
       backgroundColor: AttendanceUi.scaffoldBg,
       appBar: AttendanceUi.appBar('Employees'),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _load,
               child: _employees.isEmpty
                   ? ListView(
-                      padding: const EdgeInsets.all(20),
+                      padding: EdgeInsets.all(20),
                       children: [
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.45,
                           child: Center(
                             child: Container(
-                              padding: const EdgeInsets.all(28),
+                              padding: EdgeInsets.all(28),
                               decoration: AttendanceUi.thickCard,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(Icons.person_search_outlined,
+                                  Icon(Icons.person_search_outlined,
                                       size: 48, color: WaUi.promoIconFg),
-                                  const SizedBox(height: 16),
+                                  SizedBox(height: 16),
                                   Text(
-                                    'No employees added',
+                                    context.l10n.noEmployeesAdded,
                                     style: AttendanceUi.sectionTitle,
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: 10),
                                   Text(
-                                    'Scan any user or business QR to add employee',
+                                    context.l10n.scanAnyUserOrBusinessQRToAddEmployee,
                                     textAlign: TextAlign.center,
                                     style: AttendanceUi.bodyMuted,
                                   ),
@@ -170,9 +171,9 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                                 children: [
                                   if (employee.isPendingInvitation)
                                     Padding(
-                                      padding: const EdgeInsets.only(bottom: 4),
+                                      padding: EdgeInsets.only(bottom: 4),
                                       child: Text(
-                                        'PENDING ACCEPTANCE',
+                                        context.l10n.pendingACCEPTANCE,
                                         style: AttendanceUi.bodyMuted.copyWith(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w800,
@@ -191,7 +192,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                               ),
                               isThreeLine: true,
                               trailing: PopupMenuButton<String>(
-                                icon: const Icon(Icons.more_vert, size: 28),
+                                icon: Icon(Icons.more_vert, size: 28),
                                 onSelected: (value) async {
                                   if (value == 'edit') {
                                     await Navigator.push(
@@ -211,14 +212,14 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                                   PopupMenuItem(
                                     value: 'edit',
                                     child: Text(
-                                      'Edit Settings',
+                                      context.l10n.editSettings,
                                       style: AttendanceUi.body,
                                     ),
                                   ),
                                   PopupMenuItem(
                                     value: 'remove',
                                     child: Text(
-                                      'Remove',
+                                      context.l10n.remove,
                                       style: AttendanceUi.body,
                                     ),
                                   ),
@@ -242,22 +243,22 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                     ),
             ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: EdgeInsets.symmetric(horizontal: 8),
         child: SizedBox(
           width: double.infinity,
           child: FloatingActionButton.extended(
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const ScanScreen()),
+                MaterialPageRoute(builder: (_) => ScanScreen()),
               );
             },
             backgroundColor: WaUi.buttonDark,
             foregroundColor: Colors.white,
             elevation: 0,
-            extendedPadding: const EdgeInsets.symmetric(horizontal: 24),
-            icon: const Icon(Icons.qr_code_scanner, size: 22),
-            label: Text('Scan to Invite', style: AttendanceUi.buttonLabel),
+            extendedPadding: EdgeInsets.symmetric(horizontal: 24),
+            icon: Icon(Icons.qr_code_scanner, size: 22),
+            label: Text(context.l10n.scanToInvite, style: AttendanceUi.buttonLabel),
           ),
         ),
       ),

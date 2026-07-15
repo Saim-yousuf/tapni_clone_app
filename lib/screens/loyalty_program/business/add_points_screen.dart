@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class AddPointsScreen extends StatefulWidget {
-  const AddPointsScreen({super.key});
+  AddPointsScreen({super.key});
 
   @override
   State<AddPointsScreen> createState() => _AddPointsScreenState();
@@ -26,8 +27,7 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Add Points',
+        title: Text(context.l10n.addPoints,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
@@ -35,68 +35,65 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Bill Amount',
+            Text(context.l10n.billAmount,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
             TextField(
               controller: billController,
               keyboardType: TextInputType.number,
               onChanged: calculatePoints,
               decoration: InputDecoration(
-                hintText: 'Enter bill amount',
-                prefixIcon: const Icon(Icons.receipt_long),
+                hintText: context.l10n.enterBillAmount,
+                prefixIcon: Icon(Icons.receipt_long),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.5),
+                  borderSide: BorderSide(color: Colors.black, width: 1.5),
                 ),
               ),
             ),
 
-            const SizedBox(height: 30),
+            SizedBox(height: 30),
 
             // Points Preview Card
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
                 children: [
-                  const Text(
-                    'Points Earned',
+                  Text(context.l10n.pointsEarned,
                     style: TextStyle(color: Colors.white70, fontSize: 16),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Text(
                     '$points',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    '1 Point = 100 PKR (example rule)',
+                  SizedBox(height: 6),
+                  Text(context.l10n.n1Point100PKRExampleRule,
                     style: TextStyle(color: Colors.white54, fontSize: 12),
                   ),
                 ],
               ),
             ),
 
-            const Spacer(),
+            Spacer(),
 
             SizedBox(
               width: double.infinity,
@@ -115,8 +112,7 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
                     borderRadius: BorderRadius.circular(14),
                   ),
                 ),
-                child: const Text(
-                  'Confirm & Add Points',
+                child: Text(context.l10n.confirmAddPoints,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),

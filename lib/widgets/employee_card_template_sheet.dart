@@ -10,6 +10,7 @@ import 'package:tapni_app/widgets/employee_company_card_preview.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class EmployeeCardTemplateSheet extends StatefulWidget {
   final CompanyBusinessCard card;
   final ValueChanged<CompanyBusinessCard>? onApplied;
@@ -88,7 +89,7 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
         context: context,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
-        builder: (_) => const ProUpgradeSheet(),
+        builder: (_) => ProUpgradeSheet(),
       );
       return;
     }
@@ -105,7 +106,7 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
     if (!res.success) {
       messenger.showSnackBar(
         SnackBar(
-          content: Text(res.message ?? 'Could not save card design'),
+          content: Text(res.message ?? context.l10n.couldNotSaveCardDesign),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.red,
         ),
@@ -140,7 +141,7 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
         constraints: BoxConstraints(maxHeight: maxHeight),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           border: Border.all(
             color: Colors.black,
             width: AttendanceUi.borderWidth,
@@ -149,7 +150,7 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Container(
               width: 48,
               height: 5,
@@ -158,8 +159,8 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
                 borderRadius: BorderRadius.circular(3),
               ),
             ),
-            const SizedBox(height: 18),
-            Text('Customize Card Design', style: AttendanceUi.sectionTitle),
+            SizedBox(height: 18),
+            Text(context.l10n.customizeCardDesign, style: AttendanceUi.sectionTitle),
             const SizedBox(height: 6),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -210,24 +211,24 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
                 },
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               _templates[_activePage].name,
               style: AttendanceUi.cardTitle.copyWith(fontSize: 18),
             ),
             if (_templates[_activePage].isPro)
               Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text('PRO template', style: AttendanceUi.bodyMuted),
+                padding: EdgeInsets.only(top: 4),
+                child: Text(context.l10n.proTemplate, style: AttendanceUi.bodyMuted),
               ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 _templates.length,
                 (index) => AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  duration: Duration(milliseconds: 200),
+                  margin: EdgeInsets.symmetric(horizontal: 4),
                   height: 7,
                   width: _activePage == index ? 18 : 7,
                   decoration: BoxDecoration(
@@ -237,11 +238,11 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 20 + bottomPadding),
               child: AttendanceUi.primaryButton(
-                label: 'Apply Design',
+                label: context.l10n.applyDesign,
                 icon: Icons.palette_outlined,
                 loading: _isApplying,
                 onPressed: _applyTemplate,

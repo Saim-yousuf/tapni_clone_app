@@ -3,6 +3,7 @@ import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/business/create_reward_screen.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LoyaltyProgramDetailsScreen extends StatefulWidget {
   final String programId;
   const LoyaltyProgramDetailsScreen({super.key, required this.programId});
@@ -53,14 +54,14 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
       context: context,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Delete Reward?'),
-        content: const Text('This will permanently delete this reward program and all its enrollments.'),
+        title: Text(context.l10n.deleteReward),
+        content: Text(context.l10n.thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(context.l10n.cancel)),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            child: Text(context.l10n.delete),
           ),
         ],
       ),
@@ -83,11 +84,11 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         elevation: 0,
-        title: const Text('Program Details', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: Text(context.l10n.programDetails, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         actions: [
           if (_program != null) ...[
             IconButton(
-              icon: const Icon(Icons.edit_outlined),
+              icon: Icon(Icons.edit_outlined),
               onPressed: () async {
                 final changed = await Navigator.push<bool>(
                   context,
@@ -97,16 +98,16 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
               },
             ),
             IconButton(
-              icon: const Icon(Icons.delete_outline, color: Colors.red),
+              icon: Icon(Icons.delete_outline, color: Colors.red),
               onPressed: _delete,
             ),
           ],
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _program == null
-              ? const Center(child: Text('Program not found'))
+              ? Center(child: Text(context.l10n.programNotFound))
               : _buildContent(),
     );
   }
@@ -116,17 +117,17 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
     final stats = p.stats;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Card Preview
           _buildCardPreview(p),
-          const SizedBox(height: 28),
+          SizedBox(height: 28),
 
           // Active / Inactive Toggle
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            padding: EdgeInsets.symmetric(horizontal: 18, vertical: 14),
             decoration: BoxDecoration(
               color: p.isActive ? Colors.green.withOpacity(0.05) : Colors.red.withOpacity(0.05),
               border: Border.all(color: p.isActive ? Colors.green.withOpacity(0.3) : Colors.red.withOpacity(0.3)),
@@ -136,22 +137,22 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
               children: [
                 Icon(p.isActive ? Icons.check_circle_outline : Icons.cancel_outlined,
                     color: p.isActive ? Colors.green : Colors.red),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(p.isActive ? 'Active' : 'Inactive',
+                      Text(p.isActive ? context.l10n.active : 'Inactive',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: p.isActive ? Colors.green : Colors.red)),
-                      Text(p.isActive ? 'Customers can be enrolled and stamped' : 'This program is paused',
+                      Text(p.isActive ? context.l10n.customersCanBeEnrolledAndStamped : context.l10n.thisProgramIsPaused,
                           style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
                     ],
                   ),
                 ),
                 _isToggling
-                    ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))
+                    ? SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))
                     : Switch.adaptive(
                         value: p.isActive,
                         onChanged: (_) => _toggleActive(),
@@ -160,27 +161,27 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
               ],
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // Stats
           if (stats != null) ...[
-            const Text('Stats', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            const SizedBox(height: 12),
+            Text(context.l10n.stats, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            SizedBox(height: 12),
             Row(children: [
               Expanded(child: _statTile('Enrolled', '${stats.totalEnrollments}', Icons.people_outline)),
-              const SizedBox(width: 12),
-              Expanded(child: _statTile('Stamps Given', '${stats.totalStampsGiven}', Icons.star_outline)),
+              SizedBox(width: 12),
+              Expanded(child: _statTile(context.l10n.stampsGiven, '${stats.totalStampsGiven}', Icons.star_outline)),
             ]),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
           ],
 
           // Details
-          const Text('Details', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          const SizedBox(height: 12),
+          Text(context.l10n.details, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          SizedBox(height: 12),
           _detailRow('Title', p.title),
-          _detailRow('Label', p.label.isNotEmpty ? p.label : '-'),
-          _detailRow('Description', p.description.isNotEmpty ? p.description : '-'),
-          _detailRow('Total Stamps', '${p.stamps}'),
+          _detailRow(context.l10n.label, p.label.isNotEmpty ? p.label : '-'),
+          _detailRow(context.l10n.description, p.description.isNotEmpty ? p.description : '-'),
+          _detailRow(context.l10n.totalStamps, '${p.stamps}'),
           if (p.createdAt != null)
             _detailRow('Created', '${p.createdAt!.day}/${p.createdAt!.month}/${p.createdAt!.year}'),
           const SizedBox(height: 40),
@@ -250,7 +251,7 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
         children: [
           Icon(icon, size: 28, color: Colors.black),
           const SizedBox(height: 8),
-          Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          Text(value, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           const SizedBox(height: 2),
           Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade500)),
         ],
@@ -268,7 +269,7 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
             width: 110,
             child: Text(label, style: TextStyle(color: Colors.grey.shade500, fontSize: 13)),
           ),
-          Expanded(child: Text(value, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
+          Expanded(child: Text(value, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
         ],
       ),
     );

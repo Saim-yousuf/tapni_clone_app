@@ -6,6 +6,7 @@ import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class EmployeeInvitationsScreen extends StatefulWidget {
   const EmployeeInvitationsScreen({super.key});
 
@@ -54,8 +55,8 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
           res.success
               ? (accept
                   ? 'You joined ${invitation.business.displayName}'
-                  : 'Invitation declined')
-              : (res.message ?? 'Something went wrong'),
+                  : context.l10n.invitationDeclined)
+              : (res.message ?? context.l10n.somethingWentWrong),
         ),
       ),
     );
@@ -71,34 +72,34 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AttendanceUi.scaffoldBg,
-      appBar: AttendanceUi.appBar('Employee Invitations'),
+      appBar: AttendanceUi.appBar(context.l10n.employeeInvitations),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _load,
               child: _invitations.isEmpty
                   ? ListView(
-                      padding: const EdgeInsets.all(20),
+                      padding: EdgeInsets.all(20),
                       children: [
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.45,
                           child: Center(
                             child: Container(
-                              padding: const EdgeInsets.all(28),
+                              padding: EdgeInsets.all(28),
                               decoration: AttendanceUi.thickCard,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(Icons.mail_outline,
+                                  Icon(Icons.mail_outline,
                                       size: 48, color: WaUi.promoIconFg),
-                                  const SizedBox(height: 16),
+                                  SizedBox(height: 16),
                                   Text(
-                                    'No pending invitations',
+                                    context.l10n.noPendingInvitations,
                                     style: AttendanceUi.sectionTitle,
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: 10),
                                   Text(
-                                    'When a business invites you to their team, it will appear here.',
+                                    context.l10n.whenABusinessInvitesYouToTheirTeamItWillAppearHere,
                                     textAlign: TextAlign.center,
                                     style: AttendanceUi.bodyMuted,
                                   ),
@@ -147,7 +148,7 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                                             )
                                           : null,
                                     ),
-                                    const SizedBox(width: 14),
+                                    SizedBox(width: 14),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
@@ -157,13 +158,13 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                                             invitation.business.displayName,
                                             style: AttendanceUi.cardTitle,
                                           ),
-                                          const SizedBox(height: 4),
+                                          SizedBox(height: 4),
                                           Text(
-                                            'Invited you to join as employee',
+                                            context.l10n.invitedYouToJoinAsEmployee,
                                             style: AttendanceUi.bodyMuted
                                                 .copyWith(fontSize: 16),
                                           ),
-                                          const SizedBox(height: 4),
+                                          SizedBox(height: 4),
                                           Text(
                                             'Shift: ${invitation.shiftStart} - ${invitation.shiftEnd}',
                                             style: AttendanceUi.bodyMuted
@@ -174,12 +175,12 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 18),
+                                SizedBox(height: 18),
                                 Row(
                                   children: [
                                     Expanded(
                                       child: AttendanceUi.secondaryButton(
-                                        label: 'Decline',
+                                        label: context.l10n.decline,
                                         icon: Icons.close,
                                         loading: isResponding,
                                         onPressed: isResponding
@@ -187,10 +188,10 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                                             : () => _respond(invitation, false),
                                       ),
                                     ),
-                                    const SizedBox(width: 12),
+                                    SizedBox(width: 12),
                                     Expanded(
                                       child: AttendanceUi.primaryButton(
-                                        label: 'Accept',
+                                        label: context.l10n.accept,
                                         icon: Icons.check,
                                         loading: isResponding,
                                         onPressed: isResponding

@@ -4,6 +4,7 @@ import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 void showContactCardBottomSheet(
   BuildContext context,
   LinkTemplate template,
@@ -88,7 +89,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
       text:
           details['label'] ??
           widget.existingLink?.platformName ??
-          'Save contact',
+          context.l10n.saveContact2,
     );
     _firstNameCtrl = TextEditingController(text: details['firstName'] ?? '');
     _lastNameCtrl = TextEditingController(text: details['lastName'] ?? '');
@@ -198,33 +199,33 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
             Expanded(
               child: SingleChildScrollView(
                 controller: scrollCtrl,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     _buildAvatarRow(),
-                    const SizedBox(height: 12),
-                    _buildTextField(_firstNameCtrl, 'First name'),
-                    const SizedBox(height: 10),
-                    _buildTextField(_lastNameCtrl, 'Last name'),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 12),
+                    _buildTextField(_firstNameCtrl, context.l10n.firstName),
+                    SizedBox(height: 10),
+                    _buildTextField(_lastNameCtrl, context.l10n.lastName),
+                    SizedBox(height: 10),
                     _buildTextField(
                       _bioCtrl,
-                      'Enter bio for the contact card',
+                      context.l10n.enterBioForTheContactCard,
                       maxLines: 3,
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
                     _buildToggle(),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     if (isPersonal)
                       ..._buildPersonalFields()
                     else
                       ..._buildBusinessFields(),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     _buildAddressSection(),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     _buildShowLinkToggle(),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -237,7 +238,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
   }
 
   Widget _buildHandle() => Container(
-    margin: const EdgeInsets.only(top: 12, bottom: 8),
+    margin: EdgeInsets.only(top: 12, bottom: 8),
     width: 40,
     height: 4,
     decoration: BoxDecoration(
@@ -246,10 +247,10 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     ),
   );
 
-  Widget _buildTitle() => const Padding(
+  Widget _buildTitle() => Padding(
     padding: EdgeInsets.symmetric(vertical: 8),
     child: Text(
-      'Contact card',
+      context.l10n.contactCard,
       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
     ),
   );
@@ -292,20 +293,20 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.grey[300]!, width: 0.5),
               ),
-              child: const Icon(Icons.edit, size: 12, color: Colors.black),
+              child: Icon(Icons.edit, size: 12, color: Colors.black),
             ),
           ),
         ],
       ),
-      const SizedBox(width: 12),
+      SizedBox(width: 12),
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildTextField(_labelCtrl, 'Save contact'),
-            const SizedBox(height: 6),
+            _buildTextField(_labelCtrl, context.l10n.saveContact2),
+            SizedBox(height: 6),
             Text(
-              'Set text under the link icon',
+              context.l10n.setTextUnderTheLinkIcon,
               style: TextStyle(fontSize: 12, color: Colors.grey[500]),
             ),
           ],
@@ -336,8 +337,8 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     child: GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        margin: const EdgeInsets.all(4),
+        duration: Duration(milliseconds: 200),
+        margin: EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: active ? Colors.white : Colors.transparent,
           borderRadius: BorderRadius.circular(26),
@@ -355,25 +356,25 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
   );
 
   List<Widget> _buildPersonalFields() => [
-    _buildMultiField(_personalPhoneCtrls, 'Contact card phone'),
-    const SizedBox(height: 10),
-    _buildMultiField(_personalEmailCtrls, 'Contact card email'),
-    const SizedBox(height: 10),
-    _buildMultiField(_personalWebsiteCtrls, 'Contact card website'),
+    _buildMultiField(_personalPhoneCtrls, context.l10n.contactCardPhone),
+    SizedBox(height: 10),
+    _buildMultiField(_personalEmailCtrls, context.l10n.contactCardEmail),
+    SizedBox(height: 10),
+    _buildMultiField(_personalWebsiteCtrls, context.l10n.contactCardWebsite),
   ];
 
   List<Widget> _buildBusinessFields() => [
-    _buildMultiField(_businessPhoneCtrls, 'Business phone number'),
-    const SizedBox(height: 10),
-    _buildMultiField(_businessEmailCtrls, 'Business email address'),
-    const SizedBox(height: 10),
-    _buildMultiField(_businessWebsiteCtrls, 'Business website'),
-    const SizedBox(height: 10),
-    _buildTextField(_jobTitleCtrl, 'Job title'),
-    const SizedBox(height: 10),
-    _buildTextField(_companyCtrl, 'Contact card company name'),
-    const SizedBox(height: 10),
-    _buildTextField(_faxCtrl, 'Business fax'),
+    _buildMultiField(_businessPhoneCtrls, context.l10n.businessPhoneNumber),
+    SizedBox(height: 10),
+    _buildMultiField(_businessEmailCtrls, context.l10n.businessEmailAddress),
+    SizedBox(height: 10),
+    _buildMultiField(_businessWebsiteCtrls, context.l10n.businessWebsite),
+    SizedBox(height: 10),
+    _buildTextField(_jobTitleCtrl, context.l10n.jobTitle2),
+    SizedBox(height: 10),
+    _buildTextField(_companyCtrl, context.l10n.contactCardCompanyName),
+    SizedBox(height: 10),
+    _buildTextField(_faxCtrl, context.l10n.businessFax),
   ];
 
   Widget _buildMultiField(
@@ -450,8 +451,8 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
         ? _personalCountryCtrl
         : _businessCountryCtrl;
     final hint = isPersonal
-        ? 'Contact card home address'
-        : 'Contact card business address';
+        ? context.l10n.contactCardHomeAddress
+        : context.l10n.contactCardBusinessAddress;
 
     return Column(
       children: [
@@ -475,7 +476,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
                 });
               },
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
+                duration: Duration(milliseconds: 200),
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
@@ -493,17 +494,17 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
           ],
         ),
         AnimatedCrossFade(
-          duration: const Duration(milliseconds: 250),
+          duration: Duration(milliseconds: 250),
           crossFadeState: expanded
               ? CrossFadeState.showFirst
               : CrossFadeState.showSecond,
           firstChild: Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(top: 10),
             child: Column(
               children: [
                 Row(
                   children: [
-                    Expanded(child: _buildTextField(streetCtrl, 'Street name')),
+                    Expanded(child: _buildTextField(streetCtrl, context.l10n.streetName)),
                     const SizedBox(width: 10),
                     SizedBox(
                       width: 120,
@@ -549,7 +550,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
             shape: BoxShape.circle,
           ),
           child: IconButton(
-            icon: const Icon(Icons.delete_outline),
+            icon: Icon(Icons.delete_outline),
             onPressed: () async {
               final existingLink = widget.existingLink;
               if (existingLink != null) {
@@ -562,7 +563,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
             },
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Expanded(
           child: SizedBox(
             height: 52,
@@ -576,8 +577,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
                 ),
                 elevation: 0,
               ),
-              child: const Text(
-                'Save',
+              child: Text(context.l10n.save,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
@@ -588,7 +588,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
   );
 
   Widget _buildShowLinkToggle() => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     decoration: BoxDecoration(
       color: Colors.grey[50],
       borderRadius: BorderRadius.circular(14),
@@ -596,9 +596,9 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     ),
     child: Row(
       children: [
-        const Expanded(
+        Expanded(
           child: Text(
-            'Show link',
+            context.l10n.showLink,
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
           ),
         ),

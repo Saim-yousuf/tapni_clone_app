@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/checking_points_screen.dart';
 
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class ProfileScoreCard extends StatelessWidget {
   const ProfileScoreCard({super.key});
 
@@ -18,7 +19,7 @@ class ProfileScoreCard extends StatelessWidget {
         ).push(MaterialPageRoute(builder: (_) => CheckingPointsScreen()));
       },
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -31,8 +32,7 @@ class ProfileScoreCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Profile Strength",
+                Text(context.l10n.profileStrength,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -41,7 +41,7 @@ class ProfileScoreCard extends StatelessWidget {
                 ),
                 Text(
                   "${profileProvider.score.toStringAsFixed(0)}%",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: Colors.black,
@@ -70,7 +70,7 @@ class ProfileScoreCard extends StatelessWidget {
               profileProvider.score < 100
                   ? "Complete your profile to get more visibility"
                   : "Great! Your profile is complete 🎉",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
                 color: Colors.black54,
                 fontWeight: FontWeight.w500,
