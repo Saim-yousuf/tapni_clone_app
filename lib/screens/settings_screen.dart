@@ -36,6 +36,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _promoDismissed = false;
   int _pendingInvitationCount = 0;
+  bool _updatingVisibility = false;
 
   @override
   void initState() {
@@ -148,6 +149,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
         .length;
   }
 
+  Future<void> _toggleProfileVisibility(bool isPublic) async {
+    if (_updatingVisibility) return;
+    setState(() => _updatingVisibility = true);
+
+    final response = await Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).updateProfileVisibility(isPublic: isPublic, context: context);
+
+    if (!mounted) return;
+    setState(() => _updatingVisibility = false);
+
+    if (!response.success) {
+      final errorMessage = (response.message ?? '').trim();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            errorMessage.isNotEmpty
+                ? errorMessage
+                : 'Could not update profile visibility',
+            style: WaUi.body.copyWith(color: Colors.white),
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: WaUi.primaryText,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final profile = Provider.of<ProfileProvider>(context).profile;
@@ -257,6 +287,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   MaterialPageRoute(builder: (_) => const SocialLinksScreen()),
                 );
               },
+            ),
+            WaToolsListTile(
+              icon: profile.isPublic
+                  ? Icons.public_outlined
+                  : Icons.lock_outline,
+              title: 'Public profile',
+              subtitle: profile.isPublic
+                  ? 'Anyone can find and view your profile'
+                  : 'Hidden from search — others can\'t discover you',
+              trailing: _updatingVisibility
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    )
+                  : Switch.adaptive(
+                      value: profile.isPublic,
+                      activeColor: WaUi.accent,
+                      onChanged: _toggleProfileVisibility,
+                    ),
             ),
             WaToolsListTile(
               icon: Icons.qr_code_2_outlined,

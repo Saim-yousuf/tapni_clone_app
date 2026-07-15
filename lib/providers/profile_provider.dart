@@ -423,6 +423,50 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  Future<ApiResponse> updateProfileVisibility({
+    required bool isPublic,
+    required BuildContext context,
+  }) async {
+    final previous = _profile.isPublic;
+    _profile = _profile.copyWith(isPublic: isPublic);
+    notifyListeners();
+
+    try {
+      final repo = AuthRepo();
+      final response = await repo.updateProfile(
+        jsonBody: {'isPublic': isPublic},
+      );
+
+      if (response.success) {
+        if (response.data is Map<String, dynamic>) {
+          final data = response.data as Map<String, dynamic>;
+          final profileData = data['user'] is Map<String, dynamic>
+              ? data['user'] as Map<String, dynamic>
+              : data;
+          try {
+            _profile = UserProfile.fromApiJson(profileData);
+          } catch (_) {
+            _profile = _profile.copyWith(isPublic: isPublic);
+          }
+        }
+        notifyListeners();
+      } else {
+        _profile = _profile.copyWith(isPublic: previous);
+        notifyListeners();
+      }
+      return response;
+    } catch (error) {
+      _profile = _profile.copyWith(isPublic: previous);
+      notifyListeners();
+      return ApiResponse<dynamic>(
+        success: false,
+        statusCode: 0,
+        message: error.toString(),
+        data: null,
+      );
+    }
+  }
+
   Future<ApiResponse> updateUsername({
     required String username,
     required BuildContext context,

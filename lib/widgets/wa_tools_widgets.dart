@@ -43,65 +43,73 @@ class WaToolsListTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final bool showBadge;
   final Color? titleColor;
+  final Widget? trailing;
 
   const WaToolsListTile({
     super.key,
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.onTap,
+    this.onTap,
     this.showBadge = false,
     this.titleColor,
+    this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
+    final content = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Icon(icon, size: 24, color: WaUi.promoIconFg),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: WaUi.listTitle.copyWith(color: titleColor),
+                ),
+                const SizedBox(height: 2),
+                Text(subtitle, style: WaUi.listSubtitle),
+              ],
+            ),
+          ),
+          if (showBadge)
+            Padding(
+              padding: const EdgeInsets.only(top: 6, left: 8),
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(
+                  color: WaUi.accent,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          if (trailing != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: trailing!,
+            ),
+        ],
+      ),
+    );
+
     return Material(
       color: WaUi.toolsScaffold,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Icon(icon, size: 24, color: WaUi.promoIconFg),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: WaUi.listTitle.copyWith(color: titleColor),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(subtitle, style: WaUi.listSubtitle),
-                  ],
-                ),
-              ),
-              if (showBadge)
-                Padding(
-                  padding: const EdgeInsets.only(top: 6, left: 8),
-                  child: Container(
-                    width: 10,
-                    height: 10,
-                    decoration: const BoxDecoration(
-                      color: WaUi.accent,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
+      child: onTap == null
+          ? content
+          : InkWell(onTap: onTap, child: content),
     );
   }
 }

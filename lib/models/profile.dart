@@ -7,6 +7,7 @@ class UserProfile {
   final String? profilePhotoUrl;
   final String? coverPhotoUrl;
   final bool isPro;
+  final bool isPublic;
 
   final String name;
   final String email;
@@ -32,6 +33,7 @@ class UserProfile {
     this.profilePhotoUrl,
     this.coverPhotoUrl,
     this.isPro = false,
+    this.isPublic = true,
     required this.name,
     required this.email,
     required this.bio,
@@ -61,6 +63,7 @@ class UserProfile {
       profilePhotoUrl: json['profilePhoto']?.toString(),
       coverPhotoUrl: json['coverPhoto']?.toString(),
       isPro: json['isPro'] as bool? ?? json['IsPro'] as bool? ?? false,
+      isPublic: json['isPublic'] as bool? ?? true,
       name: json['name']?.toString() ?? '',
       email: json['email']?.toString() ?? '',
       bio: json['bio']?.toString() ?? '',
@@ -81,6 +84,7 @@ class UserProfile {
       'name': name,
       'bio': bio,
       'country': country,
+      'isPublic': isPublic,
       if (businessName != null) 'businessName': businessName,
       if (businessCategory != null) 'businessCategory': businessCategory,
       'links': socialLinks
@@ -110,6 +114,7 @@ class UserProfile {
     int? scansCount,
     int? leadsCount,
     bool? isPro,
+    bool? isPublic,
     String? cardTemplateId,
     List<UserCustomCard>? customCards,
   }) {
@@ -119,6 +124,7 @@ class UserProfile {
       profilePhotoUrl: profilePhotoUrl ?? this.profilePhotoUrl,
       coverPhotoUrl: coverPhotoUrl ?? this.coverPhotoUrl,
       isPro: isPro ?? this.isPro,
+      isPublic: isPublic ?? this.isPublic,
       name: name ?? this.name,
       email: email ?? this.email,
       bio: bio ?? this.bio,
