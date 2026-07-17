@@ -27,6 +27,41 @@ class AuthRepo {
     );
   }
 
+  Future<ApiResponse> sendPhoneOtp({required String phone}) async {
+    return await ApiHandler.request(
+      api: Api.auth.otpSend,
+      body: {"phone": phone},
+      method: ApiMethod.post,
+    );
+  }
+
+  Future<ApiResponse> verifyPhoneOtp({
+    required String phone,
+    required String otp,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.otpVerify,
+      body: {"phone": phone, "otp": otp},
+      method: ApiMethod.post,
+    );
+  }
+
+  Future<ApiResponse> completePhoneSignup({
+    required String phone,
+    required String verificationToken,
+    required String name,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.otpComplete,
+      body: {
+        "phone": phone,
+        "verificationToken": verificationToken,
+        "name": name,
+      },
+      method: ApiMethod.post,
+    );
+  }
+
   Future<ApiResponse> googleSignIn({required String token}) async {
     return await ApiHandler.request(
       api: Api.auth.googleSignIn,

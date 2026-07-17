@@ -66,6 +66,7 @@ class UserProfile {
       isPublic: json['isPublic'] as bool? ?? true,
       name: json['name']?.toString() ?? '',
       email: json['email']?.toString() ?? '',
+      phone: json['phone']?.toString() ?? '',
       bio: json['bio']?.toString() ?? '',
       country: json['country'],
       businessName: json['businessName']?.toString(),

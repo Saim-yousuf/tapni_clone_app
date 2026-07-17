@@ -5,12 +5,44 @@ import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
-import 'package:tapni_app/screens/login_screen.dart';
+import 'package:tapni_app/screens/phone_auth_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/services/push_notification_service.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/widgets/alert.dart';
+
+class OtpSendResult {
+  final bool success;
+  final String? otp;
+  final String? phone;
+  final String? message;
+
+  const OtpSendResult({
+    required this.success,
+    this.otp,
+    this.phone,
+    this.message,
+  });
+}
+
+class OtpVerifyResult {
+  final bool success;
+  final bool isNewUser;
+  final bool loggedIn;
+  final String? verificationToken;
+  final String? phone;
+  final String? message;
+
+  const OtpVerifyResult({
+    required this.success,
+    this.isNewUser = false,
+    this.loggedIn = false,
+    this.verificationToken,
+    this.phone,
+    this.message,
+  });
+}
 
 class AuthProvider extends ChangeNotifier {
   final AuthRepo _authRepo = AuthRepo();
@@ -76,6 +108,7 @@ class AuthProvider extends ChangeNotifier {
     String userId = '';
     String name = '';
     String email = '';
+    String? phone;
     String? username;
     String? profilePhoto;
 
@@ -83,18 +116,22 @@ class AuthProvider extends ChangeNotifier {
       userId = (user['id'] ?? user['_id'] ?? '').toString();
       name = (user['name'] ?? '').toString();
       email = (user['email'] ?? '').toString();
+      phone = user['phone']?.toString();
       username = user['username']?.toString();
       profilePhoto = user['profilePhoto']?.toString();
     }
 
     if (userId.isEmpty) {
-      userId = email.isNotEmpty ? email : 'user_${token.hashCode}';
+      userId = phone?.isNotEmpty == true
+          ? phone!
+          : (email.isNotEmpty ? email : 'user_${token.hashCode}');
     }
 
     await AccountStorage.upsertAndActivate(
       userId: userId,
       name: name.isNotEmpty ? name : 'Account',
       email: email,
+      phone: phone,
       username: username,
       profilePhoto: profilePhoto,
       token: token,
@@ -122,6 +159,7 @@ class AuthProvider extends ChangeNotifier {
           userId: active.userId,
           name: active.name,
           email: active.email,
+          phone: active.phone,
           username: active.username,
           profilePhoto: active.profilePhoto,
           token: newToken,
@@ -132,6 +170,7 @@ class AuthProvider extends ChangeNotifier {
           userId: active.userId,
           name: active.name,
           email: active.email,
+          phone: active.phone,
           username: active.username,
           profilePhoto: active.profilePhoto,
           token: active.token,
@@ -142,12 +181,158 @@ class AuthProvider extends ChangeNotifier {
     } catch (_) {}
   }
 
-  bool _isAlreadyOnThisDevice({String? email, String? userId}) {
+  bool _isAlreadyOnThisDevice({String? email, String? phone, String? userId}) {
     return AccountStorage.findAccountByEmailOrId(
           email: email,
+          phone: phone,
           userId: userId,
         ) !=
         null;
+  }
+
+  Future<OtpSendResult> sendOtp(
+    String phone,
+    BuildContext context, {
+    bool showErrors = true,
+  }) async {
+    final response = await _authRepo.sendPhoneOtp(phone: phone);
+
+    if (response.success && response.data != null) {
+      final data = response.data;
+      if (data is Map) {
+        return OtpSendResult(
+          success: true,
+          otp: data['otp']?.toString(),
+          phone: data['phone']?.toString() ?? phone,
+          message: response.message,
+        );
+      }
+    }
+
+    if (showErrors && context.mounted) {
+      ShowAlert.error(
+        message: response.message ?? 'Failed to send OTP',
+        context: context,
+      );
+    }
+    return OtpSendResult(
+      success: false,
+      message: response.message ?? 'Failed to send OTP',
+    );
+  }
+
+  Future<OtpVerifyResult> verifyOtp(
+    String phone,
+    String otp,
+    BuildContext context, {
+    bool addAccount = false,
+  }) async {
+    if (_isAlreadyOnThisDevice(phone: phone)) {
+      if (context.mounted) {
+        ShowAlert.error(
+          message: 'This account is already logged in on this device',
+          context: context,
+        );
+      }
+      return const OtpVerifyResult(success: false);
+    }
+
+    final response = await _authRepo.verifyPhoneOtp(phone: phone, otp: otp);
+
+    if (response.success && response.data != null) {
+      final data = response.data;
+      if (data is! Map) {
+        return OtpVerifyResult(
+          success: false,
+          message: response.message,
+        );
+      }
+
+      final isNewUser = data['isNewUser'] == true;
+      if (isNewUser) {
+        return OtpVerifyResult(
+          success: true,
+          isNewUser: true,
+          verificationToken: data['verificationToken']?.toString(),
+          phone: data['phone']?.toString() ?? phone,
+          message: response.message,
+        );
+      }
+
+      if (data['token'] != null) {
+        final user = data['user'];
+        final userId = user is Map
+            ? (user['id'] ?? user['_id'])?.toString()
+            : null;
+        final userPhone =
+            user is Map ? user['phone']?.toString() : phone;
+        final userEmail =
+            user is Map ? user['email']?.toString() : null;
+
+        if (_isAlreadyOnThisDevice(
+          email: userEmail,
+          phone: userPhone,
+          userId: userId,
+        )) {
+          if (context.mounted) {
+            ShowAlert.error(
+              message: 'This account is already logged in on this device',
+              context: context,
+            );
+          }
+          return const OtpVerifyResult(success: false);
+        }
+
+        await _persistSessionFromResponse(Map<String, dynamic>.from(data));
+        await _clearAllUserData(context);
+        await ensureDeviceSessionRegistered();
+        await PushNotificationService.syncTokenWithBackend();
+        return const OtpVerifyResult(success: true, loggedIn: true);
+      }
+    }
+
+    if (context.mounted) {
+      ShowAlert.error(
+        message: response.message ?? 'OTP verification failed',
+        context: context,
+      );
+    }
+    return OtpVerifyResult(
+      success: false,
+      message: response.message ?? 'OTP verification failed',
+    );
+  }
+
+  Future<bool> completePhoneSignup(
+    String phone,
+    String verificationToken,
+    String name,
+    BuildContext context,
+  ) async {
+    final response = await _authRepo.completePhoneSignup(
+      phone: phone,
+      verificationToken: verificationToken,
+      name: name,
+    );
+
+    if (response.success && response.data != null) {
+      final data = response.data;
+      if (data is Map && data['token'] != null) {
+        await _persistSessionFromResponse(Map<String, dynamic>.from(data));
+        await _clearAllUserData(context);
+        await ensureDeviceSessionRegistered();
+        await PushNotificationService.syncTokenWithBackend();
+        return true;
+      }
+    }
+
+    if (context.mounted) {
+      ShowAlert.error(
+        message: response.message ?? 'Signup failed',
+        context: context,
+      );
+    }
+    return false;
   }
 
   Future<bool> login(
@@ -270,7 +455,8 @@ class AuthProvider extends ChangeNotifier {
   }) async {
     final userId = (user['id'] ?? user['_id'])?.toString();
     final email = user['email']?.toString();
-    if (_isAlreadyOnThisDevice(email: email, userId: userId)) {
+    final phone = user['phone']?.toString();
+    if (_isAlreadyOnThisDevice(email: email, phone: phone, userId: userId)) {
       if (context.mounted) {
         ShowAlert.error(
           message: 'This account is already logged in on this device',
@@ -416,7 +602,7 @@ class AuthProvider extends ChangeNotifier {
         context: context,
       );
       nav.pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        MaterialPageRoute(builder: (_) => const PhoneAuthScreen()),
         (_) => false,
       );
     }

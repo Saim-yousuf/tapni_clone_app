@@ -2,6 +2,7 @@ class StoredAccount {
   final String userId;
   final String name;
   final String email;
+  final String? phone;
   final String? username;
   final String? profilePhoto;
   final String token;
@@ -11,6 +12,7 @@ class StoredAccount {
     required this.userId,
     required this.name,
     required this.email,
+    this.phone,
     this.username,
     this.profilePhoto,
     required this.token,
@@ -21,6 +23,7 @@ class StoredAccount {
     String? userId,
     String? name,
     String? email,
+    String? phone,
     String? username,
     String? profilePhoto,
     String? token,
@@ -30,6 +33,7 @@ class StoredAccount {
       userId: userId ?? this.userId,
       name: name ?? this.name,
       email: email ?? this.email,
+      phone: phone ?? this.phone,
       username: username ?? this.username,
       profilePhoto: profilePhoto ?? this.profilePhoto,
       token: token ?? this.token,
@@ -41,6 +45,7 @@ class StoredAccount {
         'userId': userId,
         'name': name,
         'email': email,
+        'phone': phone,
         'username': username,
         'profilePhoto': profilePhoto,
         'token': token,
@@ -52,6 +57,7 @@ class StoredAccount {
       userId: (json['userId'] ?? json['id'] ?? '').toString(),
       name: (json['name'] ?? '').toString(),
       email: (json['email'] ?? '').toString(),
+      phone: json['phone']?.toString(),
       username: json['username']?.toString(),
       profilePhoto: json['profilePhoto']?.toString(),
       token: (json['token'] ?? '').toString(),
@@ -59,7 +65,12 @@ class StoredAccount {
     );
   }
 
-  String get displayName => name.isNotEmpty ? name : email;
+  String get displayName {
+    if (name.isNotEmpty) return name;
+    final p = phone?.trim() ?? '';
+    if (p.isNotEmpty) return p;
+    return email;
+  }
 
   String get initials {
     final parts = displayName.trim().split(RegExp(r'\s+'));

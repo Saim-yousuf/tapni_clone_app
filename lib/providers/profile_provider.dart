@@ -105,6 +105,7 @@ class ProfileProvider extends ChangeNotifier {
           userId: _profile.id,
           name: _profile.name,
           email: _profile.email,
+          phone: _profile.phone,
           username: _profile.username,
           profilePhoto: _profile.profilePhotoUrl,
         );

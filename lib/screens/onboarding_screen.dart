@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tapni_app/screens/login_screen.dart';
+import 'package:tapni_app/screens/phone_auth_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
@@ -59,7 +59,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _goToLogin() {
     Navigator.of(
       context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const PhoneAuthScreen()));
   }
 
   @override

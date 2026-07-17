@@ -79,6 +79,7 @@ class AccountStorage {
     required String userId,
     required String name,
     required String email,
+    String? phone,
     String? username,
     String? profilePhoto,
     required String token,
@@ -96,6 +97,7 @@ class AccountStorage {
       userId: userId,
       name: name,
       email: email,
+      phone: phone,
       username: username,
       profilePhoto: profilePhoto,
       token: token,
@@ -120,6 +122,7 @@ class AccountStorage {
   static Future<void> updateActiveProfileMeta({
     String? name,
     String? email,
+    String? phone,
     String? username,
     String? profilePhoto,
     String? userId,
@@ -139,6 +142,7 @@ class AccountStorage {
       userId: nextId,
       name: name ?? current.name,
       email: email ?? current.email,
+      phone: phone ?? current.phone,
       username: username ?? current.username,
       profilePhoto: profilePhoto ?? current.profilePhoto,
     );
@@ -241,15 +245,21 @@ class AccountStorage {
 
   static StoredAccount? findAccountByEmailOrId({
     String? email,
+    String? phone,
     String? userId,
   }) {
     final accounts = getAccounts();
     final emailLower = email?.trim().toLowerCase() ?? '';
+    final phoneNorm = phone?.trim() ?? '';
     final id = userId?.trim() ?? '';
     for (final a in accounts) {
       if (id.isNotEmpty && a.userId == id) return a;
       if (emailLower.isNotEmpty &&
           a.email.trim().toLowerCase() == emailLower) {
+        return a;
+      }
+      if (phoneNorm.isNotEmpty &&
+          (a.phone ?? '').trim() == phoneNorm) {
         return a;
       }
     }

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/models/stored_account.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/screens/linked_devices/qr_login_screen.dart';
-import 'package:tapni_app/screens/login_screen.dart';
+import 'package:tapni_app/screens/phone_auth_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
@@ -160,14 +160,14 @@ class _AccountSwitcherBody extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.email_outlined, color: WaUi.promoIconFg),
-              title: Text(hostContext.l10n.emailPassword, style: WaUi.listTitle),
+              leading: Icon(Icons.phone_outlined, color: WaUi.promoIconFg),
+              title: Text('Phone number', style: WaUi.listTitle),
               onTap: () {
                 Navigator.pop(ctx);
                 if (!hostContext.mounted) return;
                 Navigator.of(hostContext).push(
                   MaterialPageRoute(
-                    builder: (_) => const LoginScreen(addAccount: true),
+                    builder: (_) => const PhoneAuthScreen(addAccount: true),
                   ),
                 );
               },

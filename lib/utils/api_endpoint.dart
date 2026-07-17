@@ -20,8 +20,8 @@ class Api {
   static void init(
     // Environment env
   ) {
-    // baseUrl = _localBaseUrl;
-    baseUrl = _liveBaseUrl;
+    baseUrl = _localBaseUrl;
+    // baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }
@@ -41,6 +41,9 @@ class _AuthApi {
   String get register => "${Api.baseUrl}/api/user/auth/register";
   String get login => "${Api.baseUrl}/api/user/auth/login";
   String get googleSignIn => "${Api.baseUrl}/api/user/auth/google";
+  String get otpSend => "${Api.baseUrl}/api/user/auth/otp/send";
+  String get otpVerify => "${Api.baseUrl}/api/user/auth/otp/verify";
+  String get otpComplete => "${Api.baseUrl}/api/user/auth/otp/complete";
   String get profile => "${Api.baseUrl}/api/user/auth/profile";
   String searchUsers(String query) =>
       "${Api.baseUrl}/api/user/auth/search?q=${Uri.encodeQueryComponent(query)}";
@@ -80,8 +83,7 @@ class _AuthApi {
       "${Api.baseUrl}/api/user/auth/device/pairing/${Uri.encodeComponent(code)}/status";
   String get approveDevicePairing =>
       "${Api.baseUrl}/api/user/auth/device/pairing/approve";
-  String get deviceSessions =>
-      "${Api.baseUrl}/api/user/auth/device/sessions";
+  String get deviceSessions => "${Api.baseUrl}/api/user/auth/device/sessions";
   String get revokeCurrentDeviceSession =>
       "${Api.baseUrl}/api/user/auth/device/sessions/current";
   String revokeDeviceSession(String sessionId) =>

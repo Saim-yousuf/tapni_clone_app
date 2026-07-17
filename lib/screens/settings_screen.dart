@@ -16,7 +16,7 @@ import 'package:tapni_app/l10n/app_languages.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/screens/app_language_screen.dart';
-import 'package:tapni_app/screens/login_screen.dart';
+import 'package:tapni_app/screens/phone_auth_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
@@ -142,7 +142,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => LoginScreen()),
+      MaterialPageRoute(builder: (_) => const PhoneAuthScreen()),
       (route) => false,
     );
   }
