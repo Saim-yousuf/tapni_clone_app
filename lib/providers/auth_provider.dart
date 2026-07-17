@@ -307,12 +307,14 @@ class AuthProvider extends ChangeNotifier {
     String phone,
     String verificationToken,
     String name,
-    BuildContext context,
-  ) async {
+    BuildContext context, {
+    String? country,
+  }) async {
     final response = await _authRepo.completePhoneSignup(
       phone: phone,
       verificationToken: verificationToken,
       name: name,
+      country: country,
     );
 
     if (response.success && response.data != null) {

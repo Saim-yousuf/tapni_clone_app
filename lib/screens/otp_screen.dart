@@ -17,11 +17,13 @@ class OtpScreen extends StatefulWidget {
     required this.phone,
     this.debugOtp,
     this.addAccount = false,
+    this.country,
   }) : super(key: key);
 
   final String phone;
   final String? debugOtp;
   final bool addAccount;
+  final String? country;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -147,6 +149,7 @@ class _OtpScreenState extends State<OtpScreen> {
             builder: (_) => CompleteProfileScreen(
               phone: result.phone ?? widget.phone,
               verificationToken: token,
+              country: widget.country,
             ),
           ),
         );

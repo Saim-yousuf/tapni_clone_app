@@ -248,3 +248,57 @@ CountryDialCode? findCountryByCode(String code) {
 CountryDialCode get defaultCountryDialCode {
   return findCountryByCode('+92') ?? kCountryDialCodes.first;
 }
+
+/// Longest dial-code prefix match for an E.164 phone (e.g. +92300...).
+CountryDialCode? findCountryByPhone(String? rawPhone) {
+  if (rawPhone == null) return null;
+  final phone = rawPhone.trim().replaceAll(RegExp(r'[\s\-()]'), '');
+  if (!phone.startsWith('+') || phone.length < 3) return null;
+
+  CountryDialCode? best;
+  for (final c in kCountryDialCodes) {
+    if (phone.startsWith(c.code)) {
+      if (best == null || c.code.length > best.code.length) {
+        best = c;
+      }
+    }
+  }
+  return best;
+}
+
+/// Maps dial-code country display name → [Constants.countries] key (lowercase).
+String? regionKeyForDialCountry(CountryDialCode country) {
+  const aliases = <String, String>{
+    'cape verde': 'cabo verde',
+    'ivory coast': "côte d'ivoire",
+    'czech republic': 'czechia (czech republic)',
+    'congo': 'congo (congo-brazzaville)',
+    'congo (drc)': 'democratic republic of the congo',
+    'eswatini': 'eswatini (swaziland)',
+    'myanmar': 'myanmar (burma)',
+    'palestine': 'palestine state',
+    'vatican city': 'holy see',
+    'united states': 'united states',
+    'united kingdom': 'united kingdom',
+    'united arab emirates': 'united arab emirates',
+  };
+
+  final lower = country.name.trim().toLowerCase();
+  return aliases[lower] ?? lower;
+}
+
+/// Resolve region list key from phone number, or null if unknown / not in list.
+String? regionKeyFromPhone(
+  String? phone, {
+  required List<String> regionOptions,
+}) {
+  final country = findCountryByPhone(phone);
+  if (country == null) return null;
+  final key = regionKeyForDialCountry(country);
+  if (key == null) return null;
+  for (final option in regionOptions) {
+    if (option == key) return option;
+  }
+  return null;
+}
+

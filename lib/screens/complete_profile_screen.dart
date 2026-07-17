@@ -4,6 +4,8 @@ import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/main_shell.dart';
+import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
@@ -12,10 +14,12 @@ class CompleteProfileScreen extends StatefulWidget {
     Key? key,
     required this.phone,
     required this.verificationToken,
+    this.country,
   }) : super(key: key);
 
   final String phone;
   final String verificationToken;
+  final String? country;
 
   @override
   State<CompleteProfileScreen> createState() => _CompleteProfileScreenState();
@@ -37,11 +41,17 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     try {
       authProvider.setLoading(true);
+      final country = widget.country ??
+          regionKeyFromPhone(
+            widget.phone,
+            regionOptions: Constants.countries,
+          );
       final success = await authProvider.completePhoneSignup(
         widget.phone,
         widget.verificationToken,
         _nameController.text.trim(),
         context,
+        country: country,
       );
       if (!success || !mounted) return;
 

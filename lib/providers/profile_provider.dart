@@ -405,6 +405,14 @@ class ProfileProvider extends ChangeNotifier {
         } else {
           _profile = updatedProfile;
         }
+        await AccountStorage.updateActiveProfileMeta(
+          userId: _profile.id,
+          name: _profile.name,
+          email: _profile.email,
+          phone: _profile.phone,
+          username: _profile.username,
+          profilePhoto: _profile.profilePhotoUrl,
+        );
         notifyListeners();
       }
       Navigator.pop(context);

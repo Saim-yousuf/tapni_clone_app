@@ -50,6 +50,7 @@ class AuthRepo {
     required String phone,
     required String verificationToken,
     required String name,
+    String? country,
   }) async {
     return await ApiHandler.request(
       api: Api.auth.otpComplete,
@@ -57,6 +58,7 @@ class AuthRepo {
         "phone": phone,
         "verificationToken": verificationToken,
         "name": name,
+        if (country != null && country.isNotEmpty) "country": country,
       },
       method: ApiMethod.post,
     );

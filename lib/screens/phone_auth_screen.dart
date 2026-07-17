@@ -65,6 +65,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
             phone: result.phone ?? phone,
             debugOtp: result.otp,
             addAccount: widget.addAccount,
+            country: regionKeyForDialCountry(_country),
           ),
         ),
       );
