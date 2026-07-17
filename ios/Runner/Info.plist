@@ -57,6 +57,8 @@
 	<string>Camera access is required to scan QR codes, capture face for attendance, and business cards.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo library access is required to scan QR codes from images.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Contacts access is required to find which of your contacts are on BarQody so you can send invitations.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location access is required to verify attendance at your workplace.</string>
 	<key>UIBackgroundModes</key>

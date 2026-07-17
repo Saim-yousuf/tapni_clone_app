@@ -7,6 +7,7 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/find_user_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
+import 'package:tapni_app/screens/invitations/invitations_home_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
@@ -92,6 +93,19 @@ class _LeadsScreenState extends State<LeadsScreen> {
               title: 'Contacts',
               subtitle: _contactsSubtitle(leadsList.length, leadsProvider),
               actions: [
+                IconButton(
+                  icon: Icon(Icons.mail_outline_rounded, size: 24),
+                  color: WaUi.primaryText,
+                  tooltip: 'Invitations',
+                  onPressed: () {
+                    _dismissKeyboard();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const InvitationsHomeScreen(),
+                      ),
+                    );
+                  },
+                ),
                 IconButton(
                   icon: Icon(Icons.qr_code_scanner_rounded, size: 24),
                   color: WaUi.primaryText,

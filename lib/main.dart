@@ -8,6 +8,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
+import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/screens/splash_screen.dart';
 import 'package:tapni_app/utils/api_endpoint.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
@@ -28,6 +29,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ChangeNotifierProvider(create: (_) => InvitationProvider()),
       ],
       child: const TapniApp(),
     ),

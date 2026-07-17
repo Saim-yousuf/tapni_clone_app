@@ -210,61 +210,83 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
                             }
                           : null,
                     ),
-                    SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _ActionChip(
-                            label: context.l10n.png,
-                            icon: Icons.image_outlined,
-                            loading: _pngLoading,
-                            onTap: _downloadPng,
+                    SizedBox(height: 28),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: WaUi.scaffold,
+                        borderRadius: BorderRadius.circular(WaUi.radiusLg),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 6),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _ExportAction(
+                              label: context.l10n.png,
+                              icon: Icons.download_rounded,
+                              loading: _pngLoading,
+                              onTap: _downloadPng,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: _ActionChip(
-                            label: context.l10n.jpg,
-                            icon: Icons.photo_outlined,
-                            loading: _jpgLoading,
-                            onTap: _downloadJpg,
+                          _ExportDivider(),
+                          Expanded(
+                            child: _ExportAction(
+                              label: context.l10n.jpg,
+                              icon: Icons.photo_outlined,
+                              loading: _jpgLoading,
+                              onTap: _downloadJpg,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: _ActionChip(
-                            label: context.l10n.share,
-                            icon: Icons.ios_share,
-                            onTap: _shareCard,
+                          _ExportDivider(),
+                          Expanded(
+                            child: _ExportAction(
+                              label: context.l10n.share,
+                              icon: Icons.ios_share_rounded,
+                              onTap: _shareCard,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48,
-                      child: FilledButton.icon(
-                        onPressed: _walletLoading ? null : _addToGoogleWallet,
-                        style: FilledButton.styleFrom(
-                          backgroundColor: WaUi.primaryText,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                          ),
-                        ),
-                        icon: _walletLoading
-                            ? SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
+                    SizedBox(height: 14),
+                    Material(
+                      color: WaUi.buttonDark,
+                      borderRadius: BorderRadius.circular(WaUi.radiusLg),
+                      child: InkWell(
+                        onTap: _walletLoading ? null : _addToGoogleWallet,
+                        borderRadius: BorderRadius.circular(WaUi.radiusLg),
+                        child: SizedBox(
+                          height: 54,
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (_walletLoading)
+                                const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              else
+                                const Icon(
+                                  Icons.account_balance_wallet_outlined,
+                                  size: 20,
                                   color: Colors.white,
                                 ),
-                              )
-                            : Icon(Icons.account_balance_wallet_outlined, size: 20),
-                        label: Text(context.l10n.addToGoogleWallet, style: WaUi.button.copyWith(color: Colors.white)),
+                              const SizedBox(width: 10),
+                              Text(
+                                context.l10n.addToGoogleWallet,
+                                style: WaUi.button.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -278,13 +300,24 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   }
 }
 
-class _ActionChip extends StatelessWidget {
+class _ExportDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 1,
+      height: 36,
+      color: WaUi.divider,
+    );
+  }
+}
+
+class _ExportAction extends StatelessWidget {
   final String label;
   final IconData icon;
   final VoidCallback onTap;
   final bool loading;
 
-  const _ActionChip({
+  const _ExportAction({
     required this.label,
     required this.icon,
     required this.onTap,
@@ -293,29 +326,46 @@ class _ActionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: WaUi.scaffold,
+    return InkWell(
+      onTap: loading ? null : onTap,
       borderRadius: BorderRadius.circular(WaUi.radiusMd),
-      child: InkWell(
-        onTap: loading ? null : onTap,
-        borderRadius: BorderRadius.circular(WaUi.radiusMd),
-        child: Container(
-          height: 48,
-          alignment: Alignment.center,
-          child: loading
-              ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(icon, size: 18, color: WaUi.primaryText),
-                    const SizedBox(height: 2),
-                    Text(label, style: WaUi.label.copyWith(color: WaUi.primaryText)),
-                  ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 44,
+              height: 44,
+              child: DecoratedBox(
+                decoration: const BoxDecoration(
+                  color: WaUi.surface,
+                  shape: BoxShape.circle,
                 ),
+                child: Center(
+                  child: loading
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: WaUi.secondaryText,
+                          ),
+                        )
+                      : Icon(icon, size: 20, color: WaUi.primaryText),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: WaUi.label.copyWith(
+                color: WaUi.primaryText,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
         ),
       ),
     );

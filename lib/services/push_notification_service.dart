@@ -10,8 +10,11 @@ import 'package:tapni_app/firebase_options.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
+import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
+import 'package:tapni_app/screens/invitations/invitation_detail_screen.dart';
+import 'package:tapni_app/screens/invitations/invitations_home_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
@@ -93,6 +96,11 @@ class PushNotificationService {
       id: 'account',
       name: 'Account',
       description: 'Subscription updates and employee invitations',
+    ),
+    'invitations': (
+      id: 'invitations',
+      name: 'Invitations',
+      description: 'Event invitations from contacts',
     ),
   };
 
@@ -254,9 +262,10 @@ class PushNotificationService {
       case 'contact_exchange':
         return 'leads';
       case 'subscription':
-        return 'account';
       case 'employee_invitation':
         return 'account';
+      case 'event_invitation':
+        return 'invitations';
       case 'loyalty_stamp':
         return 'loyalty';
       case 'catalog_order':
@@ -336,6 +345,8 @@ class PushNotificationService {
         _openLoyaltyHome(context);
       case 'employee_invitation':
         _openEmployeeInvitations(context);
+      case 'event_invitation':
+        _openEventInvitation(context, data['invitationId']?.toString());
       default:
         break;
     }
@@ -383,6 +394,20 @@ class PushNotificationService {
     );
   }
 
+  static void _openEventInvitation(BuildContext context, String? invitationId) {
+    if (invitationId != null && invitationId.isNotEmpty) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => InvitationDetailScreen(invitationId: invitationId),
+        ),
+      );
+      return;
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const InvitationsHomeScreen()),
+    );
+  }
+
   static void _refreshInAppState(Map<String, dynamic> data) {
     final type = data['type']?.toString() ?? '';
     if (type == 'catalog_order') {
@@ -403,6 +428,13 @@ class PushNotificationService {
     if (type == 'employee_invitation') {
       Provider.of<LeadsProvider>(context, listen: false)
           .fetchEmployeeInvitationNotifications();
+    }
+
+    if (type == 'event_invitation') {
+      Provider.of<InvitationProvider>(context, listen: false)
+          .fetchReceivedQuiet();
+      Provider.of<LeadsProvider>(context, listen: false)
+          .fetchEventInvitationNotifications();
     }
 
     if (type == 'subscription') {

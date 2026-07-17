@@ -5,13 +5,16 @@ import 'package:tapni_app/models/activity.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
+import 'package:tapni_app/repository/invitation_repo.dart';
 import 'package:tapni_app/models/attendance.dart';
+import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 
 class LeadsProvider extends ChangeNotifier {
   final AuthRepo _authRepo = AuthRepo();
   final CatalogRepo _catalogRepo = CatalogRepo();
   final AttendanceRepo _attendanceRepo = AttendanceRepo();
+  final InvitationRepo _invitationRepo = InvitationRepo();
 
   List<Lead> _leads = [];
   List<ContactCategory> _categories = [];
@@ -371,6 +374,7 @@ class LeadsProvider extends ChangeNotifier {
   // ── Notifications management ─────────────────────────────────────────────────
   Future<void> refreshNotifications({required bool isBusinessUser}) async {
     await fetchEmployeeInvitationNotifications();
+    await fetchEventInvitationNotifications();
     if (isBusinessUser) {
       await fetchCatalogOrderNotifications(isBusinessUser: true);
     }
@@ -404,6 +408,40 @@ class LeadsProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint('Error fetching employee invitations: $e');
+    }
+  }
+
+  Future<void> fetchEventInvitationNotifications() async {
+    try {
+      final res = await _invitationRepo.getReceived();
+      if (!res.success || res.data == null) return;
+
+      _notifications.removeWhere((n) => n['type'] == 'event_invitation');
+
+      final data = res.data;
+      final list = data is Map<String, dynamic> && data['data'] != null
+          ? data['data']
+          : data;
+
+      if (list is! List) return;
+
+      for (final item in list.whereType<Map<String, dynamic>>()) {
+        final invitation = EventInvitation.fromJson(item);
+        _notifications.add({
+          'id': invitation.id,
+          'type': 'event_invitation',
+          'title': invitation.title,
+          'body':
+              '${invitation.sender.displayName} invited you · ${invitation.typeDisplay}',
+          'time': invitation.createdAt != null ? 'Recently' : 'Just now',
+          'isRead': false,
+        });
+      }
+
+      _sortNotifications();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching event invitations: $e');
     }
   }
 

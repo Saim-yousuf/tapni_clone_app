@@ -5,6 +5,8 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
+import 'package:tapni_app/screens/invitations/invitation_detail_screen.dart';
+import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 
@@ -97,7 +99,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   final isRead = item['isRead'] as bool;
                   
                   return Dismissible(
-                    key: Key(item['id']),
+                    key: Key('${item['type']}_${item['id']}'),
                     direction: DismissDirection.endToStart,
                     background: Container(
                       alignment: Alignment.centerRight,
@@ -137,6 +139,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               MaterialPageRoute(
                                 builder: (_) =>
                                     const EmployeeInvitationsScreen(),
+                              ),
+                            );
+                          } else if (item['type'] == 'event_invitation') {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => InvitationDetailScreen(
+                                  invitationId: item['id'] as String,
+                                  invitation: item['invitation'] is EventInvitation
+                                      ? item['invitation'] as EventInvitation
+                                      : null,
+                                ),
                               ),
                             );
                           }

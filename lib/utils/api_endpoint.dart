@@ -35,6 +35,7 @@ class Api {
   static final catalog = _CatalogApi();
   static final attendance = _AttendanceApi();
   static final wallet = _WalletApi();
+  static final invitation = _InvitationApi();
 }
 
 class _AuthApi {
@@ -108,6 +109,7 @@ class _ContactApi {
   String get addManual => "${Api.baseUrl}/api/user/contacts/manual";
   String get addScanned => "${Api.baseUrl}/api/user/contacts/scan";
   String get exchange => "${Api.baseUrl}/api/user/contacts/exchange";
+  String get matchPhones => "${Api.baseUrl}/api/user/contacts/match-phones";
   String updateContact(String id) => "${Api.baseUrl}/api/user/contacts/$id";
   String deleteContact(String id) => "${Api.baseUrl}/api/user/contacts/$id";
 }
@@ -173,4 +175,12 @@ class _WalletApi {
   String get myGoogleCard => "${Api.baseUrl}/api/wallet/google/my-card";
   String googleBusinessCard(String businessUserId) =>
       "${Api.baseUrl}/api/wallet/google/business-card/$businessUserId";
+}
+
+class _InvitationApi {
+  String get create => "${Api.baseUrl}/api/invitations";
+  String get sent => "${Api.baseUrl}/api/invitations/sent";
+  String get received => "${Api.baseUrl}/api/invitations/received";
+  String byId(String id) => "${Api.baseUrl}/api/invitations/$id";
+  String update(String id) => "${Api.baseUrl}/api/invitations/$id";
 }
