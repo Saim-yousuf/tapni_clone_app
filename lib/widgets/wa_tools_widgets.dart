@@ -14,10 +14,15 @@ class WaToolsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 8, 8, 4),
+      padding: const EdgeInsets.fromLTRB(16, 10, 4, 2),
       child: Row(
         children: [
-          Expanded(child: Text(title, style: WaUi.toolsTitle)),
+          Expanded(
+            child: Text(
+              title,
+              style: WaUi.toolsTitle.copyWith(fontWeight: FontWeight.w500),
+            ),
+          ),
           if (actions != null) ...actions!,
         ],
       ),
@@ -221,36 +226,51 @@ class WaBottomNavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // WhatsApp-style: soft gray ripple clipped to the icon pill only.
+    const pillRadius = BorderRadius.all(Radius.circular(16));
+    final splash = const Color(0xFF667781).withValues(alpha: 0.14);
+    final highlight = const Color(0xFF667781).withValues(alpha: 0.08);
+
     return Expanded(
       child: InkWell(
         onTap: onTap,
+        mouseCursor: SystemMouseCursors.click,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Stack(
               clipBehavior: Clip.none,
+              alignment: Alignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 6,
-                  ),
-                  decoration: selected
-                      ? BoxDecoration(
-                          color: WaUi.navPill,
-                          borderRadius: BorderRadius.circular(WaUi.radiusPill),
-                        )
-                      : null,
-                  child: Icon(
-                    selected ? (selectedIcon ?? icon) : icon,
-                    size: 24,
-                    color: WaUi.primaryText,
+                Material(
+                  color: selected ? WaUi.navPill : Colors.transparent,
+                  borderRadius: pillRadius,
+                  child: InkWell(
+                    onTap: onTap,
+                    mouseCursor: SystemMouseCursors.click,
+                    borderRadius: pillRadius,
+                    splashFactory: InkRipple.splashFactory,
+                    splashColor: splash,
+                    highlightColor: highlight,
+                    child: SizedBox(
+                      width: 64,
+                      height: 32,
+                      child: Icon(
+                        selected ? (selectedIcon ?? icon) : icon,
+                        size: 24,
+                        color: WaUi.primaryText,
+                      ),
+                    ),
                   ),
                 ),
                 if (badgeCount != null && badgeCount! > 0)
                   Positioned(
-                    right: 6,
-                    top: -2,
+                    right: -2,
+                    top: -4,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 5,
@@ -274,7 +294,7 @@ class WaBottomNavItem extends StatelessWidget {
                   )
                 else if (showDot)
                   Positioned(
-                    right: 10,
+                    right: 4,
                     top: 2,
                     child: Container(
                       width: 8,

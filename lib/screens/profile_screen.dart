@@ -147,10 +147,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: Image.asset(
-          'assets/images/jpg/barqody_name.jpg',
-          height: 40,
-          fit: BoxFit.contain,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: Image.asset(
+            'assets/images/png/barqody_name.png',
+            height: 80,
+            fit: BoxFit.contain,
+          ),
         ),
         actions: [
           NotificationIconButton(),

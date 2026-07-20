@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/lead.dart';
-import 'package:tapni_app/models/contact_category.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/find_user_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/screens/invitations/invitations_home_screen.dart';
+import 'package:tapni_app/screens/contacts_search_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
@@ -56,28 +56,17 @@ class _LeadsScreenState extends State<LeadsScreen> {
     );
   }
 
-  String _contactsSubtitle(int count, LeadsProvider provider) {
-    if (count == 0) return context.l10n.startBuildingYourNetwork;
-    final parts = <String>['$count contact${count == 1 ? '' : 's'}'];
-    if (provider.activeCategoryId != null) {
-      parts.add(_activeCategoryLabel(provider));
-    }
-    return parts.join(' · ');
-  }
-
   @override
   Widget build(BuildContext context) {
     final leadsProvider = Provider.of<LeadsProvider>(context);
     final leadsList = leadsProvider.leads;
-    final isFiltering = _searchController.text.isNotEmpty ||
-        leadsProvider.activeCategoryId != null;
+    final isFiltering = leadsProvider.activeCategoryId != null;
 
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       floatingActionButton: Padding(
         padding: EdgeInsets.only(bottom: 8, right: 4),
         child: WaContactSpeedDial(
-          onScan: _openScan,
           onAdd: () => _showAddLeadSheet(context, leadsProvider),
           onFind: _openFindUser,
         ),
@@ -87,132 +76,136 @@ class _LeadsScreenState extends State<LeadsScreen> {
         behavior: HitTestBehavior.translucent,
         child: SafeArea(
           child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            WaChatsHeader(
-              title: 'Contacts',
-              subtitle: _contactsSubtitle(leadsList.length, leadsProvider),
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.mail_outline_rounded, size: 24),
-                  color: WaUi.primaryText,
-                  tooltip: 'Invitations',
-                  onPressed: () {
-                    _dismissKeyboard();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const InvitationsHomeScreen(),
-                      ),
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.qr_code_scanner_rounded, size: 24),
-                  color: WaUi.primaryText,
-                  tooltip: context.l10n.scan,
-                  onPressed: _openScan,
-                ),
-                IconButton(
-                  icon: Icon(Icons.person_search_outlined, size: 24),
-                  color: WaUi.primaryText,
-                  tooltip: context.l10n.findUsername,
-                  onPressed: _openFindUser,
-                ),
-                PopupMenuButton<String>(
-                  icon: Icon(
-                    Icons.more_vert,
-                    size: 24,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              WaChatsHeader(
+                title: 'Contacts',
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.photo_camera_outlined, size: 24),
                     color: WaUi.primaryText,
+                    tooltip: context.l10n.scan,
+                    onPressed: _openScan,
                   ),
-                  color: WaUi.surface,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                  ),
-                  onSelected: (value) =>
-                      _onMenuAction(context, value, leadsProvider),
-                  itemBuilder: (_) => [
-                    PopupMenuItem(
-                      value: 'filter',
-                      child: Text(context.l10n.filterContacts, style: WaUi.body),
+                  PopupMenuButton<String>(
+                    icon: const Icon(
+                      Icons.more_vert,
+                      size: 24,
+                      color: WaUi.primaryText,
                     ),
-                    PopupMenuItem(
-                      value: 'categories',
-                      child: Text(context.l10n.manageCategories, style: WaUi.body),
+                    color: WaUi.surface,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(WaUi.radiusMd),
                     ),
-                    PopupMenuItem(
-                      value: 'import',
-                      child: Text(context.l10n.importContacts, style: WaUi.body),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            WaChatSearchBar(
-              controller: _searchController,
-              focusNode: _searchFocus,
-              onChanged: (val) {
-                setState(() {});
-                leadsProvider.setSearchQuery(val);
-              },
-              onClear: () {
-                setState(() => _searchController.clear());
-                leadsProvider.setSearchQuery('');
-              },
-            ),
-            WaContactFilterChips(
-              categories: leadsProvider.categories,
-              activeCategoryId: leadsProvider.activeCategoryId,
-              onAllTap: () => leadsProvider.setActiveCategory(null),
-              onCategoryTap: (id) => leadsProvider.setActiveCategory(id),
-              onAddCategory: () =>
-                  _showAddCategoryDialog(context, leadsProvider),
-            ),
-            Expanded(
-              child: leadsProvider.isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : leadsList.isEmpty
-                  ? WaContactEmptyState(
-                      isSearching: isFiltering,
-                      onScan: _openScan,
-                      onAdd: () =>
-                          _showAddLeadSheet(context, leadsProvider),
-                    )
-                  : RefreshIndicator(
-                      color: WaUi.accent,
-                      onRefresh: leadsProvider.fetchLeads,
-                      child: ListView.builder(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(bottom: 120),
-                        itemCount: leadsList.length,
-                        itemBuilder: (context, index) {
-                          return _buildContactRow(
-                            context,
-                            leadsList[index],
-                            leadsProvider,
-                            isLast: index == leadsList.length - 1,
-                          );
-                        },
+                    onSelected: (value) =>
+                        _onMenuAction(context, value, leadsProvider),
+                    itemBuilder: (_) => [
+                      PopupMenuItem(
+                        value: 'invitations',
+                        child: Text('Invitations', style: WaUi.body),
                       ),
-                    ),
-            ),
-          ],
-        ),
+                      PopupMenuItem(
+                        value: 'find',
+                        child:
+                            Text(context.l10n.findUsername, style: WaUi.body),
+                      ),
+                      PopupMenuItem(
+                        value: 'filter',
+                        child: Text(context.l10n.filterContacts,
+                            style: WaUi.body),
+                      ),
+                      PopupMenuItem(
+                        value: 'categories',
+                        child: Text(context.l10n.manageCategories,
+                            style: WaUi.body),
+                      ),
+                      PopupMenuItem(
+                        value: 'import',
+                        child: Text(context.l10n.importContacts,
+                            style: WaUi.body),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Expanded(
+                child: leadsProvider.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : RefreshIndicator(
+                        color: WaUi.accent,
+                        onRefresh: leadsProvider.fetchLeads,
+                        child: CustomScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: WaChatSearchBar(
+                                controller: _searchController,
+                                focusNode: _searchFocus,
+                                hintText: 'Search...',
+                                readOnly: true,
+                                onTap: () {
+                                  _dismissKeyboard();
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const ContactsSearchScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: WaContactFilterChips(
+                                categories: leadsProvider.categories,
+                                activeCategoryId:
+                                    leadsProvider.activeCategoryId,
+                                onAllTap: () =>
+                                    leadsProvider.setActiveCategory(null),
+                                onCategoryTap: (id) =>
+                                    leadsProvider.setActiveCategory(id),
+                                onAddCategory: () => _showAddCategoryDialog(
+                                  context,
+                                  leadsProvider,
+                                ),
+                              ),
+                            ),
+                            if (leadsList.isEmpty)
+                              SliverFillRemaining(
+                                hasScrollBody: false,
+                                child: WaContactEmptyState(
+                                  isSearching: isFiltering,
+                                  onScan: _openScan,
+                                  onAdd: () => _showAddLeadSheet(
+                                    context,
+                                    leadsProvider,
+                                  ),
+                                ),
+                              )
+                            else
+                              SliverPadding(
+                                padding: const EdgeInsets.only(bottom: 120),
+                                sliver: SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                    (context, index) {
+                                      return _buildContactRow(
+                                        context,
+                                        leadsList[index],
+                                        leadsProvider,
+                                      );
+                                    },
+                                    childCount: leadsList.length,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  String _activeCategoryLabel(LeadsProvider provider) {
-    final id = provider.activeCategoryId;
-    if (id == null) return '';
-    ContactCategory? category;
-    for (final c in provider.categories) {
-      if (c.id == id) {
-        category = c;
-        break;
-      }
-    }
-    return category == null ? 'Filtered' : category.name;
   }
 
   void _onMenuAction(
@@ -221,6 +214,17 @@ class _LeadsScreenState extends State<LeadsScreen> {
     LeadsProvider provider,
   ) {
     switch (value) {
+      case 'invitations':
+        _dismissKeyboard();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const InvitationsHomeScreen(),
+          ),
+        );
+        break;
+      case 'find':
+        _openFindUser();
+        break;
       case 'filter':
         showModalBottomSheet(
           context: context,
@@ -1360,13 +1364,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
     return lead.isScannedContact ? context.l10n.scannedViaQR : context.l10n.noDetailsYet;
   }
 
-  bool _isRecentContact(Lead lead) {
-    return DateTime.now().difference(lead.timestamp).inDays < 7;
-  }
-
   Widget? _previewIcon(Lead lead) {
     if (lead.isScannedContact) {
-      return const Icon(Icons.done_all, size: 16, color: Color(0xFF53BDEB));
+      return const Icon(Icons.done_all, size: 16, color: WaUi.readCheck);
     }
     return null;
   }
@@ -1374,9 +1374,8 @@ class _LeadsScreenState extends State<LeadsScreen> {
   Widget _buildContactRow(
     BuildContext context,
     Lead lead,
-    LeadsProvider provider, {
-    bool isLast = false,
-  }) {
+    LeadsProvider provider,
+  ) {
     final displayName = lead.displayName;
     final photoUrl = lead.displayProfilePhoto;
 
@@ -1389,9 +1388,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
       avatarColor: waAvatarColorFor(displayName),
       categoryColor:
           lead.category != null ? _parseColor(lead.category!.color) : null,
-      highlightDate: _isRecentContact(lead),
+      highlightDate: false,
       previewIcon: _previewIcon(lead),
-      showDivider: !isLast,
+      showDivider: false,
       onTap: () {
         if (lead.contactUser != null) {
           Navigator.of(context).push(

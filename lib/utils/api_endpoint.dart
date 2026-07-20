@@ -20,8 +20,8 @@ class Api {
   static void init(
     // Environment env
   ) {
-    baseUrl = _localBaseUrl;
-    // baseUrl = _liveBaseUrl;
+    // baseUrl = _localBaseUrl;
+    baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }

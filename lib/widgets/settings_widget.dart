@@ -102,8 +102,8 @@ void _generalBottomSheet(BuildContext context) {
                       Expanded(
                         child: Center(
                           child: Image.asset(
-                            'assets/images/jpg/barqody_name.jpg',
-                            height: 48,
+                            'assets/images/png/barqody_name.png',
+                            height: 70,
                           ),
                         ),
                       ),
@@ -417,7 +417,7 @@ void _showTapniAccountBottomSheet(BuildContext context) {
               ),
             ),
             const SizedBox(height: 20),
-            Image.asset('assets/images/jpg/barqody_name.jpg', height: 48),
+            Image.asset('assets/images/png/barqody_name.png', height: 70),
             const SizedBox(height: 12),
             Text(context.l10n.welcomeToAccountCenter, style: WaUi.headline),
             const SizedBox(height: 6),

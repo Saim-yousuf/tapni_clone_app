@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/custom_app_button.dart';
 import 'package:tapni_app/widgets/go_bussiness_button.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
@@ -22,60 +23,70 @@ class SocialLinksScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Text('Links'),
-            IconButton(
-              icon: Icon(Icons.refresh_rounded),
-              onPressed: () {},
-            ),
-          ],
+        title: Text(
+          'Links',
+          style: WaUi.toolsTitle.copyWith(fontWeight: FontWeight.w500),
         ),
         centerTitle: false,
+        titleSpacing: 16,
         automaticallyImplyLeading: !isTab,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
         actions: [
           NotificationIconButton(),
           GoBussinessButton(),
         ],
       ),
-      body: Stack(
+      body: Column(
         children: [
-          currentLinks.isEmpty
-              ? Center(
-                  child: Text(
-                    context.l10n.noLinksAddedYetNTapAddLinkToGetStarted,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: isDark ? Colors.white54 : Colors.black45,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+          Expanded(
+            child: currentLinks.isEmpty
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        context.l10n.noLinksAddedYetNTapAddLinkToGetStarted,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: isDark ? Colors.white54 : Colors.black45,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.only(top: 8, bottom: 16),
+                    itemCount: currentLinks.length,
+                    itemBuilder: (context, index) {
+                      final link = currentLinks[index];
+                      return _buildLinkTile(
+                        context,
+                        link,
+                        profileProvider,
+                        isDark,
+                      );
+                    },
                   ),
-                )
-              : ListView.builder(
-                  padding: EdgeInsets.only(top: 8, bottom: 100),
-                  itemCount: currentLinks.length,
-                  itemBuilder: (context, index) {
-                    final link = currentLinks[index];
-                    return _buildLinkTile(
-                      context,
-                      link,
-                      profileProvider,
-                      isDark,
-                    );
-                  },
-                ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 110.0, left: 15, right: 15),
-            child: Align(
-              alignment: AlignmentDirectional.bottomEnd,
+          ),
+          Material(
+            color: theme.scaffoldBackgroundColor,
+            child: Padding(
+              // Clear MainShell center-docked profile FAB (~80px).
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 56),
               child: CustomAppButton(
                 width: double.infinity,
                 text: context.l10n.addLink2,
                 icon: Icons.add,
                 backgroundColor: AppTheme.primaryBlack,
                 onTap: () {
-                  LinkSheet().showAddLinkBottomSheet(context, profileProvider);
+                  LinkSheet().showAddLinkBottomSheet(
+                    context,
+                    profileProvider,
+                  );
                 },
               ),
             ),

@@ -13,9 +13,13 @@ class WaUi {
   static const Color divider = Color(0xFFE9EDEF);
   static const Color accent = Color(0xFF25D366);
   static const Color chipBg = Color(0xFFE7FCE3);
+  static const Color chipSelected = Color(0xFFE9EDEF);
+  static const Color chipBorder = Color(0xFFD1D7DB);
+  static const Color searchBg = Color(0xFFF0F2F5);
   static const Color promoIconBg = Color(0xFFE7F3FF);
   static const Color promoIconFg = Color(0xFF54656F);
   static const Color buttonDark = Color(0xFF111B21);
+  static const Color readCheck = Color(0xFF53BDEB);
 
   static const double radiusSm = 10;
   static const double radiusMd = 14;
@@ -41,12 +45,12 @@ class WaUi {
     );
   }
 
-  /// Tools screen title — large bold left header.
+  /// Tools / chats screen title — large bold left header (WhatsApp-style).
   static TextStyle get toolsTitle => _style(
-        size: 28,
+        size: 26,
         weight: FontWeight.w700,
         height: 1.15,
-        letterSpacing: -0.3,
+        letterSpacing: -0.2,
       );
 
   static TextStyle get sectionHeader => _style(
@@ -145,8 +149,8 @@ class WaUi {
 
   /// Chats / contacts list row.
   static TextStyle get chatName => _style(
-        size: 17,
-        weight: FontWeight.w500,
+        size: 16.5,
+        weight: FontWeight.w600,
         height: 1.2,
       );
 

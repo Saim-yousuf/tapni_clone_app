@@ -377,7 +377,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
-          Image.asset('assets/images/jpg/barqody_name.jpg', width: 120),
+          Image.asset('assets/images/jpg/barqody_name.png', width: 120),
           SizedBox(height: 20),
           _buildProfileAvatar(profile, displayPhoto, displayCover),
           SizedBox(height: 20),

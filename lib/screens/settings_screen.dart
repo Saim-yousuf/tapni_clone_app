@@ -5,9 +5,6 @@ import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/attendance/business/attendance_dashboard_screen.dart';
-import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
-import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
-import 'package:tapni_app/screens/attendance/employee/mark_attendance_screen.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/screens/linked_devices/account_switcher_sheet.dart';
@@ -23,8 +20,9 @@ import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/notifications_screen.dart';
 import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/screens/qr_code_screen.dart';
+import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/screens/set_username_screen.dart';
-import 'package:tapni_app/screens/social_links_screen.dart';
+import 'package:tapni_app/screens/workplace_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/settings_widget.dart';
@@ -196,8 +194,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.only(bottom: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             WaToolsHeader(
               title: context.l10n.tools,
@@ -244,7 +242,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.only(bottom: 24),
+                children: [
             if (!profile.isPro && !_promoDismissed) ...[
               WaSectionHeader(context.l10n.forYou),
               WaForYouCard(
@@ -288,16 +289,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
             WaToolsListTile(
-              icon: Icons.link,
-              title: context.l10n.socialLinks,
-              subtitle: context.l10n.socialLinksSubtitle,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => SocialLinksScreen()),
-                );
-              },
-            ),
-            WaToolsListTile(
               icon: profile.isPublic
                   ? Icons.public_outlined
                   : Icons.lock_outline,
@@ -324,11 +315,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icons.qr_code_2_outlined,
               title: context.l10n.shareQr,
               subtitle: context.l10n.shareQrSubtitle,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => QrCodeScreen()),
-                );
-              },
+              onTap: () => SharingProfileSheet.show(context),
             ),
 
             WaSectionHeader(context.l10n.shoppingRewards),
@@ -359,41 +346,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             WaSectionHeader(context.l10n.workplace),
             WaToolsListTile(
-              icon: Icons.mail_outline,
-              title: context.l10n.employeeInvitations,
-              subtitle: context.l10n.employeeInvitationsSubtitle,
+              icon: Icons.work_outline,
+              title: context.l10n.workplace,
+              subtitle:
+                  '${context.l10n.employeeInvitations}, ${context.l10n.workplaceCheckIn}, ${context.l10n.companyEmployeeCard}',
               showBadge: _pendingInvitationCount > 0,
               onTap: () async {
                 await Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => EmployeeInvitationsScreen(),
+                    builder: (_) => const WorkplaceScreen(),
                   ),
                 );
                 _loadPendingInvitations();
-              },
-            ),
-            WaToolsListTile(
-              icon: Icons.fact_check_outlined,
-              title: context.l10n.workplaceCheckIn,
-              subtitle: context.l10n.workplaceCheckInSubtitle,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => MarkAttendanceScreen(),
-                  ),
-                );
-              },
-            ),
-            WaToolsListTile(
-              icon: Icons.badge_outlined,
-              title: context.l10n.companyEmployeeCard,
-              subtitle: context.l10n.saveYourWorkIDCardToPhoneOrWallet,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => EmployeeBusinessCardsScreen(),
-                  ),
-                );
               },
             ),
 
@@ -520,6 +484,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SizedBox(height: 24),
             Center(
               child: Text(context.l10n.barqodyV100, style: WaUi.label),
+            ),
+                ],
+              ),
             ),
           ],
         ),
