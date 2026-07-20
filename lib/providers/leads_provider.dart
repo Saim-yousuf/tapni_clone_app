@@ -37,6 +37,8 @@ class LeadsProvider extends ChangeNotifier {
   final List<Activity> _activities = [];
 
   // ── Filtered leads ──────────────────────────────────────────────────────────
+  List<Lead> get allLeads => List.unmodifiable(_leads);
+
   List<Lead> get leads {
     List<Lead> filtered = _leads;
 

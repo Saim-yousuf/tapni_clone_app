@@ -68,7 +68,6 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
-    final leadsProvider = Provider.of<LeadsProvider>(context);
     final isEditing = profileProvider.isEditingProfile;
     final profile = profileProvider.profile;
 
@@ -118,7 +117,6 @@ class _MainShellState extends State<MainShell> {
                   selectedIcon: Icons.storefront,
                   label: context.l10n.tools,
                   selected: _currentPage == 'Settings',
-                  showDot: leadsProvider.unreadNotificationsCount > 0,
                   onTap: () => _switchTab('Settings'),
                 ),
               ],

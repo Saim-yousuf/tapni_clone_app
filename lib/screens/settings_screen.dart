@@ -13,6 +13,7 @@ import 'package:tapni_app/l10n/app_languages.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/screens/app_language_screen.dart';
+import 'package:tapni_app/screens/invitations/invitations_home_screen.dart';
 import 'package:tapni_app/screens/phone_auth_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
@@ -186,6 +187,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final leadsProvider = Provider.of<LeadsProvider>(context);
     final localeProvider = Provider.of<LocaleProvider>(context);
     final orderBadge = _catalogOrderBadge(leadsProvider);
+    final unreadCount = leadsProvider.unreadNotificationsCount;
     final languageSubtitle = localeProvider.isSystemLanguage
         ? context.l10n.phoneLanguage
         : (localeProvider.selectedLanguage?.displayName ??
@@ -316,6 +318,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: context.l10n.shareQr,
               subtitle: context.l10n.shareQrSubtitle,
               onTap: () => SharingProfileSheet.show(context),
+            ),
+            WaToolsListTile(
+              icon: Icons.mark_email_unread_outlined,
+              title: 'Invitations',
+              subtitle: 'Send and manage contact invitations',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const InvitationsHomeScreen(),
+                  ),
+                );
+              },
+            ),
+            WaToolsListTile(
+              icon: Icons.notifications_outlined,
+              title: context.l10n.notifications,
+              subtitle: unreadCount > 0
+                  ? '$unreadCount unread'
+                  : context.l10n.noNewNotificationsAtThisTime,
+              showBadge: unreadCount > 0,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const NotificationsScreen(),
+                  ),
+                );
+              },
             ),
 
             WaSectionHeader(context.l10n.shoppingRewards),

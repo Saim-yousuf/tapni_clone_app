@@ -63,6 +63,11 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
   bool _picking = false;
   bool _downloading = false;
 
+  bool get _hasWallpaper =>
+      _coverFile != null ||
+      (widget.draft.existingCoverUrl != null &&
+          widget.draft.existingCoverUrl!.isNotEmpty);
+
   @override
   void initState() {
     super.initState();
@@ -96,6 +101,16 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
       ..eventAt = _eventAt
       ..themeColor = _themeColor
       ..coverImageFile = _coverFile;
+  }
+
+  bool _requireTitle() {
+    if (_titleController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Title is required')),
+      );
+      return false;
+    }
+    return true;
   }
 
   Future<void> _pickDateTime() async {
@@ -135,19 +150,26 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
         _coverFile = picked.file;
         widget.draft.coverImageFile = picked.file;
         widget.draft.coverImageBase64 = base64;
+        widget.draft.clearCoverImage = false;
+        widget.draft.existingCoverUrl = null;
       });
     } finally {
       if (mounted) setState(() => _picking = false);
     }
   }
 
+  void _removeWallpaper() {
+    setState(() {
+      _coverFile = null;
+      widget.draft.coverImageFile = null;
+      widget.draft.coverImageBase64 = null;
+      widget.draft.existingCoverUrl = null;
+      widget.draft.clearCoverImage = true;
+    });
+  }
+
   void _continue() {
-    if (_titleController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Title is required')),
-      );
-      return;
-    }
+    if (!_requireTitle()) return;
     _syncDraft();
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -158,12 +180,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
 
   Future<void> _downloadCard() async {
     if (_downloading) return;
-    if (_titleController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Add a title before downloading')),
-      );
-      return;
-    }
+    if (!_requireTitle()) return;
 
     final format = await showModalBottomSheet<String>(
       context: context,
@@ -215,12 +232,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
   }
 
   Future<void> _saveDraft() async {
-    if (_titleController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Title is required')),
-      );
-      return;
-    }
+    if (!_requireTitle()) return;
     _syncDraft();
     final draft = widget.draft;
     final provider = context.read<InvitationProvider>();
@@ -233,6 +245,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
       eventAt: draft.eventAt,
       themeColor: draft.themeColor,
       coverImageBase64: draft.coverImageBase64,
+      clearCoverImage: draft.clearCoverImage,
       recipientIds: const [],
       saveAsDraft: true,
       showFeedback: false,
@@ -241,6 +254,9 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
     );
     if (invitation != null && mounted) {
       draft.invitationId = invitation.id;
+      draft.clearCoverImage = false;
+      draft.existingCoverUrl =
+          invitation.coverImage.isEmpty ? null : invitation.coverImage;
       finishInvitationFlow(
         context,
         message: 'Draft saved successfully',
@@ -251,21 +267,24 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isEdit =
+        widget.fromDraftList || widget.draft.invitationId != null;
+    final isSending = context.watch<InvitationProvider>().isSending;
+
     return Scaffold(
       backgroundColor: WaUi.scaffold,
       appBar: AppBar(
         backgroundColor: WaUi.surface,
         elevation: 0,
+        scrolledUnderElevation: 0,
         foregroundColor: WaUi.primaryText,
         title: Text(
-          widget.fromDraftList || widget.draft.invitationId != null
-              ? 'Edit draft'
-              : 'Customize card',
+          isEdit ? 'Edit invitation' : 'Customize card',
           style: WaUi.sectionHeader,
         ),
         actions: [
           IconButton(
-            tooltip: 'Download card',
+            tooltip: 'Download',
             onPressed: _downloading ? null : _downloadCard,
             icon: _downloading
                 ? const SizedBox(
@@ -277,306 +296,405 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-        children: [
-          Text('Live preview', style: WaUi.bodyMedium),
-          const SizedBox(height: 10),
-          RepaintBoundary(
-            key: _cardKey,
-            child: InvitationCardPreview(
-              type: _type,
-              title: _titleController.text.trim(),
-              message: _messageController.text.trim(),
-              venue: _venueController.text.trim(),
-              address: _addressController.text.trim(),
-              eventAt: _eventAt,
-              themeColor: _themeColor,
-              coverImageFile: _coverFile,
-              coverImageUrl: _coverFile == null
-                  ? widget.draft.existingCoverUrl
-                  : null,
-              invitationId: widget.draft.invitationId,
-              isPreview: true,
-            ),
-          ),
-          const SizedBox(height: 12),
-          OutlinedButton.icon(
-            onPressed: _downloading ? null : _downloadCard,
-            icon: const Icon(Icons.download_rounded, size: 18),
-            label: Text(
-              _downloading ? 'Saving...' : 'Download card (PNG / JPG)',
-            ),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: WaUi.primaryText,
-              side: const BorderSide(color: WaUi.divider),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-          const SizedBox(height: 28),
-
-          _sectionTitle('Event type'),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _types.map((type) {
-              final selected = _type == type;
-              return ChoiceChip(
-                label: Text(EventInvitation.typeLabel(type)),
-                selected: selected,
-                onSelected: (_) => setState(() => _type = type),
-                selectedColor: WaUi.chipBg,
-                labelStyle: WaUi.caption.copyWith(
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                ),
-                backgroundColor: WaUi.surface,
-                side: BorderSide(
-                  color: selected ? WaUi.accent : WaUi.divider,
-                ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 20),
-
-          _sectionTitle('Details'),
-          const SizedBox(height: 10),
-          TextFormField(
-            controller: _titleController,
-            decoration: _decoration('Event title *'),
-            onChanged: (_) => setState(() {}),
-          ),
-          const SizedBox(height: 12),
-          TextFormField(
-            controller: _venueController,
-            decoration: _decoration('Venue / place name'),
-            onChanged: (_) => setState(() {}),
-          ),
-          const SizedBox(height: 12),
-          TextFormField(
-            controller: _addressController,
-            maxLines: 3,
-            decoration: _decoration(
-              'Full address',
-              hint: 'Shown on the invitation card',
-            ),
-            onChanged: (_) => setState(() {}),
-          ),
-          const SizedBox(height: 12),
-          InkWell(
-            onTap: _pickDateTime,
-            borderRadius: BorderRadius.circular(12),
-            child: InputDecorator(
-              decoration: _decoration('Date & time'),
-              child: Text(
-                _eventAt == null
-                    ? 'Select date & time'
-                    : '${MaterialLocalizations.of(context).formatFullDate(_eventAt!)} · ${TimeOfDay.fromDateTime(_eventAt!).format(context)}',
-                style: WaUi.body.copyWith(
-                  color: _eventAt == null
-                      ? WaUi.secondaryText
-                      : WaUi.primaryText,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          TextFormField(
-            controller: _messageController,
-            maxLines: 4,
-            decoration: _decoration('Message / note'),
-            onChanged: (_) => setState(() {}),
-          ),
-          const SizedBox(height: 24),
-
-          _sectionTitle('Theme color'),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: _themes.map((hex) {
-              final selected = _themeColor == hex;
-              final color = invitationColorFromHex(hex);
-              return GestureDetector(
-                onTap: () => setState(() => _themeColor = hex),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: selected ? WaUi.primaryText : Colors.transparent,
-                      width: 2.5,
-                    ),
-                    boxShadow: selected
-                        ? [
-                            BoxShadow(
-                              color: color.withValues(alpha: 0.45),
-                              blurRadius: 8,
-                            ),
-                          ]
+      body: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                children: [
+                // Preview
+                RepaintBoundary(
+                  key: _cardKey,
+                  child: InvitationCardPreview(
+                    type: _type,
+                    title: _titleController.text.trim(),
+                    message: _messageController.text.trim(),
+                    venue: _venueController.text.trim(),
+                    address: _addressController.text.trim(),
+                    eventAt: _eventAt,
+                    themeColor: _themeColor,
+                    coverImageFile: _coverFile,
+                    coverImageUrl: _coverFile == null
+                        ? widget.draft.existingCoverUrl
                         : null,
+                    invitationId: widget.draft.invitationId,
+                    isPreview: true,
                   ),
-                  child: selected
-                      ? const Icon(Icons.check, color: Colors.white, size: 18)
-                      : null,
                 ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 24),
+                const SizedBox(height: 12),
 
-          _sectionTitle('Cover image'),
-          const SizedBox(height: 12),
-          if (_coverFile != null ||
-              (widget.draft.existingCoverUrl != null &&
-                  widget.draft.existingCoverUrl!.isNotEmpty)) ...[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: _coverFile != null
-                  ? Image.file(
-                      _coverFile!,
-                      height: 120,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    )
-                  : Image.network(
-                      widget.draft.existingCoverUrl!,
-                      height: 120,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
-                        height: 120,
-                        color: WaUi.navPill,
+                // Design
+                _Section(
+                  title: 'Design',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Theme', style: WaUi.label),
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: _themes.map((hex) {
+                          final selected = _themeColor == hex;
+                          final color = invitationColorFromHex(hex);
+                          return GestureDetector(
+                            onTap: () => setState(() => _themeColor = hex),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 150),
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: color,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: selected
+                                      ? WaUi.primaryText
+                                      : Colors.transparent,
+                                  width: 2,
+                                ),
+                              ),
+                              child: selected
+                                  ? const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 16,
+                                    )
+                                  : null,
+                            ),
+                          );
+                        }).toList(),
                       ),
-                    ),
-            ),
-            const SizedBox(height: 10),
-          ],
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _picking ? null : _pickCover,
-                  icon: _picking
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.image_outlined),
-                  label: Text(
-                    (_coverFile != null ||
-                            widget.draft.existingCoverUrl != null)
-                        ? 'Change'
-                        : 'Add cover',
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: WaUi.primaryText,
-                    side: const BorderSide(color: WaUi.divider),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                      const SizedBox(height: 18),
+                      Text('Wallpaper', style: WaUi.label),
+                      const SizedBox(height: 10),
+                      _WallpaperTile(
+                        hasImage: _hasWallpaper,
+                        picking: _picking,
+                        preview: _coverFile != null
+                            ? Image.file(
+                                _coverFile!,
+                                fit: BoxFit.cover,
+                              )
+                            : (widget.draft.existingCoverUrl != null
+                                ? Image.network(
+                                    widget.draft.existingCoverUrl!,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) =>
+                                        const SizedBox.shrink(),
+                                  )
+                                : null),
+                        onPick: _pickCover,
+                        onRemove: _hasWallpaper ? _removeWallpaper : null,
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              if (_coverFile != null ||
-                  widget.draft.existingCoverUrl != null) ...[
-                const SizedBox(width: 10),
-                OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      _coverFile = null;
-                      widget.draft.coverImageFile = null;
-                      widget.draft.coverImageBase64 = null;
-                      widget.draft.existingCoverUrl = null;
-                    });
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.redAccent,
-                    side: const BorderSide(color: WaUi.divider),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 14,
-                      horizontal: 16,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                const SizedBox(height: 12),
+
+                // Type
+                _Section(
+                  title: 'Event type',
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _types.map((type) {
+                      final selected = _type == type;
+                      return ChoiceChip(
+                        label: Text(EventInvitation.typeLabel(type)),
+                        selected: selected,
+                        onSelected: (_) => setState(() => _type = type),
+                        selectedColor: WaUi.chipBg,
+                        showCheckmark: false,
+                        labelStyle: WaUi.caption.copyWith(
+                          color: WaUi.primaryText,
+                          fontWeight:
+                              selected ? FontWeight.w600 : FontWeight.w500,
+                        ),
+                        backgroundColor: WaUi.scaffold,
+                        side: BorderSide(
+                          color: selected ? WaUi.accent : WaUi.divider,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        visualDensity: VisualDensity.compact,
+                      );
+                    }).toList(),
                   ),
-                  child: const Text('Remove'),
+                ),
+                const SizedBox(height: 12),
+
+                // Details
+                _Section(
+                  title: 'Details',
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _titleController,
+                        decoration: _field('Title', required: true),
+                        onChanged: (_) => setState(() {}),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _venueController,
+                        decoration: _field('Venue'),
+                        onChanged: (_) => setState(() {}),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _addressController,
+                        maxLines: 2,
+                        decoration: _field(
+                          'Address',
+                          hint: 'Shown on the card',
+                        ),
+                        onChanged: (_) => setState(() {}),
+                      ),
+                      const SizedBox(height: 12),
+                      InkWell(
+                        onTap: _pickDateTime,
+                        borderRadius: BorderRadius.circular(12),
+                        child: InputDecorator(
+                          decoration: _field('Date & time'),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  _eventAt == null
+                                      ? 'Optional'
+                                      : '${MaterialLocalizations.of(context).formatMediumDate(_eventAt!)} · ${TimeOfDay.fromDateTime(_eventAt!).format(context)}',
+                                  style: WaUi.body.copyWith(
+                                    color: _eventAt == null
+                                        ? WaUi.secondaryText
+                                        : WaUi.primaryText,
+                                  ),
+                                ),
+                              ),
+                              const Icon(
+                                Icons.calendar_today_outlined,
+                                size: 18,
+                                color: WaUi.secondaryText,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _messageController,
+                        maxLines: 3,
+                        decoration: _field('Message', hint: 'Optional note'),
+                        onChanged: (_) => setState(() {}),
+                      ),
+                    ],
+                  ),
                 ),
               ],
-            ],
-          ),
-          const SizedBox(height: 28),
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: OutlinedButton.icon(
-              onPressed: context.watch<InvitationProvider>().isSending
-                  ? null
-                  : _saveDraft,
-              icon: const Icon(Icons.save_outlined, size: 18),
-              label: Text(
-                widget.draft.invitationId != null
-                    ? 'Update draft'
-                    : 'Save draft',
-              ),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: WaUi.primaryText,
-                side: const BorderSide(color: WaUi.divider),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
             ),
           ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: ElevatedButton(
-              onPressed: _continue,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: WaUi.buttonDark,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+          _BottomBar(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: isSending ? null : _continue,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: WaUi.buttonDark,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('Select contacts & send'),
+                  ),
                 ),
-              ),
-              child: const Text('Select contacts & send'),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  height: 44,
+                  child: TextButton(
+                    onPressed: isSending ? null : _saveDraft,
+                    style: TextButton.styleFrom(
+                      foregroundColor: WaUi.secondaryText,
+                    ),
+                    child: Text(
+                      widget.draft.invitationId != null
+                          ? 'Update draft'
+                          : 'Save as draft',
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
+        ),
       ),
     );
   }
 
-  Widget _sectionTitle(String text) => Text(text, style: WaUi.bodyMedium);
-
-  InputDecoration _decoration(String label, {String? hint}) {
+  InputDecoration _field(String label, {String? hint, bool required = false}) {
     return InputDecoration(
-      labelText: label,
+      labelText: required ? '$label *' : label,
       hintText: hint,
       filled: true,
-      fillColor: WaUi.surface,
+      fillColor: WaUi.scaffold,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       alignLabelWithHint: true,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: WaUi.divider),
+        borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: WaUi.divider),
+        borderSide: BorderSide.none,
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: WaUi.accent, width: 1.5),
       ),
+    );
+  }
+}
+
+class _Section extends StatelessWidget {
+  final String title;
+  final Widget child;
+
+  const _Section({required this.title, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+      decoration: BoxDecoration(
+        color: WaUi.surface,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: WaUi.bodyMedium),
+          const SizedBox(height: 12),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+class _WallpaperTile extends StatelessWidget {
+  final bool hasImage;
+  final bool picking;
+  final Widget? preview;
+  final VoidCallback onPick;
+  final VoidCallback? onRemove;
+
+  const _WallpaperTile({
+    required this.hasImage,
+    required this.picking,
+    required this.preview,
+    required this.onPick,
+    this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: WaUi.scaffold,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: picking ? null : onPick,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          height: 72,
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  width: 52,
+                  height: 52,
+                  child: hasImage && preview != null
+                      ? preview
+                      : ColoredBox(
+                          color: WaUi.divider,
+                          child: Icon(
+                            Icons.wallpaper_rounded,
+                            size: 22,
+                            color: WaUi.secondaryText,
+                          ),
+                        ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      hasImage ? 'Wallpaper selected' : 'Add wallpaper',
+                      style: WaUi.bodyMedium,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Fills the full card background',
+                      style: WaUi.label,
+                    ),
+                  ],
+                ),
+              ),
+              if (picking)
+                const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              else if (onRemove != null)
+                IconButton(
+                  onPressed: onRemove,
+                  icon: const Icon(Icons.close_rounded, size: 20),
+                  color: WaUi.secondaryText,
+                  visualDensity: VisualDensity.compact,
+                  tooltip: 'Remove',
+                )
+              else
+                const Icon(
+                  Icons.add_rounded,
+                  color: WaUi.secondaryText,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomBar extends StatelessWidget {
+  final Widget child;
+
+  const _BottomBar({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+      decoration: const BoxDecoration(
+        color: WaUi.surface,
+        border: Border(top: BorderSide(color: WaUi.divider)),
+      ),
+      child: child,
     );
   }
 }

@@ -168,6 +168,7 @@ class InvitationProvider extends ChangeNotifier {
     DateTime? eventAt,
     String themeColor = '#E85D2A',
     String? coverImageBase64,
+    bool clearCoverImage = false,
     List<String> recipientIds = const [],
     bool saveAsDraft = false,
     bool showFeedback = true,
@@ -198,7 +199,9 @@ class InvitationProvider extends ChangeNotifier {
         'saveAsDraft': saveAsDraft,
         if (eventAt != null) 'eventAt': eventAt.toUtc().toIso8601String(),
         if (coverImageBase64 != null && coverImageBase64.isNotEmpty)
-          'coverImage': coverImageBase64,
+          'coverImage': coverImageBase64
+        else if (clearCoverImage)
+          'coverImage': '',
       };
 
       final response = invitationId != null && invitationId.isNotEmpty

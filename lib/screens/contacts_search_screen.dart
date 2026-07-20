@@ -160,10 +160,27 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
       if (PhoneUtils.isValid(phone)) leadPhones.add(phone);
     }
 
+    final me = context.read<ProfileProvider>().profile;
+    final myId = me.id?.trim() ?? '';
+    final myUsername = me.username?.trim().toLowerCase() ?? '';
+    final myPhone = PhoneUtils.normalize(me.phone);
+
     final q = _query;
     return _deviceContacts.where((c) {
       if (c.isOnBarqody != onBarqody) return false;
       if (leadPhones.contains(c.phone)) return false;
+
+      // Don't list the signed-in user as a contact match.
+      if (myPhone.isNotEmpty && c.phone == myPhone) return false;
+      final matched = c.matchedUser;
+      if (matched != null) {
+        if (myId.isNotEmpty && matched.userId == myId) return false;
+        if (myUsername.isNotEmpty &&
+            matched.username.trim().toLowerCase() == myUsername) {
+          return false;
+        }
+      }
+
       if (q.isEmpty) return true;
       return c.displayName.toLowerCase().contains(q) ||
           c.phone.contains(q) ||

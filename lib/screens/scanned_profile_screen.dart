@@ -15,8 +15,10 @@ import 'package:tapni_app/screens/attendance/business/employee_settings_screen.d
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/screens/main_shell.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+
 Map<String, dynamic> _unwrapApiPayload(dynamic data) {
   if (data is Map<String, dynamic>) {
     final inner = data['data'];
@@ -63,9 +65,61 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     _checkBusinessPrograms();
   }
 
+  bool _isOwnProfile(UserProfile profile) {
+    final me = Provider.of<ProfileProvider>(context, listen: false).profile;
+    final myId = me.id?.trim();
+    final theirId = profile.id?.trim();
+    if (myId != null &&
+        myId.isNotEmpty &&
+        theirId != null &&
+        theirId.isNotEmpty &&
+        myId == theirId) {
+      return true;
+    }
+
+    final myUsername = me.username?.trim().toLowerCase();
+    final theirUsername = profile.username?.trim().toLowerCase();
+    if (myUsername != null &&
+        myUsername.isNotEmpty &&
+        theirUsername != null &&
+        theirUsername.isNotEmpty &&
+        myUsername == theirUsername) {
+      return true;
+    }
+
+    final argUsername = widget.username?.trim().toLowerCase();
+    if (myUsername != null &&
+        myUsername.isNotEmpty &&
+        argUsername != null &&
+        argUsername.isNotEmpty &&
+        myUsername == argUsername) {
+      return true;
+    }
+
+    final argUserId = widget.user?.trim();
+    if (myId != null &&
+        myId.isNotEmpty &&
+        argUserId != null &&
+        argUserId.isNotEmpty &&
+        myId == argUserId) {
+      return true;
+    }
+
+    return false;
+  }
+
+  void _openMyCard() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const MainShell()),
+      (route) => false,
+    );
+  }
+
   Future<void> _loadCustomerEnrollmentStatus(String customerId) async {
-    final isBusinessUser =
-        Provider.of<ProfileProvider>(context, listen: false).isProUser;
+    final isBusinessUser = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).isProUser;
     if (!isBusinessUser) {
       if (mounted) setState(() => _enrollmentStatusChecked = true);
       return;
@@ -94,8 +148,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   }
 
   Future<void> _loadEmployeeStatus(String employeeUserId) async {
-    final isBusinessUser =
-        Provider.of<ProfileProvider>(context, listen: false).isProUser;
+    final isBusinessUser = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).isProUser;
     if (!isBusinessUser) {
       if (mounted) setState(() => _employeeStatusChecked = true);
       return;
@@ -141,8 +197,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   }
 
   Future<void> _checkBusinessPrograms() async {
-    final isBusinessUser =
-        Provider.of<ProfileProvider>(context, listen: false).isProUser;
+    final isBusinessUser = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).isProUser;
     if (!isBusinessUser) {
       if (mounted) setState(() => _programsChecked = true);
       return;
@@ -203,11 +261,19 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             }
           }
         }
+        final isOwn = _isOwnProfile(profile);
         setState(() {
           _profile = profile;
           _scannedCard = scannedCard;
           _isLoading = false;
+          if (isOwn) {
+            _programsChecked = true;
+            _enrollmentStatusChecked = true;
+            _employeeStatusChecked = true;
+          }
         });
+        if (isOwn) return;
+
         if (profile.id != null) {
           _loadCustomerEnrollmentStatus(profile.id!);
           _loadEmployeeStatus(profile.id!);
@@ -263,8 +329,14 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       return SizedBox.shrink();
     }
 
-    final isBusinessUser =
-        Provider.of<ProfileProvider>(context, listen: false).isProUser;
+    if (_isOwnProfile(_profile!)) {
+      return SizedBox.shrink();
+    }
+
+    final isBusinessUser = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).isProUser;
     if (!isBusinessUser || !_employeeStatusChecked || _profile!.id == null) {
       return SizedBox.shrink();
     }
@@ -287,35 +359,35 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
               _isEmployee
                   ? Icons.badge_outlined
                   : _isPendingEmployee
-                      ? Icons.hourglass_top_outlined
-                      : Icons.person_add_alt_1_outlined,
+                  ? Icons.hourglass_top_outlined
+                  : Icons.person_add_alt_1_outlined,
               color: _isEmployee
                   ? Colors.green.shade700
                   : _isPendingEmployee
-                      ? Colors.orange.shade800
-                      : Colors.black87,
+                  ? Colors.orange.shade800
+                  : Colors.black87,
             ),
             title: Text(
               _isEmployee
                   ? context.l10n.alreadyEmployee
                   : _isPendingEmployee
-                      ? context.l10n.invitationPending
-                      : context.l10n.inviteAsEmployee,
+                  ? context.l10n.invitationPending
+                  : context.l10n.inviteAsEmployee,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: _isEmployee
                     ? Colors.green.shade700
                     : _isPendingEmployee
-                        ? Colors.orange.shade800
-                        : Colors.black87,
+                    ? Colors.orange.shade800
+                    : Colors.black87,
               ),
             ),
             subtitle: Text(
               _isEmployee
                   ? context.l10n.thisPersonIsOnYourTeam
                   : _isPendingEmployee
-                      ? context.l10n.waitingForThemToAccept
-                      : context.l10n.sendInvitationForAttendance,
+                  ? context.l10n.waitingForThemToAccept
+                  : context.l10n.sendInvitationForAttendance,
               style: TextStyle(fontSize: 12),
             ),
           ),
@@ -331,11 +403,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.person_off_outlined,
-              size: 48,
-              color: Colors.black38,
-            ),
+            Icon(Icons.person_off_outlined, size: 48, color: Colors.black38),
             SizedBox(height: 16),
             Text(
               _errorMessage!,
@@ -354,30 +422,38 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   }
 
   Widget _buildProfileView(UserProfile profile) {
-    final isBusinessUser =
-        Provider.of<ProfileProvider>(context, listen: false).isProUser;
+    final isOwn = _isOwnProfile(profile);
+    final isBusinessUser = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).isProUser;
     final card = _scannedCard;
     final displayName = card?.displayName.isNotEmpty == true
         ? card!.displayName
         : profile.name;
-    final displayBio = card?.bio?.isNotEmpty == true
-        ? card!.bio!
-        : profile.bio;
+    final displayBio = card?.bio?.isNotEmpty == true ? card!.bio! : profile.bio;
     final displayPhoto = card?.profilePhotoUrl ?? profile.profilePhotoUrl;
     final displayCover = card?.coverPhotoUrl ?? profile.coverPhotoUrl;
-    final showRewardsButton = _programsChecked &&
+    final showRewardsButton =
+        !isOwn &&
+        _programsChecked &&
         _enrollmentStatusChecked &&
         isBusinessUser &&
         _hasActivePrograms &&
         profile.id != null;
-    final rewardButtonLabel =
-        _isCustomerEnrolledInBusiness ? 'Enrolled' : context.l10n.notEnrolled;
+    final rewardButtonLabel = _isCustomerEnrolledInBusiness
+        ? 'Enrolled'
+        : context.l10n.notEnrolled;
 
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
-          Image.asset('assets/images/jpg/barqody_name.png', width: 120),
+          Image.asset(
+            'assets/images/png/barqody_name.png',
+            height: 100,
+            fit: BoxFit.cover,
+          ),
           SizedBox(height: 20),
           _buildProfileAvatar(profile, displayPhoto, displayCover),
           SizedBox(height: 20),
@@ -394,61 +470,111 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             ),
           ],
           SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FilledButton.icon(
-                onPressed: () async {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(context.l10n.exchangingContact)),
-                  );
-                  final res = await AuthRepo().exchangeContact(
-                    username: widget.username,
-                    id: widget.user,
-                  );
-                  if (mounted) {
-                    if (res.success) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(context.l10n.contactExchangedSuccessfully),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            res.message ?? context.l10n.failedToExchangeContact,
-                          ),
-                        ),
-                      );
-                    }
-                  }
-                },
-                icon: Icon(Icons.sync_alt),
-                label: Text(context.l10n.exchangeContact),
-                style: FilledButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
+          if (isOwn) ...[
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(16),
               ),
-              if (showRewardsButton) ...[
-                const SizedBox(width: 10),
-                OutlinedButton.icon(
-                  onPressed: () => _showRewardSheet(profile),
-                  icon: Icon(
-                    _isCustomerEnrolledInBusiness
-                        ? Icons.check_circle_outline
-                        : Icons.card_giftcard_outlined,
-                    size: 18,
+              child: Column(
+                children: [
+                  Text(
+                    'This is you',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
                   ),
-                  label: Text(rewardButtonLabel),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: _isCustomerEnrolledInBusiness
-                        ? Colors.green.shade700
-                        : Colors.black,
+                  SizedBox(height: 4),
+                  Text(
+                    'You are viewing your own profile',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 13, color: Colors.black54),
+                  ),
+                  SizedBox(height: 12),
+                  FilledButton.icon(
+                    onPressed: _openMyCard,
+                    icon: Icon(Icons.badge_outlined),
+                    label: Text('Open my card'),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ] else
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FilledButton.icon(
+                  onPressed: () async {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(context.l10n.exchangingContact)),
+                    );
+                    final res = await AuthRepo().exchangeContact(
+                      username: widget.username,
+                      id: widget.user,
+                    );
+                    if (mounted) {
+                      if (res.success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              context.l10n.contactExchangedSuccessfully,
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              res.message ??
+                                  context.l10n.failedToExchangeContact,
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  icon: Icon(Icons.sync_alt),
+                  label: Text(context.l10n.exchangeContact),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
+                  ),
+                ),
+                if (showRewardsButton) ...[
+                  const SizedBox(width: 10),
+                  OutlinedButton.icon(
+                    onPressed: () => _showRewardSheet(profile),
+                    icon: Icon(
+                      _isCustomerEnrolledInBusiness
+                          ? Icons.check_circle_outline
+                          : Icons.card_giftcard_outlined,
+                      size: 18,
+                    ),
+                    label: Text(rewardButtonLabel),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: _isCustomerEnrolledInBusiness
+                          ? Colors.green.shade700
+                          : Colors.black,
                     side: BorderSide(
                       color: _isCustomerEnrolledInBusiness
                           ? Colors.green.shade700
@@ -481,62 +607,57 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   ) {
     final hasCover = coverUrl != null && coverUrl.trim().isNotEmpty;
 
+    final avatar = Container(
+      width: hasCover ? 100 : 130,
+      height: hasCover ? 100 : 130,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF1E2022),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipOval(
+        child: photoUrl != null && photoUrl.trim().isNotEmpty
+            ? Image.network(photoUrl, fit: BoxFit.cover)
+            : Center(
+                child: Text(
+                  profile.name.isNotEmpty
+                      ? profile.name[0].toUpperCase()
+                      : '?',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+      ),
+    );
+
+    // No cover photo: skip the tall empty cover area to avoid white space.
+    if (!hasCover) {
+      return Center(child: avatar);
+    }
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
           height: 220,
           width: double.infinity,
-          color: hasCover ? const Color(0xFFF5F5F5) : Colors.transparent,
-          child: hasCover
-              ? Image.network(coverUrl!, fit: BoxFit.cover)
-              : null,
+          color: const Color(0xFFF5F5F5),
+          child: Image.network(coverUrl!, fit: BoxFit.cover),
         ),
         Positioned(
           bottom: -6,
           left: 0,
           right: 0,
-          child: Column(
-            children: [
-              Container(
-                width: hasCover ? 100 : 130,
-                height: hasCover ? 100 : 130,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey.shade200
-                  // color: const Color(0xFF1E2022),
-
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.black.withOpacity(0.08),
-                  //     blurRadius: 10,
-                  //     offset: const Offset(0, 4),
-                  //   ),
-                  // ],
-                ),
-                child: ClipOval(
-                  child:
-                      photoUrl != null && photoUrl.trim().isNotEmpty
-                      ? Image.network(
-                          photoUrl,
-                          fit: BoxFit.cover,
-                        )
-                      : Center(
-                          child: Text(
-                            profile.name.isNotEmpty
-                                ? profile.name[0].toUpperCase()
-                                : '?',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                ),
-              ),
-            ],
-          ),
+          child: Center(child: avatar),
         ),
       ],
     );
@@ -645,10 +766,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(
-          color: Colors.grey.shade300,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey.shade300, width: 1),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius - 1),
@@ -750,7 +868,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     }
   }
 
-  void _onEnrollmentUpdated(bool isEnrolled, List<RewardEnrollment> enrollments) {
+  void _onEnrollmentUpdated(
+    bool isEnrolled,
+    List<RewardEnrollment> enrollments,
+  ) {
     if (!mounted) return;
     setState(() {
       _isCustomerEnrolledInBusiness = isEnrolled;
@@ -768,7 +889,7 @@ class _RewardSheetContent extends StatefulWidget {
   final RewardRepo repo;
   final ScrollController scrollController;
   final void Function(bool isEnrolled, List<RewardEnrollment> enrollments)?
-      onEnrollmentUpdated;
+  onEnrollmentUpdated;
 
   const _RewardSheetContent({
     required this.customer,
@@ -815,7 +936,9 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? context.l10n.failedToEnrollCustomer)),
+        SnackBar(
+          content: Text(res.message ?? context.l10n.failedToEnrollCustomer),
+        ),
       );
     }
   }
@@ -856,71 +979,73 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: 12),
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(2),
-              ),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 12),
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(2),
             ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  Icon(
-                    _isBusinessEnrolled
-                        ? Icons.check_circle_outline
-                        : Icons.card_giftcard_outlined,
-                    color: _isBusinessEnrolled ? Colors.green.shade700 : null,
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Rewards for ${widget.customer.name}',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                Icon(
+                  _isBusinessEnrolled
+                      ? Icons.check_circle_outline
+                      : Icons.card_giftcard_outlined,
+                  color: _isBusinessEnrolled ? Colors.green.shade700 : null,
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Rewards for ${widget.customer.name}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
-                        Text(
-                          _isBusinessEnrolled ? 'Enrolled' : context.l10n.notEnrolled,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: _isBusinessEnrolled
-                                ? Colors.green.shade700
-                                : Colors.black45,
-                          ),
+                      ),
+                      Text(
+                        _isBusinessEnrolled
+                            ? 'Enrolled'
+                            : context.l10n.notEnrolled,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: _isBusinessEnrolled
+                              ? Colors.green.shade700
+                              : Colors.black45,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            SizedBox(height: 8),
-            Expanded(
-              child: ListView(
-                controller: widget.scrollController,
-                padding: EdgeInsets.fromLTRB(16, 8, 16, 20),
-                children: _isBusinessEnrolled
-                    ? _buildEnrolledContent()
-                    : _buildNotEnrolledContent(),
-              ),
+          ),
+          SizedBox(height: 8),
+          Expanded(
+            child: ListView(
+              controller: widget.scrollController,
+              padding: EdgeInsets.fromLTRB(16, 8, 16, 20),
+              children: _isBusinessEnrolled
+                  ? _buildEnrolledContent()
+                  : _buildNotEnrolledContent(),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -938,7 +1063,8 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(context.l10n.customerIsNotEnrolledYet,
+            Text(
+              context.l10n.customerIsNotEnrolledYet,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 6),
@@ -1033,7 +1159,9 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
             ),
           ),
         ),
-        ..._notEnrolled.map((p) => _availableTile(p, enrollLabel: context.l10n.add)),
+        ..._notEnrolled.map(
+          (p) => _availableTile(p, enrollLabel: context.l10n.add),
+        ),
       ],
       if (_enrollments.isEmpty && _notEnrolled.isEmpty)
         Padding(
@@ -1052,9 +1180,10 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
     final prog = e.program;
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (_) => AddStampScreen(enrollment: e),
-        ));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => AddStampScreen(enrollment: e)),
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
@@ -1063,28 +1192,53 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
           color: prog?.theme.cardBackgroundColor ?? Colors.black,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Row(children: [
-          if (prog?.logo.isNotEmpty == true)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(prog!.logo, width: 36, height: 36, fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const SizedBox()),
+        child: Row(
+          children: [
+            if (prog?.logo.isNotEmpty == true)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  prog!.logo,
+                  width: 36,
+                  height: 36,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => const SizedBox(),
+                ),
+              ),
+            if (prog?.logo.isNotEmpty == true) const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    prog?.title ?? 'Program',
+                    style: TextStyle(
+                      color: prog?.theme.cardTextColor ?? Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '${e.stamps} / ${prog?.stamps ?? '?'} stamps',
+                    style: TextStyle(
+                      color: (prog?.theme.cardTextColor ?? Colors.white)
+                          .withOpacity(0.6),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          if (prog?.logo.isNotEmpty == true) const SizedBox(width: 10),
-          Expanded(child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(prog?.title ?? 'Program',
-                  style: TextStyle(color: prog?.theme.cardTextColor ?? Colors.white, fontWeight: FontWeight.bold)),
-              Text('${e.stamps} / ${prog?.stamps ?? '?'} stamps',
-                  style: TextStyle(color: (prog?.theme.cardTextColor ?? Colors.white).withOpacity(0.6), fontSize: 12)),
-            ],
-          )),
-          if (e.isCompleted)
-            const Icon(Icons.check_circle, color: Colors.green, size: 20)
-          else
-            Icon(Icons.chevron_right, color: (prog?.theme.cardTextColor ?? Colors.white).withOpacity(0.5)),
-        ]),
+            if (e.isCompleted)
+              const Icon(Icons.check_circle, color: Colors.green, size: 20)
+            else
+              Icon(
+                Icons.chevron_right,
+                color: (prog?.theme.cardTextColor ?? Colors.white).withOpacity(
+                  0.5,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -1099,51 +1253,56 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
         border: Border.all(color: Colors.grey.shade200),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(children: [
-        if (program.logo.isNotEmpty)
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              program.logo,
-              width: 36,
-              height: 36,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => const SizedBox(),
+      child: Row(
+        children: [
+          if (program.logo.isNotEmpty)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                program.logo,
+                width: 36,
+                height: 36,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const SizedBox(),
+              ),
+            ),
+          if (program.logo.isNotEmpty) const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  program.title,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '${program.stamps} stamps required',
+                  style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+                ),
+              ],
             ),
           ),
-        if (program.logo.isNotEmpty) const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(program.title, style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(
-                '${program.stamps} stamps required',
-                style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
-              ),
-            ],
-          ),
-        ),
-        isLoading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-            : ElevatedButton(
-                onPressed: () => _enrollProgram(program),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(72, 34),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+          isLoading
+              ? const SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : ElevatedButton(
+                  onPressed: () => _enrollProgram(program),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(72, 34),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: Text(enrollLabel, style: TextStyle(fontSize: 13)),
                 ),
-                child: Text(enrollLabel, style: TextStyle(fontSize: 13)),
-              ),
-      ]),
+        ],
+      ),
     );
   }
 }

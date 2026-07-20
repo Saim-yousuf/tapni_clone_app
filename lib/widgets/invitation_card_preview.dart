@@ -19,6 +19,9 @@ class InvitationDraft {
   String? coverImageBase64;
   String? existingCoverUrl;
 
+  /// When true, save/update must clear cover on the server.
+  bool clearCoverImage;
+
   InvitationDraft({
     this.invitationId,
     this.type = 'birthday',
@@ -31,6 +34,7 @@ class InvitationDraft {
     this.coverImageFile,
     this.coverImageBase64,
     this.existingCoverUrl,
+    this.clearCoverImage = false,
   });
 
   factory InvitationDraft.fromInvitation(EventInvitation inv) {
@@ -57,19 +61,15 @@ Color invitationColorFromHex(String hex) {
 
 Color _lighten(Color c, [double amount = 0.18]) {
   final hsl = HSLColor.fromColor(c);
-  return hsl
-      .withLightness((hsl.lightness + amount).clamp(0.0, 1.0))
-      .toColor();
+  return hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0)).toColor();
 }
 
-Color _darken(Color c, [double amount = 0.12]) {
+Color _darken(Color c, [double amount = 0.18]) {
   final hsl = HSLColor.fromColor(c);
-  return hsl
-      .withLightness((hsl.lightness - amount).clamp(0.0, 1.0))
-      .toColor();
+  return hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0)).toColor();
 }
 
-/// Polished invitation card — address text shows on card when set.
+/// Elegant invitation card — wallpaper fills the full background.
 class InvitationCardPreview extends StatelessWidget {
   final String type;
   final String title;
@@ -144,13 +144,9 @@ class InvitationCardPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primary = invitationColorFromHex(themeColor);
-    final light = _lighten(primary);
-    final dark = _darken(primary);
-    final gradient = LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [light, dark],
-    );
+    final light = _lighten(primary, 0.22);
+    final dark = _darken(primary, 0.22);
+    final mid = _darken(primary, 0.06);
 
     final hasTitle = title.trim().isNotEmpty;
     final hasVenue = venue.trim().isNotEmpty;
@@ -159,360 +155,430 @@ class InvitationCardPreview extends StatelessWidget {
     final hasSender = senderName != null && senderName!.trim().isNotEmpty;
     final hasMessage = message.trim().isNotEmpty;
 
-    final titleStyle = GoogleFonts.playfairDisplay(
-      color: Colors.white,
-      fontSize: 26,
-      fontWeight: FontWeight.w700,
-      height: 1.2,
-    );
-
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFCF9),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: primary.withValues(alpha: 0.12)),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: primary.withValues(alpha: 0.18),
-            blurRadius: 28,
-            offset: const Offset(0, 12),
+            color: dark.withValues(alpha: 0.28),
+            blurRadius: 32,
+            offset: const Offset(0, 14),
           ),
         ],
       ),
       clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Cover / header
-          Stack(
-            children: [
-              if (_hasCover)
-                SizedBox(
-                  height: 150,
-                  width: double.infinity,
-                  child: coverImageFile != null
-                      ? Image.file(coverImageFile!, fit: BoxFit.cover)
-                      : Image.network(
-                          coverImageUrl!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) =>
-                              Container(color: primary),
-                        ),
-                )
-              else
-                Container(
-                  height: 130,
-                  decoration: BoxDecoration(gradient: gradient),
-                ),
-              if (_hasCover)
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.black.withValues(alpha: 0.15),
-                          Colors.black.withValues(alpha: 0.55),
-                        ],
-                      ),
-                    ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 420),
+        child: Stack(
+          children: [
+            // Wallpaper / theme background
+            Positioned.fill(
+              child: _Background(
+                hasCover: _hasCover,
+                file: coverImageFile,
+                url: coverImageUrl,
+                colors: [light, mid, dark],
+              ),
+            ),
+
+            // Soft vignette — keeps photo visible, text readable
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: const [0.0, 0.28, 0.55, 1.0],
+                    colors: [
+                      Colors.black.withValues(alpha: 0.25),
+                      Colors.black.withValues(alpha: 0.15),
+                      Colors.black.withValues(alpha: 0.45),
+                      Colors.black.withValues(alpha: 0.78),
+                    ],
                   ),
-                ),
-              Positioned(
-                left: 18,
-                right: 18,
-                bottom: 16,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        EventInvitation.typeLabel(type).toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 1.1,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      hasTitle ? title.trim() : 'Your event title',
-                      style: titleStyle.copyWith(
-                        color: Colors.white.withValues(alpha: hasTitle ? 1 : 0.5),
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ],
-          ),
+            ),
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (_inviteCode != null) ...[
-                  Text(
-                    'INV · $_inviteCode',
-                    style: TextStyle(
-                      color: dark.withValues(alpha: 0.55),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1,
+            // Subtle theme tint over wallpaper
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      primary.withValues(alpha: 0.12),
+                      Colors.transparent,
+                      dark.withValues(alpha: 0.25),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            // Inner decorative frame
+            Positioned.fill(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.28),
+                      width: 1.2,
                     ),
                   ),
-                  const SizedBox(height: 14),
-                ],
+                ),
+              ),
+            ),
 
-                // Venue + Address block (address text always visible when set)
-                if (hasVenue || hasAddress) ...[
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: primary.withValues(alpha: 0.06),
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: primary.withValues(alpha: 0.12),
-                      ),
+            // Content
+            Padding(
+              padding: const EdgeInsets.fromLTRB(26, 28, 26, 22),
+              child: Column(
+                children: [
+                  Text(
+                    EventInvitation.typeLabel(type).toUpperCase(),
+                    style: GoogleFonts.cormorantGaramond(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 3.2,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Icons.place_rounded, size: 18, color: dark),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Location',
-                              style: TextStyle(
-                                color: dark,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
+                  ),
+                  const SizedBox(height: 8),
+                  _Ornament(color: Colors.white.withValues(alpha: 0.55)),
+                  const SizedBox(height: 14),
+
+                  Text(
+                    hasTitle ? title.trim() : 'Your event title',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.playfairDisplay(
+                      color: Colors.white.withValues(
+                        alpha: hasTitle ? 1 : 0.45,
+                      ),
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      height: 1.15,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withValues(alpha: 0.4),
+                          blurRadius: 12,
+                          offset: const Offset(0, 2),
                         ),
-                        if (hasVenue) ...[
-                          const SizedBox(height: 8),
-                          Text(
-                            venue.trim(),
-                            style: TextStyle(
-                              color: dark,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15,
-                              height: 1.3,
-                            ),
-                          ),
-                        ],
-                        if (hasAddress) ...[
-                          const SizedBox(height: 6),
-                          Text(
-                            address.trim(),
-                            style: TextStyle(
-                              color: Colors.black.withValues(alpha: 0.72),
-                              fontSize: 13,
-                              height: 1.4,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
-                ],
 
-                if (eventAt != null) ...[
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _chip(
-                          icon: Icons.calendar_month_rounded,
-                          label: DateFormat('EEE, MMM d').format(eventAt!.toLocal()),
-                          color: dark,
-                        ),
+                  if (hasGuest) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      'Cordially invites',
+                      style: GoogleFonts.cormorantGaramond(
+                        color: Colors.white.withValues(alpha: 0.75),
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: _chip(
-                          icon: Icons.access_time_rounded,
-                          label: DateFormat('h:mm a').format(eventAt!.toLocal()),
-                          color: dark,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      guestName!.trim(),
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.playfairDisplay(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (guestEmail != null &&
+                        guestEmail!.trim().isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        guestEmail!.trim(),
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.7),
+                          fontSize: 11,
                         ),
                       ),
                     ],
+                  ] else if (isPreview) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      'Guest name appears when they open this invite',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.5),
+                        fontSize: 11,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+
+                  const SizedBox(height: 28),
+
+                  if (eventAt != null) ...[
+                    Text(
+                      DateFormat(
+                        'EEEE',
+                      ).format(eventAt!.toLocal()).toUpperCase(),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.7),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      DateFormat('MMMM d, y').format(eventAt!.toLocal()),
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.playfairDisplay(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      DateFormat('h:mm a').format(eventAt!.toLocal()),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.85),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    _Ornament(color: Colors.white.withValues(alpha: 0.4)),
+                    const SizedBox(height: 14),
+                  ],
+
+                  if (hasVenue || hasAddress) ...[
+                    if (hasVenue)
+                      Text(
+                        venue.trim(),
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.playfairDisplay(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                          height: 1.25,
+                        ),
+                      ),
+                    if (hasAddress) ...[
+                      if (hasVenue) const SizedBox(height: 4),
+                      Text(
+                        address.trim(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.78),
+                          fontSize: 12.5,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 14),
+                  ],
+
+                  if (hasSender) ...[
+                    Text(
+                      'Hosted by ${senderName!.trim()}',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.cormorantGaramond(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+
+                  if (hasMessage) ...[
+                    Text(
+                      '“${message.trim()}”',
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.cormorantGaramond(
+                        color: Colors.white.withValues(alpha: 0.88),
+                        fontSize: 15,
+                        fontStyle: FontStyle.italic,
+                        height: 1.35,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                  ],
+
+                  const SizedBox(height: 20),
+                  _GlassQr(
+                    qrData: _qrData,
+                    qrColor: dark,
+                    inviteCode: _inviteCode,
                   ),
-                  const SizedBox(height: 12),
                 ],
-
-                if (hasSender)
-                  _chip(
-                    icon: Icons.person_rounded,
-                    label: 'Host · ${senderName!.trim()}',
-                    color: dark,
-                    fullWidth: true,
-                  ),
-
-                if (hasGuest) ...[
-                  const SizedBox(height: 12),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      gradient: gradient,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Dear',
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.85),
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          guestName!.trim(),
-                          style: GoogleFonts.playfairDisplay(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        if (guestEmail != null &&
-                            guestEmail!.trim().isNotEmpty) ...[
-                          const SizedBox(height: 2),
-                          Text(
-                            guestEmail!.trim(),
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.85),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ] else if (isPreview) ...[
-                  const SizedBox(height: 12),
-                  Text(
-                    'Guest name appears automatically when they open this invite',
-                    style: TextStyle(
-                      color: dark.withValues(alpha: 0.55),
-                      fontSize: 11,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
-
-                const SizedBox(height: 16),
-                Center(
-                  child: Container(
-                    width: 132,
-                    height: 132,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: primary.withValues(alpha: 0.2),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: primary.withValues(alpha: 0.08),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: QrImageView(
-                      data: _qrData,
-                      version: QrVersions.auto,
-                      eyeStyle: QrEyeStyle(
-                        eyeShape: QrEyeShape.square,
-                        color: dark,
-                      ),
-                      dataModuleStyle: QrDataModuleStyle(
-                        dataModuleShape: QrDataModuleShape.square,
-                        color: dark,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          if (hasMessage)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
-              decoration: BoxDecoration(gradient: gradient),
-              child: Text(
-                message.trim(),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  height: 1.45,
-                  fontWeight: FontWeight.w500,
-                ),
               ),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
 
-  Widget _chip({
-    required IconData icon,
-    required String label,
-    required Color color,
-    bool fullWidth = false,
-  }) {
-    final child = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+class _Background extends StatelessWidget {
+  final bool hasCover;
+  final File? file;
+  final String? url;
+  final List<Color> colors;
+
+  const _Background({
+    required this.hasCover,
+    required this.file,
+    required this.url,
+    required this.colors,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (hasCover) {
+      if (file != null) {
+        return Image.file(file!, fit: BoxFit.cover);
+      }
+      return Image.network(
+        url!,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => _ThemeBackdrop(colors: colors),
+      );
+    }
+    return _ThemeBackdrop(colors: colors);
+  }
+}
+
+class _ThemeBackdrop extends StatelessWidget {
+  final List<Color> colors;
+
+  const _ThemeBackdrop({required this.colors});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: colors,
+            ),
+          ),
+        ),
+        // Soft light bloom for depth when no wallpaper
+        Positioned(
+          top: -40,
+          right: -30,
+          child: Container(
+            width: 180,
+            height: 180,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.12),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 40,
+          left: -50,
+          child: Container(
+            width: 160,
+            height: 160,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.black.withValues(alpha: 0.12),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Ornament extends StatelessWidget {
+  final Color color;
+
+  const _Ornament({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(width: 36, height: 1, color: color),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Icon(Icons.diamond_outlined, size: 10, color: color),
+        ),
+        Container(width: 36, height: 1, color: color),
+      ],
+    );
+  }
+}
+
+class _GlassQr extends StatelessWidget {
+  final String qrData;
+  final Color qrColor;
+  final String? inviteCode;
+
+  const _GlassQr({
+    required this.qrData,
+    required this.qrColor,
+    this.inviteCode,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.07),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.black.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.28)),
       ),
-      child: Row(
-        mainAxisSize: fullWidth ? MainAxisSize.max : MainAxisSize.min,
+      child: Column(
         children: [
-          Icon(icon, size: 16, color: color),
-          const SizedBox(width: 8),
-          Flexible(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: color,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
+          Container(
+            width: 96,
+            height: 96,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: QrImageView(
+              data: qrData,
+              version: QrVersions.auto,
+              eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.square, color: qrColor),
+              dataModuleStyle: QrDataModuleStyle(
+                dataModuleShape: QrDataModuleShape.square,
+                color: qrColor,
               ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            inviteCode != null ? 'INV · $inviteCode' : 'Scan to open',
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.8),
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.2,
             ),
           ),
         ],
       ),
     );
-    return fullWidth ? SizedBox(width: double.infinity, child: child) : child;
   }
 }

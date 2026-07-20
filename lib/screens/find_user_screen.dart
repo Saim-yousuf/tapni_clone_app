@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
@@ -126,6 +127,19 @@ class _FindUserScreenState extends State<FindUserScreen> {
         builder: (_) => ScannedProfileScreen(username: user.username),
       ),
     );
+  }
+
+  bool _isCurrentUser(PublicUserResult user) {
+    final me = context.read<ProfileProvider>().profile;
+    final myId = me.id?.trim();
+    if (myId != null && myId.isNotEmpty && user.id == myId) return true;
+    final myUsername = me.username?.trim().toLowerCase();
+    if (myUsername != null &&
+        myUsername.isNotEmpty &&
+        user.username.trim().toLowerCase() == myUsername) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -295,6 +309,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
   }
 
   Widget _buildUserTile(PublicUserResult user, bool isDark) {
+    final isMe = _isCurrentUser(user);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -331,41 +346,62 @@ class _FindUserScreenState extends State<FindUserScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      user.name.isNotEmpty ? user.name : '@${user.username}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: isDark ? Colors.white : Colors.black,
-                      ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            user.name.isNotEmpty
+                                ? user.name
+                                : '@${user.username}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: isDark ? Colors.white : Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (isMe) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? Colors.white12
+                                  : Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              'You',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: isDark
+                                    ? Colors.white70
+                                    : Colors.black54,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '@${user.username}',
+                      isMe ? '@${user.username} · This is you' : '@${user.username}',
                       style: TextStyle(
-                        fontSize: 14,
-                        color: isDark ? Colors.white54 : Colors.grey.shade600,
+                        fontSize: 13,
+                        color: isDark ? Colors.white54 : Colors.black54,
                       ),
                     ),
-                    if (user.subtitle != '@${user.username}') ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        user.subtitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: isDark ? Colors.white38 : Colors.grey.shade500,
-                        ),
-                      ),
-                    ],
                   ],
                 ),
               ),
               Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 16,
-                color: isDark ? Colors.white38 : Colors.grey.shade400,
+                Icons.chevron_right,
+                color: isDark ? Colors.white38 : Colors.black38,
               ),
             ],
           ),
