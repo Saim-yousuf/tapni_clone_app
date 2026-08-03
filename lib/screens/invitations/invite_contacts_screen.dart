@@ -272,6 +272,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
       themeColor: draft.themeColor,
       coverImageBase64: draft.coverImageBase64,
       clearCoverImage: draft.clearCoverImage,
+      design: draft.design?.toJson(),
       recipientIds: saveAsDraft ? const [] : _selectedUserIds.toList(),
       saveAsDraft: saveAsDraft,
       showFeedback: false,

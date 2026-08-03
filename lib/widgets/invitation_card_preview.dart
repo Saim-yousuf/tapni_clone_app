@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/models/invitation.dart';
+import 'package:tapni_app/models/invitation_design.dart';
 
 class InvitationDraft {
   String? invitationId;
@@ -22,6 +23,9 @@ class InvitationDraft {
   /// When true, save/update must clear cover on the server.
   bool clearCoverImage;
 
+  /// Canva-style design document (layers). Null = classic card preview.
+  InvitationDesign? design;
+
   InvitationDraft({
     this.invitationId,
     this.type = 'birthday',
@@ -35,6 +39,7 @@ class InvitationDraft {
     this.coverImageBase64,
     this.existingCoverUrl,
     this.clearCoverImage = false,
+    this.design,
   });
 
   factory InvitationDraft.fromInvitation(EventInvitation inv) {
@@ -48,8 +53,11 @@ class InvitationDraft {
       eventAt: inv.eventAt,
       themeColor: inv.themeColor,
       existingCoverUrl: inv.coverImage.isEmpty ? null : inv.coverImage,
+      design: inv.design,
     );
   }
+
+  bool get hasDesign => design != null && design!.layers.isNotEmpty;
 }
 
 Color invitationColorFromHex(String hex) {

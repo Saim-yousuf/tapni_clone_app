@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -16,7 +17,9 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/services/push_notification_service.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // Hold the native splash until auth bootstrap finishes (no white flash).
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await SharedPrefHelper.getInstance();
   Api.init();
   await PushNotificationService.initialize();

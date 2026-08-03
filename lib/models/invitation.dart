@@ -1,3 +1,5 @@
+import 'package:tapni_app/models/invitation_design.dart';
+
 class InvitationUserSummary {
   final String id;
   final String name;
@@ -71,6 +73,7 @@ class EventInvitation {
   final String status;
   final List<InvitationRecipient> recipients;
   final DateTime? createdAt;
+  final InvitationDesign? design;
 
   EventInvitation({
     required this.id,
@@ -86,10 +89,20 @@ class EventInvitation {
     this.status = 'sent',
     this.recipients = const [],
     this.createdAt,
+    this.design,
   });
+
+  bool get hasDesign => design != null && design!.layers.isNotEmpty;
 
   factory EventInvitation.fromJson(Map<String, dynamic> json) {
     final recipientsJson = json['recipients'];
+    InvitationDesign? design;
+    final designJson = json['design'];
+    if (designJson is Map<String, dynamic>) {
+      design = InvitationDesign.fromJson(designJson);
+    } else if (designJson is String && designJson.isNotEmpty) {
+      design = InvitationDesign.fromJsonString(designJson);
+    }
     return EventInvitation(
       id: (json['_id'] ?? json['id'] ?? '').toString(),
       sender: InvitationUserSummary.fromJson(
@@ -117,6 +130,7 @@ class EventInvitation {
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'].toString())
           : null,
+      design: design,
     );
   }
 

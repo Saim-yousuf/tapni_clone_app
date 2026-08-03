@@ -55,4 +55,56 @@ class InvitationRepo {
       jsonBody: {'phones': phones},
     );
   }
+
+  Future<ApiResponse> publishTemplate(Map<String, dynamic> body) async {
+    return ApiHandler.request(
+      api: Api.invitation.templates,
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: body,
+    );
+  }
+
+  Future<ApiResponse> getPublicTemplates({
+    String? country,
+    String? category,
+  }) async {
+    final params = <String>[];
+    if (country != null && country.isNotEmpty) {
+      params.add('country=${Uri.encodeQueryComponent(country)}');
+    }
+    if (category != null && category.isNotEmpty) {
+      params.add('category=${Uri.encodeQueryComponent(category)}');
+    }
+    final query = params.isEmpty ? '' : '?${params.join('&')}';
+    return ApiHandler.request(
+      api: '${Api.invitation.templates}$query',
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> getMyTemplates() async {
+    return ApiHandler.request(
+      api: Api.invitation.myTemplates,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> useTemplate(String id) async {
+    return ApiHandler.request(
+      api: Api.invitation.useTemplate(id),
+      method: ApiMethod.post,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> deleteTemplate(String id) async {
+    return ApiHandler.request(
+      api: Api.invitation.templateById(id),
+      method: ApiMethod.delete,
+      authorization: true,
+    );
+  }
 }

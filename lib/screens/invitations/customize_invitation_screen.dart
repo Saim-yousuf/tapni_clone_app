@@ -246,6 +246,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
       themeColor: draft.themeColor,
       coverImageBase64: draft.coverImageBase64,
       clearCoverImage: draft.clearCoverImage,
+      design: draft.design?.toJson(),
       recipientIds: const [],
       saveAsDraft: true,
       showFeedback: false,

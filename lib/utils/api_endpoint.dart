@@ -183,4 +183,11 @@ class _InvitationApi {
   String get received => "${Api.baseUrl}/api/invitations/received";
   String byId(String id) => "${Api.baseUrl}/api/invitations/$id";
   String update(String id) => "${Api.baseUrl}/api/invitations/$id";
+
+  String get templates => "${Api.baseUrl}/api/invitation-templates";
+  String get myTemplates => "${Api.baseUrl}/api/invitation-templates/mine";
+  String templateById(String id) =>
+      "${Api.baseUrl}/api/invitation-templates/$id";
+  String useTemplate(String id) =>
+      "${Api.baseUrl}/api/invitation-templates/$id/use";
 }

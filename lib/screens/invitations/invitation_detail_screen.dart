@@ -7,6 +7,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
+import 'package:tapni_app/widgets/invitation_design_renderer.dart';
 
 class InvitationDetailScreen extends StatefulWidget {
   final String invitationId;
@@ -210,17 +211,22 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
                     children: [
                       RepaintBoundary(
                         key: _cardKey,
-                        child: InvitationCardPreview.fromInvitation(
-                          inv!,
-                          guestName: isGuest
-                              ? (profile.name.isNotEmpty
-                                  ? profile.name
-                                  : (profile.username ?? ''))
-                              : null,
-                          guestEmail: isGuest && profile.email.isNotEmpty
-                              ? profile.email
-                              : null,
-                        ),
+                        child: inv!.hasDesign && inv.design != null
+                            ? InvitationDesignRenderer(
+                                design: inv.design!,
+                                invitationId: inv.id,
+                              )
+                            : InvitationCardPreview.fromInvitation(
+                                inv,
+                                guestName: isGuest
+                                    ? (profile.name.isNotEmpty
+                                        ? profile.name
+                                        : (profile.username ?? ''))
+                                    : null,
+                                guestEmail: isGuest && profile.email.isNotEmpty
+                                    ? profile.email
+                                    : null,
+                              ),
                       ),
                       const SizedBox(height: 16),
                       SizedBox(

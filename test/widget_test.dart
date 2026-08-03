@@ -5,6 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:tapni_app/main.dart';
@@ -15,7 +16,7 @@ void main() {
     // Wrap in a MaterialApp with TapniApp or call it directly.
     await tester.pumpWidget(const TapniApp());
 
-    // Verify splash screen text exists
-    expect(find.text('tapni'), findsOneWidget);
+    // App boots via silent SplashScreen (native splash only).
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }

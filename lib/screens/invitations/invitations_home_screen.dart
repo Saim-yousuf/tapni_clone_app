@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
-import 'package:tapni_app/screens/invitations/create_invitation_screen.dart';
 import 'package:tapni_app/screens/invitations/customize_invitation_screen.dart';
 import 'package:tapni_app/screens/invitations/invitation_detail_screen.dart';
+import 'package:tapni_app/screens/invitations/invitation_design_editor_screen.dart';
+import 'package:tapni_app/screens/invitations/template_gallery_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
+import 'package:tapni_app/widgets/invitation_design_renderer.dart';
 
 class InvitationsHomeScreen extends StatefulWidget {
   const InvitationsHomeScreen({super.key, this.initialTab = 0});
@@ -40,9 +42,44 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
     super.dispose();
   }
 
+  void _openMyCard(EventInvitation inv) {
+    if (inv.status == 'draft') {
+      final draft = InvitationDraft.fromInvitation(inv);
+      if (inv.hasDesign && inv.design != null) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => InvitationDesignEditorScreen(
+              design: inv.design!,
+              existingDraft: draft,
+            ),
+          ),
+        );
+      } else {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => CustomizeInvitationScreen(
+              draft: draft,
+              fromDraftList: true,
+            ),
+          ),
+        );
+      }
+      return;
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => InvitationDetailScreen(
+          invitationId: inv.id,
+          invitation: inv,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<InvitationProvider>();
+    final myCards = provider.myCards;
 
     return Scaffold(
       backgroundColor: WaUi.scaffold,
@@ -51,21 +88,11 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
         elevation: 0,
         foregroundColor: WaUi.primaryText,
         title: Text('Invitations', style: WaUi.sectionHeader),
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: WaUi.primaryText,
-          unselectedLabelColor: WaUi.secondaryText,
-          indicatorColor: WaUi.accent,
-          tabs: const [
-            Tab(text: 'Received'),
-            Tab(text: 'Sent'),
-          ],
-        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const CreateInvitationScreen()),
+            MaterialPageRoute(builder: (_) => const TemplateGalleryScreen()),
           );
         },
         backgroundColor: WaUi.buttonDark,
@@ -73,26 +100,232 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
         icon: const Icon(Icons.add),
         label: const Text('Create'),
       ),
-      body: TabBarView(
-        controller: _tabController,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _InvitationList(
-            items: provider.received,
-            isLoading: provider.isLoading,
-            emptyTitle: 'No invitations yet',
-            emptySubtitle: 'When someone invites you, it will show up here.',
-            onRefresh: () => provider.fetchReceived(),
+          // ── My cards (created by me) ─────────────────────────────
+          Container(
+            color: WaUi.surface,
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      Text('My cards', style: WaUi.sectionHeader),
+                      const Spacer(),
+                      if (myCards.isNotEmpty)
+                        Text(
+                          '${myCards.length}',
+                          style: WaUi.caption.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                if (provider.isLoading && myCards.isEmpty)
+                  const SizedBox(
+                    height: 200,
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else if (myCards.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: _EmptyMyCards(
+                      onCreate: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const TemplateGalleryScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                else
+                  SizedBox(
+                    height: 220,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: myCards.length,
+                      separatorBuilder: (_, _) => const SizedBox(width: 12),
+                      itemBuilder: (_, i) {
+                        final inv = myCards[i];
+                        return _MyCardTile(
+                          invitation: inv,
+                          onTap: () => _openMyCard(inv),
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
           ),
-          _InvitationList(
-            items: provider.sent,
-            isLoading: provider.isLoading,
-            emptyTitle: 'No sent invitations',
-            emptySubtitle:
-                'Create an invitation, save as draft, or send to contacts.',
-            onRefresh: () => provider.fetchSent(),
-            showRecipientCount: true,
+
+          // ── Received / Sent tabs ─────────────────────────────────
+          Material(
+            color: WaUi.surface,
+            child: TabBar(
+              controller: _tabController,
+              labelColor: WaUi.primaryText,
+              unselectedLabelColor: WaUi.secondaryText,
+              indicatorColor: WaUi.accent,
+              tabs: const [
+                Tab(text: 'Received'),
+                Tab(text: 'Sent'),
+              ],
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _InvitationList(
+                  items: provider.received,
+                  isLoading: provider.isLoading,
+                  emptyTitle: 'No invitations yet',
+                  emptySubtitle:
+                      'When someone invites you, it will show up here.',
+                  onRefresh: () => provider.fetchAll(),
+                ),
+                _InvitationList(
+                  items: provider.sent,
+                  isLoading: provider.isLoading,
+                  emptyTitle: 'No sent invitations',
+                  emptySubtitle:
+                      'Create an invitation, save as draft, or send to contacts.',
+                  onRefresh: () => provider.fetchAll(),
+                  showRecipientCount: true,
+                  onOpen: _openMyCard,
+                ),
+              ],
+            ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _EmptyMyCards extends StatelessWidget {
+  final VoidCallback onCreate;
+
+  const _EmptyMyCards({required this.onCreate});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 16),
+      decoration: BoxDecoration(
+        color: WaUi.scaffold,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: WaUi.divider),
+      ),
+      child: Column(
+        children: [
+          Icon(Icons.style_outlined, size: 36, color: WaUi.promoIconFg),
+          const SizedBox(height: 10),
+          Text('No cards yet', style: WaUi.bodyMedium),
+          const SizedBox(height: 4),
+          Text(
+            'Design an invitation — it will appear here',
+            textAlign: TextAlign.center,
+            style: WaUi.caption,
+          ),
+          const SizedBox(height: 12),
+          TextButton.icon(
+            onPressed: onCreate,
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('Create card'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MyCardTile extends StatelessWidget {
+  final EventInvitation invitation;
+  final VoidCallback onTap;
+
+  const _MyCardTile({required this.invitation, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: 140,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: invitation.hasDesign && invitation.design != null
+                    ? InvitationDesignRenderer(
+                        design: invitation.design!,
+                        invitationId: invitation.id,
+                        shadows: const [],
+                        border: Border.all(color: WaUi.divider),
+                      )
+                    : AspectRatio(
+                        aspectRatio: 0.7,
+                        child: FittedBox(
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            width: 280,
+                            child: InvitationCardPreview(
+                              type: invitation.type,
+                              title: invitation.title,
+                              message: invitation.message,
+                              venue: invitation.venue,
+                              address: invitation.address,
+                              eventAt: invitation.eventAt,
+                              themeColor: invitation.themeColor,
+                              coverImageUrl: invitation.coverImage.isEmpty
+                                  ? null
+                                  : invitation.coverImage,
+                              invitationId: invitation.id,
+                              isPreview: true,
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              invitation.title.isEmpty ? 'Untitled' : invitation.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+                color: WaUi.primaryText,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              invitation.status == 'draft'
+                  ? 'Draft'
+                  : invitation.typeDisplay,
+              style: TextStyle(
+                fontSize: 11,
+                color: invitation.status == 'draft'
+                    ? WaUi.accent
+                    : WaUi.secondaryText,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -105,6 +338,7 @@ class _InvitationList extends StatelessWidget {
   final String emptySubtitle;
   final Future<void> Function() onRefresh;
   final bool showRecipientCount;
+  final void Function(EventInvitation)? onOpen;
 
   const _InvitationList({
     required this.items,
@@ -113,6 +347,7 @@ class _InvitationList extends StatelessWidget {
     required this.emptySubtitle,
     required this.onRefresh,
     this.showRecipientCount = false,
+    this.onOpen,
   });
 
   @override
@@ -127,20 +362,26 @@ class _InvitationList extends StatelessWidget {
           ? ListView(
               padding: const EdgeInsets.all(24),
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                 Icon(Icons.mail_outline, size: 48, color: WaUi.promoIconFg),
                 const SizedBox(height: 16),
-                Text(emptyTitle,
-                    textAlign: TextAlign.center, style: WaUi.sectionHeader),
+                Text(
+                  emptyTitle,
+                  textAlign: TextAlign.center,
+                  style: WaUi.sectionHeader,
+                ),
                 const SizedBox(height: 8),
-                Text(emptySubtitle,
-                    textAlign: TextAlign.center, style: WaUi.caption),
+                Text(
+                  emptySubtitle,
+                  textAlign: TextAlign.center,
+                  style: WaUi.caption,
+                ),
               ],
             )
           : ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
               itemCount: items.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (_, i) {
                 final inv = items[i];
                 final color = invitationColorFromHex(inv.themeColor);
@@ -150,15 +391,8 @@ class _InvitationList extends StatelessWidget {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
                     onTap: () {
-                      if (inv.status == 'draft') {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => CustomizeInvitationScreen(
-                              draft: InvitationDraft.fromInvitation(inv),
-                              fromDraftList: true,
-                            ),
-                          ),
-                        );
+                      if (onOpen != null) {
+                        onOpen!(inv);
                         return;
                       }
                       Navigator.of(context).push(
@@ -181,8 +415,10 @@ class _InvitationList extends StatelessWidget {
                               color: color.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            child: Icon(Icons.celebration_outlined,
-                                color: color),
+                            child: Icon(
+                              Icons.celebration_outlined,
+                              color: color,
+                            ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
@@ -236,8 +472,10 @@ class _InvitationList extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const Icon(Icons.chevron_right,
-                              color: WaUi.secondaryText),
+                          const Icon(
+                            Icons.chevron_right,
+                            color: WaUi.secondaryText,
+                          ),
                         ],
                       ),
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/screens/onboarding_screen.dart';
@@ -10,7 +11,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/services/push_notification_service.dart';
 
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+/// Bootstrap only — native splash stays on screen until navigation is ready.
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -18,207 +19,81 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _opacityAnimation;
-
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-
-    _scaleAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.1,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
-
-    _opacityAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
-
-    _controller.forward();
-    // final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    // authProvider.logout();
-
     _navigateToNext();
   }
 
   Future<void> _navigateToNext() async {
-    await Future.delayed(const Duration(milliseconds: 2800));
-    if (!mounted) return;
+    try {
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
 
-    final token = SharedPrefHelper.getString(
-      SharedPrefHelper.utils.authorizedToken,
-    );
-    final pendingRemoteLogout = SharedPrefHelper.getBool(
-      SharedPrefHelper.utils.pendingRemoteLogout,
-    );
-    final isLoggedIn = token.isNotEmpty && !pendingRemoteLogout;
-
-    if (pendingRemoteLogout) {
-      await SharedPrefHelper.remove(
+      final token = SharedPrefHelper.getString(
+        SharedPrefHelper.utils.authorizedToken,
+      );
+      final pendingRemoteLogout = SharedPrefHelper.getBool(
         SharedPrefHelper.utils.pendingRemoteLogout,
       );
-      await SharedPrefHelper.remove(
-        SharedPrefHelper.utils.pendingRemoteLogoutSessionId,
-      );
-      // Background FCM may already have cleared the account.
-      if (AccountStorage.getActiveAccount() != null) {
-        await AccountStorage.removeActive();
+      final isLoggedIn = token.isNotEmpty && !pendingRemoteLogout;
+
+      if (pendingRemoteLogout) {
+        await SharedPrefHelper.remove(
+          SharedPrefHelper.utils.pendingRemoteLogout,
+        );
+        await SharedPrefHelper.remove(
+          SharedPrefHelper.utils.pendingRemoteLogoutSessionId,
+        );
+        // Background FCM may already have cleared the account.
+        if (AccountStorage.getActiveAccount() != null) {
+          await AccountStorage.removeActive();
+        }
       }
-    }
-
-    if (isLoggedIn) {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      authProvider.refreshAccounts();
-      await authProvider.ensureDeviceSessionRegistered();
-
-      final subProvider = Provider.of<SubscriptionProvider>(
-        context,
-        listen: false,
-      );
-      await subProvider.checkSubscriptionStatus();
-      final profileProvider = Provider.of<ProfileProvider>(
-        context,
-        listen: false,
-      );
-      await profileProvider.fetchProfile();
-      await PushNotificationService.syncTokenWithBackend();
 
       if (!mounted) return;
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const MainShell()));
-    } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const OnboardingScreen()),
-      );
-    }
-  }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+      if (isLoggedIn) {
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        authProvider.refreshAccounts();
+        await authProvider.ensureDeviceSessionRegistered();
+
+        final subProvider = Provider.of<SubscriptionProvider>(
+          context,
+          listen: false,
+        );
+        await subProvider.checkSubscriptionStatus();
+        final profileProvider = Provider.of<ProfileProvider>(
+          context,
+          listen: false,
+        );
+        await profileProvider.fetchProfile();
+        await PushNotificationService.syncTokenWithBackend();
+
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const MainShell()),
+        );
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+        );
+      }
+    } finally {
+      // Drop native splash only after the next screen is pushed (or on error).
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FlutterNativeSplash.remove();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    return Scaffold(
-      backgroundColor: isDark ? AppTheme.primaryBlack : AppTheme.secondaryWhite,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return Opacity(
-                  opacity: _opacityAnimation.value,
-                  child: Transform.scale(
-                    scale: _scaleAnimation.value,
-                    child: child,
-                  ),
-                );
-              },
-              child: Column(
-                children: [
-                  // Logo Symbol (Dynamic Custom Design)
-                  // Container(
-                  //   width: 90,
-                  //   height: 90,
-                  //   decoration: BoxDecoration(
-                  //     gradient: AppTheme.goldGradient,
-                  //     borderRadius: BorderRadius.circular(24),
-                  //     boxShadow: [
-                  //       BoxShadow(
-                  //         color: AppTheme.accentGold.withOpacity(0.3),
-                  //         blurRadius: 20,
-                  //         spreadRadius: 2,
-                  //         offset: Offset(0, 8),
-                  //       ),
-                  //     ],
-                  //   ),
-                  //   child: Image.asset(
-                  //     'assets/images/png/app_icon.png',
-                  //     fit: BoxFit.cover,
-                  //   ),
-                  // ),
-
-                  // SizedBox(height: 24),
-                  // // Logo Text
-                  // RichText(
-                  //   text: TextSpan(
-                  //     children: [
-                  //       TextSpan(
-                  //         text: context.l10n.appTitle,
-                  //         style: TextStyle(
-                  //           fontSize: 38,
-                  //           fontWeight: FontWeight.w900,
-                  //           letterSpacing: -1,
-                  //           color: isDark ? Colors.white : Colors.black,
-                  //         ),
-                  //       ),
-                  //       TextSpan(
-                  //         text: '.',
-                  //         style: TextStyle(
-                  //           fontSize: 42,
-                  //           fontWeight: FontWeight.w900,
-                  //           color: AppTheme.accentGold,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  Image.asset(
-                    "assets/images/png/en_ar_logo.png",
-                    fit: BoxFit.cover,
-                    height: 180,
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    context.l10n.digitalBUSINESSCard,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
-                      color: Colors.grey.shade700,
-                    ),
-                  ),
-                  Text(
-                    ' بطاقة أعمال الرقمية',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
-                      color: Colors.grey.shade700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 60),
-            // Loading Indicator
-            const SizedBox(
-              width: 40,
-              height: 2,
-              child: LinearProgressIndicator(
-                backgroundColor: Colors.transparent,
-                valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accentGold),
-              ),
-            ),
-          ],
-        ),
-      ),
+    // Match native splash (black + RQ) if splash is already removed.
+    return const Scaffold(
+      backgroundColor: AppTheme.primaryBlack,
+      body: SizedBox.expand(),
     );
   }
 }

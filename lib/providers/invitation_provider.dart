@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/invitation.dart';
+import 'package:tapni_app/models/invitation_design.dart';
+import 'package:tapni_app/models/published_invitation_template.dart';
 import 'package:tapni_app/repository/invitation_repo.dart';
 import 'package:tapni_app/widgets/alert.dart';
 
@@ -8,15 +10,25 @@ class InvitationProvider extends ChangeNotifier {
 
   bool _isLoading = false;
   bool _isSending = false;
+  bool _isPublishing = false;
+  bool _loadingCommunity = false;
   List<EventInvitation> _sent = [];
   List<EventInvitation> _received = [];
+  List<PublishedInvitationTemplate> _communityTemplates = [];
   EventInvitation? _selected;
 
   bool get isLoading => _isLoading;
   bool get isSending => _isSending;
+  bool get isPublishing => _isPublishing;
+  bool get loadingCommunity => _loadingCommunity;
   List<EventInvitation> get sent => _sent;
   List<EventInvitation> get received => _received;
+  List<PublishedInvitationTemplate> get communityTemplates =>
+      _communityTemplates;
   EventInvitation? get selected => _selected;
+
+  /// Cards the user created (sent + drafts) — for home carousel.
+  List<EventInvitation> get myCards => List.unmodifiable(_sent);
 
   void setLoading(bool value) {
     _isLoading = value;
@@ -26,6 +38,7 @@ class InvitationProvider extends ChangeNotifier {
   void clearData() {
     _sent = [];
     _received = [];
+    _communityTemplates = [];
     _selected = null;
     notifyListeners();
   }
@@ -169,6 +182,7 @@ class InvitationProvider extends ChangeNotifier {
     String themeColor = '#E85D2A',
     String? coverImageBase64,
     bool clearCoverImage = false,
+    Map<String, dynamic>? design,
     List<String> recipientIds = const [],
     bool saveAsDraft = false,
     bool showFeedback = true,
@@ -202,6 +216,7 @@ class InvitationProvider extends ChangeNotifier {
           'coverImage': coverImageBase64
         else if (clearCoverImage)
           'coverImage': '',
+        if (design != null) 'design': design,
       };
 
       final response = invitationId != null && invitationId.isNotEmpty
@@ -241,5 +256,108 @@ class InvitationProvider extends ChangeNotifier {
       _isSending = false;
       notifyListeners();
     }
+  }
+
+  Future<void> fetchCommunityTemplates({
+    String? country,
+    String? category,
+  }) async {
+    _loadingCommunity = true;
+    notifyListeners();
+    try {
+      final response = await _repo.getPublicTemplates(
+        country: country,
+        category: category,
+      );
+      if (response.success && response.data != null) {
+        final data = response.data;
+        final list = data is Map<String, dynamic> && data['data'] != null
+            ? data['data']
+            : data;
+        if (list is List) {
+          _communityTemplates = list
+              .whereType<Map<String, dynamic>>()
+              .map(PublishedInvitationTemplate.fromJson)
+              .toList();
+        }
+      }
+    } finally {
+      _loadingCommunity = false;
+      notifyListeners();
+    }
+  }
+
+  Future<PublishedInvitationTemplate?> publishTemplate({
+    required String name,
+    required InvitationDesign design,
+    String description = '',
+    BuildContext? context,
+  }) async {
+    _isPublishing = true;
+    notifyListeners();
+    try {
+      final body = <String, dynamic>{
+        'name': name,
+        'description': description,
+        'countryCode': design.countryCode,
+        'category': design.category,
+        'locale': design.locale,
+        'rtl': design.rtl,
+        'previewColor': design.backgroundColor,
+        'accentColor': '#D4AF37',
+        'design': design.toJson(),
+      };
+      final response = await _repo.publishTemplate(body);
+      if (response.success && response.data != null) {
+        final data = response.data;
+        final json = data is Map<String, dynamic> && data['data'] != null
+            ? data['data']
+            : data;
+        if (json is Map<String, dynamic>) {
+          final published = PublishedInvitationTemplate.fromJson(json);
+          _communityTemplates.insert(0, published);
+          notifyListeners();
+          if (context != null && context.mounted) {
+            ShowAlert.success(
+              message: 'Template published! Others can use it now.',
+              context: context,
+            );
+          }
+          return published;
+        }
+      } else if (context != null && context.mounted) {
+        ShowAlert.error(
+          message: response.message ?? 'Failed to publish template',
+          context: context,
+        );
+      }
+      return null;
+    } finally {
+      _isPublishing = false;
+      notifyListeners();
+    }
+  }
+
+  Future<InvitationDesign?> useCommunityTemplate(
+    String id, {
+    BuildContext? context,
+  }) async {
+    final response = await _repo.useTemplate(id);
+    if (response.success && response.data != null) {
+      final data = response.data;
+      final json = data is Map<String, dynamic> && data['data'] != null
+          ? data['data']
+          : data;
+      if (json is Map<String, dynamic>) {
+        final published = PublishedInvitationTemplate.fromJson(json);
+        return published.designCopy();
+      }
+    } else if (context != null && context.mounted) {
+      ShowAlert.error(
+        message: response.message ?? 'Could not load template',
+        context: context,
+      );
+    }
+    return null;
   }
 }
