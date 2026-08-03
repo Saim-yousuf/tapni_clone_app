@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
@@ -28,11 +31,18 @@ class CompleteProfileScreen extends StatefulWidget {
 class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  File? _profileImage;
 
   @override
   void dispose() {
     _nameController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickProfilePhoto() async {
+    final picked = await pickSingleFile();
+    if (picked?.file == null) return;
+    setState(() => _profileImage = picked!.file);
   }
 
   Future<void> _handleContinue() async {
@@ -41,6 +51,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     try {
       authProvider.setLoading(true);
+
+      String? profilePhotoBase64;
+      if (_profileImage != null) {
+        profilePhotoBase64 = await fileToBase64(_profileImage!);
+      }
+
       final country = widget.country ??
           regionKeyFromPhone(
             widget.phone,
@@ -52,6 +68,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
         _nameController.text.trim(),
         context,
         country: country,
+        profilePhoto: profilePhotoBase64,
       );
       if (!success || !mounted) return;
 
@@ -117,16 +134,60 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         style: WaUi.body.copyWith(color: WaUi.secondaryText),
                       ),
                       const SizedBox(height: 36),
-                      CircleAvatar(
-                        radius: 42,
-                        backgroundColor: WaUi.navPill,
-                        child: Icon(
-                          Icons.camera_alt,
-                          size: 32,
-                          color: WaUi.promoIconFg,
+                      GestureDetector(
+                        onTap: authProvider.isLoading ? null : _pickProfilePhoto,
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            CircleAvatar(
+                              radius: 48,
+                              backgroundColor: WaUi.navPill,
+                              backgroundImage: _profileImage != null
+                                  ? FileImage(_profileImage!)
+                                  : null,
+                              child: _profileImage == null
+                                  ? Icon(
+                                      Icons.camera_alt,
+                                      size: 32,
+                                      color: WaUi.promoIconFg,
+                                    )
+                                  : null,
+                            ),
+                            Container(
+                              width: 28,
+                              height: 28,
+                              decoration: BoxDecoration(
+                                color: AppTheme.primaryBlack,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 2,
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.photo_library_outlined,
+                                size: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 10),
+                      TextButton(
+                        onPressed:
+                            authProvider.isLoading ? null : _pickProfilePhoto,
+                        child: Text(
+                          _profileImage == null
+                              ? 'Add photo'
+                              : 'Change photo',
+                          style: WaUi.bodyMedium.copyWith(
+                            color: AppTheme.primaryBlack,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
                       TextFormField(
                         controller: _nameController,
                         textInputAction: TextInputAction.done,
@@ -146,7 +207,10 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                             borderSide: BorderSide(color: WaUi.divider),
                           ),
                           focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: AppTheme.primaryBlack, width: 2),
+                            borderSide: BorderSide(
+                              color: AppTheme.primaryBlack,
+                              width: 2,
+                            ),
                           ),
                           contentPadding: const EdgeInsets.symmetric(
                             vertical: 12,

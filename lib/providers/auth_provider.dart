@@ -309,12 +309,14 @@ class AuthProvider extends ChangeNotifier {
     String name,
     BuildContext context, {
     String? country,
+    String? profilePhoto,
   }) async {
     final response = await _authRepo.completePhoneSignup(
       phone: phone,
       verificationToken: verificationToken,
       name: name,
       country: country,
+      profilePhoto: profilePhoto,
     );
 
     if (response.success && response.data != null) {

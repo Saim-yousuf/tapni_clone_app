@@ -51,6 +51,7 @@ class AuthRepo {
     required String verificationToken,
     required String name,
     String? country,
+    String? profilePhoto,
   }) async {
     return await ApiHandler.request(
       api: Api.auth.otpComplete,
@@ -59,6 +60,8 @@ class AuthRepo {
         "verificationToken": verificationToken,
         "name": name,
         if (country != null && country.isNotEmpty) "country": country,
+        if (profilePhoto != null && profilePhoto.isNotEmpty)
+          "profilePhoto": profilePhoto,
       },
       method: ApiMethod.post,
     );
