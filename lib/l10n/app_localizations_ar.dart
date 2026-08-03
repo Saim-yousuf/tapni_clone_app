@@ -2431,4 +2431,109 @@ class AppLocalizationsAr extends AppLocalizations {
   String codeWithValue(String code) {
     return 'الكود: $code';
   }
+
+  @override
+  String get eInvoice => 'فاتورة إلكترونية';
+
+  @override
+  String get eInvoiceDetails => 'تفاصيل الفاتورة الإلكترونية';
+
+  @override
+  String get saudiEInvoice => 'الفاتورة الإلكترونية السعودية';
+
+  @override
+  String get pointTheCameraAtAnyQRCodeWebsiteWifiOrProduct =>
+      'وجّه الكاميرا إلى أي رمز QR — موقع، واي فاي، منتج، أو بطاقة BarQody.';
+
+  @override
+  String get pointTheCameraAtASaudiEInvoiceQRCode =>
+      'وجّه الكاميرا إلى رمز QR لفاتورة زاتكا الإلكترونية السعودية.';
+
+  @override
+  String get invalidEInvoiceQRScanAValidZATCAInvoiceQR =>
+      'رمز فاتورة غير صالح. امسح رمز QR لفاتورة زاتكا سعودية صحيحة.';
+
+  @override
+  String get scannedQr => 'رمز QR الممسوح';
+
+  @override
+  String get qrScanResultSubtitle => 'المحتوى المستخرج من رمز QR';
+
+  @override
+  String get scannedContent => 'المحتوى الممسوح';
+
+  @override
+  String get qrTypeWebsite => 'موقع / رابط';
+
+  @override
+  String get qrTypeWifi => 'واي فاي';
+
+  @override
+  String get qrTypeEmail => 'بريد إلكتروني';
+
+  @override
+  String get qrTypePhone => 'هاتف';
+
+  @override
+  String get qrTypeSms => 'رسالة نصية';
+
+  @override
+  String get qrTypeText => 'نص / منتج';
+
+  @override
+  String get wifiNetwork => 'اسم الشبكة (SSID)';
+
+  @override
+  String get wifiPassword => 'كلمة المرور';
+
+  @override
+  String get wifiSecurity => 'الأمان';
+
+  @override
+  String get openLink => 'فتح الرابط';
+
+  @override
+  String get openEmail => 'فتح البريد';
+
+  @override
+  String get callNumber => 'اتصال بالرقم';
+
+  @override
+  String get sendSms => 'إرسال رسالة';
+
+  @override
+  String get copyContent => 'نسخ المحتوى';
+
+  @override
+  String get copiedToClipboard => 'تم النسخ إلى الحافظة';
+
+  @override
+  String get couldNotOpenLink => 'تعذر فتح هذا الرابط.';
+
+  @override
+  String get sellerName => 'اسم البائع';
+
+  @override
+  String get vatRegistrationNumber => 'الرقم الضريبي';
+
+  @override
+  String get invoiceDateTime => 'تاريخ ووقت الفاتورة';
+
+  @override
+  String get invoiceTotal => 'إجمالي الفاتورة';
+
+  @override
+  String get vatAmount => 'مبلغ الضريبة';
+
+  @override
+  String get invoiceHash => 'تجزئة الفاتورة';
+
+  @override
+  String get copyAllDetails => 'نسخ كل التفاصيل';
+
+  @override
+  String get zatcaPhase1Invoice => 'فاتورة زاتكا المرحلة الأولى';
+
+  @override
+  String get zatcaPhase2Supported => 'مدعومة المرحلة الثانية لزاتكا';
 }

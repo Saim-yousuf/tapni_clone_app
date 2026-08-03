@@ -4824,6 +4824,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Code: {code}'**
   String codeWithValue(String code);
+
+  /// No description provided for @eInvoice.
+  ///
+  /// In en, this message translates to:
+  /// **'E-Invoice'**
+  String get eInvoice;
+
+  /// No description provided for @eInvoiceDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'E-Invoice Details'**
+  String get eInvoiceDetails;
+
+  /// No description provided for @saudiEInvoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Saudi E-Invoice'**
+  String get saudiEInvoice;
+
+  /// No description provided for @pointTheCameraAtAnyQRCodeWebsiteWifiOrProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Point the camera at any QR code — website, Wi‑Fi, product, or BarQody card.'**
+  String get pointTheCameraAtAnyQRCodeWebsiteWifiOrProduct;
+
+  /// No description provided for @pointTheCameraAtASaudiEInvoiceQRCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Point the camera at a Saudi ZATCA e-invoice QR code.'**
+  String get pointTheCameraAtASaudiEInvoiceQRCode;
+
+  /// No description provided for @invalidEInvoiceQRScanAValidZATCAInvoiceQR.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid e-invoice QR. Scan a valid ZATCA Saudi invoice QR code.'**
+  String get invalidEInvoiceQRScanAValidZATCAInvoiceQR;
+
+  /// No description provided for @scannedQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanned QR'**
+  String get scannedQr;
+
+  /// No description provided for @qrScanResultSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Content detected from the QR code'**
+  String get qrScanResultSubtitle;
+
+  /// No description provided for @scannedContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanned content'**
+  String get scannedContent;
+
+  /// No description provided for @qrTypeWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Website / Link'**
+  String get qrTypeWebsite;
+
+  /// No description provided for @qrTypeWifi.
+  ///
+  /// In en, this message translates to:
+  /// **'Wi‑Fi'**
+  String get qrTypeWifi;
+
+  /// No description provided for @qrTypeEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get qrTypeEmail;
+
+  /// No description provided for @qrTypePhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get qrTypePhone;
+
+  /// No description provided for @qrTypeSms.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS'**
+  String get qrTypeSms;
+
+  /// No description provided for @qrTypeText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text / Product'**
+  String get qrTypeText;
+
+  /// No description provided for @wifiNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network name (SSID)'**
+  String get wifiNetwork;
+
+  /// No description provided for @wifiPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get wifiPassword;
+
+  /// No description provided for @wifiSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get wifiSecurity;
+
+  /// No description provided for @openLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Open link'**
+  String get openLink;
+
+  /// No description provided for @openEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Open email'**
+  String get openEmail;
+
+  /// No description provided for @callNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Call number'**
+  String get callNumber;
+
+  /// No description provided for @sendSms.
+  ///
+  /// In en, this message translates to:
+  /// **'Send SMS'**
+  String get sendSms;
+
+  /// No description provided for @copyContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy content'**
+  String get copyContent;
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// No description provided for @couldNotOpenLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open this link.'**
+  String get couldNotOpenLink;
+
+  /// No description provided for @sellerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller name'**
+  String get sellerName;
+
+  /// No description provided for @vatRegistrationNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'VAT registration number'**
+  String get vatRegistrationNumber;
+
+  /// No description provided for @invoiceDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice date & time'**
+  String get invoiceDateTime;
+
+  /// No description provided for @invoiceTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice total'**
+  String get invoiceTotal;
+
+  /// No description provided for @vatAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'VAT amount'**
+  String get vatAmount;
+
+  /// No description provided for @invoiceHash.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice hash'**
+  String get invoiceHash;
+
+  /// No description provided for @copyAllDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy all details'**
+  String get copyAllDetails;
+
+  /// No description provided for @zatcaPhase1Invoice.
+  ///
+  /// In en, this message translates to:
+  /// **'ZATCA Phase 1 invoice'**
+  String get zatcaPhase1Invoice;
+
+  /// No description provided for @zatcaPhase2Supported.
+  ///
+  /// In en, this message translates to:
+  /// **'ZATCA Phase 2 supported'**
+  String get zatcaPhase2Supported;
 }
 
 class _AppLocalizationsDelegate

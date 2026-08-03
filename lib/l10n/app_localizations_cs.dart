@@ -2455,4 +2455,109 @@ class AppLocalizationsCs extends AppLocalizations {
   String codeWithValue(String code) {
     return 'Kód: $code';
   }
+
+  @override
+  String get eInvoice => 'E-Invoice';
+
+  @override
+  String get eInvoiceDetails => 'E-Invoice Details';
+
+  @override
+  String get saudiEInvoice => 'Saudi E-Invoice';
+
+  @override
+  String get pointTheCameraAtAnyQRCodeWebsiteWifiOrProduct =>
+      'Point the camera at any QR code — website, Wi‑Fi, product, or BarQody card.';
+
+  @override
+  String get pointTheCameraAtASaudiEInvoiceQRCode =>
+      'Point the camera at a Saudi ZATCA e-invoice QR code.';
+
+  @override
+  String get invalidEInvoiceQRScanAValidZATCAInvoiceQR =>
+      'Invalid e-invoice QR. Scan a valid ZATCA Saudi invoice QR code.';
+
+  @override
+  String get scannedQr => 'Scanned QR';
+
+  @override
+  String get qrScanResultSubtitle => 'Content detected from the QR code';
+
+  @override
+  String get scannedContent => 'Scanned content';
+
+  @override
+  String get qrTypeWebsite => 'Website / Link';
+
+  @override
+  String get qrTypeWifi => 'Wi‑Fi';
+
+  @override
+  String get qrTypeEmail => 'Email';
+
+  @override
+  String get qrTypePhone => 'Phone';
+
+  @override
+  String get qrTypeSms => 'SMS';
+
+  @override
+  String get qrTypeText => 'Text / Product';
+
+  @override
+  String get wifiNetwork => 'Network name (SSID)';
+
+  @override
+  String get wifiPassword => 'Password';
+
+  @override
+  String get wifiSecurity => 'Security';
+
+  @override
+  String get openLink => 'Open link';
+
+  @override
+  String get openEmail => 'Open email';
+
+  @override
+  String get callNumber => 'Call number';
+
+  @override
+  String get sendSms => 'Send SMS';
+
+  @override
+  String get copyContent => 'Copy content';
+
+  @override
+  String get copiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get couldNotOpenLink => 'Could not open this link.';
+
+  @override
+  String get sellerName => 'Seller name';
+
+  @override
+  String get vatRegistrationNumber => 'VAT registration number';
+
+  @override
+  String get invoiceDateTime => 'Invoice date & time';
+
+  @override
+  String get invoiceTotal => 'Invoice total';
+
+  @override
+  String get vatAmount => 'VAT amount';
+
+  @override
+  String get invoiceHash => 'Invoice hash';
+
+  @override
+  String get copyAllDetails => 'Copy all details';
+
+  @override
+  String get zatcaPhase1Invoice => 'ZATCA Phase 1 invoice';
+
+  @override
+  String get zatcaPhase2Supported => 'ZATCA Phase 2 supported';
 }
