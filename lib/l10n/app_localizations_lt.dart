@@ -12,325 +12,334 @@ class AppLocalizationsLt extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Įrankiai';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Paskyros nustatymai';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Pranešimai';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Tau';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'Jūsų profilis';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Redaguoti profilį';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle =>
+      'Pakeiskite savo vardą, nuotrauką ir biografiją';
 
   @override
-  String get username => 'Username';
+  String get username => 'Vartotojo vardas';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'Nustatykite unikalų profilio vartotojo vardą';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Socialiniai saitai';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Pridėkite Instagram, WhatsApp, svetainę ir dar daugiau';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Viešas profilis';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => 'Visi gali rasti ir peržiūrėti jūsų profilį';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Paslėpta nuo paieškos – kiti negali jūsų atrasti';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Pasidalinkite mano QR kodu';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Leiskite kitiems nuskaityti jūsų skaitmeninę vizitinę kortelę';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Apsipirkimas ir apdovanojimai';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Mano užsakymai';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle =>
+      'Stebėkite užsakymus, kuriuos pateikėte iš parduotuvių';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Mano atlygio kortelės';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Peržiūrėkite antspaudus ir taškus iš lojalumo programų';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Darbo vieta';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Darbuotojų kvietimai';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Priimkite arba atmeskite komandų kvietimus iš įmonių';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Darbo vietos registracija';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Įeikite ir išeikite iš darbo pagal vietą';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Paskyros ir įrenginiai';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Susieti įrenginiai';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => 'Susiekite kitą telefoną, pvz., WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Sąskaitos';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Pridėti arba perjungti paskyras';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Perjungti tarp $count paskyrų';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Pagalba ir paskyra';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Programos kalba';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => 'Pakeiskite programoje naudojamą kalbą';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Paieškos kalba';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'Telefono kalba';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Kalba atnaujinta';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Pagalba ir DUK';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Atsakymai į dažniausiai užduodamus klausimus';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Siųsti Atsiliepimus';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle =>
+      'Praneškite apie klaidą arba pasiūlykite naują funkciją';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Atsijungti';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Atsijunkite nuo šios sesijos';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Atšaukti';
 
   @override
-  String get save => 'Save';
+  String get save => 'Išsaugoti';
 
   @override
-  String get done => 'Done';
+  String get done => 'Atlikta';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(Tik skaityti)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule =>
+      '1 taškas = 100 PKR (taisyklės pavyzdys)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => 'Reikalingi 10 antspaudų';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '123 Main St, miestas';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => 'Prieš 2 dienas';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 simbolių. Tik raidės, skaičiai, apatiniai brūkšniai ir brūkšneliai.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Priimti';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'PRIEIGA RIBOTA';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Sąskaita / IBAN: pridėkite sąskaitos numerį čia';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Paskyros pavadinimas: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Aktyvus';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'AKTYVUS';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'AKTYVI KORTELĖ';
 
   @override
-  String get add => 'Add';
+  String get add => 'Pridėti';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Pridėti pastabą...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Pridėti paskyrą';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Pirmiausia pridėkite bent vieną kategoriją';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Pridėkite kategorijas rodymo tvarka (pvz., Greitas maistas, tada Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Pirmiausia pridėkite kategorijas savo katalogo nustatymuose.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Pridėti kontaktą';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Pridėti nuorodą';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'Pridėkite nuorodas į savo profilį žemiau';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Pirmiausia pridėkite nuorodas į savo profilį, tada įgalinkite jas čia.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Pridėti logotipą';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Pridėti taškų';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Pridėti programą';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Pridėti antspaudą';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Pridėti prie „Google“ piniginės';
 
   @override
-  String get address => 'Address';
+  String get address => 'Adresas';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Visi';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Visi susigaudė!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Visi pranešimai pažymėti kaip skaityti!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Leisti fotoaparatą';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Leisti šiam įrenginiui pasiekti jūsų „Barqody“ paskyrą? Galite bet kada jį pašalinti iš susietų įrenginių.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Jau turite paskyrą?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => '„Analytics“ informacijos suvestinė';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Bet kokie specialūs pageidavimai...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Taikyti';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Taikyti dizainą';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Taikyti šabloną';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Kylantis';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Paprašykite savo įmonės nuskaityti jūsų QR kodą ir pridėti jus kaip darbuotoją';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Priskirkite kategoriją';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Priskirtos programos';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Bent 6 simboliai';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => 'Dalyvavimas baigtas šiandien';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Galimi laiko tarpsniai';
 
   @override
-  String get background => 'Background';
+  String get background => 'Fonas';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Fono spalva';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Banko sąskaita';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Banko duomenys';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Bankas: pridėkite banko pavadinimą čia';
 
   @override
   String get barqody => 'Barqody';
@@ -339,473 +348,475 @@ class AppLocalizationsLt extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Geriausia vertė';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Sąskaitos suma';
 
   @override
   String get bio => 'BIO';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => 'Biografija';
 
   @override
-  String get book => 'Book';
+  String get book => 'Knyga';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Užsakymo data';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Užsakymo grafikas';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Užsakymo laikas';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'VERSLAS';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Verslo kategorija';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Verslo detalės';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Įmonės pavadinimas';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Verslo galimybės';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Verslo programos';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Tik verslo naudotojams';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'Prisiregistruodami sutinkate su mūsų taisyklėmis ir sąlygomis.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Skambinti';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Norint nuskaityti, reikalingas fotoaparato leidimas.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Atšaukti bet kada.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Atšaukti užsakymą';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Užfiksuokite naują kontaktą';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'Kategorijos';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Kategorija *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'Kategorija jau yra';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Kategorijos pavadinimas';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Užsiregistruoti';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Patikrinkite';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Savo profilio nuorodai pasirinkite unikalų vartotojo vardą.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Pasirinkite planą';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Pasirinkite Šablonas';
 
   @override
-  String get close => 'Close';
+  String get close => 'Uždaryti';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Kodas nukopijuotas';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Netrukus';
 
   @override
-  String get company => 'Company';
+  String get company => 'Įmonė';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Įmonės darbuotojo kortelė';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'Įmonė Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Atlikite šiuos veiksmus';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Patvirtinti ir pridėti taškų';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Patvirtinti rezervaciją';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Patvirtinkite vietą';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Patvirtinkite išpirkimą';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Susietos paskyros';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Kontaktas sėkmingai pridėtas!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Kontaktinė kortelė';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => 'Sėkmingai apsikeista kontaktais!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Kontaktinis šaltinis';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'Kontaktas sėkmingai atnaujintas!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Kontaktai';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Tęsti';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Nukopijuota';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Nukopijuokite kodą';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Nepavyko nustatyti vietos. Įgalinkite GPS leidimą.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Nepavyko perjungti paskyros';
 
   @override
-  String get create => 'Create';
+  String get create => 'Sukurti';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Sukurti paskyrą';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Sukurkite lojalumo programą';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Sukurti naują nuorodą';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Sukurti programą';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Sukurti atlygį';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Sukurkite antspaudą ar taškų atlygį klientams';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Sukurkite savo pirmąją kortelę';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Sukurkite savo pirmąją atlygio kortelę klientams';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Sukūrimo data';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Pasirinktiniai vaizdai, skirti antspauduotiems ir neštampuotiems lizdams. Numatytieji nustatymai naudojami, jei nenustatyti.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Pasirinktinė nuoroda';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Kliento informacija';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully =>
+      'Klientas sėkmingai užsiregistravo';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Klientas dar neužsiregistravęs';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Klientas nerodomas';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Klientų užsakymai';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Tinkinkite kortelės dizainą';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Tinkinkite dizainą';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Tinkinkite savo profilį, atrakinkite PRO šablonus ir gaukite neribotą potencialių klientų skaičių.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Tinkinkite save';
 
   @override
-  String get date => 'Date';
+  String get date => 'Data';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Datų diapazonas';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Atmesti';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Ištrinti';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Ištrinti kortelę?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Ištrinti kategoriją';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Ištrinti kontaktą';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Ištrinti premiją?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Mažėjantis';
 
   @override
-  String get description => 'Description';
+  String get description => 'Aprašymas';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Aprašymas (nebūtina)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Detalės';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Įrenginys susietas';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Įrenginys atsijungtas';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Įrenginio būsena';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Skaitmeninė vizitinė kortelė';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'SKAITMENINĖ VERSLO kortelė';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Neturite paskyros?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'pvz. Greitas maistas';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'pvz. Be cukraus, labai karšta...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'Pelnė 50 taškų';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Redaguoti';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Redaguoti kortelę';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Redaguoti informaciją';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Redaguoti profilį';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Redaguoti nustatymus';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Redaguokite savo profilio informaciją';
 
   @override
-  String get email => 'Email';
+  String get email => 'El. paštas';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'Paštas ir slaptažodis';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'El. pašto adresas';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR =>
+      'Prisijungimo el. paštu arba nuskaityti QR kodą';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Darbuotojo kortelė';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'DARBUOTOJO KORTELĖ';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Darbuotojo veido nuotrauka';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Tuščias lizdas';
 
   @override
-  String get end => 'END';
+  String get end => 'PABAIGA';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Pabaigos data';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Pabaigos valanda';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Užregistruokite Klientą';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Įveskite sąskaitos sumą';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Įveskite kodą';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Vietoj to įveskite kodą';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Toliau įveskite tinklo kontaktinius duomenis.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Įveskite savo vardą';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Įveskite slaptažodį';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Renginio ženklelis';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Keistis kontaktais';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Keičiamasi kontaktais...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Naršyti';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'Nepavyko atnaujinti kontakto.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Užpildytas lizdas';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Filtruoti kontaktus';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Filtruoti kontaktus';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Raskite žmonių BarQody';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Rasti vartotoją';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Rasti vartotoją';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Raskite vartotojo vardą';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Pamiršai?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Nemokama kava';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Pilnas vardas';
 
   @override
-  String get general => 'General';
+  String get general => 'Generolas';
 
   @override
-  String get go => 'Go';
+  String get go => 'Eik';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'Eikite į verslą';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'SVEČIAS';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'Sveiki,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Pagalbos centras išjungtas šioje NS demonstracijoje.';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => 'Šešioliktainis: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Laikykite QR kodą rėmelio viduje – jis nuskaitomas automatiškai.';
 
   @override
-  String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+  String get howDoYouWantToDesignThisCard => 'Kaip norite sukurti šią kortelę?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Importuoti kontaktus';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'Importuoti kontaktus dar negalima.';
 
   @override
   String get inLabel => 'in';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Įeinantys užsakymai';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'Netinkamas profilio URL. Nuskaitykite galiojančią BarQody kortelę arba QR kodą.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Neteisingas QR kodas. Naudokite Barqody nuorodą QR.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Pakvieskite darbuotojus, nustatykite pamainas ir stebėkite buvimą';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'Pakvietė jus prisijungti kaip darbuotoją';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -814,19 +825,19 @@ class AppLocalizationsLt extends AppLocalizations {
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Darbo pavadinimas';
 
   @override
   String get johnDoe => 'John Doe';
 
   @override
-  String get johnSmith => 'John Smith';
+  String get johnSmith => 'Džonas Smitas';
 
   @override
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Prisijungta: 2026 m. sausio 15 d';
 
   @override
   String get jpg => 'JPG';
@@ -834,1600 +845,1615 @@ class AppLocalizationsLt extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Saugokite savo paskyrą. Nuskaitykite QR kodus tik tada, kai norite susieti įrenginį, kuriuo pasitikite.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Etiketė';
 
   @override
-  String get lat => 'Lat';
+  String get lat => 'Plat';
 
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Leiskite kitiems nukreipti savo telefono kamerą į šį QR kodą, kad jie akimirksniu peržiūrėtų jūsų tinklo profilį.';
 
   @override
-  String get link => 'Link';
+  String get link => 'Nuoroda';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Susieti įrenginį';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Nuoroda naudojant QR kitame telefone';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'Nuoroda nukopijuota į mainų sritį';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Nuorodų nustatymai';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Nuorodų nustatymai';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Susieti šį įrenginį?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Nuorodos';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Nuorodos šioje kortelėje';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'Vieta dar nenustatyta';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Reikalingas vietos leidimas';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Norint dalyvauti, reikalingas vietos leidimas';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Prisijungti';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Prisijunkite, kad galėtumėte valdyti savo skaitmeninę kortelę ir tinklą.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Prisijunkite naudodami QR kodą';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Atsijungti';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Atsijungti visus';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Atsijungti įrenginį?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Lojalumo programos';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Tvarkyti kategorijas';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Tvarkyti kontaktą';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Tvarkyti darbuotojus';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Tvarkykite savo asmeninę informaciją ir kitas nuostatas';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Pažymėti kaip baigtą';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'Kas mėnesį';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Mano kortelės';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'Mano vieta';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Mano apdovanojimai';
 
   @override
-  String get name => 'Name';
+  String get name => 'Vardas';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'VARDAS';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'Vardas yra būtinas';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'vardas@įmonė.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Nauja kortelė';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Nauja kortelė';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Nauja kategorija';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Naujas apdovanojimas';
 
   @override
-  String get next => 'Next';
+  String get next => 'Kitas';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'Kita kortelė';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet => 'Dar nėra prijungtų aktyvių nuorodų';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Nėra aktyvių atlygio programų.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Darbuotojo kortelių dar nėra';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Darbuotojų nepridėta';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Darbuotojų dar nėra';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Darbdavys nerastas';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'Šioje kategorijoje prekių nėra.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => 'Nuorodų šablonų nėra';
 
   @override
-  String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+  String get noNewNotificationsAtThisTime => 'Šiuo metu naujų pranešimų nėra.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Jūsų profilio dar niekas nežiūrėjo.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Nėra laukiančių kvietimų';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Dar nepriskirta jokių programų. Žemiau pridėkite programas.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => 'Šiame paveikslėlyje QR kodo nerasta.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Atlygio programų dar nėra';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'Šią dieną nėra laisvų laiko tarpsnių';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Nerasta jokių vartotojų';
 
   @override
-  String get none => 'None';
+  String get none => 'Nėra';
 
   @override
-  String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+  String get notAvailableOnYourCurrentPlan => 'Pagal dabartinį planą negalima';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Dar neprisiregistravęs';
 
   @override
-  String get note => 'Note';
+  String get note => 'Pastaba';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Pastabos (neprivaloma)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Pranešimas išvalytas';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Čia galima redaguoti tik viršelį, profilio nuotrauką, vardą ir biografiją.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Kai kas nors nuskaito šią kortelę, rodomos tik įgalintos nuorodos.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => 'Rodomi tik vieši profiliai';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Tik šis telefonas šiuo metu naudoja jūsų paskyrą.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'ARBA TĘSTI SU';
 
   @override
-  String get order => 'Order';
+  String get order => 'Užsakyti';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Užsakymo detalės';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'Užsakymo ID';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'Užsakymas nerastas';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Užsakymai';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Popierinė kortelė';
 
   @override
-  String get password => 'Password';
+  String get password => 'Slaptažodis';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Mokėti kas mėnesį';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'LAUKIA PRIĖMIMO';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Veiklos apžvalga';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Asmeniniai duomenys';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Telefonas';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Nuotraukos';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Pasirinkite paruoštą spalvų temą. Greitai ir švariai.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Pasirinkite spalvą';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Pasirinkite žemėlapyje';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Pateikite užsakymą';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Planas Baigėsi';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Jei norite tęsti, įveskite įmonės informaciją';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Įveskite prekės pavadinimą';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Prieš naujovindami pateikite išsamią įmonės informaciją.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Pasirinkite kategoriją';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Pasirinkite laiko tarpą';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => 'Pirmiausia nustatykite darbo vietą';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Nukreipkite fotoaparatą į QR kodą kitame įrenginyje';
 
   @override
-  String get points => 'Points';
+  String get points => 'Taškai';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Pelnyti taškai';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Premium aktyvus';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Ankstesnė kortelė';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Kaina (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'PRO šablonas';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Profilis';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Profilio patikrinimas';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Profilio stiprumas';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Profilio žiūrovai';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Profilio peržiūros';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Programos informacija';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Programos pavadinimas';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'Programa nerasta';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Programos tipas';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'QR kodas';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'QR nuskaitymai';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Kiekis';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Skaityti viską';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Tik skaityti';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'Gavo 1 antspaudą';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Naujausia veikla';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Išpirkite kitą apdovanojimą';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Išpirkite atlygį';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Išpirkta nemokama kava';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Atnaujinti QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'Regionas';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Pašalinti';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Pašalinti darbuotoją';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Atnaujinti planą';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Užklausa laukiama';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Laukiama užklausos';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Prašymas atmestas';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Prašyti prenumeratos';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Nustatyti iš naujo';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Apdovanojimas baigtas! Norėdami išpirkti, parodykite šią kortelę.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Apdovanojimas baigtas! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Išsami informacija apie apdovanojimą';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Atlygio programa';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Atlygio programos';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Atlygis išpirktas!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Apdovanojimai';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Pelnyti apdovanojimai';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => 'Kas mėnesį mokama 1600 rupijų';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => 'Kasmet išrašoma 8300 rupijų';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'IŠSAUGOTI';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Išsaugokite savo darbo tapatybės kortelę telefone arba piniginėje';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Nuskaityti';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Nuskaitykite vartotojo QR kodą, kad pridėtumėte jį kaip darbuotoją';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Nuskaitykite bet kurio vartotojo ar verslo QR kodą, kad pridėtumėte darbuotoją';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem =>
+      'Nuskaitykite verslo QR kodą, kad išpirktumėte';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Nuskaitykite kliento QR kodą';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Nuskaitykite darbuotojo profilį';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Nuskaityti QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Nuskaityti QR / rodyti QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'Nuskaityti QR kodą';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Nuskaitykite kitame įrenginyje rodomą QR kodą';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Nuskaityti ir pakviesti';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Ieškoti pagal vartotojo vardą...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Ieškoti nuorodų';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany =>
+      'Ieškokite vardo, el. pašto adreso arba įmonės';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Žiūrėti viską';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Žiūrėti, kad iš visos veiklos tyčiojamasi. Pridėjus potencialių klientų, bus rodoma nauja veikla.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Pasirinkite datą';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Pasirinkite Žymekliai';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Pasirinkite regioną';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon =>
+      'Nustatykite tekstą po nuorodos piktograma';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Nustatykite savo spalvas, nuotraukas ir foną.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Dalintis';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Pasidalinkite kortele';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Kiekvienoje kortelėje bendrinkite skirtingas nuorodas';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Bendrinti profilį';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Rodyti nuorodą';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Rodyti šioje kortelėje';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Prisijunkite naudodami „Google“.';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Registruotis';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Praleisti';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Kol kas praleiskite';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'Lizdas (min.)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Programinės įrangos inžinierius';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Kažkas nutiko';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Rūšiavimo parinktys';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Specialios instrukcijos';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Antspaudo kortelė';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Antspaudo piktograma';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Antspaudai';
 
   @override
-  String get start => 'START';
+  String get start => 'PRADĖTI';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Pradžios data';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Pradžios valanda';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Pradėkite kurti tinklus išmaniau naudodami „Barqody“.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistika';
 
   @override
-  String get status => 'Status';
+  String get status => 'Būsena';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Prenumerata';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'Prenumeratos užklausa pateikta';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'Prenumeratos užklausa pateikta.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Perbraukite, kad naršytumėte korteles';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Greitai nufotografuokite asmenukę, kad patikrintumėte dalyvavimą';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Bakstelėkite „Socialiniai saitai“ viršuje, kad pridėtumėte ir suaktyvintumėte profilius.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Bakstelėkite žemėlapį arba naudokite dabartinę vietą';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Bakstelėkite, kad pridėtumėte nuotrauką';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Palieskite, kad bendrintumėte QR kodą';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Komandos lankomumas';
 
   @override
-  String get template => 'Template';
+  String get template => 'Šablonas';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Šablonai';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Ačiū! Atsiliepimai pateikiami tik pasityčiojimui.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Ši kortelė ir jos QR kodas bus pašalinti.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Ši funkcija išskirtinai prieinama verslo vartotojams.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'Tai jau jūsų vartotojo vardas.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'Šį mėnesį';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Taip bus visam laikui ištrinta ši premijų programa ir visos jos registracijos.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Šiandien tavo savaitgalis';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Šiandien • 15.15 val';
 
   @override
-  String get total => 'Total';
+  String get total => 'Iš viso';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Stebėkite savo užsakymus';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'Operacijos nuoroda (neprivaloma)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Operacijos nuorodos numeris (neprivaloma)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Bandykite dar kartą';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Išbandykite Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Išbandykite Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Tipas';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Norėdami ieškoti, įveskite bent 2 vartotojo vardo simbolius.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Įveskite 8 simbolių kodą, rodomą po QR.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'Kuriama – vietoj to prisijunkite naudodami el. paštą / slaptažodį.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Nuimkite antspaudą';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Atnaujinkite dabar';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Atnaujinkite į';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Atnaujinkite į Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Naudokite šabloną';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Naudokite Barqody kituose telefonuose ar planšetiniuose kompiuteriuose. Jūs kontroliuojate – bet kada atsijunkite nuo bet kurio įrenginio.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Norėdami nuskaityti šį kodą, naudokite „Barqody“ savo telefone';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Naudokite numatytąją piktogramą';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Naudokite šią nuotrauką';
 
   @override
-  String get user => 'USER';
+  String get user => 'VARTOTOJAS';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Versija: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Peržiūrėkite ir atnaujinkite klientų užsakymus';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Peržiūrėti profilį';
 
   @override
-  String get views => 'Views';
+  String get views => 'Peržiūros';
 
   @override
-  String get website => 'Website';
+  String get website => 'Svetainė';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Sveiki sugrįžę';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Sveiki atvykę į sąskaitų centrą';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Kai įmonė prideda jus kaip darbuotoją, jūsų darbuotojo kortelė bus rodoma čia. Galite bet kada pritaikyti jo dizainą.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Kai įmonė įtrauks jus į savo atlygio programą, ji bus rodoma čia.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Kai įmonė pakviečia jus į savo komandą, ji bus rodoma čia.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Išjungus ši nuoroda nebus rodoma jūsų profilyje';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Parašykite ką nors apie save ar savo prekės ženklą';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Kasmet';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Vakar • 17:42 val';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Jūsų kategorijos';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Jūsų darbuotojo kortelės iš darbdavių';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'Jūsų nemokama kava sėkmingai išpirkta.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Jūsų apdovanojimai';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Jūsų prenumerata baigėsi. Norėdami gauti daugiau informacijos, bakstelėkite informacijos piktogramą.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'tavo vardas';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% nuolaida';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'AVATARAS PALIEKĖ';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Sąskaitos savininko vardas';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Sąskaitos numeris';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Aktyvus dabar';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Pridėti biografiją';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Pridėti viršelio nuotrauką';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Pridėti veido nuotrauką';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Pridėkite įvadinį balso užrašą';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Pridėti profilio pavadinimą';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Pridėti profilio nuotrauką';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Pridėti socialinių nuorodų (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Pridėti elementą';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Pridėti nuorodą';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'Pridėkite nuorodas į savo profilį žemiau';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Pridėti nuotrauką';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Pridėti į krepšelį';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Adresas (neprivaloma)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Visi kontaktų tipai';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Leidžiamas spindulys (metrais)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Beveik čia!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Jau darbuotojas';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Jau turite paskyrą?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Visada atnaujinta';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Ar tikrai norite atsijungti nuo „Barqody“?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'Dalyvavimas nepavyko';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Fono spalva';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'Užsakymas nepavyko';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward => 'Trumpai apibūdinkite šį atlygį...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Verslas patvirtintas';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Įmonės el. pašto adresas';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Verslo faksas';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Įmonės telefono numeris';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Verslo svetainė';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Kameros klaida';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Užfiksuokite veidą';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Kortelė baigta';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Kortelės etiketė';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Kortelės etiketės pavadinimas';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Kortelės peržiūra';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Kortelės tema';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Kortelė sukurta';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Kortelės pavadinimas';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Kortelė išsaugota JPG formatu';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Kortelė išsaugota kaip PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Kortelė atnaujinta';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Keisti nuotrauką';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Registracijos veidas';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Registracija sėkminga';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Išsiregistravimo veidas';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Išsiregistravimas sėkmingas';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Pasirinkite šabloną';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress =>
+      'Kontaktinės kortelės įmonės adresas';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName =>
+      'Kontaktinės kortelės įmonės pavadinimas';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'Kontaktinės kortelės el';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'Kontaktinės kortelės namų adresas';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Kontaktinės kortelės telefonas';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'Kontaktinės kortelės svetainė';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'Nepavyko užbaigti prisijungimo';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'Nepavyko sukurti QR kodo';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Nepavyko susieti įrenginio';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'Nepavyko atsijungti įrenginio';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet =>
+      'Nepavyko atidaryti „Google“ piniginės';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'Nepavyko išsaugoti kortelės dizaino';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Nepavyko atnaujinti profilio matomumo';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Sukurti galeriją';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Sukurkite kortelę, kad galėtumėte bendrinti savo profilį';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Sukurti kortelę';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Individualus bankas';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Klientai gali būti užregistruoti ir antspauduoti';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Tinkinti kortelę';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram =>
+      'Apibūdinkite savo lojalumo programą';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Rodomas vardas';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Neturite paskyros?';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE, yyyy MMM d';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Redaguoti atlygį';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Redaguoti elementą';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'El. pašto adresas';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'Būtinas el';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Darbuotojo kortelės';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Darbuotojas pašalintas';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'Darbuotojo nustatymai išsaugoti';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Užsiregistravusios įmonės';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Įveskite galiojantį el. pašto adresą';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard =>
+      'Įveskite kontaktinės kortelės biografiją';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Įveskite programos pavadinimą';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Įveskite savo biografiją';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Įveskite savo telefono numerį';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'Įveskite savo svetainės URL';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Renginio ženklelis';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee =>
+      'Pavyzdys: 10 pašto ženklų = nemokama kava';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Pridėta veido nuotrauka';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'Nepavyko pridėti programos';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Nepavyko pridėti antspaudo';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Nepavyko užregistruoti kliento';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Nepavyko pakeisti kontakto';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Nepavyko įkelti programų';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Nepavyko pateikti užsakymo';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Nepavyko pašalinti';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Nepavyko išsaugoti';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'Nepavyko išsaugoti JPG';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'Nepavyko išsaugoti PNG';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'Nepavyko išsaugoti QR kodo.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'Nepavyko išsaugoti įmonės informacijos';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Nepavyko atnaujinti būsenos';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Vardas';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Maistas ir gėrimai';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Nemokamas desertas';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Reikalingas galerijos leidimas. Įgalinkite jį nustatymuose.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Pradėkite';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Eik';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices => 'Eikite į Įrankiai → Susieti įrenginiai';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending =>
+      'Laukiama „Google“ piniginės sąrankos.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Laukiama „Google“ piniginės sąrankos. Profilio nuoroda nukopijuota.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Plėskite savo verslą';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Vartotojas svečias';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'IBAN numeris';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'BIURE';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Laukiama kvietimo';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'Kvietimas atmestas';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Kvietimas išsiųstas. Darbuotojas bus pridėtas po to, kai jis bus priimtas.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Pakviesti darbuotoją';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Pakvieskite kaip darbuotoją';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Pareigybės pavadinimas';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Pavardė';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Prisijunkite naudodami QR';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Atsijungti tik nuo šios paskyros? Kitos paskyros liks šiame telefone.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Prisijungęs per „Google“ (demo paskyra: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Prisijungiame…';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain =>
+      'Prisijungti nepavyko. Bandykite dar kartą.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'MMM d, yyyy – h:mm a';
 
   @override
   String get mmmmYyyy => 'MMMM yyyy';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Pažymėti lankomumą';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'Mano vardas';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'Mano Tapni profilis';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'Vardo laukas negali būti tuščias';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Nauja';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Kol kas kontaktų nėra';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Detalių kol kas nėra';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Dar nepridėta jokių nuorodų.\\nJei norite pradėti, palieskite „Pridėti nuorodą“.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Jokių atitikmenų';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Priežastis nenurodyta.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Neužsiregistravęs';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Antspaudų skaičius';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Bendrinti vienu paspaudimu';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Atidarykite „Barqody“ kitame telefone';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Atidarykite Kamera';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Užsakymo informacija';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Popierinė kortelė';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'Slaptažodį turi sudaryti bent 4 simboliai';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'Slaptažodį turi sudaryti bent 6 simboliai';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Telefono numeris';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Telefonas reikalingas';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Telefono numeris';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Pasirinkite vietą';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Įveskite slaptažodį';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Įveskite vartotojo vardą';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Įveskite galiojantį el. pašto adresą';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'Įveskite tinkamą antspaudų skaičių';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Įveskite savo el. pašto adresą';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Įveskite savo vardą';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Įveskite slaptažodį';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Nukreipkite fotoaparatą į QR kodą, kad nuskaitytumėte automatiškai.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Nukreipkite fotoaparatą į įvykio ženklelį ir bakstelėkite fotoaparato mygtuką.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Nukreipkite fotoaparatą į popierinę kortelę ir bakstelėkite fotoaparato mygtuką.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'Ruošiamas QR kodas…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'Profilis nerastas.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'Profilis sėkmingai atnaujintas!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'QR kodas išsaugotas galerijoje!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'Baigėsi QR kodo galiojimo laikas';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'Baigėsi QR kodo galiojimo laikas. Bakstelėkite atnaujinti.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Nekilnojamas turtas';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Pridedamas kvitas';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Atnaujinkite prenumeratą, kad atkurtumėte visišką prieigą prie aukščiausios kokybės funkcijų ir duomenų.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Pakartotinai nufotografuoti';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Atlygio titulas';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Apdovanojimas atrakintas 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Vaidmuo ar kompanija';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Išsaugoti pakeitimus';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Išsaugoti kontaktą';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Išsaugoti profilį';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Išsaugoti nustatymus';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Išsaugoti vartotojo vardą';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Išsaugoti kortelę';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Išsaugoti kontaktą';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Išsaugota vietoje. Galbūt nepavyko sinchronizuoti.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Nuskaitykite QR kodą arba pridėkite asmenį, kurį sutikote, kad sukurtumėte savo tinklą.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Nuskaityta per QR';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Ekrano tema';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'Paieška nepavyko. Bandykite dar kartą.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Pasirinkite Įmonė';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Pasirinkite dienų seką';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Pasirinkite Pabaigos datą';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Pasirinkite pradžios datą';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Siųsti pakvietimą';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Siųsti kvietimą dalyvauti';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Bendrinti nuorodą';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Pamainos laikas';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Išmanusis kontaktų fiksavimas';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Antspaudo kraštinės spalva';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Antspaudo spalva';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Antspaudų piktogramos (nebūtina)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Duoti antspaudai';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Pradėkite kurti savo tinklą';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Gatvės pavadinimas';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Norėdami atrakinti visą prieigą, perjunkite į verslo paskyrą.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Bakstelėkite Susieti įrenginį ir nuskaitykite šį QR';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Bakstelėkite, kad pridėtumėte vaizdą';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Bakstelėkite, kad pakeistumėte';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Šablonas pritaikytas vietoje. Sinchronizuoti nepavyko.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Teksto spalva';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'Ši paskyra';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Ši funkcija išskirtinai prieinama verslo vartotojams.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'Šis asmuo yra jūsų komandoje';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Ši programa pristabdyta';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Iš viso pašto ženklų';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Išbandykite kitą pavadinimą, el. pašto adresą ar įmonę.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'Nepavyko išsaugoti profilio. Bandykite dar kartą.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Nepavyko atnaujinti vartotojo vardo. Bandykite dar kartą.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'Kuriama – vietoj to prisijunkite naudodami el. paštą / slaptažodį.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Nežinomas vartotojas';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Atnaujinkite GPS vietą';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Atnaujinti būseną';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Atnaujinti krepšelį';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Atnaujinti elementą';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Atnaujinkite į';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Atnaujinkite į Business PRO';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Įkelti kvitą (neprivaloma)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Naudokite Mano vietą';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Naudokite tik raides, skaičius, apatinius brūkšnius arba brūkšnelius';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'Vartotojo vardą turi sudaryti bent 3 simboliai';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'Vartotojo vardą turi sudaryti ne daugiau kaip 30 simbolių';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'Vartotojo vardas sėkmingai atnaujintas!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Laukiama, kol jie priims';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'Svetainės URL';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Savaitgalio dienos';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Darbo vieta';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'Jūsų PRO prenumerata baigėsi.\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => 'Jūsų PRO prenumerata baigėsi.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      '„Premium“ funkcijos šiuo metu išjungtos.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Pro nuorodos paslėptos jūsų viešajame profilyje.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Jūsų verslo informacija ir duomenys yra saugūs.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Pridėti $label elementą';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Pridėkite bent vieną $label elementą';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'Nėra $label elementų.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Prekių dar nėra. Pridėkite savo pirmąjį $label elementą.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Joks viešasis profilis neatitinka „@$query“.';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Kodas: $code';
   }
 }

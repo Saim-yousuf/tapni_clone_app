@@ -12,325 +12,329 @@ class AppLocalizationsGu extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'સાધનો';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'એકાઉન્ટ સેટિંગ્સ';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'સૂચનાઓ';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'તમારા માટે';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'તમારી પ્રોફાઇલ';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'પ્રોફાઇલ સંપાદિત કરો';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => 'તમારું નામ, ફોટો અને બાયો બદલો';
 
   @override
-  String get username => 'Username';
+  String get username => 'વપરાશકર્તા નામ';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'તમારું અનન્ય પ્રોફાઇલ વપરાશકર્તા નામ સેટ કરો';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'સામાજિક લિંક્સ';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Instagram, WhatsApp, વેબસાઇટ અને વધુ ઉમેરો';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'સાર્વજનિક પ્રોફાઇલ';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => 'કોઈપણ તમારી પ્રોફાઇલ શોધી અને જોઈ શકે છે';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'શોધમાંથી છુપાયેલું — અન્ય લોકો તમને શોધી શકતા નથી';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'મારો QR કોડ શેર કરો';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'અન્ય લોકોને તમારું ડિજિટલ બિઝનેસ કાર્ડ સ્કેન કરવા દો';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'ખરીદી અને પુરસ્કારો';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'મારા ઓર્ડર્સ';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => 'તમે દુકાનોમાંથી આપેલા ઓર્ડરને ટ્રેક કરો';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'મારા પુરસ્કાર કાર્ડ્સ';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'લોયલ્ટી પ્રોગ્રામમાંથી સ્ટેમ્પ અને પોઈન્ટ જુઓ';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'કાર્યસ્થળ';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'કર્મચારી આમંત્રણો';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'વ્યવસાયો તરફથી ટીમ આમંત્રણો સ્વીકારો અથવા નકારો';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'કાર્યસ્થળે ચેક-ઇન';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'સ્થાન સાથે તમારી નોકરી પર ઘડિયાળ અને બહાર';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'એકાઉન્ટ્સ અને ઉપકરણો';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'લિંક કરેલ ઉપકરણો';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => 'WhatsApp જેવા બીજા ફોનને લિંક કરો';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'એકાઉન્ટ્સ';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'એકાઉન્ટ્સ ઉમેરો અથવા સ્વિચ કરો';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return '$count એકાઉન્ટ્સ વચ્ચે સ્વિચ કરો';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'મદદ અને એકાઉન્ટ';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'એપ્લિકેશન ભાષા';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => 'એપ્લિકેશનમાં વપરાયેલી ભાષા બદલો';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'ભાષા શોધો';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'ફોનની ભાષા';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'ભાષા અપડેટ કરી';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'મદદ અને FAQs';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'સામાન્ય પ્રશ્નોના જવાબો';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'પ્રતિસાદ મોકલો';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle => 'બગની જાણ કરો અથવા નવી સુવિધા સૂચવો';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'લોગ આઉટ કરો';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'આ સત્રમાંથી સાઇન આઉટ કરો';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'રદ કરો';
 
   @override
-  String get save => 'Save';
+  String get save => 'સાચવો';
 
   @override
-  String get done => 'Done';
+  String get done => 'થઈ ગયું';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(ફક્ત વાંચો)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 પોઈન્ટ = 100 PKR (ઉદાહરણ નિયમ)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '10 સ્ટેમ્પ જરૂરી છે';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '123 મુખ્ય સેન્ટ, શહેર';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 દિવસ પહેલા';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3-30 અક્ષરો. માત્ર અક્ષરો, સંખ્યાઓ, અન્ડરસ્કોર અને હાઇફન્સ.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'સ્વીકારો';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'ઍક્સેસ પ્રતિબંધિત';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'એકાઉન્ટ / IBAN: અહીં એકાઉન્ટ નંબર ઉમેરો';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'એકાઉન્ટ શીર્ષક: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'સક્રિય';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'સક્રિય';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'એક્ટિવ કાર્ડ';
 
   @override
-  String get add => 'Add';
+  String get add => 'ઉમેરો';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'એક નોંધ ઉમેરો...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'એકાઉન્ટ ઉમેરો';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst => 'પહેલા ઓછામાં ઓછી એક શ્રેણી ઉમેરો';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'ડિસ્પ્લે ક્રમમાં શ્રેણીઓ ઉમેરો (દા.ત. ફાસ્ટ ફૂડ, પછી દેશી)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'પ્રથમ તમારા કેટલોગ સેટિંગ્સમાં શ્રેણીઓ ઉમેરો.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'સંપર્ક ઉમેરો';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'લિંક ઉમેરો';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'નીચે તમારી પ્રોફાઇલમાં લિંક્સ ઉમેરો';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'પહેલા તમારી પ્રોફાઇલમાં લિંક્સ ઉમેરો, પછી તેમને અહીં સક્ષમ કરો.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'લોગો ઉમેરો';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'પોઈન્ટ ઉમેરો';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'પ્રોગ્રામ ઉમેરો';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'સ્ટેમ્પ ઉમેરો';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Google Wallet માં ઉમેરો';
 
   @override
-  String get address => 'Address';
+  String get address => 'સરનામું';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'બધા';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'બધા પકડાયા!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'બધી સૂચનાઓ વાંચેલી તરીકે ચિહ્નિત!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'કૅમેરાને મંજૂરી આપો';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'આ ઉપકરણને તમારા Barqody એકાઉન્ટને ઍક્સેસ કરવાની મંજૂરી આપીએ? તમે તેને લિંક કરેલ ઉપકરણોમાંથી ગમે ત્યારે દૂર કરી શકો છો.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'પહેલેથી એકાઉન્ટ છે?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'એનાલિટિક્સ ડેશબોર્ડ';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'કોઈપણ ખાસ વિનંતીઓ...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'અરજી કરો';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'ડિઝાઇન લાગુ કરો';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'ટેમ્પલેટ લાગુ કરો';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'ચડતા';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'તમારા વ્યવસાયને તમારો QR સ્કેન કરવા અને તમને કર્મચારી તરીકે ઉમેરવા માટે કહો';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'શ્રેણી સોંપો';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'સોંપાયેલ કાર્યક્રમો';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'ઓછામાં ઓછા 6 અક્ષરો';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => 'આજે હાજરી પુરી';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'ઉપલબ્ધ સ્લોટ્સ';
 
   @override
-  String get background => 'Background';
+  String get background => 'પૃષ્ઠભૂમિ';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'પૃષ્ઠભૂમિ રંગ';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'બેંક ખાતું';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'બેંક વિગતો';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'બેંક: અહીં બેંકનું નામ ઉમેરો';
 
   @override
   String get barqody => 'Barqody';
@@ -339,494 +343,495 @@ class AppLocalizationsGu extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'શ્રેષ્ઠ મૂલ્ય';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'બિલની રકમ';
 
   @override
   String get bio => 'BIO';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => 'બાયો';
 
   @override
-  String get book => 'Book';
+  String get book => 'પુસ્તક';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'બુકિંગ તારીખ';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'બુકિંગ શેડ્યૂલ';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'બુકિંગ સમય';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'વ્યાપાર';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'વ્યવસાય શ્રેણી';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'વ્યવસાય વિગતો';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'વ્યવસાયનું નામ';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'વ્યવસાય વિકલ્પો';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'વ્યાપાર કાર્યક્રમો';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'માત્ર વ્યવસાય વપરાશકર્તાઓ';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'સાઇન અપ કરીને, તમે અમારા નિયમો અને શરતો સાથે સંમત થાઓ છો.';
 
   @override
-  String get call => 'Call';
+  String get call => 'કૉલ કરો';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'સ્કેન કરવા માટે કેમેરાની પરવાનગી જરૂરી છે.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'કોઈપણ સમયે રદ કરો.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'ઓર્ડર રદ કરો';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'નવો સંપર્ક કેપ્ચર કરો';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'શ્રેણીઓ';
 
   @override
-  String get category => 'Category *';
+  String get category => 'શ્રેણી *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'શ્રેણી પહેલેથી જ અસ્તિત્વમાં છે';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'શ્રેણીનું નામ';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'ચેક ઇન';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'તપાસો';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'તમારી પ્રોફાઇલ લિંક માટે અનન્ય વપરાશકર્તા નામ પસંદ કરો.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'યોજના પસંદ કરો';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'ટેમ્પલેટ પસંદ કરો';
 
   @override
-  String get close => 'Close';
+  String get close => 'બંધ કરો';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'કોડ કૉપિ કર્યો';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'ટૂંક સમયમાં આવી રહ્યું છે';
 
   @override
-  String get company => 'Company';
+  String get company => 'કંપની';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'કંપની કર્મચારી કાર્ડ';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'કંપની Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'આ પગલાંઓ પૂર્ણ કરો';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'પુષ્ટિ કરો અને પોઈન્ટ ઉમેરો';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'બુકિંગની પુષ્ટિ કરો';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'સ્થાનની પુષ્ટિ કરો';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'રિડેમ્પશનની પુષ્ટિ કરો';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'કનેક્ટેડ એકાઉન્ટ્સ';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'સંપર્ક સફળતાપૂર્વક ઉમેરાયો!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'સંપર્ક કાર્ડ';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => 'સંપર્ક સફળતાપૂર્વક વિનિમય થયો!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'સંપર્ક સ્ત્રોત';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'સંપર્ક સફળતાપૂર્વક અપડેટ થયો!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'સંપર્કો';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'ચાલુ રાખો';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'નકલ કરી';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'કોડ કૉપિ કરો';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'સ્થાન મેળવી શકાયું નથી. કૃપા કરીને GPS પરવાનગી સક્ષમ કરો.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'એકાઉન્ટ સ્વિચ કરી શકાયું નથી';
 
   @override
-  String get create => 'Create';
+  String get create => 'બનાવો';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'એકાઉન્ટ બનાવો';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'લોયલ્ટી પ્રોગ્રામ બનાવો';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'નવી લિંક બનાવો';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'પ્રોગ્રામ બનાવો';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'પુરસ્કાર બનાવો';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'ગ્રાહકો માટે સ્ટેમ્પ અથવા પોઈન્ટ પુરસ્કારો બનાવો';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'તમારું પ્રથમ કાર્ડ બનાવો';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'ગ્રાહકો માટે તમારું પ્રથમ પુરસ્કાર કાર્ડ બનાવો';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'બનાવટની તારીખ';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'સ્ટેમ્પ્ડ અને અનસ્ટેમ્પ્ડ સ્લોટ્સ માટે કસ્ટમ છબીઓ. જો સેટ કરેલ ન હોય તો ડિફોલ્ટનો ઉપયોગ થાય છે.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'કસ્ટમ લિંક';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'ગ્રાહક વિગતો';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'ગ્રાહક સફળતાપૂર્વક નોંધાયેલ';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'ગ્રાહક હજી નોંધાયેલ નથી';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'ગ્રાહક નો શો';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'ગ્રાહક ઓર્ડર';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'કાર્ડ ડિઝાઇન કસ્ટમાઇઝ કરો';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'ડિઝાઇન કસ્ટમાઇઝ કરો';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'તમારી પ્રોફાઇલને કસ્ટમાઇઝ કરો, PRO ટેમ્પલેટ્સને અનલૉક કરો અને અમર્યાદિત લીડ્સ મેળવો.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'તમારી જાતને કસ્ટમાઇઝ કરો';
 
   @override
-  String get date => 'Date';
+  String get date => 'તારીખ';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'તારીખ શ્રેણી';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'નકાર';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'કાઢી નાખો';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'કાર્ડ કાઢી નાખીએ?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'કેટેગરી કાઢી નાખો';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'સંપર્ક કાઢી નાખો';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'પુરસ્કાર ડિલીટ કરીએ?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'ઉતરતા';
 
   @override
-  String get description => 'Description';
+  String get description => 'વર્ણન';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'વર્ણન (વૈકલ્પિક)';
 
   @override
-  String get details => 'Details';
+  String get details => 'વિગતો';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'ઉપકરણ લિંક કર્યું';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'ઉપકરણ લૉગ આઉટ થયું';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'ઉપકરણ સ્થિતિ';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'ડિજિટલ બિઝનેસ કાર્ડ';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'ડિજિટલ બિઝનેસ કાર્ડ';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'ખાતું નથી?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'દા.ત. ફાસ્ટ ફૂડ';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'દા.ત. ખાંડ નહીં, વધારે ગરમ...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => '50 પોઈન્ટ્સ મેળવ્યા';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'સંપાદિત કરો';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'કાર્ડ સંપાદિત કરો';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'વિગતો સંપાદિત કરો';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'પ્રોફાઇલ સંપાદિત કરો';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'સેટિંગ્સ સંપાદિત કરો';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'તમારી પ્રોફાઇલ વિગતો સંપાદિત કરો';
 
   @override
-  String get email => 'Email';
+  String get email => 'ઈમેલ';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'ઈમેલ અને પાસવર્ડ';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'ઇમેઇલ સરનામું';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'ઇમેઇલ લોગિન અથવા QR સ્કેન કરો';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'કર્મચારી કાર્ડ';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'કર્મચારી કાર્ડ';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'કર્મચારીનો ચહેરો ફોટો';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'ખાલી સ્લોટ';
 
   @override
-  String get end => 'END';
+  String get end => 'અંત';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'સમાપ્તિ તારીખ';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'સમાપ્તિ કલાક';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'ગ્રાહકની નોંધણી કરો';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'બિલની રકમ દાખલ કરો';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'કોડ દાખલ કરો';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'તેના બદલે કોડ દાખલ કરો';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'નીચે નેટવર્કિંગ સંપર્ક વિગતો દાખલ કરો.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'તમારું નામ દાખલ કરો';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'તમારો પાસવર્ડ દાખલ કરો';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'ઇવેન્ટ બેજ';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'એક્સચેન્જ સંપર્ક';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'સંપર્કની આપલે કરી રહ્યું છે...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'અન્વેષણ કરો';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'સંપર્ક અપડેટ કરવામાં નિષ્ફળ.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'ભરેલ સ્લોટ';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'સંપર્કો ફિલ્ટર કરો';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'સંપર્કો ફિલ્ટર કરો';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'BarQody પર લોકોને શોધો';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'વપરાશકર્તા શોધો';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'વપરાશકર્તા શોધો';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'વપરાશકર્તા નામ શોધો';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'ભૂલી ગયા છો?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'મફત કોફી';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'પૂરું નામ';
 
   @override
-  String get general => 'General';
+  String get general => 'જનરલ';
 
   @override
-  String get go => 'Go';
+  String get go => 'જાઓ';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'બિઝનેસ જાઓ';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'ગેસ્ટ';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'હેલો,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'આ UI ડેમોમાં સહાય કેન્દ્ર અક્ષમ છે.';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => 'હેક્સ: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'QR કોડને ફ્રેમની અંદર પકડી રાખો - તે આપમેળે સ્કેન કરે છે.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'તમે આ કાર્ડ કેવી રીતે ડિઝાઇન કરવા માંગો છો?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'સંપર્કો આયાત કરો';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'સંપર્કો આયાત કરો હજુ સુધી ઉપલબ્ધ નથી.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'માં';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'ઇનકમિંગ ઓર્ડર';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'અમાન્ય પ્રોફાઇલ URL. માન્ય BarQody કાર્ડ અથવા QR કોડ સ્કેન કરો.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'અમાન્ય QR કોડ. Barqody લિંક QR નો ઉપયોગ કરો.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'કર્મચારીઓને આમંત્રિત કરો, પાળી સેટ કરો અને હાજરીને ટ્રૅક કરો';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'તમને કર્મચારી તરીકે જોડાવા આમંત્રણ આપ્યું';
 
   @override
-  String get janeDoe => 'Jane Doe';
+  String get janeDoe => 'જેન ડો';
 
   @override
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'જોબ શીર્ષક';
 
   @override
-  String get johnDoe => 'John Doe';
+  String get johnDoe => 'જ્હોન ડો';
 
   @override
-  String get johnSmith => 'John Smith';
+  String get johnSmith => 'જ્હોન સ્મિથ';
 
   @override
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'જોડાયા: 15 જાન્યુઆરી, 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,10 +839,10 @@ class AppLocalizationsGu extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'તમારું એકાઉન્ટ સુરક્ષિત રાખો. જ્યારે તમે તમારા વિશ્વાસુ ઉપકરણને લિંક કરવા માંગતા હોવ ત્યારે જ QR કોડ સ્કેન કરો.';
 
   @override
-  String get label => 'Label';
+  String get label => 'લેબલ';
 
   @override
   String get lat => 'Lat';
@@ -845,1197 +850,1202 @@ class AppLocalizationsGu extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'તમારી નેટવર્કિંગ પ્રોફાઇલને ઝટપટ જોવા માટે અન્ય લોકોને તેમના ફોનના કૅમેરાને આ QR કોડ પર નિર્દેશ કરવા દો.';
 
   @override
-  String get link => 'Link';
+  String get link => 'લિંક';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'ઉપકરણને લિંક કરો';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'બીજા ફોન પર QR દ્વારા લિંક કરો';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'લિંક ક્લિપબોર્ડ પર કૉપિ કરી';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'લિંક સેટિંગ્સ';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'લિંક સેટિંગ્સ';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'આ ઉપકરણને લિંક કરીએ?';
 
   @override
-  String get links => 'Links';
+  String get links => 'લિંક્સ';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'આ કાર્ડ પર લિંક્સ';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'સ્થાન હજી સેટ કર્યું નથી';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'સ્થાન પરવાનગી જરૂરી છે';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'હાજરી માટે સ્થાન પરવાનગી જરૂરી છે';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'લોગ ઇન કરો';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'તમારા ડિજિટલ કાર્ડ અને નેટવર્કનું સંચાલન કરવા માટે લૉગ ઇન કરો.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'QR કોડ વડે લોગ ઇન કરો';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'લોગ આઉટ કરો';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'બધા લોગ આઉટ કરો';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'ઉપકરણને લોગ આઉટ કરીએ?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'લોયલ્ટી પ્રોગ્રામ્સ';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'શ્રેણીઓ મેનેજ કરો';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'સંપર્ક મેનેજ કરો';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'કર્મચારીઓનું સંચાલન કરો';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'તમારી વ્યક્તિગત વિગતો અને અન્ય પસંદગીઓનું સંચાલન કરો';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'માર્ક પૂર્ણ';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'માસિક';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'મારા કાર્ડ્સ';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'મારું સ્થાન';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'મારા પુરસ્કારો';
 
   @override
-  String get name => 'Name';
+  String get name => 'નામ';
 
   @override
   String get name2 => 'NAME';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'નામ જરૂરી છે';
 
   @override
   String get nameCompanyCom => 'name@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'નવું કાર્ડ';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'નવું કાર્ડ';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'નવી શ્રેણી';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'નવો પુરસ્કાર';
 
   @override
-  String get next => 'Next';
+  String get next => 'આગળ';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'આગામી કાર્ડ';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet =>
+      'હજી સુધી કોઈ સક્રિય લિંક્સ જોડાયેલ નથી';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'કોઈ સક્રિય પુરસ્કાર કાર્યક્રમો ઉપલબ્ધ નથી.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'હજુ સુધી કોઈ કર્મચારી કાર્ડ નથી';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'કોઈ કર્મચારીઓ ઉમેર્યા નથી';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'હજુ સુધી કોઈ કર્મચારી નથી';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'કોઈ એમ્પ્લોયર મળ્યો નથી';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'આ કેટેગરીમાં કોઈ આઇટમ નથી.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => 'કોઈ લિંક નમૂનાઓ ઉપલબ્ધ નથી';
 
   @override
-  String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+  String get noNewNotificationsAtThisTime => 'આ સમયે કોઈ નવી સૂચનાઓ નથી.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'હજુ સુધી કોઈએ તમારી પ્રોફાઇલ જોઈ નથી.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'કોઈ બાકી આમંત્રણો નથી';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'હજુ સુધી કોઈ પ્રોગ્રામ અસાઇન કર્યા નથી. નીચે પ્રોગ્રામ્સ ઉમેરો.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => 'આ છબીમાં કોઈ QR કોડ મળ્યો નથી.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'હજુ સુધી કોઈ પુરસ્કાર કાર્યક્રમો નથી';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay => 'આ દિવસે કોઈ સ્લોટ ઉપલબ્ધ નથી';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'કોઈ વપરાશકર્તાઓ મળ્યા નથી';
 
   @override
-  String get none => 'None';
+  String get none => 'કોઈ નહિ';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'તમારા વર્તમાન પ્લાન પર ઉપલબ્ધ નથી';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'હજુ સુધી ચેક ઇન કર્યું નથી';
 
   @override
-  String get note => 'Note';
+  String get note => 'નોંધ';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'નોંધો (વૈકલ્પિક)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'સૂચના સાફ';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'અહીં ફક્ત કવર, પ્રોફાઇલ ફોટો, નામ અને બાયો સંપાદનયોગ્ય છે.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'જ્યારે કોઈ વ્યક્તિ આ કાર્ડને સ્કેન કરે છે ત્યારે જ સક્ષમ લિંક્સ દેખાય છે.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown =>
+      'ફક્ત સાર્વજનિક પ્રોફાઇલ્સ બતાવવામાં આવે છે';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'અત્યારે ફક્ત આ ફોન તમારા એકાઉન્ટનો ઉપયોગ કરી રહ્યો છે.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'અથવા સાથે ચાલુ રાખો';
 
   @override
-  String get order => 'Order';
+  String get order => 'ઓર્ડર';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'ઓર્ડર વિગતો';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'ઓર્ડર ID';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'ઓર્ડર મળ્યો નથી';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'ઓર્ડર';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'પેપર કાર્ડ';
 
   @override
-  String get password => 'Password';
+  String get password => 'પાસવર્ડ';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'મહિને મહિને ચૂકવો';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'બાકી સ્વીકૃતિ';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'પ્રદર્શન ઝાંખી';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'વ્યક્તિગત વિગતો';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'ફોન';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'ફોટા';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'તૈયાર કલર થીમ પસંદ કરો. ઝડપી અને સ્વચ્છ.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'રંગ ચૂંટો';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'નકશા પર પસંદ કરો';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'ઓર્ડર મૂકો';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'યોજના સમાપ્ત';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'ચાલુ રાખવા માટે કૃપા કરીને વ્યવસાય વિગતો દાખલ કરો';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'કૃપા કરીને આઇટમનું નામ દાખલ કરો';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'કૃપા કરીને અપગ્રેડ કરતા પહેલા તમારા વ્યવસાયની વિગતો પ્રદાન કરો.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'કૃપા કરીને એક શ્રેણી પસંદ કરો';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'કૃપા કરીને સમય સ્લોટ પસંદ કરો';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst =>
+      'કૃપા કરીને પહેલા કાર્ય સ્થાન સેટ કરો';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'તમારા કૅમેરાને અન્ય ઉપકરણ પરના QR કોડ પર પૉઇન્ટ કરો';
 
   @override
-  String get points => 'Points';
+  String get points => 'પોઈન્ટ';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'પોઈન્ટ્સ કમાયા';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'પ્રીમિયમ સક્રિય';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'અગાઉનું કાર્ડ';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'કિંમત (રૂ.)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'પ્રો નમૂનો';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'પ્રોફાઇલ';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'પ્રોફાઇલ તપાસો';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'પ્રોફાઇલ સ્ટ્રેન્થ';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'પ્રોફાઇલ દર્શકો';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'પ્રોફાઇલ દૃશ્યો';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'પ્રોગ્રામ વિગતો';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'પ્રોગ્રામનું નામ';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'પ્રોગ્રામ મળ્યો નથી';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'પ્રોગ્રામનો પ્રકાર';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'QR કોડ';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'QR સ્કેન';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'જથ્થો';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'બધા વાંચો';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'માત્ર વાંચો';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => '1 સ્ટેમ્પ મેળવ્યો';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'તાજેતરની પ્રવૃત્તિ';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'અન્ય પુરસ્કાર રિડીમ કરો';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'પુરસ્કાર રિડીમ કરો';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'રિડીમ ફ્રી કોફી';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'QR રિફ્રેશ કરો';
 
   @override
-  String get region => 'Region';
+  String get region => 'પ્રદેશ';
 
   @override
-  String get rembiro => 'Rembiro';
+  String get rembiro => 'રેમ્બીરો';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'દૂર કરો';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'કર્મચારીને દૂર કરો';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'પ્લાન રિન્યૂ કરો';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'વિનંતી બાકી છે';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'વિનંતી બાકી છે';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'વિનંતી નકારી';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'સબ્સ્ક્રિપ્શનની વિનંતી કરો';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'રીસેટ કરો';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'પુરસ્કાર પૂર્ણ! રિડીમ કરવા માટે આ કાર્ડ બતાવો.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'પુરસ્કાર પૂર્ણ! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'પુરસ્કારની વિગતો';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'ઈનામ કાર્યક્રમ';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'ઈનામ કાર્યક્રમો';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'પુરસ્કાર રિડીમ કર્યો!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'પારિતોષિકો';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'પુરસ્કારો મેળવ્યા';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => 'માસિક રૂ. 1,600 બિલ';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => 'વાર્ષિક રૂ. 8,300 બિલ';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'સાચવો';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'તમારા વર્ક આઈડી કાર્ડને ફોન અથવા વોલેટમાં સાચવો';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'સ્કેન કરો';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'વપરાશકર્તાને કર્મચારી તરીકે ઉમેરવા માટે QR કોડ સ્કેન કરો';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'કર્મચારી ઉમેરવા માટે કોઈપણ વપરાશકર્તા અથવા વ્યવસાય QR સ્કેન કરો';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'રિડીમ કરવા માટે વ્યવસાય QR સ્કેન કરો';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'ગ્રાહક QR કોડ સ્કેન કરો';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'કર્મચારી પ્રોફાઇલ સ્કેન કરો';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'QR સ્કેન કરો';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'QR સ્કેન કરો / QR બતાવો';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'QR કોડ સ્કેન કરો';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice => 'અન્ય ઉપકરણ પર બતાવેલ QR સ્કેન કરો';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'આમંત્રિત કરવા માટે સ્કેન કરો';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'વપરાશકર્તાનામ દ્વારા શોધો...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'લિંક્સ શોધો';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => 'નામ, ઇમેઇલ અથવા કંપની શોધો';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'બધા જુઓ';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'જુઓ બધી પ્રવૃત્તિની મજાક ઉડાવવામાં આવે છે. લીડ્સ ઉમેરવામાં આવશે તેમ નવી પ્રવૃત્તિઓ દેખાશે.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'તારીખ પસંદ કરો';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'માર્કર પસંદ કરો';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'પ્રદેશ પસંદ કરો';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'લિંક આયકન હેઠળ ટેક્સ્ટ સેટ કરો';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'તમારા પોતાના રંગો, ફોટા અને પૃષ્ઠભૂમિ સેટ કરો.';
 
   @override
-  String get share => 'Share';
+  String get share => 'શેર કરો';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'શેર કાર્ડ';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'દરેક કાર્ડ પર અલગ અલગ લિંક્સ શેર કરો';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'પ્રોફાઇલ શેર કરો';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'લિંક બતાવો';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'આ કાર્ડ પર બતાવો';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Google સાથે સાઇન ઇન કરો';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'સાઇન અપ કરો';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'છોડો';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'હમણાં માટે અવગણો';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'સ્લોટ (મિનિટ)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'સોફ્ટવેર એન્જિનિયર';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'કંઈક ખોટું થયું';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'સૉર્ટ વિકલ્પો';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'ખાસ સૂચનાઓ';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'સ્ટેમ્પ કાર્ડ';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'સ્ટેમ્પ આયકન';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'સ્ટેમ્પ્સ';
 
   @override
   String get start => 'START';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'પ્રારંભ તારીખ';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'પ્રારંભ કલાક';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Barqody સાથે વધુ સ્માર્ટ નેટવર્કિંગ શરૂ કરો.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'આંકડા';
 
   @override
-  String get status => 'Status';
+  String get status => 'સ્થિતિ';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'સબ્સ્ક્રિપ્શન';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'સબ્સ્ક્રિપ્શન વિનંતી સબમિટ કરી';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'સબ્સ્ક્રિપ્શન વિનંતી સબમિટ કરી.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'કાર્ડ્સ બ્રાઉઝ કરવા માટે સ્વાઇપ કરો';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'હાજરીની ચકાસણી માટે ઝડપી સેલ્ફી લો';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'પ્રોફાઇલ ઉમેરવા અને સક્રિય કરવા માટે ઉપર \"સામાજિક લિંક્સ\" ને ટેપ કરો.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'નકશા પર ટેપ કરો અથવા તમારા વર્તમાન સ્થાનનો ઉપયોગ કરો';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'ફોટો ઉમેરવા માટે ટેપ કરો';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'QR કોડ શેર કરવા માટે ટૅપ કરો';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'ટીમ હાજરી';
 
   @override
-  String get template => 'Template';
+  String get template => 'ઢાંચો';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'નમૂનાઓ';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'આભાર! પ્રતિસાદ સબમિશન માત્ર મજાક છે.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'આ કાર્ડ અને તેનો QR કોડ કાઢી નાખવામાં આવશે.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'આ સુવિધા ફક્ત વ્યવસાયિક વપરાશકર્તાઓ માટે જ ઉપલબ્ધ છે.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername =>
+      'આ પહેલેથી જ તમારું વપરાશકર્તા નામ છે.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'આ મહિને';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'આ આ પુરસ્કાર કાર્યક્રમ અને તેની તમામ નોંધણીઓને કાયમ માટે કાઢી નાખશે.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'આજે તમારો સપ્તાહાંત છે';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'આજે • 3:15 PM';
 
   @override
-  String get total => 'Total';
+  String get total => 'કુલ';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'તમારા ઓર્ડરને ટ્રૅક કરો';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'વ્યવહાર સંદર્ભ (વૈકલ્પિક)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'વ્યવહાર સંદર્ભ નંબર (વૈકલ્પિક)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'ફરી પ્રયાસ કરો';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'બિઝનેસ પ્રો અજમાવી જુઓ';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'બિઝનેસ પ્રો અજમાવી જુઓ.';
 
   @override
-  String get type => 'Type';
+  String get type => 'પ્રકાર';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'શોધવા માટે વપરાશકર્તાનામના ઓછામાં ઓછા 2 અક્ષરો લખો.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'QR હેઠળ બતાવેલ 8-અક્ષરનો કોડ ટાઈપ કરો.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'વિકાસ હેઠળ - તેના બદલે ઈમેલ/પાસવર્ડ દ્વારા લોગિન કરો.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'અનસ્ટેમ્પ આઇકન';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'હવે અપગ્રેડ કરો';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'પર અપગ્રેડ કરો';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Tapni PRO પર અપગ્રેડ કરો';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'નમૂનાનો ઉપયોગ કરો';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'અન્ય ફોન અથવા ટેબ્લેટ પર Barqody નો ઉપયોગ કરો. તમે નિયંત્રણમાં રહો છો - કોઈપણ સમયે કોઈપણ ઉપકરણને લૉગ આઉટ કરો.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'આ કોડ સ્કેન કરવા માટે તમારા ફોન પર Barqody નો ઉપયોગ કરો';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'ડિફૉલ્ટ આઇકનનો ઉપયોગ કરો';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'આ ફોટોનો ઉપયોગ કરો';
 
   @override
   String get user => 'USER';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'સંસ્કરણ: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'તમારા ગ્રાહકોના ઓર્ડર જુઓ અને અપડેટ કરો';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'પ્રોફાઇલ જુઓ';
 
   @override
-  String get views => 'Views';
+  String get views => 'દૃશ્યો';
 
   @override
-  String get website => 'Website';
+  String get website => 'વેબસાઈટ';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'ફરી સ્વાગત છે';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'એકાઉન્ટ સેન્ટરમાં આપનું સ્વાગત છે';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'જ્યારે કોઈ વ્યવસાય તમને કર્મચારી તરીકે ઉમેરશે, ત્યારે તમારું કર્મચારી કાર્ડ અહીં દેખાશે. તમે તેની ડિઝાઇન ગમે ત્યારે કસ્ટમાઇઝ કરી શકો છો.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'જ્યારે કોઈ વ્યવસાય તમને તેમના પુરસ્કાર કાર્યક્રમમાં નોંધણી કરાવે છે, ત્યારે તે અહીં દેખાશે.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'જ્યારે કોઈ વ્યવસાય તમને તેમની ટીમમાં આમંત્રિત કરે છે, ત્યારે તે અહીં દેખાશે.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'જ્યારે બંધ કરવામાં આવે ત્યારે આ લિંક તમારી પ્રોફાઇલ પર દેખાશે નહીં';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'તમારા અથવા તમારી બ્રાન્ડ વિશે કંઈક લખો';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'વાર્ષિક';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'ગઈકાલે • 5:42 PM';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'તમારી શ્રેણીઓ';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'નોકરીદાતાઓ તરફથી તમારા કર્મચારી કાર્ડ';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'તમારી ફ્રી કોફી સફળતાપૂર્વક રિડીમ કરવામાં આવી છે.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'તમારા પુરસ્કારો';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'તમારું સબ્સ્ક્રિપ્શન સમાપ્ત થઈ ગયું છે. વિગતો માટે માહિતી આયકનને ટેપ કરો.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'તમારું નામ';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% ડિસ્કાઉન્ટ';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'અવતાર ટેપ કર્યો';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'ખાતા ધારકનું નામ';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'એકાઉન્ટ નંબર';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'હવે સક્રિય';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'બાયો ઉમેરો';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'કવર ફોટો ઉમેરો';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'ચહેરો ફોટો ઉમેરો';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'ઇન્ટ્રો વૉઇસ નોંધ ઉમેરો';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'પ્રોફાઇલ નામ ઉમેરો';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'પ્રોફાઇલ ફોટો ઉમેરો';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'સામાજિક લિંક્સ ઉમેરો (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'આઇટમ ઉમેરો';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'લિંક ઉમેરો';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'નીચે તમારી પ્રોફાઇલમાં લિંક્સ ઉમેરો';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'ફોટો ઉમેરો';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'કાર્ટમાં ઉમેરો';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'સરનામું (વૈકલ્પિક)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'બધા સંપર્ક પ્રકારો';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'માન્ય ત્રિજ્યા (મીટર)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'લગભગ ત્યાં છે!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'પહેલેથી જ કર્મચારી';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'પહેલેથી એકાઉન્ટ છે?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'હંમેશા અપ ટુ ડેટ';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'શું તમે ખરેખર Barqody માંથી લૉગ આઉટ કરવા માંગો છો?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'હાજરી નિષ્ફળ ગઈ';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'પૃષ્ઠભૂમિ રંગ';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'બુકિંગ નિષ્ફળ થયું';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward => 'આ પુરસ્કારનું ટૂંકમાં વર્ણન કરો...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'વ્યવસાય ચકાસાયેલ';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'વ્યવસાય ઇમેઇલ સરનામું';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'બિઝનેસ ફેક્સ';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'વ્યવસાય ફોન નંબર';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'વ્યવસાય વેબસાઇટ';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'કૅમેરામાં ભૂલ';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'કેપ્ચર ચહેરો';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'કાર્ડ પૂર્ણ થયું';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'કાર્ડ લેબલ';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'કાર્ડ લેબલનું નામ';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'કાર્ડ પૂર્વાવલોકન';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'કાર્ડ થીમ';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'કાર્ડ બનાવ્યું';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'કાર્ડનું નામ';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'કાર્ડ JPG તરીકે સાચવ્યું';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'કાર્ડ PNG તરીકે સાચવ્યું';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'કાર્ડ અપડેટ કર્યું';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'ફોટો બદલો';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'ચેક-ઇન ફેસ';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'ચેક-ઇન સફળ';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'ચેક-આઉટ ફેસ';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'ચેક-આઉટ સફળ';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'ટેમ્પલેટ પસંદ કરો';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => 'સંપર્ક કાર્ડ વ્યવસાય સરનામું';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'કાર્ડ કંપનીનું નામ સંપર્ક કરો';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'સંપર્ક કાર્ડ ઇમેઇલ';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'સંપર્ક કાર્ડ ઘર સરનામું';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'સંપર્ક કાર્ડ ફોન';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'કાર્ડ વેબસાઇટનો સંપર્ક કરો';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'લોગિન પૂર્ણ કરી શકાયું નથી';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'QR કોડ બનાવી શકાયો નથી';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'ઉપકરણને લિંક કરી શકાયું નથી';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'ઉપકરણ લોગ આઉટ કરી શકાયું નથી';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Google Wallet ખોલી શકાયું નથી';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'કાર્ડ ડિઝાઇન સાચવી શકાયું નથી';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'પ્રોફાઇલ દૃશ્યતા અપડેટ કરી શકાઈ નથી';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'ગેલેરી બનાવો';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'તમારી પ્રોફાઇલ શેર કરવા માટે એક કાર્ડ બનાવો';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'કાર્ડ બનાવો';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'કસ્ટમ બેંક';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'ગ્રાહકો નોંધણી અને સ્ટેમ્પ કરી શકાય છે';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'કાર્ડ કસ્ટમાઇઝ કરો';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram =>
+      'તમારા લોયલ્ટી પ્રોગ્રામનું વર્ણન કરો';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'ડિસ્પ્લે નામ';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'ખાતું નથી?';
 
   @override
   String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'પુરસ્કાર સંપાદિત કરો';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'આઇટમ સંપાદિત કરો';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'ઇમેઇલ સરનામું';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'ઇમેઇલ આવશ્યક છે';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'કર્મચારી કાર્ડ્સ';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'કર્મચારીને કાઢી મૂક્યા';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'કર્મચારી સેટિંગ્સ સાચવી';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'નોંધાયેલ વ્યવસાયો';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'માન્ય ઇમેઇલ દાખલ કરો';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard => 'સંપર્ક કાર્ડ માટે બાયો દાખલ કરો';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'પ્રોગ્રામનું નામ દાખલ કરો';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'તમારું બાયો દાખલ કરો';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'તમારો ફોન નંબર દાખલ કરો';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'તમારી વેબસાઇટ URL દાખલ કરો';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'ઇવેન્ટ બેજ';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'ઉદાહરણ: 10 સ્ટેમ્પ્સ = ફ્રી કોફી';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'ચહેરો ફોટો ઉમેર્યો';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'પ્રોગ્રામ ઉમેરવામાં નિષ્ફળ';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'સ્ટેમ્પ ઉમેરવામાં નિષ્ફળ';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'ગ્રાહકની નોંધણી કરવામાં નિષ્ફળ';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'સંપર્ક વિનિમય કરવામાં નિષ્ફળ';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'પ્રોગ્રામ્સ લોડ કરવામાં નિષ્ફળ';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'ઓર્ડર આપવામાં નિષ્ફળ';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'દૂર કરવામાં નિષ્ફળ';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'સાચવવામાં નિષ્ફળ';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'JPG સાચવવામાં નિષ્ફળ';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'PNG સાચવવામાં નિષ્ફળ';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'QR કોડ સાચવવામાં નિષ્ફળ.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails => 'વ્યવસાય વિગતો સાચવવામાં નિષ્ફળ';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'સ્થિતિ અપડેટ કરવામાં નિષ્ફળ';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'પ્રથમ નામ';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'ખોરાક અને પીણું';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'મફત ડેઝર્ટ';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'ગેલેરી પરવાનગી જરૂરી છે. કૃપા કરીને તેને સેટિંગ્સમાં સક્ષમ કરો.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'પ્રારંભ કરો';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'જાઓ';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices => 'ટૂલ્સ → લિંક કરેલ ઉપકરણો પર જાઓ';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending => 'Google Wallet સેટઅપ બાકી છે.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Google Wallet સેટઅપ બાકી છે. પ્રોફાઇલ લિંક કૉપિ કરી.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'તમારો વ્યવસાય વધારો';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'અતિથિ વપરાશકર્તા';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'IBAN નંબર';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'ઓફિસમાં';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'આમંત્રણ બાકી છે';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'આમંત્રણ નકાર્યું';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'આમંત્રણ મોકલ્યું. તેઓ સ્વીકારે પછી કર્મચારી ઉમેરવામાં આવશે.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'કર્મચારીને આમંત્રણ આપો';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'કર્મચારી તરીકે આમંત્રિત કરો';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'જોબ શીર્ષક';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'છેલ્લું નામ';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'QR વડે લૉગ ઇન કરો';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'ફક્ત આ ખાતામાંથી જ લોગ આઉટ કરીએ? અન્ય એકાઉન્ટ્સ આ ફોન પર રહેશે.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Google સાથે લૉગ ઇન (ડેમો એકાઉન્ટ: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'તમને લૉગ ઇન કરી રહ્યાં છીએ...';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'લૉગિન નિષ્ફળ થયું. ફરી પ્રયાસ કરો.';
 
   @override
   String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
@@ -2044,390 +2054,392 @@ class AppLocalizationsGu extends AppLocalizations {
   String get mmmmYyyy => 'MMMM yyyy';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'માર્ક હાજરી';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'મારું નામ';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'મારી તપની પ્રોફાઇલ';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'નામ ખાલી ન હોઈ શકે';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'નવી';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'હજુ સુધી કોઈ સંપર્કો નથી';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'હજુ સુધી કોઈ વિગતો નથી';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'હજી સુધી કોઈ લિંક ઉમેરાઈ નથી.\\nશરૂ કરવા માટે \"લિંક ઉમેરો\" પર ટૅપ કરો.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'કોઈ મેળ નથી';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'કોઈ કારણ આપ્યું નથી.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'નોંધાયેલ નથી';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'સ્ટેમ્પ્સની સંખ્યા';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'શેર કરવા માટે એક ટૅપ કરો';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone => 'તમારા બીજા ફોન પર Barqody ખોલો';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'કૅમેરો ખોલો';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'ઓર્ડર માહિતી';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'પેપર કાર્ડ';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'પાસવર્ડ ઓછામાં ઓછો 4 અક્ષરનો હોવો જોઈએ';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'પાસવર્ડ ઓછામાં ઓછો 6 અક્ષરનો હોવો જોઈએ';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'ફોન નંબર';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'ફોન જરૂરી છે';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'ફોન નંબર';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'સ્થાન પસંદ કરો';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'કૃપા કરીને પાસવર્ડ દાખલ કરો';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'કૃપા કરીને વપરાશકર્તા નામ દાખલ કરો';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'કૃપા કરીને માન્ય ઇમેઇલ સરનામું દાખલ કરો';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'કૃપા કરીને સ્ટેમ્પ્સની માન્ય સંખ્યા દાખલ કરો';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'કૃપા કરીને તમારો ઈમેલ દાખલ કરો';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'કૃપા કરીને તમારું નામ દાખલ કરો';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'કૃપા કરીને તમારો પાસવર્ડ દાખલ કરો';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'ઑટોમૅટિક રીતે સ્કૅન કરવા માટે કૅમેરાને QR કોડ પર પૉઇન્ટ કરો.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'કૅમેરાને ઇવેન્ટ બૅજ પર પૉઇન્ટ કરો અને કૅમેરા બટનને ટૅપ કરો.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'કેમેરાને પેપર કાર્ડ પર પોઇન્ટ કરો અને કેમેરા બટનને ટેપ કરો.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'QR કોડ તૈયાર કરી રહ્યાં છીએ...';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'પ્રોફાઇલ મળી નથી.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'પ્રોફાઇલ સફળતાપૂર્વક અપડેટ થઈ!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'QR કોડ ગેલેરીમાં સાચવ્યો!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'QR કોડ સમાપ્ત થયો';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'QR કોડ સમાપ્ત થયો. રિફ્રેશ પર ટૅપ કરો.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'રિયલ એસ્ટેટ';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'રસીદ જોડાયેલ છે';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'તમારી પ્રીમિયમ સુવિધાઓ અને ડેટાની સંપૂર્ણ ઍક્સેસ પુનઃસ્થાપિત કરવા માટે તમારું સબ્સ્ક્રિપ્શન રિન્યુ કરો.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'ફોટો ફરીથી લો';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'પુરસ્કાર શીર્ષક';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'પુરસ્કાર અનલૉક 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'ભૂમિકા અથવા કંપની';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'ફેરફારો સાચવો';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'સંપર્ક સાચવો';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'પ્રોફાઇલ સાચવો';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'સેટિંગ્સ સાચવો';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'વપરાશકર્તા નામ સાચવો';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'કાર્ડ સાચવો';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'સંપર્ક સાચવો';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'સ્થાનિક રીતે સાચવેલ. સમન્વયન નિષ્ફળ થઈ શકે છે.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'તમારું નેટવર્ક બનાવવા માટે QR કોડ સ્કૅન કરો અથવા તમે મળ્યા છો તે વ્યક્તિને ઉમેરો.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'QR દ્વારા સ્કેન કર્યું';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'સ્ક્રીન થીમ';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'શોધ નિષ્ફળ. ફરી પ્રયાસ કરો.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'કંપની પસંદ કરો';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'તારીખ શ્રેણી પસંદ કરો';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'સમાપ્તિ તારીખ પસંદ કરો';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'પ્રારંભ તારીખ પસંદ કરો';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'આમંત્રણ મોકલો';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'હાજરી માટે આમંત્રણ મોકલો';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'લિંક શેર કરો';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'શિફ્ટ ટાઇમિંગ';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'સ્માર્ટ સંપર્ક કેપ્ચર';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'સ્ટેમ્પ બોર્ડર રંગ';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'સ્ટેમ્પ રંગ';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'સ્ટેમ્પ ચિહ્નો (વૈકલ્પિક)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'સ્ટેમ્પ આપવામાં આવ્યા છે';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'તમારું નેટવર્ક બનાવવાનું શરૂ કરો';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'શેરીનું નામ';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'સંપૂર્ણ ઍક્સેસને અનલૉક કરવા માટે વ્યવસાય એકાઉન્ટ પર સ્વિચ કરો.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'ઉપકરણ લિંક કરો પર ટૅપ કરો અને આ QR સ્કેન કરો';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'છબી ઉમેરવા માટે ટેપ કરો';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'બદલવા માટે ટૅપ કરો';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'ટેમ્પ્લેટ સ્થાનિક રીતે લાગુ. સમન્વયન નિષ્ફળ થયું.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'ટેક્સ્ટનો રંગ';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'આ એકાઉન્ટ';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'આ સુવિધા ફક્ત વ્યવસાયિક વપરાશકર્તાઓ માટે જ ઉપલબ્ધ છે.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'આ વ્યક્તિ તમારી ટીમમાં છે';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'આ પ્રોગ્રામ થોભાવવામાં આવ્યો છે';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'કુલ સ્ટેમ્પ્સ';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'કોઈ અલગ નામ, ઈમેલ અથવા કંપની અજમાવી જુઓ.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'પ્રોફાઇલ સાચવવામાં અસમર્થ. ફરી પ્રયાસ કરો.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'વપરાશકર્તાનામ અપડેટ કરવામાં અસમર્થ. ફરી પ્રયાસ કરો.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'વિકાસ હેઠળ - તેના બદલે ઈમેલ/પાસવર્ડ દ્વારા લોગિન કરો.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'અજ્ઞાત વપરાશકર્તા';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'GPS સ્થાન અપડેટ કરો';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'અપડેટ સ્ટેટસ';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'કાર્ટ અપડેટ કરો';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'આઇટમ અપડેટ કરો';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'પર અપગ્રેડ કરો';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'વ્યવસાય પ્રો પર અપગ્રેડ કરો';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'અપલોડ રસીદ (વૈકલ્પિક)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'મારા સ્થાનનો ઉપયોગ કરો';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'માત્ર અક્ષરો, સંખ્યાઓ, અન્ડરસ્કોર અથવા હાઇફન્સનો ઉપયોગ કરો';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'વપરાશકર્તાનામ ઓછામાં ઓછા 3 અક્ષરોનું હોવું જોઈએ';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'વપરાશકર્તાનામ વધુમાં વધુ 30 અક્ષરોનું હોવું જોઈએ';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'વપરાશકર્તાનામ સફળતાપૂર્વક અપડેટ થયું!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'તેઓ સ્વીકારે તેની રાહ જોવી';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'વેબસાઇટ URL';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'સપ્તાહના દિવસો';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'કાર્ય સ્થાન';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'તમારું PRO સબ્સ્ક્રિપ્શન સમાપ્ત થઈ ગયું છે.\\n\\n';
 
   @override
   String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+      'તમારું PRO સબ્સ્ક્રિપ્શન સમાપ્ત થઈ ગયું છે.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'પ્રીમિયમ સુવિધાઓ હાલમાં અક્ષમ છે.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'પ્રો લિંક્સ તમારી સાર્વજનિક પ્રોફાઇલમાંથી છુપાયેલ છે.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'તમારા વ્યવસાયની વિગતો અને ડેટા સુરક્ષિત છે.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return '$label આઇટમ ઉમેરો';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'ઓછામાં ઓછી એક $label આઇટમ ઉમેરો';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'કોઈ $label આઇટમ ઉપલબ્ધ નથી.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'હજુ સુધી કોઈ આઇટમ નથી. તમારી પ્રથમ $label આઇટમ ઉમેરો.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'કોઈ સાર્વજનિક પ્રોફાઇલ \"@$query\" થી મેળ ખાતી નથી.';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'કોડ: $code';
   }
 }

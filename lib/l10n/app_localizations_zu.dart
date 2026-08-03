@@ -12,800 +12,813 @@ class AppLocalizationsZu extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Amathuluzi';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Amasethingi we-akhawunti';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Izaziso';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Kwakho';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'Iphrofayela yakho';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Hlela iphrofayela';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle =>
+      'Shintsha igama lakho, isithombe, nomlando wakho';
 
   @override
-  String get username => 'Username';
+  String get username => 'Igama lomsebenzisi';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'Setha igama lomsebenzisi lephrofayela yakho elehlukile';
 
   @override
   String get socialLinks => 'Social Links';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Faka i-Instagram, WhatsApp, iwebhusayithi nokunye';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Iphrofayela yomphakathi';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn =>
+      'Noma ubani angathola futhi abuke iphrofayela yakho';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Kufihliwe ekusesheni — abanye abakwazi ukukuthola';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Yabelana ngekhodi yami ye-QR';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Vumela abanye ukuthi baskene ikhadi lakho lebhizinisi elidijithali';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Ukuthenga nemiklomelo';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Imiyalo Yami';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => 'Landelela ama-oda owafake ezitolo';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Amakhadi Ami Omvuzo';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Buka izitembu namaphoyinti avela ezinhlelweni zokwethembeka';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Indawo yokusebenza';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Izimemo Zabasebenzi';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Yamukela noma yenqaba izimemo zeqembu ezivela kumabhizinisi';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Ngena Emsebenzini';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Ngena futhi uphume emsebenzini wakho ngendawo';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Ama-akhawunti namadivayisi';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Amadivayisi axhunyiwe';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => 'Xhuma enye ifoni njengo WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Ama-akhawunti';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Engeza noma shintsha ama-akhawunti';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Shintsha phakathi kwama-akhawunti angu-$count';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Usizo ne-akhawunti';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Ulimi lohlelo lokusebenza';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle =>
+      'Shintsha ulimi olusetshenziswe kuhlelo lokusebenza';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Sesha ulimi';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'Ulimi lwefoni';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Ulimi lubuyekeziwe';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Usizo & Imibuzo Evame Ukubuzwa';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Izimpendulo zemibuzo evamile';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Thumela Impendulo';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle => 'Bika iphutha noma phakamisa isici esisha';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Phuma';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Phuma kule seshini';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Khansela';
 
   @override
-  String get save => 'Save';
+  String get save => 'Londoloza';
 
   @override
-  String get done => 'Done';
+  String get done => 'Kwenziwe';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(Funda kuphela)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule =>
+      'Iphuzu elingu-1 = 100 PKR (isibonelo somthetho)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => 'Kudingeka Izitembu Eziyi-10';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '123 Main St, Idolobha';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => 'Ezinsukwini ezi-2 ezedlule';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 izinhlamvu. Izinhlamvu, izinombolo, ama-underscore namakhonco kuphela.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Yamukela';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'UKUFINYELELA KUkhawulelwe';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'I-akhawunti / IBAN: Engeza inombolo ye-akhawunti lapha';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Isihloko se-akhawunti: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Iyasebenza';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'IYASEBENZA';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'IKHADI ELISEBENZAYO';
 
   @override
-  String get add => 'Add';
+  String get add => 'Engeza';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Engeza inothi...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Engeza i-akhawunti';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Engeza okungenani isigaba esisodwa kuqala';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Engeza izigaba ngohlelo lokubonisa (isb. Ukudla Okusheshayo, bese kuba i-Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Engeza izigaba kuzilungiselelo zekhathalogi yakho kuqala.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Engeza oxhumana naye';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Engeza Isixhumanisi';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'Engeza izixhumanisi kuphrofayela yakho ngezansi';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Engeza izixhumanisi kuphrofayela yakho kuqala, bese uzinike amandla lapha.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Engeza Ilogo';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Engeza Amaphuzu';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Engeza Uhlelo';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Engeza isitembu';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Engeza ku-Google Wallet';
 
   @override
-  String get address => 'Address';
+  String get address => 'Ikheli';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Konke';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Konke kubanjiwe!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Zonke izaziso zimakwe njengezifundiwe!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Vumela ikhamera';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Vumela le divayisi ukuthi ifinyelele i-akhawunti yakho ye-Barqody? Ungayisusa noma nini kumadivayisi Axhunyiwe.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Usuvele unayo i-akhawunti?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'Ideshibhodi Yezibalo';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Noma yiziphi izicelo ezikhethekile...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Faka isicelo';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Sebenzisa Idizayini';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Sebenzisa Isifanekiso';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Iyakhuphuka';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Cela ibhizinisi lakho ukuthi liskene i-QR yakho futhi likungeze njengesisebenzi';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Yabela Isigaba';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Izinhlelo Ezinikeziwe';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Okungenani izinhlamvu ezingu-6';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => 'Ukuba khona kuqediwe namuhla';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Izikhala ezitholakalayo';
 
   @override
-  String get background => 'Background';
+  String get background => 'Ingemuva';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Umbala wangemuva';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'I-Akhawunti Yasebhange';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Imininingwane Yasebhange';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Ibhange: Faka igama lebhange lapha';
 
   @override
   String get barqody => 'Barqody';
 
   @override
-  String get barqodyV100 => 'barqody v1.0.0';
+  String get barqodyV100 => 'ibhaqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Inani elingcono kakhulu';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Inani leBill';
 
   @override
-  String get bio => 'BIO';
+  String get bio => 'I-BIO';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => 'I-Bio';
 
   @override
-  String get book => 'Book';
+  String get book => 'Bhukha';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Idethi yokubhuka';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Isheduli yokubhuka';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Isikhathi sokubhuka';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'IBHIZINISI';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Isigaba Sebhizinisi';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Imininingwane Yebhizinisi';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Igama Lebhizinisi';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Izinketho zebhizinisi';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Izinhlelo Zebhizinisi';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Abasebenzisi Bebhizinisi Kuphela';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'Ngokubhalisa, uyavumelana nemigomo nemibandela yethu.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Shaya ucingo';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Imvume yekhamera iyadingeka ukuze uskene.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Khansela noma nini.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Khansela i-oda';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Thwebula Oxhumana Naye Omusha';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'Izigaba';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Isigaba *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'Isigaba sesivele sikhona';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Igama lesigaba';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Ngena';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Hlola';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Khetha igama lomsebenzisi elihlukile lesixhumanisi sephrofayela yakho.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Khetha Uhlelo';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Khetha Isifanekiso';
 
   @override
-  String get close => 'Close';
+  String get close => 'Vala';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Ikhodi ikopishiwe';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Iyeza Maduze';
 
   @override
-  String get company => 'Company';
+  String get company => 'Inkampani';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Ikhadi Labasebenzi Lenkampani';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'Inkampani Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Qedela lezi zinyathelo';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Qinisekisa futhi Wengeze Amaphuzu';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Qinisekisa Ukubhukha';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Qinisekisa Indawo';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Qinisekisa Ukuhlengwa';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Ama-akhawunti Axhunyiwe';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Oxhumana naye wengezwe ngempumelelo!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Ikhadi lokuxhumana';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully =>
+      'Oxhumana naye ushintshiwe ngempumelelo!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Umthombo Wokuxhumana';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully =>
+      'Oxhumana naye ubuyekezwe ngempumelelo!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Oxhumana nabo';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Qhubeka';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Kukopishiwe';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Kopisha ikhodi';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Ayikwazanga ukuthola indawo. Sicela uvule imvume ye-GPS.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Ayikwazanga ukushintsha i-akhawunti';
 
   @override
-  String get create => 'Create';
+  String get create => 'Dala';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Yenza i-akhawunti';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Dala Uhlelo Lobuqotho';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Dala isixhumanisi esisha';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Dala Uhlelo';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Dala Umvuzo';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Dala isitembu noma imiklomelo yamaphoyinti yamakhasimende';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Dala ikhadi lakho lokuqala';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Dala ikhadi lakho lomklomelo lokuqala lamakhasimende';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Usuku Lokudala';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Izithombe zangokwezifiso zezikhala ezinesitembu nezingenasigxivizo. Okuzenzakalelayo kusetshenziswa uma kungasethiwe.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Isixhumanisi ngokwezifiso';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Imininingwane Yekhasimende';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully =>
+      'Ikhasimende libhalise ngempumelelo';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Ikhasimende alikabhaliswa';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Ikhasimende Alikho Umbukiso';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Ama-oda Ekhasimende';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Hlela Idizayini Yekhadi';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Hlela Idizayini';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Enza ngendlela oyifisayo iphrofayela yakho, vula izifanekiso ze-PRO, futhi uthole imikhondo engenamkhawulo.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Zenzele wena';
 
   @override
-  String get date => 'Date';
+  String get date => 'Usuku';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Ibanga Ledethi';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Yenqaba';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Susa';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Susa ikhadi?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Susa Isigaba';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Susa Othintana Naye';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Susa Umklomelo?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Ukwehla';
 
   @override
-  String get description => 'Description';
+  String get description => 'Incazelo';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Incazelo (kuyakhetheka)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Imininingwane';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Idivayisi ixhunyiwe';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Idivayisi iphumile';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Isimo sedivayisi';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Ikhadi Lebhizinisi Ledijithali';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'Ikhadi Lebhizinisi Ledijithali';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Awunayo i-akhawunti?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'isib. Ukudla Okusheshayo';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'isib. Awukho ushukela, kushisa kakhulu...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'Uzuze Amaphuzu angu-50';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Hlela';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Hlela ikhadi';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Hlela Imininingwane';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Hlela iphrofayela';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Hlela Izilungiselelo';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Hlela imininingwane yephrofayela yakho';
 
   @override
-  String get email => 'Email';
+  String get email => 'I-imeyili';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'I-imeyili nephasiwedi';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'Ikheli le-imeyili';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'Ukungena nge-imeyili noma skena i-QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Ikhadi lesisebenzi';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'IKHADI LOMSEBENZI';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Isithombe Sobuso Besisebenzi';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Isikhala esingenalutho';
 
   @override
-  String get end => 'END';
+  String get end => 'PHELA';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Idethi Yokuphela';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Ihora lokugcina';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Bhalisa iKhasimende';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Faka inani lebhili';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Faka ikhodi';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Faka ikhodi esikhundleni';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Faka imininingwane yokuxhumana yenethiwekhi ngezansi.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Faka igama lakho';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Faka iphasiwedi yakho';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Ibheji Lomcimbi';
 
   @override
   String get exchangeContact => 'Exchange Contact';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Ishintsha othintana naye...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Hlola';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'Yehlulekile ukubuyekeza oxhumana naye.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Isikhala esigcwele';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Hlunga abathintwayo';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Hlunga Oxhumana Nabo';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Thola abantu ku-BarQody';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Thola umsebenzisi';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Thola Umsebenzisi';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Thola igama lomsebenzisi';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Ukhohlwe?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Ikhofi Lamahhala';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Igama eligcwele';
 
   @override
-  String get general => 'General';
+  String get general => 'Okujwayelekile';
 
   @override
-  String get go => 'Go';
+  String get go => 'Hamba';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'Hamba Ibhizinisi';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'ISIHAMBANE';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'Sawubona,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Isikhungo Sosizo sikhutshaziwe kule demo ye-UI.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Bamba ikhodi ye-QR ngaphakathi kohlaka — iskena ngokuzenzakalelayo.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Ufuna ukuklama kanjani leli khadi?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Ngenisa abathintwayo';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'Oxhumana nabo bokungenisa abatholakali okwamanje.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'phakathi';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Ama-oda angenayo';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'I-URL yephrofayela engavumelekile. Skena ikhadi le-BarQody elivumelekile noma ikhodi ye-QR.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Ikhodi ye-QR engavumelekile. Sebenzisa isixhumanisi se-Barqody QR.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Mema abasebenzi, setha amashifu futhi ulandelele ubukhona';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'Ukumeme ukuthi ujoyine njengesisebenzi';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -814,7 +827,7 @@ class AppLocalizationsZu extends AppLocalizations {
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Isihloko somsebenzi';
 
   @override
   String get johnDoe => 'John Doe';
@@ -826,7 +839,7 @@ class AppLocalizationsZu extends AppLocalizations {
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Ujoyine: Jan 15, 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,10 +847,10 @@ class AppLocalizationsZu extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Gcina i-akhawunti yakho iphephile. Skena kuphela amakhodi e-QR uma ufuna ukuxhuma idivayisi oyethembayo.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Ilebula';
 
   @override
   String get lat => 'Lat';
@@ -845,1197 +858,1221 @@ class AppLocalizationsZu extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Vumela abanye bakhombe ikhamera yefoni yabo kule khodi ye-QR ukuze babuke ngokushesha iphrofayela yakho yenethiwekhi.';
 
   @override
-  String get link => 'Link';
+  String get link => 'Isixhumanisi';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Xhuma idivayisi';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Xhuma nge-QR kwenye ifoni';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard =>
+      'Isixhumanisi sikopishelwe ebhodini lokunamathisela';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Xhuma Izilungiselelo';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Izilungiselelo zesixhumanisi';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Xhuma le divayisi?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Izixhumanisi';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Izixhumanisi kuleli khadi';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'Indawo ayikasethwa';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Imvume yendawo iyadingeka';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Imvume yendawo iyadingeka ukuze ubekhona';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Ngena ngemvume';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Ngena ngemvume ukuze uphathe ikhadi lakho ledijithali nenethiwekhi.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Ngena ngemvume ngekhodi ye-QR';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Phuma';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Phuma konke';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Phuma kudivayisi?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Izinhlelo Zobuqotho';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Phatha izigaba';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Phatha othintana naye';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Phatha Abasebenzi';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Phatha imininingwane yakho siqu nokunye okuncamelayo';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Umaka Uqediwe';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'Nyanga zonke';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Amakhadi Ami';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'Indawo Yami';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Imivuzo Yami';
 
   @override
-  String get name => 'Name';
+  String get name => 'Igama';
 
   @override
   String get name2 => 'NAME';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'Igama liyadingeka';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'igama@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Ikhadi Elisha';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Ikhadi elisha';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Isigaba Esisha';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Umvuzo Omusha';
 
   @override
-  String get next => 'Next';
+  String get next => 'Olandelayo';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'Ikhadi elilandelayo';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet =>
+      'Azikho izixhumanisi ezisebenzayo ezixhunyiwe okwamanje';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Azikho izinhlelo zemiklomelo ezisebenzayo ezitholakalayo.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Awekho amakhadi abasebenzi okwamanje';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Abekho abasebenzi abangeziwe';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Abekho abasebenzi okwamanje';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Akekho umqashi otholiwe';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'Azikho izinto kulesi sigaba.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable =>
+      'Azikho izifanekiso zesixhumanisi ezitholakalayo';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'Azikho izaziso ezintsha ngalesi sikhathi.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Akekho oke wabuka iphrofayela yakho okwamanje.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Azikho izimemo ezilindile';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Azikho izinhlelo ezinikeziwe okwamanje. Engeza izinhlelo ngezansi.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage =>
+      'Ayikho ikhodi ye-QR etholakele kulesi sithombe.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Azikho izinhlelo zemiklomelo okwamanje';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'Azikho izikhala ezitholakalayo ngalolu suku';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Abekho abasebenzisi abatholiwe';
 
   @override
-  String get none => 'None';
+  String get none => 'Lutho';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'Ayitholakali ohlelweni lwakho lwamanje';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Akungeniwe okwamanje';
 
   @override
-  String get note => 'Note';
+  String get note => 'Qaphela';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Amanothi (ongakukhetha)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Isaziso sisuliwe';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Ikhava kuphela, isithombe sephrofayela, igama kanye nomlando ohlelwayo lapha.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Izixhumanisi ezinikwe amandla kuphela zibonisa uma othile eskena leli khadi.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown =>
+      'Amaphrofayela asesidlangalaleni kuphela abonisiwe';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Yile foni kuphela esebenzisa i-akhawunti yakho njengamanje.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'NOMA UQHUBEKE NA';
 
   @override
-  String get order => 'Order';
+  String get order => 'Oda';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Oda Imininingwane';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'I-ID ye-oda';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'I-oda alitholakali';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Ama-oda';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Ikhadi Lephepha';
 
   @override
-  String get password => 'Password';
+  String get password => 'Iphasiwedi';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Khokha inyanga nenyanga';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'KULINDIWE UKWAMUKELWA';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Uhlolojikelele lokusebenza';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Imininingwane ekhombisa wena';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Ucingo';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Izithombe';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Khetha itimu yombala eseyenziwe ngomumo. Ngokushesha futhi kuhlanzekile.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Khetha Umbala';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Khetha kumephu';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Faka i-oda';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Uhlelo luphelelwe yisikhathi';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Sicela ufake imininingwane yebhizinisi ukuze uqhubeke';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Sicela ufake igama lento';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Sicela unikeze imininingwane yebhizinisi lakho ngaphambi kokuthuthukisa.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Sicela ukhethe isigaba';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Sicela ukhethe indawo yesikhathi';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst =>
+      'Sicela usethe indawo yokusebenza kuqala';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Khomba ikhamera yakho kukhodi ye-QR kwenye idivayisi';
 
   @override
-  String get points => 'Points';
+  String get points => 'Amaphuzu';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Amaphuzu Azuziwe';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'I-Premium iyasebenza';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Ikhadi langaphambilini';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Intengo (ama-Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'Isifanekiso se-PRO';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Iphrofayela';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Ukuhlola Iphrofayela';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Amandla Wephrofayela';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Izibukeli Zephrofayela';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Ukubukwa Kwephrofayela';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Imininingwane Yohlelo';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Igama Lohlelo';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'Uhlelo alutholakali';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Uhlobo Lohlelo';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'Ikhodi ye-QR';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'Izikena ze-QR';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Ubuningi';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Funda Konke';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Funda kuphela';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'Ithole isitembu esi-1';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Umsebenzi Wakamuva';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Sebenzisa Omunye Umvuzo';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Sebenzisa Umvuzo';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Ikhofi Esetshenzisiwe Yamahhala';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Vuselela i-QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'Isifunda';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Susa';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Susa Isisebenzi';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Vuselela Uhlelo';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Isicelo silindile';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Isicelo Silindile';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Isicelo sinqatshiwe';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Cela ukubhalisa';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Setha kabusha';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Umvuzo Uqediwe! Bonisa leli khadi ukuze ulisebenzise.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Umvuzo Uqediwe! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Imininingwane Yomvuzo';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Uhlelo Lomvuzo';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Izinhlelo Zomvuzo';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Umvuzo Ukhishiwe!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Imivuzo';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Imivuzo Ezuziwe';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => 'Ama-Rs 1,600 akhokhiswa nyanga zonke';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => 'Ama-Rs 8,300 akhokhiswa njalo ngonyaka';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'GCINA';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Londoloza ikhadi lakho le-ID yomsebenzi efonini noma esikhwameni';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Skena';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Skena ikhodi ye-QR yomsebenzisi ukuze umengeze njengesisebenzi';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Skena noma yimuphi umsebenzisi noma i-QR yebhizinisi ukuze ungeze isisebenzi';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem =>
+      'Skena I-QR Yebhizinisi Ukuze Ulisebenzise';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Skena Ikhodi ye-QR Yekhasimende';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Skena iphrofayili yesisebenzi';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Skena i-QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Skena i-QR / bonisa i-QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'Skena ikhodi ye-QR';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Skena i-QR eboniswe kwenye idivayisi';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Skena ukuze umeme';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Sesha ngegama lomsebenzisi...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Sesha izixhumanisi';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany =>
+      'Sesha igama, i-imeyili noma inkampani';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Bona Konke';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Bona wonke umsebenzi kuhlekwa. Imisebenzi emisha izovela njengoba imikhondo yengezwa.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Khetha idethi';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Khetha Omaka';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Khetha Isifunda';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon =>
+      'Setha umbhalo ngaphansi kwesithonjana sesixhumanisi';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Zibekele eyakho imibala, izithombe nesizinda.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Yabelana';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Yabelana ngekhadi';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Yabelana ngezixhumanisi ezihlukene ekhadini ngalinye';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Yabelana Ngephrofayela';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Bonisa isixhumanisi';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Bonisa kuleli khadi';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Ngena ngemvume nge-Google';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Bhalisela';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Yeqa';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Yeqa okwamanje';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'Isikhala (imizuzu)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Unjiniyela Wesoftware';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Kukhona into engahambanga kahle';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Izinketho Zokuhlunga';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Iziyalezo ezikhethekile';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Ikhadi lesitembu';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Isithonjana Sesitembu';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Izitembu';
 
   @override
-  String get start => 'START';
+  String get start => 'QALA';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Usuku okuqalwa ngalo';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Ihora lokuqala';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Qala ukuxhumana ngobuhlakani nge-Barqody.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Izibalo';
 
   @override
-  String get status => 'Status';
+  String get status => 'Isimo';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Ukubhalisa';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted =>
+      'Isicelo sokubhaliselwe sithunyelwe';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 =>
+      'Isicelo sokubhaliselwe sithunyelwe.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Swayipha ukuze uphequlule amakhadi';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Thatha isithombe ozishuthe sona ngokushesha ukuze uqinisekise ukuba khona';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Thepha \"Izixhumanisi Zomphakathi\" ngenhla ukuze wengeze futhi wenze amaphrofayela asebenze.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Thepha kumephu noma sebenzisa indawo yakho yamanje';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Thepha ukuze wengeze isithombe';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Thepha ukuze wabelane ngekhodi ye-QR';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Ukuhambela Ithimba';
 
   @override
-  String get template => 'Template';
+  String get template => 'Isifanekiso';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Izifanekiso';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Ngiyabonga! Ukuthunyelwa kwezimpendulo kuyahlekisa kuphela.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Leli khadi nekhodi yalo ye-QR kuzokhishwa.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Lesi sici sitholakala kuphela kubasebenzisi Bebhizinisi.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'Leli igama lakho lomsebenzisi vele.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'Kule nyanga';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Lokhu kuzosusa unomphela lolu hlelo lomklomelo nakho konke ukubhaliswa kwalo.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Namuhla impelasonto yakho';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Namuhla • 3:15 PM';
 
   @override
-  String get total => 'Total';
+  String get total => 'Isamba';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Landela ngomkhondo ama-oda akho';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional =>
+      'Ireferensi yokwenziwe (kuyakhetheka)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Inombolo yereferensi yokwenziwe (kuyakhetheka)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Zama futhi';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Zama Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Zama Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Uhlobo';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Thayipha okungenani izinhlamvu ezingu-2 zegama lomsebenzisi ukuze useshe.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Thayipha ikhodi enezinhlamvu ezingu-8 eboniswe ngaphansi kwe-QR.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'Ngaphansi Kokuthuthukiswa - Ngena ngemvume nge-imeyili/iphasiwedi esikhundleni salokho.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Susa isitembu Isithonjana';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Thuthukisa manje';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Thuthukela ku';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Thuthukela ku-Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Sebenzisa isifanekiso';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Sebenzisa i-Barqody kwamanye amafoni noma amaphilisi. Uhlala ulawula — phuma kunoma iyiphi idivayisi noma nini.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Sebenzisa i-Barqody efonini yakho ukuze uskene le khodi';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Sebenzisa isithonjana esizenzakalelayo';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Sebenzisa Lesi sithombe';
 
   @override
   String get user => 'USER';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Inguqulo: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Buka futhi ubuyekeze ama-oda avela kumakhasimende akho';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Buka iphrofayela';
 
   @override
-  String get views => 'Views';
+  String get views => 'Ukubuka';
 
   @override
-  String get website => 'Website';
+  String get website => 'Iwebhusayithi';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Siyakwamukela';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Siyakwamukela ku-Akhawunti Center';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Uma ibhizinisi likungeza njengesisebenzi, ikhadi lakho lesisebenzi lizovela lapha. Ungenza ngendlela oyifisayo umklamo wayo noma nini.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Uma ibhizinisi likubhalisa kuhlelo lwalo lomklomelo, lizovela lapha.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Uma ibhizinisi likumema ethimbeni labo, lizovela lapha.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Uma sivaliwe lesi sixhumanisi ngeke siboniswe kuphrofayela yakho';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Bhala okuthile ngawe noma ngomkhiqizo wakho';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Minyaka yonke';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Izolo • 5:42 PM';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Izigaba zakho';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Amakhadi akho abasebenzi avela kubaqashi';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'Ikhofi lakho lamahhala lisetshenziswe ngempumelelo.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Imivuzo Yakho';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Ukubhalisa kwakho kuphelile. Thepha isithonjana solwazi ukuze uthole imininingwane.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'igama lakho';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% Isaphulelo';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'I-Avatar ITAPHIWE';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Igama lomphathi we-akhawunti';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Inombolo Ye-akhawunti';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Iyasebenza manje';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Engeza i-Bio';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Engeza Isithombe Sekhava';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Engeza isithombe sobuso';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Engeza Inothi Yezwi Yesethulo';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Engeza Igama Lephrofayela';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Engeza Isithombe Sephrofayela';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Engeza Izixhumanisi Zomphakathi (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Engeza into';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Engeza isixhumanisi';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'Engeza izixhumanisi kuphrofayela yakho ngezansi';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Engeza isithombe';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Engeza ekalishini';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Ikheli (uyazikhethela)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Zonke izinhlobo zokuxhumana';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Irediyasi evunyelwe (amamitha)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Cishe usufikile!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Kakade Isisebenzi';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Usuvele unayo i-akhawunti?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Ihlala Kumanje';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Uqinisekile ukuthi ufuna ukuphuma ku-Barqody?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'Ukuba khona kwehlulekile';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Umbala Ongemuva';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'Ukubhuka kuhlulekile';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward => 'Chaza kafushane lo mklomelo...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Ibhizinisi Liqinisekisiwe';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Ikheli le-imeyili lebhizinisi';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Ifeksi yebhizinisi';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Inombolo yefoni yebhizinisi';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Iwebhusayithi yebhizinisi';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Iphutha lekhamera';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Thwebula Ubuso';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Ikhadi Liqediwe';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Ilebula lekhadi';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Igama Lelebula Yekhadi';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Ukuhlola Kuqala Kwekhadi';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Itimu Yekhadi';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Ikhadi lidaliwe';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Igama lekhadi';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Ikhadi lilondolozwe njenge-JPG';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Ikhadi lilondolozwe njenge-PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Ikhadi libuyekeziwe';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Shintsha isithombe';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Ubuso Bokungena';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Ukungena kuphumelele';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Ubuso Bokuphuma';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Ukuphuma kuphumelele';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Khetha isifanekiso';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress =>
+      'Ikheli lebhizinisi lekhadi lokuxhumana';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'Igama lenkampani yekhadi lokuxhumana';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'I-imeyili yekhadi lokuxhumana';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'Ikheli lasekhaya lekhadi lokuxhumana';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Ifoni yekhadi lokuxhumana';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'Iwebhusayithi yekhadi lokuxhumana';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'Ayikwazanga ukuqedela ukungena ngemvume';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'Ayikwazanga ukudala ikhodi ye-QR';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Ayikwazanga ukuxhuma idivayisi';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'Ayikwazanga ukuphuma kudivayisi';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Ayikwazanga ukuvula i-Google Wallet';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign =>
+      'Ayikwazanga ukulondoloza umklamo wekhadi';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Ayikwazanga ukubuyekeza ukubonakala kwephrofayela';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Dala Igalari';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Dala ikhadi ukuze wabelane ngephrofayela yakho';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Dala ikhadi';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Ibhange langokwezifiso';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Amakhasimende angabhaliswa futhi agxivizwe';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Enza ngendlela oyifisayo ikhadi';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram => 'Chaza uhlelo lwakho lokwethembeka';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Bonisa igama';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Awunayo i-akhawunti?';
 
   @override
   String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Hlela Umvuzo';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Hlela into';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'Ikheli le-imeyili';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'I-imeyili iyadingeka';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Amakhadi Abasebenzi';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Isisebenzi sisusiwe';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved =>
+      'Izilungiselelo zesisebenzi zilondoloziwe';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Amabhizinisi Abhalisiwe';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Faka i-imeyili evumelekile';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard =>
+      'Faka imininingwane yekhadi lokuxhumana';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Faka igama lohlelo';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Faka umlando wakho';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Faka inombolo yakho yocingo';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'Faka i-URL yewebhusayithi yakho';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Ibheji yomcimbi';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee =>
+      'Isibonelo: Izitembu eziyi-10 = Ikhofi Lamahhala';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Isithombe Sobuso Sengeziwe';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'Yehlulekile ukwengeza uhlelo';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Yehlulekile ukwengeza isitembu';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Yehlulekile ukubhalisa ikhasimende';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Yehlulekile ukushintsha oxhumana naye';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Yehlulekile ukulayisha izinhlelo';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Yehlulekile ukufaka i-oda';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Yehlulekile ukususa';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Yehlulekile ukulondoloza';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'Yehlulekile ukulondoloza i-JPG';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'Yehlulekile ukulondoloza i-PNG';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'Yehlulekile ukulondoloza Ikhodi ye-QR.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'Yehlulekile ukulondoloza imininingwane yebhizinisi';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Yehlulekile ukubuyekeza isimo';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Igama';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Ukudla Nesiphuzo';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Uphudingi Wamahhala';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Kudingeka imvume yegalari. Sicela uyinike amandla kokuthi Izilungiselelo.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Qalisa';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Hamba';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices =>
+      'Iya kokuthi Amathuluzi → Amadivayisi axhunyiwe';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending =>
+      'Ukusethwa kwe-Google Wallet kulindile.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Ukusethwa kwe-Google Wallet kulindile. Isixhumanisi sephrofayela sikopishiwe.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Khulisa ibhizinisi lakho';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Umsebenzisi Oyisivakashi';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'Inombolo ye-IBAN';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'EHHOVISI';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Isimemo Silindile';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'Isimemo sinqatshiwe';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Isimemo sithunyelwe. Isisebenzi sizokwengezwa ngemva kokwamukela.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Mema Isisebenzi';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Mema Njengesisebenzi';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Isihloko somsebenzi';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Isibongo';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Ngena ngemvume nge-QR';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Phuma kule akhawunti kuphela? Amanye ama-akhawunti azohlala kule foni.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Ungene ngemvume nge-Google (i-akhawunti yedemo: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Ikungenisa...';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain =>
+      'Ukungena kokuyimfihlo ayiphumelelanga. Zama futhi.';
 
   @override
   String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
@@ -2044,390 +2081,393 @@ class AppLocalizationsZu extends AppLocalizations {
   String get mmmmYyyy => 'MMMM yyyy';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Maka Ababekhona';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'Igama lami';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'Iphrofayela yami ye-Tapni';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'Igama alikwazi ukungabi nalutho';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Okusha';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Abekho abathintwayo okwamanje';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Ayikho imininingwane okwamanje';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Azikho izixhumanisi ezingeziwe okwamanje.\\nThepha okuthi \"Engeza isixhumanisi\" ukuze uqalise.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Akukho okufanayo';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Asikho isizathu esinikeziwe.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Awubhalisiwe';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Inombolo Yezitembu';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Ukuthepha Okukodwa Ukuze Ukwabelana';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone => 'Vula i-Barqody kwenye ifoni yakho';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Vula Ikhamera';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Oda Ulwazi';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Ikhadi lephepha';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'Iphasiwedi kumele okungenani ibe nezinhlamvu ezi-4';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'Iphasiwedi kumele okungenani ibe nezinhlamvu eziyisi-6';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Inombolo yocingo';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Kudingeka ifoni';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Inombolo yocingo';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Khetha Indawo';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Sicela ufake iphasiwedi';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Sicela ufake igama lomsebenzisi';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Ngicela ufake ikheli le-imeyili elilungile';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'Sicela ufake inombolo evumelekile yezitembu';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Sicela ufake i-imeyili yakho';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Sicela ufake igama lakho';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Sicela ufake iphasiwedi yakho';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Khomba ikhamera kukhodi ye-QR ukuze iskene ngokuzenzakalelayo.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Khomba ikhamera ebhejini yomcimbi bese ucindezela inkinobho yekhamera.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Khomba ikhamera ekhadini lephepha bese ucindezela inkinobho yekhamera.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'Ilungiselela ikhodi ye-QR...';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'Iphrofayela ayitholakali.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully =>
+      'Iphrofayela ibuyekezwe ngempumelelo!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'Ikhodi ye-QR ilondolozwe kugalari!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'Ikhodi ye-QR iphelelwe yisikhathi';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'Ikhodi ye-QR iphelelwe yisikhathi. Thepha ukuvuselela.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Ukuthengisa izindlu';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Isiliphu sinamathiselwe';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Vuselela ukubhalisa kwakho ukuze ubuyisele ukufinyelela okugcwele ezicini zakho ze-premium nedatha.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Thatha futhi Isithombe';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Isihloko Somvuzo';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Umvuzo Uvuliwe 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Indima noma inkampani';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Londoloza Izinguquko';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Londoloza Othintana Naye';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Londoloza Iphrofayela';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Londoloza Izilungiselelo';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Londoloza Igama lomsebenzisi';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Londoloza ikhadi';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Londoloza othintana naye';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Kulondolozwe endaweni. Ukuvumelanisa kungenzeka kuhlulekile.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Skena ikhodi ye-QR noma wengeze othile ohlangane naye ukuze akhe inethiwekhi yakho.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Kuskenwe nge-QR';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Itimu Yesikrini';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'Ukusesha kuhlulekile. Zama futhi.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Khetha Inkampani';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Khetha Ibanga Ledethi';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Khetha Idethi Yokuphela';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Khetha Idethi Yokuqala';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Thumela Isimemo';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Thumela isimemo sokuba khona';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Yabelana Ngesixhumanisi';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Shift Isikhathi';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'I-Smart Contact Capture';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Umbala Wesitembu Somngcele';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Umbala Wesitembu';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Izithonjana Zesitembu (Ongakukhetha)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Izitembu Zinikiwe';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Qala ukwakha inethiwekhi yakho';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Igama lomgwaqo';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Shintshela ku-akhawunti Yebhizinisi ukuze uvule ukufinyelela okugcwele.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Thepha okuthi Xhuma idivayisi bese uskene le QR';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Thepha ukuze wengeze isithombe';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Thepha ukuze ushintshe';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Isifanekiso sisetshenziswe endaweni. Ukuvumelanisa kuhlulekile.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Umbala Wombhalo';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'Le akhawunti';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Lesi sici sitholakala kuphela kubasebenzisi Bebhizinisi.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'Lo muntu useqenjini lakho';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Lolu hlelo lumisiwe';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Izitembu Eziphelele';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Zama igama elihlukile, i-imeyili, noma inkampani.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'Ayikwazi ukulondoloza iphrofayela. Zama futhi.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Ayikwazi ukubuyekeza igama lomsebenzisi. Zama futhi.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'Ngaphansi Kokuthuthukiswa - Ngena ngemvume nge-imeyili/iphasiwedi esikhundleni salokho.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Umsebenzisi Ongaziwa';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Buyekeza Indawo ye-GPS';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Buyekeza Isimo';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Buyekeza ikalishi';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Buyekeza into';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Thuthukela ku';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Thuthukela ku-Business PRO';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Layisha irisidi (uyazikhethela)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Sebenzisa Indawo Yami';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Sebenzisa izinhlamvu, izinombolo, ama-underscore noma amakhonco kuphela';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'Igama lomsebenzisi kufanele okungenani libe nezinhlamvu ezi-3';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'Igama lomsebenzisi kufanele okungenani libe nezinhlamvu ezingu-30';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'Igama lomsebenzisi libuyekezwe ngempumelelo!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Elindele ukuthi bamukele';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'I-URL yewebhusayithi';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Izinsuku Zayimpelaviki';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Indawo Yokusebenzela';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'Ukubhalisa kwakho kwe-PRO kuphelelwe yisikhathi.\\n\\n';
 
   @override
   String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+      'Ukubhalisa kwakho kwe-PRO kuphelelwe yisikhathi.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Izici ze-Premium zikhutshaziwe okwamanje.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Izixhumanisi ze-Pro zifihliwe kuphrofayela yakho esesidlangalaleni.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Imininingwane yebhizinisi lakho nedatha kuphephile.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Engeza $label into';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Engeza okungenani into engu-$label eyodwa';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'Azikho izinto ezingu-$label ezitholakalayo.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Azikho izinto okwamanje. Engeza into yakho yokuqala engu-$label.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Ayikho iphrofayela yomphakathi efana ne-\"@$query\".';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Ikhodi: $code';
   }
 }

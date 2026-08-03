@@ -160,14 +160,19 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
     );
     final subscriptionProvider = Provider.of<SubscriptionProvider>(context);
     final subscription = subscriptionProvider.currentSubscription;
+    final media = MediaQuery.of(context);
+    final keyboardInset = media.viewInsets.bottom;
+
     return SheetScaffold(
       body: AnimatedPadding(
-      duration: Duration(milliseconds: 200),
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
+      duration: const Duration(milliseconds: 200),
+      padding: EdgeInsets.only(bottom: keyboardInset),
       child: Container(
         width: double.infinity,
+        constraints: BoxConstraints(
+          // Keep the sheet above the keyboard and scrollable if needed.
+          maxHeight: media.size.height - keyboardInset - media.padding.top,
+        ),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF161618) : Colors.white,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -183,7 +188,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           top: 10,
           left: 20,
           right: 20,
-          bottom: MediaQuery.of(context).padding.bottom + 16,
+          bottom: media.padding.bottom + 16,
         ),
         child: SingleChildScrollView(
           child: Column(

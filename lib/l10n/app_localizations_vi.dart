@@ -12,325 +12,333 @@ class AppLocalizationsVi extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Công cụ';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Cài đặt tài khoản';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Thông báo';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Dành cho bạn';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'Hồ sơ của bạn';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Chỉnh sửa hồ sơ';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => 'Thay đổi tên, ảnh và tiểu sử của bạn';
 
   @override
-  String get username => 'Username';
+  String get username => 'Tên người dùng';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle => 'Đặt tên người dùng hồ sơ duy nhất của bạn';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Liên kết xã hội';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Thêm Instagram, WhatsApp, trang web và hơn thế nữa';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Hồ sơ công khai';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn =>
+      'Bất cứ ai cũng có thể tìm và xem hồ sơ của bạn';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Ẩn khỏi tìm kiếm — những người khác không thể phát hiện ra bạn';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Chia sẻ mã QR của tôi';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Hãy để người khác quét danh thiếp kỹ thuật số của bạn';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Mua sắm & phần thưởng';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Đơn hàng của tôi';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => 'Theo dõi đơn hàng bạn đã đặt từ cửa hàng';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Thẻ phần thưởng của tôi';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Xem tem và điểm từ các chương trình khách hàng thân thiết';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Nơi làm việc';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Lời mời của nhân viên';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Chấp nhận hoặc từ chối lời mời nhóm từ các doanh nghiệp';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Đăng ký tại nơi làm việc';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Bấm giờ vào và ra tại nơi làm việc của bạn với vị trí';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Tài khoản và thiết bị';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Thiết bị được liên kết';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle =>
+      'Liên kết một điện thoại khác như WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Tài khoản';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Thêm hoặc chuyển đổi tài khoản';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Chuyển đổi giữa các tài khoản $count';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Trợ giúp & tài khoản';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Ngôn ngữ ứng dụng';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle =>
+      'Thay đổi ngôn ngữ được sử dụng trong ứng dụng';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Tìm kiếm ngôn ngữ';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'Ngôn ngữ của điện thoại';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Đã cập nhật ngôn ngữ';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Trợ giúp & Câu hỏi thường gặp';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Câu trả lời cho các câu hỏi phổ biến';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Gửi phản hồi';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle => 'Báo cáo lỗi hoặc đề xuất tính năng mới';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Đăng xuất';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Đăng xuất khỏi phiên này';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Hủy bỏ';
 
   @override
-  String get save => 'Save';
+  String get save => 'Cứu';
 
   @override
-  String get done => 'Done';
+  String get done => 'Xong';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(Chỉ đọc)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 Điểm = 100 PKR (quy tắc ví dụ)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => 'Yêu cầu 10 tem';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '123 Main St, Thành phố';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 ngày trước';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 ký tự. Chỉ chữ cái, số, dấu gạch dưới và dấu gạch nối.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Chấp nhận';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'TRUY CẬP HẠN CHẾ';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Account/IBAN: Thêm số tài khoản tại đây';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Tên tài khoản: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Tích cực';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'TÍCH CỰC';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'THẺ HOẠT ĐỘNG';
 
   @override
-  String get add => 'Add';
+  String get add => 'Thêm vào';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Thêm ghi chú...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Thêm tài khoản';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Trước tiên hãy thêm ít nhất một danh mục';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Thêm danh mục theo thứ tự hiển thị (ví dụ: Đồ ăn nhanh, sau đó là Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Trước tiên, hãy thêm danh mục trong cài đặt danh mục của bạn.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Thêm liên hệ';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Thêm liên kết';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'Thêm liên kết vào hồ sơ của bạn dưới đây';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Thêm liên kết vào hồ sơ của bạn trước, sau đó kích hoạt chúng ở đây.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Thêm biểu tượng';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Thêm điểm';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Thêm chương trình';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Thêm tem';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Thêm vào Ví Google';
 
   @override
-  String get address => 'Address';
+  String get address => 'Địa chỉ';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Tất cả';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Tất cả đã bắt kịp!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Tất cả các thông báo được đánh dấu là đã đọc!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Cho phép máy ảnh';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Cho phép thiết bị này truy cập vào tài khoản Barqody của bạn? Bạn có thể xóa nó bất cứ lúc nào khỏi các thiết bị được liên kết.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Đã có tài khoản?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'Trang tổng quan phân tích';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Mọi yêu cầu đặc biệt...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Áp dụng';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Áp dụng thiết kế';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Áp dụng mẫu';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Tăng dần';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Yêu cầu doanh nghiệp của bạn quét mã QR và thêm bạn làm nhân viên';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Chỉ định danh mục';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Chương trình được chỉ định';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Ít nhất 6 ký tự';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday =>
+      'Việc tham dự đã hoàn tất cho ngày hôm nay';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Các vị trí có sẵn';
 
   @override
-  String get background => 'Background';
+  String get background => 'Lý lịch';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Màu nền';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Tài khoản ngân hàng';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Chi tiết ngân hàng';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Ngân hàng: Thêm tên ngân hàng tại đây';
 
   @override
   String get barqody => 'Barqody';
@@ -339,473 +347,473 @@ class AppLocalizationsVi extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Giá trị tốt nhất';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Số tiền hóa đơn';
 
   @override
-  String get bio => 'BIO';
+  String get bio => 'SINH HỌC';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => 'Tiểu sử';
 
   @override
-  String get book => 'Book';
+  String get book => 'Sách';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Ngày đặt phòng';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Lịch đặt chỗ';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Thời gian đặt phòng';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'VIỆC KINH DOANH';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Hạng mục kinh doanh';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Chi tiết doanh nghiệp';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Tên doanh nghiệp';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Tùy chọn kinh doanh';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Chương trình kinh doanh';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Chỉ người dùng doanh nghiệp';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'Bằng cách đăng ký, bạn đồng ý với Điều khoản và Điều kiện của chúng tôi.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Gọi';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Cần có sự cho phép của máy ảnh để quét.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Hủy bỏ bất cứ lúc nào.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Hủy đơn hàng';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Chụp liên hệ mới';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'Thể loại';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Loại *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'Danh mục đã tồn tại';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Tên danh mục';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Đăng ký vào';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Kiểm tra';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Chọn một tên người dùng duy nhất cho liên kết hồ sơ của bạn.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Chọn gói';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Chọn mẫu';
 
   @override
-  String get close => 'Close';
+  String get close => 'Đóng';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Đã sao chép mã';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Sắp có';
 
   @override
-  String get company => 'Company';
+  String get company => 'Công ty';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Thẻ nhân viên công ty';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'Công ty Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Hoàn thành các bước này';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Xác nhận và thêm điểm';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Xác nhận đặt chỗ';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Xác nhận vị trí';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Xác nhận quy đổi';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Tài khoản được kết nối';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Đã thêm liên hệ thành công!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Thẻ liên lạc';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => 'Liên hệ trao đổi thành công!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Nguồn liên hệ';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'Liên hệ được cập nhật thành công!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Danh bạ';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Tiếp tục';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Đã sao chép';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Sao chép mã';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Không thể nhận được vị trí. Vui lòng kích hoạt quyền GPS.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Không thể chuyển đổi tài khoản';
 
   @override
-  String get create => 'Create';
+  String get create => 'Tạo nên';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Tạo tài khoản';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Tạo chương trình khách hàng thân thiết';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Tạo liên kết mới';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Tạo chương trình';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Tạo phần thưởng';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Tạo tem hoặc điểm thưởng cho khách hàng';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Tạo thẻ đầu tiên của bạn';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Tạo thẻ thưởng đầu tiên cho khách hàng';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Ngày tạo';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Hình ảnh tùy chỉnh cho các vị trí được đóng dấu và không được đóng dấu. Mặc định được sử dụng nếu không được đặt.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Liên kết tùy chỉnh';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Chi tiết khách hàng';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'Khách hàng đăng ký thành công';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Khách hàng chưa đăng ký';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Khách hàng vắng mặt';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Đơn đặt hàng của khách hàng';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Tùy chỉnh thiết kế thẻ';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Tùy chỉnh thiết kế';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Tùy chỉnh hồ sơ của bạn, mở khóa các mẫu PRO và nhận được khách hàng tiềm năng không giới hạn.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Tùy chỉnh chính mình';
 
   @override
-  String get date => 'Date';
+  String get date => 'Ngày';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Phạm vi ngày';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Sự suy sụp';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Xóa bỏ';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Xóa thẻ?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Xóa danh mục';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Xóa liên hệ';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Xóa phần thưởng?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Giảm dần';
 
   @override
-  String get description => 'Description';
+  String get description => 'Sự miêu tả';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Mô tả (tùy chọn)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Chi tiết';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Đã liên kết thiết bị';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Thiết bị đã đăng xuất';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Trạng thái thiết bị';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Danh thiếp kỹ thuật số';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'Thẻ KINH DOANH SỐ';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Bạn chưa có tài khoản?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'ví dụ. Thức ăn nhanh';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'ví dụ. Không đường, cực nóng...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'Đã kiếm được 50 điểm';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Biên tập';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Chỉnh sửa thẻ';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Chỉnh sửa chi tiết';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Chỉnh sửa hồ sơ';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Chỉnh sửa cài đặt';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Chỉnh sửa chi tiết hồ sơ của bạn';
 
   @override
-  String get email => 'Email';
+  String get email => 'E-mail';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'Email và mật khẩu';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'Địa chỉ email';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'Đăng nhập email hoặc quét QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Thẻ nhân viên';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'THẺ NHÂN VIÊN';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Ảnh khuôn mặt nhân viên';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Khe trống';
 
   @override
-  String get end => 'END';
+  String get end => 'KẾT THÚC';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Ngày kết thúc';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Giờ kết thúc';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Đăng ký khách hàng';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Nhập số tiền hóa đơn';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Nhập mã';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Nhập mã thay thế';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Nhập chi tiết liên hệ mạng bên dưới.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Nhập tên của bạn';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Nhập mật khẩu của bạn';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Huy hiệu sự kiện';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Trao đổi liên hệ';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Trao đổi liên hệ...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Khám phá';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'Không cập nhật được liên hệ.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Khe đầy';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Lọc danh bạ';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Lọc danh bạ';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Tìm người trên BarQody';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Tìm người dùng';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Tìm người dùng';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Tìm tên người dùng';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Quên?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Cà phê miễn phí';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Tên đầy đủ';
 
   @override
-  String get general => 'General';
+  String get general => 'Tổng quan';
 
   @override
-  String get go => 'Go';
+  String get go => 'Đi';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'Đi kinh doanh';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'KHÁCH MỜI';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'Xin chào,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Trung tâm trợ giúp bị tắt trong bản demo giao diện người dùng này.';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => 'Lục giác: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Giữ mã QR bên trong khung - nó sẽ tự động quét.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Bạn muốn thiết kế tấm thiệp này như thế nào?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Nhập danh bạ';
 
   @override
-  String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+  String get importContactsIsNotAvailableYet => 'Nhập danh bạ chưa khả dụng.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'TRONG';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Đơn đặt hàng đến';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'URL hồ sơ không hợp lệ. Quét thẻ BarQody hoặc mã QR hợp lệ.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Mã QR không hợp lệ. Sử dụng QR liên kết Barqody.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Mời nhân viên, đặt ca và theo dõi sự hiện diện';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'Mời bạn tham gia với tư cách là nhân viên';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -814,7 +822,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Chức danh';
 
   @override
   String get johnDoe => 'John Doe';
@@ -826,7 +834,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Đã tham gia: 15/01/2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,1208 +842,1217 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Giữ tài khoản của bạn an toàn. Chỉ quét mã QR khi bạn muốn liên kết một thiết bị mà bạn tin tưởng.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Nhãn';
 
   @override
-  String get lat => 'Lat';
+  String get lat => 'Lạt';
 
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Hãy để người khác hướng camera điện thoại của họ vào mã QR này để xem ngay hồ sơ mạng của bạn.';
 
   @override
-  String get link => 'Link';
+  String get link => 'liên kết';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Liên kết một thiết bị';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Liên kết bằng QR trên điện thoại khác';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'Đã sao chép liên kết vào bảng nhớ tạm';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Cài đặt liên kết';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Cài đặt liên kết';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Liên kết thiết bị này?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Liên kết';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Các liên kết trên thẻ này';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'Vị trí chưa được đặt';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Cần có sự cho phép vị trí';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Cần có sự cho phép vị trí để tham dự';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Đăng nhập';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Đăng nhập để quản lý thẻ kỹ thuật số và mạng của bạn.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Đăng nhập bằng mã QR';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Đăng xuất';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Đăng xuất tất cả';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Đăng xuất thiết bị?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Chương trình khách hàng thân thiết';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Quản lý danh mục';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Quản lý liên hệ';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Quản lý nhân viên';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Quản lý thông tin cá nhân của bạn và các tùy chọn khác';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Đánh dấu là đã hoàn thành';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'hàng tháng';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Thẻ của tôi';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'Vị trí của tôi';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Phần thưởng của tôi';
 
   @override
-  String get name => 'Name';
+  String get name => 'Tên';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'TÊN';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'Tên là bắt buộc';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'tên@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Thẻ mới';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Thẻ mới';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Danh mục mới';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Phần thưởng mới';
 
   @override
-  String get next => 'Next';
+  String get next => 'Kế tiếp';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'Thẻ tiếp theo';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet =>
+      'Chưa có liên kết hoạt động nào được kết nối';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Không có chương trình phần thưởng hoạt động có sẵn.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Chưa có thẻ nhân viên';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Không có nhân viên nào được thêm vào';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Chưa có nhân viên';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Không tìm thấy nhà tuyển dụng';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'Không có mục nào trong danh mục này.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => 'Không có sẵn mẫu liên kết nào';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'Không có thông báo mới vào thời điểm này.';
 
   @override
-  String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+  String get noOneHasViewedYourProfileYet => 'Chưa có ai xem hồ sơ của bạn.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Không có lời mời đang chờ xử lý';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Chưa có chương trình nào được chỉ định. Thêm các chương trình dưới đây.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage =>
+      'Không tìm thấy mã QR trong hình ảnh này.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Chưa có chương trình thưởng';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'Không có slot nào trống vào ngày này';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Không tìm thấy người dùng nào';
 
   @override
-  String get none => 'None';
+  String get none => 'Không có';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'Không có sẵn trên gói hiện tại của bạn';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Chưa đăng ký';
 
   @override
-  String get note => 'Note';
+  String get note => 'Ghi chú';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Ghi chú (tùy chọn)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Đã xóa thông báo';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Chỉ có thể chỉnh sửa ảnh bìa, ảnh hồ sơ, tên và tiểu sử ở đây.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Chỉ các liên kết được kích hoạt mới hiển thị khi ai đó quét thẻ này.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => 'Chỉ hồ sơ công khai được hiển thị';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Hiện chỉ có điện thoại này đang sử dụng tài khoản của bạn.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'HOẶC TIẾP TỤC VỚI';
 
   @override
-  String get order => 'Order';
+  String get order => 'Đặt hàng';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Chi tiết đặt hàng';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'ID đơn hàng';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'Không tìm thấy đơn hàng';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Đơn đặt hàng';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Thẻ giấy';
 
   @override
-  String get password => 'Password';
+  String get password => 'Mật khẩu';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Trả theo tháng';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'ĐANG CHỜ CHẤP NHẬN';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Tổng quan về hiệu suất';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Thông tin cá nhân';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Điện thoại';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Ảnh';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Chọn một chủ đề màu làm sẵn. Nhanh chóng và sạch sẽ.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Chọn màu';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Chọn trên bản đồ';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Đặt hàng';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Gói đã hết hạn';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Vui lòng nhập chi tiết doanh nghiệp để tiếp tục';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Vui lòng nhập tên mặt hàng';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Vui lòng cung cấp chi tiết doanh nghiệp của bạn trước khi nâng cấp.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Vui lòng chọn một danh mục';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Vui lòng chọn một khoảng thời gian';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst =>
+      'Vui lòng đặt địa điểm làm việc trước';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Hướng máy ảnh của bạn vào mã QR trên thiết bị khác';
 
   @override
-  String get points => 'Points';
+  String get points => 'Điểm';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Điểm kiếm được';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Cao cấp đang hoạt động';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Thẻ trước';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Giá (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'Mẫu CHUYÊN NGHIỆP';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Hồ sơ';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Kiểm tra hồ sơ';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Sức mạnh hồ sơ';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Người xem hồ sơ';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Lượt xem hồ sơ';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Chi tiết chương trình';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Tên chương trình';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'Không tìm thấy chương trình';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Loại chương trình';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'Mã QR';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'Quét QR';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Số lượng';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Đọc tất cả';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Chỉ đọc';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'Đã nhận được 1 Tem';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Hoạt động gần đây';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Đổi phần thưởng khác';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Đổi phần thưởng';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Đổi cà phê miễn phí';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Làm mới mã QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'Vùng đất';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Di dời';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Xóa nhân viên';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Gia hạn gói';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Yêu cầu đang chờ xử lý';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Yêu cầu đang chờ xử lý';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Yêu cầu bị từ chối';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Yêu cầu đăng ký';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Cài lại';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Phần thưởng đã hoàn thành! Xuất trình thẻ này để đổi quà.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Phần thưởng đã hoàn thành! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Chi tiết phần thưởng';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Chương trình khen thưởng';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Chương trình khen thưởng';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Phần thưởng đã được đổi!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Phần thưởng';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Phần thưởng kiếm được';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '1.600 Rs thanh toán hàng tháng';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => '8.300 Rs thanh toán hàng năm';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'CỨU';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Lưu thẻ ID công việc của bạn vào điện thoại hoặc ví';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Quét';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Quét mã QR của người dùng để thêm họ làm nhân viên';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Quét bất kỳ mã QR của người dùng hoặc doanh nghiệp nào để thêm nhân viên';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'Quét QR doanh nghiệp để đổi quà';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Quét mã QR của khách hàng';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Quét hồ sơ nhân viên';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Quét QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Quét QR / hiển thị QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'Quét mã QR';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Quét QR hiển thị trên thiết bị khác';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Quét để mời';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Tìm kiếm theo tên người dùng...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Tìm kiếm liên kết';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => 'Tìm kiếm tên, email hoặc công ty';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Xem Tất Cả';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Xem mọi hoạt động đều bị chế giễu. Các hoạt động mới sẽ xuất hiện khi khách hàng tiềm năng được thêm vào.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Chọn ngày';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Chọn điểm đánh dấu';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Chọn khu vực';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'Đặt văn bản dưới biểu tượng liên kết';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Đặt màu sắc, hình ảnh và nền của riêng bạn.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Chia sẻ';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Chia sẻ thẻ';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Chia sẻ các liên kết khác nhau trên mỗi thẻ';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Chia sẻ hồ sơ';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Hiển thị liên kết';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Hiển thị trên thẻ này';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Đăng nhập bằng Google';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Đăng ký';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Nhảy';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Bỏ qua bây giờ';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'Khe (phút)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Kỹ sư phần mềm';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Đã xảy ra lỗi';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Tùy chọn sắp xếp';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Hướng dẫn đặc biệt';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Thẻ tem';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Biểu tượng con tem';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Tem';
 
   @override
-  String get start => 'START';
+  String get start => 'BẮT ĐẦU';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Ngày bắt đầu';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Giờ bắt đầu';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Bắt đầu kết nối thông minh hơn với Barqody.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Thống kê';
 
   @override
-  String get status => 'Status';
+  String get status => 'Trạng thái';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Đăng ký';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'Đã gửi yêu cầu đăng ký';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'Đã gửi yêu cầu đăng ký.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Vuốt để duyệt thẻ';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Chụp ảnh tự sướng nhanh để xác minh điểm danh';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Nhấn vào \"Liên kết xã hội\" ở trên để thêm và kích hoạt hồ sơ.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Nhấn vào bản đồ hoặc sử dụng vị trí hiện tại của bạn';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Nhấn để thêm ảnh';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Nhấn để chia sẻ mã QR';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Đội tham dự';
 
   @override
-  String get template => 'Template';
+  String get template => 'Bản mẫu';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Mẫu';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Cảm ơn! Việc gửi phản hồi chỉ mang tính mô phỏng.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Thẻ này và mã QR của nó sẽ bị xóa.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Tính năng này chỉ dành riêng cho người dùng Doanh nghiệp.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'Đây đã là tên người dùng của bạn.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'Tháng này';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Thao tác này sẽ xóa vĩnh viễn chương trình phần thưởng này và tất cả các lượt đăng ký của chương trình đó.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Hôm nay là cuối tuần của bạn';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Hôm nay • 3:15 chiều';
 
   @override
-  String get total => 'Total';
+  String get total => 'Tổng cộng';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Theo dõi đơn đặt hàng của bạn';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'Tham chiếu giao dịch (tùy chọn)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Số tham chiếu giao dịch (tùy chọn)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Thử lại';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Hãy dùng thử Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Hãy dùng thử Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Kiểu';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Nhập ít nhất 2 ký tự của tên người dùng để tìm kiếm.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Nhập mã 8 ký tự hiển thị bên dưới mã QR.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'Đang phát triển - Thay vào đó hãy đăng nhập qua email/mật khẩu.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Biểu tượng bỏ dấu';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Nâng cấp ngay bây giờ';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Nâng cấp lên';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Nâng cấp lên Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Sử dụng một mẫu';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Sử dụng Barqody trên điện thoại hoặc máy tính bảng khác. Bạn luôn nắm quyền kiểm soát — đăng xuất khỏi mọi thiết bị bất kỳ lúc nào.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Sử dụng Barqody trên điện thoại của bạn để quét mã này';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Sử dụng biểu tượng mặc định';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Sử dụng ảnh này';
 
   @override
-  String get user => 'USER';
+  String get user => 'NGƯỜI DÙNG';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Phiên bản: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Xem và cập nhật đơn hàng từ khách hàng của bạn';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Xem hồ sơ';
 
   @override
-  String get views => 'Views';
+  String get views => 'Lượt xem';
 
   @override
-  String get website => 'Website';
+  String get website => 'Trang web';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Chào mừng trở lại';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Chào mừng đến với Trung tâm tài khoản';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Khi doanh nghiệp thêm bạn làm nhân viên, thẻ nhân viên của bạn sẽ xuất hiện ở đây. Bạn có thể tùy chỉnh thiết kế của nó bất cứ lúc nào.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Khi một doanh nghiệp đăng ký bạn vào chương trình phần thưởng của họ, nó sẽ xuất hiện ở đây.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Khi một doanh nghiệp mời bạn vào nhóm của họ, nó sẽ xuất hiện ở đây.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Khi tắt liên kết này sẽ không được hiển thị trên hồ sơ của bạn';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Viết điều gì đó về bạn hoặc thương hiệu của bạn';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Hàng năm';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Hôm qua • 5:42 chiều';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Danh mục của bạn';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Thẻ nhân viên của bạn từ người sử dụng lao động';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'Cà phê miễn phí của bạn đã được đổi thành công.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Phần thưởng của bạn';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Đăng ký của bạn đã kết thúc. Nhấn vào biểu tượng thông tin để biết chi tiết.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'tên của bạn';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => 'Giảm giá 10%';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'AVATAR ĐƯỢC GẤP';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Tên chủ tài khoản';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Số tài khoản';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Đang hoạt động';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Thêm sinh học';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Thêm ảnh bìa';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Thêm ảnh khuôn mặt';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Thêm ghi chú bằng giọng nói giới thiệu';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Thêm tên hồ sơ';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Thêm ảnh hồ sơ';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Thêm liên kết xã hội (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Thêm mục';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Thêm liên kết';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'Thêm liên kết vào hồ sơ của bạn dưới đây';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Thêm ảnh';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Thêm vào giỏ hàng';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Địa chỉ (tùy chọn)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Tất cả các loại liên hệ';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Bán kính cho phép (mét)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Hầu như ở đó!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Đã là nhân viên';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Đã có tài khoản?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Luôn cập nhật';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Bạn có chắc chắn muốn đăng xuất khỏi Barqody không?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'Tham dự không thành công';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Màu nền';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'Đặt phòng không thành công';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward =>
+      'Hãy mô tả ngắn gọn phần thưởng này...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Doanh nghiệp đã được xác minh';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Địa chỉ email doanh nghiệp';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Fax doanh nghiệp';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Số điện thoại doanh nghiệp';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Trang web kinh doanh';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Lỗi máy ảnh';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'chụp khuôn mặt';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Thẻ đã hoàn thành';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Nhãn thẻ';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Tên nhãn thẻ';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Xem trước thẻ';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Chủ đề thẻ';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Đã tạo thẻ';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Tên thẻ';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Thẻ được lưu dưới dạng JPG';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Thẻ được lưu dưới dạng PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Đã cập nhật thẻ';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Thay đổi ảnh';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Khuôn mặt đăng ký';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Đăng ký thành công';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Khuôn mặt trả phòng';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Trả phòng thành công';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Chọn mẫu';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => 'Địa chỉ kinh doanh thẻ liên lạc';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'Tên công ty thẻ liên lạc';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'Email thẻ liên hệ';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'Thẻ liên hệ địa chỉ nhà';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Điện thoại thẻ liên lạc';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'Trang web thẻ liên lạc';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'Không thể hoàn tất đăng nhập';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'Không thể tạo mã QR';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Không thể liên kết thiết bị';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'Không thể đăng xuất thiết bị';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Không thể mở Google Wallet';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'Không thể lưu thiết kế thẻ';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Không thể cập nhật khả năng hiển thị hồ sơ';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Tạo thư viện';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Tạo thẻ để chia sẻ hồ sơ của bạn';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Tạo thẻ';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Ngân hàng tùy chỉnh';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Khách hàng có thể được ghi danh và đóng dấu';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Tùy chỉnh thẻ';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram =>
+      'Mô tả chương trình khách hàng thân thiết của bạn';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Tên hiển thị';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Bạn chưa có tài khoản?';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EE, d MMM yyyy';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Chỉnh sửa phần thưởng';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Chỉnh sửa mục';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'Địa chỉ email';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'Email là bắt buộc';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Thẻ nhân viên';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Nhân viên đã bị xóa';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'Đã lưu cài đặt nhân viên';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Doanh nghiệp đã đăng ký';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Nhập email hợp lệ';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard => 'Nhập bio cho thẻ liên hệ';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Nhập tên chương trình';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Nhập tiểu sử của bạn';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Nhập số điện thoại của bạn';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'Nhập URL trang web của bạn';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Huy hiệu sự kiện';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'Ví dụ: 10 Tem = Cà phê miễn phí';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Đã thêm ảnh khuôn mặt';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'Không thể thêm chương trình';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Không thêm được tem';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Không thể đăng ký khách hàng';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Không thể trao đổi liên hệ';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Không tải được chương trình';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Không thể đặt hàng';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Không thể xóa';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Không lưu được';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'Không lưu được JPG';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'Không lưu được PNG';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'Không lưu được mã QR.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'Không lưu được thông tin chi tiết về doanh nghiệp';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Không thể cập nhật trạng thái';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Tên';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Thực phẩm & Đồ uống';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Món tráng miệng miễn phí';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Cần có sự cho phép của thư viện. Vui lòng kích hoạt nó trong Cài đặt.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Bắt đầu';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Đi';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices =>
+      'Đi tới Công cụ → Thiết bị được liên kết';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending => 'Đang chờ thiết lập Google Wallet.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Đang chờ thiết lập Google Wallet. Đã sao chép liên kết hồ sơ.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Phát triển doanh nghiệp của bạn';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Người dùng khách';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'số IBAN';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'TẠI VĂN PHÒNG';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Lời mời đang chờ xử lý';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'Lời mời đã bị từ chối';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Đã gửi lời mời. Nhân viên sẽ được thêm vào sau khi họ chấp nhận.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Mời nhân viên';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Mời làm nhân viên';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Chức danh';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Họ';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Đăng nhập bằng QR';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Chỉ đăng xuất khỏi tài khoản này? Các tài khoản khác sẽ vẫn còn trên điện thoại này.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Đã đăng nhập bằng Google (Tài khoản demo: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Đang đăng nhập cho bạn…';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'Đăng nhập không thành công. Hãy thử lại.';
 
   @override
   String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
@@ -2044,390 +2061,390 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mmmmYyyy => 'MMMM yyyy';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Đánh dấu điểm danh';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'Tên tôi';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'Hồ sơ Tapni của tôi';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'Tên không thể trống';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Mới';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Chưa có địa chỉ liên hệ nào';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Chưa có thông tin chi tiết';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Chưa có liên kết nào được thêm vào.\\nNhấn vào \"Thêm liên kết\" để bắt đầu.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Không có kết quả phù hợp';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Không có lý do nào được cung cấp.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Chưa đăng ký';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Số lượng tem';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Một lần nhấn để chia sẻ';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Mở Barqody trên điện thoại khác của bạn';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Mở máy ảnh';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Thông tin đặt hàng';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Thẻ giấy';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'Mật khẩu phải có ít nhất 4 ký tự';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'Mật khẩu phải có ít nhất 6 ký tự';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Số điện thoại';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Cần có điện thoại';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Số điện thoại';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Chọn vị trí';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Vui lòng nhập mật khẩu';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Vui lòng nhập tên người dùng';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Vui lòng nhập địa chỉ email hợp lệ';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'Vui lòng nhập số lượng tem hợp lệ';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Vui lòng nhập email của bạn';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Vui lòng nhập tên của bạn';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Vui lòng nhập mật khẩu của bạn';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Hướng máy ảnh vào mã QR để quét tự động.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Trỏ máy ảnh vào huy hiệu sự kiện và nhấn vào nút Máy ảnh.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Trỏ máy ảnh vào thẻ giấy và nhấn vào nút Máy ảnh.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'Đang chuẩn bị mã QR…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'Không tìm thấy hồ sơ.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'Hồ sơ được cập nhật thành công!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'Mã QR được lưu vào thư viện!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'Mã QR đã hết hạn';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh => 'Mã QR đã hết hạn. Nhấn vào làm mới.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Bất động sản';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Biên lai đính kèm';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Gia hạn đăng ký của bạn để khôi phục toàn quyền truy cập vào các tính năng và dữ liệu cao cấp của bạn.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Chụp lại ảnh';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Tiêu đề phần thưởng';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Đã mở khóa phần thưởng 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Vai trò hoặc công ty';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Lưu thay đổi';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Lưu liên hệ';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Lưu hồ sơ';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Lưu cài đặt';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Lưu tên người dùng';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Lưu thẻ';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Lưu liên hệ';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Đã lưu cục bộ. Đồng bộ hóa có thể đã thất bại.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Quét mã QR hoặc thêm người bạn đã gặp để xây dựng mạng lưới của bạn.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Đã quét qua QR';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Chủ đề màn hình';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'Tìm kiếm không thành công. Hãy thử lại.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Chọn công ty';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Chọn phạm vi ngày';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Chọn ngày kết thúc';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Chọn ngày bắt đầu';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Gửi lời mời';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Gửi lời mời tham dự';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Chia sẻ liên kết';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Thời gian thay đổi';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Chụp liên lạc thông minh';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Màu viền tem';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Màu tem';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Biểu tượng tem (Tùy chọn)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Tem đã tặng';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Bắt đầu xây dựng mạng lưới của bạn';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Tên đường';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Chuyển sang tài khoản Doanh nghiệp để có toàn quyền truy cập.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Nhấn vào Liên kết thiết bị và quét mã QR này';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Nhấn để thêm hình ảnh';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Nhấn để thay đổi';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Mẫu được áp dụng cục bộ. Đồng bộ hóa không thành công.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Màu văn bản';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'Tài khoản này';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Tính năng này chỉ dành riêng cho người dùng Doanh nghiệp.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'Người này thuộc nhóm của bạn';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Chương trình này bị tạm dừng';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Tổng số tem';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Hãy thử tên, email hoặc công ty khác.';
 
   @override
-  String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+  String get unableToSaveProfileTryAgain => 'Không thể lưu hồ sơ. Hãy thử lại.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Không thể cập nhật tên người dùng. Hãy thử lại.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'Đang phát triển - Thay vào đó hãy đăng nhập qua email/mật khẩu.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Người dùng không xác định';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Cập nhật vị trí GPS';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Cập nhật trạng thái';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Cập nhật giỏ hàng';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Cập nhật mục';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Nâng cấp lên';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Nâng cấp lên Business PRO';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Tải lên biên nhận (tùy chọn)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Sử dụng Vị trí của tôi';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Chỉ sử dụng chữ cái, số, dấu gạch dưới hoặc dấu gạch nối';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'Tên người dùng phải có ít nhất 3 ký tự';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'Tên người dùng phải có tối đa 30 ký tự';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'Tên người dùng được cập nhật thành công!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Chờ đợi họ chấp nhận';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'URL trang web';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Ngày cuối tuần';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Địa điểm làm việc';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'Đăng ký PRO của bạn đã hết hạn.\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => 'Đăng ký PRO của bạn đã hết hạn.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Các tính năng cao cấp hiện đã bị vô hiệu hóa.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Các liên kết chuyên nghiệp bị ẩn khỏi hồ sơ công khai của bạn.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Chi tiết và dữ liệu kinh doanh của bạn được an toàn.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Thêm mục $label';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Thêm ít nhất một mục $label';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'Không có $label mục nào.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Chưa có mục nào. Thêm mục $label đầu tiên của bạn.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Không có hồ sơ công khai nào khớp với \"@$query\".';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Mã số: $code';
   }
 }

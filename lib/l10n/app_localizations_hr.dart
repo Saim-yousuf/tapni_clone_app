@@ -12,325 +12,333 @@ class AppLocalizationsHr extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Alati';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Postavke računa';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Obavijesti';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Za tebe';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'Vaš profil';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Uredi profil';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle =>
+      'Promijenite svoje ime, fotografiju i biografiju';
 
   @override
-  String get username => 'Username';
+  String get username => 'Korisničko ime';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'Postavite svoje jedinstveno korisničko ime za profil';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Društvene veze';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Dodajte Instagram, WhatsApp, web stranicu i više';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Javni profil';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => 'Svatko može pronaći i vidjeti vaš profil';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Skriven od pretraživanja — drugi vas ne mogu otkriti';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Podijeli moj QR kod';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Neka drugi skeniraju vašu digitalnu posjetnicu';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Kupnja i nagrade';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Moje narudžbe';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => 'Pratite narudžbe iz trgovina';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Moje nagradne kartice';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Pogledajte markice i bodove iz programa vjernosti';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Radno mjesto';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Pozivnice za zaposlenike';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Prihvatite ili odbijte pozive tvrtki za tim';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Prijava na radno mjesto';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Dolazak i izlazak na posao s lokacijom';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Računi i uređaji';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Povezani uređaji';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => 'Povežite drugi telefon poput WhatsAppa';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Računi';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Dodajte ili promijenite račune';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Prebacivanje između $count računa';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Pomoć i račun';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Jezik aplikacije';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle =>
+      'Promijenite jezik koji se koristi u aplikaciji';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Jezik pretraživanja';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'Jezik telefona';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Jezik ažuriran';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Pomoć i često postavljana pitanja';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Odgovori na uobičajena pitanja';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Pošaljite povratne informacije';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle =>
+      'Prijavite bug ili predložite novu značajku';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Odjava';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Odjavite se iz ove sesije';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Otkazati';
 
   @override
-  String get save => 'Save';
+  String get save => 'Uštedjeti';
 
   @override
-  String get done => 'Done';
+  String get done => 'Gotovo';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(samo za čitanje)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 bod = 100 PKR (primjer pravila)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => 'Potrebno je 10 maraka';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => 'Glavna ulica 123, Grad';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => 'Prije 2 dana';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 znakova. Samo slova, brojevi, podvlake i crtice.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Prihvatiti';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'PRISTUP OGRANIČEN';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Račun / IBAN: Ovdje dodajte broj računa';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Naslov računa: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Aktivan';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'AKTIVAN';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'AKTIVNA KARTICA';
 
   @override
-  String get add => 'Add';
+  String get add => 'Dodati';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Dodaj bilješku...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Dodaj račun';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Prvo dodajte barem jednu kategoriju';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Dodajte kategorije redoslijedom prikaza (npr. Fast Food, zatim Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Prvo dodajte kategorije u postavkama svog kataloga.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Dodaj kontakt';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Dodaj vezu';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'U nastavku dodajte poveznice na svoj profil';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Prvo dodajte veze na svoj profil, a zatim ih omogućite ovdje.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Dodajte logotip';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Dodajte bodove';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Dodaj program';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Dodaj pečat';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Dodaj u Google novčanik';
 
   @override
-  String get address => 'Address';
+  String get address => 'Adresa';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Sve';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Sve je uhvaćeno!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Sve obavijesti označene kao pročitane!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Dopusti kameru';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Dopustiti ovom uređaju pristup vašem Barqody računu? Možete ga ukloniti bilo kada s povezanih uređaja.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Već imate račun?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'Nadzorna ploča analitike';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Bilo kakvi posebni zahtjevi...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'primijeniti';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Primijeni dizajn';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Primijeni predložak';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Uzlazno';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Zamolite svoju tvrtku da skenira vaš QR i doda vas kao zaposlenika';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Dodijelite kategoriju';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Dodijeljeni programi';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Najmanje 6 znakova';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => 'Prisustvo završeno za danas';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Dostupni utori';
 
   @override
-  String get background => 'Background';
+  String get background => 'Pozadina';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Boja pozadine';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Bankovni račun';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Bankovni podaci';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Banka: Ovdje dodajte naziv banke';
 
   @override
   String get barqody => 'Barqody';
@@ -339,10 +347,10 @@ class AppLocalizationsHr extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Najbolja vrijednost';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Iznos računa';
 
   @override
   String get bio => 'BIO';
@@ -351,461 +359,462 @@ class AppLocalizationsHr extends AppLocalizations {
   String get bio2 => 'Bio';
 
   @override
-  String get book => 'Book';
+  String get book => 'Rezervirati';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Datum rezervacije';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Raspored rezervacija';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Vrijeme rezervacije';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'POSLOVANJE';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Poslovna kategorija';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Poslovni detalji';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Naziv tvrtke';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Poslovne mogućnosti';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Poslovni programi';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Samo za poslovne korisnike';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'Prijavom se slažete s našim Uvjetima i odredbama.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Poziv';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Za skeniranje je potrebno dopuštenje kamere.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Otkaži bilo kada.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Otkaži narudžbu';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Snimi novi kontakt';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'kategorije';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Kategorija *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'Kategorija već postoji';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Naziv kategorije';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Prijaviti se';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Provjeriti';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Odaberite jedinstveno korisničko ime za poveznicu na svoj profil.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Odaberite plan';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Odaberite Predložak';
 
   @override
-  String get close => 'Close';
+  String get close => 'Zatvoriti';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Kod kopiran';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Dolazi uskoro';
 
   @override
-  String get company => 'Company';
+  String get company => 'Tvrtka';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Kartica zaposlenika tvrtke';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'Tvrtka Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Dovršite ove korake';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Potvrdite i dodajte bodove';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Potvrdite rezervaciju';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Potvrdite lokaciju';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Potvrdite otkup';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Povezani računi';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Kontakt je uspješno dodan!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Kontakt kartica';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => 'Kontakt je uspješno razmijenjen!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Kontaktirajte izvor';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'Kontakt je uspješno ažuriran!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Kontakti';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Nastaviti';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Kopirano';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Kopiraj kod';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Nije moguće dobiti lokaciju. Omogućite dopuštenje za GPS.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Nije moguće promijeniti račun';
 
   @override
-  String get create => 'Create';
+  String get create => 'Stvoriti';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Napravi račun';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Kreirajte program vjernosti';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Izradi novu poveznicu';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Stvori program';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Kreirajte nagradu';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Stvorite pečate ili nagrade za kupce';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Napravite svoju prvu karticu';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Izradite svoju prvu nagradnu karticu za kupce';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Datum stvaranja';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Prilagođene slike za žigosane i nežigosane utore. Zadane vrijednosti se koriste ako nisu postavljene.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Prilagođena veza';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Podaci o kupcu';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'Korisnik se uspješno upisao';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Kupac još nije upisan';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Kupac se ne pojavljuje';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Narudžbe kupaca';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Prilagodite dizajn kartice';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Prilagodite dizajn';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Prilagodite svoj profil, otključajte PRO predloške i ostvarite neograničen broj potencijalnih klijenata.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Prilagodite se';
 
   @override
-  String get date => 'Date';
+  String get date => 'Datum';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Raspon datuma';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Pad';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Izbrisati';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Izbrisati karticu?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Izbriši kategoriju';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Izbriši kontakt';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Izbrisati nagradu?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Silazni';
 
   @override
-  String get description => 'Description';
+  String get description => 'Opis';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Opis (nije obavezno)';
 
   @override
-  String get details => 'Details';
+  String get details => 'pojedinosti';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Uređaj je povezan';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Uređaj je odjavljen';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Status uređaja';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Digitalna posjetnica';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'DIGITALNA POSLOVNA kartica';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Nemate račun?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'npr. Brza hrana';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'npr. Bez šećera, ekstra vruće...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'Zaradio 50 bodova';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Uredi';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Uredi karticu';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Uredi pojedinosti';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Uredi profil';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Uredi postavke';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Uredite detalje svog profila';
 
   @override
-  String get email => 'Email';
+  String get email => 'E-mail';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'Email i lozinka';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'E-mail adresa';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'Prijavite se e-poštom ili skenirajte QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Kartica zaposlenika';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'KARTICA ZAPOSLENIKA';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Fotografija lica zaposlenika';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Prazan utor';
 
   @override
-  String get end => 'END';
+  String get end => 'KRAJ';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Datum završetka';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Završni sat';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Upišite kupca';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Unesite iznos računa';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Unesite kod';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Umjesto toga unesite kôd';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'U nastavku unesite podatke za kontakt za umrežavanje.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Unesite svoje ime';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Unesite svoju lozinku';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Značka događaja';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Kontakt za razmjenu';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Razmjena kontakta...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Istražiti';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'Ažuriranje kontakta nije uspjelo.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Ispunjen utor';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Filtrirajte kontakte';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Filtrirajte kontakte';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Pronađite ljude na BarQodyju';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Pronađite korisnika';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Pronađite korisnika';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Pronađite korisničko ime';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Zaboravili ste?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Besplatna kava';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Puno ime';
 
   @override
   String get general => 'General';
 
   @override
-  String get go => 'Go';
+  String get go => 'Ići';
 
   @override
   String get goBusiness => 'Go Business';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'GOST';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'Zdravo,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Centar za pomoć je onemogućen u ovoj demonstraciji korisničkog sučelja.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Držite QR kod unutar okvira — skenira se automatski.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Kako želite dizajnirati ovu karticu?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Uvoz kontakata';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'Uvoz kontakata još nije dostupan.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'u';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Pristigle narudžbe';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'Nevažeći URL profila. Skenirajte važeću BarQody karticu ili QR kod.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Nevažeći QR kod. Koristite QR vezu Barqody.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Pozovite zaposlenike, postavite smjene i pratite prisutnost';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'Pozvali su vas da se pridružite kao zaposlenik';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -814,7 +823,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Naziv radnog mjesta';
 
   @override
   String get johnDoe => 'John Doe';
@@ -826,7 +835,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Pridružio se: 15. siječnja 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,10 +843,10 @@ class AppLocalizationsHr extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Čuvajte svoj račun na sigurnom. QR kodove skenirajte samo kada želite povezati uređaj kojem vjerujete.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Označiti';
 
   @override
   String get lat => 'Lat';
@@ -845,1589 +854,1596 @@ class AppLocalizationsHr extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Dopustite drugima da usmjere kameru svog telefona na ovaj QR kod kako bi odmah vidjeli vaš mrežni profil.';
 
   @override
   String get link => 'Link';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Povežite uređaj';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Veza putem QR-a na drugom telefonu';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'Veza je kopirana u međuspremnik';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Postavke veze';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Postavke veze';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Povezati ovaj uređaj?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Linkovi';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Veze na ovoj kartici';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'Lokacija još nije postavljena';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Potrebna je dozvola za lokaciju';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Za prisustvo je potrebna dozvola za lokaciju';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Prijavite se';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Prijavite se za upravljanje digitalnom karticom i mrežom.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Prijavite se s QR kodom';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Odjavi se';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Odjavi se sve';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Odjaviti uređaj?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Programi vjernosti';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Upravljanje kategorijama';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Upravljanje kontaktom';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Upravljanje zaposlenicima';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Upravljajte svojim osobnim podacima i drugim preferencijama';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Označi kao završeno';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'Mjesečno';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Moje kartice';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'Moja lokacija';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Moje nagrade';
 
   @override
-  String get name => 'Name';
+  String get name => 'Ime';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'IME';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'Ime je potrebno';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'ime@tvrtka.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Nova kartica';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Nova kartica';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Nova kategorija';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Nova nagrada';
 
   @override
-  String get next => 'Next';
+  String get next => 'Sljedeći';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'Sljedeća karta';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet => 'Još nema povezanih aktivnih veza';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Nema dostupnih aktivnih programa nagrađivanja.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Još nema iskaznica zaposlenika';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Nema dodanih zaposlenika';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Još nema zaposlenih';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Poslodavac nije pronađen';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'Nema stavki u ovoj kategoriji.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => 'Nema dostupnih predložaka veza';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'Trenutačno nema novih obavijesti.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Još nitko nije pogledao vaš profil.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Nema pozivnica na čekanju';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Još nema dodijeljenih programa. Dodajte programe ispod.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => 'Na ovoj slici nije pronađen QR kod.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Još nema programa nagrađivanja';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay => 'Ovaj dan nema dostupnih mjesta';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Nema pronađenih korisnika';
 
   @override
-  String get none => 'None';
+  String get none => 'Nijedan';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'Nije dostupno na vašem trenutnom planu';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Još nisam prijavljen';
 
   @override
-  String get note => 'Note';
+  String get note => 'Bilješka';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Bilješke (nije obavezno)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Obavijest je izbrisana';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Ovdje se mogu uređivati ​​samo naslovnica, profilna slika, ime i biografija.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Samo omogućene veze prikazuju se kada netko skenira ovu karticu.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => 'Prikazuju se samo javni profili';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Samo ovaj telefon trenutno koristi vaš račun.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'ILI NASTAVI SA';
 
   @override
-  String get order => 'Order';
+  String get order => 'Redoslijed';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Detalji narudžbe';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'ID narudžbe';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'Narudžba nije pronađena';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Narudžbe';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Papirnata kartica';
 
   @override
-  String get password => 'Password';
+  String get password => 'Lozinka';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Plaćajte mjesec za mjesec';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'ČEKA SE PRIHVAT';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Pregled izvedbe';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Osobni podaci';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Telefon';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Fotografije';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Odaberite gotovu temu boja. Brzo i čisto.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Odaberite boju';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Odaberite na karti';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Naručite';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Plan je istekao';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Za nastavak unesite podatke o tvrtki';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Unesite naziv artikla';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Prije nadogradnje navedite svoje poslovne podatke.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Odaberite kategoriju';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Odaberite termin';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => 'Prvo postavite mjesto rada';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Usmjerite kameru prema QR kodu na drugom uređaju';
 
   @override
-  String get points => 'Points';
+  String get points => 'Bodovi';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Zarađeni bodovi';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Premium aktivan';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Prethodna kartica';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Cijena (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'PRO predložak';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Profil';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Provjera profila';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Snaga profila';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Gledatelji profila';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Pregledi profila';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Detalji programa';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Naziv programa';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'Program nije pronađen';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Vrsta programa';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'QR kod';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'QR skeniranje';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Količina';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Pročitaj sve';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Samo za čitanje';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'Primljena 1 marka';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Nedavna aktivnost';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Iskoristite drugu nagradu';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Iskoristite nagradu';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Iskorištena besplatna kava';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Osvježi QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'Regija';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Ukloniti';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Ukloni zaposlenika';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Obnovi plan';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Zahtjev na čekanju';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Zahtjev na čekanju';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Zahtjev odbijen';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Zatražite pretplatu';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Resetiraj';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Nagrada je završena! Pokažite ovu karticu da biste je iskoristili.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Nagrada je završena! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Detalji nagrade';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Program nagrađivanja';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Programi nagrađivanja';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Nagrada je iskorištena!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Nagrade';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Zarađene nagrade';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => 'Naplaćuje se 1600 Rs mjesečno';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => 'Naplaćuje se 8300 Rs godišnje';
 
   @override
-  String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
+  String get saimyousufYGmailCom => 'saimyosuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'UŠTEDJETI';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Spremite svoju radnu iskaznicu u telefon ili novčanik';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Skenirati';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Skenirajte korisnički QR kod da biste ga dodali kao zaposlenika';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Skenirajte bilo koji korisnički ili poslovni QR da dodate zaposlenika';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'Skenirajte poslovni QR za otkup';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Skenirajte QR kod kupca';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Skenirajte profil zaposlenika';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Skeniraj QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Skeniraj QR / prikaži QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'Skeniraj QR kod';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Skenirajte QR prikazan na drugom uređaju';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Skeniraj za pozivanje';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Traži po korisničkom imenu...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Traži poveznice';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => 'Pretražite ime, e-poštu ili tvrtku';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Vidi sve';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Pogledajte sve aktivnosti ismijane. Nove aktivnosti pojavit će se kako se dodaju potencijalni klijenti.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Odaberite datum';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Odaberite Markeri';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Odaberite regiju';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'Postavite tekst ispod ikone veze';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Postavite vlastite boje, fotografije i pozadinu.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Udio';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Podijelite karticu';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Podijelite različite veze na svakoj kartici';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Podijelite profil';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Prikaži vezu';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Prikaži na ovoj kartici';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Prijavite se s Googleom';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Prijavite se';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Preskočiti';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Preskoči za sada';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'Utor (min.)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Softverski inženjer';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Nešto nije u redu';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Mogućnosti sortiranja';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Posebne upute';
 
   @override
   String get stampCard => 'Stamp Card';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Ikona pečata';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Markice';
 
   @override
   String get start => 'START';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Datum početka';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Početak sata';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Započnite umrežavanje pametnije uz Barqody.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistika';
 
   @override
   String get status => 'Status';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Pretplata';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'Predan zahtjev za pretplatu';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'Predan zahtjev za pretplatu.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Prijeđite prstom za pregledavanje kartica';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Snimite brzi selfie za potvrdu prisutnosti';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Dodirnite gore \"Društvene veze\" za dodavanje i aktiviranje profila.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Dodirnite kartu ili upotrijebite svoju trenutnu lokaciju';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Dodirnite za dodavanje fotografije';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Dodirnite za dijeljenje QR koda';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Posjećenost ekipe';
 
   @override
-  String get template => 'Template';
+  String get template => 'Predložak';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Predlošci';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Hvala! Slanje povratnih informacija samo je lažno.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Ova kartica i njezin QR kôd bit će uklonjeni.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Ova značajka dostupna je isključivo poslovnim korisnicima.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'Ovo je već vaše korisničko ime.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'Ovaj mjesec';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Ovo će trajno izbrisati ovaj program nagrađivanja i sve njegove prijave.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Danas je vaš vikend';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Danas • 15:15';
 
   @override
-  String get total => 'Total';
+  String get total => 'Ukupno';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Pratite svoje narudžbe';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional =>
+      'Referenca transakcije (nije obavezno)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Referentni broj transakcije (neobavezno)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Pokušajte ponovno';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Isprobajte Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Isprobajte Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Tip';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Unesite najmanje 2 znaka korisničkog imena za pretraživanje.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Upišite kod od 8 znakova prikazan ispod QR-a.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'U razvoju - umjesto toga prijavite se putem e-pošte/lozinke.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Ikona za uklanjanje žiga';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Nadogradite sada';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Nadogradite na';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Nadogradite na Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Koristite predložak';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Koristite Barqody na drugim telefonima ili tabletima. Vi imate kontrolu — odjavite se s bilo kojeg uređaja bilo kada.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Koristite Barqody na svom telefonu da skenirate ovaj kod';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Koristi zadanu ikonu';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Koristite ovu fotografiju';
 
   @override
-  String get user => 'USER';
+  String get user => 'KORISNIK';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Verzija: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Pregledajte i ažurirajte narudžbe svojih kupaca';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Pogledaj profil';
 
   @override
-  String get views => 'Views';
+  String get views => 'Pogledi';
 
   @override
-  String get website => 'Website';
+  String get website => 'Web stranica';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Dobrodošli Natrag';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Dobro došli u Centar za račune';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Kada vas tvrtka doda kao zaposlenika, ovdje će se pojaviti vaša kartica zaposlenika. Njegov dizajn možete prilagoditi bilo kada.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Kada vas tvrtka upiše u svoj program nagrađivanja, pojavit će se ovdje.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Kada vas tvrtka pozove u svoj tim, to će se pojaviti ovdje.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Kada je isključena ova veza se neće prikazivati ​​na vašem profilu';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Napišite nešto o sebi ili vašem brendu';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Godišnje';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Jučer • 17:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Vaše kategorije';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Vaše kartice zaposlenika od poslodavaca';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'Vaša besplatna kava je uspješno iskorištena.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Vaše nagrade';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Vaša pretplata je istekla. Dodirnite ikonu informacija za detalje.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'tvoje ime';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% popusta';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'AVATAR PRISTUPAN';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Ime vlasnika računa';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Broj računa';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Trenutno aktivan';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Dodajte biografiju';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Dodaj naslovnu fotografiju';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Dodajte fotografiju lica';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Dodajte uvodnu glasovnu bilješku';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Dodajte naziv profila';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Dodajte fotografiju profila';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Dodaj društvene veze (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Dodaj stavku';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Dodaj vezu';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'U nastavku dodajte poveznice na svoj profil';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Dodajte fotografiju';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Dodaj u košaricu';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Adresa (nije obavezno)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Sve vrste kontakata';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Dopušteni radijus (metri)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Još malo pa smo stigli!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Već zaposlenik';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Već imate račun?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Uvijek ažurirani';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Jeste li sigurni da se želite odjaviti s Barqodyja?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'Dolazak nije uspio';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Boja pozadine';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'Rezervacija nije uspjela';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward => 'Ukratko opišite ovu nagradu...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Posao potvrđen';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Adresa poslovne e-pošte';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Poslovni faks';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Broj poslovnog telefona';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Poslovna web stranica';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Greška kamere';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Snimi lice';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Kartica dovršena';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Oznaka kartice';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Naziv oznake kartice';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Pregled kartice';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Tema kartice';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Kartica je stvorena';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Naziv kartice';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Kartica je spremljena kao JPG';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Kartica je spremljena kao PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Kartica ažurirana';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Promjena fotografije';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Lice za prijavu';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Prijava uspjela';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Odjava lica';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Odjava uspjela';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Odaberite predložak';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => 'Poslovna adresa kontakt kartice';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'Ime tvrtke na kartici kontakta';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'E-pošta kontakt kartice';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'Kućna adresa kartice kontakta';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Telefon kontakt kartice';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'Web stranica kontakt kartice';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'Nije moguće dovršiti prijavu';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'Nije moguće izraditi QR kod';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Nije moguće povezati uređaj';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'Nije moguće odjaviti uređaj';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Nije moguće otvoriti Google novčanik';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'Nije moguće spremiti dizajn kartice';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Nije moguće ažurirati vidljivost profila';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Stvori galeriju';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Izradite karticu da biste podijelili svoj profil';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Izradi karticu';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Carinska banka';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Kupci se mogu upisati i ovjeriti';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Prilagodite karticu';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram => 'Opišite svoj program vjernosti';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Ime za prikaz';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Nemate račun?';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE, d MMM gggg';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Uredi nagradu';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Uredi stavku';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'E-mail adresa';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'Email je obavezan';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Kartice zaposlenika';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Zaposlenik uklonjen';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'Postavke zaposlenika spremljene';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Upisane tvrtke';
 
   @override
   String get enterAValidEmail => 'Enter a valid email';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard =>
+      'Unesite biografiju za karticu kontakta';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Unesite naziv programa';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Unesite svoju biografiju';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Unesite svoj telefonski broj';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'Unesite URL svoje web stranice';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Bedž događaja';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'Primjer: 10 maraka = besplatna kava';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Dodana fotografija lica';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'Dodavanje programa nije uspjelo';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Dodavanje marke nije uspjelo';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Prijava korisnika nije uspjela';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Razmjena kontakta nije uspjela';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Neuspješno učitavanje programa';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Narudžba nije uspjela';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Uklanjanje nije uspjelo';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Spremanje nije uspjelo';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'Nije uspjelo spremanje JPG-a';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'Spremanje PNG-a nije uspjelo';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'Spremanje QR koda nije uspjelo.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'Spremanje podataka o tvrtki nije uspjelo';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Ažuriranje statusa nije uspjelo';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Ime';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Hrana i piće';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Besplatan desert';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Potrebna je dozvola galerije. Omogućite ga u postavkama.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Započnite';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Ići';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices => 'Idite na Alati → Povezani uređaji';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending =>
+      'Postavljanje Google novčanika na čekanju.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Postavljanje Google novčanika na čekanju. Link profila je kopiran.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Razvijte svoje poslovanje';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Korisnik gost';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'IBAN broj';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'U UREDU';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Pozivnica na čekanju';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'Pozivnica je odbijena';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Pozivnica je poslana. Zaposlenik će biti dodan nakon što prihvati.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Pozovite zaposlenika';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Pozovi kao zaposlenika';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Naziv radnog mjesta';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Prezime';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Prijavite se pomoću QR-a';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Odjaviti se samo s ovog računa? Ostali računi ostat će na ovom telefonu.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Prijavljeni putem Googlea (demo račun: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Prijavljujem se...';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'Prijava nije uspjela. Pokušajte ponovno.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'd MMM, gggg - h:mm a';
 
   @override
-  String get mmmmYyyy => 'MMMM yyyy';
+  String get mmmmYyyy => 'MMMM gggg';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Označi posjećenost';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'Moje ime';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'Moj Tapni profil';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'Ime ne može biti prazno';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Novi';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Još nema kontakata';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Još nema detalja';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Još nisu dodane veze.\\nDodirnite \"Dodaj vezu\" za početak.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Nema podudaranja';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Nije naveden razlog.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Nije upisano';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Broj maraka';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Jedan dodir za dijeljenje';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Otvorite Barqody na drugom telefonu';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Otvori kameru';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Informacije o narudžbi';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Papirnata karta';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'Lozinka mora imati najmanje 4 znaka';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'Lozinka mora imati najmanje 6 znakova';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Broj telefona';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Telefon je obavezan';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Broj telefona';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Odaberite lokaciju';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Molimo unesite lozinku';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Unesite korisničko ime';
 
   @override
-  String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+  String get pleaseEnterAValidEmailAddress => 'Unesite važeću adresu e-pošte';
 
   @override
-  String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+  String get pleaseEnterAValidNumberOfStamps => 'Unesite važeći broj maraka';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Molimo unesite svoju e-poštu';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Molimo unesite svoje ime';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Molimo unesite svoju lozinku';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Usmjerite kameru prema QR kodu za automatsko skeniranje.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Usmjerite kameru prema bedžu događaja i dodirnite gumb Kamera.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Usmjerite kameru na papirnatu karticu i dodirnite gumb Kamera.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'Priprema QR koda…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'Profil nije pronađen.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'Profil je uspješno ažuriran!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'QR kod spremljen u galeriju!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'QR kod je istekao';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh => 'QR kod je istekao. Dodirnite osvježi.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Nekretnina';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Račun u prilogu';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Obnovite svoju pretplatu da vratite puni pristup svojim premium značajkama i podacima.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Ponovno snimi fotografiju';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Naslov nagrade';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Nagrada otključana 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Uloga ili tvrtka';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Spremi promjene';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Spremi kontakt';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Spremi profil';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Spremi postavke';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Spremi korisničko ime';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Spremi karticu';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Spremi kontakt';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Spremljeno lokalno. Sinkronizacija možda nije uspjela.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Skenirajte QR kod ili dodajte nekoga koga ste upoznali da izgradite svoju mrežu.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Skenirano putem QR-a';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Tema zaslona';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain =>
+      'Pretraga nije uspjela. Pokušajte ponovno.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Odaberite Tvrtka';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Odaberite datumski raspon';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Odaberite Datum završetka';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Odaberite Datum početka';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Pošaljite pozivnicu';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance =>
+      'Pošaljite pozivnicu za sudjelovanje';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Dijeli vezu';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Vrijeme smjene';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Pametno snimanje kontakata';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Boja obruba marke';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Boja pečata';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Ikone pečata (nije obavezno)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Dane marke';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Počnite graditi svoju mrežu';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Naziv ulice';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Prijeđite na poslovni račun da biste otključali puni pristup.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Dodirnite Poveži uređaj i skenirajte ovaj QR';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Dodirnite za dodavanje slike';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Dodirnite za promjenu';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Predložak primijenjen lokalno. Sinkronizacija nije uspjela.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Boja teksta';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'Ovaj račun';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Ova značajka dostupna je isključivo poslovnim korisnicima.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'Ova osoba je u vašem timu';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Ovaj program je pauziran';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Ukupno markica';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Pokušajte s drugim imenom, e-poštom ili tvrtkom.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'Nije moguće spremiti profil. Pokušajte ponovno.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Nije moguće ažurirati korisničko ime. Pokušajte ponovno.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'U razvoju - umjesto toga prijavite se putem e-pošte/lozinke.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Nepoznati korisnik';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Ažurirajte GPS lokaciju';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Ažuriraj status';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Ažurirajte košaricu';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Ažuriraj stavku';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Nadogradite na';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Nadogradite na Business PRO';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Prijenos potvrde (neobavezno)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Koristi Moju lokaciju';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Koristite samo slova, brojeve, podvlake ili crtice';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'Korisničko ime mora imati najmanje 3 znaka';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'Korisničko ime mora imati najviše 30 znakova';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'Korisničko ime je uspješno ažurirano!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Čeka se da prihvate';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'URL web stranice';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Dani vikenda';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Mjesto rada';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'Vaša PRO pretplata je istekla.\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => 'Vaša PRO pretplata je istekla.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Premium značajke trenutno su onemogućene.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Pro veze su skrivene od vašeg javnog profila.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Vaši poslovni podaci i podaci su sigurni.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Dodajte $label stavku';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Dodajte barem jednu stavku $label';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'Nema dostupnih $label stavki.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Još nema stavki. Dodajte svoju prvu $label stavku.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Nijedan javni profil ne odgovara \"@$query\".';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Šifra: $code';
   }
 }

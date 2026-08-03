@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Translate app_en.arb into all unique WhatsApp app languages.
-Regional variants (es_MX, ar_EG, en_US...) reuse base ARBs via Flutter fallback.
-"""
+"""Fast parallel ARB translator — many locales at once."""
 from __future__ import annotations
 
 import json
 import re
+import sys
 import time
 import urllib.parse
 import urllib.request
@@ -19,10 +17,10 @@ L10N = ROOT / "lib" / "l10n"
 EN_PATH = L10N / "app_en.arb"
 PLACEHOLDER_RE = re.compile(r"\{[a-zA-Z_][a-zA-Z0-9_]*\}")
 
-# Flutter ARB locale -> MyMemory / Google-compatible target
 TARGETS: dict[str, str] = {
     "af": "af",
     "sq": "sq",
+    "ar": "ar",
     "az": "az",
     "be_BY": "be",
     "bn": "bn",
@@ -34,7 +32,7 @@ TARGETS: dict[str, str] = {
     "hr": "hr",
     "cs": "cs",
     "da": "da",
-    "prs_AF": "fa",  # Dari ~ Persian
+    "prs_AF": "fa",
     "nl": "nl",
     "et": "et",
     "fil": "tl",
@@ -46,6 +44,7 @@ TARGETS: dict[str, str] = {
     "gu": "gu",
     "ha": "ha",
     "he": "he",
+    "hi": "hi",
     "hu": "hu",
     "id": "id",
     "ga": "ga",
@@ -67,8 +66,8 @@ TARGETS: dict[str, str] = {
     "ps_AF": "ps",
     "fa": "fa",
     "pl": "pl",
-    "pt_BR": "pt-BR",
-    "pt_PT": "pt-PT",
+    "pt_BR": "pt",
+    "pt_PT": "pt",
     "pa": "pa",
     "ro": "ro",
     "ru": "ru",
@@ -76,6 +75,7 @@ TARGETS: dict[str, str] = {
     "si_LK": "si",
     "sk": "sk",
     "sl": "sl",
+    "es": "es",
     "sw": "sw",
     "sv": "sv",
     "ta": "ta",
@@ -83,19 +83,13 @@ TARGETS: dict[str, str] = {
     "th": "th",
     "tr": "tr",
     "uk": "uk",
+    "ur": "ur",
     "uz": "uz",
     "vi": "vi",
     "zu": "zu",
-    # Complete / refresh existing non-English packs to full key coverage
-    "ur": "ur",
-    "ar": "ar",
-    "hi": "hi",
-    "es": "es",
 }
 
-SKIP_IF_COMPLETE = {"en"}  # never overwrite template
-
-KEEP_AS_IS_KEYS = {"appTitle", "barqody", "tapni", "aabbccdd", "jpg", "png", "ai", "pro"}
+KEEP = {"appTitle", "barqody", "tapni", "aabbccdd", "jpg", "png", "ai", "pro"}
 
 
 def protect(text: str) -> tuple[str, list[str]]:
@@ -113,80 +107,98 @@ def restore(text: str, found: list[str]) -> str:
     return out
 
 
-def translate_one(text: str, target: str) -> str:
-    protected, phs = protect(text)
-    q = urllib.parse.quote(protected[:450])
+def translate_google(text: str, target: str) -> str | None:
+    q = urllib.parse.quote(text)
+    tl = urllib.parse.quote(target)
     url = (
-        "https://api.mymemory.translated.net/get"
-        f"?q={q}&langpair=en|{urllib.parse.quote(target)}"
+        "https://translate.googleapis.com/translate_a/single"
+        f"?client=gtx&sl=en&tl={tl}&dt=t&q={q}"
     )
     try:
-        with urllib.request.urlopen(url, timeout=15) as resp:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=20) as resp:
             data = json.loads(resp.read().decode("utf-8"))
-        tr = data.get("responseData", {}).get("translatedText") or protected
-        upper = tr.upper()
-        if "INVALID" in upper or "MYMEMORY WARNING" in upper or "QUERY LENGTH" in upper:
-            return text
-        return restore(tr, phs)
+        parts = []
+        for chunk in data[0]:
+            if isinstance(chunk, list) and chunk and isinstance(chunk[0], str):
+                parts.append(chunk[0])
+        out = "".join(parts).strip()
+        return out or None
     except Exception:
+        return None
+
+
+def translate_one(text: str, target: str) -> str:
+    protected, phs = protect(text)
+    if not protected.strip():
         return text
+    tr = translate_google(protected, target)
+    if not tr:
+        return text
+    return restore(tr, phs)
 
 
-def is_complete(path: Path, expected_keys: set[str]) -> bool:
+def coverage(path: Path, en: dict, keys: list[str]) -> float:
     if not path.exists():
-        return False
+        return 0.0
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except Exception:
-        return False
-    keys = {k for k in data if not k.startswith("@") and k != "@@locale"}
-    return expected_keys.issubset(keys)
+        return 0.0
+    diff = 0
+    for k in keys:
+        if k in KEEP:
+            continue
+        v = data.get(k)
+        if isinstance(v, str) and v and v != en[k]:
+            diff += 1
+    denom = max(1, len(keys) - len(KEEP))
+    return diff / denom
 
 
-def translate_locale(locale: str, mm_target: str, en: dict, keys: list[str]) -> None:
+def translate_locale(locale: str, target: str, en: dict, keys: list[str]) -> str:
     out_path = L10N / f"app_{locale}.arb"
-    expected = set(keys)
-    if locale in SKIP_IF_COMPLETE:
-        return
-    if is_complete(out_path, expected) and locale not in {"ur", "ar", "hi"}:
-        # Always refresh short packs; skip complete others
-        print(f"SKIP complete {locale}")
-        return
+    existing = {}
+    if out_path.exists():
+        try:
+            existing = json.loads(out_path.read_text(encoding="utf-8"))
+        except Exception:
+            existing = {}
 
-    # Refresh ur/ar/hi/es if incomplete
-    if is_complete(out_path, expected):
-        print(f"SKIP complete {locale}")
-        return
-
-    print(f"TRANSLATING {locale} ({mm_target}) ...")
-    out: dict = {"@@locale": locale.replace("-", "_")}
-    # ensure @@locale matches Flutter (underscore)
-    out["@@locale"] = locale
-
+    out: dict = {"@@locale": locale}
     pending: list[tuple[str, str]] = []
     for k in keys:
         src = en[k]
-        if k in KEEP_AS_IS_KEYS:
-            out[k] = src if k != "appTitle" else "BarQody"
+        if k in KEEP:
+            out[k] = "BarQody" if k == "appTitle" else src
             continue
-        pending.append((k, src))
+        cur = existing.get(k)
+        if isinstance(cur, str) and cur.strip() and cur != src:
+            out[k] = cur
+        else:
+            pending.append((k, src))
+
+    if not pending:
+        for k in keys:
+            meta = en.get("@" + k)
+            if isinstance(meta, dict):
+                out["@" + k] = meta
+        out_path.write_text(
+            json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        return f"SKIP {locale}"
 
     results: dict[str, str] = {}
-    with ThreadPoolExecutor(max_workers=8) as pool:
-        futs = {
-            pool.submit(translate_one, text, mm_target): key for key, text in pending
-        }
-        done = 0
+    # High parallelism per locale
+    with ThreadPoolExecutor(max_workers=16) as pool:
+        futs = {pool.submit(translate_one, text, target): key for key, text in pending}
         for fut in as_completed(futs):
-            key = futs[fut]
-            results[key] = fut.result()
-            done += 1
-            if done % 50 == 0:
-                print(f"  {locale}: {done}/{len(pending)}")
-                time.sleep(0.15)
+            results[futs[fut]] = fut.result()
 
     out.update(results)
     for k in keys:
+        if k not in out:
+            out[k] = en[k]
         meta = en.get("@" + k)
         if isinstance(meta, dict):
             out["@" + k] = meta
@@ -194,31 +206,52 @@ def translate_locale(locale: str, mm_target: str, en: dict, keys: list[str]) -> 
     out_path.write_text(
         json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    print(f"WROTE {out_path.name}")
+    changed = sum(1 for k, v in results.items() if v != en[k])
+    return f"OK {locale} {changed}/{len(pending)}"
 
 
 def main() -> None:
+    # unbuffered prints
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace") if hasattr(
+        sys.stdout, "reconfigure"
+    ) else None
+
     en = json.loads(EN_PATH.read_text(encoding="utf-8"))
     keys = [
         k
         for k, v in en.items()
         if not k.startswith("@") and k != "@@locale" and isinstance(v, str)
     ]
-    print(f"source keys={len(keys)} targets={len(TARGETS)}")
 
-    # Translate incomplete existing packs first (user-facing)
-    priority = ["es", "ur", "ar", "hi", "fr", "de", "pt_BR", "id", "tr", "ru"]
-    ordered = priority + [k for k in TARGETS if k not in priority]
+    only = [a for a in sys.argv[1:] if not a.startswith("-")]
+    force = "--force" in sys.argv
+    locales = list(TARGETS.keys()) if not only else [x for x in only if x in TARGETS]
 
-    for locale in ordered:
-        mm = TARGETS[locale]
-        try:
-            translate_locale(locale, mm, en, keys)
-        except Exception as e:
-            print(f"FAIL {locale}: {e!r}")
-        time.sleep(0.4)
+    todo = []
+    for loc in locales:
+        cov = coverage(L10N / f"app_{loc}.arb", en, keys)
+        if not force and cov >= 0.85:
+            print(f"DONE-ish {loc} cov={cov:.0%}", flush=True)
+            continue
+        todo.append(loc)
 
-    print("ALL DONE")
+    print(f"keys={len(keys)} todo={len(todo)} parallel_locales=8", flush=True)
+    t0 = time.time()
+
+    # Translate several locales concurrently
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        futs = {
+            pool.submit(translate_locale, loc, TARGETS[loc], en, keys): loc
+            for loc in todo
+        }
+        for fut in as_completed(futs):
+            loc = futs[fut]
+            try:
+                print(fut.result(), flush=True)
+            except Exception as e:
+                print(f"FAIL {loc}: {e!r}", flush=True)
+
+    print(f"ALL DONE in {time.time() - t0:.0f}s", flush=True)
 
 
 if __name__ == "__main__":

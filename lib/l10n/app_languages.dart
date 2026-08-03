@@ -32,6 +32,93 @@ class AppLanguages {
   /// Sentinel for "follow phone language".
   static const String systemCode = 'system';
 
+  /// Locales with real translation packs under `lib/l10n` (see tool/translate_all_arbs.py).
+  /// Regional WhatsApp variants (es_MX, ar_EG, …) resolve via [isImplemented].
+  static const Set<String> implementedCodes = {
+    'en',
+    'af',
+    'sq',
+    'ar',
+    'az',
+    'be_BY',
+    'bn',
+    'bg',
+    'ca',
+    'zh_CN',
+    'zh_HK',
+    'zh_TW',
+    'hr',
+    'cs',
+    'da',
+    'prs_AF', // uses Persian (fa) pack via FallbackAppLocalizationsDelegate
+    'nl',
+    'et',
+    'fil',
+    'fi',
+    'fr',
+    'ka',
+    'de',
+    'el',
+    'gu',
+    'ha',
+    'he',
+    'hi',
+    'hu',
+    'id',
+    'ga',
+    'it',
+    'ja',
+    'kn',
+    'kk',
+    'rw_RW',
+    'ko',
+    'ky_KG',
+    'lo',
+    'lv',
+    'lt',
+    'mk',
+    'ms',
+    'ml',
+    'mr',
+    'nb',
+    'ps_AF',
+    'fa',
+    'pl',
+    'pt_BR',
+    'pt_PT',
+    'pa',
+    'ro',
+    'ru',
+    'sr',
+    'si_LK',
+    'sk',
+    'sl',
+    'es',
+    'sw',
+    'sv',
+    'ta',
+    'te',
+    'th',
+    'tr',
+    'uk',
+    'ur',
+    'uz',
+    'vi',
+    'zu',
+  };
+
+  /// Languages shown in the App Language picker (full WhatsApp list).
+  static List<AppLanguage> get selectable => all;
+
+  static bool isImplemented(String? code) {
+    if (code == null || code.isEmpty || code == systemCode) return true;
+    final language = findByCode(code);
+    if (language == null) return false;
+    if (implementedCodes.contains(language.code)) return true;
+    // Regional variants of an implemented base language (e.g. es_MX → es).
+    return implementedCodes.contains(language.locale.languageCode);
+  }
+
   static const List<AppLanguage> all = [
     AppLanguage(code: 'af', englishName: 'Afrikaans', nativeName: 'Afrikaans'),
     AppLanguage(code: 'sq', englishName: 'Albanian', nativeName: 'Shqip'),

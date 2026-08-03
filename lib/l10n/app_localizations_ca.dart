@@ -12,325 +12,332 @@ class AppLocalizationsCa extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Eines';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Configuració del compte';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Notificacions';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Per a tu';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'El teu perfil';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Edita el perfil';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => 'Canvia el teu nom, foto i biografia';
 
   @override
-  String get username => 'Username';
+  String get username => 'Nom d\'usuari';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'Establiu el vostre nom d\'usuari de perfil únic';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Enllaços socials';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Afegeix Instagram, WhatsApp, lloc web i molt més';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Perfil públic';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => 'Qualsevol pot trobar i veure el teu perfil';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Amagat de la cerca; els altres no us poden descobrir';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Comparteix el meu codi QR';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Deixa que altres escanegen la teva targeta de visita digital';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Compres i recompenses';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Les meves ordres';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle =>
+      'Feu un seguiment de les comandes que heu fet a les botigues';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Les meves targetes de recompensa';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Veure segells i punts dels programes de fidelització';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Lloc de treball';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Invitacions dels empleats';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Accepteu o rebutgeu les invitacions d\'equips d\'empreses';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Registre al lloc de treball';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Entra i surt a la teva feina amb la ubicació';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Comptes i dispositius';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Dispositius enllaçats';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => 'Enllaça un altre telèfon com WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Comptes';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Afegiu o canvieu de compte';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Canvia entre els comptes $count';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Ajuda i compte';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Idioma de l\'aplicació';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => 'Canvia l\'idioma utilitzat a l\'aplicació';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Cerca l\'idioma';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'L\'idioma del telèfon';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Idioma actualitzat';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Ajuda i preguntes freqüents';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Respostes a preguntes habituals';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Envia comentaris';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle =>
+      'Informar d\'un error o suggerir una funció nova';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Tanca la sessió';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Tanca la sessió d\'aquesta sessió';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Cancel·la';
 
   @override
-  String get save => 'Save';
+  String get save => 'Desa';
 
   @override
-  String get done => 'Done';
+  String get done => 'Fet';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(Només lectura)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 punt = 100 PKR (regla d\'exemple)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '10 segells necessaris';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '123 Main St, Ciutat';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => 'Fa 2 dies';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3-30 caràcters. Només lletres, números, guions baixos i guions.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Acceptar';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'ACCÉS RESTRINGIT';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Compte / IBAN: afegiu aquí el número de compte';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Títol del compte: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Actius';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'ACTIVA';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'TARGETA ACTIVA';
 
   @override
-  String get add => 'Add';
+  String get add => 'Afegeix';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Afegeix una nota...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Afegeix un compte';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Afegiu almenys una categoria primer';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Afegeix categories en ordre de visualització (p. ex., menjar ràpid i després Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Primer afegiu categories a la configuració del vostre catàleg.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Afegeix un contacte';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Afegeix un enllaç';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'Afegiu enllaços al vostre perfil a continuació';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Afegiu primer enllaços al vostre perfil i, a continuació, activeu-los aquí.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Afegeix el logotip';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Afegeix punts';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Afegeix programa';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Afegeix segell';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Afegeix a Google Wallet';
 
   @override
-  String get address => 'Address';
+  String get address => 'Adreça';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Tots';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Tot agafat!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Totes les notificacions marcades com a llegides!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Permet la càmera';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Vols permetre que aquest dispositiu accedeixi al teu compte de Barqody? Pots eliminar-lo en qualsevol moment dels dispositius enllaçats.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Ja tens un compte?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'Tauler d\'anàlisi';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Qualsevol petició especial...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Aplicar';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Aplica el disseny';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Aplica la plantilla';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Ascendent';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Demana a la teva empresa que escanegi el teu QR i t\'afegeixi com a empleat';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Assigna una categoria';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Programes assignats';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Com a mínim 6 caràcters';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => 'Assistència completada per avui';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Espais disponibles';
 
   @override
-  String get background => 'Background';
+  String get background => 'Fons';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Color de fons';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Compte bancari';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Dades bancàries';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Banc: afegiu aquí el nom del banc';
 
   @override
   String get barqody => 'Barqody';
@@ -339,473 +346,477 @@ class AppLocalizationsCa extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Millor valor';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Import de la factura';
 
   @override
   String get bio => 'BIO';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => 'bio';
 
   @override
-  String get book => 'Book';
+  String get book => 'Llibre';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Data de reserva';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Horari de reserves';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Hora de reserva';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'NEGOCIS';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Categoria Empresarial';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Detalls de l\'empresa';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Nom de l\'empresa';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Opcions de negoci';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Programes empresarials';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Només usuaris empresarials';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'En registrar-se, accepteu els nostres Termes i Condicions.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Truca';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Es requereix permís de càmera per escanejar.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Cancel·la en qualsevol moment.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Cancel·la la comanda';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Captura un contacte nou';
 
   @override
   String get categories => 'Categories';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Categoria *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'La categoria ja existeix';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Nom de la categoria';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Registra\'t';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Fes una ullada';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Trieu un nom d\'usuari únic per a l\'enllaç del vostre perfil.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Trieu Pla';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Trieu Plantilla';
 
   @override
-  String get close => 'Close';
+  String get close => 'Tancar';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Codi copiat';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Aviat';
 
   @override
-  String get company => 'Company';
+  String get company => 'Companyia';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Targeta de treballador de l\'empresa';
 
   @override
   String get companyInc => 'Company Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Completa aquests passos';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Confirmar i afegir punts';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Confirmeu la reserva';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Confirmeu la ubicació';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Confirmeu la redempció';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Comptes connectats';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Contacte afegit correctament!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Targeta de contacte';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully =>
+      'Contacte intercanviat correctament!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Font de contacte';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'Contacte actualitzat correctament!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Contactes';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Continua';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Copiat';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Copia el codi';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'No s\'ha pogut obtenir la ubicació. Si us plau, activeu el permís GPS.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'No s\'ha pogut canviar de compte';
 
   @override
-  String get create => 'Create';
+  String get create => 'Crear';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Crea un compte';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Crear un programa de fidelització';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Crea un enllaç nou';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Crear programa';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Crea una recompensa';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Creeu recompenses de segell o punts per als clients';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Crea la teva primera targeta';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Crea la teva primera targeta de recompensa per als clients';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Data de creació';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Imatges personalitzades per a ranures estampades i sense estampar. Els valors per defecte s\'utilitzen si no s\'estableixen.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Enllaç personalitzat';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Dades del client';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully =>
+      'El client s\'ha registrat correctament';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'El client encara no està inscrit';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'No es presenta al client';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Comandes dels clients';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Personalitza el disseny de la targeta';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Disseny personalitzat';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Personalitza el teu perfil, desbloqueja plantilles PRO i aconsegueix clients potencials il·limitats.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Personalitza\'t';
 
   @override
-  String get date => 'Date';
+  String get date => 'Data';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Interval de dates';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Declinar';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Suprimeix';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Vols suprimir la targeta?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Suprimeix la categoria';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Suprimeix el contacte';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Vols suprimir la recompensa?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Descens';
 
   @override
-  String get description => 'Description';
+  String get description => 'Descripció';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Descripció (opcional)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Detalls';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Dispositiu enllaçat';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'S\'ha tancat la sessió del dispositiu';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Estat del dispositiu';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Targeta de visita digital';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'Targeta de negocis DIGITAL';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'No tens un compte?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'p. ex. Menjar ràpid';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'p. ex. Sense sucre, molt calent...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'Ha guanyat 50 punts';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Edita';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Edita la targeta';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Edita els detalls';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Edita el perfil';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Edita la configuració';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Editeu els detalls del vostre perfil';
 
   @override
-  String get email => 'Email';
+  String get email => 'Correu electrònic';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'Correu electrònic i contrasenya';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'Adreça de correu electrònic';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR =>
+      'Inicieu sessió per correu electrònic o escaneja QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Targeta de treballador';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'TARGETA DE TREBALLADOR';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Foto de la cara de l\'empleat';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Ranura buida';
 
   @override
-  String get end => 'END';
+  String get end => 'FINALITZACIÓ';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Data de finalització';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Hora final';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Inscriure el client';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Introduïu l\'import de la factura';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Introduïu el codi';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Introduïu el codi';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Introduïu les dades de contacte de la xarxa a continuació.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Introduïu el vostre nom';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Introduïu la vostra contrasenya';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Insígnia d\'esdeveniment';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Intercanvi de contacte';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'S\'està intercanviant contacte...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Explora';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'No s\'ha pogut actualitzar el contacte.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Ranura plena';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Filtra els contactes';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Filtra els contactes';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Troba gent a BarQody';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Cerca usuari';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Cerca usuari';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Cerca el nom d\'usuari';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Heu oblidat?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Cafè gratuït';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Nom complet';
 
   @override
   String get general => 'General';
 
   @override
-  String get go => 'Go';
+  String get go => 'Vés';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'Anem a negocis';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'CONVIDAT';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'hola,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'El Centre d\'ajuda està desactivat en aquesta demostració de la interfície d\'usuari.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Mantingueu el codi QR dins del marc: escaneja automàticament.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Com vols dissenyar aquesta targeta?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Importa contactes';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'Importar contactes encara no està disponible.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'en';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Comandes entrants';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'L\'URL del perfil no és vàlid. Escaneja una targeta BarQody o un codi QR vàlid.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Codi QR no vàlid. Utilitzeu un enllaç QR de Barqody.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Convida empleats, estableix torns i fes un seguiment de la presència';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'T\'ha convidat a unir-te com a empleat';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -814,7 +825,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Títol del treball';
 
   @override
   String get johnDoe => 'John Doe';
@@ -826,7 +837,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Inscripció: 15 de gener de 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,10 +845,10 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Manteniu el vostre compte segur. Només escaneja codis QR quan vulguis enllaçar un dispositiu de confiança.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Etiqueta';
 
   @override
   String get lat => 'Lat';
@@ -845,1589 +856,1621 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Deixa que altres apuntin la càmera del telèfon a aquest codi QR per veure a l\'instant el teu perfil de xarxa.';
 
   @override
-  String get link => 'Link';
+  String get link => 'Enllaç';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Enllaçar un dispositiu';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Enllaça per QR a un altre telèfon';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'S\'ha copiat l\'enllaç al porta-retalls';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Configuració d\'enllaços';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Configuració d\'enllaços';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Vols enllaçar aquest dispositiu?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Enllaços';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Enllaços en aquesta targeta';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'La ubicació encara no està definida';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Cal permís d\'ubicació';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Cal permís de localització per assistir';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Inicieu sessió';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Inicieu sessió per gestionar la vostra targeta digital i la vostra xarxa.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Inicieu sessió amb el codi QR';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Tanca la sessió';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Tanca la sessió de tots';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Tanqueu la sessió del dispositiu?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Programes de fidelització';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Gestionar categories';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Gestiona el contacte';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Gestionar Empleats';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Gestioneu les vostres dades personals i altres preferències';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Marcar completat';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'Mensualment';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Les meves cartes';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'La meva ubicació';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Les meves recompenses';
 
   @override
-  String get name => 'Name';
+  String get name => 'Nom';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'NOM';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'El nom és obligatori';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'nom@empresa.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Nova Targeta';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Targeta nova';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Nova Categoria';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Nova recompensa';
 
   @override
-  String get next => 'Next';
+  String get next => 'A continuació';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'La següent targeta';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet =>
+      'Encara no hi ha cap enllaç actiu connectat';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'No hi ha cap programa de recompenses actiu disponible.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Encara no hi ha cap carnet d\'empleat';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'No s\'han afegit empleats';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Encara no hi ha empleats';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'No s\'ha trobat cap empresari';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'No hi ha articles en aquesta categoria.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable =>
+      'No hi ha plantilles d\'enllaç disponibles';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'No hi ha notificacions noves en aquest moment.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Ningú ha vist el teu perfil encara.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'No hi ha invitacions pendents';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Encara no s\'ha assignat cap programa. Afegiu programes a continuació.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage =>
+      'No s\'ha trobat cap codi QR en aquesta imatge.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Encara no hi ha programes de recompensa';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'No hi ha places disponibles aquest dia';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'No s\'han trobat usuaris';
 
   @override
-  String get none => 'None';
+  String get none => 'Cap';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'No disponible al vostre pla actual';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Encara no s\'ha registrat';
 
   @override
-  String get note => 'Note';
+  String get note => 'Nota';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Notes (opcional)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Notificació esborrada';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Aquí només es poden editar la portada, la foto de perfil, el nom i la biografia.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Només els enllaços activats es mostren quan algú escaneja aquesta targeta.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown =>
+      'Només es mostren els perfils públics';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Només aquest telèfon està utilitzant el teu compte ara mateix.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'O CONTINUAR AMB';
 
   @override
-  String get order => 'Order';
+  String get order => 'Ordre';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Detalls de la comanda';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'Identificador de comanda';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'No s\'ha trobat la comanda';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Comandes';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Targeta de paper';
 
   @override
-  String get password => 'Password';
+  String get password => 'Contrasenya';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Paga mes a mes';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'PENDIENT D\'ACCEPTACIÓ';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Visió general del rendiment';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Dades personals';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Telèfon';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Fotos';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Trieu un tema de color ja fet. Ràpid i net.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Tria el color';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Tria al mapa';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Fes la comanda';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Pla caducat';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Introduïu els detalls de l\'empresa per continuar';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Introduïu el nom de l\'element';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Proporcioneu les dades de la vostra empresa abans d\'actualitzar.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Seleccioneu una categoria';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Seleccioneu una franja horària';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst =>
+      'Si us plau, configureu primer el lloc de treball';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Apunteu la càmera al codi QR de l\'altre dispositiu';
 
   @override
-  String get points => 'Points';
+  String get points => 'Punts';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Punts guanyats';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Premium activa';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Targeta anterior';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Preu (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'Plantilla PRO';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Perfil';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Comprovació del perfil';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Força del perfil';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Visualitzadors de perfils';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Visualitzacions de perfil';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Detalls del programa';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Nom del programa';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'No s\'ha trobat el programa';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Tipus de programa';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'Codi QR';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'Escaneigs QR';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Quantitat';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Llegeix-ho tot';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Només lectura';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'S\'ha rebut 1 segell';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Activitat recent';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Bescanvia una altra recompensa';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Bescanviar la recompensa';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Cafè gratuït bescanviat';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Actualitza el QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'Regió';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Eliminar';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Elimina l\'empleat';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Pla de renovació';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Sol·licitud pendent';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Sol·licitud pendent';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Sol·licitud rebutjada';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Sol·licita la subscripció';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Restableix';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Recompensa completada! Mostra aquesta targeta per bescanviar.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Recompensa completada! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Detalls de la recompensa';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Programa de recompensa';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Programes de recompensa';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Recompensa bescanviada!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Recompenses';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Recompenses obtingudes';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '1.600 rupies facturats mensualment';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => '8.300 rupies facturats anualment';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'DESA';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Desa la targeta d\'identificació de la feina al telèfon o a la cartera';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Escaneja';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Escaneja un codi QR d\'usuari per afegir-lo com a empleat';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Escaneja qualsevol QR d\'usuari o empresa per afegir empleat';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem =>
+      'Escaneja QR empresarial per bescanviar-lo';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Escaneja el codi QR del client';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Escaneja el perfil de l\'empleat';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Escaneja QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Escaneja QR / mostra QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'Escaneja el codi QR';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Escaneja el QR que es mostra a l\'altre dispositiu';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Escaneja per convidar';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Cerca per nom d\'usuari...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Cerca enllaços';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany =>
+      'Cerca nom, correu electrònic o empresa';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Veure-ho tot';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Veure tota l\'activitat es burla. Les activitats noves apareixeran a mesura que s\'afegeixin clients potencials.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Seleccioneu la data';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Seleccioneu Marcadors';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Seleccioneu Regió';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon =>
+      'Estableix el text sota la icona d\'enllaç';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Estableix els teus propis colors, fotos i fons.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Comparteix';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Comparteix la targeta';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Comparteix diferents enllaços a cada targeta';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Comparteix el perfil';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Mostra l\'enllaç';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Mostra en aquesta targeta';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Inicieu la sessió amb Google';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Registra\'t';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Saltar';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Saltar per ara';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'Ranura (min)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Enginyer de programari';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Alguna cosa va fallar';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Opcions d\'ordenació';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Instruccions especials';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Targeta de segell';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Icona del segell';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Segells';
 
   @override
-  String get start => 'START';
+  String get start => 'COMENÇA';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Data d\'inici';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Hora d\'inici';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Comenceu a connectar de manera més intel·ligent amb Barqody.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Estadístiques';
 
   @override
-  String get status => 'Status';
+  String get status => 'Estat';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Subscripció';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted =>
+      'S\'ha enviat la sol·licitud de subscripció';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 =>
+      'S\'ha enviat la sol·licitud de subscripció.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Fes lliscar el dit per buscar targetes';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Fes-te una selfie ràpida per verificar l\'assistència';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Toqueu \"Enllaços socials\" a dalt per afegir i activar perfils.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Toqueu el mapa o utilitzeu la vostra ubicació actual';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Toca per afegir una foto';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Toca per compartir el codi QR';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Assistència de l\'equip';
 
   @override
-  String get template => 'Template';
+  String get template => 'Plantilla';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Plantilles';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Gràcies! Els enviaments de comentaris només són simulats.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Aquesta targeta i el seu codi QR s\'eliminaran.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Aquesta funció està disponible exclusivament per als usuaris empresarials.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'Aquest ja és el teu nom d\'usuari.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'Aquest mes';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Això suprimirà permanentment aquest programa de recompenses i totes les seves inscripcions.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Avui és el teu cap de setmana';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Avui • 15:15';
 
   @override
   String get total => 'Total';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Feu un seguiment de les vostres comandes';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional =>
+      'Referència de la transacció (opcional)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Número de referència de la transacció (opcional)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Torna-ho a provar';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Proveu Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Proveu Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Tipus';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Escriviu almenys 2 caràcters d\'un nom d\'usuari per cercar.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Escriviu el codi de 8 caràcters que es mostra sota el QR.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'En desenvolupament: inicieu sessió mitjançant correu electrònic/contrasenya.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Icona de desempremta';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Actualitza ara';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Actualitza a';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Actualitza a Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Utilitzeu una plantilla';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Utilitzeu Barqody en altres telèfons o tauletes. Teniu el control: tanqueu la sessió de qualsevol dispositiu en qualsevol moment.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Utilitzeu Barqody al vostre telèfon per escanejar aquest codi';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Utilitza la icona predeterminada';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Utilitza aquesta foto';
 
   @override
-  String get user => 'USER';
+  String get user => 'USUARI';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Versió: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Consulta i actualitza les comandes dels teus clients';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Veure perfil';
 
   @override
-  String get views => 'Views';
+  String get views => 'Vistes';
 
   @override
-  String get website => 'Website';
+  String get website => 'Lloc web';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Benvingut de nou';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Benvingut al Centre de comptes';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Quan una empresa t\'afegeix com a empleat, la teva targeta d\'empleat apareixerà aquí. Podeu personalitzar el seu disseny en qualsevol moment.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Quan una empresa us inscrigui al seu programa de recompenses, apareixerà aquí.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Quan una empresa et convidi al seu equip, apareixerà aquí.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Quan estigui desactivat, aquest enllaç no es mostrarà al teu perfil';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Escriu alguna cosa sobre tu o la teva marca';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Anualment';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Ahir • 17:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Les teves categories';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Les vostres targetes d\'empleat dels empresaris';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'El vostre cafè gratuït s\'ha bescanviat correctament.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Les teves recompenses';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'La teva subscripció ha finalitzat. Toqueu la icona d\'informació per obtenir més informació.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'el teu nom';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% de descompte';
 
   @override
   String get avatarTAPPED => 'AVATAR TAPPED';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Nom del titular del compte';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Número de compte';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Actiu ara';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Afegeix la biografia';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Afegeix una foto de portada';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Afegeix una foto de cara';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Afegeix una nota de veu d\'introducció';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Afegeix el nom del perfil';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Afegeix una foto de perfil';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Afegeix enllaços socials (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Afegeix un element';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Afegeix un enllaç';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'Afegiu enllaços al vostre perfil a continuació';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Afegeix una foto';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Afegeix a la cistella';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Adreça (opcional)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Tots els tipus de contacte';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Radi permès (metres)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Gairebé allà!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Ja Empleat';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Ja tens un compte?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Sempre al dia';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Esteu segur que voleu tancar la sessió de Barqody?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'L\'assistència ha fallat';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Color de fons';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'La reserva ha fallat';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward =>
+      'Descriu breument aquesta recompensa...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Empresa verificada';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Adreça de correu electrònic empresarial';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Fax comercial';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Número de telèfon de l\'empresa';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Lloc web empresarial';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Error de càmera';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Captura la cara';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Targeta completada';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Etiqueta de la targeta';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Nom de l\'etiqueta de la targeta';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Vista prèvia de la targeta';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Tema de la targeta';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Targeta creada';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Nom de la targeta';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Targeta desada com a JPG';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Targeta desada com a PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Targeta actualitzada';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Canvia foto';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Face d\'entrada';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Check-in correctament';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Cara de sortida';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Sortida correcta';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Trieu la plantilla';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress =>
+      'Adreça comercial de la targeta de contacte';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName =>
+      'Nom de l\'empresa de la targeta de contacte';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'Correu electrònic de la targeta de contacte';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress =>
+      'Adreça de casa de la targeta de contacte';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Telèfon de la targeta de contacte';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'Lloc web de la targeta de contacte';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin =>
+      'No s\'ha pogut completar l\'inici de sessió';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'No s\'ha pogut crear el codi QR';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'No s\'ha pogut enllaçar el dispositiu';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice =>
+      'No s\'ha pogut tancar la sessió del dispositiu';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'No s\'ha pogut obrir Google Wallet';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign =>
+      'No s\'ha pogut desar el disseny de la targeta';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'No s\'ha pogut actualitzar la visibilitat del perfil';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Crea galeria';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Crea una targeta per compartir el teu perfil';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Crea una targeta';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Banc personalitzat';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Els clients poden ser inscrits i segellats';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Personalitza la targeta';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram =>
+      'Descriu el teu programa de fidelització';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Nom de visualització';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'No tens un compte?';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE, d MMM aaaa';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Edita la recompensa';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Edita l\'element';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'Adreça de correu electrònic';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'El correu electrònic és obligatori';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Targetes d\'empleats';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Empleat eliminat';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved =>
+      'S\'ha desat la configuració dels empleats';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Empreses inscrites';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Introduïu un correu electrònic vàlid';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard =>
+      'Introdueix la biografia de la targeta de contacte';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Introduïu el nom del programa';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Introdueix la teva biografia';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Introduïu el vostre número de telèfon';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'Introduïu l\'URL del vostre lloc web';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Insígnia de l\'esdeveniment';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'Exemple: 10 segells = cafè gratuït';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'S\'ha afegit una foto de cara';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'No s\'ha pogut afegir el programa';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'No s\'ha pogut afegir el segell';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'No s\'ha pogut registrar el client';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact =>
+      'No s\'ha pogut intercanviar el contacte';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'No s\'han pogut carregar els programes';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'No s\'ha pogut fer la comanda';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'No s\'ha pogut eliminar';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'No s\'ha pogut desar';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'No s\'ha pogut desar JPG';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'No s\'ha pogut desar el PNG';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'No s\'ha pogut desar el codi QR.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'No s\'han pogut desar els detalls de l\'empresa';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'No s\'ha pogut actualitzar l\'estat';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Nom de pila';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Aliments i begudes';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Postres gratuïtes';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Cal permís de la galeria. Si us plau, activeu-lo a Configuració.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Comença';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Vés';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices => 'Aneu a Eines → Dispositius enllaçats';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending =>
+      'Configuració de Google Wallet pendent.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Configuració de Google Wallet pendent. S\'ha copiat l\'enllaç del perfil.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Feu créixer el vostre negoci';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Usuari convidat';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'Número IBAN';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'EN OFICINA';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Invitació pendent';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'S\'ha rebutjat la invitació';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Invitació enviada. L\'empleat s\'afegirà després d\'acceptar.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Convida un empleat';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Convida com a empleat';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Títol del treball';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Cognom';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Inicieu sessió amb QR';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Tanqueu la sessió només d\'aquest compte? Altres comptes es mantindran en aquest telèfon.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Inicieu sessió amb Google (compte de demostració: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Iniciant sessió...';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain =>
+      'No s\'ha pogut iniciar la sessió. Torna-ho a provar.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'MMM d, aaaa - h:mm a';
 
   @override
-  String get mmmmYyyy => 'MMMM yyyy';
+  String get mmmmYyyy => 'MMMM aaaa';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Marca l\'assistència';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'El meu nom';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'El meu perfil de Tapni';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'El nom no pot estar buit';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Nou';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Encara no hi ha contactes';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Encara no hi ha detalls';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Encara no s\'ha afegit cap enllaç.\\nToqueu \"Afegeix un enllaç\" per començar.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Sense coincidències';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'No s\'ha donat cap motiu.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'No inscrit';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Nombre de segells';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Un toc per compartir';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone => 'Obriu Barqody a l\'altre telèfon';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Obriu la càmera';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Informació de la comanda';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Targeta de paper';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'La contrasenya ha de tenir almenys 4 caràcters';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'La contrasenya ha de tenir almenys 6 caràcters';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Número de telèfon';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Es requereix telèfon';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Número de telèfon';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Trieu la ubicació';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Introduïu una contrasenya';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Introduïu un nom d\'usuari';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Introduïu una adreça de correu electrònic vàlida';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'Introduïu un nombre vàlid de segells';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Introduïu el vostre correu electrònic';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Introduïu el vostre nom';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Introduïu la vostra contrasenya';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Apunta la càmera cap a un codi QR per escanejar automàticament.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Apunta la càmera cap a una insígnia d\'esdeveniment i toca el botó Càmera.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Apunteu la càmera cap a la targeta de paper i toqueu el botó Càmera.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'S\'està preparant el codi QR...';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'No s\'ha trobat el perfil.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully =>
+      'El perfil s\'ha actualitzat correctament!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'Codi QR desat a la galeria!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'El codi QR ha caducat';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'El codi QR ha caducat. Toca Actualitzar.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Immobiliària';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'S\'adjunta el rebut';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Renova la teva subscripció per restaurar l\'accés complet a les teves funcions i dades premium.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Torna a fer la foto';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Títol de la recompensa';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Recompensa desbloquejada 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Rol o empresa';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Desa els canvis';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Desa el contacte';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Desa el perfil';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Desa la configuració';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Desa el nom d\'usuari';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Desa la targeta';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Desa el contacte';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Desat localment. És possible que la sincronització hagi fallat.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Escaneja un codi QR o afegeix algú que hagis conegut per crear la teva xarxa.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Escanejat mitjançant QR';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Tema de pantalla';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'La cerca ha fallat. Torna-ho a provar.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Seleccioneu Empresa';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Seleccioneu Interval de dates';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Seleccioneu la data de finalització';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Seleccioneu Data d\'inici';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Enviar invitació';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Enviar invitació per assistir';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Comparteix l\'enllaç';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Temporització del torn';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Captura intel·ligent de contactes';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Color de la vora del segell';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Color del segell';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Icones de segell (opcional)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Segells donats';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Comença a construir la teva xarxa';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Nom del carrer';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Canvia a un compte d\'empresa per desbloquejar l\'accés complet.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Toca Enllaça un dispositiu i escaneja aquest QR';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Toqueu per afegir una imatge';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Toca per canviar';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Plantilla aplicada localment. La sincronització ha fallat.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Color del text';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'Aquest compte';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Aquesta funció està disponible exclusivament per als usuaris empresarials.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam =>
+      'Aquesta persona forma part del teu equip';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Aquest programa està en pausa';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Total de segells';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Prova amb un nom, un correu electrònic o una empresa diferents.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'No es pot desar el perfil. Torna-ho a provar.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'No es pot actualitzar el nom d\'usuari. Torna-ho a provar.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'En desenvolupament: inicieu sessió mitjançant correu electrònic/contrasenya.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Usuari desconegut';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Actualitza la ubicació GPS';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Actualitzar l\'estat';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Actualitza el carretó';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Actualitza l\'element';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Actualitza a';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Actualitza a Business PRO';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Carrega el rebut (opcional)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Utilitza La meva ubicació';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Utilitzeu només lletres, números, guions baixos o guions';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'El nom d\'usuari ha de tenir com a mínim 3 caràcters';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'El nom d\'usuari ha de tenir com a màxim 30 caràcters';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'El nom d\'usuari s\'ha actualitzat correctament!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Esperant que acceptin';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'URL del lloc web';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Dies de cap de setmana';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Lloc de treball';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'La teva subscripció PRO ha caducat.\\n\\n';
 
   @override
   String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+      'La teva subscripció PRO ha caducat.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Les funcions premium estan desactivades actualment.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Els enllaços professionals s\'oculten del vostre perfil públic.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Les dades i les dades de la vostra empresa estan segures.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Afegeix $label element';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Afegiu almenys un $label element';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'No hi ha $label articles disponibles.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Encara no hi ha articles. Afegeix el teu primer $label element.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'No hi ha cap perfil públic que coincideixi amb \"@$query\".';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Codi: $code';
   }
 }

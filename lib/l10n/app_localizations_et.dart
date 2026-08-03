@@ -12,325 +12,331 @@ class AppLocalizationsEt extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Tööriistad';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Konto seaded';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Märguanded';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Sinu jaoks';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'Teie profiil';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Redigeeri profiili';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => 'Muutke oma nime, fotot ja biograafiat';
 
   @override
-  String get username => 'Username';
+  String get username => 'Kasutajanimi';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'Määrake oma ainulaadne profiili kasutajanimi';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Sotsiaalsed lingid';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Lisage Instagram, WhatsApp, veebisait ja palju muud';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Avalik profiil';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => 'Igaüks võib teie profiili leida ja vaadata';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Otsingu eest peidetud – teised ei saa teid avastada';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Jaga minu QR-koodi';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Laske teistel skannida teie digitaalset visiitkaarti';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Ostlemine ja auhinnad';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Minu tellimused';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => 'Jälgige poodidest tehtud tellimusi';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Minu auhinnakaardid';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Vaadake lojaalsusprogrammide marke ja punkte';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Töökoht';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Töötajate kutsed';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Võtke vastu või lükake tagasi ettevõtete meeskonnakutsed';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Töökoha registreerimine';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Kella sisse ja välja töökohal asukohaga';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Kontod ja seadmed';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Lingitud seadmed';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle =>
+      'Linkige teine ​​telefon, näiteks WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Kontod';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Kontode lisamine või vahetamine';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Vaheta $count konto vahel';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Abi ja konto';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Rakenduse keel';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => 'Muutke rakenduses kasutatavat keelt';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Otsi keel';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'Telefoni keel';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Keel värskendatud';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Abi ja KKK';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Vastused levinud küsimustele';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Saada tagasisidet';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle =>
+      'Teatage veast või soovitage uut funktsiooni';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Logi välja';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Logige sellelt seansilt välja';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Tühista';
 
   @override
-  String get save => 'Save';
+  String get save => 'Salvesta';
 
   @override
-  String get done => 'Done';
+  String get done => 'Valmis';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(Ainult lugemiseks)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 punkt = 100 PKR (näidisreegel)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => 'Vaja on 10 templit';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '123 Main St, linn';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 päeva tagasi';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 tähemärki. Ainult tähed, numbrid, allkriipsud ja sidekriipsud.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Nõustu';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'JUURDEPÄÄS PIIRATUD';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Konto / IBAN: lisage siia konto number';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Konto pealkiri: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Aktiivne';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'AKTIIVNE';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'AKTIIVKAART';
 
   @override
-  String get add => 'Add';
+  String get add => 'Lisa';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Lisa märge...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Lisa konto';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Lisage esmalt vähemalt üks kategooria';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Kategooriate lisamine kuvamisjärjekorras (nt kiirtoit, seejärel Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Esmalt lisage kataloogi seadetesse kategooriad.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Lisa kontakt';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Lisa link';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow => 'Lisage allpool oma profiili lingid';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Lisage esmalt oma profiilile lingid ja seejärel lubage need siin.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Lisa Logo';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Lisa punkte';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Lisa programm';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Lisa tempel';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Lisage Google Walletisse';
 
   @override
-  String get address => 'Address';
+  String get address => 'Aadress';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Kõik';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Kõik järgi!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Kõik teatised on märgitud loetuks!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Luba kaamera';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Kas lubada sellel seadmel juurdepääs teie Barqody kontole? Saate selle igal ajal lingitud seadmetest eemaldada.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Kas teil on juba konto?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'Analyticsi juhtpaneel';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Kõik erisoovid...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Rakenda';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Rakenda disain';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Rakenda mall';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Kasvav';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Paluge oma ettevõttel skannida teie QR ja lisada teid töötajaks';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Kategooria määramine';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Määratud programmid';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Vähemalt 6 tähemärki';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => 'Osalemine tänaseks lõppenud';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Saadaolevad teenindusajad';
 
   @override
-  String get background => 'Background';
+  String get background => 'Taust';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Taustavärv';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Pangakonto';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Panga üksikasjad';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Pank: lisa siia panga nimi';
 
   @override
   String get barqody => 'Barqody';
@@ -339,10 +345,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Parim väärtus';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Arve summa';
 
   @override
   String get bio => 'BIO';
@@ -351,470 +357,471 @@ class AppLocalizationsEt extends AppLocalizations {
   String get bio2 => 'Bio';
 
   @override
-  String get book => 'Book';
+  String get book => 'Raamat';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Broneerimise kuupäev';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Broneerimise ajakava';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Broneerimise aeg';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'ÄRI';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Ärikategooria';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Ettevõtte üksikasjad';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Ettevõtte nimi';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Ärivõimalused';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Äriprogrammid';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Ainult ärikasutajad';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'Registreerudes nõustute meie tingimustega.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Helista';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Skannimiseks on vaja kaamera luba.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Tühistage igal ajal.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Tühista tellimus';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Jäädvustage uus kontakt';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'Kategooriad';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Kategooria *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'Kategooria on juba olemas';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Kategooria nimi';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Registreeruge';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Kontrollige';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Valige oma profiililingi jaoks ainulaadne kasutajanimi.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Valige Plaan';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Valige Mall';
 
   @override
-  String get close => 'Close';
+  String get close => 'Sule';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Kood kopeeritud';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Varsti';
 
   @override
-  String get company => 'Company';
+  String get company => 'Ettevõte';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Ettevõtte töötaja kaart';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'Ettevõte Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Viige need sammud lõpule';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Kinnitage ja lisage punkte';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Kinnitage broneering';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Kinnitage asukoht';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Kinnitage lunastamine';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Ühendatud kontod';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Kontakti lisamine õnnestus!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Kontakti kaart';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => 'Kontakti vahetamine õnnestus!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Kontakti allikas';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'Kontakti värskendamine õnnestus!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Kontaktid';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Jätka';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Kopeeritud';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Kopeeri kood';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Asukohta ei õnnestunud hankida. Lubage GPS-i luba.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Kontot ei saanud vahetada';
 
   @override
-  String get create => 'Create';
+  String get create => 'Loo';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Loo konto';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Looge lojaalsusprogramm';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Loo uus link';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Loo programm';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Loo preemia';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Looge klientidele preemiaid või punkte';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Looge oma esimene kaart';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Looge klientidele esimene preemiakaart';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Loomise kuupäev';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Kohandatud pildid tembeldatud ja templita pesade jaoks. Kui pole määratud, kasutatakse vaikeväärtusi.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Kohandatud link';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Kliendi üksikasjad';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'Klient registreerus edukalt';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Klient ei ole veel registreerunud';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Klient ei näita';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Klientide tellimused';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Kohandage kaardikujundust';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Kohandage disaini';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Kohandage oma profiili, avage PRO mallid ja hankige piiramatu arv müügivihjeid.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Kohandage ennast';
 
   @override
-  String get date => 'Date';
+  String get date => 'Kuupäev';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Kuupäevavahemik';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Keeldumine';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Kustuta';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Kas kustutada kaart?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Kustuta kategooria';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Kustuta kontakt';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Kas kustutada preemia?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Langevad';
 
   @override
-  String get description => 'Description';
+  String get description => 'Kirjeldus';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Kirjeldus (valikuline)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Üksikasjad';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Seade on lingitud';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Seade on välja logitud';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Seadme olek';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Digitaalne visiitkaart';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'DIGITAALNE ÄRIkaart';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Kas teil pole kontot?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'nt. Kiirtoit';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'nt. Ilma suhkruta, eriti kuum...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'Teeniti 50 punkti';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Muuda';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Redigeeri kaarti';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Redigeeri üksikasju';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Redigeeri profiili';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Redigeeri sätteid';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Muutke oma profiili üksikasju';
 
   @override
-  String get email => 'Email';
+  String get email => 'Meil';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'E-post ja parool';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'E-posti aadress';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR =>
+      'Saatke sisselogimine e-postiga või skannige QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Töötaja kaart';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'TÖÖTAJA KAART';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Töötaja näofoto';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Tühi pesa';
 
   @override
-  String get end => 'END';
+  String get end => 'LÕPP';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Lõppkuupäev';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Lõputund';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Registreerige klient';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Sisesta arve summa';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Sisestage kood';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Sisestage selle asemel kood';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Sisestage allpool võrgu kontaktandmed.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Sisestage oma nimi';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Sisestage oma parool';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Sündmuse märk';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Vahetage kontakti';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Kontakti vahetamine...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Uurige';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'Kontakti värskendamine ebaõnnestus.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Täidetud pesa';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Filtreerige kontakte';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Filtreeri kontaktid';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Otsige inimesi BarQodyst';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Leia kasutaja';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Leia kasutaja';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Leia kasutajanimi';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Unustasid?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Tasuta kohv';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Täisnimi';
 
   @override
-  String get general => 'General';
+  String get general => 'Kindral';
 
   @override
-  String get go => 'Go';
+  String get go => 'Mine';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'Mine äri';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'KÜLALINE';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'Tere,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Abikeskus on selles kasutajaliidese demos keelatud.';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => 'Kuueteistkümnend: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Hoidke QR-koodi raami sees – see skannib automaatselt.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Kuidas soovite seda kaarti kujundada?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Importige kontakte';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'Kontaktide importimine pole veel saadaval.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'sisse';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Sissetulevad tellimused';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'Kehtetu profiili URL. Skannige kehtiv BarQody kaart või QR-kood.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Vale QR-kood. Kasutage Barqody linki QR.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Kutsuge töötajaid, määrake vahetused ja jälgige kohalolekut';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee => 'Kutsus teid töötajana liituma';
 
   @override
   String get janeDoe => 'Jane Doe';
 
   @override
-  String get janeCompanyCom => 'jane@company.com';
+  String get janeCompanyCom => 'jane@firma.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Ametinimetus';
 
   @override
   String get johnDoe => 'John Doe';
@@ -826,7 +833,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Liitus: 15. jaanuar 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,10 +841,10 @@ class AppLocalizationsEt extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Hoidke oma konto turvaliselt. Skannige QR-koode ainult siis, kui soovite linkida usaldusväärse seadme.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Silt';
 
   @override
   String get lat => 'Lat';
@@ -845,1589 +852,1598 @@ class AppLocalizationsEt extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Laske teistel suunata oma telefoni kaamera sellele QR-koodile, et näha kohe teie võrguprofiili.';
 
   @override
   String get link => 'Link';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Ühendage seade';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Link teise telefoni QR-ga';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'Link on lõikelauale kopeeritud';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Lingi seaded';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Lingi seaded';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Kas siduda see seade?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Lingid';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Lingid sellel kaardil';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'Asukoht pole veel määratud';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Vajalik asukoha luba';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Osalemiseks vajalik asukohaluba';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Logi sisse';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Digikaardi ja võrgu haldamiseks logige sisse.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Logige sisse QR-koodiga';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Logi välja';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Logi kõik välja';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Logi seadmest välja?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Lojaalsusprogrammid';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Hallake kategooriaid';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Kontakti haldamine';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Töötajate haldamine';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Hallake oma isikuandmeid ja muid eelistusi';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Märgi lõpetatuks';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'Igakuine';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Minu kaardid';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'Minu asukoht';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Minu auhinnad';
 
   @override
-  String get name => 'Name';
+  String get name => 'Nimi';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'NIMI';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'Nimi on kohustuslik';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'nimi@ettevõte.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Uus kaart';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Uus kaart';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Uus kategooria';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Uus tasu';
 
   @override
-  String get next => 'Next';
+  String get next => 'Edasi';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'Järgmine kaart';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet =>
+      'Ühtegi aktiivset linki pole veel ühendatud';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Aktiivseid preemiaprogramme pole saadaval.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Töötajakaarte veel pole';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Töötajaid pole lisatud';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Töötajaid veel pole';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Tööandjat ei leitud';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'Selles kategoorias pole üksusi.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => 'Linkimalle pole saadaval';
 
   @override
-  String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+  String get noNewNotificationsAtThisTime => 'Hetkel uusi märguandeid pole.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Keegi pole veel teie profiili vaadanud.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Ootel kutseid pole';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Ühtegi programmi pole veel määratud. Lisage programmid allpool.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => 'Sellel pildil ei leitud QR-koodi.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Preemiaprogramme veel pole';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'Sellel päeval pole ühtegi teenindusaega saadaval';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Ühtegi kasutajat ei leitud';
 
   @override
-  String get none => 'None';
+  String get none => 'Mitte ühtegi';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'Pole teie praeguses plaanis saadaval';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Pole veel sisse registreeritud';
 
   @override
-  String get note => 'Note';
+  String get note => 'Märkus';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Märkused (valikuline)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Teatis kustutati';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Siin saab muuta ainult kaanepilti, profiilifotot, nime ja biograafiat.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Kui keegi seda kaarti skannib, kuvatakse ainult lubatud lingid.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown =>
+      'Kuvatakse ainult avalikud profiilid';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Ainult see telefon kasutab praegu teie kontot.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'VÕI JÄTKAKE';
 
   @override
-  String get order => 'Order';
+  String get order => 'Telli';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Tellimuse üksikasjad';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'Tellimuse ID';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'Tellimust ei leitud';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Tellimused';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Paberkaart';
 
   @override
-  String get password => 'Password';
+  String get password => 'Parool';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Maksa iga kuu';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'OOTAB AKTSEPTI';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Toimivuse ülevaade';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Isiklikud andmed';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Telefon';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Fotod';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Valige valmis värviteema. Kiire ja puhas.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Valige värv';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Valige kaardil';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Esitage tellimus';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Plaan aegunud';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Jätkamiseks sisestage ettevõtte andmed';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Sisestage üksuse nimi';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Enne täiendamist esitage oma ettevõtte üksikasjad.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Palun valige kategooria';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Valige ajapilu';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => 'Määrake esmalt töökoht';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Suunake kaamera teises seadmes olevale QR-koodile';
 
   @override
-  String get points => 'Points';
+  String get points => 'Punktid';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Teenitud punktid';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Premium aktiivne';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Eelmine kaart';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Hind (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'PRO mall';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Profiil';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Profiili kontroll';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Profiili tugevus';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Profiili vaatajad';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Profiili vaated';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Programmi üksikasjad';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Programmi nimi';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'Programmi ei leitud';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Programmi tüüp';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'QR-kood';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'QR-skaneeringud';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Kogus';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Loe kõik';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Ainult lugemiseks';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'Sai 1 tempel';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Hiljutine tegevus';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Lunasta veel üks preemia';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Lunasta preemia';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Lunastatud tasuta kohv';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Värskenda QR-i';
 
   @override
-  String get region => 'Region';
+  String get region => 'Piirkond';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Eemalda';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Eemalda töötaja';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Uuenda plaani';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Taotlus on pooleli';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Taotlus on ootel';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Taotlus lükati tagasi';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Taotlege tellimust';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Lähtesta';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Preemia lõpetatud! Lunastamiseks näidake seda kaarti.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Preemia lõpetatud! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Preemia üksikasjad';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Preemiaprogramm';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Preemiaprogrammid';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Preemia lunastatud!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Preemiad';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Teenitud preemiad';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => 'Igakuine arve on 1600 Rs';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => 'Aastas esitatakse arve 8300 Rs';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'SALVESTA';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Salvestage oma töö ID-kaart telefoni või rahakotti';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Skaneeri';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Skaneerige kasutaja QR-kood, et lisada ta töötajana';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Töötaja lisamiseks skannige kasutaja või ettevõtte QR-koodi';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'Lunastamiseks skannige ettevõtte QR-d';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Skannige kliendi QR-koodi';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Skannige töötaja profiili';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Skaneeri QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Skanni QR / näita QR-i';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'QR-koodi skannimine';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Skannige teises seadmes kuvatav QR';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Skanni kutsumiseks';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Otsi kasutajanime järgi...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Otsi linke';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany =>
+      'Otsige nime, e-posti aadressi või ettevõtte nime';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Vaata kõiki';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Vaadake, et kogu tegevust mõnitatakse. Müügivihjete lisamisel ilmuvad uued tegevused.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Valige kuupäev';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Valige Markerid';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Valige piirkond';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'Määrake tekst lingi ikooni alla';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Määrake oma värvid, fotod ja taust.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Jaga';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Jaga kaarti';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Jagage igal kaardil erinevaid linke';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Jaga profiili';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Näita linki';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Näita sellel kaardil';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Logige sisse Google\'iga';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Registreeruge';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Jäta vahele';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Jäta praegu vahele';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'Pilu (min)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Tarkvarainsener';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Midagi läks valesti';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Sorteerimisvalikud';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Erijuhised';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Templikaart';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Templi ikoon';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Margid';
 
   @override
   String get start => 'START';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Alguskuupäev';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Algustund';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Alustage Barqodyga nutikamalt võrkude loomist.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistika';
 
   @override
-  String get status => 'Status';
+  String get status => 'Olek';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Tellimus';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'Tellimistaotlus on esitatud';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'Tellimistaotlus on esitatud.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Kaartide sirvimiseks pühkige';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Osalemise kinnitamiseks tehke kiire selfie';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Profiilide lisamiseks ja aktiveerimiseks puudutage ülal \"Sotsiaallingid\".';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Puudutage kaarti või kasutage oma praegust asukohta';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Foto lisamiseks puudutage';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Puudutage QR-koodi jagamiseks';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Meeskonna osavõtt';
 
   @override
-  String get template => 'Template';
+  String get template => 'Mall';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Mallid';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Aitäh! Tagasiside esitamine on ainult pilkamine.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'See kaart ja selle QR-kood eemaldatakse.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'See funktsioon on saadaval ainult ärikasutajatele.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'See on juba teie kasutajanimi.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'Sel kuul';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'See kustutab jäädavalt selle preemiaprogrammi ja kõik selle registreerimised.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Täna on teie nädalavahetus';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Täna • 15:15';
 
   @override
-  String get total => 'Total';
+  String get total => 'Kokku';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Jälgige oma tellimusi';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'Tehinguviide (valikuline)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Tehingu viitenumber (valikuline)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Proovi uuesti';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Proovige Business Pro-d';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Proovige Business Pro-d.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Tüüp';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Sisestage otsimiseks vähemalt 2 tähemärki kasutajanimest.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Sisestage QR-koodi all olev 8-kohaline kood.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'Arendamisel – logige sisse hoopis meili/parooliga.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Eemalda templi ikoon';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Uuendage kohe';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Uuenda versioonile';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Uuendage Tapni PRO-le';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Kasutage malli';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Kasutage Barqodyt teistes telefonides või tahvelarvutites. Saate hoida kontrolli – logige igal ajal seadmest välja.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Kasutage selle koodi skannimiseks oma telefonis Barqodyt';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Kasuta vaikeikooni';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Kasutage seda fotot';
 
   @override
-  String get user => 'USER';
+  String get user => 'KASUTAJA';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Versioon: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Vaadake ja värskendage oma klientide tellimusi';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Vaata profiili';
 
   @override
-  String get views => 'Views';
+  String get views => 'Vaated';
 
   @override
-  String get website => 'Website';
+  String get website => 'Veebisait';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Tere tulemast tagasi';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Tere tulemast kontokeskusesse';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Kui ettevõte lisab teid töötajaks, kuvatakse siin teie töötaja kaart. Saate selle disaini igal ajal kohandada.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Kui ettevõte registreerib teid oma preemiaprogrammi, kuvatakse see siin.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Kui ettevõte kutsub teid oma meeskonda, kuvatakse see siin.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Kui see on välja lülitatud, ei kuvata seda linki teie profiilil';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Kirjutage midagi enda või oma kaubamärgi kohta';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Aastane';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Eile • 17:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Teie kategooriad';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Teie töötaja kaardid tööandjatelt';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'Teie tasuta kohv on edukalt lunastatud.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Teie auhinnad';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Teie tellimus on lõppenud. Üksikasjade vaatamiseks puudutage teabeikooni.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'sinu nimi';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% allahindlust';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'AVATAR KÄPUTAS';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Konto omaniku nimi';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Konto number';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Hetkel aktiivne';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Lisa Bio';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Lisa kaanefoto';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Lisage näofoto';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Lisage sissejuhatav häälmärkus';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Lisa profiilinimi';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Lisa profiilifoto';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Sotsiaalsete linkide lisamine (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Lisa üksus';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Lisa link';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'Lisage allpool oma profiili lingid';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Lisa foto';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Lisa ostukorvi';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Aadress (valikuline)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Kõik kontaktitüübid';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Lubatud raadius (meetrites)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Peaaegu kohal!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Juba töötaja';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Kas teil on juba konto?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Alati kursis';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Kas olete kindel, et soovite Barqodyst välja logida?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'Osalemine ebaõnnestus';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Taustavärv';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'Broneerimine ebaõnnestus';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward =>
+      'Kirjeldage seda preemiat lühidalt...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Ettevõte on kinnitatud';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Ettevõtte e-posti aadress';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Ärifaks';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Ettevõtte telefoninumber';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Ettevõtte veebisait';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Kaamera viga';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Jäädvusta nägu';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Kaart valmis';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Kaardi etikett';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Kaardi sildi nimi';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Kaardi eelvaade';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Kaardi teema';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Kaart loodud';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Kaardi nimi';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Kaart salvestati JPG-vormingus';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Kaart salvestati PNG-vormingus';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Kaart värskendatud';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Muuda fotot';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Sisseregistreerimise nägu';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Sisseregistreerimine õnnestus';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Väljaregistreerimise nägu';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Väljaregistreerimine õnnestus';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Valige mall';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => 'Kontaktkaardi ettevõtte aadress';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'Kontaktkaardi ettevõtte nimi';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'Kontaktkaardi meiliaadress';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'Kontaktkaardi kodune aadress';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Kontaktkaardi telefon';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'Kontaktkaardi veebisait';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'Sisselogimine ei õnnestunud';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'QR-koodi ei saanud luua';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Seadet ei saanud linkida';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'Seadmest ei saanud välja logida';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Google Walletit ei saanud avada';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'Kaardi kujundust ei saanud salvestada';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Profiili nähtavust ei saanud värskendada';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Loo galerii';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Looge oma profiili jagamiseks kaart';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Loo kaart';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Kohandatud pank';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Kliente saab registreerida ja tembeldada';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Kohandage kaarti';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram => 'Kirjeldage oma lojaalsusprogrammi';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Kuvatav nimi';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Kas teil pole kontot?';
 
   @override
   String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Redigeeri preemiat';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Muuda üksust';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'E-posti aadress';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'E-post on kohustuslik';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Töötaja kaardid';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Töötaja eemaldatud';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'Töötaja seaded on salvestatud';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Registreeritud ettevõtted';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Sisestage kehtiv e-posti aadress';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard => 'Sisestage kontaktikaardi bio';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Sisestage programmi nimi';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Sisestage oma biograafia';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Sisestage oma telefoninumber';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'Sisestage oma veebisaidi URL';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Sündmuse märk';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'Näide: 10 marki = tasuta kohv';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Lisatud näofoto';
 
   @override
   String get failedToAddProgram => 'Failed to add program';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Templi lisamine ebaõnnestus';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Kliendi registreerimine ebaõnnestus';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Kontakti vahetamine ebaõnnestus';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Programmide laadimine ebaõnnestus';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Tellimuse esitamine ebaõnnestus';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Eemaldamine ebaõnnestus';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Salvestamine ebaõnnestus';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'JPG salvestamine ebaõnnestus';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'PNG-vormingus salvestamine ebaõnnestus';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'QR-koodi salvestamine ebaõnnestus.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'Ettevõtte üksikasjade salvestamine ebaõnnestus';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Oleku värskendamine ebaõnnestus';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Eesnimi';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Toit ja jook';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Tasuta magustoit';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Vajalik on galerii luba. Lubage see seadetes.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Alustage';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Mine';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices => 'Avage Tööriistad → Lingitud seadmed';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending =>
+      'Google Walleti seadistamine on ootel.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Google Walleti seadistamine on ootel. Profiili link on kopeeritud.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Kasvatage oma ettevõtet';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Külaliskasutaja';
 
   @override
   String get ibanNumber => 'IBAN number';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'KONTORIS';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Kutse ootel';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'Kutse lükati tagasi';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Kutse saadetud. Töötaja lisatakse pärast nende vastuvõtmist.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Kutsu töötaja';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Kutsu töötajaks';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Ametinimetus';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Perekonnanimi';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Logi sisse QR-ga';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Kas ainult sellelt kontolt välja logida? Teised kontod jäävad sellesse telefoni.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Google\'iga sisse logitud (demokonto: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Sinu sisselogimine…';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'Sisselogimine ebaõnnestus. Proovi uuesti.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'MMM d, yyyy – h:mm a';
 
   @override
   String get mmmmYyyy => 'MMMM yyyy';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Märkige kohalolek';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'Minu nimi';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'Minu Tapni profiil';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'Nimi ei tohi olla tühi';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Uus';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Kontakte veel pole';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Üksikasju veel pole';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Linke pole veel lisatud.\\nAlustamiseks puudutage nuppu \"Lisa link\".';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Vasteid pole';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Põhjust ei esitatud.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Pole registreerunud';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Markide arv';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Jagamiseks üks puudutus';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Avage oma teises telefonis Barqody';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Avage Kaamera';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Tellimuse info';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Paberkaart';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'Parool peab koosnema vähemalt 4 tähemärgist';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'Parool peab olema vähemalt 6 tähemärki pikk';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Telefoninumber';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Telefon on nõutav';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Telefoninumber';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Valige asukoht';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Palun sisesta parool';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Palun sisesta kasutajanimi';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Sisestage kehtiv e-posti aadress';
 
   @override
-  String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+  String get pleaseEnterAValidNumberOfStamps => 'Sisestage kehtiv arv templeid';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Palun sisesta oma email';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Palun sisesta oma nimi';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Palun sisesta oma parool';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Suunake kaamera automaatseks skannimiseks QR-koodile.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Suunake kaamera sündmuse märgile ja puudutage nuppu Kaamera.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Suunake kaamera paberkaardile ja puudutage nuppu Kaamera.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'QR-koodi ettevalmistamine…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'Profiili ei leitud.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'Profiili värskendamine õnnestus!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'QR-kood salvestati galeriisse!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'QR-kood aegus';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'QR-kood aegus. Puudutage valikut Värskenda.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Kinnisvara';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Kviitung lisatud';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Uuendage oma tellimust, et taastada täielik juurdepääs oma esmaklassilistele funktsioonidele ja andmetele.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Tee foto uuesti';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Preemia tiitel';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Auhind on avatud 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Roll või ettevõte';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Salvesta muudatused';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Salvesta kontakt';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Salvesta profiil';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Salvesta sätted';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Salvesta kasutajanimi';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Salvesta kaart';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Salvesta kontakt';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Salvestatud kohapeal. Sünkroonimine võis ebaõnnestuda.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Skannige QR-kood või lisage oma võrgu loomiseks keegi, kellega kohtusite.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Skaneeritud QR-ga';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Ekraani teema';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'Otsing ebaõnnestus. Proovi uuesti.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Valige Ettevõte';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Valige Kuupäevavahemik';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Valige Lõppkuupäev';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Valige Alguskuupäev';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Saada kutse';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Saada kutse osalemiseks';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Jaga linki';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Vahetuste ajastus';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Nutikas kontaktide püüdmine';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Templi äärise värv';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Templi värv';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Templiikoonid (valikuline)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Markid antud';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Alustage oma võrgu loomist';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Tänava nimi';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Täieliku juurdepääsu avamiseks lülituge ettevõttekontole.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Puudutage valikut Seadme ühendamine ja skannige see QR';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Pildi lisamiseks puudutage';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Puudutage muutmiseks';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Mall rakendati kohapeal. Sünkroonimine ebaõnnestus.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Teksti värv';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'See konto';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'See funktsioon on saadaval ainult ärikasutajatele.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'See inimene on teie meeskonnas';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'See programm on peatatud';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Marke kokku';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Proovige teist nime, e-posti aadressi või ettevõtet.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'Profiili ei saa salvestada. Proovi uuesti.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Kasutajanime ei saa värskendada. Proovi uuesti.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'Arendamisel – logige sisse hoopis meili/parooliga.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Tundmatu kasutaja';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Värskendage GPS-i asukohta';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Värskenda olekut';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Värskenda ostukorvi';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Värskenda üksust';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Uuenda versioonile';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Minge üle Business PRO-le';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Laadi kviitung üles (valikuline)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Kasutage Minu asukohta';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Kasutage ainult tähti, numbreid, allkriipse või sidekriipse';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'Kasutajanimi peab koosnema vähemalt 3 tähemärgist';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'Kasutajanimi peab olema kuni 30 tähemärki pikk';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'Kasutajanime värskendamine õnnestus!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Ootab, kuni nad vastu võtavad';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'Veebisaidi URL';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Nädalavahetuse päevad';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Töö asukoht';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'Teie PRO tellimus on aegunud.\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => 'Teie PRO tellimus on aegunud.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Premium-funktsioonid on praegu keelatud.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Pro lingid on teie avalikult profiililt peidetud.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Teie ettevõtte üksikasjad ja andmed on kaitstud.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Lisa $label üksus';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Lisage vähemalt üks $label üksus';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return '$label üksust pole saadaval.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Üksusi pole veel. Lisage oma esimene $label üksus.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Ükski avalik profiil ei vasta \"@$query\".';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Kood: $code';
   }
 }

@@ -12,325 +12,332 @@ class AppLocalizationsGa extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Uirlisí';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Socruithe cuntais';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Fógraí';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Ar do shon';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'Do phróifíl';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Cuir Próifíl in Eagar';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle =>
+      'Athraigh d\'ainm, do ghrianghraf agus do bheathaisnéis';
 
   @override
-  String get username => 'Username';
+  String get username => 'Ainm úsáideora';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'Socraigh d\'ainm úsáideora próifíle uathúil';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Naisc Shóisialta';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Cuir Instagram, WhatsApp, suíomh Gréasáin agus go leor eile leis';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Próifíl phoiblí';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn =>
+      'Is féidir le duine ar bith do phróifíl a aimsiú agus féachaint air';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'I bhfolach ón gcuardach - ní féidir le daoine eile tú a aimsiú';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Roinn Mo Chód QR';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Lig do dhaoine eile do chárta gnó digiteach a scanadh';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Siopadóireacht & luach saothair';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Mo Orduithe';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => 'Rianaigh orduithe a chuir tú ó shiopaí';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Mo Chártaí Luaíochta';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Féach ar stampaí agus pointí ó chláir dílseachta';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Ionad oibre';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Cuirí Fostaithe';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Glac le cuirí foirne ó ghnólachtaí nó diúltaigh dóibh';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Seiceáil Isteach san Ionad Oibre';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Clog isteach agus amach ag do phost le suíomh';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Cuntais & gléasanna';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Gléasanna nasctha';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => 'Nasc guthán eile cosúil le WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Cuntais';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Cuir leis nó athraigh cuntais';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Athraigh idir cuntais $count';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Cabhair & cuntas';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Teanga app';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => 'Athraigh an teanga a úsáidtear san aip';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Cuardaigh teanga';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'Teanga an fón';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Nuashonraíodh an teanga';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Cabhair & CCanna';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Freagraí ar cheisteanna coitianta';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Seol Aiseolas';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle => 'Tuairiscigh fabht nó mol gné nua';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Logáil Amach';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Sínigh amach as an seisiún seo';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Cealaigh';
 
   @override
-  String get save => 'Save';
+  String get save => 'Sábháil';
 
   @override
-  String get done => 'Done';
+  String get done => 'Déanta';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(Inléite amháin)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule =>
+      '1 phointe = 100 PKR (riail shamplach)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '10 Stampa ag Teastáil';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '123 An Phríomhshráid, Cathair';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 Days ago';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3-30 carachtar. Litreacha, uimhreacha, béimeanna agus fleiscíní amháin.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Glac';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'ROCHTAIN SRIANTA';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Cuntas / IBAN: Cuir uimhir chuntais anseo';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Teideal an Chuntais: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Gníomhach';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'GNÍOMHACH';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'CÁRTA GNÍOMHACH';
 
   @override
-  String get add => 'Add';
+  String get add => 'Cuir';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Cuir nóta leis...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Cuir cuntas leis';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Cuir catagóir amháin ar a laghad leis ar dtús';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Cuir catagóirí in ord taispeána (m.sh. Fast Food, ansin Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Cuir catagóirí i do shocruithe catalóige ar dtús.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Cuir teagmhálaí leis';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Cuir Nasc leis';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow => 'Cuir naisc le do phróifíl thíos';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Cuir naisc le do phróifíl ar dtús, ansin cumasaigh anseo iad.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Cuir Lógó leis';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Cuir Pointí leis';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Cuir Clár leis';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Cuir Stampa leis';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Cuir le Google Wallet é';
 
   @override
-  String get address => 'Address';
+  String get address => 'Seoladh';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Gach';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Gach gafa suas!';
 
   @override
-  String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+  String get allNotificationsMarkedAsRead => 'Gach fógra marcáilte mar léite!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Ceadaigh ceamara';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Ceadaigh don ghléas seo rochtain a fháil ar do chuntas Barqody? Is féidir leat é a bhaint am ar bith de ghléasanna Nasctha.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'An bhfuil cuntas agat cheana féin?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'Painéal Anailíse';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Aon iarratais speisialta...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Cuir iarratas isteach';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Iarratas a Dhearadh';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Cuir Teimpléad i bhfeidhm';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Ag dul suas';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Iarr ar do ghnó do QR a scanadh agus tú a chur leis mar fhostaí';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Sann Catagóir';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Cláir Sannta';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => '6 charachtar ar a laghad';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday =>
+      'Tinreamh críochnaithe don lá inniu';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Sliotáin ar fáil';
 
   @override
-  String get background => 'Background';
+  String get background => 'Cúlra';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Dath an chúlra';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Cuntas Bainc';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Sonraí Bainc';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Banc: Cuir ainm bainc anseo';
 
   @override
   String get barqody => 'Barqody';
@@ -339,473 +346,477 @@ class AppLocalizationsGa extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Luach is fearr';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Méid an Bhille';
 
   @override
   String get bio => 'BIO';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => 'Bith';
 
   @override
-  String get book => 'Book';
+  String get book => 'Leabhar';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Dáta áirithinte';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Sceideal áirithinte';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Am áirithinte';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'GNÓ';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Catagóir Gnó';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Sonraí Gnó';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Ainm Gnó';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Roghanna gnó';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Cláir Ghnó';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Úsáideoirí Gnó Amháin';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'Trí chlárú, aontaíonn tú lenár dTéarmaí agus Coinníollacha.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Glaoigh';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Teastaíonn cead ceamara chun scanadh.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Cealaigh am ar bith.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Cealaigh Ordú';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Gabháil Teagmháil Nua';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'Catagóirí';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Catagóir *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'Tá catagóir ann cheana féin';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Ainm an Chatagóire';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Seiceáil isteach';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Seiceáil amach';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Roghnaigh ainm úsáideora uathúil do nasc próifíle.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Roghnaigh Plean';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Roghnaigh Teimpléad';
 
   @override
-  String get close => 'Close';
+  String get close => 'Dún';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Cóipeáladh an cód';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Ag teacht go luath';
 
   @override
-  String get company => 'Company';
+  String get company => 'Cuideachta';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Cárta Fostaí Cuideachta';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'Cuideachta Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Críochnaigh na céimeanna seo';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Deimhnigh & Cuir Pointí Leis';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Deimhnigh Áirithint';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Deimhnigh Suíomh';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Deimhnigh Fuascailt';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Cuntais Nasctha';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Cuireadh an teagmháil leis!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Cárta teagmhála';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully =>
+      'D\'éirigh le teagmháil a mhalartú!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Teagmháil Foinse';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully =>
+      'D\'éirigh leis an teagmhálaí a nuashonrú!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Teagmhálaithe';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Lean ort';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Cóipeáladh';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Cóipeáil cód';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Níorbh fhéidir an suíomh a fháil. Cumasaigh cead GPS le do thoil.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Níorbh fhéidir an cuntas a athrú';
 
   @override
-  String get create => 'Create';
+  String get create => 'Cruthaigh';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Cruthaigh Cuntas';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Cruthaigh Clár Dílseachta';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Cruthaigh nasc nua';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Cruthaigh Clár';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Cruthaigh Luaíocht';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Cruthaigh luach saothair stampa nó pointí do chustaiméirí';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Cruthaigh do chéad chárta';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Cruthaigh do chéad chárta luaíochta do chustaiméirí';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Dáta Cruthaithe';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Íomhánna saincheaptha le haghaidh sliotán stampáilte agus gan stampáil. Úsáidtear réamhshocruithe mura socraítear iad.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Nasc saincheaptha';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Sonraí Custaiméara';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully =>
+      'D\'éirigh leis an gcustaiméir a chlárú';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Níl an custaiméir cláraithe fós';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Custaiméir Uimh Taispeáin';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Orduithe do Chustaiméirí';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Saincheap Dearadh Cárta';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Saincheap Dearadh';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Saincheap do phróifíl, díghlasáil teimpléid OCP, agus faigh treoracha neamhtheoranta.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Saincheap tú féin';
 
   @override
-  String get date => 'Date';
+  String get date => 'Dáta';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Raon Dáta';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Meath';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Scrios';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'An bhfuil fonn ort cárta a scriosadh?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Scrios Catagóir';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Scrios Teagmháil';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Scrios Luaíocht?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'íslitheach';
 
   @override
-  String get description => 'Description';
+  String get description => 'Cur síos';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Cur síos (roghnach)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Sonraí';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Gléas nasctha';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Gléas logáilte amach';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Stádas an ghléis';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Cárta Gnó Digiteach';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'Cárta GNÓ DIGITEACH';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Nach bhfuil cuntas agat?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'e.g. Bia mear';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'e.g. Gan siúcra, te breise ...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'Ghnóthaigh 50 pointe';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Cuir in eagar';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Cuir cárta in eagar';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Cuir Sonraí in Eagar';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Cuir próifíl in eagar';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Cuir Socruithe in Eagar';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Cuir sonraí do phróifíle in eagar';
 
   @override
-  String get email => 'Email';
+  String get email => 'Ríomhphost';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'Ríomhphost & pasfhocal';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'Seoladh Ríomhphoist';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'Logáil isteach ríomhphoist nó scanadh QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Cárta Fostaí';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'CÁRTA FOSTAITHE';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Grianghraf Aghaidh Fostaí';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Sliotán folamh';
 
   @override
-  String get end => 'END';
+  String get end => 'CRÍOCH';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Dáta Deiridh';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Uair deiridh';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Cláraigh Custaiméir';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Cuir isteach méid an bhille';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Cuir isteach cód';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Cuir isteach cód ina ionad';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Cuir isteach sonraí teagmhála líonraithe thíos.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Cuir isteach d\'ainm';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Cuir isteach do phasfhocal';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Suaitheantas Imeachta';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Malartú Teagmháil';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Teagmháil á mhalartú...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Déan iniúchadh';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'Theip ar an teagmhálaí a nuashonrú.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Sliotán líonta';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Scag teagmhálaithe';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Scag Teagmhálaithe';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Aimsigh daoine ar BarQody';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Aimsigh úsáideoir';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Aimsigh Úsáideoir';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Aimsigh ainm úsáideora';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Dearmadta?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Caife saor in aisce,';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Ainm Iomlán';
 
   @override
-  String get general => 'General';
+  String get general => 'Ginearálta';
 
   @override
-  String get go => 'Go';
+  String get go => 'Téigh';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'Téigh Gnó';
 
   @override
   String get guest => 'GUEST';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'Dia duit,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Tá an Lárionad Cabhrach díchumasaithe sa taispeántas UI seo.';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => 'Heics: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Coinnigh an cód QR taobh istigh den fhráma - scanann sé go huathoibríoch.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Conas is mian leat an cárta seo a dhearadh?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Iompórtáil teagmhálacha';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'Níl fáil fós ar theagmhálaithe iompórtála.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'isteach';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Orduithe ag teacht isteach';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'URL próifíle neamhbhailí. Scan cárta BarQody bailí nó cód QR.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Cód QR neamhbhailí. Úsáid nasc Barqody QR.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Tabhair cuireadh d\'fhostaithe, socraigh sealanna agus rianaigh láithreacht';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'Tugadh cuireadh duit a bheith páirteach mar fhostaí';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -814,7 +825,7 @@ class AppLocalizationsGa extends AppLocalizations {
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Teideal Poist';
 
   @override
   String get johnDoe => 'John Doe';
@@ -823,10 +834,10 @@ class AppLocalizationsGa extends AppLocalizations {
   String get johnSmith => 'John Smith';
 
   @override
-  String get johnEmailCom => 'john@email.com';
+  String get johnEmailCom => 'john@ríomhphost.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Ymunodd: 15 Eanáir, 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,10 +845,10 @@ class AppLocalizationsGa extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Coinnigh do chuntas slán. Ná scanadh cóid QR ach amháin nuair is mian leat gléas a bhfuil muinín agat as a nascadh.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Lipéad';
 
   @override
   String get lat => 'Lat';
@@ -845,437 +856,441 @@ class AppLocalizationsGa extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Lig do dhaoine eile ceamara a ngutháin a dhíriú chuig an gcód QR seo chun do phróifíl líonraithe a fheiceáil láithreach.';
 
   @override
-  String get link => 'Link';
+  String get link => 'Nasc';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Nasc gléas';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Nasc le QR ar ghuthán eile';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard =>
+      'Cóipeáladh an nasc chuig an ngearrthaisce';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Socruithe Nasc';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Socruithe naisc';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Nasc an gléas seo?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Naisc';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Naisc ar an gcárta seo';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'Níl an suíomh socraithe fós';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Teastaíonn cead suímh';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Teastaíonn cead suímh le freastal';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Logáil Isteach';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Logáil isteach chun do chárta digiteach agus líonra a bhainistiú.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Logáil isteach le cód QR';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Logáil amach';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Logáil amach ar fad';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Gléas logáil amach?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Cláir Dílseachta';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Bainistigh catagóirí';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Déan teagmháil a bhainistiú';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Bainistigh Fostaithe';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Bainistigh do shonraí pearsanta agus sainroghanna eile';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Marcáil Críochnaithe';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'go míosúil';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Mo Chártaí';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'Mo Shuíomh';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Mo Luaíochtaí';
 
   @override
-  String get name => 'Name';
+  String get name => 'Ainm';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'AINM';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'Tá ainm ag teastáil';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'ainm@cuideachta.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Cárta Nua';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Cárta nua';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Catagóir Nua';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Duais Nua';
 
   @override
-  String get next => 'Next';
+  String get next => 'Ar aghaidh';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'An chéad chárta eile';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet => 'Níl naisc ghníomhacha nasctha fós';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Níl aon chláir ghníomhacha luaíochta ar fáil.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Níl cártaí fostaithe fós';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Níor cuireadh aon fhostaithe leis';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Níl aon fhostaithe fós';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Níor aimsíodh aon fhostóir';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'Níl aon mhír sa chatagóir seo.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => 'Níl teimpléid naisc ar fáil';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'Níl aon fhógraí nua ann faoi láthair.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Níl aon duine tar éis féachaint ar do phróifíl go fóill.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Níl aon chuirí ar feitheamh';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Níl aon chláir sannta go fóill. Cuir cláir leis thíos.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage =>
+      'Níor aimsíodh aon chód QR san íomhá seo.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Níl aon chláir luaíochta fós';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'Níl aon sliotán ar fáil ar an lá seo';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Níor aimsíodh aon úsáideoir';
 
   @override
-  String get none => 'None';
+  String get none => 'Dada';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'Níl sé ar fáil ar do phlean reatha';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Gan seiceáil isteach fós';
 
   @override
-  String get note => 'Note';
+  String get note => 'Nóta';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Nótaí (roghnach)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Glanadh an fógra';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Ní féidir ach clúdach, grianghraf próifíle, ainm agus beathaisnéis a chur in eagar anseo.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Ní thaispeántar naisc chumasaithe ach amháin nuair a scanann duine éigin an cárta seo.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown =>
+      'Ní thaispeántar ach próifílí poiblí';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Níl ach an guthán seo ag baint úsáid as do chuntas faoi láthair.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'NÓ LEANÚINT LE';
 
   @override
-  String get order => 'Order';
+  String get order => 'Ordú';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Sonraí an Ordaithe';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'Aitheantas an Ordaithe';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'Níor aimsíodh an t-ordú';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Orduithe';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Cárta Páipéir';
 
   @override
-  String get password => 'Password';
+  String get password => 'Pasfhocal';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Íoc de réir míosa';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'AR FHÁIL GLACADH';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Forbhreathnú Feidhmíochta';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Sonraí Pearsanta';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Fón';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Grianghraif';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Roghnaigh téama datha réamhdhéanta. Tapa agus glan.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Pioc Dath';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Pioc ar Léarscáil';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Ordú Áite';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Plean in éag';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Cuir isteach sonraí gnó chun leanúint ar aghaidh';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Cuir isteach ainm na míre le do thoil';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Tabhair sonraí do ghnó roimh uasghrádú.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Roghnaigh catagóir';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Roghnaigh sliotán ama le do thoil';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => 'Socraigh suíomh oibre ar dtús';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Pointe do cheamara ag an gcód QR ar an ngléas eile';
 
   @override
-  String get points => 'Points';
+  String get points => 'Pointí';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Pointí Tuillte';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Préimh gníomhach';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Cárta roimhe seo';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Praghas (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'Teimpléad PRO';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Próifíl';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Seiceáil Próifíl';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Neart Próifíl';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Amharcóirí Próifíl';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Radhairc Próifíl';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Sonraí an Chláir';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Ainm an Chláir';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'Clár gan aimsiú';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Cineál Cláir';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'Cód QR';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'Scanadh QR';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Cainníocht';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Léigh Uile';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Léigh amháin';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'Fuarthas 1 Stampa';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Gníomhaíocht le Déanaí';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Faigh Duais Eile';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Fuascailt Luaíocht';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Caife saor in aisce a saor in aisce';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Athnuaigh QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'Réigiún';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Bain';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Bain Fostaí';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Plean Athnuachana';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Iarratas ar feitheamh';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Iarratas ar Feitheamh';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Iarratas diúltaithe';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Iarr síntiús';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Athshocraigh';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Luach saothair Críochnaithe! Taispeáin an cárta seo le fuascailt.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Luach saothair Críochnaithe! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Sonraí Luaíochta';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Clár luaíochta';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Cláir Luaíochta';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Duais Fuascailte!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'luach saothair';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Luaíochtaí Tuillte';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => 'RS 1,600 le bille go míosúil';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => 'RS 8,300 le bille bliantúil';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
@@ -1285,1149 +1300,1164 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Sábháil do chárta aitheantais oibre ar an bhfón nó ar an sparán';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Scanadh';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Scan cód QR úsáideora chun iad a chur leis mar fhostaí';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Scan aon úsáideoir nó QR gnó chun fostaí a chur leis';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'Scan Gnó QR le Fuascailt';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Scan Cód QR an Chustaiméara';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Scan próifíl an fhostaí';
 
   @override
   String get scanQR => 'Scan QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Scan QR / taispeáin QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'Scan an Cód QR';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Scan QR a thaispeántar ar an ngléas eile';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Scan le Cuireadh';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Cuardaigh de réir ainm úsáideora...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Cuardaigh naisc';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany =>
+      'Cuardaigh ainm, ríomhphost nó cuideachta';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Féach Uile';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Féach go bhfuil gach gníomhaíocht ag magadh. Léireofar gníomhaíochtaí nua de réir mar a chuirtear treoracha leis.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Roghnaigh dáta';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Roghnaigh Marcóirí';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Roghnaigh Réigiún';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'Socraigh téacs faoin deilbhín nasc';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Socraigh do chuid dathanna, grianghraif agus cúlra féin.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Comhroinn';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Roinn cárta';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Roinn naisc éagsúla ar gach cárta';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Comhroinn Próifíl';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Taispeáin nasc';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Taispeáin ar an gcárta seo';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Sínigh isteach le Google';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Cláraigh';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Scipeáil';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Scipeáil go fóill';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'Sliotán (nóiméad)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Innealtóir Bogearraí';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Chuaigh rud éigin mícheart';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Roghanna Sórtáil';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Treoracha speisialta';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Cárta Stampa';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Deilbhín Stampa';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Stampaí';
 
   @override
-  String get start => 'START';
+  String get start => 'TÚS';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Dáta Tosaigh';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Uair tosaigh';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Tosaigh líonrú níos cliste le Barqody.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Staitisticí';
 
   @override
-  String get status => 'Status';
+  String get status => 'Stádas';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Síntiús';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'Iarratas síntiús curtha isteach';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 =>
+      'Iarratas síntiús curtha isteach.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Svaidhpeáil chun cártaí a bhrabhsáil';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Glac selfie tapa chun tinreamh a fhíorú';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Beartaíonn \"Naisc Shóisialta\" thuas chun próifílí a chur leis agus a ghníomhachtú.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Tapáil ar an léarscáil nó bain úsáid as do shuíomh reatha';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Tapáil chun grianghraf a chur leis';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Tapáil chun cód QR a roinnt';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Tinreamh Foirne';
 
   @override
-  String get template => 'Template';
+  String get template => 'Teimpléad';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Teimpléid';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Go raibh maith agat! Níl ann ach aighneachtaí aiseolais.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Bainfear an cárta seo agus a chód QR.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Tá an ghné seo ar fáil go heisiach d\'úsáideoirí Gnó.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'Seo d’ainm úsáideora cheana féin.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'an mhí seo';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Scriosfaidh sé seo an clár luaíochta seo agus a rolluithe go léir go buan.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Is é inniu do dheireadh seachtaine';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Inniu • 3:15 PM';
 
   @override
-  String get total => 'Total';
+  String get total => 'Iomlán';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Rianaigh d\'orduithe';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'Tagairt idirbhirt (roghnach)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Uimhir thagartha an idirbhirt (roghnach)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Bain triail eile as';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Bain triail as Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Bain triail as Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Cineál';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Clóscríobh ar a laghad 2 charachtar d’ainm úsáideora le cuardach.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Clóscríobh an cód 8-charachtar a thaispeántar faoin QR.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'Faoi Fhorbairt - Logáil isteach trí ríomhphost / pasfhocal ina ionad sin.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Deilbhín Unstamp';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Uasghrádaigh anois';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Uasghrádú go';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Uasghrádú go Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Bain úsáid as teimpléad';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Bain úsáid as Barqody ar ghutháin nó táibléad eile. Fanann tú i gceannas - logáil amach aon fheiste am ar bith.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Úsáid Barqody ar do ghuthán chun an cód seo a scanadh';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Úsáid an deilbhín réamhshocraithe';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Úsáid an Grianghraf seo';
 
   @override
-  String get user => 'USER';
+  String get user => 'ÚSÁIDEOIR';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Leagan: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Féach ar agus nuashonraigh orduithe ó do chustaiméirí';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Próifíl Amharc';
 
   @override
-  String get views => 'Views';
+  String get views => 'Radhairc';
 
   @override
-  String get website => 'Website';
+  String get website => 'Suíomh Gréasáin';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Fáilte Ar Ais';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Fáilte go dtí an Lárionad Cuntas';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Nuair a chuireann gnó isteach tú mar fhostaí, beidh do chárta fostaí le feiceáil anseo. Is féidir leat a dhearadh a shaincheapadh ag am ar bith.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Nuair a chláraíonn gnólacht tú ina chlár luaíochta, beidh sé le feiceáil anseo.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Nuair a thugann gnólacht cuireadh duit chuig a bhfoireann, beidh sé le feiceáil anseo.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Nuair a bheidh an nasc seo múchta ní thaispeánfar an nasc seo ar do phróifíl';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Scríobh rud éigin fút féin nó faoi do bhranda';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Bliantúil';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Inné • 5:42 PM';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Do chatagóirí';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Do chártaí fostaithe ó fhostóirí';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'D’éirigh le do chaife saor in aisce a fhuascailt.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Do luach saothair';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Tá deireadh tagtha le do shíntiús. Tapáil an deilbhín faisnéise le haghaidh sonraí.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'd\'ainm';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => 'Lascaine 10%.';
 
   @override
   String get avatarTAPPED => 'AVATAR TAPPED';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Ainm sealbhóir an chuntais';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Uimhir chuntais';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Gníomhach anois';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Cuir Bith';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Cuir Grianghraf Clúdaigh leis';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Cuir Grianghraf Aghaidh leis';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Cuir Nóta Gutha Intro leis';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Cuir Ainm Próifíl leis';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Cuir Grianghraf Próifíl leis';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Cuir Naisc Shóisialta leis (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Cuir mír leis';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Cuir nasc leis';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 => 'Cuir naisc le do phróifíl thíos';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Cuir grianghraf leis';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Cuir leis an tralaí';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Seoladh (roghnach)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Gach cineál teagmhála';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Ga ceadaithe (méadar)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Beagnach ann!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Fostaí Cheana';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'An bhfuil cuntas agat cheana féin?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'I gcónaí Suas Chun Dáta';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'An bhfuil tú cinnte gur mhaith leat logáil amach as Barqody?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'Theip ar an tinreamh';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Dath an Chúlra';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'Theip ar an áirithint';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward =>
+      'Déan cur síos go hachomair ar an duais seo ...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Gnó Deimhnithe';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Seoladh ríomhphoist gnó';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Facs gnó';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Uimhir theileafóin ghnó';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Láithreán gréasáin gnó';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Earráid ceamara';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Gabháil Aghaidh';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Cárta Críochnaithe';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Lipéad Cárta';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Ainm Lipéad Cárta';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Réamhamharc Cárta';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Téama Cárta';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Cárta cruthaithe';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Ainm cárta';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Cárta sábháilte mar JPG';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Cárta sábháilte mar PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Cárta nuashonraithe';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Athraigh grianghraf';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Seiceáil isteach Aghaidh';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Seiceáil isteach rathúil';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Seiceáil amach Aghaidh';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Seiceáil amach rathúil';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Roghnaigh teimpléad';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => 'Seoladh gnó cárta teagmhála';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'Ainm cuideachta cárta teagmhála';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'Ríomhphost cárta teagmhála';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'Seoladh baile an chárta teagmhála';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Cárta teagmhála fón';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'Láithreán gréasáin cárta teagmhála';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin =>
+      'Níorbh fhéidir logáil isteach a chríochnú';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'Níorbh fhéidir cód QR a chruthú';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Níorbh fhéidir gléas a nascadh';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'Níorbh fhéidir an gléas logáil amach';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet =>
+      'Níorbh fhéidir Google Wallet a oscailt';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign =>
+      'Níorbh fhéidir dearadh an chárta a shábháil';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Níorbh fhéidir infheictheacht na próifíle a nuashonrú';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Cruthaigh Gailearaí';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Cruthaigh cárta chun do phróifíl a roinnt';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Cruthaigh cárta';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Banc saincheaptha';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Is féidir le custaiméirí a chlárú agus a stampáil';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Saincheap cárta';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram =>
+      'Déan cur síos ar do chlár dílseachta';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Ainm taispeána';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Nach bhfuil cuntas agat?';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE, d MMM bbbb';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Cuir Luaíocht in Eagar';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Cuir mír in eagar';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'Seoladh ríomhphoist';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'Tá ríomhphost ag teastáil';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Cártaí Fostaithe';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Baineadh an fostaí';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'Sábháladh socruithe an fhostaí';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Gnólachtaí Cláraithe';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Cuir isteach ríomhphost bailí';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard =>
+      'Cuir isteach bio don chárta teagmhála';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Cuir isteach ainm an chláir';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Cuir isteach do bheathaisnéis';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Cuir isteach d\'uimhir theileafóin';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'Cuir isteach URL do shuíomh Gréasáin';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Suaitheantas imeachta';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee =>
+      'Sampla: 10 Stampaí = Caife Saor in Aisce';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Cuireadh Grianghraf Aghaidh leis';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'Theip ar an gclár a chur leis';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Theip ar an stampa a chur leis';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Theip ar an gcustaiméir a chlárú';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Theip ar theagmháil a mhalartú';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Theip ar na cláir a lódáil';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Theip ar ordú a chur';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Theip ar bhaint';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Theip ar shábháil';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'Theip ar shábháil JPG';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'Theip ar shábháil PNG';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'Theip ar shábháil an Chóid QR.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails => 'Theip ar shábháil sonraí gnó';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Theip ar an stádas a nuashonrú';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Céad ainm';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Bia & Deoch';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Dessert saor in aisce,';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Teastaíonn cead gailearaí. Cumasaigh é sna Socruithe le do thoil.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Faigh Tosaigh';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Téigh';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices => 'Téigh go dtí Uirlisí → Feistí nasctha';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending => 'Socrú Google Wallet ar feitheamh.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Socrú Google Wallet ar feitheamh. Cóipeáladh nasc próifíle.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Fás do ghnó';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Úsáideoir Aoi';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'Uimhir IBAN';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'IN OIFIG';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Cuireadh ar Feitheamh';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'Diúltaíodh don chuireadh';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Cuireadh seolta. Cuirfear fostaí leis tar éis dóibh glacadh leis.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Tabhair cuireadh d\'Fhostaí';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Tabhair cuireadh mar Fhostaí';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Teideal poist';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Sloinne';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Logáil isteach le QR';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Logáil amach as an gcuntas seo amháin? Fanfaidh cuntais eile ar an bhfón seo.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Logáilte isteach le Google (Cuntas taispeána: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Ag logáil isteach tú…';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain =>
+      'Theip ar logáil isteach. Bain triail eile as.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'MMM d, bbbb - h:mm a';
 
   @override
-  String get mmmmYyyy => 'MMMM yyyy';
+  String get mmmmYyyy => 'MMMM bbbb';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Mark Tinreamh';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'M\'Ainm';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'Mo Phróifíl Tapni';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'Ní féidir leis an ainm a bheith folamh';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Nua';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Níl aon teagmhálaithe fós';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Níl aon sonraí fós';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Níl aon nasc curtha leis fós.\\nTapáil \"Cuir nasc leis\" chun tús a chur leis.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Gan aon chluichí';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Níor tugadh aon chúis.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Gan Clárú';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Líon na Stampaí';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Tapáil Amháin Le Roinnt';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone => 'Oscail Barqody ar do ghuthán eile';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Oscail ceamara';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Eolas Ordú';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Cárta páipéir';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'Caithfidh 4 charachtar ar a laghad a bheith sa phasfhocal';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'Caithfidh 6 charachtar ar a laghad a bheith sa phasfhocal';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Uimhir Theileafóin';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Tá gá le fón';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Uimhir theileafóin';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Roghnaigh Suíomh';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Cuir isteach pasfhocal le do thoil';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Cuir isteach ainm úsáideora le do thoil';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Cuir isteach seoladh ríomhphoist bailí';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'Cuir isteach líon bailí stampaí le do thoil';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Cuir isteach do ríomhphost le do thoil';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Cuir isteach d\'ainm le do thoil';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Cuir isteach do phasfhocal';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Pointe an ceamara ag cód QR le scanadh go huathoibríoch.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Pointe an ceamara ag suaitheantas imeachta agus tapáil an cnaipe Ceamara.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Pointe an ceamara ar chárta páipéir agus tapáil an cnaipe Ceamara.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'Cód QR á ullmhú…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'Próifíl gan aimsiú.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully =>
+      'D\'éirigh leis an bpróifíl a nuashonrú!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'Cód QR sábháilte sa ghailearaí!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'Chuaigh an cód QR in éag';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'Chuaigh an cód QR in éag. Tapáil athnuachan.';
 
   @override
   String get realEstate => 'Real Estate';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Admháil ceangailte';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Athnuaigh do shíntiús chun rochtain iomlán ar do ghnéithe agus do shonraí préimhe a athbhunú.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Glac Grianghraf';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Teideal Luaíochta';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Luaíocht Díghlasáilte 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Ról nó cuideachta';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Sábháil Athruithe';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Sábháil Teagmháil';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Sábháil Próifíl';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Sábháil Socruithe';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Sábháil Ainm Úsáideora';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Sábháil cárta';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Sábháil teagmháil';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Sábháilte go háitiúil. Seans gur theip ar an sioncronú.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Scan cód QR nó cuir duine éigin ar bhuail tú leis chun do líonra a thógáil.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Scanadh trí QR';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Téama Scáileáin';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain =>
+      'Theip ar an gcuardach. Bain triail eile as.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Roghnaigh Cuideachta';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Roghnaigh Raon Dáta';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Roghnaigh Dáta Deiridh';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Roghnaigh Dáta Tosaigh';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Seol Cuireadh';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Seol cuireadh chun freastal';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Comhroinn Nasc';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Uainiú Shift';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Gabháil Teagmhála Cliste';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Dath Teorann Stampa';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Dath Stampa';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Deilbhíní Stampa (Roghnach)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Stampaí tugtha';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Tosaigh ag tógáil do líonra';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Ainm sráide';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Athraigh go cuntas Gnó chun rochtain iomlán a dhíghlasáil.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Tapáil Nasc gléas agus scanadh an QR seo';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Tapáil chun íomhá a chur leis';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Tapáil chun athrú';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Teimpléad curtha i bhfeidhm go háitiúil. Theip ar shioncronú.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Dath Téacs';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'An cuntas seo';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Tá an ghné seo ar fáil go heisiach d\'úsáideoirí Gnó.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'Tá an duine seo ar d\'fhoireann';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Tá an clár seo ar sos';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Stampaí Iomlána';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Bain triail as ainm, ríomhphost nó cuideachta eile.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'Ní féidir an phróifíl a shábháil. Bain triail eile as.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Ní féidir an t-ainm úsáideora a nuashonrú. Bain triail eile as.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'Faoi Fhorbairt - Logáil isteach trí ríomhphost / pasfhocal ina ionad sin.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Úsáideoir Anaithnid';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Nuashonraigh suíomh GPS';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Stádas Nuashonraithe';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Nuashonraigh an cart';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Mír a nuashonrú';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Uasghrádú go';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Uasghrádú go Gnó PRO';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Uaslódáil admháil (roghnach)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Úsáid Mo Shuíomh';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Bain úsáid as litreacha, uimhreacha, foscórtha nó fleiscíní amháin';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'Caithfidh 3 charachtar ar a laghad a bheith san ainm úsáideora';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'Caithfidh 30 carachtar ar a mhéad a bheith san ainm úsáideora';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'D\'éirigh le hainm úsáideora a nuashonrú!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Ag fanacht leo glacadh leis';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'URL an tsuímh Ghréasáin';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Laethanta Deireadh Seachtaine';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Suíomh Oibre';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'Chuaigh do shíntiús PRO in éag.\\n\\n';
 
   @override
   String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+      'Tá do shíntiús PRO imithe in éag.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Tá gnéithe préimhe díchumasaithe faoi láthair.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Tá naisc pro i bhfolach ó do phróifíl phoiblí.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Tá do shonraí gnó agus do shonraí sábháilte.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Cuir $label leis';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Cuir mír $label amháin ar a laghad leis';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'Níl aon mhír $label ar fáil.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Níl aon earraí fós. Cuir do chéad mhír $label leis.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Ní mheaitseálann próifíl phoiblí \"@$query\".';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Cód: $code';
   }
 }

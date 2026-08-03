@@ -12,821 +12,802 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => '工具';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => '账户设置';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => '通知';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => '为你';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => '您的个人资料';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => '编辑个人资料';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => '更改您的姓名、照片和简介';
 
   @override
-  String get username => 'Username';
+  String get username => '用户名';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle => '设置您唯一的个人资料用户名';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => '社交链接';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle => '添加 Instagram、WhatsApp、网站等';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => '公开资料';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => '任何人都可以找到并查看您的个人资料';
 
   @override
-  String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+  String get publicProfileOff => '隐藏在搜索中 - 其他人无法发现您';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => '分享我的二维码';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle => '让其他人扫描您的数字名片';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => '购物和奖励';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => '我的订单';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => '跟踪您从商店下的订单';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => '我的奖励卡';
 
   @override
-  String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+  String get myRewardCardsSubtitle => '查看忠诚度计划的印章和积分';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => '职场';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => '员工邀请函';
 
   @override
-  String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+  String get employeeInvitationsSubtitle => '接受或拒绝企业的团队邀请';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => '工作场所签到';
 
   @override
-  String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+  String get workplaceCheckInSubtitle => '在工作地点打卡上下班';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => '帐户和设备';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => '链接设备';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => '连接另一部手机，例如 WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => '账户';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => '添加或切换帐户';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return '在 $count 帐户之间切换';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => '帮助和帐户';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => '应用语言';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => '更改应用程序中使用的语言';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => '搜索语言';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => '手机语言';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => '语言已更新';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => '帮助和常见问题解答';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => '常见问题解答';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => '发送反馈';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle => '报告错误或建议新功能';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => '退出';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => '退出此会话';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => '取消';
 
   @override
-  String get save => 'Save';
+  String get save => '节省';
 
   @override
-  String get done => 'Done';
+  String get done => '完毕';
 
   @override
-  String get str => 'بطاقة أعمال الرقمية';
+  String get str => '🌈🌈🌈🌈';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '（只读）';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 点 = 100 PKR（规则示例）';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '需要 10 张邮票';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '市主街 123 号';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 天前';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 个字符。仅限字母、数字、下划线和连字符。';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => '接受';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => '访问受限';
 
   @override
-  String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+  String get accountIBANAddAccountNumberHere => '帐户/IBAN：在此处添加帐号';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => '账户名称：Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => '积极的';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => '积极的';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => '活动卡';
 
   @override
-  String get add => 'Add';
+  String get add => '添加';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => '添加注释...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => '添加账户';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst => '首先添加至少一个类别';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      '按显示顺序添加类别（例如快餐，然后是德西）';
 
   @override
-  String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+  String get addCategoriesInYourCatalogSettingsFirst => '首先在目录设置中添加类别。';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => '添加联系人';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => '添加链接';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow => '在下面添加指向您个人资料的链接';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      '首先将链接添加到您的个人资料，然后在此处启用它们。';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => '添加徽标';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => '添加积分';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => '添加节目';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => '添加图章';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => '添加到 Google 钱包';
 
   @override
-  String get address => 'Address';
+  String get address => '地址';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => '全部';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => '都追上了！';
 
   @override
-  String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+  String get allNotificationsMarkedAsRead => '所有通知均标记为已读！';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => '允许拍照';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      '允许此设备访问您的 Barqody 帐户吗？您可以随时从链接的设备中将其删除。';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => '已经有帐户？';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => '分析仪表板';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => '有什么特殊要求...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => '申请';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => '应用设计';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => '应用模板';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => '升序';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      '要求您的企业扫描您的二维码并将您添加为员工';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => '分配类别';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => '分配的程序';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => '至少 6 个字符';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => '今天出席人数已完成';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => '可用插槽';
 
   @override
-  String get background => 'Background';
+  String get background => '背景';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => '背景颜色';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => '银行账户';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => '银行详情';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => '银行：在此添加银行名称';
 
   @override
   String get barqody => 'Barqody';
 
   @override
-  String get barqodyV100 => 'barqody v1.0.0';
+  String get barqodyV100 => '巴科迪 v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => '最超值';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => '账单金额';
 
   @override
-  String get bio => 'BIO';
+  String get bio => '生物';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => '简介';
 
   @override
-  String get book => 'Book';
+  String get book => '书';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => '预订日期';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => '预订时间表';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => '预订时间';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => '商业';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => '业务类别';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => '业务详情';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => '公司名称';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => '商业选择';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => '商业项目';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => '仅限商业用户';
 
   @override
-  String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+  String get bySigningUpYouAgreeToOurTermsAndConditions => '注册即表示您同意我们的条款和条件。';
 
   @override
-  String get call => 'Call';
+  String get call => '称呼';
 
   @override
-  String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+  String get cameraPermissionIsRequiredToScan => '需要相机许可才能扫描。';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => '随时取消。';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => '取消订单';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => '捕获新联系人';
 
   @override
-  String get categories => 'Categories';
+  String get categories => '类别';
 
   @override
-  String get category => 'Category *';
+  String get category => '类别 *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => '类别已存在';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => '类别名称';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => '报到';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => '查看';
 
   @override
-  String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+  String get chooseAUniqueUsernameForYourProfileLink => '为您的个人资料链接选择一个唯一的用户名。';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => '选择计划';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => '选择模板';
 
   @override
-  String get close => 'Close';
+  String get close => '关闭';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => '复制代码';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => '即将推出';
 
   @override
-  String get company => 'Company';
+  String get company => '公司';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => '公司员工卡';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => '公司';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => '完成这些步骤';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => '确认并添加积分';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => '确认预订';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => '确认地点';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => '确认兑换';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => '关联账户';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => '联系人添加成功！';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => '联系卡';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => '联系方式交换成功！';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => '联系来源';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => '联系方式更新成功！';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => '联系方式';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => '继续';
 
   @override
-  String get copied => 'Copied';
+  String get copied => '已复制';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => '复制代码';
 
   @override
-  String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+  String get couldNotGetLocationPleaseEnableGPSPermission => '无法获取位置。请开启GPS权限。';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => '无法切换帐户';
 
   @override
-  String get create => 'Create';
+  String get create => '创造';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => '创建账户';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => '创建忠诚度计划';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => '创建新链接';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => '创建程序';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => '创造奖励';
 
   @override
-  String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+  String get createStampOrPointsRewardsForCustomers => '为客户创建印章或积分奖励';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => '创建你的第一张卡片';
 
   @override
-  String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+  String get createYourFirstRewardCardForCustomers => '为客户创建您的第一张奖励卡';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => '创建日期';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      '用于加盖和未加盖插槽的自定义图像。如果未设置，则使用默认值。';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => '自定义链接';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => '客户详情';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => '客户注册成功';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => '客户尚未注册';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => '顾客未出现';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => '客户订单';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => '定制卡片设计';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => '定制设计';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      '自定义您的个人资料、解锁 PRO 模板并获得无限的潜在客户。';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => '定制你自己';
 
   @override
-  String get date => 'Date';
+  String get date => '日期';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => '日期范围';
 
   @override
-  String get decline => 'Decline';
+  String get decline => '衰退';
 
   @override
-  String get delete => 'Delete';
+  String get delete => '删除';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => '删除卡？';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => '删除类别';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => '删除联系人';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => '删除奖励？';
 
   @override
-  String get descending => 'Descending';
+  String get descending => '降序';
 
   @override
-  String get description => 'Description';
+  String get description => '描述';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => '说明（可选）';
 
   @override
-  String get details => 'Details';
+  String get details => '细节';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => '设备链接';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => '设备已注销';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => '设备状态';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => '数字名片';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => '数字名片';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => '没有帐户？';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => '例如快餐';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => '例如不加糖，特别辣……';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => '获得 50 积分';
 
   @override
-  String get edit => 'Edit';
+  String get edit => '编辑';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => '编辑卡';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => '编辑详细信息';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => '编辑个人资料';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => '编辑设置';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => '编辑您的个人资料详细信息';
 
   @override
-  String get email => 'Email';
+  String get email => '电子邮件';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => '电子邮件和密码';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => '电子邮件';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => '邮箱登录或扫描二维码';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => '员工卡';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => '员工卡';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => '员工脸部照片';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => '空槽';
 
   @override
-  String get end => 'END';
+  String get end => '结尾';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => '结束日期';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => '结束时间';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => '登记客户';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => '输入账单金额';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => '输入代码';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => '输入代码代替';
 
   @override
-  String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+  String get enterNetworkingContactDetailsBelow => '在下面输入网络联系方式。';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => '输入你的名字';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => '输入您的密码';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => '活动徽章';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => '交流联系方式';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => '交换联系方式...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => '探索';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => '无法更新联系人。';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => '已填槽';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => '过滤联系人';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => '过滤联系人';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => '在 BarQody 上找人';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => '查找用户';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => '查找用户';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => '查找用户名';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => '忘记了？';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => '免费咖啡';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => '姓名';
 
   @override
-  String get general => 'General';
+  String get general => '一般的';
 
   @override
-  String get go => 'Go';
+  String get go => '去';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => '开展业务';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => '客人';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => '你好，';
 
   @override
-  String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+  String get helpCenterIsDisabledInThisUIDemo => '此 UI 演示中禁用了帮助中心。';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => '十六进制：#';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      '将二维码放在框架内 - 它会自动扫描。';
 
   @override
-  String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+  String get howDoYouWantToDesignThisCard => '你想如何设计这张卡片？';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => '导入联系人';
 
   @override
-  String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+  String get importContactsIsNotAvailableYet => '导入联系人尚不可用。';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => '在';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => '收到的订单';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      '个人资料 URL 无效。扫描有效的 BarQody 卡或二维码。';
 
   @override
-  String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+  String get invalidQRCodeUseABarqodyLinkQR => '二维码无效。使用 Barqody 链接 QR。';
 
   @override
-  String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+  String get inviteEmployeesSetShiftsAndTrackPresence => '邀请员工、设置轮班并跟踪状态';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee => '邀请您作为员工加入';
 
   @override
-  String get janeDoe => 'Jane Doe';
+  String get janeDoe => '简·无名氏';
 
   @override
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => '职称';
 
   @override
-  String get johnDoe => 'John Doe';
+  String get johnDoe => '约翰·多伊';
 
   @override
-  String get johnSmith => 'John Smith';
+  String get johnSmith => '约翰·史密斯';
 
   @override
-  String get johnEmailCom => 'john@email.com';
+  String get johnEmailCom => '约翰@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => '加入时间：2026 年 1 月 15 日';
 
   @override
   String get jpg => 'JPG';
@@ -834,1601 +815,1544 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      '确保您的帐户安全。仅当您想要链接您信任的设备时才扫描二维码。';
 
   @override
-  String get label => 'Label';
+  String get label => '标签';
 
   @override
-  String get lat => 'Lat';
+  String get lat => '纬度';
 
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      '让其他人将手机摄像头对准此二维码即可立即查看您的网络配置文件。';
 
   @override
-  String get link => 'Link';
+  String get link => '关联';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => '链接设备';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => '在另一部手机上通过二维码链接';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => '链接已复制到剪贴板';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => '链接设置';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => '链接设置';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => '链接此设备？';
 
   @override
-  String get links => 'Links';
+  String get links => '链接';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => '此卡上的链接';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => '地点尚未确定';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => '需要位置许可';
 
   @override
-  String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+  String get locationPermissionRequiredForAttendance => '出席需要位置许可';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => '登录';
 
   @override
-  String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+  String get logInToManageYourDigitalCardAndNetwork => '登录以管理您的数字卡和网络。';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => '使用二维码登录';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => '退出';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => '全部注销';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => '注销设备？';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => '忠诚度计划';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => '管理类别';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => '管理联系人';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => '管理员工';
 
   @override
-  String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+  String get manageYourPersonalDetailsOtherPreferences => '管理您的个人详细信息和其他偏好';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => '标记已完成';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => '每月';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => '我的卡片';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => '我的位置';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => '我的奖励';
 
   @override
-  String get name => 'Name';
+  String get name => '姓名';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => '姓名';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => '姓名为必填项';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => '姓名@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => '新卡';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => '新卡';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => '新类别';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => '新奖励';
 
   @override
-  String get next => 'Next';
+  String get next => '下一个';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => '下一张卡';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet => '尚未连接活动链接';
 
   @override
-  String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+  String get noActiveRewardProgramsAvailable => '没有可用的主动奖励计划。';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => '还没有员工卡';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => '没有添加员工';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => '还没有员工';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => '没有找到雇主';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => '此类别中没有项目。';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => '没有可用的链接模板';
 
   @override
-  String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+  String get noNewNotificationsAtThisTime => '目前没有新的通知。';
 
   @override
-  String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+  String get noOneHasViewedYourProfileYet => '尚未有人查看您的个人资料。';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => '没有待处理的邀请';
 
   @override
-  String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+  String get noProgramsAssignedYetAddProgramsBelow => '尚未分配程序。添加下面的程序。';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => '此图片中未找到二维码。';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => '还没有奖励计划';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay => '当天没有空位';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => '没有找到用户';
 
   @override
-  String get none => 'None';
+  String get none => '没有任何';
 
   @override
-  String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+  String get notAvailableOnYourCurrentPlan => '您当前的计划不可用';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => '尚未办理登机手续';
 
   @override
-  String get note => 'Note';
+  String get note => '笔记';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => '注释（可选）';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => '通知已清除';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      '此处仅可编辑封面、个人资料照片、姓名和简介。';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      '当有人扫描此卡时，仅显示已启用的链接。';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => '仅显示公开个人资料';
 
   @override
-  String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+  String get onlyThisPhoneIsUsingYourAccountRightNow => '目前只有这部手机正在使用您的帐户。';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => '或继续';
 
   @override
-  String get order => 'Order';
+  String get order => '命令';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => '订单详情';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => '订单号';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => '未找到订单';
 
   @override
-  String get orders => 'Orders';
+  String get orders => '订单';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => '纸卡';
 
   @override
-  String get password => 'Password';
+  String get password => '密码';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => '按月付费';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => '等待接受';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => '性能概览';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => '个人资料';
 
   @override
-  String get phone => 'Phone';
+  String get phone => '电话';
 
   @override
-  String get photos => 'Photos';
+  String get photos => '照片';
 
   @override
-  String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+  String get pickAReadyMadeColorThemeQuickAndClean => '选择一个现成的颜色主题。又快又干净。';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => '选择颜色';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => '在地图上选择';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => '下订单';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => '计划已过期';
 
   @override
-  String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+  String get pleaseEnterBusinessDetailsToContinue => '请输入业务详细信息以继续';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => '请输入商品名称';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      '请在升级前提供您的业务详细信息。';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => '请选择一个类别';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => '请选择时段';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => '请先设定工作地点';
 
   @override
   String get png => 'PNG';
 
   @override
-  String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+  String get pointYourCameraAtTheQRCodeOnTheOtherDevice => '将相机对准另一台设备上的二维码';
 
   @override
-  String get points => 'Points';
+  String get points => '积分';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => '获得积分';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => '高级活跃';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => '上一张卡';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => '价格（卢比）';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => '专业版模板';
 
   @override
-  String get profile => 'Profile';
+  String get profile => '轮廓';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => '个人资料检查';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => '型材强度';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => '个人资料查看者';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => '个人资料视图';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => '计划详情';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => '节目名称';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => '找不到程序';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => '节目类型';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => '二维码';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => '二维码扫描';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => '数量';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => '阅读全部';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => '只读';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => '收到 1 枚邮票';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => '最近的活动';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => '兑换另一份奖励';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => '兑换奖励';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => '兑换免费咖啡';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => '刷新二维码';
 
   @override
-  String get region => 'Region';
+  String get region => '地区';
 
   @override
-  String get rembiro => 'Rembiro';
+  String get rembiro => '伦比罗';
 
   @override
-  String get remove => 'Remove';
+  String get remove => '消除';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => '删除员工';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => '更新计划';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => '请求待处理';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => '请求待处理';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => '请求被拒绝';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => '请求订阅';
 
   @override
-  String get reset => 'Reset';
+  String get reset => '重置';
 
   @override
-  String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+  String get rewardCompletedShowThisCardToRedeem => '奖励完成！出示此卡即可兑换。';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => '奖励完成！ 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => '奖励详情';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => '奖励计划';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => '奖励计划';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => '奖励已兑换！';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => '奖励';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => '获得的奖励';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '每月收费 1,600 卢比';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => '每年收费 8,300 卢比';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => '节省';
 
   @override
-  String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+  String get saveYourWorkIDCardToPhoneOrWallet => '将您的工作 ID 卡保存到手机或钱包中';
 
   @override
-  String get scan => 'Scan';
+  String get scan => '扫描';
 
   @override
-  String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+  String get scanAUserQRCodeToAddThemAsEmployee => '扫描用户二维码将其添加为员工';
 
   @override
-  String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+  String get scanAnyUserOrBusinessQRToAddEmployee => '扫描任意用户或企业二维码添加员工';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => '扫描商家二维码即可兑换';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => '扫描客户二维码';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => '扫描员工档案';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => '扫描二维码';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => '扫描二维码/出示二维码';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => '扫描二维码';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice => '扫描其他设备上显示的二维码';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => '扫描邀请';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => '按用户名搜索...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => '搜索链接';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => '搜索姓名、电子邮件或公司';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => '查看全部';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      '看到所有活动都被嘲笑。随着线索的添加，新的活动将会出现。';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => '选择日期';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => '选择标记';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => '选择地区';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => '在链接图标下设置文本';
 
   @override
-  String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+  String get setYourOwnColorsPhotosAndBackground => '设置您自己的颜色、照片和背景。';
 
   @override
-  String get share => 'Share';
+  String get share => '分享';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => '共享卡';
 
   @override
-  String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+  String get shareDifferentLinksOnEachCard => '在每张卡片上共享不同的链接';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => '分享个人资料';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => '显示链接';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => '在此卡上显示';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => '使用 Google 登录';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => '报名';
 
   @override
-  String get skip => 'Skip';
+  String get skip => '跳过';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => '暂时跳过';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => '时隙（分钟）';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => '软件工程师';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => '出了点问题';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => '排序选项';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => '特别说明';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => '邮票卡';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => '邮票图标';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => '邮票';
 
   @override
-  String get start => 'START';
+  String get start => '开始';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => '开始日期';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => '开始时间';
 
   @override
-  String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+  String get startNetworkingSmarterWithBarqody => '通过 Barqody 开始更智能的网络。';
 
   @override
-  String get stats => 'Stats';
+  String get stats => '统计数据';
 
   @override
-  String get status => 'Status';
+  String get status => '地位';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => '订阅';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => '已提交订阅请求';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => '已提交订阅请求。';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => '滑动即可浏览卡片';
 
   @override
-  String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+  String get takeAQuickSelfieForAttendanceVerification => '快速自拍以验证出席情况';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      '点击上面的“社交链接”即可添加并激活个人资料。';
 
   @override
-  String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+  String get tapOnTheMapOrUseYourCurrentLocation => '点击地图或使用您当前的位置';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => '点击即可添加照片';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => '点击分享二维码';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => '团队出勤';
 
   @override
-  String get template => 'Template';
+  String get template => '模板';
 
   @override
-  String get templates => 'Templates';
+  String get templates => '模板';
 
   @override
-  String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+  String get thankYouFeedbackSubmissionsAreMockOnly => '谢谢你！反馈提交仅是模拟的。';
 
   @override
-  String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+  String get thisCardAndItsQRCodeWillBeRemoved => '该卡及其二维码将被删除。';
 
   @override
-  String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers => '此功能专供企业用户使用。';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => '这已经是您的用户名了。';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => '本月';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      '这将永久删除此奖励计划及其所有注册。';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => '今天是你的周末';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => '今天 • 下午 3:15';
 
   @override
-  String get total => 'Total';
+  String get total => '全部的';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => '追踪您的订单';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => '交易参考（可选）';
 
   @override
-  String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+  String get transactionReferenceNumberOptional => '交易参考号（可选）';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => '再试一次';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => '尝试商务专业版';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => '尝试商务专业版。';
 
   @override
-  String get type => 'Type';
+  String get type => '类型';
 
   @override
-  String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+  String get typeAtLeast2CharactersOfAUsernameToSearch => '输入至少 2 个字符的用户名进行搜索。';
 
   @override
-  String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+  String get typeThe8CharacterCodeShownUnderTheQR => '输入二维码下方显示的 8 个字符代码。';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      '正在开发 - 通过电子邮件/密码登录。';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => '取消标记图标';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => '立即升级';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => '升级至';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => '升级到 Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => '使用模板';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      '在其他手机或平板电脑上使用 Barqody。您始终掌控一切 — 随时注销任何设备。';
 
   @override
-  String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+  String get useBarqodyOnYourPhoneToScanThisCode => '使用手机上的 Barqody 扫描此代码';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => '使用默认图标';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => '使用这张照片';
 
   @override
-  String get user => 'USER';
+  String get user => '用户';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => '版本：1.0.1';
 
   @override
-  String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+  String get viewAndUpdateOrdersFromYourCustomers => '查看和更新​​客户的订单';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => '查看资料';
 
   @override
-  String get views => 'Views';
+  String get views => '意见';
 
   @override
-  String get website => 'Website';
+  String get website => '网站';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => '欢迎回来';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => '欢迎来到账户中心';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      '当企业将您添加为员工时，您的员工卡将显示在此处。您可以随时定制其设计。';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      '当企业将您纳入其奖励计划时，该计划将显示在此处。';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      '当企业邀请您加入他们的团队时，它会出现在此处。';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      '关闭后，此链接将不会显示在您的个人资料上';
 
   @override
-  String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+  String get writeSomethingAboutYouOrYourBrand => '写一些关于您或您的品牌的信息';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => '每年';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => '昨天 • 下午 5:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => '您的类别';
 
   @override
-  String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+  String get yourEmployeeCardsFromEmployers => '雇主给您的员工卡';
 
   @override
-  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed => '您的免费咖啡已成功兑换。';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => '您的奖励';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      '您的订阅已结束。点击信息图标了解详细信息。';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => '你的名字';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% 折扣';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => '已点击头像';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => '账户持有人姓名';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => '帐号';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => '现在活跃';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => '添加个人简介';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => '添加封面照片';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => '添加脸部照片';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => '添加介绍性语音注释';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => '添加个人资料名称';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => '添加个人资料照片';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => '添加社交链接 (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => '添加项目';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => '添加链接';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 => '在下面添加指向您个人资料的链接';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => '添加照片';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => '添加到购物车';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => '地址（可选）';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => '所有联系人类型';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => '允许半径（米）';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => '快到了！';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => '已经是员工';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => '已经有帐户？';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => '始终保持最新状态';
 
   @override
-  String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+  String get areYouSureYouWantToLogOutOfBarqody => '您确定要退出 Barqody 吗？';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => '考勤失败';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => '背景颜色';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => '预订失败';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward => '简单描述一下这个奖励...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => '业务已验证';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => '企业电子邮件地址';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => '商务传真';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => '商务电话号码';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => '企业网站';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => '相机错误';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => '捕捉人脸';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => '卡已完成';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => '卡标签';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => '卡标签名称';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => '卡片预览';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => '卡片主题';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => '卡已创建';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => '卡名';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => '卡片另存为 JPG';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => '卡片另存为 PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => '卡已更新';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => '更改照片';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => '签到脸';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => '入住成功';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => '结帐脸';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => '退房成功';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => '选择模板';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => '联系卡营业地址';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => '联系卡公司名称';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => '联系卡电子邮件';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => '联系卡家庭住址';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => '联系卡电话';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => '联系卡网站';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => '无法完成登录';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => '无法创建二维码';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => '无法链接设备';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => '无法注销设备';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => '无法打开 Google 电子钱包';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => '无法保存卡片设计';
 
   @override
-  String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+  String get couldNotUpdateProfileVisibility => '无法更新个人资料可见性';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => '创建画廊';
 
   @override
-  String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+  String get createACardToShareYourProfile => '创建一张卡片来分享您的个人资料';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => '创建卡片';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => '海关银行';
 
   @override
-  String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+  String get customersCanBeEnrolledAndStamped => '客户可以注册并盖章';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => '定制卡片';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram => '描述您的忠诚度计划';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => '显示名称';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => '没有帐户？';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE，d MMM yyyy';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => '编辑奖励';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => '编辑项目';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => '电子邮件';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => '电子邮件为必填项';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => '员工卡';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => '员工被移除';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => '已保存员工设置';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => '注册企业';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => '输入有效的电子邮件';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard => '输入联系人卡的简介';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => '输入程序名称';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => '输入您的个人简介';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => '输入您的电话号码';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => '输入您的网站网址';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => '活动徽章';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => '示例：10 枚邮票 = 免费咖啡';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => '添加脸部照片';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => '添加程序失败';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => '添加印章失败';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => '注册客户失败';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => '交换联系方式失败';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => '无法加载程序';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => '下单失败';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => '删除失败';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => '保存失败';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => '保存 JPG 失败';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => '保存 PNG 失败';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => '保存二维码失败。';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails => '无法保存商家详细信息';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => '更新状态失败';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => '名';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => '食品及饮料';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => '免费甜点';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      '需要画廊许可。请在“设置”中启用它。';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => '开始使用';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => '去';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices => '转到工具 → 链接的设备';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending => 'Google 电子钱包设置待处理。';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Google 电子钱包设置待处理。个人资料链接已复制。';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => '拓展您的业务';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => '访客用户';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => '国际银行号码';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => '在办公室';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => '邀请待定';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => '邀请被拒绝';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      '邀请已发送。员工接受后将被添加。';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => '邀请员工';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => '邀请成为员工';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => '职称';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => '姓';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => '使用二维码登录';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      '仅注销该帐户吗？其他帐户将保留在该手机上。';
 
   @override
-  String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+  String get loggedInWithGoogleDemoAccountSaimY => '使用 Google 登录（模拟帐户：Saim Y）';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => '正在让您登录...';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => '登录失败。再试一次。';
 
   @override
   String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
 
   @override
-  String get mmmmYyyy => 'MMMM yyyy';
+  String get mmmmYyyy => 'MMMM 年';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => '标记出勤率';
 
   @override
-  String get myName => 'My Name';
+  String get myName => '我的名字';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => '我的塔普尼个人资料';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => '名称不能为空';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => '新的';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => '还没有联系方式';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => '尚无详细信息';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      '尚未添加链接。\\n点击“添加链接”即可开始。';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => '没有匹配项';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => '没有提供理由。';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => '未注册';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => '邮票数量';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => '一键分享';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone => '在您的另一部手机上打开 Barqody';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => '打开相机';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => '订单信息';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => '纸卡';
 
   @override
-  String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+  String get passwordMustBeAtLeast4Characters => '密码必须至少为 4 个字符';
 
   @override
-  String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+  String get passwordMustBeAtLeast6Characters => '密码必须至少为 6 个字符';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => '电话号码';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => '电话为必填项';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => '电话号码';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => '选择地点';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => '请输入密码';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => '请输入用户名';
 
   @override
-  String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+  String get pleaseEnterAValidEmailAddress => '请输入有效的电子邮件地址';
 
   @override
-  String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+  String get pleaseEnterAValidNumberOfStamps => '请输入有效的邮票数量';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => '请输入您的电子邮件';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => '请输入您的姓名';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => '请输入您的密码';
 
   @override
-  String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+  String get pointTheCameraAtAQRCodeToScanAutomatically => '将相机对准二维码即可自动扫描。';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      '将相机对准事件徽章并点击相机按钮。';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      '将相机对准纸卡并点击相机按钮。';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => '正在准备二维码...';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => '未找到个人资料。';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => '个人资料更新成功！';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => '二维码已保存至图库！';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => '二维码已过期';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh => '二维码已过期。点击刷新。';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => '房地产';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => '附收据';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      '续订您的订阅以恢复对您的高级功能和数据的完全访问权限。';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => '重拍照片';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => '奖励称号';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => '奖励已解锁🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => '角色或公司';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => '保存更改';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => '保存联系方式';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => '保存个人资料';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => '保存设置';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => '保存用户名';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => '保存卡';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => '保存联系方式';
 
   @override
-  String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+  String get savedLocallySyncMayHaveFailed => '保存在本地。同步可能失败。';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      '扫描二维码或添加您遇到的人来建立您的网络。';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => '通过二维码扫描';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => '屏幕主题';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => '搜索失败。再试一次。';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => '选择公司';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => '选择日期范围';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => '选择结束日期';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => '选择开始日期';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => '发送邀请';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => '发送出席邀请';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => '分享链接';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => '换档时间';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => '智能接触捕捉';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => '邮票边框颜色';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => '印章颜色';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => '印章图标（可选）';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => '赠送邮票';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => '开始建立你的网络';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => '街道名称';
 
   @override
-  String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+  String get switchToABusinessAccountToUnlockFullAccess => '切换到企业帐户以解锁完全访问权限。';
 
   @override
-  String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+  String get tapLinkADeviceAndScanThisQR => '点击链接设备并扫描此二维码';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => '点击添加图像';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => '点击即可更改';
 
   @override
-  String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+  String get templateAppliedLocallySyncFailed => '本地应用的模板。同步失败。';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => '文字颜色';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => '这个账号';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      '此功能专供企业用户使用。';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => '此人在您的团队中';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => '该节目已暂停';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => '邮票总数';
 
   @override
-  String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+  String get tryADifferentNameEmailOrCompany => '尝试使用不同的名称、电子邮件或公司。';
 
   @override
-  String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+  String get unableToSaveProfileTryAgain => '无法保存个人资料。再试一次。';
 
   @override
-  String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+  String get unableToUpdateUsernameTryAgain => '无法更新用户名。再试一次。';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      '正在开发 - 通过电子邮件/密码登录。';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => '未知用户';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => '更新 GPS 位置';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => '更新状态';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => '更新购物车';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => '更新项目';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => '升级至';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => '升级至商务专业版';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => '上传收据（可选）';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => '使用我的位置';
 
   @override
-  String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+  String get useLettersNumbersUnderscoresOrHyphensOnly => '仅使用字母、数字、下划线或连字符';
 
   @override
-  String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+  String get usernameMustBeAtLeast3Characters => '用户名必须至少 3 个字符';
 
   @override
-  String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+  String get usernameMustBeAtMost30Characters => '用户名不得超过 30 个字符';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully => '用户名更新成功！';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => '等待他们接受';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => '网站网址';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => '周末';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => '工作地点';
 
   @override
-  String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+  String get yourPROSubscriptionHasExpiredNN => '您的 PRO 订阅已过期。\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => '您的 PRO 订阅已过期。';
 
   @override
-  String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+  String get premiumFeaturesAreCurrentlyDisabled => '高级功能目前已被禁用。';
 
   @override
-  String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+  String get proLinksAreHiddenFromYourPublicProfile => '专业版链接在您的公开个人资料中隐藏。';
 
   @override
-  String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+  String get yourBusinessDetailsAndDataAreSafe => '您的业​​务详细信息和数据是安全的。';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return '添加 $label 项目';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return '添加至少一项 $label 项目';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return '没有可用的 $label 项目。';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return '还没有商品。添加您的第一个 $label 项目。';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return '没有公开的个人资料与“@$query”匹配。';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return '代码：$code';
   }
 }
 
@@ -2440,821 +2364,802 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => '工具';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => '账户设置';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => '通知';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => '为你';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => '您的个人资料';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => '编辑个人资料';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => '更改您的姓名、照片和简介';
 
   @override
-  String get username => 'Username';
+  String get username => '用户名';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle => '设置您唯一的个人资料用户名';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => '社交链接';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle => '添加 Instagram、WhatsApp、网站等';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => '公开资料';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => '任何人都可以找到并查看您的个人资料';
 
   @override
-  String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+  String get publicProfileOff => '隐藏在搜索中 - 其他人无法发现您';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => '分享我的二维码';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle => '让其他人扫描您的数字名片';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => '购物和奖励';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => '我的订单';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => '跟踪您从商店下的订单';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => '我的奖励卡';
 
   @override
-  String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+  String get myRewardCardsSubtitle => '查看忠诚度计划的印章和积分';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => '职场';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => '员工邀请函';
 
   @override
-  String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+  String get employeeInvitationsSubtitle => '接受或拒绝企业的团队邀请';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => '工作场所签到';
 
   @override
-  String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+  String get workplaceCheckInSubtitle => '在工作地点打卡上下班';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => '帐户和设备';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => '链接设备';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => '连接另一部手机，例如 WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => '账户';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => '添加或切换帐户';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return '在 $count 帐户之间切换';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => '帮助和帐户';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => '应用语言';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => '更改应用程序中使用的语言';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => '搜索语言';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => '手机语言';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => '语言已更新';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => '帮助和常见问题解答';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => '常见问题解答';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => '发送反馈';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle => '报告错误或建议新功能';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => '退出';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => '退出此会话';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => '取消';
 
   @override
-  String get save => 'Save';
+  String get save => '节省';
 
   @override
-  String get done => 'Done';
+  String get done => '完毕';
 
   @override
-  String get str => 'بطاقة أعمال الرقمية';
+  String get str => '🌈🌈🌈🌈';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '（只读）';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 点 = 100 PKR（规则示例）';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '需要 10 张邮票';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '市主街 123 号';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 天前';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 个字符。仅限字母、数字、下划线和连字符。';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => '接受';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => '访问受限';
 
   @override
-  String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+  String get accountIBANAddAccountNumberHere => '帐户/IBAN：在此处添加帐号';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => '账户名称：Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => '积极的';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => '积极的';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => '活动卡';
 
   @override
-  String get add => 'Add';
+  String get add => '添加';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => '添加注释...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => '添加账户';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst => '首先添加至少一个类别';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      '按显示顺序添加类别（例如快餐，然后是德西）';
 
   @override
-  String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+  String get addCategoriesInYourCatalogSettingsFirst => '首先在目录设置中添加类别。';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => '添加联系人';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => '添加链接';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow => '在下面添加指向您个人资料的链接';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      '首先将链接添加到您的个人资料，然后在此处启用它们。';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => '添加徽标';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => '添加积分';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => '添加节目';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => '添加图章';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => '添加到 Google 钱包';
 
   @override
-  String get address => 'Address';
+  String get address => '地址';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => '全部';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => '都追上了！';
 
   @override
-  String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+  String get allNotificationsMarkedAsRead => '所有通知均标记为已读！';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => '允许拍照';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      '允许此设备访问您的 Barqody 帐户吗？您可以随时从链接的设备中将其删除。';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => '已经有帐户？';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => '分析仪表板';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => '有什么特殊要求...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => '申请';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => '应用设计';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => '应用模板';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => '升序';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      '要求您的企业扫描您的二维码并将您添加为员工';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => '分配类别';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => '分配的程序';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => '至少 6 个字符';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => '今天出席人数已完成';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => '可用插槽';
 
   @override
-  String get background => 'Background';
+  String get background => '背景';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => '背景颜色';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => '银行账户';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => '银行详情';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => '银行：在此添加银行名称';
 
   @override
   String get barqody => 'Barqody';
 
   @override
-  String get barqodyV100 => 'barqody v1.0.0';
+  String get barqodyV100 => '巴科迪 v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => '最超值';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => '账单金额';
 
   @override
-  String get bio => 'BIO';
+  String get bio => '生物';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => '简介';
 
   @override
-  String get book => 'Book';
+  String get book => '书';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => '预订日期';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => '预订时间表';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => '预订时间';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => '商业';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => '业务类别';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => '业务详情';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => '公司名称';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => '商业选择';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => '商业项目';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => '仅限商业用户';
 
   @override
-  String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+  String get bySigningUpYouAgreeToOurTermsAndConditions => '注册即表示您同意我们的条款和条件。';
 
   @override
-  String get call => 'Call';
+  String get call => '称呼';
 
   @override
-  String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+  String get cameraPermissionIsRequiredToScan => '需要相机许可才能扫描。';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => '随时取消。';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => '取消订单';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => '捕获新联系人';
 
   @override
-  String get categories => 'Categories';
+  String get categories => '类别';
 
   @override
-  String get category => 'Category *';
+  String get category => '类别 *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => '类别已存在';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => '类别名称';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => '报到';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => '查看';
 
   @override
-  String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+  String get chooseAUniqueUsernameForYourProfileLink => '为您的个人资料链接选择一个唯一的用户名。';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => '选择计划';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => '选择模板';
 
   @override
-  String get close => 'Close';
+  String get close => '关闭';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => '复制代码';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => '即将推出';
 
   @override
-  String get company => 'Company';
+  String get company => '公司';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => '公司员工卡';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => '公司';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => '完成这些步骤';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => '确认并添加积分';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => '确认预订';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => '确认地点';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => '确认兑换';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => '关联账户';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => '联系人添加成功！';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => '联系卡';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => '联系方式交换成功！';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => '联系来源';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => '联系方式更新成功！';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => '联系方式';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => '继续';
 
   @override
-  String get copied => 'Copied';
+  String get copied => '已复制';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => '复制代码';
 
   @override
-  String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+  String get couldNotGetLocationPleaseEnableGPSPermission => '无法获取位置。请开启GPS权限。';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => '无法切换帐户';
 
   @override
-  String get create => 'Create';
+  String get create => '创造';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => '创建账户';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => '创建忠诚度计划';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => '创建新链接';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => '创建程序';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => '创造奖励';
 
   @override
-  String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+  String get createStampOrPointsRewardsForCustomers => '为客户创建印章或积分奖励';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => '创建你的第一张卡片';
 
   @override
-  String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+  String get createYourFirstRewardCardForCustomers => '为客户创建您的第一张奖励卡';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => '创建日期';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      '用于加盖和未加盖插槽的自定义图像。如果未设置，则使用默认值。';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => '自定义链接';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => '客户详情';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => '客户注册成功';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => '客户尚未注册';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => '顾客未出现';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => '客户订单';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => '定制卡片设计';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => '定制设计';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      '自定义您的个人资料、解锁 PRO 模板并获得无限的潜在客户。';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => '定制你自己';
 
   @override
-  String get date => 'Date';
+  String get date => '日期';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => '日期范围';
 
   @override
-  String get decline => 'Decline';
+  String get decline => '衰退';
 
   @override
-  String get delete => 'Delete';
+  String get delete => '删除';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => '删除卡？';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => '删除类别';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => '删除联系人';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => '删除奖励？';
 
   @override
-  String get descending => 'Descending';
+  String get descending => '降序';
 
   @override
-  String get description => 'Description';
+  String get description => '描述';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => '说明（可选）';
 
   @override
-  String get details => 'Details';
+  String get details => '细节';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => '设备链接';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => '设备已注销';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => '设备状态';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => '数字名片';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => '数字名片';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => '没有帐户？';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => '例如快餐';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => '例如不加糖，特别辣……';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => '获得 50 积分';
 
   @override
-  String get edit => 'Edit';
+  String get edit => '编辑';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => '编辑卡';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => '编辑详细信息';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => '编辑个人资料';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => '编辑设置';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => '编辑您的个人资料详细信息';
 
   @override
-  String get email => 'Email';
+  String get email => '电子邮件';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => '电子邮件和密码';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => '电子邮件';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => '邮箱登录或扫描二维码';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => '员工卡';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => '员工卡';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => '员工脸部照片';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => '空槽';
 
   @override
-  String get end => 'END';
+  String get end => '结尾';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => '结束日期';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => '结束时间';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => '登记客户';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => '输入账单金额';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => '输入代码';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => '输入代码代替';
 
   @override
-  String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+  String get enterNetworkingContactDetailsBelow => '在下面输入网络联系方式。';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => '输入你的名字';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => '输入您的密码';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => '活动徽章';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => '交流联系方式';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => '交换联系方式...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => '探索';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => '无法更新联系人。';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => '已填槽';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => '过滤联系人';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => '过滤联系人';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => '在 BarQody 上找人';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => '查找用户';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => '查找用户';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => '查找用户名';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => '忘记了？';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => '免费咖啡';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => '姓名';
 
   @override
-  String get general => 'General';
+  String get general => '一般的';
 
   @override
-  String get go => 'Go';
+  String get go => '去';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => '开展业务';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => '客人';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => '你好，';
 
   @override
-  String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+  String get helpCenterIsDisabledInThisUIDemo => '此 UI 演示中禁用了帮助中心。';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => '十六进制：#';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      '将二维码放在框架内 - 它会自动扫描。';
 
   @override
-  String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+  String get howDoYouWantToDesignThisCard => '你想如何设计这张卡片？';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => '导入联系人';
 
   @override
-  String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+  String get importContactsIsNotAvailableYet => '导入联系人尚不可用。';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => '在';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => '收到的订单';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      '个人资料 URL 无效。扫描有效的 BarQody 卡或二维码。';
 
   @override
-  String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+  String get invalidQRCodeUseABarqodyLinkQR => '二维码无效。使用 Barqody 链接 QR。';
 
   @override
-  String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+  String get inviteEmployeesSetShiftsAndTrackPresence => '邀请员工、设置轮班并跟踪状态';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee => '邀请您作为员工加入';
 
   @override
-  String get janeDoe => 'Jane Doe';
+  String get janeDoe => '简·无名氏';
 
   @override
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => '职称';
 
   @override
-  String get johnDoe => 'John Doe';
+  String get johnDoe => '约翰·多伊';
 
   @override
-  String get johnSmith => 'John Smith';
+  String get johnSmith => '约翰·史密斯';
 
   @override
-  String get johnEmailCom => 'john@email.com';
+  String get johnEmailCom => '约翰@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => '加入时间：2026 年 1 月 15 日';
 
   @override
   String get jpg => 'JPG';
@@ -3262,809 +3167,1545 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      '确保您的帐户安全。仅当您想要链接您信任的设备时才扫描二维码。';
 
   @override
-  String get label => 'Label';
+  String get label => '标签';
 
   @override
-  String get lat => 'Lat';
+  String get lat => '纬度';
 
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      '让其他人将手机摄像头对准此二维码即可立即查看您的网络配置文件。';
 
   @override
-  String get link => 'Link';
+  String get link => '关联';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => '链接设备';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => '在另一部手机上通过二维码链接';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => '链接已复制到剪贴板';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => '链接设置';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => '链接设置';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => '链接此设备？';
 
   @override
-  String get links => 'Links';
+  String get links => '链接';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => '此卡上的链接';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => '地点尚未确定';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => '需要位置许可';
 
   @override
-  String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+  String get locationPermissionRequiredForAttendance => '出席需要位置许可';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => '登录';
 
   @override
-  String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+  String get logInToManageYourDigitalCardAndNetwork => '登录以管理您的数字卡和网络。';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => '使用二维码登录';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => '退出';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => '全部注销';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => '注销设备？';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => '忠诚度计划';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => '管理类别';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => '管理联系人';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => '管理员工';
 
   @override
-  String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+  String get manageYourPersonalDetailsOtherPreferences => '管理您的个人详细信息和其他偏好';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => '标记已完成';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => '每月';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => '我的卡片';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => '我的位置';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => '我的奖励';
 
   @override
-  String get name => 'Name';
+  String get name => '姓名';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => '姓名';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => '姓名为必填项';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => '姓名@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => '新卡';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => '新卡';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => '新类别';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => '新奖励';
 
   @override
-  String get next => 'Next';
+  String get next => '下一个';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => '下一张卡';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet => '尚未连接活动链接';
 
   @override
-  String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+  String get noActiveRewardProgramsAvailable => '没有可用的主动奖励计划。';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => '还没有员工卡';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => '没有添加员工';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => '还没有员工';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => '没有找到雇主';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => '此类别中没有项目。';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => '没有可用的链接模板';
 
   @override
-  String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+  String get noNewNotificationsAtThisTime => '目前没有新的通知。';
 
   @override
-  String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+  String get noOneHasViewedYourProfileYet => '尚未有人查看您的个人资料。';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => '没有待处理的邀请';
 
   @override
-  String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+  String get noProgramsAssignedYetAddProgramsBelow => '尚未分配程序。添加下面的程序。';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => '此图片中未找到二维码。';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => '还没有奖励计划';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay => '当天没有空位';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => '没有找到用户';
 
   @override
-  String get none => 'None';
+  String get none => '没有任何';
 
   @override
-  String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+  String get notAvailableOnYourCurrentPlan => '您当前的计划不可用';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => '尚未办理登机手续';
 
   @override
-  String get note => 'Note';
+  String get note => '笔记';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => '注释（可选）';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => '通知已清除';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      '此处仅可编辑封面、个人资料照片、姓名和简介。';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      '当有人扫描此卡时，仅显示已启用的链接。';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => '仅显示公开个人资料';
 
   @override
-  String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+  String get onlyThisPhoneIsUsingYourAccountRightNow => '目前只有这部手机正在使用您的帐户。';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => '或继续';
 
   @override
-  String get order => 'Order';
+  String get order => '命令';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => '订单详情';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => '订单号';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => '未找到订单';
 
   @override
-  String get orders => 'Orders';
+  String get orders => '订单';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => '纸卡';
 
   @override
-  String get password => 'Password';
+  String get password => '密码';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => '按月付费';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => '等待接受';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => '性能概览';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => '个人资料';
 
   @override
-  String get phone => 'Phone';
+  String get phone => '电话';
 
   @override
-  String get photos => 'Photos';
+  String get photos => '照片';
 
   @override
-  String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+  String get pickAReadyMadeColorThemeQuickAndClean => '选择一个现成的颜色主题。又快又干净。';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => '选择颜色';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => '在地图上选择';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => '下订单';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => '计划已过期';
 
   @override
-  String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+  String get pleaseEnterBusinessDetailsToContinue => '请输入业务详细信息以继续';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => '请输入商品名称';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      '请在升级前提供您的业务详细信息。';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => '请选择一个类别';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => '请选择时段';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => '请先设定工作地点';
 
   @override
   String get png => 'PNG';
 
   @override
-  String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+  String get pointYourCameraAtTheQRCodeOnTheOtherDevice => '将相机对准另一台设备上的二维码';
 
   @override
-  String get points => 'Points';
+  String get points => '积分';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => '获得积分';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => '高级活跃';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => '上一张卡';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => '价格（卢比）';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => '专业版模板';
 
   @override
-  String get profile => 'Profile';
+  String get profile => '轮廓';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => '个人资料检查';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => '型材强度';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => '个人资料查看者';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => '个人资料视图';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => '计划详情';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => '节目名称';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => '找不到程序';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => '节目类型';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => '二维码';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => '二维码扫描';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => '数量';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => '阅读全部';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => '只读';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => '收到 1 枚邮票';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => '最近的活动';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => '兑换另一份奖励';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => '兑换奖励';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => '兑换免费咖啡';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => '刷新二维码';
 
   @override
-  String get region => 'Region';
+  String get region => '地区';
 
   @override
-  String get rembiro => 'Rembiro';
+  String get rembiro => '伦比罗';
 
   @override
-  String get remove => 'Remove';
+  String get remove => '消除';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => '删除员工';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => '更新计划';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => '请求待处理';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => '请求待处理';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => '请求被拒绝';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => '请求订阅';
 
   @override
-  String get reset => 'Reset';
+  String get reset => '重置';
 
   @override
-  String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+  String get rewardCompletedShowThisCardToRedeem => '奖励完成！出示此卡即可兑换。';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => '奖励完成！ 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => '奖励详情';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => '奖励计划';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => '奖励计划';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => '奖励已兑换！';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => '奖励';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => '获得的奖励';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '每月收费 1,600 卢比';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => '每年收费 8,300 卢比';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => '节省';
 
   @override
-  String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+  String get saveYourWorkIDCardToPhoneOrWallet => '将您的工作 ID 卡保存到手机或钱包中';
 
   @override
-  String get scan => 'Scan';
+  String get scan => '扫描';
 
   @override
-  String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+  String get scanAUserQRCodeToAddThemAsEmployee => '扫描用户二维码将其添加为员工';
 
   @override
-  String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+  String get scanAnyUserOrBusinessQRToAddEmployee => '扫描任意用户或企业二维码添加员工';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => '扫描商家二维码即可兑换';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => '扫描客户二维码';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => '扫描员工档案';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => '扫描二维码';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => '扫描二维码/出示二维码';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => '扫描二维码';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice => '扫描其他设备上显示的二维码';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => '扫描邀请';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => '按用户名搜索...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => '搜索链接';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => '搜索姓名、电子邮件或公司';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => '查看全部';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      '看到所有活动都被嘲笑。随着线索的添加，新的活动将会出现。';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => '选择日期';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => '选择标记';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => '选择地区';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => '在链接图标下设置文本';
 
   @override
-  String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+  String get setYourOwnColorsPhotosAndBackground => '设置您自己的颜色、照片和背景。';
 
   @override
-  String get share => 'Share';
+  String get share => '分享';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => '共享卡';
 
   @override
-  String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+  String get shareDifferentLinksOnEachCard => '在每张卡片上共享不同的链接';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => '分享个人资料';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => '显示链接';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => '在此卡上显示';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => '使用 Google 登录';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => '报名';
 
   @override
-  String get skip => 'Skip';
+  String get skip => '跳过';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => '暂时跳过';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => '时隙（分钟）';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => '软件工程师';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => '出了点问题';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => '排序选项';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => '特别说明';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => '邮票卡';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => '邮票图标';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => '邮票';
 
   @override
-  String get start => 'START';
+  String get start => '开始';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => '开始日期';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => '开始时间';
 
   @override
-  String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+  String get startNetworkingSmarterWithBarqody => '通过 Barqody 开始更智能的网络。';
 
   @override
-  String get stats => 'Stats';
+  String get stats => '统计数据';
 
   @override
-  String get status => 'Status';
+  String get status => '地位';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => '订阅';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => '已提交订阅请求';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => '已提交订阅请求。';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => '滑动即可浏览卡片';
 
   @override
-  String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+  String get takeAQuickSelfieForAttendanceVerification => '快速自拍以验证出席情况';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      '点击上面的“社交链接”即可添加并激活个人资料。';
 
   @override
-  String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+  String get tapOnTheMapOrUseYourCurrentLocation => '点击地图或使用您当前的位置';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => '点击即可添加照片';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => '点击分享二维码';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => '团队出勤';
 
   @override
-  String get template => 'Template';
+  String get template => '模板';
 
   @override
-  String get templates => 'Templates';
+  String get templates => '模板';
 
   @override
-  String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+  String get thankYouFeedbackSubmissionsAreMockOnly => '谢谢你！反馈提交仅是模拟的。';
 
   @override
-  String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+  String get thisCardAndItsQRCodeWillBeRemoved => '该卡及其二维码将被删除。';
 
   @override
-  String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers => '此功能专供企业用户使用。';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => '这已经是您的用户名了。';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => '本月';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      '这将永久删除此奖励计划及其所有注册。';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => '今天是你的周末';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => '今天 • 下午 3:15';
 
   @override
-  String get total => 'Total';
+  String get total => '全部的';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => '追踪您的订单';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => '交易参考（可选）';
 
   @override
-  String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+  String get transactionReferenceNumberOptional => '交易参考号（可选）';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => '再试一次';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => '尝试商务专业版';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => '尝试商务专业版。';
 
   @override
-  String get type => 'Type';
+  String get type => '类型';
 
   @override
-  String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+  String get typeAtLeast2CharactersOfAUsernameToSearch => '输入至少 2 个字符的用户名进行搜索。';
 
   @override
-  String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+  String get typeThe8CharacterCodeShownUnderTheQR => '输入二维码下方显示的 8 个字符代码。';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      '正在开发 - 通过电子邮件/密码登录。';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => '取消标记图标';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => '立即升级';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => '升级至';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => '升级到 Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => '使用模板';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      '在其他手机或平板电脑上使用 Barqody。您始终掌控一切 — 随时注销任何设备。';
 
   @override
-  String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+  String get useBarqodyOnYourPhoneToScanThisCode => '使用手机上的 Barqody 扫描此代码';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => '使用默认图标';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => '使用这张照片';
 
   @override
-  String get user => 'USER';
+  String get user => '用户';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => '版本：1.0.1';
 
   @override
-  String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+  String get viewAndUpdateOrdersFromYourCustomers => '查看和更新​​客户的订单';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => '查看资料';
 
   @override
-  String get views => 'Views';
+  String get views => '意见';
 
   @override
-  String get website => 'Website';
+  String get website => '网站';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => '欢迎回来';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => '欢迎来到账户中心';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      '当企业将您添加为员工时，您的员工卡将显示在此处。您可以随时定制其设计。';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      '当企业将您纳入其奖励计划时，该计划将显示在此处。';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      '当企业邀请您加入他们的团队时，它会出现在此处。';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      '关闭后，此链接将不会显示在您的个人资料上';
 
   @override
-  String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+  String get writeSomethingAboutYouOrYourBrand => '写一些关于您或您的品牌的信息';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => '每年';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => '昨天 • 下午 5:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => '您的类别';
 
   @override
-  String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+  String get yourEmployeeCardsFromEmployers => '雇主给您的员工卡';
 
   @override
-  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed => '您的免费咖啡已成功兑换。';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => '您的奖励';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      '您的订阅已结束。点击信息图标了解详细信息。';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => '你的名字';
+
+  @override
+  String get n10Discount => '10% 折扣';
+
+  @override
+  String get avatarTAPPED => '已点击头像';
+
+  @override
+  String get accountHolderName => '账户持有人姓名';
+
+  @override
+  String get accountNumber => '帐号';
+
+  @override
+  String get activeNow => '现在活跃';
+
+  @override
+  String get addBio => '添加个人简介';
+
+  @override
+  String get addCoverPhoto => '添加封面照片';
+
+  @override
+  String get addFacePhoto => '添加脸部照片';
+
+  @override
+  String get addIntroVoiceNote => '添加介绍性语音注释';
+
+  @override
+  String get addProfileName => '添加个人资料名称';
+
+  @override
+  String get addProfilePhoto => '添加个人资料照片';
+
+  @override
+  String get addSocialLinks3 => '添加社交链接 (3+)';
+
+  @override
+  String get addItem => '添加项目';
+
+  @override
+  String get addLink2 => '添加链接';
+
+  @override
+  String get addLinksToYourProfileBelow2 => '在下面添加指向您个人资料的链接';
+
+  @override
+  String get addPhoto => '添加照片';
+
+  @override
+  String get addToCart => '添加到购物车';
+
+  @override
+  String get addressOptional => '地址（可选）';
+
+  @override
+  String get allContactTypes => '所有联系人类型';
+
+  @override
+  String get allowedRadiusMeters => '允许半径（米）';
+
+  @override
+  String get almostThere => '快到了！';
+
+  @override
+  String get alreadyEmployee => '已经是员工';
+
+  @override
+  String get alreadyHaveAnAccount2 => '已经有帐户？';
+
+  @override
+  String get alwaysUpToDate => '始终保持最新状态';
+
+  @override
+  String get areYouSureYouWantToLogOutOfBarqody => '您确定要退出 Barqody 吗？';
+
+  @override
+  String get attendanceFailed => '考勤失败';
+
+  @override
+  String get backgroundColor2 => '背景颜色';
+
+  @override
+  String get bookingFailed => '预订失败';
+
+  @override
+  String get brieflyDescribeThisReward => '简单描述一下这个奖励...';
+
+  @override
+  String get businessVerified => '业务已验证';
+
+  @override
+  String get businessEmailAddress => '企业电子邮件地址';
+
+  @override
+  String get businessFax => '商务传真';
+
+  @override
+  String get businessPhoneNumber => '商务电话号码';
+
+  @override
+  String get businessWebsite => '企业网站';
+
+  @override
+  String get cameraError => '相机错误';
+
+  @override
+  String get captureFace => '捕捉人脸';
+
+  @override
+  String get cardCompleted => '卡已完成';
+
+  @override
+  String get cardLabel => '卡标签';
+
+  @override
+  String get cardLabelName => '卡标签名称';
+
+  @override
+  String get cardPreview => '卡片预览';
+
+  @override
+  String get cardTheme => '卡片主题';
+
+  @override
+  String get cardCreated => '卡已创建';
+
+  @override
+  String get cardName => '卡名';
+
+  @override
+  String get cardSavedAsJPG => '卡片另存为 JPG';
+
+  @override
+  String get cardSavedAsPNG => '卡片另存为 PNG';
+
+  @override
+  String get cardUpdated => '卡已更新';
+
+  @override
+  String get changePhoto => '更改照片';
+
+  @override
+  String get checkInFace => '签到脸';
+
+  @override
+  String get checkInSuccessful => '入住成功';
+
+  @override
+  String get checkOutFace => '结帐脸';
+
+  @override
+  String get checkOutSuccessful => '退房成功';
+
+  @override
+  String get chooseTemplate2 => '选择模板';
+
+  @override
+  String get contactCardBusinessAddress => '联系卡营业地址';
+
+  @override
+  String get contactCardCompanyName => '联系卡公司名称';
+
+  @override
+  String get contactCardEmail => '联系卡电子邮件';
+
+  @override
+  String get contactCardHomeAddress => '联系卡家庭住址';
+
+  @override
+  String get contactCardPhone => '联系卡电话';
+
+  @override
+  String get contactCardWebsite => '联系卡网站';
+
+  @override
+  String get couldNotCompleteLogin => '无法完成登录';
+
+  @override
+  String get couldNotCreateQRCode => '无法创建二维码';
+
+  @override
+  String get couldNotLinkDevice => '无法链接设备';
+
+  @override
+  String get couldNotLogOutDevice => '无法注销设备';
+
+  @override
+  String get couldNotOpenGoogleWallet => '无法打开 Google 电子钱包';
+
+  @override
+  String get couldNotSaveCardDesign => '无法保存卡片设计';
+
+  @override
+  String get couldNotUpdateProfileVisibility => '无法更新个人资料可见性';
+
+  @override
+  String get createGallery => '创建画廊';
+
+  @override
+  String get createACardToShareYourProfile => '创建一张卡片来分享您的个人资料';
+
+  @override
+  String get createCard => '创建卡片';
+
+  @override
+  String get customBank => '海关银行';
+
+  @override
+  String get customersCanBeEnrolledAndStamped => '客户可以注册并盖章';
+
+  @override
+  String get customizeCard => '定制卡片';
+
+  @override
+  String get describeYourLoyaltyProgram => '描述您的忠诚度计划';
+
+  @override
+  String get displayName => '显示名称';
+
+  @override
+  String get dontHaveAnAccount2 => '没有帐户？';
+
+  @override
+  String get eeeDMMMYyyy => 'EEE，d MMM yyyy';
+
+  @override
+  String get editReward => '编辑奖励';
+
+  @override
+  String get editItem => '编辑项目';
+
+  @override
+  String get emailAddress2 => '电子邮件';
+
+  @override
+  String get emailIsRequired => '电子邮件为必填项';
+
+  @override
+  String get employeeCards => '员工卡';
+
+  @override
+  String get employeeRemoved => '员工被移除';
+
+  @override
+  String get employeeSettingsSaved => '已保存员工设置';
+
+  @override
+  String get enrolledBusinesses => '注册企业';
+
+  @override
+  String get enterAValidEmail => '输入有效的电子邮件';
+
+  @override
+  String get enterBioForTheContactCard => '输入联系人卡的简介';
+
+  @override
+  String get enterProgramName => '输入程序名称';
+
+  @override
+  String get enterYourBio => '输入您的个人简介';
+
+  @override
+  String get enterYourPhoneNumber => '输入您的电话号码';
+
+  @override
+  String get enterYourWebsiteURL => '输入您的网站网址';
+
+  @override
+  String get eventBadge2 => '活动徽章';
+
+  @override
+  String get example10StampsFreeCoffee => '示例：10 枚邮票 = 免费咖啡';
+
+  @override
+  String get facePhotoAdded => '添加脸部照片';
+
+  @override
+  String get failedToAddProgram => '添加程序失败';
+
+  @override
+  String get failedToAddStamp => '添加印章失败';
+
+  @override
+  String get failedToEnrollCustomer => '注册客户失败';
+
+  @override
+  String get failedToExchangeContact => '交换联系方式失败';
+
+  @override
+  String get failedToLoadPrograms => '无法加载程序';
+
+  @override
+  String get failedToPlaceOrder => '下单失败';
+
+  @override
+  String get failedToRemove => '删除失败';
+
+  @override
+  String get failedToSave => '保存失败';
+
+  @override
+  String get failedToSaveJPG => '保存 JPG 失败';
+
+  @override
+  String get failedToSavePNG => '保存 PNG 失败';
+
+  @override
+  String get failedToSaveQRCode => '保存二维码失败。';
+
+  @override
+  String get failedToSaveBusinessDetails => '无法保存商家详细信息';
+
+  @override
+  String get failedToUpdateStatus => '更新状态失败';
+
+  @override
+  String get firstName => '名';
+
+  @override
+  String get foodBeverage => '食品及饮料';
+
+  @override
+  String get freeDessert => '免费甜点';
+
+  @override
+  String get galleryPermissionRequiredPleaseEnableItInSettings =>
+      '需要画廊许可。请在“设置”中启用它。';
+
+  @override
+  String get getStarted => '开始使用';
+
+  @override
+  String get go2 => '去';
+
+  @override
+  String get goToToolsLinkedDevices => '转到工具 → 链接的设备';
+
+  @override
+  String get googleWalletSetupPending => 'Google 电子钱包设置待处理。';
+
+  @override
+  String get googleWalletSetupPendingProfileLinkCopied =>
+      'Google 电子钱包设置待处理。个人资料链接已复制。';
+
+  @override
+  String get growYourBusiness => '拓展您的业务';
+
+  @override
+  String get guestUser => '访客用户';
+
+  @override
+  String get ibanNumber => '国际银行号码';
+
+  @override
+  String get inOFFICE => '在办公室';
+
+  @override
+  String get invitationPending => '邀请待定';
+
+  @override
+  String get invitationDeclined => '邀请被拒绝';
+
+  @override
+  String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
+      '邀请已发送。员工接受后将被添加。';
+
+  @override
+  String get inviteEmployee => '邀请员工';
+
+  @override
+  String get inviteAsEmployee => '邀请成为员工';
+
+  @override
+  String get jobTitle2 => '职称';
+
+  @override
+  String get lastName => '姓';
+
+  @override
+  String get logInWithQR => '使用二维码登录';
+
+  @override
+  String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
+      '仅注销该帐户吗？其他帐户将保留在该手机上。';
+
+  @override
+  String get loggedInWithGoogleDemoAccountSaimY => '使用 Google 登录（模拟帐户：Saim Y）';
+
+  @override
+  String get loggingYouIn => '正在让您登录...';
+
+  @override
+  String get loginFailedTryAgain => '登录失败。再试一次。';
+
+  @override
+  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+
+  @override
+  String get mmmmYyyy => 'MMMM 年';
+
+  @override
+  String get markAttendance => '标记出勤率';
+
+  @override
+  String get myName => '我的名字';
+
+  @override
+  String get myTapniProfile => '我的塔普尼个人资料';
+
+  @override
+  String get nameCannotBeEmpty => '名称不能为空';
+
+  @override
+  String get newLabel => '新的';
+
+  @override
+  String get noContactsYet => '还没有联系方式';
+
+  @override
+  String get noDetailsYet => '尚无详细信息';
+
+  @override
+  String get noLinksAddedYetNTapAddLinkToGetStarted =>
+      '尚未添加链接。\\n点击“添加链接”即可开始。';
+
+  @override
+  String get noMatches => '没有匹配项';
+
+  @override
+  String get noReasonProvided => '没有提供理由。';
+
+  @override
+  String get notEnrolled => '未注册';
+
+  @override
+  String get numberOfStamps => '邮票数量';
+
+  @override
+  String get oneTapToShare => '一键分享';
+
+  @override
+  String get openBarqodyOnYourOtherPhone => '在您的另一部手机上打开 Barqody';
+
+  @override
+  String get openCamera => '打开相机';
+
+  @override
+  String get orderInfo => '订单信息';
+
+  @override
+  String get paperCard2 => '纸卡';
+
+  @override
+  String get passwordMustBeAtLeast4Characters => '密码必须至少为 4 个字符';
+
+  @override
+  String get passwordMustBeAtLeast6Characters => '密码必须至少为 6 个字符';
+
+  @override
+  String get phoneNumber => '电话号码';
+
+  @override
+  String get phoneIsRequired => '电话为必填项';
+
+  @override
+  String get phoneNumber2 => '电话号码';
+
+  @override
+  String get pickLocation => '选择地点';
+
+  @override
+  String get pleaseEnterAPassword => '请输入密码';
+
+  @override
+  String get pleaseEnterAUsername => '请输入用户名';
+
+  @override
+  String get pleaseEnterAValidEmailAddress => '请输入有效的电子邮件地址';
+
+  @override
+  String get pleaseEnterAValidNumberOfStamps => '请输入有效的邮票数量';
+
+  @override
+  String get pleaseEnterYourEmail => '请输入您的电子邮件';
+
+  @override
+  String get pleaseEnterYourName => '请输入您的姓名';
+
+  @override
+  String get pleaseEnterYourPassword => '请输入您的密码';
+
+  @override
+  String get pointTheCameraAtAQRCodeToScanAutomatically => '将相机对准二维码即可自动扫描。';
+
+  @override
+  String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
+      '将相机对准事件徽章并点击相机按钮。';
+
+  @override
+  String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
+      '将相机对准纸卡并点击相机按钮。';
+
+  @override
+  String get preparingQRCode => '正在准备二维码...';
+
+  @override
+  String get profileNotFound => '未找到个人资料。';
+
+  @override
+  String get profileUpdatedSuccessfully => '个人资料更新成功！';
+
+  @override
+  String get qrCodeSavedToGallery => '二维码已保存至图库！';
+
+  @override
+  String get qrCodeExpired => '二维码已过期';
+
+  @override
+  String get qrCodeExpiredTapRefresh => '二维码已过期。点击刷新。';
+
+  @override
+  String get realEstate => '房地产';
+
+  @override
+  String get receiptAttached => '附收据';
+
+  @override
+  String
+  get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
+      '续订您的订阅以恢复对您的高级功能和数据的完全访问权限。';
+
+  @override
+  String get retakePhoto => '重拍照片';
+
+  @override
+  String get rewardTitle => '奖励称号';
+
+  @override
+  String get rewardUnlocked => '奖励已解锁🎉';
+
+  @override
+  String get roleOrCompany => '角色或公司';
+
+  @override
+  String get saveChanges => '保存更改';
+
+  @override
+  String get saveContact => '保存联系方式';
+
+  @override
+  String get saveProfile => '保存个人资料';
+
+  @override
+  String get saveSettings => '保存设置';
+
+  @override
+  String get saveUsername => '保存用户名';
+
+  @override
+  String get saveCard => '保存卡';
+
+  @override
+  String get saveContact2 => '保存联系方式';
+
+  @override
+  String get savedLocallySyncMayHaveFailed => '保存在本地。同步可能失败。';
+
+  @override
+  String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
+      '扫描二维码或添加您遇到的人来建立您的网络。';
+
+  @override
+  String get scannedViaQR => '通过二维码扫描';
+
+  @override
+  String get screenTheme => '屏幕主题';
+
+  @override
+  String get searchFailedTryAgain => '搜索失败。再试一次。';
+
+  @override
+  String get selectCompany => '选择公司';
+
+  @override
+  String get selectDateRange => '选择日期范围';
+
+  @override
+  String get selectEndDate => '选择结束日期';
+
+  @override
+  String get selectStartDate => '选择开始日期';
+
+  @override
+  String get sendInvitation => '发送邀请';
+
+  @override
+  String get sendInvitationForAttendance => '发送出席邀请';
+
+  @override
+  String get shareLink => '分享链接';
+
+  @override
+  String get shiftTiming => '换档时间';
+
+  @override
+  String get smartContactCapture => '智能接触捕捉';
+
+  @override
+  String get stampBorderColor => '邮票边框颜色';
+
+  @override
+  String get stampColor => '印章颜色';
+
+  @override
+  String get stampIconsOptional => '印章图标（可选）';
+
+  @override
+  String get stampsGiven => '赠送邮票';
+
+  @override
+  String get startBuildingYourNetwork => '开始建立你的网络';
+
+  @override
+  String get streetName => '街道名称';
+
+  @override
+  String get switchToABusinessAccountToUnlockFullAccess => '切换到企业帐户以解锁完全访问权限。';
+
+  @override
+  String get tapLinkADeviceAndScanThisQR => '点击链接设备并扫描此二维码';
+
+  @override
+  String get tapToAddImage => '点击添加图像';
+
+  @override
+  String get tapToChange => '点击即可更改';
+
+  @override
+  String get templateAppliedLocallySyncFailed => '本地应用的模板。同步失败。';
+
+  @override
+  String get textColor => '文字颜色';
+
+  @override
+  String get thisAccount => '这个账号';
+
+  @override
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
+      '此功能专供企业用户使用。';
+
+  @override
+  String get thisPersonIsOnYourTeam => '此人在您的团队中';
+
+  @override
+  String get thisProgramIsPaused => '该节目已暂停';
+
+  @override
+  String get totalStamps => '邮票总数';
+
+  @override
+  String get tryADifferentNameEmailOrCompany => '尝试使用不同的名称、电子邮件或公司。';
+
+  @override
+  String get unableToSaveProfileTryAgain => '无法保存个人资料。再试一次。';
+
+  @override
+  String get unableToUpdateUsernameTryAgain => '无法更新用户名。再试一次。';
+
+  @override
+  String get underDevelopmentLoginViaEmailPasswordInstead2 =>
+      '正在开发 - 通过电子邮件/密码登录。';
+
+  @override
+  String get unknownUser => '未知用户';
+
+  @override
+  String get updateGPSLocation => '更新 GPS 位置';
+
+  @override
+  String get updateStatus => '更新状态';
+
+  @override
+  String get updateCart => '更新购物车';
+
+  @override
+  String get updateItem => '更新项目';
+
+  @override
+  String get upgradeTo2 => '升级至';
+
+  @override
+  String get upgradeToBusinessPRO => '升级至商务专业版';
+
+  @override
+  String get uploadReceiptOptional => '上传收据（可选）';
+
+  @override
+  String get useMyLocation => '使用我的位置';
+
+  @override
+  String get useLettersNumbersUnderscoresOrHyphensOnly => '仅使用字母、数字、下划线或连字符';
+
+  @override
+  String get usernameMustBeAtLeast3Characters => '用户名必须至少 3 个字符';
+
+  @override
+  String get usernameMustBeAtMost30Characters => '用户名不得超过 30 个字符';
+
+  @override
+  String get usernameUpdatedSuccessfully => '用户名更新成功！';
+
+  @override
+  String get waitingForThemToAccept => '等待他们接受';
+
+  @override
+  String get websiteURL => '网站网址';
+
+  @override
+  String get weekendDays => '周末';
+
+  @override
+  String get workLocation => '工作地点';
+
+  @override
+  String get yourPROSubscriptionHasExpiredNN => '您的 PRO 订阅已过期。\\n\\n';
+
+  @override
+  String get yourPROSubscriptionHasExpired => '您的 PRO 订阅已过期。';
+
+  @override
+  String get premiumFeaturesAreCurrentlyDisabled => '高级功能目前已被禁用。';
+
+  @override
+  String get proLinksAreHiddenFromYourPublicProfile => '专业版链接在您的公开个人资料中隐藏。';
+
+  @override
+  String get yourBusinessDetailsAndDataAreSafe => '您的业​​务详细信息和数据是安全的。';
+
+  @override
+  String addCatalogItem(String label) {
+    return '添加 $label 项目';
+  }
+
+  @override
+  String addAtLeastOneCatalogItem(String label) {
+    return '添加至少一项 $label 项目';
+  }
+
+  @override
+  String noCatalogItemsAvailable(String label) {
+    return '没有可用的 $label 项目。';
+  }
+
+  @override
+  String noItemsYetAddFirstCatalogItem(String label) {
+    return '还没有商品。添加您的第一个 $label 项目。';
+  }
+
+  @override
+  String noPublicProfileMatchesQuery(String query) {
+    return '没有公开的个人资料与“@$query”匹配。';
+  }
+
+  @override
+  String codeWithValue(String code) {
+    return '代码：$code';
+  }
 }
 
 /// The translations for Chinese, as used in Hong Kong (`zh_HK`).
@@ -4075,821 +4716,803 @@ class AppLocalizationsZhHk extends AppLocalizationsZh {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => '工具';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => '帳戶設定';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => '通知';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => '為你';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => '您的個人資料';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => '編輯個人資料';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => '更改您的姓名、照片和簡介';
 
   @override
-  String get username => 'Username';
+  String get username => '使用者名稱';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle => '設定您唯一的個人資料用戶名';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => '社群連結';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle => '新增 Instagram、WhatsApp、網站等';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => '公開資料';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => '任何人都可以找到並查看您的個人資料';
 
   @override
-  String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+  String get publicProfileOff => '隱藏在搜尋中 - 其他人無法發現您';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => '分享我的二維碼';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle => '讓其他人掃描您的數位名片';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => '購物和獎勵';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => '我的訂單';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => '追蹤您從商店下的訂單';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => '我的獎勵卡';
 
   @override
-  String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+  String get myRewardCardsSubtitle => '查看忠誠度計劃的印章和積分';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => '職場';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => '員工邀請函';
 
   @override
-  String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+  String get employeeInvitationsSubtitle => '接受或拒絕企業的團隊邀請';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => '工作場所簽到';
 
   @override
-  String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+  String get workplaceCheckInSubtitle => '在工作地點打卡上下班';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => '帳戶和設備';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => '連結設備';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => '連接另一部手機，例如 WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => '帳戶';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => '新增或切換帳戶';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return '在 $count 帳戶之間切換';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => '幫助和帳戶';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => '應用語言';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => '更改應用程式中使用的語言';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => '搜尋語言';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => '手機語言';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => '語言已更新';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => '幫助和常見問題解答';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => '常見問題解答';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => '傳送回饋';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle => '報告錯誤或建議新功能';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => '退出';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => '退出此會話';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => '取消';
 
   @override
-  String get save => 'Save';
+  String get save => '節省';
 
   @override
-  String get done => 'Done';
+  String get done => '完畢';
 
   @override
-  String get str => 'بطاقة أعمال الرقمية';
+  String get str => '🌈🌈🌈🌈';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '（唯讀）';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 點 = 100 PKR（規則範例）';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '需要 10 張郵票';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '市主街 123 號';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 天前';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 個字元。僅限字母、數字、底線和連字符。';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => '接受';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => '訪問受限';
 
   @override
-  String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+  String get accountIBANAddAccountNumberHere => '帳戶/IBAN：在此新增帳號';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => '帳戶名稱：Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => '積極的';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => '積極的';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => '活動卡';
 
   @override
-  String get add => 'Add';
+  String get add => '添加';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => '新增註釋...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => '新增帳戶';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst => '首先新增至少一個類別';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      '按顯示順序新增類別（例如快餐，然後是德西）';
 
   @override
-  String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+  String get addCategoriesInYourCatalogSettingsFirst => '首先在目錄設定中新增類別。';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => '新增聯絡人';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => '添加連結';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow => '在下面添加指向您個人資料的鏈接';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      '首先將連結新增到您的個人資料，然後在此處啟用它們。';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => '添加徽標';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => '添加積分';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => '新增節目';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => '新增圖章';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => '加入 Google 錢包';
 
   @override
-  String get address => 'Address';
+  String get address => '地址';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => '全部';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => '都追上了！';
 
   @override
-  String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+  String get allNotificationsMarkedAsRead => '所有通知均標記為已讀！';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => '允許拍照';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      '允許此設備存取您的 Barqody 帳戶嗎？您可以隨時從連結的裝置中將其刪除。';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => '已經有帳戶？';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => '分析儀表板';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => '有什麼特殊要求...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => '申請';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => '應用設計';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => '應用程式模板';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => '升序';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      '請您的企業掃描您的二維碼並將您新增為員工';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => '分配類別';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => '分配的程序';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => '至少 6 個字符';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => '今天出席人數已完成';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => '可用插槽';
 
   @override
-  String get background => 'Background';
+  String get background => '背景';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => '背景顏色';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => '銀行帳戶';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => '銀行詳情';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => '銀行：在此新增銀行名稱';
 
   @override
   String get barqody => 'Barqody';
 
   @override
-  String get barqodyV100 => 'barqody v1.0.0';
+  String get barqodyV100 => '巴科迪 v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => '最超值';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => '帳單金額';
 
   @override
-  String get bio => 'BIO';
+  String get bio => '生物';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => '簡介';
 
   @override
-  String get book => 'Book';
+  String get book => '書';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => '預訂日期';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => '預訂時間表';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => '預訂時間';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => '商業';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => '業務類別';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => '業務詳情';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => '公司名稱';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => '商業選擇';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => '商業項目';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => '僅限商業用戶';
 
   @override
-  String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+  String get bySigningUpYouAgreeToOurTermsAndConditions => '註冊即表示您同意我們的條款和條件。';
 
   @override
-  String get call => 'Call';
+  String get call => '稱呼';
 
   @override
-  String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+  String get cameraPermissionIsRequiredToScan => '需要相機許可才能掃描。';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => '隨時取消。';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => '取消訂單';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => '捕捉新聯絡人';
 
   @override
-  String get categories => 'Categories';
+  String get categories => '類別';
 
   @override
-  String get category => 'Category *';
+  String get category => '類別 *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => '類別已存在';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => '類別名稱';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => '報到';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => '查看';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      '為您的個人資料連結選擇一個唯一的使用者名稱。';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => '選擇計劃';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => '選擇模板';
 
   @override
-  String get close => 'Close';
+  String get close => '關閉';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => '複製程式碼';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => '即將推出';
 
   @override
-  String get company => 'Company';
+  String get company => '公司';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => '公司員工卡';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => '公司';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => '完成這些步驟';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => '確認並添加積分';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => '確認預訂';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => '確認地點';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => '確認兌換';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => '關聯帳戶';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => '聯絡人添加成功！';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => '聯絡卡';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => '聯絡方式交換成功！';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => '聯繫來源';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => '聯絡方式更新成功！';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => '聯絡方式';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => '繼續';
 
   @override
-  String get copied => 'Copied';
+  String get copied => '已複製';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => '複製程式碼';
 
   @override
-  String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+  String get couldNotGetLocationPleaseEnableGPSPermission => '無法取得位置。請開啟GPS權限。';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => '無法切換帳戶';
 
   @override
-  String get create => 'Create';
+  String get create => '創造';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => '建立帳戶';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => '創建忠誠度計劃';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => '建立新連結';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => '創建程式';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => '創造獎勵';
 
   @override
-  String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+  String get createStampOrPointsRewardsForCustomers => '為客戶創建印章或積分獎勵';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => '創建你的第一張卡片';
 
   @override
-  String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+  String get createYourFirstRewardCardForCustomers => '為客戶創建您的第一張獎勵卡';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => '建立日期';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      '用於加蓋和未加蓋插槽的自訂影像。如果未設置，則使用預設值。';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => '自訂連結';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => '客戶詳情';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => '客戶註冊成功';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => '客戶尚未註冊';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => '顧客未出現';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => '客戶訂單';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => '客製化卡片設計';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => '客製化設計';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      '自訂您的個人資料、解鎖 PRO 模板並獲得無限的潛在客戶。';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => '客製化你自己';
 
   @override
-  String get date => 'Date';
+  String get date => '日期';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => '日期範圍';
 
   @override
-  String get decline => 'Decline';
+  String get decline => '衰退';
 
   @override
-  String get delete => 'Delete';
+  String get delete => '刪除';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => '刪除卡？';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => '刪除類別';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => '刪除聯絡人';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => '刪除獎勵？';
 
   @override
-  String get descending => 'Descending';
+  String get descending => '降序';
 
   @override
-  String get description => 'Description';
+  String get description => '描述';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => '說明（可選）';
 
   @override
-  String get details => 'Details';
+  String get details => '細節';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => '裝置連結';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => '設備已登出';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => '設備狀態';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => '數位名片';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => '數位名片';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => '沒有帳戶？';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => '例如快餐';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => '例如不加糖，特別辣…';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => '獲得 50 點';
 
   @override
-  String get edit => 'Edit';
+  String get edit => '編輯';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => '編輯卡';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => '編輯詳細信息';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => '編輯個人資料';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => '編輯設定';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => '編輯您的個人資料詳細信息';
 
   @override
-  String get email => 'Email';
+  String get email => '電子郵件';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => '電子郵件和密碼';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => '電子郵件';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => '信箱登入或掃描二維碼';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => '員工卡';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => '員工卡';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => '員工臉部照片';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => '空槽';
 
   @override
-  String get end => 'END';
+  String get end => '結尾';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => '結束日期';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => '結束時間';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => '登記客戶';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => '輸入帳單金額';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => '輸入代碼';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => '輸入代碼代替';
 
   @override
-  String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+  String get enterNetworkingContactDetailsBelow => '在下面輸入網路聯絡方式。';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => '輸入你的名字';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => '輸入您的密碼';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => '活動徽章';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => '交流聯絡方式';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => '交換聯絡方式...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => '探索';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => '無法更新聯絡人。';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => '已填槽';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => '過濾聯絡人';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => '過濾聯絡人';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => '在 BarQody 上找人';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => '尋找用戶';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => '尋找用戶';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => '尋找用戶名';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => '忘記了？';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => '免費咖啡';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => '姓名';
 
   @override
-  String get general => 'General';
+  String get general => '一般的';
 
   @override
-  String get go => 'Go';
+  String get go => '去';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => '開展業務';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => '客人';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => '你好，';
 
   @override
-  String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+  String get helpCenterIsDisabledInThisUIDemo => '此 UI 演示中禁用了幫助中心。';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => '十六進位:#';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      '將二維碼放在框架內 - 它會自動掃描。';
 
   @override
-  String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+  String get howDoYouWantToDesignThisCard => '你想如何設計這張卡片？';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => '導入聯絡人';
 
   @override
-  String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+  String get importContactsIsNotAvailableYet => '導入聯絡人尚不可用。';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => '在';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => '收到的訂單';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      '個人資料 URL 無效。掃描有效的 BarQody 卡或二維碼。';
 
   @override
-  String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+  String get invalidQRCodeUseABarqodyLinkQR => '二維碼無效。使用 Barqody 連結 QR。';
 
   @override
-  String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+  String get inviteEmployeesSetShiftsAndTrackPresence => '邀請員工、設定輪班並追蹤狀態';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee => '邀請您作為員工加入';
 
   @override
-  String get janeDoe => 'Jane Doe';
+  String get janeDoe => '簡·無名氏';
 
   @override
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => '職稱';
 
   @override
-  String get johnDoe => 'John Doe';
+  String get johnDoe => '約翰·多伊';
 
   @override
-  String get johnSmith => 'John Smith';
+  String get johnSmith => '約翰史密斯';
 
   @override
-  String get johnEmailCom => 'john@email.com';
+  String get johnEmailCom => '約翰@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => '加入時間：2026 年 1 月 15 日';
 
   @override
   String get jpg => 'JPG';
@@ -4897,809 +5520,1546 @@ class AppLocalizationsZhHk extends AppLocalizationsZh {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      '確保您的帳戶安全。僅當您想要連結您信任的裝置時才掃描二維碼。';
 
   @override
-  String get label => 'Label';
+  String get label => '標籤';
 
   @override
-  String get lat => 'Lat';
+  String get lat => '緯度';
 
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      '讓其他人將手機相機對準此二維碼即可立即查看您的網路設定檔。';
 
   @override
-  String get link => 'Link';
+  String get link => '關聯';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => '連結設備';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => '在另一部手機上透過二維碼連結';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => '連結已複製到剪貼簿';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => '連結設定';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => '連結設定';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => '連結此設備？';
 
   @override
-  String get links => 'Links';
+  String get links => '連結';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => '此卡上的連結';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => '地點尚未確定';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => '需要位置許可';
 
   @override
-  String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+  String get locationPermissionRequiredForAttendance => '出席需要位置許可';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => '登入';
 
   @override
-  String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+  String get logInToManageYourDigitalCardAndNetwork => '登入以管理您的數位卡和網路。';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => '使用二維碼登入';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => '退出';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => '全部註銷';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => '註銷設備？';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => '忠誠度計劃';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => '管理類別';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => '管理聯絡人';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => '管理員工';
 
   @override
-  String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+  String get manageYourPersonalDetailsOtherPreferences => '管理您的個人詳細資料和其他偏好';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => '標記已完成';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => '每月';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => '我的卡片';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => '我的位置';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => '我的獎勵';
 
   @override
-  String get name => 'Name';
+  String get name => '姓名';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => '姓名';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => '姓名為必填項';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => '姓名@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => '新卡';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => '新卡';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => '新類別';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => '新獎勵';
 
   @override
-  String get next => 'Next';
+  String get next => '下一個';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => '下一張卡';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet => '尚未連接活動鏈接';
 
   @override
-  String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+  String get noActiveRewardProgramsAvailable => '沒有可用的主動獎勵計劃。';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => '還沒有員工卡';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => '沒有新增員工';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => '還沒有員工';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => '沒有找到雇主';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => '此類別中沒有項目。';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => '沒有可用的連結模板';
 
   @override
-  String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+  String get noNewNotificationsAtThisTime => '目前沒有新的通知。';
 
   @override
-  String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+  String get noOneHasViewedYourProfileYet => '尚未有人查看您的個人資料。';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => '沒有待處理的邀請';
 
   @override
-  String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+  String get noProgramsAssignedYetAddProgramsBelow => '尚未分配程序。添加下面的程式。';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => '此圖片中未找到二維碼。';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => '還沒有獎勵計劃';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay => '當天沒有空位';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => '沒有找到用戶';
 
   @override
-  String get none => 'None';
+  String get none => '沒有任何';
 
   @override
-  String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+  String get notAvailableOnYourCurrentPlan => '您目前的計劃不可用';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => '尚未辦理登機手續';
 
   @override
-  String get note => 'Note';
+  String get note => '筆記';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => '註釋（可選）';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => '通知已清除';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      '此處僅可編輯封面、個人資料照片、姓名和簡介。';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      '當有人掃描此卡時，僅顯示已啟用的連結。';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => '僅顯示公開個人資料';
 
   @override
-  String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+  String get onlyThisPhoneIsUsingYourAccountRightNow => '目前只有這支手機正在使用您的帳戶。';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => '或繼續';
 
   @override
-  String get order => 'Order';
+  String get order => '命令';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => '訂單詳情';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => '訂單編號';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => '未找到訂單';
 
   @override
-  String get orders => 'Orders';
+  String get orders => '訂單';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => '紙卡';
 
   @override
-  String get password => 'Password';
+  String get password => '密碼';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => '按月付費';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => '等待接受';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => '性能概覽';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => '個人資料';
 
   @override
-  String get phone => 'Phone';
+  String get phone => '電話';
 
   @override
-  String get photos => 'Photos';
+  String get photos => '照片';
 
   @override
-  String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+  String get pickAReadyMadeColorThemeQuickAndClean => '選擇現成的顏色主題。又快又乾淨。';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => '選擇顏色';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => '在地圖上選擇';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => '下訂單';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => '計劃已過期';
 
   @override
-  String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+  String get pleaseEnterBusinessDetailsToContinue => '請輸入業務詳細資訊以繼續';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => '請輸入商品名稱';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      '請在升級前提供您的業務詳細資訊。';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => '請選擇一個類別';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => '請選擇時段';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => '請先設定工作地點';
 
   @override
   String get png => 'PNG';
 
   @override
-  String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+  String get pointYourCameraAtTheQRCodeOnTheOtherDevice => '將相機對準另一台裝置上的二維碼';
 
   @override
-  String get points => 'Points';
+  String get points => '積分';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => '獲得積分';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => '進階活躍';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => '上一張卡';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => '價格（盧比）';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => '專業版模板';
 
   @override
-  String get profile => 'Profile';
+  String get profile => '輪廓';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => '個人資料檢查';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => '型材強度';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => '個人資料查看者';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => '個人資料視圖';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => '計劃詳情';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => '節目名稱';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => '找不到程式';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => '節目類型';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'QR 圖碼';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'QR 圖碼掃描';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => '數量';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => '閱讀全部';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => '只讀';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => '收到 1 枚郵票';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => '最近的活動';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => '兌換另一份獎勵';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => '兌換獎勵';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => '兌換免費咖啡';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => '刷新二維碼';
 
   @override
-  String get region => 'Region';
+  String get region => '地區';
 
   @override
-  String get rembiro => 'Rembiro';
+  String get rembiro => '倫比羅';
 
   @override
-  String get remove => 'Remove';
+  String get remove => '消除';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => '刪除員工';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => '更新計劃';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => '請求待處理';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => '請求待處理';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => '請求被拒絕';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => '請求訂閱';
 
   @override
-  String get reset => 'Reset';
+  String get reset => '重置';
 
   @override
-  String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+  String get rewardCompletedShowThisCardToRedeem => '獎勵完成！出示此卡即可兌換。';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => '獎勵完成！ 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => '獎勵詳情';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => '獎勵計劃';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => '獎勵計劃';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => '獎勵已兌換！';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => '獎勵';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => '獲得的獎勵';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '每月收費 1,600 盧比';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => '每年收費 8,300 盧比';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => '節省';
 
   @override
-  String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+  String get saveYourWorkIDCardToPhoneOrWallet => '將您的工作 ID 卡儲存到手機或錢包中';
 
   @override
-  String get scan => 'Scan';
+  String get scan => '掃描';
 
   @override
-  String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+  String get scanAUserQRCodeToAddThemAsEmployee => '掃描用戶二維碼將其新增為員工';
 
   @override
-  String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+  String get scanAnyUserOrBusinessQRToAddEmployee => '掃描任何使用者或企業二維碼新增員工';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => '掃描商家二維碼即可兌換';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => '掃描客戶二維碼';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => '掃描員工檔案';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => '掃描二維碼';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => '掃描二維碼/出示二維碼';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => '掃描二維碼';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice => '掃描其他裝置上顯示的二維碼';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => '掃描邀請';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => '按使用者名稱搜尋...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => '搜尋連結';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => '搜尋姓名、電子郵件或公司';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => '看全部';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      '看到所有活動都被嘲笑。隨著線索的添加，新的活動將會出現。';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => '選擇日期';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => '選擇標記';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => '選擇地區';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => '在連結圖示下方設定文本';
 
   @override
-  String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+  String get setYourOwnColorsPhotosAndBackground => '設定您自己的顏色、照片和背景。';
 
   @override
-  String get share => 'Share';
+  String get share => '分享';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => '共享卡';
 
   @override
-  String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+  String get shareDifferentLinksOnEachCard => '在每張卡片上共享不同的鏈接';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => '分享個人資料';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => '顯示連結';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => '在此卡上顯示';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => '使用 Google 登入';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => '報名';
 
   @override
-  String get skip => 'Skip';
+  String get skip => '跳過';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => '暫時跳過';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => '時隙（分鐘）';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => '軟體工程師';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => '出了點問題';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => '排序選項';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => '特別說明';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => '郵票卡';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => '郵票圖示';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => '郵票';
 
   @override
-  String get start => 'START';
+  String get start => '開始';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => '開始日期';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => '開始時間';
 
   @override
-  String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+  String get startNetworkingSmarterWithBarqody => '透過 Barqody 開始更聰明的網路。';
 
   @override
-  String get stats => 'Stats';
+  String get stats => '統計數據';
 
   @override
-  String get status => 'Status';
+  String get status => '地位';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => '訂閱';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => '已提交訂閱請求';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => '已提交訂閱請求。';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => '滑動即可瀏覽卡片';
 
   @override
-  String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+  String get takeAQuickSelfieForAttendanceVerification => '快速自拍以驗證出席情況';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      '點擊上面的「社群連結」即可新增並啟動個人資料。';
 
   @override
-  String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+  String get tapOnTheMapOrUseYourCurrentLocation => '點擊地圖或使用您目前的位置';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => '點擊即可新增照片';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => '點擊分享二維碼';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => '團隊出勤';
 
   @override
-  String get template => 'Template';
+  String get template => '範本';
 
   @override
-  String get templates => 'Templates';
+  String get templates => '範本';
 
   @override
-  String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+  String get thankYouFeedbackSubmissionsAreMockOnly => '謝謝你！回饋提交僅是模擬的。';
 
   @override
-  String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+  String get thisCardAndItsQRCodeWillBeRemoved => '該卡及其二維碼將被刪除。';
 
   @override
-  String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers => '此功能專供企業用戶使用。';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => '這已經是您的用戶名了。';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => '本月';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      '這將永久刪除此獎勵計劃及其所有註冊。';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => '今天是你的週末';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => '今天 • 下午 3:15';
 
   @override
-  String get total => 'Total';
+  String get total => '全部的';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => '追蹤您的訂單';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => '交易參考（可選）';
 
   @override
-  String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+  String get transactionReferenceNumberOptional => '交易參考號碼（可選）';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => '再試一次';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => '嘗試商務專業版';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => '嘗試商務專業版。';
 
   @override
-  String get type => 'Type';
+  String get type => '類型';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      '輸入至少 2 個字元的使用者名稱進行搜尋。';
 
   @override
-  String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+  String get typeThe8CharacterCodeShownUnderTheQR => '輸入二維碼下方顯示的 8 個字元代碼。';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      '正在開發 - 透過電子郵件/密碼登入。';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => '取消標記圖標';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => '立即升級';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => '升級至';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => '升級到 Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => '使用模板';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      '在其他手機或平板電腦上使用 Barqody。您隨時掌控一切 — 隨時登出任何設備。';
 
   @override
-  String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+  String get useBarqodyOnYourPhoneToScanThisCode => '使用手機上的 Barqody 掃描此代碼';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => '使用預設圖標';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => '使用這張照片';
 
   @override
-  String get user => 'USER';
+  String get user => '使用者';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => '版本：1.0.1';
 
   @override
-  String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+  String get viewAndUpdateOrdersFromYourCustomers => '查看和更新​​客戶的訂單';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => '查看資料';
 
   @override
-  String get views => 'Views';
+  String get views => '意見';
 
   @override
-  String get website => 'Website';
+  String get website => '網站';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => '歡迎回來';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => '歡迎來到帳戶中心';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      '當企業將您新增為員工時，您的員工卡將顯示在此。您可以隨時自訂其設計。';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      '當企業將您納入其獎勵計劃時，該計劃將顯示在此處。';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      '當企業邀請您加入他們的團隊時，它會出現在此。';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      '關閉後，此連結將不會顯示在您的個人資料上';
 
   @override
-  String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+  String get writeSomethingAboutYouOrYourBrand => '寫一些關於您或您的品牌的信息';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => '每年';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => '昨天 • 下午 5:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => '您的類別';
 
   @override
-  String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+  String get yourEmployeeCardsFromEmployers => '雇主給您的員工卡';
 
   @override
-  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed => '您的免費咖啡已成功兌換。';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => '您的獎勵';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      '您的訂閱已結束。點擊資訊圖示了解詳細資訊。';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => '你的名字';
+
+  @override
+  String get n10Discount => '10% 折扣';
+
+  @override
+  String get avatarTAPPED => '已點擊頭像';
+
+  @override
+  String get accountHolderName => '帳戶持有人姓名';
+
+  @override
+  String get accountNumber => '帳號';
+
+  @override
+  String get activeNow => '現在活躍';
+
+  @override
+  String get addBio => '新增個人簡介';
+
+  @override
+  String get addCoverPhoto => '新增封面照片';
+
+  @override
+  String get addFacePhoto => '添加臉部照片';
+
+  @override
+  String get addIntroVoiceNote => '新增介紹性語音註釋';
+
+  @override
+  String get addProfileName => '新增個人資料名稱';
+
+  @override
+  String get addProfilePhoto => '新增個人資料照片';
+
+  @override
+  String get addSocialLinks3 => '新增社群連結 (3+)';
+
+  @override
+  String get addItem => '新增項目';
+
+  @override
+  String get addLink2 => '添加連結';
+
+  @override
+  String get addLinksToYourProfileBelow2 => '在下面添加指向您個人資料的鏈接';
+
+  @override
+  String get addPhoto => '添加照片';
+
+  @override
+  String get addToCart => '加入購物車';
+
+  @override
+  String get addressOptional => '地址（可選）';
+
+  @override
+  String get allContactTypes => '所有聯絡人類型';
+
+  @override
+  String get allowedRadiusMeters => '允許半徑（公尺）';
+
+  @override
+  String get almostThere => '快到了！';
+
+  @override
+  String get alreadyEmployee => '已經是員工';
+
+  @override
+  String get alreadyHaveAnAccount2 => '已經有帳戶？';
+
+  @override
+  String get alwaysUpToDate => '始終保持最新狀態';
+
+  @override
+  String get areYouSureYouWantToLogOutOfBarqody => '您確定要退出 Barqody 嗎？';
+
+  @override
+  String get attendanceFailed => '考勤失敗';
+
+  @override
+  String get backgroundColor2 => '背景顏色';
+
+  @override
+  String get bookingFailed => '預訂失敗';
+
+  @override
+  String get brieflyDescribeThisReward => '簡單描述一下這個獎勵...';
+
+  @override
+  String get businessVerified => '業務已驗證';
+
+  @override
+  String get businessEmailAddress => '企業電子郵件地址';
+
+  @override
+  String get businessFax => '商務傳真';
+
+  @override
+  String get businessPhoneNumber => '商務電話號碼';
+
+  @override
+  String get businessWebsite => '企業網站';
+
+  @override
+  String get cameraError => '相機錯誤';
+
+  @override
+  String get captureFace => '捕捉人臉';
+
+  @override
+  String get cardCompleted => '卡片已完成';
+
+  @override
+  String get cardLabel => '卡標籤';
+
+  @override
+  String get cardLabelName => '卡標籤名稱';
+
+  @override
+  String get cardPreview => '卡片預覽';
+
+  @override
+  String get cardTheme => '卡片主題';
+
+  @override
+  String get cardCreated => '卡已創建';
+
+  @override
+  String get cardName => '卡名';
+
+  @override
+  String get cardSavedAsJPG => '卡片另存為 JPG';
+
+  @override
+  String get cardSavedAsPNG => '卡片另存為 PNG';
+
+  @override
+  String get cardUpdated => '卡片已更新';
+
+  @override
+  String get changePhoto => '更改照片';
+
+  @override
+  String get checkInFace => '簽到臉';
+
+  @override
+  String get checkInSuccessful => '入住成功';
+
+  @override
+  String get checkOutFace => '結帳臉';
+
+  @override
+  String get checkOutSuccessful => '退房成功';
+
+  @override
+  String get chooseTemplate2 => '選擇模板';
+
+  @override
+  String get contactCardBusinessAddress => '聯絡卡營業地址';
+
+  @override
+  String get contactCardCompanyName => '聯絡卡公司名稱';
+
+  @override
+  String get contactCardEmail => '聯絡卡電子郵件';
+
+  @override
+  String get contactCardHomeAddress => '聯絡卡家庭住址';
+
+  @override
+  String get contactCardPhone => '聯絡卡電話';
+
+  @override
+  String get contactCardWebsite => '聯絡卡網站';
+
+  @override
+  String get couldNotCompleteLogin => '無法完成登入';
+
+  @override
+  String get couldNotCreateQRCode => '無法建立二維碼';
+
+  @override
+  String get couldNotLinkDevice => '無法連結設備';
+
+  @override
+  String get couldNotLogOutDevice => '無法註銷設備';
+
+  @override
+  String get couldNotOpenGoogleWallet => '無法打開 Google 電子錢包';
+
+  @override
+  String get couldNotSaveCardDesign => '無法儲存卡片設計';
+
+  @override
+  String get couldNotUpdateProfileVisibility => '無法更新個人資料可見性';
+
+  @override
+  String get createGallery => '創建畫廊';
+
+  @override
+  String get createACardToShareYourProfile => '建立一張卡片來分享您的個人資料';
+
+  @override
+  String get createCard => '創建卡片';
+
+  @override
+  String get customBank => '海關銀行';
+
+  @override
+  String get customersCanBeEnrolledAndStamped => '客戶可以註冊並蓋章';
+
+  @override
+  String get customizeCard => '客製化卡片';
+
+  @override
+  String get describeYourLoyaltyProgram => '描述您的忠誠度計劃';
+
+  @override
+  String get displayName => '顯示名稱';
+
+  @override
+  String get dontHaveAnAccount2 => '沒有帳戶？';
+
+  @override
+  String get eeeDMMMYyyy => 'EEE，d MMM yyyy';
+
+  @override
+  String get editReward => '編輯獎勵';
+
+  @override
+  String get editItem => '編輯項目';
+
+  @override
+  String get emailAddress2 => '電子郵件';
+
+  @override
+  String get emailIsRequired => '電子郵件為必填項';
+
+  @override
+  String get employeeCards => '員工卡';
+
+  @override
+  String get employeeRemoved => '員工被移除';
+
+  @override
+  String get employeeSettingsSaved => '已儲存員工設定';
+
+  @override
+  String get enrolledBusinesses => '註冊企業';
+
+  @override
+  String get enterAValidEmail => '輸入有效的電子郵件';
+
+  @override
+  String get enterBioForTheContactCard => '輸入聯絡人卡的簡介';
+
+  @override
+  String get enterProgramName => '輸入程式名稱';
+
+  @override
+  String get enterYourBio => '輸入您的個人簡介';
+
+  @override
+  String get enterYourPhoneNumber => '輸入您的電話號碼';
+
+  @override
+  String get enterYourWebsiteURL => '輸入您的網站網址';
+
+  @override
+  String get eventBadge2 => '活動徽章';
+
+  @override
+  String get example10StampsFreeCoffee => '範例：10 枚郵票 = 免費咖啡';
+
+  @override
+  String get facePhotoAdded => '添加臉部照片';
+
+  @override
+  String get failedToAddProgram => '新增程式失敗';
+
+  @override
+  String get failedToAddStamp => '添加印章失敗';
+
+  @override
+  String get failedToEnrollCustomer => '註冊客戶失敗';
+
+  @override
+  String get failedToExchangeContact => '交換聯絡方式失敗';
+
+  @override
+  String get failedToLoadPrograms => '無法載入程式';
+
+  @override
+  String get failedToPlaceOrder => '下單失敗';
+
+  @override
+  String get failedToRemove => '刪除失敗';
+
+  @override
+  String get failedToSave => '保存失敗';
+
+  @override
+  String get failedToSaveJPG => '儲存 JPG 失敗';
+
+  @override
+  String get failedToSavePNG => '保存 PNG 失敗';
+
+  @override
+  String get failedToSaveQRCode => '儲存二維碼失敗。';
+
+  @override
+  String get failedToSaveBusinessDetails => '無法保存商家詳細信息';
+
+  @override
+  String get failedToUpdateStatus => '更新狀態失敗';
+
+  @override
+  String get firstName => '名';
+
+  @override
+  String get foodBeverage => '食品及飲料';
+
+  @override
+  String get freeDessert => '免費甜點';
+
+  @override
+  String get galleryPermissionRequiredPleaseEnableItInSettings =>
+      '需要畫廊許可。請在“設定”中啟用它。';
+
+  @override
+  String get getStarted => '開始使用';
+
+  @override
+  String get go2 => '去';
+
+  @override
+  String get goToToolsLinkedDevices => '前往工具 → 連結的設備';
+
+  @override
+  String get googleWalletSetupPending => 'Google 電子錢包設定待處理。';
+
+  @override
+  String get googleWalletSetupPendingProfileLinkCopied =>
+      'Google 電子錢包設定待處理。個人資料連結已複製。';
+
+  @override
+  String get growYourBusiness => '拓展您的業務';
+
+  @override
+  String get guestUser => '訪客用戶';
+
+  @override
+  String get ibanNumber => '國際銀行號碼';
+
+  @override
+  String get inOFFICE => '在辦公室';
+
+  @override
+  String get invitationPending => '邀請待定';
+
+  @override
+  String get invitationDeclined => '邀請被拒絕';
+
+  @override
+  String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
+      '邀請已發送。員工接受後會被加入。';
+
+  @override
+  String get inviteEmployee => '邀請員工';
+
+  @override
+  String get inviteAsEmployee => '邀請成為員工';
+
+  @override
+  String get jobTitle2 => '職稱';
+
+  @override
+  String get lastName => '姓';
+
+  @override
+  String get logInWithQR => '使用二維碼登入';
+
+  @override
+  String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
+      '僅註銷該帳號嗎？其他帳號將保留在該手機上。';
+
+  @override
+  String get loggedInWithGoogleDemoAccountSaimY => '使用 Google 登入（模擬帳戶：Saim Y）';
+
+  @override
+  String get loggingYouIn => '正在讓您登入...';
+
+  @override
+  String get loginFailedTryAgain => '登入失敗。再試一次。';
+
+  @override
+  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+
+  @override
+  String get mmmmYyyy => 'MMMM 年';
+
+  @override
+  String get markAttendance => '標記出勤率';
+
+  @override
+  String get myName => '我的名字';
+
+  @override
+  String get myTapniProfile => '我的塔普尼個人資料';
+
+  @override
+  String get nameCannotBeEmpty => '名稱不能為空';
+
+  @override
+  String get newLabel => '新的';
+
+  @override
+  String get noContactsYet => '還沒有聯絡方式';
+
+  @override
+  String get noDetailsYet => '尚無詳細資訊';
+
+  @override
+  String get noLinksAddedYetNTapAddLinkToGetStarted =>
+      '尚未添加連結。 \\n點擊「新增連結」即可開始。';
+
+  @override
+  String get noMatches => '沒有匹配項';
+
+  @override
+  String get noReasonProvided => '沒有提供理由。';
+
+  @override
+  String get notEnrolled => '未註冊';
+
+  @override
+  String get numberOfStamps => '郵票數量';
+
+  @override
+  String get oneTapToShare => '一鍵分享';
+
+  @override
+  String get openBarqodyOnYourOtherPhone => '在您的另一部手機上打開 Barqody';
+
+  @override
+  String get openCamera => '開啟相機';
+
+  @override
+  String get orderInfo => '訂單資訊';
+
+  @override
+  String get paperCard2 => '紙卡';
+
+  @override
+  String get passwordMustBeAtLeast4Characters => '密碼必須至少為 4 個字符';
+
+  @override
+  String get passwordMustBeAtLeast6Characters => '密碼必須至少為 6 個字符';
+
+  @override
+  String get phoneNumber => '電話號碼';
+
+  @override
+  String get phoneIsRequired => '電話為必填項';
+
+  @override
+  String get phoneNumber2 => '電話號碼';
+
+  @override
+  String get pickLocation => '選擇地點';
+
+  @override
+  String get pleaseEnterAPassword => '請輸入密碼';
+
+  @override
+  String get pleaseEnterAUsername => '請輸入使用者名稱';
+
+  @override
+  String get pleaseEnterAValidEmailAddress => '請輸入有效的電子郵件地址';
+
+  @override
+  String get pleaseEnterAValidNumberOfStamps => '請輸入有效的郵票數量';
+
+  @override
+  String get pleaseEnterYourEmail => '請輸入您的電子郵件';
+
+  @override
+  String get pleaseEnterYourName => '請輸入您的姓名';
+
+  @override
+  String get pleaseEnterYourPassword => '請輸入您的密碼';
+
+  @override
+  String get pointTheCameraAtAQRCodeToScanAutomatically => '將相機對準二維碼即可自動掃描。';
+
+  @override
+  String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
+      '將相機對準事件徽章並點擊相機按鈕。';
+
+  @override
+  String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
+      '將相機對準紙卡並點選相機按鈕。';
+
+  @override
+  String get preparingQRCode => '正在準備二維碼...';
+
+  @override
+  String get profileNotFound => '未找到個人資料。';
+
+  @override
+  String get profileUpdatedSuccessfully => '個人資料更新成功！';
+
+  @override
+  String get qrCodeSavedToGallery => '二維碼已儲存至圖庫！';
+
+  @override
+  String get qrCodeExpired => 'QR 圖碼已過期';
+
+  @override
+  String get qrCodeExpiredTapRefresh => '二維碼已過期。點擊刷新。';
+
+  @override
+  String get realEstate => '房地產';
+
+  @override
+  String get receiptAttached => '附收據';
+
+  @override
+  String
+  get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
+      '續訂您的訂閱以恢復對您的高級功能和資料的完全存取權。';
+
+  @override
+  String get retakePhoto => '重拍照片';
+
+  @override
+  String get rewardTitle => '獎勵稱號';
+
+  @override
+  String get rewardUnlocked => '獎勵已解鎖🎉';
+
+  @override
+  String get roleOrCompany => '角色或公司';
+
+  @override
+  String get saveChanges => '儲存變更';
+
+  @override
+  String get saveContact => '儲存聯絡方式';
+
+  @override
+  String get saveProfile => '儲存個人資料';
+
+  @override
+  String get saveSettings => '儲存設定';
+
+  @override
+  String get saveUsername => '儲存使用者名稱';
+
+  @override
+  String get saveCard => '儲存卡';
+
+  @override
+  String get saveContact2 => '儲存聯絡方式';
+
+  @override
+  String get savedLocallySyncMayHaveFailed => '保存在本地。同步可能失敗。';
+
+  @override
+  String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
+      '掃描二維碼或添加您遇到的人來建立您的網路。';
+
+  @override
+  String get scannedViaQR => '透過二維碼掃描';
+
+  @override
+  String get screenTheme => '螢幕主題';
+
+  @override
+  String get searchFailedTryAgain => '搜尋失敗。再試一次。';
+
+  @override
+  String get selectCompany => '選擇公司';
+
+  @override
+  String get selectDateRange => '選擇日期範圍';
+
+  @override
+  String get selectEndDate => '選擇結束日期';
+
+  @override
+  String get selectStartDate => '選擇開始日期';
+
+  @override
+  String get sendInvitation => '發送邀請';
+
+  @override
+  String get sendInvitationForAttendance => '發送出席邀請';
+
+  @override
+  String get shareLink => '分享連結';
+
+  @override
+  String get shiftTiming => '換檔時間';
+
+  @override
+  String get smartContactCapture => '智慧接觸捕捉';
+
+  @override
+  String get stampBorderColor => '郵票邊框顏色';
+
+  @override
+  String get stampColor => '印章顏色';
+
+  @override
+  String get stampIconsOptional => '印章圖標（可選）';
+
+  @override
+  String get stampsGiven => '贈送郵票';
+
+  @override
+  String get startBuildingYourNetwork => '開始建立你的網絡';
+
+  @override
+  String get streetName => '街道名稱';
+
+  @override
+  String get switchToABusinessAccountToUnlockFullAccess => '切換到企業帳戶以解鎖完全存取權限。';
+
+  @override
+  String get tapLinkADeviceAndScanThisQR => '點擊連結設備並掃描此二維碼';
+
+  @override
+  String get tapToAddImage => '點擊新增圖像';
+
+  @override
+  String get tapToChange => '點擊即可更改';
+
+  @override
+  String get templateAppliedLocallySyncFailed => '本地應用的模板。同步失敗。';
+
+  @override
+  String get textColor => '文字顏色';
+
+  @override
+  String get thisAccount => '這個帳號';
+
+  @override
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
+      '此功能專供企業用戶使用。';
+
+  @override
+  String get thisPersonIsOnYourTeam => '此人在您的團隊中';
+
+  @override
+  String get thisProgramIsPaused => '該節目已暫停';
+
+  @override
+  String get totalStamps => '郵票總數';
+
+  @override
+  String get tryADifferentNameEmailOrCompany => '嘗試使用不同的名稱、電子郵件或公司。';
+
+  @override
+  String get unableToSaveProfileTryAgain => '無法儲存個人資料。再試一次。';
+
+  @override
+  String get unableToUpdateUsernameTryAgain => '無法更新使用者名稱。再試一次。';
+
+  @override
+  String get underDevelopmentLoginViaEmailPasswordInstead2 =>
+      '正在開發 - 透過電子郵件/密碼登入。';
+
+  @override
+  String get unknownUser => '未知用戶';
+
+  @override
+  String get updateGPSLocation => '更新 GPS 位置';
+
+  @override
+  String get updateStatus => '更新狀態';
+
+  @override
+  String get updateCart => '更新購物車';
+
+  @override
+  String get updateItem => '更新項目';
+
+  @override
+  String get upgradeTo2 => '升級至';
+
+  @override
+  String get upgradeToBusinessPRO => '升級至商務專業版';
+
+  @override
+  String get uploadReceiptOptional => '上傳收據（可選）';
+
+  @override
+  String get useMyLocation => '使用我的位置';
+
+  @override
+  String get useLettersNumbersUnderscoresOrHyphensOnly => '僅使用字母、數字、底線或連字符';
+
+  @override
+  String get usernameMustBeAtLeast3Characters => '使用者名稱必須至少 3 個字符';
+
+  @override
+  String get usernameMustBeAtMost30Characters => '使用者名稱不得超過 30 個字符';
+
+  @override
+  String get usernameUpdatedSuccessfully => '使用者名稱更新成功！';
+
+  @override
+  String get waitingForThemToAccept => '等待他們接受';
+
+  @override
+  String get websiteURL => '網站網址';
+
+  @override
+  String get weekendDays => '週末';
+
+  @override
+  String get workLocation => '工作地點';
+
+  @override
+  String get yourPROSubscriptionHasExpiredNN => '您的 PRO 訂閱已過期。 \\n\\n';
+
+  @override
+  String get yourPROSubscriptionHasExpired => '您的 PRO 訂閱已過期。';
+
+  @override
+  String get premiumFeaturesAreCurrentlyDisabled => '高級功能目前已停用。';
+
+  @override
+  String get proLinksAreHiddenFromYourPublicProfile => '專業版連結在您的公開個人資料中隱藏。';
+
+  @override
+  String get yourBusinessDetailsAndDataAreSafe => '您的業務詳細資訊和資料是安全的。';
+
+  @override
+  String addCatalogItem(String label) {
+    return '新增 $label 項目';
+  }
+
+  @override
+  String addAtLeastOneCatalogItem(String label) {
+    return '增加至少一項 $label 項目';
+  }
+
+  @override
+  String noCatalogItemsAvailable(String label) {
+    return '沒有可用的 $label 項目。';
+  }
+
+  @override
+  String noItemsYetAddFirstCatalogItem(String label) {
+    return '還沒有商品。新增您的第一個 $label 項目。';
+  }
+
+  @override
+  String noPublicProfileMatchesQuery(String query) {
+    return '沒有公開的個人資料與「@$query」相符。';
+  }
+
+  @override
+  String codeWithValue(String code) {
+    return '代碼：$code';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -5710,821 +7070,803 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => '工具';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => '帳戶設定';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => '通知';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => '為你';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => '您的個人資料';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => '編輯個人資料';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => '更改您的姓名、照片和簡介';
 
   @override
-  String get username => 'Username';
+  String get username => '使用者名稱';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle => '設定您唯一的個人資料用戶名';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => '社群連結';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle => '新增 Instagram、WhatsApp、網站等';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => '公開資料';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => '任何人都可以找到並查看您的個人資料';
 
   @override
-  String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+  String get publicProfileOff => '隱藏在搜尋中 - 其他人無法發現您';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => '分享我的二維碼';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle => '讓其他人掃描您的數位名片';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => '購物和獎勵';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => '我的訂單';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => '追蹤您從商店下的訂單';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => '我的獎勵卡';
 
   @override
-  String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+  String get myRewardCardsSubtitle => '查看忠誠度計劃的印章和積分';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => '職場';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => '員工邀請函';
 
   @override
-  String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+  String get employeeInvitationsSubtitle => '接受或拒絕企業的團隊邀請';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => '工作場所簽到';
 
   @override
-  String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+  String get workplaceCheckInSubtitle => '在工作地點打卡上下班';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => '帳戶和設備';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => '連結設備';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => '連接另一部手機，例如 WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => '帳戶';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => '新增或切換帳戶';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return '在 $count 帳戶之間切換';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => '幫助和帳戶';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => '應用語言';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => '更改應用程式中使用的語言';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => '搜尋語言';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => '手機語言';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => '語言已更新';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => '幫助和常見問題解答';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => '常見問題解答';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => '傳送回饋';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle => '報告錯誤或建議新功能';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => '退出';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => '退出此會話';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => '取消';
 
   @override
-  String get save => 'Save';
+  String get save => '節省';
 
   @override
-  String get done => 'Done';
+  String get done => '完畢';
 
   @override
-  String get str => 'بطاقة أعمال الرقمية';
+  String get str => '🌈🌈🌈🌈';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '（唯讀）';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 點 = 100 PKR（規則範例）';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '需要 10 張郵票';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '市主街 123 號';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 天前';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 個字元。僅限字母、數字、底線和連字符。';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => '接受';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => '訪問受限';
 
   @override
-  String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+  String get accountIBANAddAccountNumberHere => '帳戶/IBAN：在此新增帳號';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => '帳戶名稱：Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => '積極的';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => '積極的';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => '活動卡';
 
   @override
-  String get add => 'Add';
+  String get add => '添加';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => '新增註釋...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => '新增帳戶';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst => '首先新增至少一個類別';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      '按顯示順序新增類別（例如快餐，然後是德西）';
 
   @override
-  String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+  String get addCategoriesInYourCatalogSettingsFirst => '首先在目錄設定中新增類別。';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => '新增聯絡人';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => '添加連結';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow => '在下面添加指向您個人資料的鏈接';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      '首先將連結新增到您的個人資料，然後在此處啟用它們。';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => '添加徽標';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => '添加積分';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => '新增節目';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => '新增圖章';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => '加入 Google 錢包';
 
   @override
-  String get address => 'Address';
+  String get address => '地址';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => '全部';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => '都追上了！';
 
   @override
-  String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+  String get allNotificationsMarkedAsRead => '所有通知均標記為已讀！';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => '允許拍照';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      '允許此設備存取您的 Barqody 帳戶嗎？您可以隨時從連結的裝置中將其刪除。';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => '已經有帳戶？';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => '分析儀表板';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => '有什麼特殊要求...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => '申請';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => '應用設計';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => '應用程式模板';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => '升序';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      '請您的企業掃描您的二維碼並將您新增為員工';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => '分配類別';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => '分配的程序';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => '至少 6 個字符';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => '今天出席人數已完成';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => '可用插槽';
 
   @override
-  String get background => 'Background';
+  String get background => '背景';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => '背景顏色';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => '銀行帳戶';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => '銀行詳情';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => '銀行：在此新增銀行名稱';
 
   @override
   String get barqody => 'Barqody';
 
   @override
-  String get barqodyV100 => 'barqody v1.0.0';
+  String get barqodyV100 => '巴科迪 v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => '最超值';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => '帳單金額';
 
   @override
-  String get bio => 'BIO';
+  String get bio => '生物';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => '簡介';
 
   @override
-  String get book => 'Book';
+  String get book => '書';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => '預訂日期';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => '預訂時間表';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => '預訂時間';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => '商業';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => '業務類別';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => '業務詳情';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => '公司名稱';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => '商業選擇';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => '商業項目';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => '僅限商業用戶';
 
   @override
-  String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+  String get bySigningUpYouAgreeToOurTermsAndConditions => '註冊即表示您同意我們的條款和條件。';
 
   @override
-  String get call => 'Call';
+  String get call => '稱呼';
 
   @override
-  String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+  String get cameraPermissionIsRequiredToScan => '需要相機許可才能掃描。';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => '隨時取消。';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => '取消訂單';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => '捕捉新聯絡人';
 
   @override
-  String get categories => 'Categories';
+  String get categories => '類別';
 
   @override
-  String get category => 'Category *';
+  String get category => '類別 *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => '類別已存在';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => '類別名稱';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => '報到';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => '查看';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      '為您的個人資料連結選擇一個唯一的使用者名稱。';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => '選擇計劃';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => '選擇模板';
 
   @override
-  String get close => 'Close';
+  String get close => '關閉';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => '複製程式碼';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => '即將推出';
 
   @override
-  String get company => 'Company';
+  String get company => '公司';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => '公司員工卡';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => '公司';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => '完成這些步驟';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => '確認並添加積分';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => '確認預訂';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => '確認地點';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => '確認兌換';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => '關聯帳戶';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => '聯絡人添加成功！';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => '聯絡卡';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => '聯絡方式交換成功！';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => '聯繫來源';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => '聯絡方式更新成功！';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => '聯絡方式';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => '繼續';
 
   @override
-  String get copied => 'Copied';
+  String get copied => '已複製';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => '複製程式碼';
 
   @override
-  String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+  String get couldNotGetLocationPleaseEnableGPSPermission => '無法取得位置。請開啟GPS權限。';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => '無法切換帳戶';
 
   @override
-  String get create => 'Create';
+  String get create => '創造';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => '建立帳戶';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => '創建忠誠度計劃';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => '建立新連結';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => '創建程式';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => '創造獎勵';
 
   @override
-  String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+  String get createStampOrPointsRewardsForCustomers => '為客戶創建印章或積分獎勵';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => '創建你的第一張卡片';
 
   @override
-  String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+  String get createYourFirstRewardCardForCustomers => '為客戶創建您的第一張獎勵卡';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => '建立日期';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      '用於加蓋和未加蓋插槽的自訂影像。如果未設置，則使用預設值。';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => '自訂連結';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => '客戶詳情';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => '客戶註冊成功';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => '客戶尚未註冊';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => '顧客未出現';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => '客戶訂單';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => '客製化卡片設計';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => '客製化設計';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      '自訂您的個人資料、解鎖 PRO 模板並獲得無限的潛在客戶。';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => '客製化你自己';
 
   @override
-  String get date => 'Date';
+  String get date => '日期';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => '日期範圍';
 
   @override
-  String get decline => 'Decline';
+  String get decline => '衰退';
 
   @override
-  String get delete => 'Delete';
+  String get delete => '刪除';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => '刪除卡？';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => '刪除類別';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => '刪除聯絡人';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => '刪除獎勵？';
 
   @override
-  String get descending => 'Descending';
+  String get descending => '降序';
 
   @override
-  String get description => 'Description';
+  String get description => '描述';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => '說明（可選）';
 
   @override
-  String get details => 'Details';
+  String get details => '細節';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => '裝置連結';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => '設備已登出';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => '設備狀態';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => '數位名片';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => '數位名片';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => '沒有帳戶？';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => '例如快餐';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => '例如不加糖，特別辣…';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => '獲得 50 點';
 
   @override
-  String get edit => 'Edit';
+  String get edit => '編輯';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => '編輯卡';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => '編輯詳細信息';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => '編輯個人資料';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => '編輯設定';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => '編輯您的個人資料詳細信息';
 
   @override
-  String get email => 'Email';
+  String get email => '電子郵件';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => '電子郵件和密碼';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => '電子郵件';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => '信箱登入或掃描二維碼';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => '員工卡';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => '員工卡';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => '員工臉部照片';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => '空槽';
 
   @override
-  String get end => 'END';
+  String get end => '結尾';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => '結束日期';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => '結束時間';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => '登記客戶';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => '輸入帳單金額';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => '輸入代碼';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => '輸入代碼代替';
 
   @override
-  String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+  String get enterNetworkingContactDetailsBelow => '在下面輸入網路聯絡方式。';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => '輸入你的名字';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => '輸入您的密碼';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => '活動徽章';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => '交流聯絡方式';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => '交換聯絡方式...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => '探索';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => '無法更新聯絡人。';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => '已填槽';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => '過濾聯絡人';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => '過濾聯絡人';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => '在 BarQody 上找人';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => '尋找用戶';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => '尋找用戶';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => '尋找用戶名';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => '忘記了？';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => '免費咖啡';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => '姓名';
 
   @override
-  String get general => 'General';
+  String get general => '一般的';
 
   @override
-  String get go => 'Go';
+  String get go => '去';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => '開展業務';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => '客人';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => '你好，';
 
   @override
-  String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+  String get helpCenterIsDisabledInThisUIDemo => '此 UI 演示中禁用了幫助中心。';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => '十六進位:#';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      '將二維碼放在框架內 - 它會自動掃描。';
 
   @override
-  String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+  String get howDoYouWantToDesignThisCard => '你想如何設計這張卡片？';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => '導入聯絡人';
 
   @override
-  String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+  String get importContactsIsNotAvailableYet => '導入聯絡人尚不可用。';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => '在';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => '收到的訂單';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      '個人資料 URL 無效。掃描有效的 BarQody 卡或二維碼。';
 
   @override
-  String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+  String get invalidQRCodeUseABarqodyLinkQR => '二維碼無效。使用 Barqody 連結 QR。';
 
   @override
-  String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+  String get inviteEmployeesSetShiftsAndTrackPresence => '邀請員工、設定輪班並追蹤狀態';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee => '邀請您作為員工加入';
 
   @override
-  String get janeDoe => 'Jane Doe';
+  String get janeDoe => '簡·無名氏';
 
   @override
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => '職稱';
 
   @override
-  String get johnDoe => 'John Doe';
+  String get johnDoe => '約翰·多伊';
 
   @override
-  String get johnSmith => 'John Smith';
+  String get johnSmith => '約翰史密斯';
 
   @override
-  String get johnEmailCom => 'john@email.com';
+  String get johnEmailCom => '約翰@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => '加入時間：2026 年 1 月 15 日';
 
   @override
   String get jpg => 'JPG';
@@ -6532,807 +7874,1544 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      '確保您的帳戶安全。僅當您想要連結您信任的裝置時才掃描二維碼。';
 
   @override
-  String get label => 'Label';
+  String get label => '標籤';
 
   @override
-  String get lat => 'Lat';
+  String get lat => '緯度';
 
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      '讓其他人將手機相機對準此二維碼即可立即查看您的網路設定檔。';
 
   @override
-  String get link => 'Link';
+  String get link => '關聯';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => '連結設備';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => '在另一部手機上透過二維碼連結';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => '連結已複製到剪貼簿';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => '連結設定';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => '連結設定';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => '連結此設備？';
 
   @override
-  String get links => 'Links';
+  String get links => '連結';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => '此卡上的連結';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => '地點尚未確定';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => '需要位置許可';
 
   @override
-  String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+  String get locationPermissionRequiredForAttendance => '出席需要位置許可';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => '登入';
 
   @override
-  String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+  String get logInToManageYourDigitalCardAndNetwork => '登入以管理您的數位卡和網路。';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => '使用二維碼登入';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => '退出';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => '全部註銷';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => '註銷設備？';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => '忠誠度計劃';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => '管理類別';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => '管理聯絡人';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => '管理員工';
 
   @override
-  String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+  String get manageYourPersonalDetailsOtherPreferences => '管理您的個人詳細資料和其他偏好';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => '標記已完成';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => '每月';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => '我的卡片';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => '我的位置';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => '我的獎勵';
 
   @override
-  String get name => 'Name';
+  String get name => '姓名';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => '姓名';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => '姓名為必填項';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => '姓名@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => '新卡';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => '新卡';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => '新類別';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => '新獎勵';
 
   @override
-  String get next => 'Next';
+  String get next => '下一個';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => '下一張卡';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet => '尚未連接活動鏈接';
 
   @override
-  String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+  String get noActiveRewardProgramsAvailable => '沒有可用的主動獎勵計劃。';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => '還沒有員工卡';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => '沒有新增員工';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => '還沒有員工';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => '沒有找到雇主';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => '此類別中沒有項目。';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => '沒有可用的連結模板';
 
   @override
-  String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+  String get noNewNotificationsAtThisTime => '目前沒有新的通知。';
 
   @override
-  String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+  String get noOneHasViewedYourProfileYet => '尚未有人查看您的個人資料。';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => '沒有待處理的邀請';
 
   @override
-  String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+  String get noProgramsAssignedYetAddProgramsBelow => '尚未分配程序。添加下面的程式。';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => '此圖片中未找到二維碼。';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => '還沒有獎勵計劃';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay => '當天沒有空位';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => '沒有找到用戶';
 
   @override
-  String get none => 'None';
+  String get none => '沒有任何';
 
   @override
-  String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+  String get notAvailableOnYourCurrentPlan => '您目前的計劃不可用';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => '尚未辦理登機手續';
 
   @override
-  String get note => 'Note';
+  String get note => '筆記';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => '註釋（可選）';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => '通知已清除';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      '此處僅可編輯封面、個人資料照片、姓名和簡介。';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      '當有人掃描此卡時，僅顯示已啟用的連結。';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => '僅顯示公開個人資料';
 
   @override
-  String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+  String get onlyThisPhoneIsUsingYourAccountRightNow => '目前只有這支手機正在使用您的帳戶。';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => '或繼續';
 
   @override
-  String get order => 'Order';
+  String get order => '命令';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => '訂單詳情';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => '訂單編號';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => '未找到訂單';
 
   @override
-  String get orders => 'Orders';
+  String get orders => '訂單';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => '紙卡';
 
   @override
-  String get password => 'Password';
+  String get password => '密碼';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => '按月付費';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => '等待接受';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => '性能概覽';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => '個人資料';
 
   @override
-  String get phone => 'Phone';
+  String get phone => '電話';
 
   @override
-  String get photos => 'Photos';
+  String get photos => '照片';
 
   @override
-  String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+  String get pickAReadyMadeColorThemeQuickAndClean => '選擇現成的顏色主題。又快又乾淨。';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => '選擇顏色';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => '在地圖上選擇';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => '下訂單';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => '計劃已過期';
 
   @override
-  String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+  String get pleaseEnterBusinessDetailsToContinue => '請輸入業務詳細資訊以繼續';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => '請輸入商品名稱';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      '請在升級前提供您的業務詳細資訊。';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => '請選擇一個類別';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => '請選擇時段';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => '請先設定工作地點';
 
   @override
   String get png => 'PNG';
 
   @override
-  String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+  String get pointYourCameraAtTheQRCodeOnTheOtherDevice => '將相機對準另一台裝置上的二維碼';
 
   @override
-  String get points => 'Points';
+  String get points => '積分';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => '獲得積分';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => '進階活躍';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => '上一張卡';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => '價格（盧比）';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => '專業版模板';
 
   @override
-  String get profile => 'Profile';
+  String get profile => '輪廓';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => '個人資料檢查';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => '型材強度';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => '個人資料查看者';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => '個人資料視圖';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => '計劃詳情';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => '節目名稱';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => '找不到程式';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => '節目類型';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'QR 圖碼';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'QR 圖碼掃描';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => '數量';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => '閱讀全部';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => '只讀';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => '收到 1 枚郵票';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => '最近的活動';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => '兌換另一份獎勵';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => '兌換獎勵';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => '兌換免費咖啡';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => '刷新二維碼';
 
   @override
-  String get region => 'Region';
+  String get region => '地區';
 
   @override
-  String get rembiro => 'Rembiro';
+  String get rembiro => '倫比羅';
 
   @override
-  String get remove => 'Remove';
+  String get remove => '消除';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => '刪除員工';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => '更新計劃';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => '請求待處理';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => '請求待處理';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => '請求被拒絕';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => '請求訂閱';
 
   @override
-  String get reset => 'Reset';
+  String get reset => '重置';
 
   @override
-  String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+  String get rewardCompletedShowThisCardToRedeem => '獎勵完成！出示此卡即可兌換。';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => '獎勵完成！ 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => '獎勵詳情';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => '獎勵計劃';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => '獎勵計劃';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => '獎勵已兌換！';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => '獎勵';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => '獲得的獎勵';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '每月收費 1,600 盧比';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => '每年收費 8,300 盧比';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => '節省';
 
   @override
-  String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+  String get saveYourWorkIDCardToPhoneOrWallet => '將您的工作 ID 卡儲存到手機或錢包中';
 
   @override
-  String get scan => 'Scan';
+  String get scan => '掃描';
 
   @override
-  String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+  String get scanAUserQRCodeToAddThemAsEmployee => '掃描用戶二維碼將其新增為員工';
 
   @override
-  String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+  String get scanAnyUserOrBusinessQRToAddEmployee => '掃描任何使用者或企業二維碼新增員工';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => '掃描商家二維碼即可兌換';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => '掃描客戶二維碼';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => '掃描員工檔案';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => '掃描二維碼';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => '掃描二維碼/出示二維碼';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => '掃描二維碼';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice => '掃描其他裝置上顯示的二維碼';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => '掃描邀請';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => '按使用者名稱搜尋...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => '搜尋連結';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => '搜尋姓名、電子郵件或公司';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => '看全部';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      '看到所有活動都被嘲笑。隨著線索的添加，新的活動將會出現。';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => '選擇日期';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => '選擇標記';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => '選擇地區';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => '在連結圖示下方設定文本';
 
   @override
-  String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+  String get setYourOwnColorsPhotosAndBackground => '設定您自己的顏色、照片和背景。';
 
   @override
-  String get share => 'Share';
+  String get share => '分享';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => '共享卡';
 
   @override
-  String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+  String get shareDifferentLinksOnEachCard => '在每張卡片上共享不同的鏈接';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => '分享個人資料';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => '顯示連結';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => '在此卡上顯示';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => '使用 Google 登入';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => '報名';
 
   @override
-  String get skip => 'Skip';
+  String get skip => '跳過';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => '暫時跳過';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => '時隙（分鐘）';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => '軟體工程師';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => '出了點問題';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => '排序選項';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => '特別說明';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => '郵票卡';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => '郵票圖示';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => '郵票';
 
   @override
-  String get start => 'START';
+  String get start => '開始';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => '開始日期';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => '開始時間';
 
   @override
-  String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+  String get startNetworkingSmarterWithBarqody => '透過 Barqody 開始更聰明的網路。';
 
   @override
-  String get stats => 'Stats';
+  String get stats => '統計數據';
 
   @override
-  String get status => 'Status';
+  String get status => '地位';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => '訂閱';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => '已提交訂閱請求';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => '已提交訂閱請求。';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => '滑動即可瀏覽卡片';
 
   @override
-  String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+  String get takeAQuickSelfieForAttendanceVerification => '快速自拍以驗證出席情況';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      '點擊上面的「社群連結」即可新增並啟動個人資料。';
 
   @override
-  String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+  String get tapOnTheMapOrUseYourCurrentLocation => '點擊地圖或使用您目前的位置';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => '點擊即可新增照片';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => '點擊分享二維碼';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => '團隊出勤';
 
   @override
-  String get template => 'Template';
+  String get template => '範本';
 
   @override
-  String get templates => 'Templates';
+  String get templates => '範本';
 
   @override
-  String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+  String get thankYouFeedbackSubmissionsAreMockOnly => '謝謝你！回饋提交僅是模擬的。';
 
   @override
-  String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+  String get thisCardAndItsQRCodeWillBeRemoved => '該卡及其二維碼將被刪除。';
 
   @override
-  String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers => '此功能專供企業用戶使用。';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => '這已經是您的用戶名了。';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => '本月';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      '這將永久刪除此獎勵計劃及其所有註冊。';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => '今天是你的週末';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => '今天 • 下午 3:15';
 
   @override
-  String get total => 'Total';
+  String get total => '全部的';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => '追蹤您的訂單';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => '交易參考（可選）';
 
   @override
-  String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+  String get transactionReferenceNumberOptional => '交易參考號碼（可選）';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => '再試一次';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => '嘗試商務專業版';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => '嘗試商務專業版。';
 
   @override
-  String get type => 'Type';
+  String get type => '類型';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      '輸入至少 2 個字元的使用者名稱進行搜尋。';
 
   @override
-  String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+  String get typeThe8CharacterCodeShownUnderTheQR => '輸入二維碼下方顯示的 8 個字元代碼。';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      '正在開發 - 透過電子郵件/密碼登入。';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => '取消標記圖標';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => '立即升級';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => '升級至';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => '升級到 Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => '使用模板';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      '在其他手機或平板電腦上使用 Barqody。您隨時掌控一切 — 隨時登出任何設備。';
 
   @override
-  String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+  String get useBarqodyOnYourPhoneToScanThisCode => '使用手機上的 Barqody 掃描此代碼';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => '使用預設圖標';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => '使用這張照片';
 
   @override
-  String get user => 'USER';
+  String get user => '使用者';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => '版本：1.0.1';
 
   @override
-  String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+  String get viewAndUpdateOrdersFromYourCustomers => '查看和更新​​客戶的訂單';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => '查看資料';
 
   @override
-  String get views => 'Views';
+  String get views => '意見';
 
   @override
-  String get website => 'Website';
+  String get website => '網站';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => '歡迎回來';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => '歡迎來到帳戶中心';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      '當企業將您新增為員工時，您的員工卡將顯示在此。您可以隨時自訂其設計。';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      '當企業將您納入其獎勵計劃時，該計劃將顯示在此處。';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      '當企業邀請您加入他們的團隊時，它會出現在此。';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      '關閉後，此連結將不會顯示在您的個人資料上';
 
   @override
-  String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+  String get writeSomethingAboutYouOrYourBrand => '寫一些關於您或您的品牌的信息';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => '每年';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => '昨天 • 下午 5:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => '您的類別';
 
   @override
-  String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+  String get yourEmployeeCardsFromEmployers => '雇主給您的員工卡';
 
   @override
-  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed => '您的免費咖啡已成功兌換。';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => '您的獎勵';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      '您的訂閱已結束。點擊資訊圖示了解詳細資訊。';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => '你的名字';
+
+  @override
+  String get n10Discount => '10% 折扣';
+
+  @override
+  String get avatarTAPPED => '已點擊頭像';
+
+  @override
+  String get accountHolderName => '帳戶持有人姓名';
+
+  @override
+  String get accountNumber => '帳號';
+
+  @override
+  String get activeNow => '現在活躍';
+
+  @override
+  String get addBio => '新增個人簡介';
+
+  @override
+  String get addCoverPhoto => '新增封面照片';
+
+  @override
+  String get addFacePhoto => '添加臉部照片';
+
+  @override
+  String get addIntroVoiceNote => '新增介紹性語音註釋';
+
+  @override
+  String get addProfileName => '新增個人資料名稱';
+
+  @override
+  String get addProfilePhoto => '新增個人資料照片';
+
+  @override
+  String get addSocialLinks3 => '新增社群連結 (3+)';
+
+  @override
+  String get addItem => '新增項目';
+
+  @override
+  String get addLink2 => '添加連結';
+
+  @override
+  String get addLinksToYourProfileBelow2 => '在下面添加指向您個人資料的鏈接';
+
+  @override
+  String get addPhoto => '添加照片';
+
+  @override
+  String get addToCart => '加入購物車';
+
+  @override
+  String get addressOptional => '地址（可選）';
+
+  @override
+  String get allContactTypes => '所有聯絡人類型';
+
+  @override
+  String get allowedRadiusMeters => '允許半徑（公尺）';
+
+  @override
+  String get almostThere => '快到了！';
+
+  @override
+  String get alreadyEmployee => '已經是員工';
+
+  @override
+  String get alreadyHaveAnAccount2 => '已經有帳戶？';
+
+  @override
+  String get alwaysUpToDate => '始終保持最新狀態';
+
+  @override
+  String get areYouSureYouWantToLogOutOfBarqody => '您確定要退出 Barqody 嗎？';
+
+  @override
+  String get attendanceFailed => '考勤失敗';
+
+  @override
+  String get backgroundColor2 => '背景顏色';
+
+  @override
+  String get bookingFailed => '預訂失敗';
+
+  @override
+  String get brieflyDescribeThisReward => '簡單描述一下這個獎勵...';
+
+  @override
+  String get businessVerified => '業務已驗證';
+
+  @override
+  String get businessEmailAddress => '企業電子郵件地址';
+
+  @override
+  String get businessFax => '商務傳真';
+
+  @override
+  String get businessPhoneNumber => '商務電話號碼';
+
+  @override
+  String get businessWebsite => '企業網站';
+
+  @override
+  String get cameraError => '相機錯誤';
+
+  @override
+  String get captureFace => '捕捉人臉';
+
+  @override
+  String get cardCompleted => '卡片已完成';
+
+  @override
+  String get cardLabel => '卡標籤';
+
+  @override
+  String get cardLabelName => '卡標籤名稱';
+
+  @override
+  String get cardPreview => '卡片預覽';
+
+  @override
+  String get cardTheme => '卡片主題';
+
+  @override
+  String get cardCreated => '卡已創建';
+
+  @override
+  String get cardName => '卡名';
+
+  @override
+  String get cardSavedAsJPG => '卡片另存為 JPG';
+
+  @override
+  String get cardSavedAsPNG => '卡片另存為 PNG';
+
+  @override
+  String get cardUpdated => '卡片已更新';
+
+  @override
+  String get changePhoto => '更改照片';
+
+  @override
+  String get checkInFace => '簽到臉';
+
+  @override
+  String get checkInSuccessful => '入住成功';
+
+  @override
+  String get checkOutFace => '結帳臉';
+
+  @override
+  String get checkOutSuccessful => '退房成功';
+
+  @override
+  String get chooseTemplate2 => '選擇模板';
+
+  @override
+  String get contactCardBusinessAddress => '聯絡卡營業地址';
+
+  @override
+  String get contactCardCompanyName => '聯絡卡公司名稱';
+
+  @override
+  String get contactCardEmail => '聯絡卡電子郵件';
+
+  @override
+  String get contactCardHomeAddress => '聯絡卡家庭住址';
+
+  @override
+  String get contactCardPhone => '聯絡卡電話';
+
+  @override
+  String get contactCardWebsite => '聯絡卡網站';
+
+  @override
+  String get couldNotCompleteLogin => '無法完成登入';
+
+  @override
+  String get couldNotCreateQRCode => '無法建立二維碼';
+
+  @override
+  String get couldNotLinkDevice => '無法連結設備';
+
+  @override
+  String get couldNotLogOutDevice => '無法註銷設備';
+
+  @override
+  String get couldNotOpenGoogleWallet => '無法打開 Google 電子錢包';
+
+  @override
+  String get couldNotSaveCardDesign => '無法儲存卡片設計';
+
+  @override
+  String get couldNotUpdateProfileVisibility => '無法更新個人資料可見性';
+
+  @override
+  String get createGallery => '創建畫廊';
+
+  @override
+  String get createACardToShareYourProfile => '建立一張卡片來分享您的個人資料';
+
+  @override
+  String get createCard => '創建卡片';
+
+  @override
+  String get customBank => '海關銀行';
+
+  @override
+  String get customersCanBeEnrolledAndStamped => '客戶可以註冊並蓋章';
+
+  @override
+  String get customizeCard => '客製化卡片';
+
+  @override
+  String get describeYourLoyaltyProgram => '描述您的忠誠度計劃';
+
+  @override
+  String get displayName => '顯示名稱';
+
+  @override
+  String get dontHaveAnAccount2 => '沒有帳戶？';
+
+  @override
+  String get eeeDMMMYyyy => 'EEE，d MMM yyyy';
+
+  @override
+  String get editReward => '編輯獎勵';
+
+  @override
+  String get editItem => '編輯項目';
+
+  @override
+  String get emailAddress2 => '電子郵件';
+
+  @override
+  String get emailIsRequired => '電子郵件為必填項';
+
+  @override
+  String get employeeCards => '員工卡';
+
+  @override
+  String get employeeRemoved => '員工被移除';
+
+  @override
+  String get employeeSettingsSaved => '已儲存員工設定';
+
+  @override
+  String get enrolledBusinesses => '註冊企業';
+
+  @override
+  String get enterAValidEmail => '輸入有效的電子郵件';
+
+  @override
+  String get enterBioForTheContactCard => '輸入聯絡人卡的簡介';
+
+  @override
+  String get enterProgramName => '輸入程式名稱';
+
+  @override
+  String get enterYourBio => '輸入您的個人簡介';
+
+  @override
+  String get enterYourPhoneNumber => '輸入您的電話號碼';
+
+  @override
+  String get enterYourWebsiteURL => '輸入您的網站網址';
+
+  @override
+  String get eventBadge2 => '活動徽章';
+
+  @override
+  String get example10StampsFreeCoffee => '範例：10 枚郵票 = 免費咖啡';
+
+  @override
+  String get facePhotoAdded => '添加臉部照片';
+
+  @override
+  String get failedToAddProgram => '新增程式失敗';
+
+  @override
+  String get failedToAddStamp => '添加印章失敗';
+
+  @override
+  String get failedToEnrollCustomer => '註冊客戶失敗';
+
+  @override
+  String get failedToExchangeContact => '交換聯絡方式失敗';
+
+  @override
+  String get failedToLoadPrograms => '無法載入程式';
+
+  @override
+  String get failedToPlaceOrder => '下單失敗';
+
+  @override
+  String get failedToRemove => '刪除失敗';
+
+  @override
+  String get failedToSave => '保存失敗';
+
+  @override
+  String get failedToSaveJPG => '儲存 JPG 失敗';
+
+  @override
+  String get failedToSavePNG => '保存 PNG 失敗';
+
+  @override
+  String get failedToSaveQRCode => '儲存二維碼失敗。';
+
+  @override
+  String get failedToSaveBusinessDetails => '無法保存商家詳細信息';
+
+  @override
+  String get failedToUpdateStatus => '更新狀態失敗';
+
+  @override
+  String get firstName => '名';
+
+  @override
+  String get foodBeverage => '食品及飲料';
+
+  @override
+  String get freeDessert => '免費甜點';
+
+  @override
+  String get galleryPermissionRequiredPleaseEnableItInSettings =>
+      '需要畫廊許可。請在“設定”中啟用它。';
+
+  @override
+  String get getStarted => '開始使用';
+
+  @override
+  String get go2 => '去';
+
+  @override
+  String get goToToolsLinkedDevices => '前往工具 → 連結的設備';
+
+  @override
+  String get googleWalletSetupPending => 'Google 電子錢包設定待處理。';
+
+  @override
+  String get googleWalletSetupPendingProfileLinkCopied =>
+      'Google 電子錢包設定待處理。個人資料連結已複製。';
+
+  @override
+  String get growYourBusiness => '拓展您的業務';
+
+  @override
+  String get guestUser => '訪客用戶';
+
+  @override
+  String get ibanNumber => '國際銀行號碼';
+
+  @override
+  String get inOFFICE => '在辦公室';
+
+  @override
+  String get invitationPending => '邀請待定';
+
+  @override
+  String get invitationDeclined => '邀請被拒絕';
+
+  @override
+  String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
+      '邀請已發送。員工接受後會被加入。';
+
+  @override
+  String get inviteEmployee => '邀請員工';
+
+  @override
+  String get inviteAsEmployee => '邀請成為員工';
+
+  @override
+  String get jobTitle2 => '職稱';
+
+  @override
+  String get lastName => '姓';
+
+  @override
+  String get logInWithQR => '使用二維碼登入';
+
+  @override
+  String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
+      '僅註銷該帳號嗎？其他帳號將保留在該手機上。';
+
+  @override
+  String get loggedInWithGoogleDemoAccountSaimY => '使用 Google 登入（模擬帳戶：Saim Y）';
+
+  @override
+  String get loggingYouIn => '正在讓您登入...';
+
+  @override
+  String get loginFailedTryAgain => '登入失敗。再試一次。';
+
+  @override
+  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+
+  @override
+  String get mmmmYyyy => 'MMMM 年';
+
+  @override
+  String get markAttendance => '標記出勤率';
+
+  @override
+  String get myName => '我的名字';
+
+  @override
+  String get myTapniProfile => '我的塔普尼個人資料';
+
+  @override
+  String get nameCannotBeEmpty => '名稱不能為空';
+
+  @override
+  String get newLabel => '新的';
+
+  @override
+  String get noContactsYet => '還沒有聯絡方式';
+
+  @override
+  String get noDetailsYet => '尚無詳細資訊';
+
+  @override
+  String get noLinksAddedYetNTapAddLinkToGetStarted =>
+      '尚未添加連結。 \\n點擊「新增連結」即可開始。';
+
+  @override
+  String get noMatches => '沒有匹配項';
+
+  @override
+  String get noReasonProvided => '沒有提供理由。';
+
+  @override
+  String get notEnrolled => '未註冊';
+
+  @override
+  String get numberOfStamps => '郵票數量';
+
+  @override
+  String get oneTapToShare => '一鍵分享';
+
+  @override
+  String get openBarqodyOnYourOtherPhone => '在您的另一部手機上打開 Barqody';
+
+  @override
+  String get openCamera => '開啟相機';
+
+  @override
+  String get orderInfo => '訂單資訊';
+
+  @override
+  String get paperCard2 => '紙卡';
+
+  @override
+  String get passwordMustBeAtLeast4Characters => '密碼必須至少為 4 個字符';
+
+  @override
+  String get passwordMustBeAtLeast6Characters => '密碼必須至少為 6 個字符';
+
+  @override
+  String get phoneNumber => '電話號碼';
+
+  @override
+  String get phoneIsRequired => '電話為必填項';
+
+  @override
+  String get phoneNumber2 => '電話號碼';
+
+  @override
+  String get pickLocation => '選擇地點';
+
+  @override
+  String get pleaseEnterAPassword => '請輸入密碼';
+
+  @override
+  String get pleaseEnterAUsername => '請輸入使用者名稱';
+
+  @override
+  String get pleaseEnterAValidEmailAddress => '請輸入有效的電子郵件地址';
+
+  @override
+  String get pleaseEnterAValidNumberOfStamps => '請輸入有效的郵票數量';
+
+  @override
+  String get pleaseEnterYourEmail => '請輸入您的電子郵件';
+
+  @override
+  String get pleaseEnterYourName => '請輸入您的姓名';
+
+  @override
+  String get pleaseEnterYourPassword => '請輸入您的密碼';
+
+  @override
+  String get pointTheCameraAtAQRCodeToScanAutomatically => '將相機對準二維碼即可自動掃描。';
+
+  @override
+  String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
+      '將相機對準事件徽章並點擊相機按鈕。';
+
+  @override
+  String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
+      '將相機對準紙卡並點選相機按鈕。';
+
+  @override
+  String get preparingQRCode => '正在準備二維碼...';
+
+  @override
+  String get profileNotFound => '未找到個人資料。';
+
+  @override
+  String get profileUpdatedSuccessfully => '個人資料更新成功！';
+
+  @override
+  String get qrCodeSavedToGallery => '二維碼已儲存至圖庫！';
+
+  @override
+  String get qrCodeExpired => 'QR 圖碼已過期';
+
+  @override
+  String get qrCodeExpiredTapRefresh => '二維碼已過期。點擊刷新。';
+
+  @override
+  String get realEstate => '房地產';
+
+  @override
+  String get receiptAttached => '附收據';
+
+  @override
+  String
+  get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
+      '續訂您的訂閱以恢復對您的高級功能和資料的完全存取權。';
+
+  @override
+  String get retakePhoto => '重拍照片';
+
+  @override
+  String get rewardTitle => '獎勵稱號';
+
+  @override
+  String get rewardUnlocked => '獎勵已解鎖🎉';
+
+  @override
+  String get roleOrCompany => '角色或公司';
+
+  @override
+  String get saveChanges => '儲存變更';
+
+  @override
+  String get saveContact => '儲存聯絡方式';
+
+  @override
+  String get saveProfile => '儲存個人資料';
+
+  @override
+  String get saveSettings => '儲存設定';
+
+  @override
+  String get saveUsername => '儲存使用者名稱';
+
+  @override
+  String get saveCard => '儲存卡';
+
+  @override
+  String get saveContact2 => '儲存聯絡方式';
+
+  @override
+  String get savedLocallySyncMayHaveFailed => '保存在本地。同步可能失敗。';
+
+  @override
+  String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
+      '掃描二維碼或添加您遇到的人來建立您的網路。';
+
+  @override
+  String get scannedViaQR => '透過二維碼掃描';
+
+  @override
+  String get screenTheme => '螢幕主題';
+
+  @override
+  String get searchFailedTryAgain => '搜尋失敗。再試一次。';
+
+  @override
+  String get selectCompany => '選擇公司';
+
+  @override
+  String get selectDateRange => '選擇日期範圍';
+
+  @override
+  String get selectEndDate => '選擇結束日期';
+
+  @override
+  String get selectStartDate => '選擇開始日期';
+
+  @override
+  String get sendInvitation => '發送邀請';
+
+  @override
+  String get sendInvitationForAttendance => '發送出席邀請';
+
+  @override
+  String get shareLink => '分享連結';
+
+  @override
+  String get shiftTiming => '換檔時間';
+
+  @override
+  String get smartContactCapture => '智慧接觸捕捉';
+
+  @override
+  String get stampBorderColor => '郵票邊框顏色';
+
+  @override
+  String get stampColor => '印章顏色';
+
+  @override
+  String get stampIconsOptional => '印章圖標（可選）';
+
+  @override
+  String get stampsGiven => '贈送郵票';
+
+  @override
+  String get startBuildingYourNetwork => '開始建立你的網絡';
+
+  @override
+  String get streetName => '街道名稱';
+
+  @override
+  String get switchToABusinessAccountToUnlockFullAccess => '切換到企業帳戶以解鎖完全存取權限。';
+
+  @override
+  String get tapLinkADeviceAndScanThisQR => '點擊連結設備並掃描此二維碼';
+
+  @override
+  String get tapToAddImage => '點擊新增圖像';
+
+  @override
+  String get tapToChange => '點擊即可更改';
+
+  @override
+  String get templateAppliedLocallySyncFailed => '本地應用的模板。同步失敗。';
+
+  @override
+  String get textColor => '文字顏色';
+
+  @override
+  String get thisAccount => '這個帳號';
+
+  @override
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
+      '此功能專供企業用戶使用。';
+
+  @override
+  String get thisPersonIsOnYourTeam => '此人在您的團隊中';
+
+  @override
+  String get thisProgramIsPaused => '該節目已暫停';
+
+  @override
+  String get totalStamps => '郵票總數';
+
+  @override
+  String get tryADifferentNameEmailOrCompany => '嘗試使用不同的名稱、電子郵件或公司。';
+
+  @override
+  String get unableToSaveProfileTryAgain => '無法儲存個人資料。再試一次。';
+
+  @override
+  String get unableToUpdateUsernameTryAgain => '無法更新使用者名稱。再試一次。';
+
+  @override
+  String get underDevelopmentLoginViaEmailPasswordInstead2 =>
+      '正在開發 - 透過電子郵件/密碼登入。';
+
+  @override
+  String get unknownUser => '未知用戶';
+
+  @override
+  String get updateGPSLocation => '更新 GPS 位置';
+
+  @override
+  String get updateStatus => '更新狀態';
+
+  @override
+  String get updateCart => '更新購物車';
+
+  @override
+  String get updateItem => '更新項目';
+
+  @override
+  String get upgradeTo2 => '升級至';
+
+  @override
+  String get upgradeToBusinessPRO => '升級至商務專業版';
+
+  @override
+  String get uploadReceiptOptional => '上傳收據（可選）';
+
+  @override
+  String get useMyLocation => '使用我的位置';
+
+  @override
+  String get useLettersNumbersUnderscoresOrHyphensOnly => '僅使用字母、數字、底線或連字符';
+
+  @override
+  String get usernameMustBeAtLeast3Characters => '使用者名稱必須至少 3 個字符';
+
+  @override
+  String get usernameMustBeAtMost30Characters => '使用者名稱不得超過 30 個字符';
+
+  @override
+  String get usernameUpdatedSuccessfully => '使用者名稱更新成功！';
+
+  @override
+  String get waitingForThemToAccept => '等待他們接受';
+
+  @override
+  String get websiteURL => '網站網址';
+
+  @override
+  String get weekendDays => '週末';
+
+  @override
+  String get workLocation => '工作地點';
+
+  @override
+  String get yourPROSubscriptionHasExpiredNN => '您的 PRO 訂閱已過期。 \\n\\n';
+
+  @override
+  String get yourPROSubscriptionHasExpired => '您的 PRO 訂閱已過期。';
+
+  @override
+  String get premiumFeaturesAreCurrentlyDisabled => '高級功能目前已停用。';
+
+  @override
+  String get proLinksAreHiddenFromYourPublicProfile => '專業版連結在您的公開個人資料中隱藏。';
+
+  @override
+  String get yourBusinessDetailsAndDataAreSafe => '您的業務詳細資訊和資料是安全的。';
+
+  @override
+  String addCatalogItem(String label) {
+    return '新增 $label 項目';
+  }
+
+  @override
+  String addAtLeastOneCatalogItem(String label) {
+    return '增加至少一項 $label 項目';
+  }
+
+  @override
+  String noCatalogItemsAvailable(String label) {
+    return '沒有可用的 $label 項目。';
+  }
+
+  @override
+  String noItemsYetAddFirstCatalogItem(String label) {
+    return '還沒有商品。新增您的第一個 $label 項目。';
+  }
+
+  @override
+  String noPublicProfileMatchesQuery(String query) {
+    return '沒有公開的個人資料與「@$query」相符。';
+  }
+
+  @override
+  String codeWithValue(String code) {
+    return '代碼：$code';
+  }
 }

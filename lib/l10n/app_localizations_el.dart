@@ -12,325 +12,339 @@ class AppLocalizationsEl extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Εργαλεία';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Ρυθμίσεις λογαριασμού';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Ειδοποιήσεις';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Για σένα';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'Το προφίλ σας';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Επεξεργασία προφίλ';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle =>
+      'Αλλάξτε το όνομα, τη φωτογραφία και το βιογραφικό σας';
 
   @override
-  String get username => 'Username';
+  String get username => 'Όνομα χρήστη';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'Ορίστε το μοναδικό όνομα χρήστη του προφίλ σας';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Κοινωνικοί Σύνδεσμοι';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Προσθέστε Instagram, WhatsApp, ιστότοπο και πολλά άλλα';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Δημόσιο προφίλ';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn =>
+      'Οποιοσδήποτε μπορεί να βρει και να δει το προφίλ σας';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Απόκρυψη από την αναζήτηση — οι άλλοι δεν μπορούν να σας ανακαλύψουν';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Κοινή χρήση του κωδικού QR μου';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Αφήστε άλλους να σαρώσουν την ψηφιακή επαγγελματική σας κάρτα';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Αγορές και επιβραβεύσεις';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Οι παραγγελίες μου';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle =>
+      'Παρακολουθήστε τις παραγγελίες που υποβάλατε από καταστήματα';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Οι κάρτες ανταμοιβής μου';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Δείτε γραμματόσημα και πόντους από προγράμματα επιβράβευσης';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Χώρος εργασίας';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Προσκλήσεις εργαζομένων';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Αποδεχτείτε ή απορρίψτε προσκλήσεις ομάδας από επιχειρήσεις';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Check-in στο χώρο εργασίας';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Ρολόι μέσα και έξω στη δουλειά σας με την τοποθεσία';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Λογαριασμοί και συσκευές';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Συνδεδεμένες συσκευές';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle =>
+      'Συνδέστε ένα άλλο τηλέφωνο όπως το WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Λογαριασμοί';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Προσθήκη ή εναλλαγή λογαριασμών';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Εναλλαγή μεταξύ $count λογαριασμών';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Βοήθεια και λογαριασμός';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Γλώσσα εφαρμογής';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle =>
+      'Αλλάξτε τη γλώσσα που χρησιμοποιείται στην εφαρμογή';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Αναζήτηση γλώσσας';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'Γλώσσα του τηλεφώνου';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Η γλώσσα ενημερώθηκε';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Βοήθεια και συχνές ερωτήσεις';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Απαντήσεις σε κοινές ερωτήσεις';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Αποστολή σχολίων';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle =>
+      'Αναφέρετε ένα σφάλμα ή προτείνετε μια νέα λειτουργία';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Αποσύνδεση';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Αποσυνδεθείτε από αυτήν την περίοδο σύνδεσης';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Ματαίωση';
 
   @override
-  String get save => 'Save';
+  String get save => 'Εκτός';
 
   @override
-  String get done => 'Done';
+  String get done => 'Γινώμενος';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(μόνο για ανάγνωση)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule =>
+      '1 Πόντος = 100 PKR (παράδειγμα κανόνα)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => 'Απαιτούνται 10 γραμματόσημα';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '123 Main St, Πόλη';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => 'Πριν από 2 μέρες';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 χαρακτήρες. Μόνο γράμματα, αριθμοί, κάτω παύλες και παύλες.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Αποδέχομαι';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'ΠΕΡΙΟΡΙΣΜΕΝΗ ΠΡΟΣΒΑΣΗ';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Λογαριασμός / IBAN: Προσθέστε τον αριθμό λογαριασμού εδώ';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Τίτλος λογαριασμού: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Ενεργός';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'ΕΝΕΡΓΟΣ';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'ΕΝΕΡΓΗ ΚΑΡΤΑ';
 
   @override
-  String get add => 'Add';
+  String get add => 'Προσθέτω';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Προσθήκη σημείωσης...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Προσθήκη λογαριασμού';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Προσθέστε πρώτα τουλάχιστον μία κατηγορία';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Προσθέστε κατηγορίες με σειρά εμφάνισης (π.χ. Fast Food και μετά Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Προσθέστε πρώτα κατηγορίες στις ρυθμίσεις του καταλόγου σας.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Προσθήκη επαφής';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Προσθήκη συνδέσμου';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'Προσθέστε συνδέσμους στο προφίλ σας παρακάτω';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Προσθέστε πρώτα συνδέσμους στο προφίλ σας και μετά ενεργοποιήστε τους εδώ.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Προσθήκη λογότυπου';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Προσθήκη πόντων';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Προσθήκη προγράμματος';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Προσθήκη σφραγίδας';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Προσθήκη στο Πορτοφόλι Google';
 
   @override
-  String get address => 'Address';
+  String get address => 'Διεύθυνση';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Ολοι';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Όλα πιάστηκαν!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Όλες οι ειδοποιήσεις επισημάνθηκαν ως αναγνωσμένες!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Να επιτρέπεται η κάμερα';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Να επιτρέπεται σε αυτήν τη συσκευή να έχει πρόσβαση στον λογαριασμό σας Barqody; Μπορείτε να το αφαιρέσετε ανά πάσα στιγμή από τις Συνδεδεμένες συσκευές.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Έχετε ήδη λογαριασμό;';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'Πίνακας ελέγχου Analytics';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Τυχόν ειδικά αιτήματα...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Εφαρμόζω';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Εφαρμογή σχεδίου';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Εφαρμογή προτύπου';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Αύξουσα';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Ζητήστε από την επιχείρησή σας να σαρώσει το QR σας και να σας προσθέσει ως υπάλληλο';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Εκχώρηση Κατηγορίας';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Ανατεθειμένα Προγράμματα';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Τουλάχιστον 6 χαρακτήρες';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday =>
+      'Η προσέλευση ολοκληρώθηκε για σήμερα';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Διαθέσιμες κουλοχέρηδες';
 
   @override
-  String get background => 'Background';
+  String get background => 'Φόντο';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Χρώμα φόντου';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Τραπεζικός Λογαριασμός';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Στοιχεία Τράπεζας';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere =>
+      'Τράπεζα: Προσθέστε το όνομα της τράπεζας εδώ';
 
   @override
   String get barqody => 'Barqody';
@@ -339,494 +353,497 @@ class AppLocalizationsEl extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Καλύτερη αξία';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Ποσό Λογαριασμού';
 
   @override
-  String get bio => 'BIO';
+  String get bio => 'ΒΙΟΓΡΑΦΙΚΟ';
 
   @override
   String get bio2 => 'Bio';
 
   @override
-  String get book => 'Book';
+  String get book => 'Βιβλίο';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Ημερομηνία κράτησης';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Πρόγραμμα κρατήσεων';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Χρόνος κράτησης';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'ΕΠΙΧΕΙΡΗΣΗ';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Κατηγορία Επιχειρήσεων';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Στοιχεία επιχείρησης';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Εμπορική επωνυμία';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Επιχειρηματικές επιλογές';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Επιχειρηματικά Προγράμματα';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Μόνο επαγγελματίες χρήστες';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'Με την εγγραφή σας, συμφωνείτε με τους Όρους και τις Προϋποθέσεις μας.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Κλήση';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Απαιτείται άδεια κάμερας για σάρωση.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Ακύρωση ανά πάσα στιγμή.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Ακύρωση παραγγελίας';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Λήψη νέας επαφής';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'Κατηγορίες';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Κατηγορία *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'Η κατηγορία υπάρχει ήδη';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Όνομα κατηγορίας';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Ελεγχος εισιτηρίου';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Αναχωρώ';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Επιλέξτε ένα μοναδικό όνομα χρήστη για τον σύνδεσμο του προφίλ σας.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Επιλέξτε Σχέδιο';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Επιλέξτε Πρότυπο';
 
   @override
-  String get close => 'Close';
+  String get close => 'Κοντά';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Ο κωδικός αντιγράφηκε';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Προσεχώς';
 
   @override
-  String get company => 'Company';
+  String get company => 'Εταιρεία';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Κάρτα Εργαζομένου Εταιρείας';
 
   @override
   String get companyInc => 'Company Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Ολοκληρώστε αυτά τα βήματα';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Επιβεβαίωση και προσθήκη σημείων';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Επιβεβαίωση κράτησης';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Επιβεβαίωση τοποθεσίας';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Επιβεβαίωση εξαργύρωσης';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Συνδεδεμένοι λογαριασμοί';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Η επαφή προστέθηκε με επιτυχία!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Κάρτα επικοινωνίας';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully =>
+      'Η επαφή ανταλλάχθηκε με επιτυχία!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Πηγή επικοινωνίας';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'Η επαφή ενημερώθηκε με επιτυχία!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Επαφές';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Συνεχίζω';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Αντιγράφηκε';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Αντιγραφή κωδικού';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Δεν ήταν δυνατή η λήψη της τοποθεσίας. Ενεργοποιήστε την άδεια GPS.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Δεν ήταν δυνατή η αλλαγή λογαριασμού';
 
   @override
-  String get create => 'Create';
+  String get create => 'Δημιουργώ';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Δημιουργία λογαριασμού';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Δημιουργία προγράμματος αφοσίωσης';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Δημιουργία νέου συνδέσμου';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Δημιουργία προγράμματος';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Δημιουργία ανταμοιβής';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Δημιουργήστε ανταμοιβές σφραγίδων ή πόντων για πελάτες';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Δημιουργήστε την πρώτη σας κάρτα';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Δημιουργήστε την πρώτη σας κάρτα επιβράβευσης για τους πελάτες';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Ημερομηνία δημιουργίας';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Προσαρμοσμένες εικόνες για σφραγισμένες και μη σφραγισμένες υποδοχές. Οι προεπιλογές χρησιμοποιούνται εάν δεν έχουν οριστεί.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Προσαρμοσμένος σύνδεσμος';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Στοιχεία Πελάτη';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'Ο πελάτης εγγράφηκε με επιτυχία';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Ο πελάτης δεν έχει εγγραφεί ακόμα';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Πελάτης Χωρίς Εμφάνιση';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Παραγγελίες πελατών';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Προσαρμόστε το σχέδιο καρτών';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Προσαρμογή σχεδίου';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Προσαρμόστε το προφίλ σας, ξεκλειδώστε τα πρότυπα PRO και αποκτήστε απεριόριστους δυνητικούς πελάτες.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Προσαρμόστε τον εαυτό σας';
 
   @override
-  String get date => 'Date';
+  String get date => 'Ημερομηνία';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Εύρος ημερομηνιών';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Πτώση';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Διαγράφω';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Διαγραφή κάρτας;';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Διαγραφή Κατηγορίας';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Διαγραφή επαφής';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Διαγραφή ανταμοιβής;';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Φθίνων';
 
   @override
-  String get description => 'Description';
+  String get description => 'Περιγραφή';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Περιγραφή (προαιρετικό)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Καθέκαστα';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Η συσκευή είναι συνδεδεμένη';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Η συσκευή αποσυνδέθηκε';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Κατάσταση συσκευής';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Ψηφιακή επαγγελματική κάρτα';
 
   @override
   String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Δεν έχετε λογαριασμό;';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'π.χ. Fast Food';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'π.χ. Χωρίς ζάχαρη, πολύ ζεστό...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'Κέρδισε 50 πόντους';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Εκδίδω';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Επεξεργασία κάρτας';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Επεξεργασία λεπτομερειών';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Επεξεργασία προφίλ';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Επεξεργασία ρυθμίσεων';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails =>
+      'Επεξεργαστείτε τα στοιχεία του προφίλ σας';
 
   @override
-  String get email => 'Email';
+  String get email => 'E-mail';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'Email & κωδικός πρόσβασης';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'Διεύθυνση Email';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'Είσοδος μέσω email ή σάρωση QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Κάρτα υπαλλήλου';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'ΚΑΡΤΑ ΕΡΓΑΖΟΜΕΝΟΥ';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Φωτογραφία προσώπου υπαλλήλου';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Κενή υποδοχή';
 
   @override
-  String get end => 'END';
+  String get end => 'ΤΕΛΟΣ';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Ημερομηνία λήξης';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Ώρα λήξης';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Εγγραφή Πελάτη';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Εισαγάγετε το ποσό του λογαριασμού';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Εισαγάγετε κωδικό';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Εισαγάγετε τον κωδικό';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Εισαγάγετε τα στοιχεία επικοινωνίας δικτύωσης παρακάτω.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Εισαγάγετε το όνομά σας';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Εισαγάγετε τον κωδικό πρόσβασής σας';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Σήμα εκδήλωσης';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Επικοινωνία ανταλλαγής';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Ανταλλαγή επαφών...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Εξερευνώ';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'Η ενημέρωση της επαφής απέτυχε.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Γεμάτη υποδοχή';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Φιλτράρισμα επαφών';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Φιλτράρισμα επαφών';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Βρείτε άτομα στο BarQody';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Εύρεση χρήστη';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Εύρεση χρήστη';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Βρείτε όνομα χρήστη';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Ξεχάσατε;';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Δωρεάν καφές';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Ονοματεπώνυμο';
 
   @override
-  String get general => 'General';
+  String get general => 'Γενικός';
 
   @override
-  String get go => 'Go';
+  String get go => 'Πάω';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'Πηγαίνετε Επιχειρήσεις';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'ΕΠΙΣΚΕΠΤΗΣ';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'Γειά σου,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Το Κέντρο βοήθειας είναι απενεργοποιημένο σε αυτήν την επίδειξη διεπαφής χρήστη.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Κρατήστε τον κωδικό QR μέσα στο πλαίσιο — σαρώνει αυτόματα.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Πώς θέλετε να σχεδιάσετε αυτήν την κάρτα;';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Εισαγωγή επαφών';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'Η εισαγωγή επαφών δεν είναι ακόμη διαθέσιμη.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'σε';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Εισερχόμενες παραγγελίες';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'Μη έγκυρη διεύθυνση URL προφίλ. Σαρώστε μια έγκυρη κάρτα BarQody ή έναν κωδικό QR.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Μη έγκυρος κωδικός QR. Χρησιμοποιήστε ένα QR συνδέσμου Barqody.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Προσκαλέστε υπαλλήλους, ορίστε βάρδιες και παρακολουθήστε την παρουσία';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'Σας προσκάλεσε να συμμετάσχετε ως υπάλληλος';
 
   @override
-  String get janeDoe => 'Jane Doe';
+  String get janeDoe => 'Τζέιν Ντόε';
 
   @override
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Τίτλος Εργασίας';
 
   @override
   String get johnDoe => 'John Doe';
 
   @override
-  String get johnSmith => 'John Smith';
+  String get johnSmith => 'Τζον Σμιθ';
 
   @override
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Εγγραφή: 15 Ιανουαρίου 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,10 +851,10 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Διατηρήστε τον λογαριασμό σας ασφαλή. Σαρώστε κωδικούς QR μόνο όταν θέλετε να συνδέσετε μια συσκευή που εμπιστεύεστε.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Επιγραφή';
 
   @override
   String get lat => 'Lat';
@@ -845,1589 +862,1617 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Αφήστε άλλους να κατευθύνουν την κάμερα του τηλεφώνου τους σε αυτόν τον κωδικό QR για να δουν αμέσως το προφίλ δικτύωσης σας.';
 
   @override
-  String get link => 'Link';
+  String get link => 'Σύνδεσμος';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Συνδέστε μια συσκευή';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Σύνδεση μέσω QR σε άλλο τηλέφωνο';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'Ο σύνδεσμος αντιγράφηκε στο πρόχειρο';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Ρυθμίσεις συνδέσμου';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Ρυθμίσεις συνδέσμου';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Σύνδεση αυτής της συσκευής;';
 
   @override
-  String get links => 'Links';
+  String get links => 'Εδαφος διά παιγνίδι γκολφ';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Σύνδεσμοι σε αυτήν την κάρτα';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'Η τοποθεσία δεν έχει οριστεί ακόμα';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Απαιτείται άδεια τοποθεσίας';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Απαιτείται άδεια τοποθεσίας για τη συμμετοχή';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Συνδεθείτε';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Συνδεθείτε για να διαχειριστείτε την ψηφιακή κάρτα και το δίκτυό σας.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Συνδεθείτε με κωδικό QR';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Αποσυνδεθείτε';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Αποσύνδεση όλων';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Αποσύνδεση συσκευής;';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Προγράμματα αφοσίωσης';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Διαχείριση κατηγοριών';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Διαχείριση επαφής';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Διαχείριση Εργαζομένων';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Διαχειριστείτε τα προσωπικά σας στοιχεία και άλλες προτιμήσεις';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Σήμα Ολοκληρωμένο';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'Μηνιαίος';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Οι κάρτες μου';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'Η τοποθεσία μου';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Οι ανταμοιβές μου';
 
   @override
-  String get name => 'Name';
+  String get name => 'Ονομα';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'ΟΝΟΜΑ';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'Το όνομα απαιτείται';
 
   @override
   String get nameCompanyCom => 'name@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Νέα κάρτα';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Νέα κάρτα';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Νέα Κατηγορία';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Νέα επιβράβευση';
 
   @override
-  String get next => 'Next';
+  String get next => 'Επόμενος';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'Επόμενη κάρτα';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet =>
+      'Δεν έχουν συνδεθεί ακόμη ενεργοί σύνδεσμοι';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Δεν υπάρχουν διαθέσιμα ενεργά προγράμματα επιβράβευσης.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Δεν υπάρχουν ακόμη κάρτες υπαλλήλων';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Δεν προστέθηκαν υπάλληλοι';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Δεν υπάρχουν ακόμη υπάλληλοι';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Δεν βρέθηκε εργοδότης';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory =>
+      'Δεν υπάρχουν αντικείμενα σε αυτήν την κατηγορία.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable =>
+      'Δεν υπάρχουν διαθέσιμα πρότυπα συνδέσμων';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'Δεν υπάρχουν νέες ειδοποιήσεις αυτήν τη στιγμή.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Κανείς δεν έχει δει ακόμα το προφίλ σας.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Δεν υπάρχουν εκκρεμείς προσκλήσεις';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Δεν έχουν εκχωρηθεί ακόμη προγράμματα. Προσθέστε προγράμματα παρακάτω.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage =>
+      'Δεν βρέθηκε κωδικός QR σε αυτήν την εικόνα.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet =>
+      'Δεν υπάρχουν ακόμη προγράμματα επιβράβευσης';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'Δεν υπάρχουν διαθέσιμοι κουλοχέρηδες αυτήν την ημέρα';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Δεν βρέθηκαν χρήστες';
 
   @override
-  String get none => 'None';
+  String get none => 'Κανένας';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'Δεν διατίθεται στο τρέχον σχέδιό σας';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Δεν έχει γίνει ακόμα check in';
 
   @override
-  String get note => 'Note';
+  String get note => 'Σημείωμα';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Σημειώσεις (προαιρετικό)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Η ειδοποίηση διαγράφηκε';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Μόνο το εξώφυλλο, η φωτογραφία προφίλ, το όνομα και το βιογραφικό είναι επεξεργάσιμα εδώ.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Μόνο οι ενεργοποιημένοι σύνδεσμοι εμφανίζονται όταν κάποιος σαρώνει αυτήν την κάρτα.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => 'Εμφανίζονται μόνο δημόσια προφίλ';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Μόνο αυτό το τηλέφωνο χρησιμοποιεί τον λογαριασμό σας αυτήν τη στιγμή.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'Ή ΣΥΝΕΧΙΣΤΕ ΜΕ';
 
   @override
-  String get order => 'Order';
+  String get order => 'Παραγγελία';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Στοιχεία παραγγελίας';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'Ταυτότητα παραγγελίας';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'Η παραγγελία δεν βρέθηκε';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Παραγγελίες';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Χάρτινη κάρτα';
 
   @override
-  String get password => 'Password';
+  String get password => 'Σύνθημα';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Πληρώστε μήνα με μήνα';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'ΕΚΚΡΕΜΜΕΝΗ ΑΠΟΔΟΧΗ';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Επισκόπηση απόδοσης';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Προσωπικά Στοιχεία';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Τηλέφωνο';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Φωτογραφίες';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Επιλέξτε ένα έτοιμο έγχρωμο θέμα. Γρήγορο και καθαρό.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Επιλέξτε Χρώμα';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Επιλέξτε στον χάρτη';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Κάντε παραγγελία';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Το σχέδιο έληξε';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Εισαγάγετε τα στοιχεία της επιχείρησης για να συνεχίσετε';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Εισαγάγετε το όνομα του στοιχείου';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Δώστε τα στοιχεία της επιχείρησής σας πριν από την αναβάθμιση.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Επιλέξτε μια κατηγορία';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Επιλέξτε ένα χρονικό διάστημα';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst =>
+      'Ορίστε πρώτα την τοποθεσία εργασίας';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Στρέψτε την κάμερά σας στον κωδικό QR στην άλλη συσκευή';
 
   @override
-  String get points => 'Points';
+  String get points => 'Πόντοι';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Πόντοι που κερδίζονται';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Premium ενεργό';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Προηγούμενη κάρτα';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Τιμή (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'Πρότυπο PRO';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Προφίλ';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Έλεγχος προφίλ';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Ισχύς προφίλ';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Προφίλ θεατές';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Προβολές προφίλ';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Λεπτομέρειες προγράμματος';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Όνομα προγράμματος';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'Το πρόγραμμα δεν βρέθηκε';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Τύπος προγράμματος';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'Κωδικός QR';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'Σαρώσεις QR';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Ποσότητα';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Διαβάστε όλα';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Μόνο για ανάγνωση';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'Έλαβε 1 γραμματόσημο';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Πρόσφατη Δραστηριότητα';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Εξαργυρώστε άλλη μια ανταμοιβή';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Εξαργυρώστε την ανταμοιβή';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Εξαργυρωμένος δωρεάν καφές';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Ανανέωση QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'Περιοχή';
 
   @override
-  String get rembiro => 'Rembiro';
+  String get rembiro => 'Ρεμπίρο';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Αφαιρώ';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Κατάργηση υπαλλήλου';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Ανανέωση σχεδίου';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Αίτημα σε εκκρεμότητα';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Αίτημα σε εκκρεμότητα';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Το αίτημα απορρίφθηκε';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Ζητήστε συνδρομή';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Επαναφορά';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Η επιβράβευση ολοκληρώθηκε! Δείξτε αυτήν την κάρτα για εξαργύρωση.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Η επιβράβευση ολοκληρώθηκε! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Λεπτομέρειες ανταμοιβής';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Πρόγραμμα επιβράβευσης';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Προγράμματα επιβράβευσης';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Η ανταμοιβή εξαργυρώθηκε!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Ανταμοιβές';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Κερδισμένες ανταμοιβές';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '1.600 Rs μηνιαίως';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => '8.300 Rs τιμολογούνται ετησίως';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'ΕΚΤΟΣ';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Αποθηκεύστε την ταυτότητα εργασίας σας στο τηλέφωνο ή στο πορτοφόλι';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Σάρωση';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Σαρώστε έναν κωδικό QR χρήστη για να τον προσθέσετε ως υπάλληλο';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Σαρώστε οποιοδήποτε QR χρήστη ή επιχείρησης για να προσθέσετε υπάλληλο';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'Σάρωση Business QR για εξαργύρωση';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Σάρωση κωδικού QR πελάτη';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Σάρωση προφίλ υπαλλήλου';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Σάρωση QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Σάρωση QR / εμφάνιση QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'Σάρωση κωδικού QR';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Σάρωση QR που εμφανίζεται στην άλλη συσκευή';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Σάρωση για Πρόσκληση';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Αναζήτηση με όνομα χρήστη...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Αναζήτηση συνδέσμων';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany =>
+      'Αναζήτηση ονόματος, email ή εταιρείας';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Δείτε όλα';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Δείτε όλη η δραστηριότητα είναι χλευαστική. Θα εμφανιστούν νέες δραστηριότητες καθώς προστίθενται δυνητικοί πελάτες.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Επιλέξτε ημερομηνία';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Επιλέξτε Δείκτες';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Επιλέξτε Περιοχή';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon =>
+      'Ορίστε κείμενο κάτω από το εικονίδιο συνδέσμου';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Ορίστε τα δικά σας χρώματα, φωτογραφίες και φόντο.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Μερίδιο';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Κοινή χρήση κάρτας';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Μοιραστείτε διαφορετικούς συνδέσμους σε κάθε κάρτα';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Κοινή χρήση προφίλ';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Εμφάνιση συνδέσμου';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Εμφάνιση σε αυτήν την κάρτα';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Συνδεθείτε με το Google';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Εγγραφείτε';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Παραλείπω';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Παράλειψη προς το παρόν';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'Υποδοχή (λεπτά)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Μηχανικός Λογισμικού';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Κάτι πήγε στραβά';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Επιλογές ταξινόμησης';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Ειδικές οδηγίες';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Κάρτα γραμματοσήμων';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Σφραγίδα εικονίδιο';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Γραμματόσημα';
 
   @override
-  String get start => 'START';
+  String get start => 'ΑΡΧΗ';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Ημερομηνία έναρξης';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Ώρα έναρξης';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Ξεκινήστε τη δικτύωση πιο έξυπνα με την Barqody.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Στατιστικά στοιχεία';
 
   @override
-  String get status => 'Status';
+  String get status => 'Κατάσταση';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Συνδρομή';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'Υποβλήθηκε αίτημα συνδρομής';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'Υποβλήθηκε αίτημα συνδρομής.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Σύρετε για να περιηγηθείτε στις κάρτες';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Τραβήξτε μια γρήγορη selfie για επαλήθευση συμμετοχής';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Πατήστε \"Σύνδεσμοι κοινωνικής δικτύωσης\" παραπάνω για να προσθέσετε και να ενεργοποιήσετε προφίλ.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Πατήστε στον χάρτη ή χρησιμοποιήστε την τρέχουσα τοποθεσία σας';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Πατήστε για προσθήκη φωτογραφίας';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Πατήστε για κοινή χρήση κωδικού QR';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Ομαδική Προσέλευση';
 
   @override
-  String get template => 'Template';
+  String get template => 'Περίγραμμα';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Πρότυπα';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Σας ευχαριστώ! Οι υποβολές σχολίων είναι μόνο εικονικές.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Αυτή η κάρτα και ο κωδικός QR της θα αφαιρεθούν.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Αυτή η δυνατότητα είναι αποκλειστικά διαθέσιμη σε επαγγελματίες χρήστες.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'Αυτό είναι ήδη το όνομα χρήστη σας.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'Αυτόν τον μήνα';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Αυτό θα διαγράψει οριστικά αυτό το πρόγραμμα επιβράβευσης και όλες τις εγγραφές του.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Σήμερα είναι το Σαββατοκύριακο σας';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Σήμερα • 15:15';
 
   @override
-  String get total => 'Total';
+  String get total => 'Σύνολο';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Παρακολουθήστε τις παραγγελίες σας';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'Αναφορά συναλλαγής (προαιρετικό)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Αριθμός αναφοράς συναλλαγής (προαιρετικό)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Προσπαθήστε ξανά';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Δοκιμάστε το Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Δοκιμάστε το Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Τύπος';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Πληκτρολογήστε τουλάχιστον 2 χαρακτήρες από ένα όνομα χρήστη για αναζήτηση.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Πληκτρολογήστε τον κωδικό 8 χαρακτήρων που εμφανίζεται κάτω από το QR.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'Υπό Ανάπτυξη - Συνδεθείτε μέσω email/κωδικού πρόσβασης.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Αφαίρεση σφραγίδας εικονίδιο';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Αναβάθμιση τώρα';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Αναβάθμιση σε';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Αναβάθμιση σε Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Χρησιμοποιήστε ένα πρότυπο';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Χρησιμοποιήστε το Barqody σε άλλα τηλέφωνα ή tablet. Παραμένετε στον έλεγχο — αποσυνδεθείτε οποιαδήποτε συσκευή ανά πάσα στιγμή.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Χρησιμοποιήστε το Barqody στο τηλέφωνό σας για να σαρώσετε αυτόν τον κωδικό';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Χρησιμοποιήστε το προεπιλεγμένο εικονίδιο';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Χρησιμοποιήστε αυτήν τη φωτογραφία';
 
   @override
-  String get user => 'USER';
+  String get user => 'ΜΕΤΑΧΕΙΡΙΖΟΜΕΝΟΣ';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Έκδοση: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Δείτε και ενημερώστε τις παραγγελίες από τους πελάτες σας';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Προβολή Προφίλ';
 
   @override
-  String get views => 'Views';
+  String get views => 'Απόψεις';
 
   @override
-  String get website => 'Website';
+  String get website => 'Δικτυακός τόπος';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Καλώς ήλθατε πίσω';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Καλώς ορίσατε στο Κέντρο Λογαριασμών';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Όταν μια επιχείρηση σας προσθέτει ως εργαζόμενο, η κάρτα υπαλλήλου σας θα εμφανίζεται εδώ. Μπορείτε να προσαρμόσετε το σχεδιασμό του ανά πάσα στιγμή.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Όταν μια επιχείρηση σας εγγράψει στο πρόγραμμα ανταμοιβής της, θα εμφανίζεται εδώ.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Όταν μια επιχείρηση σας προσκαλεί στην ομάδα της, θα εμφανίζεται εδώ.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Όταν απενεργοποιηθεί, αυτός ο σύνδεσμος δεν θα εμφανίζεται στο προφίλ σας';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Γράψτε κάτι για εσάς ή την επωνυμία σας';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Ετήσια';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Χθες • 5:42 μ.μ';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Οι κατηγορίες σας';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Οι κάρτες των εργαζομένων σας από τους εργοδότες';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'Ο δωρεάν καφές σας εξαργυρώθηκε με επιτυχία.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Οι ανταμοιβές σας';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Η συνδρομή σας έληξε. Πατήστε το εικονίδιο πληροφοριών για λεπτομέρειες.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'το όνομά σου';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => 'Έκπτωση 10%.';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'ΑΒΑΤΑΡ ΠΑΡΑΚΟΠΗΘΗΚΕ';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Όνομα κατόχου λογαριασμού';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Αριθμός λογαριασμού';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Ενεργός τώρα';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Προσθήκη βιογραφικού';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Προσθήκη φωτογραφίας εξωφύλλου';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Προσθήκη φωτογραφίας προσώπου';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Προσθήκη φωνητικής σημείωσης εισαγωγής';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Προσθήκη ονόματος προφίλ';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Προσθήκη φωτογραφίας προφίλ';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Προσθήκη συνδέσμων κοινωνικής δικτύωσης (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Προσθήκη στοιχείου';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Προσθήκη συνδέσμου';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'Προσθέστε συνδέσμους στο προφίλ σας παρακάτω';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Προσθήκη φωτογραφίας';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Προσθήκη στο καλάθι';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Διεύθυνση (προαιρετικό)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Όλοι οι τύποι επαφών';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Επιτρεπόμενη ακτίνα (μέτρα)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Σχεδόν εκεί!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Ήδη Υπάλληλος';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Έχετε ήδη λογαριασμό;';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Πάντα επίκαιρο';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Είστε βέβαιοι ότι θέλετε να αποσυνδεθείτε από το Barqody;';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'Η προσέλευση απέτυχε';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Χρώμα φόντου';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'Η κράτηση απέτυχε';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward =>
+      'Περιγράψτε συνοπτικά αυτήν την ανταμοιβή...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Επαλήθευση επιχείρησης';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Διεύθυνση email επιχείρησης';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Επαγγελματικό φαξ';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Αριθμός τηλεφώνου επιχείρησης';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Ιστοσελίδα επιχείρησης';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Σφάλμα κάμερας';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Λήψη προσώπου';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Η κάρτα ολοκληρώθηκε';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Ετικέτα κάρτας';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Όνομα ετικέτας κάρτας';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Προεπισκόπηση κάρτας';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Θέμα κάρτας';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Η κάρτα δημιουργήθηκε';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Όνομα κάρτας';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Η κάρτα αποθηκεύτηκε ως JPG';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Η κάρτα αποθηκεύτηκε ως PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Η κάρτα ενημερώθηκε';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Αλλαγή φωτογραφίας';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Πρόσωπο check-in';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Το check-in ήταν επιτυχές';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Πρόσωπο αναχώρησης';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Το check-out ήταν επιτυχές';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Επιλέξτε πρότυπο';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress =>
+      'Διεύθυνση επαγγελματικής κάρτας επικοινωνίας';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'Επωνυμία εταιρείας κάρτας επικοινωνίας';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'email κάρτας επικοινωνίας';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress =>
+      'Διεύθυνση κατοικίας κάρτας επικοινωνίας';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Τηλέφωνο κάρτας επικοινωνίας';
 
   @override
   String get contactCardWebsite => 'Contact card website';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin =>
+      'Δεν ήταν δυνατή η ολοκλήρωση της σύνδεσης';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'Δεν ήταν δυνατή η δημιουργία κωδικού QR';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Δεν ήταν δυνατή η σύνδεση της συσκευής';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice =>
+      'Δεν ήταν δυνατή η αποσύνδεση της συσκευής';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet =>
+      'Δεν ήταν δυνατό το άνοιγμα του Πορτοφολιού Google';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign =>
+      'Δεν ήταν δυνατή η αποθήκευση του σχεδίου της κάρτας';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Δεν ήταν δυνατή η ενημέρωση της ορατότητας του προφίλ';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Δημιουργία Gallery';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Δημιουργήστε μια κάρτα για να μοιραστείτε το προφίλ σας';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Δημιουργία κάρτας';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Προσαρμοσμένη τράπεζα';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Οι πελάτες μπορούν να εγγραφούν και να σφραγιστούν';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Προσαρμογή κάρτας';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram =>
+      'Περιγράψτε το πρόγραμμα αφοσίωσης σας';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Εμφανιζόμενο όνομα';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Δεν έχετε λογαριασμό;';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'ΕΕΕ, η ΜΜΜ εεεε';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Επεξεργασία ανταμοιβής';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Επεξεργασία στοιχείου';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'Διεύθυνση ηλεκτρονικού ταχυδρομείου';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'Απαιτείται email';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Κάρτες εργαζομένων';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Ο υπάλληλος αφαιρέθηκε';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved =>
+      'Οι ρυθμίσεις των εργαζομένων αποθηκεύτηκαν';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Εγγεγραμμένες επιχειρήσεις';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Εισαγάγετε ένα έγκυρο email';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard =>
+      'Εισαγάγετε βιογραφικό για την κάρτα επικοινωνίας';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Εισαγάγετε το όνομα του προγράμματος';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Εισαγάγετε το βιογραφικό σας';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Εισαγάγετε τον αριθμό τηλεφώνου σας';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL =>
+      'Εισαγάγετε τη διεύθυνση URL του ιστότοπού σας';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Σήμα εκδήλωσης';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee =>
+      'Παράδειγμα: 10 γραμματόσημα = Δωρεάν καφές';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Προστέθηκε φωτογραφία προσώπου';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'Αποτυχία προσθήκης προγράμματος';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Αποτυχία προσθήκης σφραγίδας';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Αποτυχία εγγραφής πελάτη';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Αποτυχία ανταλλαγής επαφής';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Αποτυχία φόρτωσης προγραμμάτων';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Η παραγγελία απέτυχε';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Αποτυχία κατάργησης';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Αποτυχία αποθήκευσης';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'Αποτυχία αποθήκευσης JPG';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'Αποτυχία αποθήκευσης PNG';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'Αποτυχία αποθήκευσης QR Code.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'Αποτυχία αποθήκευσης επιχειρησιακών στοιχείων';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Η ενημέρωση της κατάστασης απέτυχε';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Ονομα';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Τρόφιμα & Ποτά';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Δωρεάν επιδόρπιο';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Απαιτείται άδεια γκαλερί. Ενεργοποιήστε το στις Ρυθμίσεις.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Ξεκινήστε';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Πάω';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices =>
+      'Μεταβείτε στα Εργαλεία → Συνδεδεμένες συσκευές';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending =>
+      'Εκκρεμεί η ρύθμιση του Πορτοφολιού Google.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Εκκρεμεί η ρύθμιση του Πορτοφολιού Google. Ο σύνδεσμος προφίλ αντιγράφηκε.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Αναπτύξτε την επιχείρησή σας';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Επισκέπτης Χρήστης';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'Αριθμός IBAN';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'ΣΤΟ ΓΡΑΦΕΙΟ';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Η πρόσκληση εκκρεμεί';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'Η πρόσκληση απορρίφθηκε';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Η πρόσκληση στάλθηκε. Οι υπάλληλοι θα προστεθούν αφού αποδεχτούν.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Πρόσκληση υπαλλήλου';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Πρόσκληση ως Υπάλληλος';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Τίτλος εργασίας';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Επώνυμο';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Συνδεθείτε με QR';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Αποσύνδεση μόνο από αυτόν τον λογαριασμό; Οι άλλοι λογαριασμοί θα παραμείνουν σε αυτό το τηλέφωνο.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Συνδεθήκατε με το Google (Επίδειξη λογαριασμού: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Σύνδεσή σας…';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'Η σύνδεση απέτυχε. Προσπαθήστε ξανά.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'ΜΜΜ η, εεε - ω:μ α';
 
   @override
-  String get mmmmYyyy => 'MMMM yyyy';
+  String get mmmmYyyy => 'ΜΜΜ εεεε';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Σημειώστε την Παρακολούθηση';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'Το όνομά μου';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'Το προφίλ μου Tapni';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'Το όνομα δεν μπορεί να είναι κενό';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Νέος';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Δεν υπάρχουν επαφές ακόμα';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Δεν υπάρχουν ακόμη λεπτομέρειες';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Δεν έχουν προστεθεί ακόμη σύνδεσμοι.\\nΠατήστε \"Προσθήκη συνδέσμου\" για να ξεκινήσετε.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Χωρίς αγώνες';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Δεν αναφέρθηκε λόγος.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Δεν έχει εγγραφεί';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Αριθμός γραμματοσήμων';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Ένα πάτημα για κοινή χρήση';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Ανοίξτε το Barqody στο άλλο σας τηλέφωνο';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Ανοίξτε την κάμερα';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Πληροφορίες Παραγγελίας';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Χαρτί κάρτα';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον 4 χαρακτήρες';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον 6 χαρακτήρες';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Αριθμός τηλεφώνου';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Απαιτείται τηλέφωνο';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Αριθμός τηλεφώνου';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Επιλέξτε Τοποθεσία';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Εισαγάγετε έναν κωδικό πρόσβασης';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Εισαγάγετε ένα όνομα χρήστη';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Εισαγάγετε μια έγκυρη διεύθυνση email';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'Εισαγάγετε έναν έγκυρο αριθμό γραμματοσήμων';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Παρακαλώ εισάγετε το email σας';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Παρακαλώ εισάγετε το όνομά σας';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Εισαγάγετε τον κωδικό πρόσβασής σας';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Στρέψτε την κάμερα σε έναν κωδικό QR για αυτόματη σάρωση.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Στρέψτε την κάμερα σε ένα σήμα εκδήλωσης και πατήστε το κουμπί Κάμερα.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Στρέψτε την κάμερα προς την χάρτινη κάρτα και πατήστε το κουμπί Κάμερα.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'Προετοιμασία κωδικού QR…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'Το προφίλ δεν βρέθηκε.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'Το προφίλ ενημερώθηκε με επιτυχία!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'Ο κωδικός QR αποθηκεύτηκε στη συλλογή!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'Ο κωδικός QR έληξε';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh => 'Ο κωδικός QR έληξε. Πατήστε ανανέωση.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Ακίνητα';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Επισυνάπτεται η απόδειξη';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Ανανεώστε τη συνδρομή σας για να επαναφέρετε την πλήρη πρόσβαση στις premium λειτουργίες και τα δεδομένα σας.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Επαναλάβετε τη φωτογραφία';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Τίτλος επιβράβευσης';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Η ανταμοιβή ξεκλειδώθηκε 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Ρόλος ή εταιρεία';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Αποθήκευση αλλαγών';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Αποθήκευση επαφής';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Αποθήκευση προφίλ';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Αποθήκευση ρυθμίσεων';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Αποθήκευση ονόματος χρήστη';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Αποθήκευση κάρτας';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Αποθήκευση επαφής';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Αποθηκεύτηκε τοπικά. Ο συγχρονισμός μπορεί να απέτυχε.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Σαρώστε έναν κωδικό QR ή προσθέστε κάποιον που γνωρίσατε για να δημιουργήσετε το δίκτυό σας.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Σάρωση μέσω QR';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Θέμα οθόνης';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'Η αναζήτηση απέτυχε. Προσπαθήστε ξανά.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Επιλέξτε Εταιρεία';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Επιλέξτε Εύρος ημερομηνιών';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Επιλέξτε Ημερομηνία λήξης';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Επιλέξτε Ημερομηνία έναρξης';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Αποστολή Πρόσκλησης';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Αποστολή πρόσκλησης για συμμετοχή';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Κοινή χρήση συνδέσμου';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Χρονισμός αλλαγής';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Έξυπνη λήψη επαφών';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Χρώμα περιγράμματος σφραγίδας';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Χρώμα γραμματοσήμων';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Εικονίδια γραμματοσήμων (προαιρετικά)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Δίνονται γραμματόσημα';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork =>
+      'Ξεκινήστε τη δημιουργία του δικτύου σας';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Όνομα οδού';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Μεταβείτε σε έναν επαγγελματικό λογαριασμό για να ξεκλειδώσετε την πλήρη πρόσβαση.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Πατήστε Σύνδεση συσκευής και σαρώστε αυτό το QR';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Πατήστε για προσθήκη εικόνας';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Πατήστε για αλλαγή';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Το πρότυπο εφαρμόζεται τοπικά. Ο συγχρονισμός απέτυχε.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Χρώμα κειμένου';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'Αυτός ο λογαριασμός';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Αυτή η δυνατότητα είναι αποκλειστικά διαθέσιμη σε επαγγελματίες χρήστες.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'Αυτό το άτομο είναι στην ομάδα σας';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Αυτό το πρόγραμμα έχει τεθεί σε παύση';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Σύνολο γραμματοσήμων';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Δοκιμάστε ένα διαφορετικό όνομα, email ή εταιρεία.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'Δεν είναι δυνατή η αποθήκευση του προφίλ. Προσπαθήστε ξανά.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Δεν είναι δυνατή η ενημέρωση του ονόματος χρήστη. Προσπαθήστε ξανά.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'Υπό Ανάπτυξη - Συνδεθείτε μέσω email/κωδικού πρόσβασης.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Άγνωστος Χρήστης';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Ενημέρωση τοποθεσίας GPS';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Ενημέρωση κατάστασης';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Ενημέρωση καλαθιού';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Ενημέρωση στοιχείου';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Αναβάθμιση σε';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Αναβάθμιση σε Business PRO';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Μεταφόρτωση απόδειξης (προαιρετικό)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Χρήση της τοποθεσίας μου';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Χρησιμοποιήστε μόνο γράμματα, αριθμούς, κάτω παύλες ή παύλες';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'Το όνομα χρήστη πρέπει να αποτελείται από τουλάχιστον 3 χαρακτήρες';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'Το όνομα χρήστη πρέπει να είναι το πολύ 30 χαρακτήρες';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'Το όνομα χρήστη ενημερώθηκε με επιτυχία!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Περιμένοντας να δεχτούν';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'URL ιστότοπου';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Μέρες Σαββατοκύριακου';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Θέση εργασίας';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'Η συνδρομή σας PRO έχει λήξει.\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => 'Η συνδρομή σας PRO έχει λήξει.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Οι λειτουργίες Premium είναι απενεργοποιημένες αυτήν τη στιγμή.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Οι σύνδεσμοι επαγγελματίες είναι κρυφοί από το δημόσιο προφίλ σας.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Τα στοιχεία και τα δεδομένα της επιχείρησής σας είναι ασφαλή.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Προσθήκη $label στοιχείου';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Προσθέστε τουλάχιστον ένα $label στοιχείο';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'Δεν υπάρχουν $label αντικείμενα διαθέσιμα.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Δεν υπάρχουν ακόμη στοιχεία. Προσθέστε το πρώτο σας $label στοιχείο.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Κανένα δημόσιο προφίλ δεν ταιριάζει με το \"@$query\".';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Κωδικός: $code';
   }
 }

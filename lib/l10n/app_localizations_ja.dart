@@ -12,821 +12,809 @@ class AppLocalizationsJa extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'ツール';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'アカウント設定';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => '通知';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'あなたのために';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'あなたのプロフィール';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'プロフィールの編集';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => '名前、写真、プロフィールを変更する';
 
   @override
-  String get username => 'Username';
+  String get username => 'ユーザー名';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle => '独自のプロフィールのユーザー名を設定する';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'ソーシャルリンク';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle => 'Instagram、WhatsApp、ウェブサイトなどを追加';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => '公開プロフィール';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => '誰でもあなたのプロフィールを見つけて閲覧できます';
 
   @override
-  String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+  String get publicProfileOff => '検索から非表示 - 他の人はあなたを見つけることができません';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => '私のQRコードを共有する';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle => '他の人にデジタル名刺をスキャンしてもらいましょう';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'ショッピングと特典';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => '私の注文';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => 'ショップからの注文を追跡する';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => '私のポイントカード';
 
   @override
-  String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+  String get myRewardCardsSubtitle => 'ロイヤルティ プログラムのスタンプとポイントを表示する';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => '職場';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => '従業員の招待';
 
   @override
-  String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+  String get employeeInvitationsSubtitle => '企業からのチームへの招待を承諾または拒否する';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => '職場のチェックイン';
 
   @override
-  String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+  String get workplaceCheckInSubtitle => '位置情報を使用して職場への出退勤を記録する';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'アカウントとデバイス';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'リンクされたデバイス';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => 'WhatsApp などの別の電話をリンクする';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'アカウント';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'アカウントの追加または切り替え';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return '$count アカウント間の切り替え';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'ヘルプとアカウント';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'アプリ言語';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => 'アプリで使用する言語を変更する';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => '検索言語';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => '電話の言語';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => '言語が更新されました';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'ヘルプとよくある質問';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'よくある質問への回答';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'フィードバックを送信する';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle => 'バグを報告するか、新機能を提案してください';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'ログアウト';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'このセッションからサインアウトする';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'キャンセル';
 
   @override
-  String get save => 'Save';
+  String get save => '保存';
 
   @override
-  String get done => 'Done';
+  String get done => '終わり';
 
   @override
-  String get str => 'بطاقة أعمال الرقمية';
+  String get str => 'और देखें';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(読み取り専用)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 ポイント = 100 PKR (ルール例)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '必要なスタンプは10個';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '123 Main St, シティ';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2日前';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3 ～ 30 文字。文字、数字、アンダースコア、ハイフンのみ。';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => '受け入れる';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'アクセス制限あり';
 
   @override
-  String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+  String get accountIBANAddAccountNumberHere => 'アカウント/IBAN: ここにアカウント番号を追加します';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'アカウントタイトル: タップニ';
 
   @override
-  String get active => 'Active';
+  String get active => 'アクティブ';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'アクティブ';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'アクティブカード';
 
   @override
-  String get add => 'Add';
+  String get add => '追加';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'メモを追加...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'アカウントを追加';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst => 'まず少なくとも 1 つのカテゴリを追加してください';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      '表示順にカテゴリを追加します (例: ファーストフード、次にデジ)';
 
   @override
-  String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+  String get addCategoriesInYourCatalogSettingsFirst => 'まずカタログ設定にカテゴリを追加します。';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => '連絡先を追加';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'リンクを追加';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow => '以下のプロフィールへのリンクを追加してください';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'まずプロフィールにリンクを追加してから、ここでリンクを有効にします。';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'ロゴを追加する';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'ポイントを追加する';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'プログラムの追加';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'スタンプを追加する';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Google ウォレットに追加';
 
   @override
-  String get address => 'Address';
+  String get address => '住所';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => '全て';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => '全員追いついた！';
 
   @override
-  String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+  String get allNotificationsMarkedAsRead => 'すべての通知に既読マークが付いています。';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'カメラを許可する';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'このデバイスが Barqody アカウントにアクセスすることを許可しますか?リンクされたデバイスからいつでも削除できます。';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'すでにアカウントをお持ちですか?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => '分析ダッシュボード';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => '特別なご要望がございましたら...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => '適用する';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'デザインを適用する';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'テンプレートの適用';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => '上昇';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'QR をスキャンして従業員として追加するよう企業に依頼してください';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'カテゴリの割り当て';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => '割り当てられたプログラム';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => '少なくとも6文字';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => '本日の出席は完了しました';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => '利用可能なスロット';
 
   @override
-  String get background => 'Background';
+  String get background => '背景';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => '背景色';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => '銀行口座';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => '銀行詳細';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => '銀行: ここに銀行名を追加します';
 
   @override
   String get barqody => 'Barqody';
 
   @override
-  String get barqodyV100 => 'barqody v1.0.0';
+  String get barqodyV100 => 'バーコディ v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => '最高の価値';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => '請求金額';
 
   @override
-  String get bio => 'BIO';
+  String get bio => 'バイオ';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => 'バイオ';
 
   @override
-  String get book => 'Book';
+  String get book => '本';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => '予約日';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => '予約スケジュール';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => '予約時間';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => '仕事';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => '事業内容';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => '事業内容';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => '商号';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'ビジネスオプション';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'ビジネスプログラム';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'ビジネスユーザーのみ';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'サインアップすると、利用規約に同意したことになります。';
 
   @override
-  String get call => 'Call';
+  String get call => '電話';
 
   @override
-  String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+  String get cameraPermissionIsRequiredToScan => 'スキャンするにはカメラの許可が必要です。';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'いつでもキャンセルできます。';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => '注文をキャンセルする';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => '新しい連絡先をキャプチャする';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'カテゴリー';
 
   @override
-  String get category => 'Category *';
+  String get category => 'カテゴリー *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'カテゴリはすでに存在します';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'カテゴリ名';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'チェックイン';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'チェックアウト';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'プロフィール リンク用に一意のユーザー名を選択してください。';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'プランを選択';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'テンプレートの選択';
 
   @override
-  String get close => 'Close';
+  String get close => '近い';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'コードをコピーしました';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => '近日公開予定';
 
   @override
-  String get company => 'Company';
+  String get company => '会社';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => '社員証';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => '株式会社カンパニー';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'これらの手順を完了してください';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'ポイントの確認・追加';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => '予約を確認する';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => '場所を確認する';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => '引き換えの確認';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => '接続されたアカウント';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => '連絡先が正常に追加されました。';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => '連絡先カード';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => '無事に連絡先交換できました！';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'ソースに連絡する';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => '連絡先が正常に更新されました。';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => '連絡先';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => '続く';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'コピーされました';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'コードをコピーする';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      '位置情報を取得できませんでした。 GPS許可を有効にしてください。';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'アカウントを切り替えられませんでした';
 
   @override
-  String get create => 'Create';
+  String get create => '作成する';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'アカウントを作成する';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'ロイヤルティ プログラムの作成';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => '新しいリンクを作成する';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'プログラムの作成';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => '報酬の作成';
 
   @override
-  String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+  String get createStampOrPointsRewardsForCustomers => '顧客向けのスタンプやポイント特典を作成する';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => '最初のカードを作成する';
 
   @override
-  String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+  String get createYourFirstRewardCardForCustomers => '顧客向けの最初のポイントカードを作成する';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => '作成日';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'スタンプされたスロットとスタンプされていないスロットのカスタム イメージ。設定されていない場合はデフォルトが使用されます。';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'カスタムリンク';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => '顧客の詳細';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'お客様は正常に登録されました';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'お客様はまだ登録されていません';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'ノーショーのお客様';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => '顧客の注文';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'カードデザインのカスタマイズ';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'デザインのカスタマイズ';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'プロフィールをカスタマイズし、PRO テンプレートのロックを解除し、無制限の見込み客を獲得します。';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => '自分自身をカスタマイズする';
 
   @override
-  String get date => 'Date';
+  String get date => '日付';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => '日付範囲';
 
   @override
-  String get decline => 'Decline';
+  String get decline => '衰退';
 
   @override
-  String get delete => 'Delete';
+  String get delete => '消去';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'カードを削除しますか?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'カテゴリの削除';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => '連絡先の削除';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => '報酬を削除しますか?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => '降順';
 
   @override
-  String get description => 'Description';
+  String get description => '説明';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => '説明 (オプション)';
 
   @override
-  String get details => 'Details';
+  String get details => '詳細';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'デバイスがリンクされています';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'デバイスがログアウトしました';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'デバイスのステータス';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'デジタル名刺';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'デジタル名刺';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'アカウントをお持ちでない場合は、';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => '例えばファーストフード';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => '例えば砂糖不使用、エクストラホット...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => '50ポイント獲得';
 
   @override
-  String get edit => 'Edit';
+  String get edit => '編集';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'カードを編集する';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => '詳細の編集';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'プロフィールの編集';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => '設定の編集';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'プロフィールの詳細を編集する';
 
   @override
-  String get email => 'Email';
+  String get email => '電子メール';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'メールアドレスとパスワード';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => '電子メールアドレス';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => '電子メールでログインするか、QR をスキャンしてください';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => '社員証';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => '従業員カード';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => '社員の顔写真';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => '空のスロット';
 
   @override
-  String get end => 'END';
+  String get end => '終わり';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => '終了日';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => '終了時間';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => '顧客を登録する';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => '請求額を入力してください';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'コードを入力してください';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => '代わりにコードを入力してください';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      '以下にネットワーキングの連絡先の詳細を入力してください。';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'あなたの名前を入力してください';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'パスワードを入力してください';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'イベントバッジ';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => '連絡先を交換する';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => '連絡先を交換しています...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => '探検する';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => '連絡先を更新できませんでした。';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => '埋まったスロット';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => '連絡先をフィルタリングする';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'フィルター連絡先';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'BarQody で人を探す';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'ユーザーを探す';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'ユーザーの検索';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'ユーザー名の検索';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => '忘れましたか？';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => '無料のコーヒー';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'フルネーム';
 
   @override
-  String get general => 'General';
+  String get general => '一般的な';
 
   @override
-  String get go => 'Go';
+  String get go => '行く';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'ビジネスに行く';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'ゲスト';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'こんにちは、';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'この UI デモではヘルプ センターが無効になっています。';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => '16 進数: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'QR コードをフレーム内にかざすと、自動的にスキャンされます。';
 
   @override
-  String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+  String get howDoYouWantToDesignThisCard => 'このカードをどのようにデザインしますか?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => '連絡先をインポートする';
 
   @override
-  String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+  String get importContactsIsNotAvailableYet => '連絡先のインポートはまだ利用できません。';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'で';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => '入荷注文';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'プロフィール URL が無効です。有効な BarQody カードまたは QR コードをスキャンします。';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      '無効な QR コードです。 Barqody リンク QR を使用します。';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      '従業員を招待し、シフトを設定し、在席状況を追跡する';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee => 'あなたを従業員として招待しました';
 
   @override
-  String get janeDoe => 'Jane Doe';
+  String get janeDoe => 'ジェーン・ドウ';
 
   @override
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => '役職';
 
   @override
-  String get johnDoe => 'John Doe';
+  String get johnDoe => 'ジョン・ドゥ';
 
   @override
-  String get johnSmith => 'John Smith';
+  String get johnSmith => 'ジョン・スミス';
 
   @override
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => '参加日: 2026 年 1 月 15 日';
 
   @override
   String get jpg => 'JPG';
@@ -834,1600 +822,1564 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'アカウントを安全に保管してください。信頼できるデバイスをリンクする場合にのみ、QR コードをスキャンしてください。';
 
   @override
-  String get label => 'Label';
+  String get label => 'ラベル';
 
   @override
-  String get lat => 'Lat';
+  String get lat => '緯度';
 
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      '他の人が携帯電話のカメラをこの QR コードに向けて、あなたのネットワーキング プロファイルを即座に表示できるようにしてください。';
 
   @override
-  String get link => 'Link';
+  String get link => 'リンク';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'デバイスをリンクする';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => '別の携帯電話から QR でリンクする';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'リンクがクリップボードにコピーされました';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'リンク設定';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'リンク設定';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'このデバイスをリンクしますか?';
 
   @override
-  String get links => 'Links';
+  String get links => 'リンク';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'このカードのリンク';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => '場所はまだ設定されていません';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => '位置情報の許可が必要です';
 
   @override
-  String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+  String get locationPermissionRequiredForAttendance => '参加には場所の許可が必要です';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'ログイン';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'ログインしてデジタル カードとネットワークを管理します。';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'QRコードでログイン';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'ログアウト';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'すべてログアウトする';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'デバイスをログアウトしますか?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'ロイヤルティ プログラム';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'カテゴリの管理';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => '連絡先の管理';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => '従業員の管理';
 
   @override
-  String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+  String get manageYourPersonalDetailsOtherPreferences => '個人情報やその他の設定を管理する';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => '完了マークを付ける';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => '毎月';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => '私のカード';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => '私の現在地';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => '私のご褒美';
 
   @override
-  String get name => 'Name';
+  String get name => '名前';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => '名前';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => '名前は必須です';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => '名前@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => '新しいカード';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => '新しいカード';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => '新しいカテゴリー';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => '新しい報酬';
 
   @override
-  String get next => 'Next';
+  String get next => '次';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => '次のカード';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet => 'まだアクティブなリンクが接続されていません';
 
   @override
-  String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+  String get noActiveRewardProgramsAvailable => '有効な特典プログラムはありません。';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => '従業員カードはまだありません';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => '従業員は追加されませんでした';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'まだ従業員はいません';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => '雇用主が見つかりませんでした';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'このカテゴリにはアイテムがありません。';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => '利用可能なリンク テンプレートがありません';
 
   @override
-  String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+  String get noNewNotificationsAtThisTime => '現時点では新しい通知はありません。';
 
   @override
-  String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+  String get noOneHasViewedYourProfileYet => 'まだあなたのプロフィールを見た人はいません。';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => '保留中の招待はありません';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'まだプログラムが割り当てられていません。以下にプログラムを追加します。';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => 'この画像には QR コードが見つかりません。';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'まだ特典プログラムはありません';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay => 'この日は空き枠がありません';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'ユーザーが見つかりませんでした';
 
   @override
-  String get none => 'None';
+  String get none => 'なし';
 
   @override
-  String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+  String get notAvailableOnYourCurrentPlan => '現在のプランでは利用できません';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'まだチェックインしていません';
 
   @override
-  String get note => 'Note';
+  String get note => '注記';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => '注記 (オプション)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => '通知がクリアされました';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'ここで編集できるのは、カバー、プロフィール写真、名前、プロフィールのみです。';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      '誰かがこのカードをスキャンすると、有効なリンクのみが表示されます。';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => '公開プロフィールのみが表示されます';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      '現在、この電話だけがあなたのアカウントを使用しています。';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'または続行してください';
 
   @override
-  String get order => 'Order';
+  String get order => '注文';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => '注文の詳細';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => '注文ID';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => '注文が見つかりません';
 
   @override
-  String get orders => 'Orders';
+  String get orders => '注文';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => '紙カード';
 
   @override
-  String get password => 'Password';
+  String get password => 'パスワード';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => '月ごとに支払う';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => '承認待ち';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'パフォーマンスの概要';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => '個人情報';
 
   @override
-  String get phone => 'Phone';
+  String get phone => '電話';
 
   @override
-  String get photos => 'Photos';
+  String get photos => '写真';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      '既製のカラーテーマを選択します。素早くてきれい。';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => '色の選択';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => '地図上で選択';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => '注文する';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'プランの有効期限が切れました';
 
   @override
-  String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+  String get pleaseEnterBusinessDetailsToContinue => '続行するにはビジネスの詳細を入力してください';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => '項目名を入力してください';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'アップグレードする前に、ビジネスの詳細を入力してください。';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'カテゴリを選択してください';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => '時間帯を選択してください';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => '最初に勤務場所を設定してください';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'カメラを他のデバイスの QR コードに向けます';
 
   @override
-  String get points => 'Points';
+  String get points => 'ポイント';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => '獲得ポイント';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'プレミアムアクティブ';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => '前のカード';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => '価格 (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'PRO テンプレート';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'プロフィール';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'プロフィールチェック';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'プロファイル強度';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'プロフィール閲覧者';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => '縦断ビュー';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'プログラム詳細';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'プログラム名';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'プログラムが見つかりません';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'プログラムの種類';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'QRコード';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'QRスキャン';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => '量';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'すべて読む';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => '読み取り専用';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'スタンプを1個受け取りました';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => '最近の活動';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => '別の特典を引き換える';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => '報酬を引き換える';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => '無料のコーヒーを引き換えた';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'QRを更新';
 
   @override
-  String get region => 'Region';
+  String get region => '地域';
 
   @override
-  String get rembiro => 'Rembiro';
+  String get rembiro => 'レンビロ';
 
   @override
-  String get remove => 'Remove';
+  String get remove => '取り除く';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => '従業員の削除';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => '更新プラン';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'リクエストは保留中です';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'リクエスト保留中';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'リクエストが拒否されました';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => '購読をリクエストする';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'リセット';
 
   @override
-  String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+  String get rewardCompletedShowThisCardToRedeem => '報酬完了！このカードを提示して引き換えてください。';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => '報酬完了！ 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => '報酬の詳細';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => '報酬プログラム';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => '特典プログラム';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => '報酬を引き換えました！';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => '報酬';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => '獲得した報酬';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '月額 1,600 円請求';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => '年間 8,300 ルピーが請求されます';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => '保存';
 
   @override
-  String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+  String get saveYourWorkIDCardToPhoneOrWallet => '職場 ID カードを携帯電話または財布に保存します';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'スキャン';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'ユーザーの QR コードをスキャンして従業員として追加します';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'ユーザーまたはビジネスの QR をスキャンして従業員を追加します';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'ビジネス QR をスキャンして引き換える';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => '顧客の QR コードをスキャンします';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => '従業員プロフィールをスキャンする';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'QRをスキャン';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'QR をスキャン / QR を表示';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'QRコードをスキャン';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice => '他のデバイスに表示されている QR をスキャンします';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'スキャンして招待';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'ユーザー名で検索...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => '検索リンク';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => '名前、メールアドレス、会社名を検索';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'すべて見る';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'すべてのアクティビティがモックされているのを参照してください。リードが追加されると、新しいアクティビティが表示されます。';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => '日付を選択してください';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'マーカーの選択';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => '地域の選択';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'リンクアイコンの下にテキストを設定します';
 
   @override
-  String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+  String get setYourOwnColorsPhotosAndBackground => '独自の色、写真、背景を設定します。';
 
   @override
-  String get share => 'Share';
+  String get share => '共有';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'シェアカード';
 
   @override
-  String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+  String get shareDifferentLinksOnEachCard => '各カードの異なるリンクを共有する';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'プロフィールを共有する';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'リンクを表示';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'このカードに表示';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Googleでサインイン';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'サインアップ';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'スキップ';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => '今のところスキップしてください';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'スロット (分)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'ソフトウェアエンジニア';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => '何か問題が発生しました';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => '並べ替えオプション';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => '特別な指示';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'スタンプカード';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'スタンプアイコン';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'スタンプ';
 
   @override
-  String get start => 'START';
+  String get start => '始める';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => '開始日';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => '開始時間';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Barqody でよりスマートなネットワーキングを始めましょう。';
 
   @override
-  String get stats => 'Stats';
+  String get stats => '統計';
 
   @override
-  String get status => 'Status';
+  String get status => '状態';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'サブスクリプション';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'サブスクリプションリクエストが送信されました';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'サブスクリプションリクエストが送信されました。';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'スワイプしてカードを閲覧します';
 
   @override
-  String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+  String get takeAQuickSelfieForAttendanceVerification => '出席確認のために簡単な自撮り写真を撮る';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      '上の「ソーシャルリンク」をタップしてプロフィールを追加して有効にします。';
 
   @override
-  String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+  String get tapOnTheMapOrUseYourCurrentLocation => '地図をタップするか、現在地を使用します';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'タップして写真を追加します';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'タップして QR コードを共有します';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'チームの出席状況';
 
   @override
-  String get template => 'Template';
+  String get template => 'テンプレート';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'テンプレート';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'ありがとう！フィードバックの送信はモックのみです。';
 
   @override
-  String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+  String get thisCardAndItsQRCodeWillBeRemoved => 'このカードとそのQRコードは削除されます。';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'この機能はビジネス ユーザーのみが利用できます。';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'これはすでにあなたのユーザー名です。';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => '今月';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'これにより、この特典プログラムとそのすべての登録が完全に削除されます。';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => '今日はあなたの週末です';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => '今日 • 午後 3 時 15 分';
 
   @override
-  String get total => 'Total';
+  String get total => '合計';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => '注文を追跡する';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'トランザクション参照 (オプション)';
 
   @override
-  String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+  String get transactionReferenceNumberOptional => '取引参照番号 (オプション)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'もう一度やり直してください';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'ビジネスプロを試す';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'ビジネスプロをお試しください。';
 
   @override
-  String get type => 'Type';
+  String get type => 'タイプ';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      '検索するユーザー名を 2 文字以上入力します。';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'QR の下に表示されている 8 文字のコードを入力します。';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      '開発中 - 代わりに電子メール/パスワードを使用してログインしてください。';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'スタンプ解除アイコン';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => '今すぐアップグレードしてください';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'にアップグレード';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Tapni PRO にアップグレードする';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'テンプレートを使用する';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      '他の携帯電話やタブレットでも Barqody を使用してください。いつでもどのデバイスでもログアウトできます。';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      '携帯電話で Barqody を使用してこのコードをスキャンしてください';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'デフォルトのアイコンを使用する';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'この写真を使用してください';
 
   @override
-  String get user => 'USER';
+  String get user => 'ユーザー';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'バージョン: 1.0.1';
 
   @override
-  String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+  String get viewAndUpdateOrdersFromYourCustomers => '顧客からの注文を表示および更新する';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'プロフィールを見る';
 
   @override
-  String get views => 'Views';
+  String get views => 'ビュー';
 
   @override
-  String get website => 'Website';
+  String get website => 'Webサイト';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'おかえり';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'アカウント センターへようこそ';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      '企業があなたを従業員として追加すると、従業員カードがここに表示されます。いつでもデザインをカスタマイズできます。';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      '企業があなたを報酬プログラムに登録すると、ここに表示されます。';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      '企業があなたをチームに招待すると、ここに表示されます。';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'オフにすると、このリンクはプロフィールに表示されなくなります';
 
   @override
-  String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+  String get writeSomethingAboutYouOrYourBrand => 'あなたまたはあなたのブランドについて何か書いてください';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => '毎年';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => '昨日 • 午後 5 時 42 分';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'あなたのカテゴリー';
 
   @override
-  String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+  String get yourEmployeeCardsFromEmployers => '雇用主からの従業員カード';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      '無料のコーヒーは正常に引き換えられました。';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'あなたの報酬';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'サブスクリプションは終了しました。詳細については、情報アイコンをタップしてください。';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'あなたの名前';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10%割引';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'アバターをタップしました';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => '口座名義人名';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => '口座番号';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => '現在アクティブです';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => '略歴を追加';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'カバー写真を追加する';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => '顔写真を追加';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'イントロボイスメモを追加';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'プロファイル名の追加';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'プロフィール写真を追加';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'ソーシャルリンクの追加 (3 個以上)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'アイテムの追加';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'リンクを追加';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 => '以下のプロフィールへのリンクを追加してください';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => '写真を追加';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'カートに追加';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => '住所 (オプション)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'すべての連絡先タイプ';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => '許容半径 (メートル)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'もうすぐそこです！';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'すでに従業員';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'すでにアカウントをお持ちですか?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => '常に最新の状態';
 
   @override
-  String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+  String get areYouSureYouWantToLogOutOfBarqody => 'Barqody からログアウトしてもよろしいですか?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => '出席できませんでした';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => '背景色';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => '予約に失敗しました';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward => 'この報酬を簡単に説明すると...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'ビジネス検証済み';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'ビジネスメールアドレス';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'ビジネスファックス';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => '勤務先の電話番号';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'ビジネスサイト';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'カメラエラー';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => '顔をキャプチャする';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'カード完成';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'カードラベル';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'カードラベル名';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'カードのプレビュー';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'カードのテーマ';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'カードが作成されました';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'カード名';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'カードをJPGとして保存';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'カードを PNG として保存';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'カードが更新されました';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => '写真を変更する';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'チェックイン顔';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'チェックイン成功';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'チェックアウトフェイス';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'チェックアウトが成功しました';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'テンプレートを選択';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => '連絡先カードの会社住所';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => '連絡先カード会社名';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => '連絡先カードのメールアドレス';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => '連絡先カードの自宅住所';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => '連絡先カード電話';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'コンタクトカードのウェブサイト';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'ログインを完了できませんでした';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'QRコードを作成できませんでした';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'デバイスをリンクできませんでした';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'デバイスからログアウトできませんでした';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Google ウォレットを開けませんでした';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'カードのデザインを保存できませんでした';
 
   @override
-  String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+  String get couldNotUpdateProfileVisibility => 'プロフィールの公開設定を更新できませんでした';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'ギャラリーの作成';
 
   @override
-  String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+  String get createACardToShareYourProfile => 'カードを作成してプロフィールを共有する';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'カードの作成';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'カスタムバンク';
 
   @override
-  String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+  String get customersCanBeEnrolledAndStamped => '顧客は登録してスタンプを押すことができます';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'カードをカスタマイズする';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram => 'ロイヤルティ プログラムについて説明してください';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => '表示名';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'アカウントをお持ちでない場合は、';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE、d MMM yyyy';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => '報酬の編集';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => '項目を編集する';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => '電子メールアドレス';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'メールアドレスは必須です';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => '社員証';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => '従業員が削除されました';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => '従業員設定が保存されました';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => '登録事業者';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => '有効なメールアドレスを入力してください';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard => '連絡先カードの略歴を入力してください';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'プログラム名を入力してください';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'あなたの略歴を入力してください';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => '電話番号を入力してください';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'ウェブサイトの URL を入力してください';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'イベントバッジ';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => '例: スタンプ 10 個 = コーヒー無料';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => '顔写真追加';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'プログラムの追加に失敗しました';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'スタンプの追加に失敗しました';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => '顧客の登録に失敗しました';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => '連絡先交換に失敗しました';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'プログラムのロードに失敗しました';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => '注文に失敗しました';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => '削除に失敗しました';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => '保存に失敗しました';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'JPGの保存に失敗しました';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'PNGの保存に失敗しました';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'QRコードの保存に失敗しました。';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails => 'ビジネスの詳細を保存できませんでした';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'ステータスの更新に失敗しました';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'ファーストネーム';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => '食べ物と飲み物';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => '無料のデザート';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'ギャラリーの許可が必要です。設定で有効にしてください。';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => '始めましょう';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => '行く';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices => '[ツール] → [リンクされたデバイス] に移動します。';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending => 'Google ウォレットの設定が保留中です。';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Google ウォレットの設定が保留中です。プロフィールリンクがコピーされました。';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'ビジネスを成長させる';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'ゲストユーザー';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'IBAN番号';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'オフィスで';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => '招待が保留中';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => '招待が拒否されました';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      '招待状が送信されました。従業員は承認後に追加されます。';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => '従業員を招待する';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => '従業員として招待する';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => '役職';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => '苗字';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'QRでログイン';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'このアカウントのみからログアウトしますか?他のアカウントはこの電話に残ります。';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Googleでログイン（デモアカウント：Saim Y）';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'ログインしています…';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'ログインに失敗しました。もう一度やり直してください。';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'MMM d、yyyy - h:mm a';
 
   @override
   String get mmmmYyyy => 'MMMM yyyy';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => '出席をマークする';
 
   @override
-  String get myName => 'My Name';
+  String get myName => '私の名前';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => '私のタプニプロフィール';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => '名前を空にすることはできません';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => '新しい';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'まだ連絡先がありません';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => '詳細はまだありません';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'まだリンクが追加されていません。\\n開始するには、[リンクを追加] をタップしてください。';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => '一致しません';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => '理由は示されていません。';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => '未登録';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'スタンプの数';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'ワンタップで共有';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone => '他の携帯電話で Barqody を開きます';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'カメラを開く';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => '注文情報';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => '紙カード';
 
   @override
-  String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+  String get passwordMustBeAtLeast4Characters => 'パスワードは4文字以上である必要があります';
 
   @override
-  String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+  String get passwordMustBeAtLeast6Characters => 'パスワードは6文字以上である必要があります';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => '電話番号';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => '電話番号は必須です';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => '電話番号';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => '場所を選択';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'パスワードを入力してください';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'ユーザー名を入力してください';
 
   @override
-  String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+  String get pleaseEnterAValidEmailAddress => '有効なメールアドレスを入力してください';
 
   @override
-  String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+  String get pleaseEnterAValidNumberOfStamps => '有効なスタンプ数を入力してください';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'メールアドレスを入力してください';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'あなたの名前を入力してください';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'パスワードを入力してください';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'カメラを QR コードに向けると、自動的にスキャンされます。';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'イベントバッジにカメラを向けて、「カメラ」ボタンをタップします。';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'カメラを紙カードに向けて、「カメラ」ボタンをタップします。';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'QRコードを準備中…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'プロフィールが見つかりません。';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'プロフィールが正常に更新されました。';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'QRコードをギャラリーに保存しました！';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'QRコードの有効期限が切れました';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh => 'QRコードの有効期限が切れました。 「更新」をタップします。';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => '不動産';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => '領収書添付';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'サブスクリプションを更新すると、プレミアム機能とデータへの完全なアクセスが復元されます。';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => '写真を撮り直す';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => '報酬タイトル';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => '報酬のロックが解除されました 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => '役割または会社';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => '変更を保存';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => '連絡先の保存';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'プロファイルの保存';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => '設定の保存';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'ユーザー名を保存';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'セーブカード';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => '連絡先の保存';
 
   @override
-  String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+  String get savedLocallySyncMayHaveFailed => 'ローカルに保存されました。同期に失敗した可能性があります。';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'QR コードをスキャンするか、出会った人を追加してネットワークを構築します。';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'QR経由でスキャン';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => '画面テーマ';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => '検索に失敗しました。もう一度やり直してください。';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => '会社を選択してください';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => '日付範囲の選択';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => '終了日を選択してください';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => '開始日を選択してください';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => '招待状を送信する';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => '出席の招待状を送信する';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'リンクを共有する';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'シフトタイミング';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'スマートコンタクトキャプチャ';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'スタンプの枠線の色';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'スタンプの色';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'スタンプアイコン（オプション）';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => '付与されるスタンプ';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'ネットワークの構築を始めましょう';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => '通り名';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'ビジネス アカウントに切り替えて、フルアクセスのロックを解除します。';
 
   @override
-  String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+  String get tapLinkADeviceAndScanThisQR => '「デバイスをリンク」をタップして、この QR をスキャンします';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'タップして画像を追加します';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'タップして変更します';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'テンプレートはローカルに適用されます。同期に失敗しました。';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => '文字の色';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'このアカウント';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'この機能はビジネス ユーザーのみが利用できます。';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'この人はあなたのチームにいます';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'この番組は一時停止されています';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => '合計スタンプ数';
 
   @override
-  String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+  String get tryADifferentNameEmailOrCompany => '別の名前、メールアドレス、または会社名を試してください。';
 
   @override
-  String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+  String get unableToSaveProfileTryAgain => 'プロファイルを保存できません。もう一度やり直してください。';
 
   @override
-  String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+  String get unableToUpdateUsernameTryAgain => 'ユーザー名を更新できません。もう一度やり直してください。';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      '開発中 - 代わりに電子メール/パスワードを使用してログインしてください。';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => '不明なユーザー';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'GPS 位置情報を更新する';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'ステータスの更新';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'カートを更新する';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'アイテムを更新する';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'にアップグレード';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'ビジネス PRO にアップグレード';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => '領収書のアップロード (オプション)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => '現在地を使用する';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      '文字、数字、アンダースコア、またはハイフンのみを使用してください';
 
   @override
-  String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+  String get usernameMustBeAtLeast3Characters => 'ユーザー名は少なくとも 3 文字である必要があります';
 
   @override
-  String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+  String get usernameMustBeAtMost30Characters => 'ユーザー名は最大 30 文字にする必要があります';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully => 'ユーザー名が正常に更新されました。';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => '彼らが受け入れるのを待っています';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'ウェブサイトのURL';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => '週末';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => '勤務地';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'PRO サブスクリプションの有効期限が切れました。\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => 'PRO サブスクリプションの有効期限が切れました。';
 
   @override
-  String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+  String get premiumFeaturesAreCurrentlyDisabled => 'プレミアム機能は現在無効になっています。';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'プロ リンクは公開プロフィールからは非表示になります。';
 
   @override
-  String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+  String get yourBusinessDetailsAndDataAreSafe => 'ビジネスの詳細とデータは安全です。';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return '$label アイテムを追加';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return '少なくとも 1 つの $label アイテムを追加してください';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return '利用可能な$labelアイテムはありません。';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'まだアイテムはありません。最初の $label アイテムを追加します。';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return '「@$query」に一致する公開プロフィールはありません。';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'コード: $code';
   }
 }

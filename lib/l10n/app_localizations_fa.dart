@@ -12,325 +12,331 @@ class AppLocalizationsFa extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'ابزار';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'تنظیمات حساب';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'اطلاعیه ها';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'برای شما';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'نمایه شما';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'ویرایش نمایه';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => 'نام، عکس و بیوگرافی خود را تغییر دهید';
 
   @override
-  String get username => 'Username';
+  String get username => 'نام کاربری';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'نام کاربری پروفایل منحصر به فرد خود را تنظیم کنید';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'پیوندهای اجتماعی';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'اینستاگرام، واتس اپ، وب سایت و موارد دیگر را اضافه کنید';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'نمایه عمومی';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn =>
+      'هر کسی می تواند نمایه شما را پیدا کرده و مشاهده کند';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'پنهان از جستجو - دیگران نمی توانند شما را پیدا کنند';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'کد QR من را به اشتراک بگذارید';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'به دیگران اجازه دهید کارت ویزیت دیجیتال شما را اسکن کنند';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'خرید و جوایز';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'سفارشات من';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle =>
+      'سفارش‌هایی را که از مغازه‌ها ارسال کرده‌اید دنبال کنید';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'کارت های پاداش من';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'تمبرها و امتیازهای برنامه های وفاداری را مشاهده کنید';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'محل کار';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'دعوت نامه های کارکنان';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'دعوت‌های تیم‌های کسب‌وکار را بپذیرید یا رد کنید';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'ورود به محل کار';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'ساعت داخل و خارج از محل کار خود را با موقعیت مکانی';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'حساب‌ها و دستگاه‌ها';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'دستگاه های مرتبط';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => 'تلفن دیگری مانند WhatsApp را پیوند دهید';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'حساب ها';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'اضافه کردن یا تغییر حساب';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'بین حساب های $count جابه جا شوید';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'راهنما و حساب';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'زبان برنامه';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => 'زبان مورد استفاده در برنامه را تغییر دهید';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'زبان جستجو کنید';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'زبان تلفن';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'زبان به روز شد';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'راهنما و سوالات متداول';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'پاسخ به سوالات رایج';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'ارسال بازخورد';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle => 'گزارش یک اشکال یا پیشنهاد یک ویژگی جدید';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'از سیستم خارج شوید';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'از این جلسه خارج شوید';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'لغو کنید';
 
   @override
-  String get save => 'Save';
+  String get save => 'ذخیره کنید';
 
   @override
-  String get done => 'Done';
+  String get done => 'انجام شد';
 
   @override
-  String get str => 'بطاقة أعمال الرقمية';
+  String get str => 'بطاقة عمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(فقط خواندنی)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 امتیاز = 100 PKR (قانون مثال)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '10 مهر الزامی است';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => 'خیابان اصلی 123، شهر';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 روز پیش';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3-30 کاراکتر فقط حروف، اعداد، زیرخط و خط فاصله.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'قبول کنید';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'دسترسی محدود شده است';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'حساب / IBAN: شماره حساب را در اینجا اضافه کنید';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'عنوان اکانت: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'فعال';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'فعال';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'کارت فعال';
 
   @override
-  String get add => 'Add';
+  String get add => 'اضافه کنید';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'اضافه کردن یادداشت...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'اضافه کردن حساب';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst => 'ابتدا حداقل یک دسته اضافه کنید';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'دسته‌ها را به ترتیب نمایش اضافه کنید (مثلاً فست فود، سپس Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'ابتدا دسته ها را در تنظیمات کاتالوگ خود اضافه کنید.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'افزودن مخاطب';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'پیوند اضافه کنید';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'لینک های زیر را به پروفایل خود اضافه کنید';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'ابتدا پیوندها را به نمایه خود اضافه کنید، سپس آنها را در اینجا فعال کنید.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'اضافه کردن لوگو';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'امتیاز اضافه کنید';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'افزودن برنامه';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'اضافه کردن تمبر';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'به Google Wallet اضافه کنید';
 
   @override
-  String get address => 'Address';
+  String get address => 'آدرس';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'همه';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'همه گرفتار شدند!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'همه اعلان‌ها به عنوان خوانده شده علامت‌گذاری شدند!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'اجازه دوربین';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'به این دستگاه اجازه می‌دهید به حساب Barqody شما دسترسی داشته باشد؟ هرزمان خواستید می‌توانید آن را از دستگاه‌های مرتبط حذف کنید.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'از قبل حساب کاربری دارید؟';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'داشبورد تجزیه و تحلیل';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'هر گونه درخواست خاص ...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'درخواست کنید';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'طراحی را اعمال کنید';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'اعمال الگو';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'صعودی';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'از کسب و کارتان بخواهید که QR شما را اسکن کند و شما را به عنوان کارمند اضافه کند';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'اختصاص دادن دسته';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'برنامه های اختصاص داده شده';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'حداقل 6 کاراکتر';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => 'حضور برای امروز تکمیل شد';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'اسلات های موجود';
 
   @override
-  String get background => 'Background';
+  String get background => 'پس زمینه';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'رنگ پس زمینه';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'حساب بانکی';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'مشخصات بانکی';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'بانک: نام بانک را در اینجا اضافه کنید';
 
   @override
   String get barqody => 'Barqody';
@@ -339,494 +345,495 @@ class AppLocalizationsFa extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'بهترین ارزش';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'مبلغ قبض';
 
   @override
   String get bio => 'BIO';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => 'بیوگرافی';
 
   @override
-  String get book => 'Book';
+  String get book => 'کتاب';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'تاریخ رزرو';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'برنامه رزرو';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'زمان رزرو';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'کسب و کار';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'دسته کسب و کار';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'جزئیات کسب و کار';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'نام کسب و کار';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'گزینه های کسب و کار';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'برنامه های تجاری';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'فقط کاربران تجاری';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'با ثبت نام، با شرایط و ضوابط ما موافقت می کنید.';
 
   @override
-  String get call => 'Call';
+  String get call => 'تماس بگیرید';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'مجوز دوربین برای اسکن مورد نیاز است.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'هر زمان خواستید لغو کنید.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'لغو سفارش';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'مخاطب جدید را ضبط کنید';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'دسته بندی ها';
 
   @override
-  String get category => 'Category *';
+  String get category => 'دسته*';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'دسته از قبل وجود دارد';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'نام دسته';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'بررسی کنید';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'بررسی کنید';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'یک نام کاربری منحصر به فرد برای پیوند نمایه خود انتخاب کنید.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'طرح را انتخاب کنید';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'قالب را انتخاب کنید';
 
   @override
-  String get close => 'Close';
+  String get close => 'بستن';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'کد کپی شد';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'به زودی';
 
   @override
-  String get company => 'Company';
+  String get company => 'شرکت';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'کارت کارمند شرکت';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'شرکت شرکت';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'این مراحل را کامل کنید';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'تایید و اضافه کردن امتیاز';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'رزرو را تایید کنید';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'مکان را تأیید کنید';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Redemption را تایید کنید';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'حساب های متصل';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'تماس با موفقیت اضافه شد!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'کارت تماس';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => 'تماس با موفقیت مبادله شد!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'منبع تماس';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'تماس با موفقیت به روز شد!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'مخاطبین';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'ادامه دهید';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'کپی شده است';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'کد را کپی کنید';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'مکان دریافت نشد. لطفا مجوز GPS را فعال کنید.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'تغییر حساب ممکن نیست';
 
   @override
-  String get create => 'Create';
+  String get create => 'ایجاد کنید';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'ایجاد حساب کاربری';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'ایجاد برنامه وفاداری';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'لینک جدید ایجاد کنید';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'ایجاد برنامه';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'پاداش ایجاد کنید';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'برای مشتریان جوایز تمبر یا امتیاز ایجاد کنید';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'اولین کارت خود را بسازید';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'اولین کارت پاداش خود را برای مشتریان ایجاد کنید';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'تاریخ ایجاد';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'تصاویر سفارشی برای اسلات های مهر شده و بدون مهر. اگر تنظیم نشده باشد از پیش فرض ها استفاده می شود.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'لینک سفارشی';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'جزئیات مشتری';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'مشتری با موفقیت ثبت نام کرد';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'مشتری هنوز ثبت نام نکرده است';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'مشتری بدون نمایش';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'سفارشات مشتری';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'سفارشی کردن طراحی کارت';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'سفارشی کردن طراحی';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'نمایه خود را سفارشی کنید، قفل قالب های PRO را باز کنید و سرنخ های نامحدود دریافت کنید.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'خودتان را سفارشی کنید';
 
   @override
-  String get date => 'Date';
+  String get date => 'تاریخ';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'محدوده تاریخ';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'رد کردن';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'حذف کنید';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'کارت حذف شود؟';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'حذف دسته';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'حذف مخاطب';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'پاداش حذف شود؟';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'نزولی';
 
   @override
-  String get description => 'Description';
+  String get description => 'توضیحات';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'توضیحات (اختیاری)';
 
   @override
-  String get details => 'Details';
+  String get details => 'جزئیات';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'دستگاه مرتبط است';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'دستگاه از سیستم خارج شد';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'وضعیت دستگاه';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'کارت ویزیت دیجیتال';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'کارت ویزیت دیجیتال';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'حساب کاربری ندارید؟';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'به عنوان مثال فست فود';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'به عنوان مثال بدون شکر، خیلی داغ...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => '50 امتیاز کسب کرد';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'ویرایش کنید';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'ویرایش کارت';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'ویرایش جزئیات';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'ویرایش نمایه';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'ویرایش تنظیمات';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'جزئیات نمایه خود را ویرایش کنید';
 
   @override
-  String get email => 'Email';
+  String get email => 'ایمیل';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'ایمیل و رمز عبور';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'آدرس ایمیل';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'ورود به سیستم ایمیل یا اسکن QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'کارت کارمند';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'کارت کارمندی';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'عکس چهره کارمند';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'شکاف خالی';
 
   @override
-  String get end => 'END';
+  String get end => 'پایان';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'تاریخ پایان';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'ساعت پایان';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'ثبت نام مشتری';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'مبلغ قبض را وارد کنید';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'کد را وارد کنید';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'به جای آن کد را وارد کنید';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'اطلاعات تماس شبکه را در زیر وارد کنید.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'نام خود را وارد کنید';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'رمز عبور خود را وارد کنید';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'نشان رویداد';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'تبادل تماس';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'در حال تبادل تماس...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'کاوش کنید';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'مخاطب به‌روزرسانی نشد.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'شکاف پر شده';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'فیلتر کردن مخاطبین';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'فیلتر کردن مخاطبین';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'افراد را در BarQody پیدا کنید';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'کاربر را پیدا کنید';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'کاربر را پیدا کنید';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'نام کاربری را پیدا کنید';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'فراموش کرده اید؟';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'قهوه رایگان';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'نام کامل';
 
   @override
-  String get general => 'General';
+  String get general => 'ژنرال';
 
   @override
-  String get go => 'Go';
+  String get go => 'برو';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'برو تجارت';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'مهمان';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'سلام';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'مرکز راهنمایی در این دمو رابط کاربری غیرفعال است.';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => 'هگز: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'کد QR را در داخل قاب نگه دارید - به طور خودکار اسکن می شود.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'چگونه می خواهید این کارت را طراحی کنید؟';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'وارد کردن مخاطبین';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'وارد کردن مخاطبین هنوز در دسترس نیست.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'در';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'سفارشات دریافتی';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'URL نمایه نامعتبر است. یک کارت BarQody معتبر یا کد QR را اسکن کنید.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'کد QR نامعتبر است. از QR پیوند Barqody استفاده کنید.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'کارمندان را دعوت کنید، شیفت ها را تنظیم کنید و حضور را پیگیری کنید';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'از شما دعوت کرد که به عنوان کارمند بپیوندید';
 
   @override
-  String get janeDoe => 'Jane Doe';
+  String get janeDoe => 'جین دو';
 
   @override
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'عنوان شغلی';
 
   @override
-  String get johnDoe => 'John Doe';
+  String get johnDoe => 'جان دو';
 
   @override
-  String get johnSmith => 'John Smith';
+  String get johnSmith => 'جان اسمیت';
 
   @override
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'تاریخ عضویت: 15 ژانویه 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,1600 +841,1605 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'حساب خود را ایمن نگه دارید فقط زمانی کدهای QR را اسکن کنید که بخواهید دستگاهی را که به آن اعتماد دارید پیوند دهید.';
 
   @override
-  String get label => 'Label';
+  String get label => 'برچسب بزنید';
 
   @override
-  String get lat => 'Lat';
+  String get lat => 'لات';
 
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'به دیگران اجازه دهید دوربین تلفن خود را روی این کد QR بگیرند تا فوراً نمایه شبکه شما را مشاهده کنند.';
 
   @override
-  String get link => 'Link';
+  String get link => 'پیوند';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'یک دستگاه را پیوند دهید';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'پیوند با QR در تلفن دیگری';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'پیوند در کلیپ بورد کپی شد';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'تنظیمات پیوند';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'تنظیمات پیوند';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'این دستگاه را پیوند دهید؟';
 
   @override
-  String get links => 'Links';
+  String get links => 'پیوندها';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'پیوندهای موجود در این کارت';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'مکان هنوز تنظیم نشده است';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'مجوز مکان مورد نیاز است';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'مجوز مکان برای حضور لازم است';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'وارد شوید';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'برای مدیریت کارت دیجیتال و شبکه خود وارد شوید.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'با کد QR وارد شوید';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'از سیستم خارج شوید';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'همه را از سیستم خارج کنید';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'خروج از دستگاه؟';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'برنامه های وفاداری';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'دسته ها را مدیریت کنید';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'مدیریت تماس';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'مدیریت کارکنان';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'اطلاعات شخصی و سایر تنظیمات برگزیده خود را مدیریت کنید';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'علامت گذاری به پایان رسید';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'ماهانه';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'کارت های من';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'موقعیت مکانی من';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'پاداش های من';
 
   @override
-  String get name => 'Name';
+  String get name => 'نام';
 
   @override
   String get name2 => 'NAME';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'نام الزامی است';
 
   @override
   String get nameCompanyCom => 'name@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'کارت جدید';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'کارت جدید';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'دسته بندی جدید';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'پاداش جدید';
 
   @override
-  String get next => 'Next';
+  String get next => 'بعدی';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'کارت بعدی';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet => 'هنوز پیوند فعالی متصل نشده است';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'هیچ برنامه پاداش فعالی در دسترس نیست.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'هنوز کارت کارمندی وجود ندارد';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'هیچ کارمندی اضافه نشد';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'هنوز کارمندی وجود ندارد';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'کارفرمایی پیدا نشد';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'هیچ موردی در این دسته وجود ندارد.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => 'هیچ قالب پیوندی موجود نیست';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'در حال حاضر اعلان جدیدی وجود ندارد.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'هنوز کسی پروفایل شما را مشاهده نکرده است.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'دعوتنامه معلقی وجود ندارد';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'هنوز هیچ برنامه ای اختصاص داده نشده است. برنامه های زیر را اضافه کنید';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => 'هیچ کد QR در این تصویر یافت نشد.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'هنوز هیچ برنامه پاداشی وجود ندارد';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay => 'هیچ اسلاتی در این روز موجود نیست';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'هیچ کاربری پیدا نشد';
 
   @override
-  String get none => 'None';
+  String get none => 'هیچ کدام';
 
   @override
-  String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+  String get notAvailableOnYourCurrentPlan => 'در طرح فعلی شما موجود نیست';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'هنوز ثبت نام نشده است';
 
   @override
-  String get note => 'Note';
+  String get note => 'توجه داشته باشید';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'یادداشت ها (اختیاری)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'اعلان پاک شد';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'فقط جلد، عکس نمایه، نام و بیو در اینجا قابل ویرایش است.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'زمانی که شخصی این کارت را اسکن می‌کند، فقط پیوندهای فعال نشان داده می‌شوند.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown =>
+      'فقط نمایه های عمومی نشان داده می شود';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'در حال حاضر فقط این تلفن از حساب شما استفاده می کند.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'یا ادامه دهید';
 
   @override
-  String get order => 'Order';
+  String get order => 'سفارش دهید';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'جزئیات سفارش';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'شناسه سفارش';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'سفارش پیدا نشد';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'سفارشات';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'کارت کاغذی';
 
   @override
-  String get password => 'Password';
+  String get password => 'رمز عبور';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'ماه به ماه پرداخت کنید';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'در انتظار پذیرش';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'بررسی اجمالی عملکرد';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'جزئیات شخصی';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'تلفن';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'عکس ها';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'یک تم رنگی آماده انتخاب کنید. سریع و تمیز.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'رنگ را انتخاب کنید';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'روی نقشه انتخاب کنید';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'ثبت سفارش';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'طرح منقضی شد';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'لطفا جزئیات کسب و کار را برای ادامه وارد کنید';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'لطفا نام مورد را وارد کنید';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'لطفاً قبل از ارتقا اطلاعات کسب و کار خود را ارائه دهید.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'لطفا یک دسته را انتخاب کنید';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'لطفاً یک بازه زمانی انتخاب کنید';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => 'لطفاً ابتدا محل کار را تنظیم کنید';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'دوربین خود را به سمت کد QR دستگاه دیگر بگیرید';
 
   @override
-  String get points => 'Points';
+  String get points => 'امتیاز';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'امتیازهای کسب شده';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'پریمیوم فعال';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'کارت قبلی';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'قیمت (روپیه)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'قالب PRO';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'نمایه';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'بررسی نمایه';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'قدرت نمایه';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'بینندگان نمایه';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'بازدیدهای نمایه';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'جزئیات برنامه';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'نام برنامه';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'برنامه پیدا نشد';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'نوع برنامه';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'کد QR';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'اسکن های QR';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'مقدار';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'همه را بخوانید';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'فقط بخوانید';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => '1 تمبر دریافت کرد';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'فعالیت اخیر';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'پاداش دیگری را بازخرید کنید';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'بازخرید پاداش';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'قهوه رایگان بازخرید شده';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'QR را بازخوانی کنید';
 
   @override
-  String get region => 'Region';
+  String get region => 'منطقه';
 
   @override
-  String get rembiro => 'Rembiro';
+  String get rembiro => 'رمبیرو';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'حذف کنید';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'کارمند را حذف کنید';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'تمدید طرح';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'درخواست در انتظار';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'درخواست در انتظار';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'درخواست رد شد';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'درخواست اشتراک';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'بازنشانی کنید';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'پاداش تکمیل شد! این کارت را برای بازخرید نشان دهید.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'پاداش تکمیل شد! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'جزئیات پاداش';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'برنامه پاداش';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'برنامه های پاداش';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'پاداش بازخرید شد!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'پاداش';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'جوایز کسب شده';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '1600 روپیه ماهیانه صورتحساب';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => '8300 روپیه سالانه صورتحساب';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'ذخیره کنید';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'کارت شناسایی کار خود را در تلفن یا کیف پول ذخیره کنید';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'اسکن کنید';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'یک کد QR کاربر را اسکن کنید تا آنها را به عنوان کارمند اضافه کنید';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'هر کاربر یا QR کسب و کار را برای اضافه کردن کارمند اسکن کنید';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'برای بازخرید QR کسب و کار اسکن کنید';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'کد QR مشتری را اسکن کنید';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'اسکن پروفایل کارمند';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'اسکن QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'اسکن QR / نمایش QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'کد QR را اسکن کنید';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'QR نشان داده شده در دستگاه دیگر را اسکن کنید';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'اسکن برای دعوت';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'جستجو بر اساس نام کاربری...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'پیوندها را جستجو کنید';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => 'نام، ایمیل یا شرکت را جستجو کنید';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'مشاهده همه';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'ببینید همه فعالیت ها مسخره شده است. فعالیت های جدید با اضافه شدن سرنخ ها ظاهر می شود.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'تاریخ را انتخاب کنید';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'نشانگرها را انتخاب کنید';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'منطقه را انتخاب کنید';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'متن را زیر نماد پیوند تنظیم کنید';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'رنگ ها، عکس ها و پس زمینه خود را تنظیم کنید.';
 
   @override
-  String get share => 'Share';
+  String get share => 'به اشتراک بگذارید';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'کارت را به اشتراک بگذارید';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'پیوندهای مختلف را در هر کارت به اشتراک بگذارید';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'نمایه را به اشتراک بگذارید';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'نمایش لینک';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'در این کارت نشان داده شود';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'با گوگل وارد شوید';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'ثبت نام کنید';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'پرش کنید';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'فعلا رد شوید';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'اسلات (دقیقه)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'مهندس نرم افزار';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'مشکلی پیش آمد';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'گزینه های مرتب سازی';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'دستورالعمل های ویژه';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'کارت تمبر';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'نماد تمبر';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'تمبر';
 
   @override
-  String get start => 'START';
+  String get start => 'شروع کنید';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'تاریخ شروع';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'ساعت شروع';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'با Barqody شبکه سازی را هوشمندتر شروع کنید.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'آمار';
 
   @override
-  String get status => 'Status';
+  String get status => 'وضعیت';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'اشتراک';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'درخواست اشتراک ارسال شد';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'درخواست اشتراک ارسال شد.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'برای مرور کارت ها انگشت خود را بکشید';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'برای تأیید حضور، یک سلفی سریع بگیرید';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'برای افزودن و فعال کردن نمایه‌ها، روی «پیوندهای اجتماعی» در بالا ضربه بزنید.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'روی نقشه ضربه بزنید یا از موقعیت مکانی فعلی خود استفاده کنید';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'برای افزودن عکس ضربه بزنید';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'برای اشتراک‌گذاری کد QR ضربه بزنید';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'حضور و غیاب تیمی';
 
   @override
-  String get template => 'Template';
+  String get template => 'الگو';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'قالب ها';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'متشکرم! ارسالی بازخورد فقط ساختگی است.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'این کارت و کد QR آن حذف خواهد شد.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'این ویژگی به طور انحصاری در دسترس کاربران تجاری است.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'این قبلاً نام کاربری شماست.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'این ماه';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'با این کار این برنامه پاداش و همه ثبت‌نام‌های آن برای همیشه حذف می‌شود.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'امروز آخر هفته شماست';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'امروز • ساعت 15:15';
 
   @override
-  String get total => 'Total';
+  String get total => 'مجموع';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'سفارشات خود را پیگیری کنید';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'مرجع تراکنش (اختیاری)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'شماره مرجع تراکنش (اختیاری)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'دوباره امتحان کنید';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Business Pro را امتحان کنید';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Business Pro را امتحان کنید.';
 
   @override
-  String get type => 'Type';
+  String get type => 'تایپ کنید';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'حداقل 2 کاراکتر از یک نام کاربری را برای جستجو تایپ کنید.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'کد 8 کاراکتری نشان داده شده در زیر QR را تایپ کنید.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'در حال توسعه - به جای آن از طریق ایمیل/رمز عبور وارد شوید.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'نماد حذف مهر';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'اکنون ارتقا دهید';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'ارتقاء به';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'به Tapni PRO ارتقا دهید';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'از یک الگو استفاده کنید';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'از Barqody در سایر گوشی ها یا تبلت ها استفاده کنید. شما در کنترل باقی می‌مانید - هر زمانی که بخواهید از هر دستگاهی خارج شوید.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'برای اسکن این کد از Barqody در گوشی خود استفاده کنید';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'از نماد پیش فرض استفاده کنید';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'از این عکس استفاده کنید';
 
   @override
-  String get user => 'USER';
+  String get user => 'کاربر';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'نسخه: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'سفارشات مشتریان خود را مشاهده و به روز کنید';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'مشاهده نمایه';
 
   @override
-  String get views => 'Views';
+  String get views => 'بازدیدها';
 
   @override
-  String get website => 'Website';
+  String get website => 'وب سایت';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'خوش آمدید بازگشت';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'به مرکز حساب خوش آمدید';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'وقتی یک کسب و کار شما را به عنوان کارمند اضافه می کند، کارت کارمند شما در اینجا ظاهر می شود. شما می توانید طراحی آن را در هر زمان سفارشی کنید.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'هنگامی که یک کسب و کار شما را در برنامه پاداش خود ثبت نام می کند، در اینجا ظاهر می شود.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'وقتی یک کسب و کار شما را به تیم خود دعوت می کند، در اینجا ظاهر می شود.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'وقتی خاموش باشد، این پیوند در نمایه شما نشان داده نخواهد شد';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'چیزی در مورد خود یا برندتان بنویسید';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'سالانه';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'دیروز • 5:42 عصر';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'دسته های شما';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'کارت های کارمند شما از کارفرمایان';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'قهوه رایگان شما با موفقیت استفاده شد.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'پاداش های شما';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'اشتراک شما به پایان رسیده است. برای جزئیات روی نماد اطلاعات ضربه بزنید.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'نام شما';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% تخفیف';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'آواتار ضربه زده شد';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'نام صاحب حساب';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'شماره حساب';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'اکنون فعال است';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Bio را اضافه کنید';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'اضافه کردن عکس روی جلد';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'اضافه کردن عکس چهره';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'اضافه کردن Intro Voice Note';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'اضافه کردن نام نمایه';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'افزودن عکس نمایه';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'افزودن پیوندهای اجتماعی (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'مورد را اضافه کنید';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'لینک اضافه کنید';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'لینک های زیر را به پروفایل خود اضافه کنید';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'عکس اضافه کنید';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'به سبد خرید اضافه کنید';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'آدرس (اختیاری)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'همه انواع تماس';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'شعاع مجاز (متر)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'تقریباً وجود دارد!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'قبلاً کارمند';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'از قبل حساب کاربری دارید؟';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'همیشه به روز';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'آیا مطمئن هستید که می خواهید از Barqody خارج شوید؟';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'حضور ناموفق بود';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'رنگ پس زمینه';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'رزرو انجام نشد';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward =>
+      'این پاداش را به اختصار توضیح دهید...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'کسب و کار تأیید شد';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'آدرس ایمیل کسب و کار';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'فکس تجاری';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'شماره تلفن کسب و کار';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'وب سایت کسب و کار';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'خطای دوربین';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'عکس گرفتن از چهره';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'کارت تکمیل شد';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'برچسب کارت';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'نام برچسب کارت';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'پیش نمایش کارت';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'تم کارت';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'کارت ایجاد شد';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'نام کارت';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'کارت به صورت JPG ذخیره شد';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'کارت به عنوان PNG ذخیره شد';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'کارت به روز شد';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'تغییر عکس';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'حضور در چهره';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'اعلام حضور با موفقیت انجام شد';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'صورت خروج';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'تسویه حساب با موفقیت انجام شد';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'الگو را انتخاب کنید';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => 'آدرس کسب و کار کارت تماس';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'نام شرکت کارت تماس';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'ایمیل کارت تماس';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'آدرس منزل کارت تماس';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'تلفن کارت تماس';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'وب سایت کارت تماس';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'ورود کامل نشد';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'کد QR ایجاد نشد';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'دستگاه پیوند داده نشد';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'نمی توان از دستگاه خارج شد';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Google Wallet باز نشد';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'طراحی کارت ذخیره نشد';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'قابلیت مشاهده نمایه به‌روزرسانی نشد';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'ایجاد گالری';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'یک کارت برای به اشتراک گذاشتن نمایه خود ایجاد کنید';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'کارت ایجاد کنید';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'بانک سفارشی';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'مشتریان را می توان ثبت نام کرد و مهر کرد';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'کارت را سفارشی کنید';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram => 'برنامه وفاداری خود را شرح دهید';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'نام نمایشی';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'حساب کاربری ندارید؟';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE، d MMM yyyy';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'ویرایش جایزه';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'مورد را ویرایش کنید';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'آدرس ایمیل';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'ایمیل مورد نیاز است';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'کارت های کارمند';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'کارمند حذف شد';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'تنظیمات کارمند ذخیره شد';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'مشاغل ثبت نام شده';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'یک ایمیل معتبر وارد کنید';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard => 'بیو کارت تماس را وارد کنید';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'نام برنامه را وارد کنید';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'بیو خود را وارد کنید';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'شماره تلفن خود را وارد کنید';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'آدرس وب سایت خود را وارد کنید';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'نشان رویداد';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'مثال: 10 تمبر = قهوه رایگان';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'عکس چهره اضافه شد';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'برنامه اضافه نشد';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'تمبر اضافه نشد';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'ثبت نام مشتری انجام نشد';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'تبادل تماس انجام نشد';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'برنامه ها بارگیری نشد';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'ثبت سفارش انجام نشد';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'حذف نشد';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'ذخیره نشد';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'JPG ذخیره نشد';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'PNG ذخیره نشد';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'کد QR ذخیره نشد.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails => 'جزئیات کسب و کار ذخیره نشد';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'وضعیت به‌روزرسانی نشد';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'نام کوچک';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'غذا و نوشیدنی';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'دسر رایگان';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'مجوز گالری مورد نیاز است. لطفاً آن را در تنظیمات فعال کنید.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'شروع کنید';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'برو';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices => 'به ابزارها ← دستگاه های مرتبط بروید';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending =>
+      'راه اندازی Google Wallet در انتظار است.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'راه اندازی Google Wallet در انتظار است. پیوند نمایه کپی شد.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'کسب و کار خود را توسعه دهید';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'کاربر مهمان';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'شماره IBAN';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'در دفتر';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'دعوت در انتظار';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'دعوت رد شد';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'دعوت نامه ارسال شد. کارمندان پس از پذیرش اضافه خواهند شد.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'دعوت از کارمند';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'به عنوان کارمند دعوت کنید';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'عنوان شغلی';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'نام خانوادگی';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'با QR وارد شوید';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'فقط از این حساب خارج شوید؟ سایر اکانت ها در این تلفن باقی خواهند ماند.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'با Google وارد شده‌اید (حساب آزمایشی: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'ورود شما به سیستم…';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'ورود ناموفق بود. دوباره امتحان کنید.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'MMM d، yyyy - h:mm a';
 
   @override
   String get mmmmYyyy => 'MMMM yyyy';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'حضور و غیاب را علامت بزنید';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'نام من';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'پروفایل تاپنی من';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'نام نمی تواند خالی باشد';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'جدید';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'هنوز مخاطبی وجود ندارد';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'هنوز جزئیاتی وجود ندارد';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'هنوز پیوندی اضافه نشده است.\\nبرای شروع روی «افزودن پیوند» ضربه بزنید.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'هیچ مسابقه ای وجود ندارد';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'دلیلی ارائه نشده است.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'ثبت نام نشده است';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'تعداد تمبر';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'یک ضربه برای اشتراک گذاری';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Barqody را روی گوشی دیگر خود باز کنید';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'دوربین را باز کنید';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'اطلاعات سفارش';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'کارت کاغذی';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'رمز عبور باید حداقل 4 کاراکتر باشد';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'رمز عبور باید حداقل 6 کاراکتر باشد';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'شماره تلفن';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'تلفن الزامی است';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'شماره تلفن';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'مکان را انتخاب کنید';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'لطفا یک رمز عبور وارد کنید';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'لطفا یک نام کاربری وارد کنید';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'لطفا یک آدرس ایمیل معتبر وارد کنید';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'لطفاً تعداد معتبری از تمبرها را وارد کنید';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'لطفا ایمیل خود را وارد کنید';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'لطفا نام خود را وارد کنید';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'لطفا رمز عبور خود را وارد کنید';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'دوربین را به سمت یک کد QR بگیرید تا به صورت خودکار اسکن شود.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'دوربین را به سمت نشان رویداد بگیرید و روی دکمه دوربین ضربه بزنید.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'دوربین را به سمت کارت کاغذی بگیرید و روی دکمه دوربین ضربه بزنید.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'در حال آماده سازی کد QR…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'نمایه پیدا نشد';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'نمایه با موفقیت به روز شد!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'کد QR در گالری ذخیره شد!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'کد QR منقضی شده است';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'کد QR منقضی شده است. روی refresh ضربه بزنید.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'املاک و مستغلات';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'رسید پیوست';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'اشتراک خود را تمدید کنید تا دسترسی کامل به ویژگی ها و داده های برتر خود را بازیابی کنید.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'دوباره گرفتن عکس';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'عنوان پاداش';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'قفل جایزه 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'نقش یا شرکت';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'ذخیره تغییرات';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'ذخیره مخاطب';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'ذخیره نمایه';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'تنظیمات را ذخیره کنید';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'ذخیره نام کاربری';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'ذخیره کارت';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'ذخیره مخاطب';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'به صورت محلی ذخیره شده است. ممکن است همگام سازی انجام نشده باشد.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'یک کد QR را اسکن کنید یا فردی را که برای ساخت شبکه خود ملاقات کرده اید اضافه کنید.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'از طریق QR اسکن شده است';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'تم صفحه نمایش';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'جستجو ناموفق بود. دوباره امتحان کنید.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'شرکت را انتخاب کنید';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'محدوده تاریخ را انتخاب کنید';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'تاریخ پایان را انتخاب کنید';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'تاریخ شروع را انتخاب کنید';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'ارسال دعوتنامه';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'ارسال دعوتنامه برای حضور';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'لینک را به اشتراک بگذارید';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'تغییر زمان';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'ضبط تماس هوشمند';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'رنگ حاشیه مهر';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'رنگ تمبر';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'نمادهای تمبر (اختیاری)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'تمبر داده شده';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'شروع به ساخت شبکه خود کنید';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'نام خیابان';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'برای باز کردن قفل دسترسی کامل، به یک حساب تجاری بروید.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'روی پیوند یک دستگاه ضربه بزنید و این QR را اسکن کنید';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'برای افزودن تصویر ضربه بزنید';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'برای تغییر ضربه بزنید';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'الگو به صورت محلی اعمال شد. همگام سازی انجام نشد.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'رنگ متن';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'این حساب';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'این ویژگی به طور انحصاری در دسترس کاربران تجاری است.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'این شخص در تیم شماست';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'این برنامه متوقف شده است';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'کل تمبرها';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'نام، ایمیل یا شرکت دیگری را امتحان کنید.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'ذخیره نمایه ممکن نیست. دوباره امتحان کنید.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'نام کاربری به روز رسانی نمی شود. دوباره امتحان کنید.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'در حال توسعه - به جای آن از طریق ایمیل/رمز عبور وارد شوید.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'کاربر ناشناس';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'به روز رسانی مکان GPS';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'به روز رسانی وضعیت';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'سبد خرید را به روز کنید';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'به روز رسانی مورد';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'ارتقاء به';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'به Business PRO ارتقا دهید';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'رسید بارگذاری (اختیاری)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'از موقعیت مکانی من استفاده کنید';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'فقط از حروف، اعداد، زیرخط یا خط فاصله استفاده کنید';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'نام کاربری باید حداقل 3 کاراکتر باشد';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'نام کاربری باید حداکثر 30 کاراکتر باشد';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully => 'نام کاربری با موفقیت به روز شد!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'منتظر قبول شدنشون';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'آدرس وب سایت';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'روزهای آخر هفته';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'محل کار';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'اشتراک PRO شما منقضی شده است.\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => 'اشتراک PRO شما منقضی شده است.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'ویژگی‌های Premium در حال حاضر غیرفعال هستند.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'لینک های حرفه ای از نمایه عمومی شما پنهان می شوند.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'جزئیات و داده های کسب و کار شما ایمن هستند.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return '$label مورد را اضافه کنید';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'حداقل یک مورد $label اضافه کنید';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'هیچ $label موردی موجود نیست.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'هنوز موردی وجود ندارد. اولین مورد $label خود را اضافه کنید.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'هیچ نمایه عمومی با \"@$query\" مطابقت ندارد.';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'کد: $code';
   }
 }

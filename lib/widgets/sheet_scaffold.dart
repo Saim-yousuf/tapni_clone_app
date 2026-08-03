@@ -15,6 +15,9 @@ class SheetScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
+      // Sheets pad for the keyboard themselves; resizing here double-applies
+      // viewInsets and can push the sheet off-screen.
+      resizeToAvoidBottomInset: false,
       body: Align(
         alignment: Alignment.bottomCenter,
         child: body,

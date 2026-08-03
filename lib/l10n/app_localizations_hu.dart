@@ -12,325 +12,336 @@ class AppLocalizationsHu extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Eszközök';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Fiókbeállítások';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Értesítések';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Neked';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'A profilod';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Profil szerkesztése';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle =>
+      'Módosítsa a nevét, fényképét és életrajzát';
 
   @override
-  String get username => 'Username';
+  String get username => 'Felhasználónév';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle => 'Állítsa be egyedi profil felhasználónevét';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Közösségi linkek';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Adjon hozzá Instagramot, WhatsApp-ot, webhelyet és még sok mást';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Nyilvános profil';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn =>
+      'Bárki megtalálhatja és megtekintheti profilját';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'A keresés elől elrejtve – mások nem fedezhetik fel';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Ossza meg QR-kódomat';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Hagyja, hogy mások beolvassák digitális névjegykártyáját';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Vásárlás és jutalmak';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Megrendeléseim';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle =>
+      'Kövesse nyomon az üzletekből leadott rendeléseit';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Jutalomkártyáim';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Tekintse meg a hűségprogramok bélyegeit és pontjait';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Munkahely';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Alkalmazotti meghívók';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Vállalkozások csapatmeghívásainak elfogadása vagy elutasítása';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Munkahelyi bejelentkezés';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Be- és kilépés a munkahelyén a hely megadásával';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Fiókok és eszközök';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Kapcsolt eszközök';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle =>
+      'Kapcsoljon össze egy másik telefont, például a WhatsApp-ot';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Fiókok';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Fiókok hozzáadása vagy váltása';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Váltás $count fiók között';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Súgó és fiók';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Alkalmazás nyelve';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle =>
+      'Módosítsa az alkalmazásban használt nyelvet';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Keresés nyelve';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'A telefon nyelve';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Nyelv frissítve';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Súgó és GYIK';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Válaszok a gyakori kérdésekre';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Visszajelzés küldése';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle =>
+      'Jelentse be a hibát, vagy javasoljon új funkciót';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Jelentkezzen ki';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Jelentkezzen ki ebből a munkamenetből';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Mégsem';
 
   @override
-  String get save => 'Save';
+  String get save => 'Megtakarítás';
 
   @override
-  String get done => 'Done';
+  String get done => 'Kész';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(Csak olvasható)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 pont = 100 PKR (példaszabály)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '10 bélyeg szükséges';
 
   @override
   String get n123MainStCity => '123 Main St, City';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 nappal ezelőtt';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3-30 karakter. Csak betűk, számok, aláhúzás és kötőjelek.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Elfogadás';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'A HOZZÁFÉRÉS KORLÁTOZOTT';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Számla / IBAN: Adja meg itt a számlaszámot';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Fiók címe: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Aktív';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'AKTÍV';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'AKTÍV KÁRTYA';
 
   @override
-  String get add => 'Add';
+  String get add => 'Hozzáadás';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Megjegyzés hozzáadása...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Fiók hozzáadása lehetőségre';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Először adjon hozzá legalább egy kategóriát';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Kategóriák hozzáadása megjelenítési sorrendben (pl. Fast Food, majd Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Először adjon hozzá kategóriákat a katalógus beállításaihoz.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Névjegy hozzáadása';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Link hozzáadása';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'Adjon hozzá linkeket a profiljához alább';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Először adjon hozzá linkeket a profiljához, majd engedélyezze őket itt.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Logo hozzáadása';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Pontok hozzáadása';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Program hozzáadása';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Bélyegző hozzáadása';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Hozzáadás a Google Wallethoz';
 
   @override
-  String get address => 'Address';
+  String get address => 'Cím';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Minden';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Minden utolérte!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Minden értesítés olvasottként megjelölve!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Kamera engedélyezése';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Engedélyezi ennek az eszköznek, hogy hozzáférjen Barqody-fiókjához? Bármikor eltávolíthatja a kapcsolt eszközökről.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Már van fiókja?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'Analytics irányítópult';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Bármilyen különleges kérés...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Alkalmazni';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Tervezés alkalmazása';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Sablon alkalmazása';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Emelkedő';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Kérje meg vállalkozását, hogy olvassa be QR-kódját, és vegye fel Önt alkalmazottként';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Kategória hozzárendelése';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Hozzárendelt programok';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Legalább 6 karakter';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday =>
+      'A részvétel a mai napra befejeződött';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Rendelkezésre álló helyek';
 
   @override
-  String get background => 'Background';
+  String get background => 'Háttér';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Háttérszín';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Bankszámla';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Banki adatok';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Bank: Adja hozzá a bank nevét';
 
   @override
   String get barqody => 'Barqody';
@@ -339,10 +350,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Legjobb érték';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Számla összege';
 
   @override
   String get bio => 'BIO';
@@ -351,461 +362,465 @@ class AppLocalizationsHu extends AppLocalizations {
   String get bio2 => 'Bio';
 
   @override
-  String get book => 'Book';
+  String get book => 'Könyv';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Foglalás dátuma';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Foglalási ütemterv';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Foglalási idő';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'ÜZLETI';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Üzleti kategória';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Üzleti részletek';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Vállalkozás neve';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Üzleti lehetőségek';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Üzleti programok';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Csak üzleti felhasználók';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'A regisztrációval Ön elfogadja Általános Szerződési Feltételeinket.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Hívás';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'A szkenneléshez kameraengedély szükséges.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Bármikor lemondhatja.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Megrendelés törlése';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Új névjegy rögzítése';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'Kategóriák';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Kategória *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'A kategória már létezik';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Kategória neve';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Bejelentkezés';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Nézze meg';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Válasszon egyedi felhasználónevet a profillinkhez.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Válassza a Terv lehetőséget';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Válassza a Sablon lehetőséget';
 
   @override
-  String get close => 'Close';
+  String get close => 'Közeli';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Kód másolva';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Hamarosan';
 
   @override
-  String get company => 'Company';
+  String get company => 'Vállalat';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Vállalati alkalmazotti kártya';
 
   @override
   String get companyInc => 'Company Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Hajtsa végre ezeket a lépéseket';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Megerősítés és pontok hozzáadása';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Foglalás megerősítése';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Hely megerősítése';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Erősítse meg a beváltást';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Kapcsolt fiókok';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully =>
+      'A kapcsolatfelvétel sikeresen hozzáadva!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Névjegykártya';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => 'Sikeres kapcsolatcsere!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Kapcsolatfelvételi forrás';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully =>
+      'Kapcsolattartó sikeresen frissítve!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Kapcsolatok';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Folytatás';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Másolva';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Kód másolása';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Nem sikerült lekérni a helyet. Kérjük, engedélyezze a GPS-engedélyt.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Nem sikerült fiókot váltani';
 
   @override
-  String get create => 'Create';
+  String get create => 'Teremt';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Fiók létrehozása';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Hűségprogram létrehozása';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Új link létrehozása';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Program létrehozása';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Jutalom létrehozása';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Hozzon létre bélyeg- vagy pontjutalmakat az ügyfelek számára';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Hozd létre az első kártyádat';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Készítse el első jutalomkártyáját az ügyfelek számára';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Létrehozás dátuma';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Egyedi képek bélyegzett és bélyeg nélküli helyekhez. Ha nincs beállítva, a rendszer az alapértelmezett értékeket használja.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Egyéni link';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Ügyfél adatai';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'Az ügyfél sikeresen regisztrált';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Az ügyfél még nem regisztrált';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Ügyfél nem jelenik meg';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Ügyfélrendelések';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'A kártyatervezés testreszabása';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'A tervezés testreszabása';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Szabja testre profilját, oldja fel a PRO-sablonokat, és szerezzen korlátlan számú leadet.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Testreszabhatja magát';
 
   @override
-  String get date => 'Date';
+  String get date => 'Dátum';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Dátumtartomány';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Hanyatlás';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Töröl';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Törli a kártyát?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Kategória törlése';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Névjegy törlése';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Törli a jutalmat?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Csökkenő';
 
   @override
-  String get description => 'Description';
+  String get description => 'Leírás';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Leírás (nem kötelező)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Részletek';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Eszköz összekapcsolva';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Az eszköz kijelentkezett';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Eszköz állapota';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Digitális névjegykártya';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'DIGITÁLIS ÜZLETkártya';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Nincs fiókja?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'például Gyorsétterem';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'például Cukor nélkül, extra meleg...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => '50 pontot szerzett';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Szerkesztés';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Kártya szerkesztése';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Részletek szerkesztése';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Profil szerkesztése';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Beállítások szerkesztése';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Szerkessze profiladatait';
 
   @override
   String get email => 'Email';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'E-mail és jelszó';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'E-mail cím';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR =>
+      'E-mail bejelentkezés vagy QR-kód beolvasása';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Munkavállalói kártya';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'ALKALMAZOTT KÁRTYA';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Munkavállalói arcfotó';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Üres nyílás';
 
   @override
-  String get end => 'END';
+  String get end => 'VÉGE';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Befejezés dátuma';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Vége óra';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Regisztrálja az Ügyfelet';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Adja meg a számla összegét';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Írja be a kódot';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Írja be helyette a kódot';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Adja meg alább a hálózati kapcsolati adatokat.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Írja be a nevét';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Adja meg jelszavát';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Eseményjelvény';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Kapcsolatcsere';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Kapcsolat csere...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Fedezze fel';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'Nem sikerült frissíteni a névjegyet.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Töltött rés';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Névjegyek szűrése';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Névjegyek szűrése';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Keressen embereket a BarQody-n';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Felhasználó keresése';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Felhasználó keresése';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Felhasználónév keresése';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Elfelejtetted?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Ingyenes kávé';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Teljes név';
 
   @override
-  String get general => 'General';
+  String get general => 'Általános';
 
   @override
-  String get go => 'Go';
+  String get go => 'Megy';
 
   @override
   String get goBusiness => 'Go Business';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'VENDÉG';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'Helló,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Ebben a felhasználói felületi bemutatóban a Súgó le van tiltva.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Tartsa a QR-kódot a keretben – az automatikusan beolvassa.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Hogyan szeretné megtervezni ezt a kártyát?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Névjegyek importálása';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'A névjegyek importálása még nem érhető el.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'be';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Bejövő rendelések';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'Érvénytelen profil URL. Olvass be egy érvényes BarQody-kártyát vagy QR-kódot.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Érvénytelen QR-kód. Használjon Barqody QR-linket.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Hívja meg az alkalmazottakat, állítson be műszakokat és kövesse nyomon a jelenlétet';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'Meghívta, hogy csatlakozzon alkalmazottként';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -814,7 +829,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Munkakör';
 
   @override
   String get johnDoe => 'John Doe';
@@ -826,7 +841,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Csatlakozás: 2026. január 15';
 
   @override
   String get jpg => 'JPG';
@@ -834,10 +849,10 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Tartsa biztonságban fiókját. Csak akkor olvassa be a QR-kódokat, ha megbízható eszközt szeretne összekapcsolni.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Címke';
 
   @override
   String get lat => 'Lat';
@@ -845,1589 +860,1605 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Hagyja, hogy mások irányítsák telefonjuk kameráját erre a QR-kódra, hogy azonnal megtekinthessék hálózati profilját.';
 
   @override
   String get link => 'Link';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Kapcsoljon össze egy eszközt';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Hivatkozás QR-val egy másik telefonon';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'Link a vágólapra másolva';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Link beállításai';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Link beállítások';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Összekapcsolja ezt az eszközt?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Linkek';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Linkek ezen a kártyán';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'A hely még nincs beállítva';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Helyszíni engedély szükséges';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'A részvételhez helyszíni engedély szükséges';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Bejelentkezés';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Jelentkezzen be digitális kártya és hálózat kezeléséhez.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Jelentkezzen be QR kóddal';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Jelentkezzen ki';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Jelentkezzen ki az összesből';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Kijelentkezni az eszközről?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Hűségprogramok';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Kategóriák kezelése';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Kapcsolatok kezelése';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Alkalmazottak kezelése';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Kezelje személyes adatait és egyéb preferenciáit';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Jelölje meg befejezettnek';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'Havi';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Saját kártyáim';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'Saját hely';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Saját jutalmaim';
 
   @override
-  String get name => 'Name';
+  String get name => 'Név';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'NÉV';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'A név megadása kötelező';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'név@cég.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Új kártya';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Új kártya';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Új kategória';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Új jutalom';
 
   @override
-  String get next => 'Next';
+  String get next => 'Következő';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'Következő kártya';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet =>
+      'Még nincsenek aktív linkek csatlakoztatva';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Nincsenek aktív jutalomprogramok.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Még nincs alkalmazotti kártya';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Nincsenek alkalmazottak hozzáadva';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Még nincsenek alkalmazottak';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Nem található munkáltató';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'Nincsenek tételek ebben a kategóriában.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable =>
+      'Nem állnak rendelkezésre hivatkozássablonok';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'Jelenleg nincsenek új értesítések.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Még senki sem nézte meg a profilodat.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Nincsenek függőben lévő meghívók';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Még nincs program hozzárendelve. Adjon hozzá programokat alább.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => 'A képen nem található QR-kód.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Még nincsenek jutalomprogramok';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'Ezen a napon nincsenek szabad helyek';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Nem található felhasználó';
 
   @override
-  String get none => 'None';
+  String get none => 'Egyik sem';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'Nem áll rendelkezésre a jelenlegi csomagban';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Még nem jelentkezett be';
 
   @override
-  String get note => 'Note';
+  String get note => 'Jegyzet';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Megjegyzések (nem kötelező)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Értesítés törölve';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Itt csak a borító, a profilkép, a név és az életrajz szerkeszthető.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Csak az engedélyezett linkek jelennek meg, amikor valaki beolvassa ezt a kártyát.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown =>
+      'Csak a nyilvános profilok jelennek meg';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Jelenleg csak ez a telefon használja az Ön fiókját.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'VAGY FOLYTATJA AZT';
 
   @override
-  String get order => 'Order';
+  String get order => 'Rendelés';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Megrendelés részletei';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'Rendelési azonosító';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'A rendelés nem található';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Megrendelések';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Papír kártya';
 
   @override
-  String get password => 'Password';
+  String get password => 'Jelszó';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Fizetés hónapról hónapra';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'ELFOGADÁS FÜGG';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Teljesítmény áttekintése';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Személyes adatok';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Telefon';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Fényképek';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Válasszon egy kész színtémát. Gyors és tiszta.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Válassz színt';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Válassz a térképen';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Rendelés leadása';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Terv lejárt';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'A folytatáshoz adja meg a vállalkozás adatait';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Kérjük, adja meg az elem nevét';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Kérjük, adja meg vállalkozása adatait a frissítés előtt.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Kérjük, válasszon kategóriát';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Kérjük, válasszon egy idősávot';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst =>
+      'Kérjük, először állítsa be a munkahely helyét';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Irányítsa a kamerát a másik eszközön lévő QR-kódra';
 
   @override
-  String get points => 'Points';
+  String get points => 'Pontok';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Szerzett pontok';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Prémium aktív';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Előző kártya';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Ár (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'PRO sablon';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Profil';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Profil ellenőrzés';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Profil erőssége';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Profilnézők';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Profil megtekintések';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Program részletei';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Program neve';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'A program nem található';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Program típusa';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'QR-kód';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'QR szkennelések';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Mennyiség';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Olvassa el az összeset';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Csak olvasható';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => '1 bélyeget kapott';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Legutóbbi tevékenység';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Válts be egy másik jutalmat';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Jutalom beváltása';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Megváltott ingyenes kávé';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Frissítse a QR-t';
 
   @override
-  String get region => 'Region';
+  String get region => 'Régió';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Távolítsa el';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Alkalmazott eltávolítása';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Terv megújítása';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Kérés függőben';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Kérelem függőben';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Kérelem elutasítva';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Kérjen előfizetést';
 
   @override
   String get reset => 'Reset';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Jutalom teljesítve! Beváltásához mutasd meg ezt a kártyát.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Jutalom teljesítve! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Jutalom részletei';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Jutalomprogram';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Jutalomprogramok';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Jutalom beváltva!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Jutalmak';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Megszerzett jutalmak';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '1600 Rs havonta';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => 'Évente 8300 Rs';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'MEGTAKARÍTÁS';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Mentse munkahelyi személyi igazolványát telefonjába vagy pénztárcájába';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Letapogatás';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Olvassa be a felhasználói QR-kódot, hogy hozzáadja őket alkalmazottként';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Olvasson be bármely felhasználó vagy üzleti QR-kódot alkalmazott hozzáadásához';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem =>
+      'Olvassa be az üzleti QR-kódot a beváltáshoz';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Olvassa be az Ügyfél QR-kódját';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Az alkalmazotti profil vizsgálata';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'QR-kód beolvasása';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'QR beolvasása / QR megjelenítése';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'QR-kód beolvasása';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Olvassa be a másik eszközön látható QR-kódot';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Beolvasás meghíváshoz';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Keresés felhasználónév alapján...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Linkek keresése';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany =>
+      'Keressen névre, e-mail címre vagy cégre';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Összes megtekintése';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Az összes tevékenység megcsúfolásának megtekintése. Az új tevékenységek megjelennek a potenciális ügyfelek hozzáadásával.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Válassza ki a dátumot';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Válassza a Jelölők lehetőséget';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Válassza ki a Régiót';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon =>
+      'Állítson be szöveget a link ikon alatt';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Állítsa be saját színeit, fotóit és hátterét.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Részesedés';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Oszd meg a kártyát';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Oszd meg a különböző linkeket az egyes kártyákon';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Profil megosztása';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Link megjelenítése';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Mutasd meg ezen a kártyán';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Jelentkezzen be a Google-lal';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Regisztráljon';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Kihagyás';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Most hagyd ki';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'Időköz (perc)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Szoftvermérnök';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Valami elromlott';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Rendezési beállítások';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Különleges utasítások';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Bélyegzőkártya';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Bélyegző ikon';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Bélyegek';
 
   @override
-  String get start => 'START';
+  String get start => 'INDUL';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Kezdés dátuma';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Kezdő óra';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Kezdje el intelligensebben a hálózatépítést a Barqodyval.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statisztika';
 
   @override
-  String get status => 'Status';
+  String get status => 'Állapot';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Előfizetés';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'Előfizetési kérelem benyújtva';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'Előfizetési kérelem benyújtva.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Csúsztassa ujját a kártyák böngészéséhez';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Készítsen egy gyors szelfit a jelenlét ellenőrzéséhez';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Profilok hozzáadásához és aktiválásához érintse meg a fenti „Közösségi linkek” elemet.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Koppintson a térképre, vagy használja az aktuális tartózkodási helyét';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Érintse meg a fénykép hozzáadásához';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Koppintson a QR-kód megosztásához';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Csapatlátogatás';
 
   @override
-  String get template => 'Template';
+  String get template => 'Sablon';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Sablonok';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Köszönöm! A visszajelzések csak gúnyolódnak.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Ezt a kártyát és QR-kódját eltávolítjuk.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Ez a funkció kizárólag az üzleti felhasználók számára érhető el.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'Ez már az Ön felhasználóneve.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'Ebben a hónapban';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Ezzel véglegesen törli ezt a jutalomprogramot és az összes regisztrációját.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Ma van a hétvégéd';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Ma • 15:15';
 
   @override
-  String get total => 'Total';
+  String get total => 'Teljes';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Kövesse nyomon megrendeléseit';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional =>
+      'Tranzakció referencia (opcionális)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Tranzakció hivatkozási száma (nem kötelező)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Próbáld újra';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Próbáld ki a Business Pro-t';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Próbáld ki a Business Pro-t.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Írja be';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Írjon be legalább 2 karaktert a felhasználónévből a kereséshez.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Írja be a QR alatt látható 8 karakterből álló kódot.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'Fejlesztés alatt - Jelentkezzen be e-mailben/jelszóval.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Bélyegző ikon eltávolítása';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Frissítsen most';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Frissítés erre';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Frissítsen Tapni PRO-ra';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Használjon sablont';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Használja a Barqody-t más telefonokon vagy táblagépeken. Maradhat az irányítás – bármikor jelentkezzen ki bármely eszközről.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Használja a Barqody-t a telefonján a kód beolvasásához';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Használja az alapértelmezett ikont';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Használja ezt a fényképet';
 
   @override
-  String get user => 'USER';
+  String get user => 'FELHASZNÁLÓ';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Verzió: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Tekintse meg és frissítse ügyfelei rendeléseit';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Profil megtekintése';
 
   @override
-  String get views => 'Views';
+  String get views => 'Nézetek';
 
   @override
-  String get website => 'Website';
+  String get website => 'Weboldal';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Üdvözöljük Vissza';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Üdvözöljük a Fiókközpontban';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Amikor egy vállalkozás felveszi Önt alkalmazottként, itt jelenik meg az alkalmazotti kártya. Bármikor testreszabhatja a dizájnt.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Amikor egy vállalkozás felveszi Önt jutalmazási programjába, az itt jelenik meg.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Ha egy vállalkozás meghívja Önt a csapatába, az itt jelenik meg.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Ha ki van kapcsolva, ez a link nem jelenik meg a profilodban';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Írj valamit magadról vagy a márkádról';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Évi';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Tegnap • 17:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Az Ön kategóriái';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Munkavállalói kártyái a munkáltatóktól';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'Ingyenes kávéját sikeresen beváltotta.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Az Ön jutalma';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Előfizetése lejárt. A részletekért koppintson az információs ikonra.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'a neved';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% kedvezmény';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'AVATÁR KAPCSOLVA';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Számlatulajdonos neve';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Számlaszám';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Aktív most';
 
   @override
   String get addBio => 'Add Bio';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Borítókép hozzáadása';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Arckép hozzáadása';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Bevezető hangjegyzet hozzáadása';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Profilnév hozzáadása';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Profilfotó hozzáadása';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Közösségi linkek hozzáadása (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Elem hozzáadása';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Link hozzáadása';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'Adjon hozzá linkeket a profiljához alább';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Fénykép hozzáadása';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Kosárba';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Cím (nem kötelező)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Minden kapcsolattípus';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Megengedett sugár (méter)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Majdnem megvan!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Már alkalmazott';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Már van fiókja?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Mindig naprakész';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Biztos, hogy ki akar jelentkezni a Barqodyból?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'A jelenlét meghiúsult';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Háttérszín';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'A foglalás nem sikerült';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward => 'Röviden írja le ezt a jutalmat...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Üzleti ellenőrzés';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Üzleti e-mail cím';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Üzleti fax';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Üzleti telefonszám';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Üzleti weboldal';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Kamera hiba';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Arc rögzítése';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Kártya kész';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Kártya Címke';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Kártya címke neve';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Kártya előnézete';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Kártya téma';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Kártya létrehozva';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Kártya neve';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'A kártya JPG formátumban mentve';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'A kártya PNG formátumban mentve';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'A kártya frissítve';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Fotó módosítása';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Bejelentkezési arc';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Sikeres bejelentkezés';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Kijelentkezés Arc';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'A kijelentkezés sikeres volt';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Válasszon sablont';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => 'Névjegykártya üzleti címe';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'Névjegykártya cég neve';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'Névjegykártya e-mail címe';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'Kapcsolattartó kártya lakcíme';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Névjegykártya telefon';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'A névjegykártya webhelye';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'Nem sikerült befejezni a bejelentkezést';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'Nem sikerült létrehozni a QR-kódot';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Nem sikerült összekapcsolni az eszközt';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'Nem sikerült kijelentkezni az eszközről';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet =>
+      'Nem sikerült megnyitni a Google Walletot';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'Nem sikerült menteni a kártyatervet';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Nem sikerült frissíteni a profil láthatóságát';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Galéria létrehozása';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Hozzon létre egy kártyát a profil megosztásához';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Kártya létrehozása';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Egyedi bank';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Az ügyfelek regisztrálhatók és lebélyegezhetők';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'A kártya testreszabása';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram => 'Ismertesse hűségprogramját';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Megjelenítési név';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Nincs fiókja?';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE, éééé HMM d';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Jutalom szerkesztése';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Elem szerkesztése';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'E-mail cím';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'E-mail megadása kötelező';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Munkavállalói kártyák';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Alkalmazott eltávolítva';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'Az alkalmazotti beállítások elmentve';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Beiratkozott vállalkozások';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Adjon meg egy érvényes e-mail-címet';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard =>
+      'Adja meg az életrajzot a névjegykártyához';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Írja be a program nevét';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Adja meg életrajzát';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Adja meg telefonszámát';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'Adja meg webhelye URL-jét';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Esemény jelvény';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'Példa: 10 bélyeg = ingyenes kávé';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Arckép hozzáadva';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'Nem sikerült hozzáadni a programot';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Nem sikerült hozzáadni a bélyeget';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Nem sikerült regisztrálni az ügyfelet';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Nem sikerült a kapcsolatcsere';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Nem sikerült betölteni a programokat';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Nem sikerült leadni a rendelést';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Nem sikerült eltávolítani';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Nem sikerült menteni';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'Nem sikerült menteni a JPG-fájlt';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'Nem sikerült menteni a PNG-t';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'Nem sikerült menteni a QR-kódot.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'Nem sikerült menteni a vállalkozás adatait';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Nem sikerült frissíteni az állapotot';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Keresztnév';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Étel és ital';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Ingyenes desszert';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Galériaengedély szükséges. Kérjük, engedélyezze a Beállításokban.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Kezdje el';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Megy';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices =>
+      'Válassza az Eszközök → Kapcsolt eszközök menüpontot';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending => 'A Google Wallet beállítása függőben.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'A Google Wallet beállítása függőben. A profil linkje kimásolva.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Növelje vállalkozását';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Vendég felhasználó';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'IBAN szám';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'IRODÁBAN';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Meghívó függőben';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'A meghívás elutasítva';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Meghívó elküldve. Az alkalmazottak felvétele az elfogadás után történik.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Alkalmazott meghívása';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Meghívás alkalmazottként';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Munkakör';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Vezetéknév';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Jelentkezzen be QR-val';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Csak ebből a fiókból jelentkezik ki? A többi fiók ezen a telefonon marad.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Bejelentkezve a Google-lal (demó fiók: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Bejelentkezéskor…';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'Sikertelen bejelentkezés. Próbáld újra.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'HH d, yyyy - h:mm a';
 
   @override
-  String get mmmmYyyy => 'MMMM yyyy';
+  String get mmmmYyyy => 'éééé MMMM';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Jelenlét jelölése';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'Az én nevem';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'Tapni profilom';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'A név nem lehet üres';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Új';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Még nincsenek elérhetőségek';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Még nincsenek részletek';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Még nincsenek hozzáadva linkek.\\nA kezdéshez koppintson a „Link hozzáadása” elemre.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Nincs egyezés';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Indoklás nélkül.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Nincs beiratkozott';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Bélyegek száma';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Egy érintéssel megosztás';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Nyissa meg a Barqodyt a másik telefonon';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Nyissa meg a Kamera lehetőséget';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Rendelési információ';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Papír kártya';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'A jelszónak legalább 4 karakterből kell állnia';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'A jelszónak legalább 6 karakterből kell állnia';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Telefonszám';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Telefon szükséges';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Telefonszám';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Válassza ki a Helyet';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Adjon meg egy jelszót';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Kérjük, adjon meg egy felhasználónevet';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Kérjük, adjon meg egy érvényes e-mail címet';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'Kérjük, érvényes számú bélyegzőt adjon meg';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Kérjük, adja meg e-mail címét';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Kérjük, adja meg a nevét';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Kérjük, adja meg jelszavát';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Irányítsa a kamerát egy QR-kódra az automatikus beolvasáshoz.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Irányítsa a kamerát egy eseményjelvényre, és érintse meg a Kamera gombot.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Irányítsa a kamerát a papírkártyára, és érintse meg a Kamera gombot.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'QR-kód előkészítése…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'A profil nem található.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'A profil sikeresen frissítve!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'QR kód mentve a galériába!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'A QR kód lejárt';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'A QR kód lejárt. Koppintson a Frissítés gombra.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Ingatlan';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Nyugta csatolva';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'A prémium szolgáltatásaihoz és adataihoz való teljes hozzáférés visszaállításához újítsa meg előfizetését.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Fotó újrafelvétele';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Jutalom cím';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Jutalom feloldva 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Szerep vagy társaság';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Módosítások mentése';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Névjegy mentése';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Profil mentése';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Beállítások mentése';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Felhasználónév mentése';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Kártya mentése';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Névjegy mentése';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Helyben mentve. Lehetséges, hogy a szinkronizálás nem sikerült.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Olvassa be a QR-kódot, vagy adjon hozzá valakit, akivel találkozott a hálózat kiépítéséhez.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'QR-val szkennelve';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Képernyő téma';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'A keresés sikertelen. Próbáld újra.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Válassza a Vállalat lehetőséget';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Válassza a Dátumtartomány lehetőséget';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Válassza a Befejezés dátumát';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Válassza a Kezdő dátum lehetőséget';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Meghívó küldése';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Részvételi meghívó küldése';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Link megosztása';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Váltásidőzítés';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Intelligens kapcsolatfelvétel';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Bélyegző szegély színe';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Bélyegző színe';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Bélyegzőikonok (opcionális)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Bélyegek adott';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Kezdje el építeni a hálózatát';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Utcanév';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'A teljes hozzáférés feloldásához váltson üzleti fiókra.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Koppintson az Eszköz összekapcsolása elemre, és olvassa be ezt a QR-kódot';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Koppintson a kép hozzáadásához';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Érintse meg a módosításhoz';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Helyben alkalmazott sablon. A szinkronizálás nem sikerült.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Szöveg színe';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'Ez a fiók';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Ez a funkció kizárólag az üzleti felhasználók számára érhető el.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'Ez a személy a csapatodban van';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Ez a program szünetel';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Összes bélyeg';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Próbálkozzon másik névvel, e-mail címmel vagy céggel.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'Nem sikerült menteni a profilt. Próbáld újra.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Nem sikerült frissíteni a felhasználónevet. Próbáld újra.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'Fejlesztés alatt - Jelentkezzen be e-mailben/jelszóval.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Ismeretlen felhasználó';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Frissítse a GPS-helyet';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Állapot frissítése';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Kosár frissítése';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Frissítse az elemet';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Frissítés erre';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Frissítsen Business PRO-ra';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Nyugta feltöltése (nem kötelező)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Használja a Saját pozíciót';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Csak betűket, számokat, aláhúzásjeleket vagy kötőjeleket használjon';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'A felhasználónévnek legalább 3 karakterből kell állnia';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'A felhasználónév legfeljebb 30 karakterből állhat';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'Felhasználónév sikeresen frissítve!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Várja, hogy elfogadják';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'Webhely URL';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Hétvégi napok';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Munkahely';
 
   @override
-  String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+  String get yourPROSubscriptionHasExpiredNN => 'PRO-előfizetése lejárt.\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => 'PRO-előfizetése lejárt.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'A prémium funkciók jelenleg le vannak tiltva.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'A Pro linkek el vannak rejtve nyilvános profilodban.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Vállalkozásának adatai és adatai biztonságban vannak.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return '$label elem hozzáadása';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Adjon hozzá legalább egy $label elemet';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'Nincs elérhető $label elem.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Még nincsenek tételek. Adja hozzá az első $label elemet.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Egy nyilvános profil sem felel meg a \"@$query\" kifejezésnek.';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Kód: $code';
   }
 }

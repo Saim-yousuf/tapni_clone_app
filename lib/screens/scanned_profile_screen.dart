@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:tapni_app/widgets/bank_widgets.dart';
 import 'package:tapni_app/widgets/loading_widget.dart';
@@ -16,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/main_shell.dart';
+import 'package:tapni_app/utils/constant.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 
@@ -307,12 +309,17 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         foregroundColor: Colors.black,
         title: Text(
           widget.username ?? context.l10n.profile,
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
-        actions: [_buildAppBarMenu()],
+        actions: [
+          _buildShareButton(),
+          _buildAppBarMenu(),
+        ],
       ),
       body: SafeArea(
         child: _isLoading
@@ -321,6 +328,37 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             ? _buildErrorView()
             : _buildProfileView(_profile!),
       ),
+    );
+  }
+
+  Widget _buildShareButton() {
+    if (_isLoading || _errorMessage != null || _profile == null) {
+      return const SizedBox.shrink();
+    }
+
+    return IconButton(
+      icon: const Icon(Icons.share_rounded),
+      tooltip: context.l10n.shareProfile,
+      onPressed: () => _shareProfile(_profile!),
+    );
+  }
+
+  Future<void> _shareProfile(UserProfile profile) async {
+    final username =
+        (profile.username?.trim().isNotEmpty == true
+            ? profile.username!.trim()
+            : widget.username?.trim()) ??
+        '';
+    if (username.isEmpty) return;
+
+    final card = _scannedCard;
+    final url = card != null
+        ? card.profileUrl(username)
+        : '${Constants.appDomain}/$username';
+
+    await Share.share(
+      'Check out this profile: $url',
+      subject: context.l10n.shareProfile,
     );
   }
 
@@ -449,12 +487,6 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         children: [
-          Image.asset(
-            'assets/images/png/barqody_name.png',
-            height: 100,
-            fit: BoxFit.cover,
-          ),
-          SizedBox(height: 20),
           _buildProfileAvatar(profile, displayPhoto, displayCover),
           SizedBox(height: 20),
           Text(

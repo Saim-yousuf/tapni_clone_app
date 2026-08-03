@@ -12,325 +12,331 @@ class AppLocalizationsMs extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Alatan';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Tetapan akaun';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Pemberitahuan';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Untuk awak';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'Profil anda';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Edit Profil';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => 'Tukar nama, foto dan bio anda';
 
   @override
-  String get username => 'Username';
+  String get username => 'Nama pengguna';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle => 'Tetapkan nama pengguna profil unik anda';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Pautan Sosial';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Tambah Instagram, WhatsApp, tapak web dan banyak lagi';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Profil awam';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn =>
+      'Sesiapa sahaja boleh mencari dan melihat profil anda';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Tersembunyi daripada carian — orang lain tidak dapat menemui anda';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Kongsi Kod QR Saya';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Biarkan orang lain mengimbas kad perniagaan digital anda';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Beli-belah & ganjaran';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Pesanan Saya';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle => 'Jejaki pesanan yang anda buat dari kedai';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Kad Ganjaran Saya';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Lihat setem dan mata daripada program kesetiaan';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'tempat kerja';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Jemputan Pekerja';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Terima atau tolak jemputan pasukan daripada perniagaan';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Daftar Masuk Tempat Kerja';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Jam masuk dan keluar di tempat kerja anda dengan lokasi';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Akaun & peranti';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Peranti yang dipautkan';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => 'Pautkan telefon lain seperti WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Akaun';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Tambah atau tukar akaun';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Beralih antara $count akaun';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Bantuan & akaun';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Bahasa apl';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => 'Tukar bahasa yang digunakan dalam apl';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Bahasa carian';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'Bahasa telefon';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Bahasa dikemas kini';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Bantuan & Soalan Lazim';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Jawapan kepada soalan biasa';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Hantar Maklum Balas';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle =>
+      'Laporkan pepijat atau cadangkan ciri baharu';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Log Keluar';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Log keluar daripada sesi ini';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Batal';
 
   @override
-  String get save => 'Save';
+  String get save => 'Jimat';
 
   @override
-  String get done => 'Done';
+  String get done => 'Selesai';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(Baca sahaja)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 Mata = 100 PKR (contoh peraturan)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '10 Setem Diperlukan';
 
   @override
   String get n123MainStCity => '123 Main St, City';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 Hari Lalu';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 aksara. Huruf, nombor, garis bawah dan sempang sahaja.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Terima';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'AKSES TERHAD';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Akaun / IBAN: Tambah nombor akaun di sini';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Tajuk Akaun: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Aktif';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'AKTIF';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'KAD AKTIF';
 
   @override
-  String get add => 'Add';
+  String get add => 'Tambah';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Tambah nota...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Tambah akaun';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Tambah sekurang-kurangnya satu kategori dahulu';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Tambah kategori dalam susunan paparan (cth. Makanan Segera, kemudian Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Tambah kategori dalam tetapan katalog anda dahulu.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Tambah kenalan';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Tambah Pautan';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'Tambahkan pautan ke profil anda di bawah';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Tambahkan pautan ke profil anda dahulu, kemudian dayakannya di sini.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Tambah Logo';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Tambah Mata';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Tambah Program';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Tambah Setem';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Tambahkan pada Google Wallet';
 
   @override
-  String get address => 'Address';
+  String get address => 'Alamat';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Semua';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Semua terperangkap!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Semua pemberitahuan ditandai sebagai dibaca!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Benarkan kamera';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Benarkan peranti ini mengakses akaun Barqody anda? Anda boleh mengalih keluarnya pada bila-bila masa daripada peranti Terpaut.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Sudah mempunyai akaun?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'Papan Pemuka Analitis';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Sebarang permintaan khas...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Mohon';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Gunakan Reka Bentuk';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Gunakan Templat';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Menaik';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Minta perniagaan anda mengimbas QR anda dan menambahkan anda sebagai pekerja';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Tetapkan Kategori';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Program yang Ditugaskan';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Sekurang-kurangnya 6 aksara';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => 'Kehadiran selesai untuk hari ini';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Slot yang ada';
 
   @override
-  String get background => 'Background';
+  String get background => 'Latar belakang';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Warna latar belakang';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Akaun Bank';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Butiran Bank';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Bank: Tambahkan nama bank di sini';
 
   @override
   String get barqody => 'Barqody';
@@ -339,10 +345,10 @@ class AppLocalizationsMs extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Nilai terbaik';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Jumlah Bil';
 
   @override
   String get bio => 'BIO';
@@ -351,461 +357,462 @@ class AppLocalizationsMs extends AppLocalizations {
   String get bio2 => 'Bio';
 
   @override
-  String get book => 'Book';
+  String get book => 'Buku';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Tarikh tempahan';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Jadual tempahan';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Masa tempahan';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'PERNIAGAAN';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Kategori Perniagaan';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Butiran Perniagaan';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Nama Perniagaan';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Pilihan perniagaan';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Program Perniagaan';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Pengguna Perniagaan Sahaja';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'Dengan mendaftar, anda bersetuju menerima Terma dan Syarat kami.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Panggil';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Kebenaran kamera diperlukan untuk mengimbas.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Batalkan bila-bila masa.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Batalkan Pesanan';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Tangkap Kenalan Baharu';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'Kategori';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Kategori *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'Kategori sudah wujud';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Nama Kategori';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Daftar masuk';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Semak keluar';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Pilih nama pengguna unik untuk pautan profil anda.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Pilih Rancangan';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Pilih Templat';
 
   @override
-  String get close => 'Close';
+  String get close => 'tutup';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Kod disalin';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Akan Datang';
 
   @override
-  String get company => 'Company';
+  String get company => 'Syarikat';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Kad Pekerja Syarikat';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'Syarikat Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Lengkapkan langkah-langkah ini';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Sahkan & Tambah Mata';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Sahkan Tempahan';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Sahkan Lokasi';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Sahkan Penebusan';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Akaun Bersambung';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Kenalan berjaya ditambahkan!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Kad kenalan';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => 'Kenalan berjaya ditukar!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Sumber Hubungan';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'Kenalan berjaya dikemas kini!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Kenalan';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'teruskan';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'disalin';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Salin kod';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Tidak dapat lokasi. Sila dayakan kebenaran GPS.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Tidak dapat menukar akaun';
 
   @override
-  String get create => 'Create';
+  String get create => 'Buat';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Buat Akaun';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Buat Program Kesetiaan';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Buat pautan baharu';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Buat Program';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Cipta Ganjaran';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Buat ganjaran setem atau mata untuk pelanggan';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Buat kad pertama anda';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Buat kad ganjaran pertama anda untuk pelanggan';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Tarikh Penciptaan';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Imej tersuai untuk slot yang dicop dan tidak dicop. Lalai digunakan jika tidak ditetapkan.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Pautan tersuai';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Butiran Pelanggan';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'Pelanggan berjaya mendaftar';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Pelanggan belum mendaftar lagi';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Pelanggan Tidak Hadir';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Pesanan Pelanggan';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Sesuaikan Reka Bentuk Kad';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Sesuaikan Reka Bentuk';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Sesuaikan profil anda, buka kunci templat PRO dan dapatkan petunjuk tanpa had.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Sesuaikan diri anda';
 
   @override
-  String get date => 'Date';
+  String get date => 'tarikh';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Julat Tarikh';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Tolak';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Padam';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Padamkan kad?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Padamkan Kategori';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Padam Kenalan';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Padamkan Ganjaran?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Menurun';
 
   @override
-  String get description => 'Description';
+  String get description => 'Penerangan';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Penerangan (pilihan)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Butiran';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Peranti dipautkan';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Peranti dilog keluar';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Status peranti';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Kad Perniagaan Digital';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'Kad PERNIAGAAN DIGITAL';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Tiada akaun?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'cth. Makanan Segera';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'cth. Tanpa gula, lebih panas...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'Mendapat 50 Mata';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Sunting';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Edit kad';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Edit Butiran';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Edit profil';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Edit Tetapan';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Edit butiran profil anda';
 
   @override
-  String get email => 'Email';
+  String get email => 'E-mel';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'E-mel & kata laluan';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'Alamat E-mel';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'Log masuk e-mel atau imbas QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Kad Pekerja';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'KAD PEKERJA';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Foto Wajah Pekerja';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Slot kosong';
 
   @override
-  String get end => 'END';
+  String get end => 'TAMAT';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Tarikh Tamat';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Jam tamat';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Daftarkan Pelanggan';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Masukkan jumlah bil';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Masukkan kod';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Masukkan kod sebaliknya';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Masukkan butiran hubungan rangkaian di bawah.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Masukkan nama anda';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Masukkan kata laluan anda';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Lencana Acara';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Pertukaran Kenalan';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Bertukar kenalan...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Teroka';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'Gagal mengemas kini kenalan.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Slot terisi';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Tapis kenalan';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Tapis Kenalan';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Cari orang di BarQody';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Cari pengguna';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Cari Pengguna';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Cari nama pengguna';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'terlupa?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Kopi Percuma';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Nama Penuh';
 
   @override
-  String get general => 'General';
+  String get general => 'Umum';
 
   @override
-  String get go => 'Go';
+  String get go => 'Pergi';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'Pergi Perniagaan';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'TETAMU';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'helo,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Pusat Bantuan dilumpuhkan dalam tunjuk cara UI ini.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Pegang kod QR di dalam bingkai — ia mengimbas secara automatik.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Bagaimana anda mahu mereka bentuk kad ini?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Import kenalan';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'Import kenalan belum tersedia lagi.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'dalam';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Pesanan masuk';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'URL profil tidak sah. Imbas kad BarQody atau kod QR yang sah.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Kod QR tidak sah. Gunakan QR pautan Barqody.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Jemput pekerja, tetapkan syif dan jejaki kehadiran';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'Menjemput anda untuk menyertai sebagai pekerja';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -814,7 +821,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Jawatan Kosong';
 
   @override
   String get johnDoe => 'John Doe';
@@ -826,7 +833,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Menyertai: 15 Jan 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,7 +841,7 @@ class AppLocalizationsMs extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Pastikan akaun anda selamat. Hanya imbas kod QR apabila anda ingin memautkan peranti yang anda percayai.';
 
   @override
   String get label => 'Label';
@@ -845,1589 +852,1599 @@ class AppLocalizationsMs extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Biarkan orang lain menghalakan kamera telefon mereka ke kod QR ini untuk melihat profil rangkaian anda dengan serta-merta.';
 
   @override
-  String get link => 'Link';
+  String get link => 'Pautan';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Pautkan peranti';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Pautan melalui QR pada telefon lain';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'Pautan disalin ke papan keratan';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Tetapan Pautan';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Tetapan pautan';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Pautkan peranti ini?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Pautan';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Pautan pada kad ini';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'Lokasi belum ditetapkan lagi';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Kebenaran lokasi diperlukan';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Kebenaran lokasi diperlukan untuk kehadiran';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Log Masuk';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Log masuk untuk mengurus kad digital dan rangkaian anda.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Log masuk dengan kod QR';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Log keluar';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Log keluar semua';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Log keluar peranti?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Program Kesetiaan';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Uruskan kategori';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Urus kenalan';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Mengurus Pekerja';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Urus butiran peribadi anda & pilihan lain';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Tandakan Selesai';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'Bulanan';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Kad Saya';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'Lokasi Saya';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Ganjaran saya';
 
   @override
-  String get name => 'Name';
+  String get name => 'Nama';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'NAMA';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'Nama diperlukan';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'nama@syarikat.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Kad Baru';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Kad baru';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Kategori Baharu';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Ganjaran Baru';
 
   @override
-  String get next => 'Next';
+  String get next => 'Seterusnya';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'Kad seterusnya';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet =>
+      'Tiada pautan aktif disambungkan lagi';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Tiada program ganjaran aktif tersedia.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Belum ada kad pekerja';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Tiada pekerja ditambah';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Belum ada pekerja';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Tiada majikan ditemui';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'Tiada item dalam kategori ini.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => 'Tiada templat pautan tersedia';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'Tiada pemberitahuan baharu pada masa ini.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Tiada siapa yang melihat profil anda lagi.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Tiada jemputan yang belum selesai';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Belum ada program yang ditetapkan. Tambah program di bawah.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => 'Tiada kod QR ditemui dalam imej ini.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Belum ada program ganjaran';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay => 'Tiada slot tersedia pada hari ini';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Tiada pengguna ditemui';
 
   @override
-  String get none => 'None';
+  String get none => 'tiada';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'Tidak tersedia pada pelan semasa anda';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Belum daftar masuk lagi';
 
   @override
-  String get note => 'Note';
+  String get note => 'Nota';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Nota (pilihan)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Pemberitahuan dikosongkan';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Hanya muka depan, foto profil, nama dan bio boleh diedit di sini.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Hanya pautan yang didayakan dipaparkan apabila seseorang mengimbas kad ini.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => 'Hanya profil awam ditunjukkan';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Hanya telefon ini yang menggunakan akaun anda sekarang.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'ATAU TERUSKAN DENGAN';
 
   @override
-  String get order => 'Order';
+  String get order => 'Pesanan';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Butiran Pesanan';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'ID Pesanan';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'Pesanan tidak ditemui';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Pesanan';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Kad Kertas';
 
   @override
-  String get password => 'Password';
+  String get password => 'Kata laluan';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Bayar bulan demi bulan';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'TERTUNDA PENERIMAAN';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Gambaran Keseluruhan Prestasi';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Butiran Peribadi';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'telefon';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Foto';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Pilih tema warna yang sudah siap. Cepat dan bersih.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Pilih Warna';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Pilih pada Peta';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Letakkan Pesanan';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Pelan Tamat';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Sila masukkan butiran perniagaan untuk meneruskan';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Sila masukkan nama item';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Sila berikan butiran perniagaan anda sebelum menaik taraf.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Sila pilih kategori';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Sila pilih slot masa';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => 'Sila tetapkan lokasi kerja dahulu';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Halakan kamera anda pada kod QR pada peranti lain';
 
   @override
-  String get points => 'Points';
+  String get points => 'mata';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Mata Diperolehi';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Premium aktif';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Kad sebelumnya';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Harga (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'templat PRO';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Profil';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Semakan Profil';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Kekuatan Profil';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Penonton Profil';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Pandangan Profil';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Butiran Program';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Nama Program';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'Program tidak ditemui';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Jenis Program';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'Kod QR';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'Imbasan QR';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Kuantiti';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Baca Semua';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Baca sahaja';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'Menerima 1 Cop';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Aktiviti Terkini';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Tebus Ganjaran Lagi';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Tebus Ganjaran';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Kopi Percuma Tebus';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Muat semula QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'Wilayah';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Alih keluar';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Keluarkan Pekerja';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Perbaharui Rancangan';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Permintaan belum selesai';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Permintaan Belum Selesai';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Permintaan ditolak';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Minta langganan';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Tetapkan semula';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Ganjaran Selesai! Tunjukkan kad ini untuk menebus.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Ganjaran Selesai! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Butiran Ganjaran';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Program Ganjaran';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Program Ganjaran';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Ganjaran Ditebus!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Ganjaran';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Ganjaran Diperolehi';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => 'Rs 1,600 dibilkan setiap bulan';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => 'Rs 8,300 dibilkan setiap tahun';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'JIMAT';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Simpan kad ID kerja anda ke telefon atau dompet';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Imbas';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Imbas kod QR pengguna untuk menambah mereka sebagai pekerja';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Imbas mana-mana pengguna atau QR perniagaan untuk menambah pekerja';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'Imbas QR Perniagaan untuk Menebus';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Imbas Kod QR Pelanggan';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Imbas profil pekerja';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Imbas QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Imbas QR / tunjukkan QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'Imbas Kod QR';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Imbas QR yang ditunjukkan pada peranti lain';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Imbas untuk Menjemput';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Cari mengikut nama pengguna...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Cari pautan';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => 'Cari nama, e-mel atau syarikat';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Lihat Semua';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Lihat semua aktiviti diejek. Aktiviti baharu akan muncul apabila petunjuk ditambah.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Pilih tarikh';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Pilih Penanda';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Pilih Wilayah';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'Tetapkan teks di bawah ikon pautan';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Tetapkan warna, foto dan latar belakang anda sendiri.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Kongsi';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Kongsi kad';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Kongsi pautan yang berbeza pada setiap kad';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Kongsi Profil';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Tunjukkan pautan';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Tunjukkan pada kad ini';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Log masuk dengan Google';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Daftar';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Langkau';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Langkau buat masa ini';
 
   @override
   String get slotMin => 'Slot (min)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Jurutera Perisian';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Sesuatu telah berlaku';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Pilihan Isih';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Arahan khas';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Kad Setem';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Ikon Setem';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'setem';
 
   @override
-  String get start => 'START';
+  String get start => 'MULAKAN';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Tarikh Mula';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Jam mula';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Mulakan rangkaian dengan lebih bijak dengan Barqody.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistik';
 
   @override
   String get status => 'Status';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Langganan';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'Permintaan langganan diserahkan';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 =>
+      'Permintaan langganan diserahkan.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Leret untuk menyemak imbas kad';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Ambil swafoto pantas untuk pengesahan kehadiran';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Ketik \"Pautan Sosial\" di atas untuk menambah dan mengaktifkan profil.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Ketik pada peta atau gunakan lokasi semasa anda';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Ketik untuk menambah foto';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Ketik untuk berkongsi kod QR';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Kehadiran Pasukan';
 
   @override
-  String get template => 'Template';
+  String get template => 'templat';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'templat';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'terima kasih! Penyerahan maklum balas adalah olok-olok sahaja.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Kad ini dan kod QRnya akan dialih keluar.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Ciri ini tersedia secara eksklusif untuk pengguna Perniagaan.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'Ini sudah pun nama pengguna anda.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'bulan ini';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Ini akan memadamkan program ganjaran ini dan semua pendaftarannya secara kekal.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Hari ini adalah hujung minggu anda';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Hari ini • 3:15 PTG';
 
   @override
-  String get total => 'Total';
+  String get total => 'Jumlah';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Jejaki pesanan anda';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'Rujukan urus niaga (pilihan)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Nombor rujukan urus niaga (pilihan)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Cuba lagi';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Cuba Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Cuba Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'taip';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Taip sekurang-kurangnya 2 aksara nama pengguna untuk dicari.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Taip kod 8 aksara yang ditunjukkan di bawah QR.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'Dalam Pembangunan - Log masuk melalui e-mel/kata laluan sebaliknya.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Ikon Nyahsetem';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Tingkatkan sekarang';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Naik taraf kepada';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Naik taraf kepada Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Gunakan templat';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Gunakan Barqody pada telefon atau tablet lain. Anda kekal dalam kawalan — log keluar mana-mana peranti pada bila-bila masa.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Gunakan Barqody pada telefon anda untuk mengimbas kod ini';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Gunakan ikon lalai';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Gunakan Foto Ini';
 
   @override
-  String get user => 'USER';
+  String get user => 'PENGGUNA';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Versi: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Lihat dan kemas kini pesanan daripada pelanggan anda';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Lihat Profil';
 
   @override
-  String get views => 'Views';
+  String get views => 'Pandangan';
 
   @override
-  String get website => 'Website';
+  String get website => 'laman web';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Selamat Kembali';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Selamat datang ke Pusat Akaun';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Apabila perniagaan menambahkan anda sebagai pekerja, kad pekerja anda akan dipaparkan di sini. Anda boleh menyesuaikan reka bentuknya pada bila-bila masa.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Apabila perniagaan mendaftarkan anda dalam program ganjaran mereka, perniagaan itu akan dipaparkan di sini.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Apabila perniagaan menjemput anda ke pasukan mereka, perniagaan itu akan dipaparkan di sini.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Apabila dimatikan pautan ini tidak akan ditunjukkan pada profil anda';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Tulis sesuatu tentang anda atau jenama anda';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'setiap tahun';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Semalam • 5:42 PM';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Kategori anda';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Kad pekerja anda daripada majikan';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'Kopi Percuma anda telah berjaya ditebus.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Ganjaran Anda';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Langganan anda telah tamat. Ketik ikon maklumat untuk mendapatkan butiran.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'nama awak';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => 'Diskaun 10%.';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'AVATAR DITORE';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Nama pemegang akaun';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Nombor akaun';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Aktif sekarang';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Tambah Bio';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Tambah Foto Muka Depan';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Tambah Foto Muka';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Tambah Nota Suara Pengenalan';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Tambah Nama Profil';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Tambah Foto Profil';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Tambah Pautan Sosial (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Tambah item';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Tambah pautan';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'Tambahkan pautan ke profil anda di bawah';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Tambah foto';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Tambah ke troli';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Alamat (pilihan)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Semua jenis kenalan';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Jejari yang dibenarkan (meter)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'hampir sampai!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Sudah Pekerja';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Sudah mempunyai akaun?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Sentiasa Terkini';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Adakah anda pasti mahu log keluar dari Barqody?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'Kehadiran gagal';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Warna Latar Belakang';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'Tempahan gagal';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward =>
+      'Terangkan secara ringkas ganjaran ini...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Perniagaan Disahkan';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Alamat e-mel perniagaan';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Faks perniagaan';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Nombor telefon perniagaan';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Laman web perniagaan';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Ralat kamera';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Tangkap Wajah';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Kad Selesai';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Label Kad';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Nama Label Kad';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Pratonton Kad';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Tema Kad';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Kad dibuat';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Nama kad';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Kad disimpan sebagai JPG';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Kad disimpan sebagai PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Kad dikemas kini';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Tukar foto';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Muka Daftar Masuk';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Daftar masuk berjaya';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Muka Daftar Keluar';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Daftar keluar berjaya';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Pilih templat';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => 'Alamat perniagaan kad kenalan';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'Nama syarikat kad kenalan';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'E-mel kad kenalan';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'Alamat rumah kad kenalan';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Telefon kad kenalan';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'Laman web kad kenalan';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'Tidak dapat melengkapkan log masuk';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'Tidak dapat membuat kod QR';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Tidak dapat memautkan peranti';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'Tidak dapat log keluar peranti';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Tidak dapat membuka Google Wallet';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'Tidak dapat menyimpan reka bentuk kad';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Tidak dapat mengemas kini keterlihatan profil';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Cipta Galeri';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Buat kad untuk berkongsi profil anda';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Buat kad';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Bank tersuai';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Pelanggan boleh didaftarkan dan dicop';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Sesuaikan kad';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram => 'Terangkan program kesetiaan anda';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Nama paparan';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Tiada akaun?';
 
   @override
   String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Edit Ganjaran';
 
   @override
   String get editItem => 'Edit item';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'Alamat e-mel';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'E-mel diperlukan';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Kad Pekerja';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Pekerja dikeluarkan';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'Tetapan pekerja disimpan';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Perniagaan Terdaftar';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Masukkan e-mel yang sah';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard => 'Masukkan bio untuk kad kenalan';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Masukkan nama program';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Masukkan bio anda';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Masukkan nombor telefon anda';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'Masukkan URL tapak web anda';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Lencana acara';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'Contoh: 10 Setem = Kopi Percuma';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Foto Wajah Ditambah';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'Gagal menambah program';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Gagal menambah setem';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Gagal mendaftarkan pelanggan';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Gagal bertukar kenalan';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Gagal memuatkan program';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Gagal membuat pesanan';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Gagal mengalih keluar';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Gagal menyimpan';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'Gagal menyimpan JPG';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'Gagal menyimpan PNG';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'Gagal menyimpan Kod QR.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'Gagal menyimpan butiran perniagaan';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Gagal mengemas kini status';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'nama pertama';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Makanan & Minuman';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Pencuci mulut Percuma';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Kebenaran galeri diperlukan. Sila dayakannya dalam Tetapan.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Mulakan';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Pergi';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices => 'Pergi ke Alat → Peranti yang dipautkan';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending =>
+      'Persediaan Google Wallet belum selesai.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Persediaan Google Wallet belum selesai. Pautan profil disalin.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Kembangkan perniagaan anda';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Pengguna Tetamu';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'Nombor IBAN';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'DI PEJABAT';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Jemputan Belum Selesai';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'Jemputan ditolak';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Jemputan dihantar. Pekerja akan ditambah selepas mereka menerima.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Jemput Pekerja';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Jemput sebagai Pekerja';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Tajuk kerja';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'nama keluarga';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Log masuk dengan QR';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Log keluar dari akaun ini sahaja? Akaun lain akan kekal pada telefon ini.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Log masuk dengan Google (Akaun Demo: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Melog masuk anda…';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'Log masuk gagal. Cuba lagi.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'MMM d, tttt - h:mm a';
 
   @override
   String get mmmmYyyy => 'MMMM yyyy';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Tandakan Kehadiran';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'Nama Saya';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'Profil Tapni Saya';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'Nama tidak boleh kosong';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'baru';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Tiada kenalan lagi';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Tiada butiran lagi';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Tiada pautan ditambahkan lagi.\\nKetik \"Tambah pautan\" untuk bermula.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Tiada padanan';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Tiada alasan diberikan.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Tidak Didaftarkan';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Bilangan Setem';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Satu Ketik Untuk Berkongsi';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Buka Barqody pada telefon anda yang lain';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Buka Kamera';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Maklumat Pesanan';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Kad kertas';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'Kata laluan mestilah sekurang-kurangnya 4 aksara';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'Kata laluan mestilah sekurang-kurangnya 6 aksara';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Nombor Telefon';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Telefon diperlukan';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Nombor telefon';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Pilih Lokasi';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Sila masukkan kata laluan';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Sila masukkan nama pengguna';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Sila masukkan alamat e-mel yang sah';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'Sila masukkan bilangan setem yang sah';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Sila masukkan e-mel anda';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Sila masukkan nama anda';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Sila masukkan kata laluan anda';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Halakan kamera pada kod QR untuk mengimbas secara automatik.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Halakan kamera pada lencana acara dan ketik butang Kamera.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Halakan kamera pada kad kertas dan ketik butang Kamera.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'Menyediakan kod QR…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'Profil tidak ditemui.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'Profil berjaya dikemas kini!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'Kod QR disimpan ke galeri!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'Kod QR tamat tempoh';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'Kod QR tamat tempoh. Ketik muat semula.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Hartanah';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Resit dilampirkan';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Baharui langganan anda untuk memulihkan akses penuh kepada ciri dan data premium anda.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Ambil Semula Foto';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Tajuk Ganjaran';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Ganjaran Dibuka 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Peranan atau syarikat';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Simpan Perubahan';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Simpan Kenalan';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Simpan Profil';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Simpan Tetapan';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Simpan Nama Pengguna';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Simpan kad';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Simpan kenalan';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Disimpan secara tempatan. Penyegerakan mungkin gagal.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Imbas kod QR atau tambah seseorang yang anda temui untuk membina rangkaian anda.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Diimbas melalui QR';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Tema Skrin';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'Carian gagal. Cuba lagi.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Pilih Syarikat';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Pilih Julat Tarikh';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Pilih Tarikh Tamat';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Pilih Tarikh Mula';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Hantar Jemputan';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Hantar jemputan untuk kehadiran';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Kongsi Pautan';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Masa Shift';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Tangkapan Kenalan Pintar';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Cop Warna Sempadan';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Warna Setem';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Ikon Setem (Pilihan)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Setem Diberi';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Mula membina rangkaian anda';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Nama jalan';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Tukar kepada akaun Perniagaan untuk membuka kunci akses penuh.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Ketik Pautkan peranti dan imbas QR ini';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Ketik untuk menambah imej';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Ketik untuk menukar';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Templat digunakan secara tempatan. Penyegerakan gagal.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Warna Teks';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'Akaun ini';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Ciri ini tersedia secara eksklusif untuk pengguna Perniagaan.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'Orang ini berada dalam pasukan anda';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Program ini dijeda';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Jumlah Setem';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Cuba nama, e-mel atau syarikat lain.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'Tidak dapat menyimpan profil. Cuba lagi.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Tidak dapat mengemas kini nama pengguna. Cuba lagi.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'Dalam Pembangunan - Log masuk melalui e-mel/kata laluan sebaliknya.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Pengguna Tidak Diketahui';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Kemas kini Lokasi GPS';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Kemas kini Status';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Kemas kini troli';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Kemas kini item';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Naik taraf kepada';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Naik taraf kepada Business PRO';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Muat naik resit (pilihan)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Gunakan Lokasi Saya';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Gunakan huruf, nombor, garis bawah atau sempang sahaja';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'Nama pengguna mestilah sekurang-kurangnya 3 aksara';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'Nama pengguna mestilah paling banyak 30 aksara';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'Nama pengguna berjaya dikemas kini!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Menunggu mereka menerima';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'URL tapak web';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Hari Hujung Minggu';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Lokasi Kerja';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'Langganan PRO anda telah tamat tempoh.\\n\\n';
 
   @override
   String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+      'Langganan PRO anda telah tamat tempoh.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Ciri premium dilumpuhkan pada masa ini.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Pautan pro disembunyikan daripada profil awam anda.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Butiran dan data perniagaan anda selamat.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Tambahkan $label item';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Tambahkan sekurang-kurangnya satu $label item';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'Tiada $label item tersedia.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Tiada item lagi. Tambahkan $label item pertama anda.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Tiada profil awam sepadan dengan \"@$query\".';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Kod: $code';
   }
 }

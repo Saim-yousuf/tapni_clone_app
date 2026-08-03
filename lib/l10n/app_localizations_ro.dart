@@ -12,325 +12,336 @@ class AppLocalizationsRo extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Instrumente';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Setările contului';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Notificări';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Pentru dumneavoastră';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'Profilul dvs';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Editați profilul';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle =>
+      'Schimbați-vă numele, fotografia și biografia';
 
   @override
-  String get username => 'Username';
+  String get username => 'Nume de utilizator';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'Setați numele de utilizator unic al profilului dvs';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Linkuri sociale';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Adăugați Instagram, WhatsApp, site-ul web și multe altele';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Profil public';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => 'Oricine vă poate găsi și vizualiza profilul';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Ascuns de căutare — alții nu vă pot descoperi';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Distribuiți codul meu QR';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Permiteți altora să vă scaneze cartea de vizită digitală';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Cumpărături și recompense';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'Ordinele mele';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle =>
+      'Urmăriți comenzile pe care le-ați plasat din magazine';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'Cardurile mele de recompensă';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Vizualizați timbre și puncte din programele de fidelitate';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Locul de muncă';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Invitații pentru angajați';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Acceptați sau refuzați invitațiile de echipă de la companii';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Înregistrarea la locul de muncă';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Intră și ieși la locul de muncă cu locația';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Conturi și dispozitive';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Dispozitive conectate';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle =>
+      'Conectați un alt telefon, cum ar fi WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Conturi';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Adăugați sau schimbați conturile';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Comutați între conturile $count';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Ajutor și cont';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Limba aplicației';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => 'Schimbați limba folosită în aplicație';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Căutați limba';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'Limba telefonului';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Limba actualizată';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Ajutor și întrebări frecvente';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Răspunsuri la întrebări frecvente';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Trimiteți feedback';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle =>
+      'Raportați o eroare sau sugerați o funcție nouă';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Deconectați-vă';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Deconectați-vă de la această sesiune';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Anula';
 
   @override
-  String get save => 'Save';
+  String get save => 'Salva';
 
   @override
-  String get done => 'Done';
+  String get done => 'Făcut';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(Numai citire)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule =>
+      '1 punct = 100 PKR (exemplu de regulă)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => 'Sunt necesare 10 ștampile';
 
   @override
   String get n123MainStCity => '123 Main St, City';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => 'Acum 2 Zile';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3-30 de caractere. Numai litere, cifre, caractere de subliniere și cratime.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Accepta';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'ACCES RESTRICȚIONAT';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Cont / IBAN: Adăugați numărul de cont aici';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Titlul contului: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Activ';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'ACTIV';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'CARDUL ACTIV';
 
   @override
-  String get add => 'Add';
+  String get add => 'Adăuga';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Adăugați o notă...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Adăugați cont';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Adăugați mai întâi cel puțin o categorie';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Adăugați categorii în ordinea de afișare (de exemplu, Fast Food, apoi Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Adăugați mai întâi categorii în setările catalogului dvs.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Adăugați contact';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Adăugați link';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'Adăugați linkuri către profilul dvs. mai jos';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Adăugați mai întâi linkuri către profilul dvs., apoi activați-le aici.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Adăugați sigla';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Adăugați puncte';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Adaugă program';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Adăugați ștampila';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Adăugați în Google Wallet';
 
   @override
-  String get address => 'Address';
+  String get address => 'Adresa';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Toate';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Toate prinse!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Toate notificările au fost marcate ca citite!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Permiteți camera';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Permiteți acestui dispozitiv să vă acceseze contul Barqody? Îl puteți elimina oricând de pe dispozitivele conectate.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Aveți deja un cont?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'Tabloul de bord Analytics';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Orice solicitare speciala...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Aplicați';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Aplicați Design';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Aplicați șablonul';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Ascendent';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Cereți companiei dvs. să vă scaneze QR-ul și să vă adauge ca angajat';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Atribuiți o categorie';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Programe atribuite';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Cel puțin 6 caractere';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday =>
+      'Prezența a fost finalizată pentru astăzi';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Sloturi disponibile';
 
   @override
-  String get background => 'Background';
+  String get background => 'Fundal';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Culoare de fundal';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Cont bancar';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Detalii bancare';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Banca: Adăugați aici numele băncii';
 
   @override
   String get barqody => 'Barqody';
@@ -339,473 +350,476 @@ class AppLocalizationsRo extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Cea mai bună valoare';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Suma facturii';
 
   @override
   String get bio => 'BIO';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => 'bio';
 
   @override
-  String get book => 'Book';
+  String get book => 'Carte';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Data rezervarii';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Program de rezervare';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Timp de rezervare';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'AFACERI';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Categoria de afaceri';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Detalii de afaceri';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Numele companiei';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Opțiuni de afaceri';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Programe de afaceri';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Numai utilizatorii de afaceri';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'Prin înscriere, sunteți de acord cu Termenii și Condițiile noastre.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Apel';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Este necesară permisiunea camerei pentru scanare.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Anulați oricând.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Anulează comanda';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Capturați contact nou';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'Categorii';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Categorie *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'Categoria există deja';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Nume categorie';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Check-in';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Verifică';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Alegeți un nume de utilizator unic pentru linkul de profil.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Alegeți Plan';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Alegeți șablon';
 
   @override
-  String get close => 'Close';
+  String get close => 'Aproape';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Cod copiat';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'În curând';
 
   @override
-  String get company => 'Company';
+  String get company => 'Companie';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Card de angajat al companiei';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'Compania Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Completați acești pași';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Confirmați și adăugați puncte';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Confirmați rezervarea';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Confirmați locația';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Confirmați răscumpărarea';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Conturi conectate';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Contact adăugat cu succes!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Card de contact';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully =>
+      'Contactul a fost schimbat cu succes!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Contact Sursa';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'Contact actualizat cu succes!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Contacte';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Continua';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Copiat';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Copiați codul';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Nu s-a putut obține locația. Vă rugăm să activați permisiunea GPS.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Nu s-a putut schimba contul';
 
   @override
-  String get create => 'Create';
+  String get create => 'Crea';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Creează cont';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Creați program de loialitate';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Creați un nou link';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Creați program';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Creați recompensă';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Creați recompense de ștampilă sau puncte pentru clienți';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Creează-ți primul card';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Creați primul card de recompensă pentru clienți';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Data creării';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Imagini personalizate pentru sloturile ștampilate și neștampilate. Valorile implicite sunt utilizate dacă nu sunt setate.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Link personalizat';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Detalii client';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'Clientul s-a înscris cu succes';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Clientul nu este încă înscris';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Nu se prezinta client';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Comenzile clienților';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Personalizați designul cardului';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Personalizați designul';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Personalizați-vă profilul, deblocați șabloane PRO și obțineți clienți potențiali nelimitați.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Personalizează-te';
 
   @override
-  String get date => 'Date';
+  String get date => 'Data';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Interval de date';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Declin';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Şterge';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Ștergeți cardul?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Ștergeți categoria';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Ștergeți contactul';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Ștergeți recompensa?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Descendent';
 
   @override
-  String get description => 'Description';
+  String get description => 'Descriere';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Descriere (opțional)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Detalii';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Dispozitiv conectat';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Dispozitivul a fost deconectat';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Starea dispozitivului';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Carte de vizită digitală';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'Card DIGITAL DE AFACERI';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Nu ai un cont?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'de ex. Fast food';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'de ex. Fara zahar, foarte fierbinte...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'A câștigat 50 de puncte';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Edita';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Editați cardul';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Editați detalii';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Editați profilul';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Editați setările';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Editați detaliile profilului dvs';
 
   @override
-  String get email => 'Email';
+  String get email => 'E-mail';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'E-mail și parolă';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'Adresa de e-mail';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'Conectați-vă prin e-mail sau scanați QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Card de angajat';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'CARDUL DE ANGAJAT';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Fotografie față de angajat';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Slot gol';
 
   @override
-  String get end => 'END';
+  String get end => 'Sfârşit';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Data de încheiere';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Ora de sfârșit';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Înscrieți clientul';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Introduceți suma facturii';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Introdu codul';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'În schimb, introduceți codul';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Introduceți detaliile de contact pentru rețele de mai jos.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Introduceți numele dvs';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Introduceți parola';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Insigna evenimentului';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Schimb de contact';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Schimb de contact...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Explora';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact =>
+      'Nu s-a putut actualiza persoana de contact.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Slot plin';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Filtrați contactele';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Filtrați contacte';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Găsiți persoane pe BarQody';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Găsiți utilizator';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Găsiți utilizator';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Găsiți numele de utilizator';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Ai uitat?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Cafea gratuită';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Numele complet';
 
   @override
   String get general => 'General';
 
   @override
-  String get go => 'Go';
+  String get go => 'Merge';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'Mergi la afaceri';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'OASPETE';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'Buna ziua,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Centrul de ajutor este dezactivat în această demonstrație a interfeței de utilizare.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Țineți codul QR în interiorul cadrului - se scanează automat.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Cum doriți să proiectați acest card?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Importați contacte';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'Importarea contactelor nu este încă disponibilă.';
 
   @override
-  String get inLabel => 'in';
+  String get inLabel => 'în';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Comenzile primite';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'Adresa URL a profilului nevalidă. Scanați un card BarQody sau un cod QR valid.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Cod QR nevalid. Utilizați un QR de link Barqody.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Invitați angajați, setați ture și urmăriți prezența';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'V-am invitat să vă alăturați ca angajat';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -814,7 +828,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Denumirea funcției';
 
   @override
   String get johnDoe => 'John Doe';
@@ -826,7 +840,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Înscris: 15 ianuarie 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,10 +848,10 @@ class AppLocalizationsRo extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Păstrați-vă contul în siguranță. Scanați codurile QR numai atunci când doriți să conectați un dispozitiv în care aveți încredere.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Eticheta';
 
   @override
   String get lat => 'Lat';
@@ -845,1589 +859,1616 @@ class AppLocalizationsRo extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Permiteți altora să-și îndrepte camera telefonului către acest cod QR pentru a vă vedea instantaneu profilul de rețea.';
 
   @override
-  String get link => 'Link';
+  String get link => 'Legătură';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Conectați un dispozitiv';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Link prin QR pe ​​alt telefon';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'Link copiat în clipboard';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Setări link';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Setări link';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Conectați acest dispozitiv?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Legături';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Link-uri de pe acest card';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'Locația nu este setată încă';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired =>
+      'Este necesară permisiunea de locație';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Permisiunea locației este necesară pentru participare';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Log in';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Conectați-vă pentru a vă gestiona cardul digital și rețeaua.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Conectați-vă cu codul QR';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Deconectați-vă';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Deconectați-vă pe toate';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Deconectați-vă de la dispozitiv?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Programe de loialitate';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Gestionați categoriile';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Gestionați contactul';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Gestionați angajații';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Gestionați-vă detaliile personale și alte preferințe';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Marcare finalizată';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'Lunar';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'Cardurile mele';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'Locația mea';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'Recompensele mele';
 
   @override
-  String get name => 'Name';
+  String get name => 'Nume';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'NUME';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'Numele este obligatoriu';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'nume@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Card nou';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Card nou';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Noua categorie';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Noua recompensă';
 
   @override
-  String get next => 'Next';
+  String get next => 'Următorul';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'Următorul card';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet => 'Niciun link activ conectat încă';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Nu sunt disponibile programe active de recompensă.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Încă nu există carduri de angajat';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Nu s-au adăugat angajați';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Încă nu există angajați';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Nu a fost găsit niciun angajator';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory =>
+      'Nu există articole din această categorie.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable =>
+      'Nu există șabloane de linkuri disponibile';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'Nu există notificări noi în acest moment.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Nimeni nu ți-a văzut încă profilul.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Fără invitații în așteptare';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Încă nu au fost atribuite programe. Adăugați programe mai jos.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage =>
+      'Nu s-a găsit niciun cod QR în această imagine.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Nu există încă programe de recompensă';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'Nu există sloturi disponibile în această zi';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Nu s-au găsit utilizatori';
 
   @override
-  String get none => 'None';
+  String get none => 'Nici unul';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'Nu este disponibil în planul dvs. actual';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Nu s-a înregistrat încă';
 
   @override
-  String get note => 'Note';
+  String get note => 'Nota';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Note (opțional)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Notificarea a fost anulată';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Doar coperta, fotografia de profil, numele și biografia sunt editabile aici.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Numai linkurile activate apar atunci când cineva scanează acest card.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown =>
+      'Sunt afișate numai profilurile publice';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Numai acest telefon vă folosește contul în acest moment.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'SAU CONTINUAȚI CU';
 
   @override
-  String get order => 'Order';
+  String get order => 'Comanda';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Detalii de comandă';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'ID comandă';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'Comanda nu a fost găsită';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Comenzi';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Card de hârtie';
 
   @override
-  String get password => 'Password';
+  String get password => 'Parolă';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Plătește lună de lună';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'AȘTEPTAREA ACCEPTĂRII';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Prezentare generală a performanței';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Detalii personale';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Telefon';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Fotografii';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Alegeți o temă de culoare gata făcută. Rapid și curat.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Alegeți culoarea';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Alegeți pe hartă';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Plasați Comanda';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Planul a expirat';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Vă rugăm să introduceți detaliile companiei pentru a continua';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName =>
+      'Vă rugăm să introduceți numele articolului';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Vă rugăm să furnizați detaliile companiei dvs. înainte de a face upgrade.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Vă rugăm să selectați o categorie';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Vă rugăm să selectați un interval orar';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst =>
+      'Vă rugăm să setați mai întâi locul de lucru';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Îndreptați camera către codul QR de pe celălalt dispozitiv';
 
   @override
-  String get points => 'Points';
+  String get points => 'Puncte';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Puncte câștigate';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Premium activ';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Cartea anterioară';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Preț (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'Șablon PRO';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Profil';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Verificare profil';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Puterea profilului';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Vizualizatori de profil';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Vizualizări de profil';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Detalii program';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Numele programului';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'Programul nu a fost găsit';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Tip program';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'Cod QR';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'Scanări QR';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Cantitate';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Citiți Tot';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Numai citire';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'A primit 1 ștampilă';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Activitate recentă';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Răscumpărați o altă recompensă';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Răscumpărați recompensa';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Cafea gratuită răscumpărată';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Actualizează QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'Regiune';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Elimina';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Eliminați angajat';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Planul de reînnoire';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Solicitare în așteptare';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Solicitare în așteptare';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Solicitare respinsă';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Solicitați abonament';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Resetați';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Recompensa finalizată! Afișați acest card pentru a-l valorifica.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Recompensa finalizată! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Detalii despre recompense';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Programul de recompense';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Programe de recompensă';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Recompensa răscumpărată!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Recompense';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Recompense câștigate';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => '1.600 Rs facturat lunar';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => '8.300 Rs facturat anual';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'SALVA';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Salvați cartea de identitate de serviciu pe telefon sau portofel';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Scanează';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Scanați un cod QR de utilizator pentru a-l adăuga ca angajat';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Scanați orice utilizator sau QR de afaceri pentru a adăuga angajat';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem =>
+      'Scanează QR Business pentru a valorifica';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Scanați codul QR al clientului';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Scanați profilul angajatului';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Scanați QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Scanează QR / arată QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'Scanați codul QR';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Scanați QR afișat pe celălalt dispozitiv';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Scanează pentru a invita';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Cauta dupa nume de utilizator...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Caută link-uri';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => 'Căutați nume, e-mail sau companie';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Vezi toate';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Vedeți toată activitatea este batjocorită. Noi activități vor apărea pe măsură ce se adaugă clienți potențiali.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Selectați data';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Selectați Marcatori';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Selectați Regiune';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'Setați textul sub pictograma linkului';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Setează-ți propriile culori, fotografii și fundal.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Distribuie';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Partajați cardul';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Distribuie link-uri diferite pe fiecare card';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Partajați profilul';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Afișează linkul';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Afișați pe acest card';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Conectați-vă cu Google';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Înscrieți-vă';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Sari peste';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Sari peste moment';
 
   @override
   String get slotMin => 'Slot (min)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Inginer software';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Ceva a mers prost';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Opțiuni de sortare';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Instructiuni speciale';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Card de timbru';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Pictogramă ștampilă';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Timbre';
 
   @override
-  String get start => 'START';
+  String get start => 'ÎNCEPUT';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Data de începere';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Ora de începere';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Începeți să faceți rețele mai inteligent cu Barqody.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistici';
 
   @override
-  String get status => 'Status';
+  String get status => 'Stare';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Abonament';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'Solicitare de abonament trimisă';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 =>
+      'Solicitare de abonament trimisă.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Glisați pentru a răsfoi carduri';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Fă-ți un selfie rapid pentru verificarea prezenței';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Atingeți „Legături sociale” de mai sus pentru a adăuga și a activa profiluri.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Atingeți harta sau utilizați locația dvs. actuală';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Atingeți pentru a adăuga o fotografie';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Atingeți pentru a partaja codul QR';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Prezența echipei';
 
   @override
-  String get template => 'Template';
+  String get template => 'Șablon';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Șabloane';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Multumesc! Trimiterile de feedback sunt doar simulate.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Acest card și codul său QR vor fi eliminate.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Această funcție este disponibilă exclusiv pentru utilizatorii Business.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername =>
+      'Acesta este deja numele dvs. de utilizator.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'Luna aceasta';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Acest lucru va șterge definitiv acest program de recompense și toate înscrierile sale.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Astăzi este weekendul tău';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Astăzi • 15:15';
 
   @override
   String get total => 'Total';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Urmăriți-vă comenzile';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'Referința tranzacției (opțional)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Numărul de referință al tranzacției (opțional)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Încearcă din nou';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Încercați Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Încercați Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Tip';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Introduceți cel puțin 2 caractere dintr-un nume de utilizator pentru a căuta.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Introdu codul de 8 caractere afișat sub QR.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'În dezvoltare - Conectați-vă prin e-mail/parolă.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Anulare ștampila pictogramă';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Faceți upgrade acum';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Upgrade la';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Faceți upgrade la Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Utilizați un șablon';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Utilizați Barqody pe alte telefoane sau tablete. Păstrați controlul - deconectați-vă oricând de orice dispozitiv.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Utilizați Barqody pe telefon pentru a scana acest cod';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Utilizați pictograma implicită';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Utilizați această fotografie';
 
   @override
-  String get user => 'USER';
+  String get user => 'UTILIZATOR';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Versiunea: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Vizualizați și actualizați comenzile de la clienții dvs';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Vizualizați profilul';
 
   @override
-  String get views => 'Views';
+  String get views => 'Vizualizări';
 
   @override
-  String get website => 'Website';
+  String get website => 'Site-ul web';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Bine ai revenit';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Bun venit la Centrul de conturi';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Când o companie te adaugă ca angajat, cardul tău de angajat va apărea aici. Îi puteți personaliza designul oricând.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Când o companie te înscrie în programul său de recompense, aceasta va apărea aici.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Când o companie te invită în echipa sa, aceasta va apărea aici.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Când este dezactivat, acest link nu va fi afișat în profilul tău';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Scrie ceva despre tine sau despre marca ta';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Anual';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Ieri • 17:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Categoriile dvs';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Cardurile de angajat de la angajatori';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'Cafeaua dvs. gratuită a fost valorificată cu succes.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Recompensele tale';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Abonamentul dvs. s-a încheiat. Atingeți pictograma de informații pentru detalii.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'Numele dumneavoastră';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% Reducere';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'AVATAR ATAPEAT';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Numele titularului contului';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Numărul de cont';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Activ acum';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Adaugă bio';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Adăugați o fotografie de copertă';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Adăugați o fotografie a feței';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Adăugați o notă vocală introductivă';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Adăugați un nume de profil';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Adăugați o fotografie de profil';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Adăugați linkuri sociale (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Adăugați articol';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Adăugați link';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'Adăugați linkuri către profilul dvs. mai jos';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Adăugați o fotografie';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Adaugă in coş';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Adresa (optional)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Toate tipurile de contact';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Raza permisă (metri)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Aproape acolo!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Deja angajat';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Aveți deja un cont?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Întotdeauna la zi';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Sigur doriți să vă deconectați de la Barqody?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'Prezența a eșuat';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Culoare de fundal';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'Rezervarea a eșuat';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward =>
+      'Descrieți pe scurt această recompensă...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Compania verificată';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Adresa de e-mail comercială';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Fax de afaceri';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Numărul de telefon al companiei';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Site de afaceri';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Eroare camera';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Captură Fața';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Card completat';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Eticheta cardului';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Numele etichetei cardului';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Previzualizare card';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Tema cardului';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Card creat';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Numele cardului';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Card salvat ca JPG';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Card salvat ca PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Card actualizat';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Schimbați fotografia';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Fața de check-in';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Înregistrare reușită';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'Fața de check-out';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Check-out reușit';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Alegeți șablonul';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress =>
+      'Adresa de afaceri a cardului de contact';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'Numele companiei card de contact';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'E-mail card de contact';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress =>
+      'Adresa de domiciliu a cardului de contact';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Telefon card de contact';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'Site-ul cardului de contact';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'Nu s-a putut finaliza autentificarea';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'Codul QR nu a putut fi creat';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Nu s-a putut conecta dispozitivul';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'Dispozitivul nu a putut fi deconectat';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Google Wallet nu a putut fi deschis';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'Nu s-a putut salva designul cardului';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Nu s-a putut actualiza vizibilitatea profilului';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Creați galerie';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Creați un card pentru a vă partaja profilul';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Creați card';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Banca personalizata';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Clienții pot fi înscriși și ștampilați';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Personalizați cardul';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram =>
+      'Descrieți programul dvs. de loialitate';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Numele de afișare';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Nu ai un cont?';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE, d MMM aaaa';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Editați recompensa';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Editați elementul';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'Adresa de e-mail';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'E-mailul este obligatoriu';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Carduri de angajat';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Angajat eliminat';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'Setările angajaților au fost salvate';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Afaceri înscrise';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Introduceți un e-mail valid';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard =>
+      'Introduceți bio pentru cardul de contact';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Introduceți numele programului';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Introdu biografia ta';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Introduceți numărul dvs. de telefon';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL =>
+      'Introduceți adresa URL a site-ului dvs. web';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Insigna evenimentului';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'Exemplu: 10 timbre = Cafea gratuită';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Fotografia feței a fost adăugată';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'Nu s-a putut adăuga programul';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Nu s-a putut adăuga ștampila';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Nu s-a putut înscrie clientul';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Schimbul de contact nu a reușit';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Nu s-au încărcat programele';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Nu s-a putut plasa comanda';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Eliminarea eșuată';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Salvare eșuată';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'Nu s-a salvat JPG';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'Nu s-a salvat PNG';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'Nu s-a salvat codul QR.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'Nu s-au salvat detaliile companiei';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Nu s-a putut actualiza starea';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Prenume';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Mâncare și băuturi';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Desert gratuit';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Este necesară permisiunea galeriei. Activați-l în Setări.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Începeți';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Merge';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices =>
+      'Accesați Instrumente → Dispozitive conectate';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending =>
+      'Configurarea Google Wallet este în așteptare.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Configurarea Google Wallet este în așteptare. Linkul profilului a fost copiat.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Dezvoltă-ți afacerea';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Utilizator invitat';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'Număr IBAN';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'ÎN BIROUL';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Invitație în așteptare';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'Invitația a fost refuzată';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Invitație trimisă. Angajatul va fi adăugat după ce acceptă.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Invitați un angajat';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Invitați ca angajat';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Denumirea funcției';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Nume';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Conectați-vă cu QR';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Deconectați-vă numai din acest cont? Alte conturi vor rămâne pe acest telefon.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Conectat cu Google (cont demonstrativ: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Te conectez...';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'Autentificare eșuată. Încearcă din nou.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'LMM d, aaaa - h:mm a';
 
   @override
-  String get mmmmYyyy => 'MMMM yyyy';
+  String get mmmmYyyy => 'MMMM aaaa';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Marcați prezența';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'Numele meu';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'Profilul meu Tapni';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'Numele nu poate fi gol';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Nou';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Nicio persoană de contact încă';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Încă nu există detalii';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Nu au fost adăugate linkuri încă.\\nAtingeți „Adăugați link” pentru a începe.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Fără meciuri';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Niciun motiv furnizat.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Neînscris';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Numărul de timbre';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'O apăsare pentru a partaja';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Deschideți Barqody pe celălalt telefon';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Deschideți Camera';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Informații despre comandă';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Card de hârtie';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'Parola trebuie să aibă cel puțin 4 caractere';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'Parola trebuie să aibă cel puțin 6 caractere';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Număr de telefon';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Este necesar telefonul';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Număr de telefon';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Alegeți locația';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Vă rugăm să introduceți o parolă';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername =>
+      'Vă rugăm să introduceți un nume de utilizator';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Vă rugăm să introduceți o adresă de email validă';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'Vă rugăm să introduceți un număr valid de ștampile';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail =>
+      'Vă rugăm să introduceți adresa dvs. de e-mail';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Vă rugăm să introduceți numele dvs';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Vă rugăm să introduceți parola';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Îndreptați camera către un cod QR pentru a-l scana automat.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Îndreptați camera către o insignă de eveniment și atingeți butonul Cameră.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Îndreptați camera către cardul de hârtie și atingeți butonul Cameră.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'Se pregătește codul QR...';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'Profilul nu a fost găsit.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'Profil actualizat cu succes!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'Cod QR salvat în galerie!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'Codul QR a expirat';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'Codul QR a expirat. Atingeți reîmprospătare.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Imobiliare';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Chitanța atașată';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Reînnoiește-ți abonamentul pentru a restabili accesul complet la funcțiile și datele tale premium.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Refaceți fotografia';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Titlul recompensei';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Recompensa deblocată 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Rol sau companie';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Salvați modificările';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Salvați contactul';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Salvați profilul';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Salvați setările';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Salvați numele de utilizator';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Salvați cardul';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Salvați contactul';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Salvat local. Este posibil ca sincronizarea să fi eșuat.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Scanează un cod QR sau adaugă pe cineva pe care l-ai întâlnit pentru a-ți construi rețeaua.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Scanat prin QR';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Tema ecranului';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'Căutarea a eșuat. Încearcă din nou.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Selectați Companie';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Selectați Interval de date';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Selectați Data de încheiere';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Selectați Data de începere';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Trimite invitația';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Trimite invitația de participare';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Partajați linkul';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Timp de schimbare';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Captură inteligentă a contactelor';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Culoarea chenarului ștampilei';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Culoarea ștampilei';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Pictograme de ștampilă (opțional)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Timbre date';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Începeți să vă construiți rețeaua';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Numele străzii';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Comutați la un cont Business pentru a debloca accesul complet.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Atinge Conectați un dispozitiv și scanați acest QR';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Atingeți pentru a adăuga o imagine';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Atingeți pentru a schimba';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Șablon aplicat local. Sincronizarea a eșuat.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Culoare text';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'Acest cont';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Această funcție este disponibilă exclusiv pentru utilizatorii Business.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam =>
+      'Această persoană face parte din echipa ta';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Acest program este întrerupt';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Total Timbre';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Încercați un alt nume, e-mail sau companie.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'Nu se poate salva profilul. Încearcă din nou.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Nu se poate actualiza numele de utilizator. Încearcă din nou.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'În dezvoltare - Conectați-vă prin e-mail/parolă.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Utilizator necunoscut';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Actualizați locația GPS';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Actualizare stare';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Actualizați coșul';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Actualizați elementul';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Upgrade la';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Faceți upgrade la Business PRO';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Încărcați chitanța (opțional)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Utilizați Locația mea';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Utilizați numai litere, cifre, caractere de subliniere sau cratime';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'Numele de utilizator trebuie să aibă cel puțin 3 caractere';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'Numele de utilizator trebuie să aibă cel mult 30 de caractere';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'Numele de utilizator a fost actualizat cu succes!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Așteptând să accepte';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'Adresa URL a site-ului web';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Zilele de weekend';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Locul de lucru';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'Abonamentul dvs. PRO a expirat.\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => 'Abonamentul dvs. PRO a expirat.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Funcțiile premium sunt în prezent dezactivate.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Linkurile profesionale sunt ascunse din profilul dvs. public.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Detaliile și datele companiei dvs. sunt în siguranță.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Adăugați $label articol';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Adăugați cel puțin un articol $label';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'Nu există $label articole disponibile.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Niciun articol încă. Adăugați primul dvs. articol $label.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Niciun profil public nu se potrivește cu „@$query”.';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Cod: $code';
   }
 }

@@ -4,6 +4,7 @@ import 'package:tapni_app/l10n/app_languages.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 
 class AppLanguageScreen extends StatefulWidget {
   const AppLanguageScreen({super.key});
@@ -24,12 +25,17 @@ class _AppLanguageScreenState extends State<AppLanguageScreen> {
 
   List<AppLanguage> get _filtered {
     final q = _query.trim().toLowerCase();
-    if (q.isEmpty) return AppLanguages.all;
-    return AppLanguages.all.where((lang) {
+    if (q.isEmpty) return AppLanguages.selectable;
+    return AppLanguages.selectable.where((lang) {
       return lang.englishName.toLowerCase().contains(q) ||
           lang.nativeName.toLowerCase().contains(q) ||
           lang.code.toLowerCase().contains(q);
     }).toList();
+  }
+
+  void _clearSearch() {
+    _searchController.clear();
+    setState(() => _query = '');
   }
 
   Future<void> _selectSystem(LocaleProvider provider) async {
@@ -70,29 +76,18 @@ class _AppLanguageScreenState extends State<AppLanguageScreen> {
       appBar: AppBar(
         backgroundColor: WaUi.toolsScaffold,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         foregroundColor: WaUi.primaryText,
         title: Text(context.l10n.appLanguage, style: WaUi.title),
       ),
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(16, 4, 16, 12),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) => setState(() => _query = value),
-              decoration: InputDecoration(
-                hintText: context.l10n.searchLanguage,
-                hintStyle: WaUi.body.copyWith(color: WaUi.secondaryText),
-                prefixIcon: Icon(Icons.search, color: WaUi.secondaryText),
-                filled: true,
-                fillColor: WaUi.navPill,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(WaUi.radiusPill),
-                  borderSide: BorderSide.none,
-                ),
-                contentPadding: EdgeInsets.symmetric(vertical: 0),
-              ),
-            ),
+          WaChatSearchBar(
+            controller: _searchController,
+            hintText: context.l10n.searchLanguage,
+            onChanged: (value) => setState(() => _query = value),
+            onClear: _clearSearch,
           ),
           Expanded(
             child: ListView(

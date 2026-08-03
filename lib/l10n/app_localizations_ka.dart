@@ -12,325 +12,332 @@ class AppLocalizationsKa extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'ხელსაწყოები';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'ანგარიშის პარამეტრები';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'შეტყობინებები';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'შენთვის';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'შენი პროფილი';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'პროფილის რედაქტირება';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => 'შეცვალეთ თქვენი სახელი, ფოტო და ბიოგრაფია';
 
   @override
-  String get username => 'Username';
+  String get username => 'მომხმარებლის სახელი';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle =>
+      'დააყენეთ თქვენი უნიკალური პროფილის მომხმარებლის სახელი';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'სოციალური ბმულები';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'დაამატეთ Instagram, WhatsApp, ვებსაიტი და სხვა';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'საჯარო პროფილი';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn =>
+      'ნებისმიერს შეუძლია თქვენი პროფილის პოვნა და ნახვა';
 
   @override
-  String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+  String get publicProfileOff => 'დამალულია ძიებისგან — სხვები ვერ გიპოვიან';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'გააზიარე ჩემი QR კოდი';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'მიეცით საშუალება სხვებს დაასკანირონ თქვენი ციფრული სავიზიტო ბარათი';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'შოპინგი და ჯილდოები';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'ჩემი შეკვეთები';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle =>
+      'თვალყური ადევნეთ თქვენს მიერ დადებულ შეკვეთებს მაღაზიებიდან';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'ჩემი ჯილდო ბარათები';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'იხილეთ მარკები და ქულები ლოიალობის პროგრამებიდან';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'სამუშაო ადგილი';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'თანამშრომლების მოსაწვევები';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'მიიღეთ ან უარყოთ გუნდის მოწვევები ბიზნესიდან';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'სამუშაო ადგილის შემოწმება';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'საათი თქვენს სამუშაოზე მდებარეობის მიხედვით';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'ანგარიშები და მოწყობილობები';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'დაკავშირებული მოწყობილობები';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle =>
+      'დააკავშირეთ სხვა ტელეფონი, როგორიცაა WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'ანგარიშები';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'ანგარიშების დამატება ან გადართვა';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'გადართვა $count ანგარიშებს შორის';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'დახმარება და ანგარიში';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'აპლიკაციის ენა';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle => 'შეცვალეთ აპში გამოყენებული ენა';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'ენის ძებნა';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'ტელეფონის ენა';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'ენა განახლებულია';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'დახმარება და ხშირად დასმული კითხვები';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'პასუხები საერთო კითხვებზე';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'გამოხმაურების გაგზავნა';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle =>
+      'შეატყობინეთ შეცდომის შესახებ ან შესთავაზეთ ახალი ფუნქცია';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'გასვლა';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'გადით ამ სესიიდან';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'გაუქმება';
 
   @override
-  String get save => 'Save';
+  String get save => 'შენახვა';
 
   @override
-  String get done => 'Done';
+  String get done => 'შესრულებულია';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(მხოლოდ წაკითხვა)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 ქულა = 100 PKR (მაგალითი წესი)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => 'საჭიროა 10 მარკა';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => '123 მთავარი ქ, ქ';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 დღის წინ';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3-30 სიმბოლო. მხოლოდ ასოები, რიცხვები, ხაზები და დეფისები.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'მიღება';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'წვდომა შეზღუდულია';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'ანგარიში / IBAN: დაამატეთ ანგარიშის ნომერი აქ';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'ანგარიშის სათაური: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'აქტიური';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'აქტიური';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'ACTIVE ბარათი';
 
   @override
-  String get add => 'Add';
+  String get add => 'დამატება';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'დაამატეთ შენიშვნა...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'ანგარიშის დამატება';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst => 'ჯერ დაამატეთ ერთი კატეგორია მაინც';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'დაამატეთ კატეგორიები ჩვენების თანმიმდევრობით (მაგ. სწრაფი კვება, შემდეგ Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'ჯერ დაამატეთ კატეგორიები კატალოგის პარამეტრებში.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'კონტაქტის დამატება';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'ლინკის დამატება';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'დაამატეთ ბმულები თქვენს პროფილზე ქვემოთ';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'ჯერ დაამატეთ ბმულები თქვენს პროფილს, შემდეგ ჩართეთ ისინი აქ.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'ლოგოს დამატება';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'ქულების დამატება';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'პროგრამის დამატება';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'შტამპის დამატება';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Google Wallet-ში დამატება';
 
   @override
-  String get address => 'Address';
+  String get address => 'მისამართი';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'ყველა';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'ყველა დაიჭირეს!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'ყველა შეტყობინება მონიშნულია წაკითხულად!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'კამერის დაშვება';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'მიეცით უფლება ამ მოწყობილობას წვდომა ჰქონდეს თქვენს Barqody ანგარიშზე? შეგიძლიათ ნებისმიერ დროს წაშალოთ დაკავშირებული მოწყობილობებიდან.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'უკვე გაქვთ ანგარიში?';
 
   @override
-  String get analyticsDashboard => 'Analytics Dashboard';
+  String get analyticsDashboard => 'ანალიტიკის დაფა';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'რაიმე განსაკუთრებული მოთხოვნა...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'მიმართეთ';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'გამოიყენეთ დიზაინი';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'შაბლონის გამოყენება';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'აღმავალი';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'სთხოვეთ თქვენს ბიზნესს დაასკანიროს თქვენი QR და დაგამატოთ როგორც თანამშრომელი';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'დანიშნეთ კატეგორია';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'მინიჭებული პროგრამები';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'მინიმუმ 6 სიმბოლო';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => 'დასწრება დღეს დასრულდა';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'ხელმისაწვდომი სლოტები';
 
   @override
-  String get background => 'Background';
+  String get background => 'ფონი';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'ფონის ფერი';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'საბანკო ანგარიში';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'ბანკის დეტალები';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'ბანკი: დაამატეთ ბანკის სახელი აქ';
 
   @override
   String get barqody => 'Barqody';
@@ -339,494 +346,495 @@ class AppLocalizationsKa extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'საუკეთესო ღირებულება';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'ბილეთის თანხა';
 
   @override
-  String get bio => 'BIO';
+  String get bio => 'ბიო';
 
   @override
-  String get bio2 => 'Bio';
+  String get bio2 => 'ბიო';
 
   @override
-  String get book => 'Book';
+  String get book => 'წიგნი';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'დაჯავშნის თარიღი';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'დაჯავშნის განრიგი';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'დაჯავშნის დრო';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'ბიზნესი';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'ბიზნესის კატეგორია';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'ბიზნესის დეტალები';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'ბიზნესის სახელი';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'ბიზნეს ვარიანტები';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'ბიზნეს პროგრამები';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'მხოლოდ ბიზნეს მომხმარებლები';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'დარეგისტრირებით თქვენ ეთანხმებით ჩვენს წესებსა და პირობებს.';
 
   @override
-  String get call => 'Call';
+  String get call => 'დარეკეთ';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'სკანირებისთვის საჭიროა კამერის ნებართვა.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'გააუქმეთ ნებისმიერ დროს.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'შეკვეთის გაუქმება';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'ახალი კონტაქტის გადაღება';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'კატეგორიები';
 
   @override
-  String get category => 'Category *';
+  String get category => 'კატეგორია *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'კატეგორია უკვე არსებობს';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'კატეგორიის სახელი';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'შემოწმება';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'შეამოწმეთ';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'აირჩიეთ უნიკალური მომხმარებლის სახელი თქვენი პროფილის ბმულისთვის.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'აირჩიეთ გეგმა';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'აირჩიეთ შაბლონი';
 
   @override
-  String get close => 'Close';
+  String get close => 'დახურვა';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'კოდი დაკოპირებულია';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'მალე';
 
   @override
-  String get company => 'Company';
+  String get company => 'კომპანია';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'კომპანიის თანამშრომლის ბარათი';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'კომპანია Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'დაასრულეთ ეს ნაბიჯები';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'დაადასტურეთ და დაამატეთ ქულები';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'დაადასტურეთ დაჯავშნა';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'დაადასტურეთ მდებარეობა';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'დაადასტურეთ გამოსყიდვა';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'დაკავშირებული ანგარიშები';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'კონტაქტი წარმატებით დაემატა!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'საკონტაქტო ბარათი';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => 'კონტაქტი წარმატებით გაცვალეს!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'საკონტაქტო წყარო';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'კონტაქტი წარმატებით განახლდა!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'კონტაქტები';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'განაგრძეთ';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'კოპირებულია';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'დააკოპირეთ კოდი';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'მდებარეობის მიღება ვერ მოხერხდა. გთხოვთ, ჩართოთ GPS ნებართვა.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'ანგარიშის გადართვა ვერ მოხერხდა';
 
   @override
-  String get create => 'Create';
+  String get create => 'შექმნა';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'ანგარიშის შექმნა';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'შექმენით ლოიალობის პროგრამა';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'შექმენით ახალი ბმული';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'პროგრამის შექმნა';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'შექმენით ჯილდო';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'შექმენით ბეჭედი ან ქულების ჯილდოები მომხმარებლებისთვის';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'შექმენით თქვენი პირველი ბარათი';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'შექმენით თქვენი პირველი ჯილდოს ბარათი მომხმარებლებისთვის';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'შექმნის თარიღი';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'მორგებული სურათები შტამპიანი და დაუბეჭდავი სლოტებისთვის. ნაგულისხმევი გამოიყენება თუ არ არის დაყენებული.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'მორგებული ბმული';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'მომხმარებლის დეტალები';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'კლიენტი წარმატებით დარეგისტრირდა';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet =>
+      'მომხმარებელი ჯერ არ არის დარეგისტრირებული';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'კლიენტი არ არის შოუ';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'მომხმარებლის შეკვეთები';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'ბარათის დიზაინის მორგება';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'დიზაინის მორგება';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'შეცვალეთ თქვენი პროფილი, განბლოკეთ PRO შაბლონები და მიიღეთ შეუზღუდავი პოტენციალი.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'საკუთარი თავის მორგება';
 
   @override
-  String get date => 'Date';
+  String get date => 'თარიღი';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'თარიღის დიაპაზონი';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'უარყოფა';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'წაშლა';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'წაშალოთ ბარათი?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'კატეგორიის წაშლა';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'კონტაქტის წაშლა';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'წაშალოთ ჯილდო?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'დაღმავალი';
 
   @override
-  String get description => 'Description';
+  String get description => 'აღწერა';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'აღწერა (სურვილისამებრ)';
 
   @override
-  String get details => 'Details';
+  String get details => 'დეტალები';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'მოწყობილობა დაკავშირებულია';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'მოწყობილობა გამოვიდა';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'მოწყობილობის სტატუსი';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'ციფრული სავიზიტო ბარათი';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'ციფრული ბიზნეს ბარათი';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'არ გაქვთ ანგარიში?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'მაგ. სწრაფი კვება';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'მაგ. შაქრის გარეშე, ზედმეტი ცხელი...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'დაიმსახურა 50 ქულა';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'რედაქტირება';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'ბარათის რედაქტირება';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'დეტალების რედაქტირება';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'პროფილის რედაქტირება';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'პარამეტრების რედაქტირება';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'შეცვალეთ თქვენი პროფილის დეტალები';
 
   @override
-  String get email => 'Email';
+  String get email => 'ელფოსტა';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'ელფოსტა და პაროლი';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'ელფოსტის მისამართი';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'შესვლის ელფოსტა ან QR სკანირება';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'თანამშრომლის ბარათი';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'თანამშრომლის ბარათი';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'თანამშრომლის სახის ფოტო';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'ცარიელი სლოტი';
 
   @override
-  String get end => 'END';
+  String get end => 'დასასრული';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'დასრულების თარიღი';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'დასრულების საათი';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'ჩაწერეთ კლიენტი';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'შეიყვანეთ გადასახადის თანხა';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'შეიყვანეთ კოდი';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'ამის ნაცვლად შეიყვანეთ კოდი';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'შეიყვანეთ ქსელის საკონტაქტო ინფორმაცია ქვემოთ.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'შეიყვანეთ თქვენი სახელი';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'შეიყვანეთ თქვენი პაროლი';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'ღონისძიების ბეჯი';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'გაცვლითი კონტაქტი';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'კონტაქტის გაცვლა...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'გამოიკვლიეთ';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'კონტაქტის განახლება ვერ მოხერხდა.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'შევსებული სლოტი';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'გაფილტრეთ კონტაქტები';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'კონტაქტების გაფილტვრა';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'იპოვეთ ხალხი BarQody-ზე';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'მომხმარებლის მოძებნა';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'მომხმარებლის მოძებნა';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'მომხმარებლის სახელის პოვნა';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'დაგავიწყდა?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'უფასო ყავა';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'სრული სახელი';
 
   @override
-  String get general => 'General';
+  String get general => 'გენერალი';
 
   @override
-  String get go => 'Go';
+  String get go => 'წადი';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'წადი ბიზნესში';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'სტუმარი';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'გამარჯობა,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'დახმარების ცენტრი გათიშულია ამ ინტერფეისის დემო ვერსიაში.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'დაიჭირეთ QR კოდი ჩარჩოში - ის ავტომატურად სკანირებს.';
 
   @override
-  String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+  String get howDoYouWantToDesignThisCard => 'როგორ გსურთ ამ ბარათის დიზაინი?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'კონტაქტების იმპორტი';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'კონტაქტების იმპორტი ჯერ მიუწვდომელია.';
 
   @override
   String get inLabel => 'in';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'შემოსული შეკვეთები';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'არასწორი პროფილის URL. დაასკანირეთ მოქმედი BarQody ბარათი ან QR კოდი.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'არასწორი QR კოდი. გამოიყენეთ Barqody ბმული QR.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'მოიწვიე თანამშრომლები, დააყენე ცვლა და აკონტროლე ყოფნა';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'მოგიწვიათ, რომ შეუერთდეთ როგორც თანამშრომელი';
 
   @override
-  String get janeDoe => 'Jane Doe';
+  String get janeDoe => 'ჯეინ დო';
 
   @override
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'სამუშაოს დასახელება';
 
   @override
-  String get johnDoe => 'John Doe';
+  String get johnDoe => 'ჯონ დო';
 
   @override
-  String get johnSmith => 'John Smith';
+  String get johnSmith => 'ჯონ სმიტი';
 
   @override
   String get johnEmailCom => 'john@email.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'დარეგისტრირდა: 2026 წლის 15 იანვარი';
 
   @override
   String get jpg => 'JPG';
@@ -834,1600 +842,1617 @@ class AppLocalizationsKa extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'შეინახეთ თქვენი ანგარიში უსაფრთხოდ. დაასკანირეთ QR კოდები მხოლოდ მაშინ, როდესაც გსურთ დაუკავშიროთ მოწყობილობა, რომელსაც ენდობით.';
 
   @override
-  String get label => 'Label';
+  String get label => 'ლეიბლი';
 
   @override
-  String get lat => 'Lat';
+  String get lat => 'ლათ';
 
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'მიეცით საშუალება სხვებს მიმართონ ტელეფონის კამერას ამ QR კოდზე, რათა მყისიერად ნახონ თქვენი ქსელის პროფილი.';
 
   @override
-  String get link => 'Link';
+  String get link => 'ბმული';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'მოწყობილობის მიბმა';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'ბმული QR-ით სხვა ტელეფონზე';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'ბმული კოპირებულია ბუფერში';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'ბმულის პარამეტრები';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'ბმული პარამეტრები';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'ამ მოწყობილობის მიბმა?';
 
   @override
-  String get links => 'Links';
+  String get links => 'ბმულები';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'ლინკები ამ ბარათზე';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'მდებარეობა ჯერ არ არის მითითებული';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'საჭიროა მდებარეობის ნებართვა';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'დასწრებისთვის საჭიროა მდებარეობის ნებართვა';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'შესვლა';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'შედით თქვენი ციფრული ბარათისა და ქსელის სამართავად.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'შედით QR კოდით';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'გასვლა';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'გამოდით ყველა';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'გამოხვალთ მოწყობილობა?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'ლოიალობის პროგრამები';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'კატეგორიების მართვა';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'კონტაქტის მართვა';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'თანამშრომლების მართვა';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'მართეთ თქვენი პერსონალური დეტალები და სხვა პრეფერენციები';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'მარკ დასრულებული';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'ყოველთვიური';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'ჩემი ბარათები';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'ჩემი მდებარეობა';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'ჩემი ჯილდოები';
 
   @override
-  String get name => 'Name';
+  String get name => 'სახელი';
 
   @override
   String get name2 => 'NAME';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'სახელი აუცილებელია';
 
   @override
   String get nameCompanyCom => 'name@company.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'ახალი ბარათი';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'ახალი ბარათი';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'ახალი კატეგორია';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'ახალი ჯილდო';
 
   @override
-  String get next => 'Next';
+  String get next => 'შემდეგი';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'შემდეგი ბარათი';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet =>
+      'აქტიური ბმულები ჯერ არ არის დაკავშირებული';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'აქტიური ჯილდოს პროგრამები არ არის ხელმისაწვდომი.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'თანამშრომლის ბარათები ჯერ არ არის';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'თანამშრომლები არ დამატებულა';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'ჯერ არ არის თანამშრომლები';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'დამსაქმებელი ვერ მოიძებნა';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'ამ კატეგორიაში ელემენტი არ არის.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable =>
+      'არ არის ხელმისაწვდომი ბმულის შაბლონები';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'ახალი შეტყობინებები ამ დროისთვის არ არის.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'ჯერ არავის უნახავს თქვენი პროფილი.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'მომლოდინე მოსაწვევები არ არის';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'ჯერ არ არის დანიშნული პროგრამები. დაამატეთ პროგრამები ქვემოთ.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage => 'ამ სურათზე QR კოდი ვერ მოიძებნა.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'ჯილდოს პროგრამები ჯერ არ არის';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'ამ დღეს სლოტები არ არის ხელმისაწვდომი';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'მომხმარებელი ვერ მოიძებნა';
 
   @override
-  String get none => 'None';
+  String get none => 'არცერთი';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'მიუწვდომელია თქვენს ამჟამინდელ გეგმაზე';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'ჯერ არ არის რეგისტრირებული';
 
   @override
-  String get note => 'Note';
+  String get note => 'შენიშვნა';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'შენიშვნები (სურვილისამებრ)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'შეტყობინება გასუფთავებულია';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'აქ მხოლოდ ყდა, პროფილის ფოტო, სახელი და ბიო რედაქტირებადია.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'მხოლოდ ჩართული ბმულები გამოჩნდება, როდესაც ვინმე სკანირებს ამ ბარათს.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => 'ნაჩვენებია მხოლოდ საჯარო პროფილები';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'მხოლოდ ეს ტელეფონი იყენებს თქვენს ანგარიშს ამჟამად.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'ან გააგრძელეთ';
 
   @override
-  String get order => 'Order';
+  String get order => 'შეკვეთა';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'შეკვეთის დეტალები';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'შეკვეთის ID';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'შეკვეთა ვერ მოიძებნა';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'შეკვეთები';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'ქაღალდის ბარათი';
 
   @override
-  String get password => 'Password';
+  String get password => 'პაროლი';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'გადაიხადეთ თვიდან თვემდე';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'ელოდება მიღებას';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'შესრულების მიმოხილვა';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'პირადი დეტალები';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'ტელეფონი';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'ფოტოები';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'შეარჩიეთ მზა ფერის თემა. სწრაფი და სუფთა.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'აირჩიეთ ფერი';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'აირჩიეთ რუკაზე';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'განათავსეთ შეკვეთა';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'გეგმა ამოიწურა';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'გთხოვთ, შეიყვანოთ ბიზნესის დეტალები გასაგრძელებლად';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'გთხოვთ შეიყვანოთ ელემენტის სახელი';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'გთხოვთ, მიუთითოთ თქვენი ბიზნესის დეტალები განახლებამდე.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'გთხოვთ, აირჩიოთ კატეგორია';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'გთხოვთ, აირჩიოთ დროის მონაკვეთი';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst =>
+      'გთხოვთ, ჯერ დააყენოთ სამუშაო ადგილი';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'მიმართეთ კამერას სხვა მოწყობილობის QR კოდზე';
 
   @override
-  String get points => 'Points';
+  String get points => 'ქულები';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'მოპოვებული ქულები';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'პრემიუმ აქტიური';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'წინა ბარათი';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'ფასი (რს)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'PRO შაბლონი';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'პროფილი';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'პროფილის შემოწმება';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'პროფილის სიძლიერე';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'პროფილის მნახველები';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'პროფილის ნახვები';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'პროგრამის დეტალები';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'პროგრამის სახელი';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'პროგრამა ვერ მოიძებნა';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'პროგრამის ტიპი';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'QR კოდი';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'QR სკანირება';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'რაოდენობა';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'წაიკითხეთ ყველა';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'მხოლოდ წაკითხული';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => 'მიღებულია 1 ბეჭედი';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'ბოლო აქტივობა';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'გამოისყიდეთ კიდევ ერთი ჯილდო';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'გამოისყიდე ჯილდო';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'გამოსყიდული უფასო ყავა';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'განაახლეთ QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'რეგიონი';
 
   @override
-  String get rembiro => 'Rembiro';
+  String get rembiro => 'რემბირო';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'ამოღება';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'თანამშრომელი წაშალეთ';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'განაახლეთ გეგმა';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'მოთხოვნა მომლოდინეა';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'მოთხოვნა მომლოდინეა';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'მოთხოვნა უარყოფილია';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'მოითხოვეთ გამოწერა';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'გადატვირთვა';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'ჯილდო დასრულდა! აჩვენეთ ეს ბარათი გამოსასყიდად.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'ჯილდო დასრულდა! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'ჯილდოს დეტალები';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'დაჯილდოების პროგრამა';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'ჯილდოს პროგრამები';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'ჯილდო გამოსყიდულია!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'ჯილდოები';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'მიღებული ჯილდოები';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => 'ყოველთვიურად დარიცხულია 1600 რუბლი';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => 'ყოველწლიურად დარიცხულია 8300 რუბლი';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'შენახვა';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'შეინახეთ სამუშაო პირადობის მოწმობა ტელეფონში ან საფულეში';
 
   @override
   String get scan => 'Scan';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'დაასკანირეთ მომხმარებლის QR კოდი, რომ დაამატოთ ისინი თანამშრომლად';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'დაასკანირეთ ნებისმიერი მომხმარებლის ან ბიზნეს QR თანამშრომლის დასამატებლად';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'სკანირება Business QR გამოსასყიდად';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'კლიენტის QR კოდის სკანირება';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'თანამშრომლის პროფილის სკანირება';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'QR-ის სკანირება';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'QR სკანირება / QR ჩვენება';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'QR კოდის სკანირება';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'სხვა მოწყობილობაზე ნაჩვენები QR-ის სკანირება';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'სკანირება მოსაწვევად';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'მომხმარებლის სახელით ძიება...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'მოძებნეთ ბმულები';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => 'მოძებნეთ სახელი, ელფოსტა ან კომპანია';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'იხილეთ ყველა';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'იხილეთ ყველა აქტივობა დაცინილია. ახალი აქტივობები გამოჩნდება ლიდერების დამატებისას.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'აირჩიეთ თარიღი';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'აირჩიეთ მარკერები';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'აირჩიეთ რეგიონი';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'დააყენეთ ტექსტი ბმულის ხატის ქვეშ';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'დააყენეთ საკუთარი ფერები, ფოტოები და ფონი.';
 
   @override
-  String get share => 'Share';
+  String get share => 'გააზიარეთ';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'გააზიარეთ ბარათი';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'გააზიარეთ სხვადასხვა ბმულები თითოეულ ბარათზე';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'პროფილის გაზიარება';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'ლინკის ჩვენება';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'ამ ბარათზე ჩვენება';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'შედით Google-ით';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'დარეგისტრირდით';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'გამოტოვება';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'ახლა გამოტოვეთ';
 
   @override
-  String get slotMin => 'Slot (min)';
+  String get slotMin => 'სლოტი (წთ)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'პროგრამული უზრუნველყოფის ინჟინერი';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'რაღაც შეფერხდა';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'დალაგების პარამეტრები';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'სპეციალური მითითებები';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'მარკის ბარათი';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'მარკის ხატულა';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'მარკები';
 
   @override
-  String get start => 'START';
+  String get start => 'დაწყება';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'დაწყების თარიღი';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'დაწყების საათი';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'დაიწყეთ ქსელის უფრო ჭკვიანურად ჩართვა Barqody-თან.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'სტატისტიკა';
 
   @override
-  String get status => 'Status';
+  String get status => 'სტატუსი';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'გამოწერა';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'გამოწერის მოთხოვნა გაგზავნილია';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'გამოწერის მოთხოვნა გაგზავნილია.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'გადაფურცლეთ ბარათების დასათვალიერებლად';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'გადაიღეთ სწრაფი სელფი დასწრების გადამოწმებისთვის';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'შეეხეთ „სოციალურ ბმულებს“ ზემოთ პროფილების დასამატებლად და გასააქტიურებლად.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'შეეხეთ რუკას ან გამოიყენეთ თქვენი მიმდინარე მდებარეობა';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'შეეხეთ ფოტოს დასამატებლად';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'შეეხეთ QR კოდის გასაზიარებლად';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'გუნდური დასწრება';
 
   @override
-  String get template => 'Template';
+  String get template => 'შაბლონი';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'შაბლონები';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'გმადლობთ! გამოხმაურება არის მხოლოდ იმიტირებული.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'ეს ბარათი და მისი QR კოდი წაიშლება.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'ეს ფუნქცია ექსკლუზიურად ხელმისაწვდომია ბიზნეს მომხმარებლებისთვის.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername =>
+      'ეს უკვე თქვენი მომხმარებლის სახელია.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'ამ თვეში';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'ეს სამუდამოდ წაშლის ამ ჯილდოს პროგრამას და მის ყველა ჩარიცხვას.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'დღეს თქვენი შაბათ-კვირაა';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'დღეს • 15:15';
 
   @override
-  String get total => 'Total';
+  String get total => 'სულ';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'თვალყური ადევნეთ თქვენს შეკვეთებს';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional =>
+      'ტრანზაქციის მითითება (არასავალდებულო)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'ტრანზაქციის საცნობარო ნომერი (არასავალდებულო)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'სცადეთ ხელახლა';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'სცადეთ Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'სცადეთ Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'ტიპი';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'საძიებლად ჩაწერეთ მომხმარებლის სახელის მინიმუმ 2 სიმბოლო.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'ჩაწერეთ QR-ში ნაჩვენები 8-სიმბოლოიანი კოდი.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'შემუშავების პროცესში - შესვლა ელექტრონული ფოსტით/პაროლის ნაცვლად.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'ბეჭდის ამოღება ხატულა';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'განაახლეთ ახლავე';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'განახლება';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'განაახლეთ Tapni PRO-ზე';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'გამოიყენეთ შაბლონი';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'გამოიყენეთ Barqody სხვა ტელეფონებზე ან ტაბლეტებზე. თქვენ აკონტროლებთ - ნებისმიერ დროს გამოდით ნებისმიერი მოწყობილობიდან.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'გამოიყენეთ Barqody თქვენს ტელეფონზე ამ კოდის სკანირებისთვის';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'გამოიყენეთ ნაგულისხმევი ხატულა';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'გამოიყენეთ ეს ფოტო';
 
   @override
   String get user => 'USER';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'ვერსია: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'თქვენი მომხმარებლების შეკვეთების ნახვა და განახლება';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'პროფილის ნახვა';
 
   @override
-  String get views => 'Views';
+  String get views => 'ნახვები';
 
   @override
-  String get website => 'Website';
+  String get website => 'საიტი';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'კეთილი იყოს თქვენი მობრძანება';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter =>
+      'კეთილი იყოს თქვენი მობრძანება ანგარიშების ცენტრში';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'როდესაც ბიზნესი დაგმატებთ როგორც თანამშრომელი, თქვენი თანამშრომლის ბარათი აქ გამოჩნდება. მისი დიზაინის მორგება ნებისმიერ დროს შეგიძლიათ.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'როდესაც ბიზნესი დაგირიცხავთ ჯილდოს პროგრამაში, ის აქ გამოჩნდება.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'როდესაც ბიზნესი გიწვევთ თავის გუნდში, ის აქ გამოჩნდება.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'როდესაც გამორთულია, ეს ბმული თქვენს პროფილზე არ გამოჩნდება';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'დაწერეთ რამე თქვენს ან თქვენს ბრენდზე';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'ყოველწლიურად';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'გუშინ • 17:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'თქვენი კატეგორიები';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'თქვენი თანამშრომლის ბარათები დამსაქმებლებისგან';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'თქვენი უფასო ყავა წარმატებით იქნა გამოსყიდული.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'თქვენი ჯილდოები';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'თქვენი გამოწერა დასრულდა. დეტალებისთვის შეეხეთ ინფორმაციის ხატულას.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'შენი სახელი';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% ფასდაკლება';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'ავატარი შეეკრა';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'ანგარიშის მფლობელის სახელი';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'ანგარიშის ნომერი';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'აქტიურია ახლა';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'დაამატეთ ბიო';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'დაამატეთ ყდის ფოტო';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'სახის ფოტოს დამატება';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'დაამატეთ Intro Voice Note';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'პროფილის სახელის დამატება';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'პროფილის ფოტოს დამატება';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'დაამატეთ სოციალური ბმულები (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'ელემენტის დამატება';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'ლინკის დამატება';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'დაამატეთ ბმულები თქვენს პროფილზე ქვემოთ';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'დაამატეთ ფოტო';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'კალათაში დამატება';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'მისამართი (არასავალდებულო)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'ყველა სახის კონტაქტი';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'დაშვებული რადიუსი (მეტრი)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'თითქმის იქ!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'უკვე თანამშრომელი';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'უკვე გაქვთ ანგარიში?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'ყოველთვის განახლებული';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'დარწმუნებული ხართ, რომ გსურთ გამოხვიდეთ Barqody-დან?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'დასწრება ვერ მოხერხდა';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'ფონის ფერი';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'დაჯავშნა ვერ მოხერხდა';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward => 'მოკლედ აღწერეთ ეს ჯილდო...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'ბიზნესი დადასტურებულია';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'ბიზნეს ელფოსტის მისამართი';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'ბიზნეს ფაქსი';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'ბიზნეს ტელეფონის ნომერი';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'ბიზნეს საიტი';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'კამერის შეცდომა';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'სახის გადაღება';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'ბარათი დასრულებულია';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'ბარათის ეტიკეტი';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'ბარათის ეტიკეტის სახელი';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'ბარათის გადახედვა';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'ბარათის თემა';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'ბარათი შეიქმნა';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'ბარათის სახელი';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'ბარათი შენახულია JPG სახით';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'ბარათი შენახულია PNG სახით';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'ბარათი განახლებულია';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'ფოტოს შეცვლა';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'შემოწმების სახე';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'რეგისტრაცია წარმატებით დასრულდა';
 
   @override
-  String get checkOutFace => 'Check-out Face';
+  String get checkOutFace => 'გასვლის სახე';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'შემოწმება წარმატებით დასრულდა';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'აირჩიეთ შაბლონი';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress =>
+      'საკონტაქტო ბარათის ბიზნეს მისამართი';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'საკონტაქტო ბარათის კომპანიის სახელი';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'საკონტაქტო ბარათის ელ.ფოსტა';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'საკონტაქტო ბარათის სახლის მისამართი';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'საკონტაქტო ბარათის ტელეფონი';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'საკონტაქტო ბარათის ვებსაიტი';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'შესვლა ვერ მოხერხდა';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'QR კოდის შექმნა ვერ მოხერხდა';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'მოწყობილობის მიბმა ვერ მოხერხდა';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'მოწყობილობის გამოსვლა ვერ მოხერხდა';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Google Wallet-ის გახსნა ვერ მოხერხდა';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'ბარათის დიზაინის შენახვა ვერ მოხერხდა';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'პროფილის ხილვადობის განახლება ვერ მოხერხდა';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'გალერეის შექმნა';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'შექმენით ბარათი თქვენი პროფილის გასაზიარებლად';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'ბარათის შექმნა';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'საბაჟო ბანკი';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'მომხმარებლების დარეგისტრირება და ბეჭედი შეიძლება';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'ბარათის მორგება';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram => 'აღწერეთ თქვენი ლოიალობის პროგრამა';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'საჩვენებელი სახელი';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'არ გაქვთ ანგარიში?';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE, d MMM წწ';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'ჯილდოს რედაქტირება';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'ელემენტის რედაქტირება';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'ელფოსტის მისამართი';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'საჭიროა ელ.ფოსტა';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'თანამშრომლების ბარათები';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'თანამშრომელი ამოიღეს';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'თანამშრომლის პარამეტრები შენახულია';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'დარეგისტრირებული ბიზნესები';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'შეიყვანეთ სწორი ელფოსტა';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard =>
+      'შეიყვანეთ ბიო საკონტაქტო ბარათისთვის';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'შეიყვანეთ პროგრამის სახელი';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'შეიყვანეთ თქვენი ბიო';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'შეიყვანეთ თქვენი ტელეფონის ნომერი';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'შეიყვანეთ თქვენი ვებსაიტის URL';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'ღონისძიების ბეჯი';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'მაგალითი: 10 მარკა = უფასო ყავა';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'სახის ფოტო დამატებულია';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'პროგრამის დამატება ვერ მოხერხდა';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'მარკის დამატება ვერ მოხერხდა';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'კლიენტის დარეგისტრირება ვერ მოხერხდა';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'კონტაქტის გაცვლა ვერ მოხერხდა';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'პროგრამების ჩატვირთვა ვერ მოხერხდა';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'შეკვეთის განთავსება ვერ მოხერხდა';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'ამოღება ვერ მოხერხდა';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'შენახვა ვერ მოხერხდა';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'JPG შენახვა ვერ მოხერხდა';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'PNG-ის შენახვა ვერ მოხერხდა';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'QR კოდის შენახვა ვერ მოხერხდა.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'ბიზნესის დეტალების შენახვა ვერ მოხერხდა';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'სტატუსის განახლება ვერ მოხერხდა';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'სახელი';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'საკვები და სასმელი';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'უფასო დესერტი';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'საჭიროა გალერეის ნებართვა. გთხოვთ, ჩართოთ ის პარამეტრებში.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'დაიწყეთ';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'წადი';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices =>
+      'გადადით ხელსაწყოები → დაკავშირებული მოწყობილობები';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending =>
+      'Google Wallet-ის დაყენება მოლოდინშია.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Google Wallet-ის დაყენება მოლოდინშია. პროფილის ბმული კოპირებულია.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'გაზარდეთ თქვენი ბიზნესი';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'სტუმარი მომხმარებელი';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'IBAN ნომერი';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'ოფისში';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'მოწვევა მოლოდინშია';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'მოწვევა უარყოფილია';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'მოწვევა გაგზავნილია. თანამშრომელი დაემატება მიღების შემდეგ.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'მოიწვიე თანამშრომელი';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'მოიწვიე როგორც თანამშრომელი';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'სამუშაოს დასახელება';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'გვარი';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'შედით QR-ით';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'მხოლოდ ამ ანგარიშიდან გამოსვლა? სხვა ანგარიშები დარჩება ამ ტელეფონზე.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'შესული ხართ Google-ით (დემო ანგარიში: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'მიმდინარეობს შესვლა…';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'შესვლა ვერ მოხერხდა. სცადეთ ხელახლა.';
 
   @override
   String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
 
   @override
-  String get mmmmYyyy => 'MMMM yyyy';
+  String get mmmmYyyy => 'MMMM წწ';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'მონიშნე დასწრება';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'ჩემი სახელი';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'ჩემი ტაპნის პროფილი';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'სახელი არ შეიძლება იყოს ცარიელი';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'ახალი';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'კონტაქტები ჯერ არ არის';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'დეტალები ჯერ არ არის';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'ბმულები ჯერ არ არის დამატებული.\\nდასაწყებად შეეხეთ „ბმულის დამატებას“.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'არანაირი მატჩი';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'მიზეზი არ არის მოწოდებული.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'არ არის დარეგისტრირებული';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'მარკების რაოდენობა';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'ერთი შეხებით გასაზიარებლად';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'გახსენით Barqody თქვენს სხვა ტელეფონზე';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'გახსენით კამერა';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'შეკვეთის ინფორმაცია';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'ქაღალდის ბარათი';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'პაროლი უნდა შედგებოდეს მინიმუმ 4 სიმბოლოსგან';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'პაროლი უნდა შედგებოდეს მინიმუმ 6 სიმბოლოსგან';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'ტელეფონის ნომერი';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'ტელეფონი აუცილებელია';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'ტელეფონის ნომერი';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'აირჩიეთ ადგილმდებარეობა';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'გთხოვთ შეიყვანოთ პაროლი';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'გთხოვთ შეიყვანოთ მომხმარებლის სახელი';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'გთხოვთ, შეიყვანოთ სწორი ელფოსტის მისამართი';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'გთხოვთ, შეიყვანოთ მარკების სწორი რაოდენობა';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'გთხოვთ შეიყვანოთ თქვენი ელფოსტა';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'გთხოვთ შეიყვანოთ თქვენი სახელი';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'გთხოვთ შეიყვანოთ თქვენი პაროლი';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'მიუთითეთ კამერა QR კოდის ავტომატური სკანირებისთვის.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'მიმართეთ კამერა ღონისძიების ბეჯს და შეეხეთ კამერის ღილაკს.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'მიმართეთ კამერა ქაღალდის ბარათს და შეეხეთ კამერის ღილაკს.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'მიმდინარეობს QR კოდის მომზადება…';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'პროფილი ვერ მოიძებნა.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'პროფილი წარმატებით განახლდა!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'QR კოდი შენახულია გალერეაში!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'QR კოდს ვადა გაუვიდა';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh =>
+      'QR კოდს ვადა გაუვიდა. შეეხეთ განახლებას.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'უძრავი ქონება';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'თანდართული ქვითარი';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'განაახლეთ თქვენი გამოწერა, რათა აღადგინოთ სრული წვდომა თქვენს პრემიუმ ფუნქციებსა და მონაცემებზე.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'გადაიღეთ ფოტო';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'ჯილდოს სათაური';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'ჯილდო განბლოკილია 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'როლი ან კომპანია';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'ცვლილებების შენახვა';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'კონტაქტის შენახვა';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'პროფილის შენახვა';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'პარამეტრების შენახვა';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'მომხმარებლის სახელის შენახვა';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'ბარათის შენახვა';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'კონტაქტის შენახვა';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'შენახულია ადგილობრივად. შესაძლოა სინქრონიზაცია ვერ მოხერხდა.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'დაასკანირეთ QR კოდი ან დაამატეთ ვინმე, ვინც შეხვდით თქვენი ქსელის ასაშენებლად.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'დასკანირებულია QR-ის საშუალებით';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'ეკრანის თემა';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'ძიება ვერ მოხერხდა. სცადეთ ხელახლა.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'აირჩიეთ კომპანია';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'აირჩიეთ თარიღის დიაპაზონი';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'აირჩიეთ დასრულების თარიღი';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'აირჩიეთ დაწყების თარიღი';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'მოწვევის გაგზავნა';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'გაგზავნეთ მოწვევა დასწრებისთვის';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'ლინკის გაზიარება';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'ცვლის დრო';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'ჭკვიანი კონტაქტის გადაღება';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'მარკის საზღვრის ფერი';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'მარკის ფერი';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'მარკების ხატები (სურვილისამებრ)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'მოცემულია მარკები';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'დაიწყეთ თქვენი ქსელის აშენება';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'ქუჩის სახელი';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'გადაერთეთ ბიზნეს ანგარიშზე სრული წვდომის განსაბლოკად.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'შეეხეთ მოწყობილობის მიბმას და დაასკანირეთ ეს QR';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'შეეხეთ სურათის დასამატებლად';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'შეეხეთ შესაცვლელად';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'შაბლონი გამოიყენება ადგილობრივად. სინქრონიზაცია ვერ მოხერხდა.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'ტექსტის ფერი';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'ეს ანგარიში';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'ეს ფუნქცია ექსკლუზიურად ხელმისაწვდომია ბიზნეს მომხმარებლებისთვის.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'ეს ადამიანი თქვენს გუნდშია';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'ეს პროგრამა შეჩერებულია';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'სულ მარკები';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'სცადეთ სხვა სახელი, ელფოსტა ან კომპანია.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'პროფილის შენახვა შეუძლებელია. სცადეთ ხელახლა.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'მომხმარებლის სახელის განახლება შეუძლებელია. სცადეთ ხელახლა.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'შემუშავების პროცესში - შესვლა ელექტრონული ფოსტით/პაროლის ნაცვლად.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'უცნობი მომხმარებელი';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'განაახლეთ GPS მდებარეობა';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'სტატუსის განახლება';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'კალათის განახლება';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'ელემენტის განახლება';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'განახლება';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'განაახლეთ Business PRO-ზე';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'ქვითარის ატვირთვა (არასავალდებულო)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'გამოიყენეთ ჩემი მდებარეობა';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'გამოიყენეთ მხოლოდ ასოები, რიცხვები, ხაზები ან დეფისები';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'მომხმარებლის სახელი უნდა იყოს მინიმუმ 3 სიმბოლო';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'მომხმარებლის სახელი უნდა შედგებოდეს მაქსიმუმ 30 სიმბოლოსგან';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'მომხმარებლის სახელი წარმატებით განახლდა!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'ველოდები მათ მიღებას';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'ვებსაიტის URL';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'შაბათ-კვირის დღეები';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'სამუშაო ადგილმდებარეობა';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'თქვენს PRO გამოწერას ვადა გაუვიდა.\\n\\n';
 
   @override
   String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+      'თქვენი PRO გამოწერის ვადა ამოიწურა.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Premium ფუნქციები ამჟამად გამორთულია.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'პრო ბმულები დამალულია თქვენი საჯარო პროფილიდან.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'თქვენი ბიზნესის დეტალები და მონაცემები უსაფრთხოა.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'დაამატეთ $label ელემენტი';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'დაამატეთ მინიმუმ ერთი $label ელემენტი';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return '$label ელემენტი არ არის ხელმისაწვდომი.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'ჯერ არ არის ელემენტი. დაამატეთ თქვენი პირველი $label ელემენტი.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'არცერთი საჯარო პროფილი არ ემთხვევა \"@$query\".';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'კოდი: $code';
   }
 }

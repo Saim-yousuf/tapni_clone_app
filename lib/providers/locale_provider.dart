@@ -31,10 +31,14 @@ class LocaleProvider extends ChangeNotifier {
 
   Future<void> _loadSavedLanguage() async {
     final saved = SharedPrefHelper.getString(_prefsKey);
-    if (saved.isEmpty) {
+    if (saved.isEmpty || saved == AppLanguages.systemCode) {
       _languageCode = AppLanguages.systemCode;
-    } else {
+    } else if (AppLanguages.isImplemented(saved)) {
       _languageCode = saved;
+    } else {
+      // Previously selected stub locale (English-only ARB) — reset so UI is honest.
+      _languageCode = AppLanguages.systemCode;
+      await SharedPrefHelper.putString(_prefsKey, AppLanguages.systemCode);
     }
     notifyListeners();
   }
@@ -46,6 +50,7 @@ class LocaleProvider extends ChangeNotifier {
   }
 
   Future<void> setLanguage(AppLanguage language) async {
+    if (!AppLanguages.isImplemented(language.code)) return;
     _languageCode = language.code;
     await SharedPrefHelper.putString(_prefsKey, language.code);
     notifyListeners();
@@ -57,7 +62,7 @@ class LocaleProvider extends ChangeNotifier {
       return;
     }
     final language = AppLanguages.findByCode(code);
-    if (language == null) return;
+    if (language == null || !AppLanguages.isImplemented(language.code)) return;
     await setLanguage(language);
   }
 }

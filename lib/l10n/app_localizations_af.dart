@@ -12,325 +12,332 @@ class AppLocalizationsAf extends AppLocalizations {
   String get appTitle => 'BarQody';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Gereedskap';
 
   @override
-  String get accountSettings => 'Account settings';
+  String get accountSettings => 'Rekeninginstellings';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Kennisgewings';
 
   @override
-  String get forYou => 'For you';
+  String get forYou => 'Vir jou';
 
   @override
-  String get yourProfile => 'Your profile';
+  String get yourProfile => 'Jou profiel';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Wysig profiel';
 
   @override
-  String get editProfileSubtitle => 'Change your name, photo, and bio';
+  String get editProfileSubtitle => 'Verander jou naam, foto en bio';
 
   @override
-  String get username => 'Username';
+  String get username => 'Gebruikersnaam';
 
   @override
-  String get setUsernameSubtitle => 'Set your unique profile username';
+  String get setUsernameSubtitle => 'Stel jou unieke profiel gebruikersnaam';
 
   @override
-  String get socialLinks => 'Social Links';
+  String get socialLinks => 'Sosiale skakels';
 
   @override
-  String get socialLinksSubtitle => 'Add Instagram, WhatsApp, website and more';
+  String get socialLinksSubtitle =>
+      'Voeg Instagram, WhatsApp, webwerf en meer by';
 
   @override
-  String get publicProfile => 'Public profile';
+  String get publicProfile => 'Openbare profiel';
 
   @override
-  String get publicProfileOn => 'Anyone can find and view your profile';
+  String get publicProfileOn => 'Enigiemand kan jou profiel vind en bekyk';
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Versteek vir soektog – ander kan jou nie ontdek nie';
 
   @override
-  String get shareQr => 'Share My QR Code';
+  String get shareQr => 'Deel my QR-kode';
 
   @override
-  String get shareQrSubtitle => 'Let others scan your digital business card';
+  String get shareQrSubtitle =>
+      'Laat ander jou digitale besigheidskaartjie skandeer';
 
   @override
-  String get shoppingRewards => 'Shopping & rewards';
+  String get shoppingRewards => 'Inkopies en belonings';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'My bestellings';
 
   @override
-  String get myOrdersSubtitle => 'Track orders you placed from shops';
+  String get myOrdersSubtitle =>
+      'Volg bestellings wat jy by winkels geplaas het';
 
   @override
-  String get myRewardCards => 'My Reward Cards';
+  String get myRewardCards => 'My beloningskaarte';
 
   @override
   String get myRewardCardsSubtitle =>
-      'View stamps and points from loyalty programs';
+      'Bekyk seëls en punte van lojaliteitsprogramme';
 
   @override
-  String get workplace => 'Workplace';
+  String get workplace => 'Werkplek';
 
   @override
-  String get employeeInvitations => 'Employee Invitations';
+  String get employeeInvitations => 'Werknemer uitnodigings';
 
   @override
   String get employeeInvitationsSubtitle =>
-      'Accept or decline team invitations from businesses';
+      'Aanvaar of weier spanuitnodigings van besighede af';
 
   @override
-  String get workplaceCheckIn => 'Workplace Check-In';
+  String get workplaceCheckIn => 'Werkplek-inklok';
 
   @override
   String get workplaceCheckInSubtitle =>
-      'Clock in and out at your job with location';
+      'Klok in en uit by jou werk met ligging';
 
   @override
-  String get accountsAndDevices => 'Accounts & devices';
+  String get accountsAndDevices => 'Rekeninge en toestelle';
 
   @override
-  String get linkedDevices => 'Linked devices';
+  String get linkedDevices => 'Gekoppelde toestelle';
 
   @override
-  String get linkedDevicesSubtitle => 'Link another phone like WhatsApp';
+  String get linkedDevicesSubtitle => 'Koppel \'n ander foon soos WhatsApp';
 
   @override
-  String get accounts => 'Accounts';
+  String get accounts => 'Rekeninge';
 
   @override
-  String get accountsSubtitle => 'Add or switch accounts';
+  String get accountsSubtitle => 'Voeg rekeninge by of verander dit';
 
   @override
   String accountsSwitchSubtitle(int count) {
-    return 'Switch between $count accounts';
+    return 'Wissel tussen $count rekeninge';
   }
 
   @override
-  String get helpAndAccount => 'Help & account';
+  String get helpAndAccount => 'Hulp en rekening';
 
   @override
-  String get appLanguage => 'App language';
+  String get appLanguage => 'Toepassingstaal';
 
   @override
-  String get appLanguageSubtitle => 'Change the language used in the app';
+  String get appLanguageSubtitle =>
+      'Verander die taal wat in die toepassing gebruik word';
 
   @override
-  String get searchLanguage => 'Search language';
+  String get searchLanguage => 'Soek taal';
 
   @override
-  String get phoneLanguage => 'Phone\'s language';
+  String get phoneLanguage => 'Telefoon se taal';
 
   @override
-  String get languageUpdated => 'Language updated';
+  String get languageUpdated => 'Taal opgedateer';
 
   @override
-  String get helpFaqs => 'Help & FAQs';
+  String get helpFaqs => 'Hulp & Gereelde Vrae';
 
   @override
-  String get helpFaqsSubtitle => 'Answers to common questions';
+  String get helpFaqsSubtitle => 'Antwoorde op algemene vrae';
 
   @override
-  String get sendFeedback => 'Send Feedback';
+  String get sendFeedback => 'Stuur terugvoer';
 
   @override
-  String get sendFeedbackSubtitle => 'Report a bug or suggest a new feature';
+  String get sendFeedbackSubtitle =>
+      'Rapporteer \'n fout of stel \'n nuwe kenmerk voor';
 
   @override
-  String get logOut => 'Log Out';
+  String get logOut => 'Teken uit';
 
   @override
-  String get logOutSubtitle => 'Sign out of this session';
+  String get logOutSubtitle => 'Teken uit by hierdie sessie';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Kanselleer';
 
   @override
-  String get save => 'Save';
+  String get save => 'Stoor';
 
   @override
-  String get done => 'Done';
+  String get done => 'Klaar';
 
   @override
   String get str => 'بطاقة أعمال الرقمية';
 
   @override
-  String get readOnly => '(Read only)';
+  String get readOnly => '(Leesalleen)';
 
   @override
-  String get n1Point100PKRExampleRule => '1 Point = 100 PKR (example rule)';
+  String get n1Point100PKRExampleRule => '1 punt = 100 PKR (voorbeeld reël)';
 
   @override
-  String get n10StampsRequired => '10 Stamps Required';
+  String get n10StampsRequired => '10 seëls benodig';
 
   @override
-  String get n123MainStCity => '123 Main St, City';
+  String get n123MainStCity => 'Hoofstraat 123, Stad';
 
   @override
-  String get n2DaysAgo => '2 Days Ago';
+  String get n2DaysAgo => '2 Dae gelede';
 
   @override
   String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
-      '3–30 characters. Letters, numbers, underscores and hyphens only.';
+      '3–30 karakters. Slegs letters, syfers, onderstrepings en koppeltekens.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Aanvaar';
 
   @override
-  String get accessRESTRICTED => 'ACCESS RESTRICTED';
+  String get accessRESTRICTED => 'TOEGANG BEPERK';
 
   @override
   String get accountIBANAddAccountNumberHere =>
-      'Account / IBAN: Add account number here';
+      'Rekening / IBAN: Voeg rekeningnommer hier by';
 
   @override
-  String get accountTitleTapni => 'Account Title: Tapni';
+  String get accountTitleTapni => 'Rekeningtitel: Tapni';
 
   @override
-  String get active => 'Active';
+  String get active => 'Aktief';
 
   @override
-  String get active2 => 'ACTIVE';
+  String get active2 => 'AKTIEF';
 
   @override
-  String get activeCARD => 'ACTIVE CARD';
+  String get activeCARD => 'AKTIEWE KAART';
 
   @override
-  String get add => 'Add';
+  String get add => 'Voeg by';
 
   @override
-  String get addANote => 'Add a note...';
+  String get addANote => 'Voeg \'n nota by...';
 
   @override
-  String get addAccount => 'Add account';
+  String get addAccount => 'Voeg rekening by';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Voeg eers ten minste een kategorie by';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
-      'Add categories in display order (e.g. Fast Food, then Desi)';
+      'Voeg kategorieë by in vertoonvolgorde (bv. Kitskos, dan Desi)';
 
   @override
   String get addCategoriesInYourCatalogSettingsFirst =>
-      'Add categories in your catalog settings first.';
+      'Voeg eers kategorieë in jou katalogusinstellings by.';
 
   @override
-  String get addContact => 'Add contact';
+  String get addContact => 'Voeg kontak by';
 
   @override
-  String get addLink => 'Add Link';
+  String get addLink => 'Voeg skakel by';
 
   @override
-  String get addLinksToYourProfileBelow => 'Add links to your profile below';
+  String get addLinksToYourProfileBelow =>
+      'Voeg skakels by jou profiel hieronder';
 
   @override
   String get addLinksToYourProfileFirstThenEnableThemHere =>
-      'Add links to your profile first, then enable them here.';
+      'Voeg eers skakels by jou profiel en aktiveer dit dan hier.';
 
   @override
-  String get addLogo => 'Add Logo';
+  String get addLogo => 'Voeg logo by';
 
   @override
-  String get addPoints => 'Add Points';
+  String get addPoints => 'Voeg punte by';
 
   @override
-  String get addProgram => 'Add Program';
+  String get addProgram => 'Voeg program by';
 
   @override
-  String get addStamp => 'Add Stamp';
+  String get addStamp => 'Voeg stempel by';
 
   @override
-  String get addToGoogleWallet => 'Add to Google Wallet';
+  String get addToGoogleWallet => 'Voeg by Google Wallet';
 
   @override
-  String get address => 'Address';
+  String get address => 'Adres';
 
   @override
   String get ai => 'AI';
 
   @override
-  String get all => 'All';
+  String get all => 'Almal';
 
   @override
-  String get allCaughtUp => 'All caught up!';
+  String get allCaughtUp => 'Alles ingehaal!';
 
   @override
   String get allNotificationsMarkedAsRead =>
-      'All notifications marked as read!';
+      'Alle kennisgewings gemerk as gelees!';
 
   @override
-  String get allowCamera => 'Allow camera';
+  String get allowCamera => 'Laat kamera toe';
 
   @override
   String
   get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
-      'Allow this device to access your Barqody account? You can remove it anytime from Linked devices.';
+      'Laat hierdie toestel toegang tot jou Barqody-rekening toe? Jy kan dit enige tyd van gekoppelde toestelle verwyder.';
 
   @override
-  String get alreadyHaveAnAccount => 'Already have an account?';
+  String get alreadyHaveAnAccount => 'Het jy reeds \'n rekening?';
 
   @override
   String get analyticsDashboard => 'Analytics Dashboard';
 
   @override
-  String get anySpecialRequests => 'Any special requests...';
+  String get anySpecialRequests => 'Enige spesiale versoeke...';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Doen aansoek';
 
   @override
-  String get applyDesign => 'Apply Design';
+  String get applyDesign => 'Pas ontwerp toe';
 
   @override
-  String get applyTemplate => 'Apply Template';
+  String get applyTemplate => 'Pas sjabloon toe';
 
   @override
-  String get ascending => 'Ascending';
+  String get ascending => 'Stygend';
 
   @override
   String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
-      'Ask your business to scan your QR and add you as an employee';
+      'Vra jou besigheid om jou QR te skandeer en jou as werknemer by te voeg';
 
   @override
-  String get assignCategory => 'Assign Category';
+  String get assignCategory => 'Ken kategorie toe';
 
   @override
-  String get assignedPrograms => 'Assigned Programs';
+  String get assignedPrograms => 'Toegewysde programme';
 
   @override
-  String get atLeast6Characters => 'At least 6 characters';
+  String get atLeast6Characters => 'Ten minste 6 karakters';
 
   @override
-  String get attendanceCompletedForToday => 'Attendance completed for today';
+  String get attendanceCompletedForToday => 'Bywoning voltooi vir vandag';
 
   @override
-  String get availableSlots => 'Available slots';
+  String get availableSlots => 'Beskikbare gleuwe';
 
   @override
-  String get background => 'Background';
+  String get background => 'Agtergrond';
 
   @override
-  String get backgroundColor => 'Background color';
+  String get backgroundColor => 'Agtergrond kleur';
 
   @override
-  String get bankAccount => 'Bank Account';
+  String get bankAccount => 'Bankrekening';
 
   @override
-  String get bankDetails => 'Bank Details';
+  String get bankDetails => 'Bankbesonderhede';
 
   @override
-  String get bankAddBankNameHere => 'Bank: Add bank name here';
+  String get bankAddBankNameHere => 'Bank: Voeg banknaam hier by';
 
   @override
   String get barqody => 'Barqody';
@@ -339,10 +346,10 @@ class AppLocalizationsAf extends AppLocalizations {
   String get barqodyV100 => 'barqody v1.0.0';
 
   @override
-  String get bestValue => 'Best value';
+  String get bestValue => 'Beste waarde';
 
   @override
-  String get billAmount => 'Bill Amount';
+  String get billAmount => 'Rekening Bedrag';
 
   @override
   String get bio => 'BIO';
@@ -351,461 +358,462 @@ class AppLocalizationsAf extends AppLocalizations {
   String get bio2 => 'Bio';
 
   @override
-  String get book => 'Book';
+  String get book => 'Boek';
 
   @override
-  String get bookingDate => 'Booking date';
+  String get bookingDate => 'Besprekingsdatum';
 
   @override
-  String get bookingSchedule => 'Booking schedule';
+  String get bookingSchedule => 'Besprekingskedule';
 
   @override
-  String get bookingTime => 'Booking time';
+  String get bookingTime => 'Besprekingstyd';
 
   @override
-  String get business => 'BUSINESS';
+  String get business => 'BESIGHEID';
 
   @override
-  String get businessCategory => 'Business Category';
+  String get businessCategory => 'Besigheidskategorie';
 
   @override
-  String get businessDetails => 'Business Details';
+  String get businessDetails => 'Besigheidsbesonderhede';
 
   @override
-  String get businessName => 'Business Name';
+  String get businessName => 'Besigheidsnaam';
 
   @override
-  String get businessOptions => 'Business options';
+  String get businessOptions => 'Besigheidsopsies';
 
   @override
-  String get businessPrograms => 'Business Programs';
+  String get businessPrograms => 'Besigheidsprogramme';
 
   @override
-  String get businessUsersOnly => 'Business Users Only';
+  String get businessUsersOnly => 'Slegs besigheidsgebruikers';
 
   @override
   String get bySigningUpYouAgreeToOurTermsAndConditions =>
-      'By signing up, you agree to our Terms and Conditions.';
+      'Deur aan te meld, stem jy in tot ons Bepalings en Voorwaardes.';
 
   @override
-  String get call => 'Call';
+  String get call => 'Bel';
 
   @override
   String get cameraPermissionIsRequiredToScan =>
-      'Camera permission is required to scan.';
+      'Kameratoestemming word vereis om te skandeer.';
 
   @override
-  String get cancelAnytime => 'Cancel anytime.';
+  String get cancelAnytime => 'Kanselleer enige tyd.';
 
   @override
-  String get cancelOrder => 'Cancel Order';
+  String get cancelOrder => 'Kanselleer bestelling';
 
   @override
-  String get captureNewContact => 'Capture New Contact';
+  String get captureNewContact => 'Vang nuwe kontak vas';
 
   @override
-  String get categories => 'Categories';
+  String get categories => 'Kategorieë';
 
   @override
-  String get category => 'Category *';
+  String get category => 'Kategorie *';
 
   @override
-  String get categoryAlreadyExists => 'Category already exists';
+  String get categoryAlreadyExists => 'Kategorie bestaan ​​reeds';
 
   @override
-  String get categoryName => 'Category Name';
+  String get categoryName => 'Kategorie Naam';
 
   @override
-  String get checkIn => 'Check in';
+  String get checkIn => 'Meld aan';
 
   @override
-  String get checkOut => 'Check out';
+  String get checkOut => 'Kyk uit';
 
   @override
   String get chooseAUniqueUsernameForYourProfileLink =>
-      'Choose a unique username for your profile link.';
+      'Kies \'n unieke gebruikersnaam vir jou profielskakel.';
 
   @override
-  String get choosePlan => 'Choose Plan';
+  String get choosePlan => 'Kies Plan';
 
   @override
-  String get chooseTemplate => 'Choose Template';
+  String get chooseTemplate => 'Kies Sjabloon';
 
   @override
-  String get close => 'Close';
+  String get close => 'Maak toe';
 
   @override
-  String get codeCopied => 'Code copied';
+  String get codeCopied => 'Kode gekopieer';
 
   @override
-  String get commingSoon => 'Comming Soon';
+  String get commingSoon => 'Binnekort beskikbaar';
 
   @override
-  String get company => 'Company';
+  String get company => 'Maatskappy';
 
   @override
-  String get companyEmployeeCard => 'Company Employee Card';
+  String get companyEmployeeCard => 'Maatskappy werknemerkaart';
 
   @override
-  String get companyInc => 'Company Inc.';
+  String get companyInc => 'Maatskappy Inc.';
 
   @override
-  String get completeTheseSteps => 'Complete these steps';
+  String get completeTheseSteps => 'Voltooi hierdie stappe';
 
   @override
-  String get confirmAddPoints => 'Confirm & Add Points';
+  String get confirmAddPoints => 'Bevestig en voeg punte by';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get confirmBooking => 'Bevestig bespreking';
 
   @override
-  String get confirmLocation => 'Confirm Location';
+  String get confirmLocation => 'Bevestig ligging';
 
   @override
-  String get confirmRedemption => 'Confirm Redemption';
+  String get confirmRedemption => 'Bevestig verlossing';
 
   @override
-  String get connectedAccounts => 'Connected Accounts';
+  String get connectedAccounts => 'Gekoppelde rekeninge';
 
   @override
-  String get contactAddedSuccessfully => 'Contact added successfully!';
+  String get contactAddedSuccessfully => 'Kontak suksesvol bygevoeg!';
 
   @override
-  String get contactCard => 'Contact card';
+  String get contactCard => 'Kontak kaart';
 
   @override
-  String get contactExchangedSuccessfully => 'Contact exchanged successfully!';
+  String get contactExchangedSuccessfully => 'Kontak suksesvol uitgeruil!';
 
   @override
-  String get contactSource => 'Contact Source';
+  String get contactSource => 'Kontak Bron';
 
   @override
-  String get contactUpdatedSuccessfully => 'Contact updated successfully!';
+  String get contactUpdatedSuccessfully => 'Kontak suksesvol opgedateer!';
 
   @override
-  String get contacts => 'Contacts';
+  String get contacts => 'Kontakte';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Gaan voort';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Gekopieer';
 
   @override
-  String get copyCode => 'Copy code';
+  String get copyCode => 'Kopieer kode';
 
   @override
   String get couldNotGetLocationPleaseEnableGPSPermission =>
-      'Could not get location. Please enable GPS permission.';
+      'Kon nie ligging kry nie. Aktiveer asseblief GPS-toestemming.';
 
   @override
-  String get couldNotSwitchAccount => 'Could not switch account';
+  String get couldNotSwitchAccount => 'Kon nie rekening verander nie';
 
   @override
-  String get create => 'Create';
+  String get create => 'Skep';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => 'Skep rekening';
 
   @override
-  String get createLoyaltyProgram => 'Create Loyalty Program';
+  String get createLoyaltyProgram => 'Skep lojaliteitsprogram';
 
   @override
-  String get createNewLink => 'Create new link';
+  String get createNewLink => 'Skep nuwe skakel';
 
   @override
-  String get createProgram => 'Create Program';
+  String get createProgram => 'Skep program';
 
   @override
-  String get createReward => 'Create Reward';
+  String get createReward => 'Skep beloning';
 
   @override
   String get createStampOrPointsRewardsForCustomers =>
-      'Create stamp or points rewards for customers';
+      'Skep stempel- of puntebelonings vir kliënte';
 
   @override
-  String get createYourFirstCard => 'Create your first card';
+  String get createYourFirstCard => 'Skep jou eerste kaart';
 
   @override
   String get createYourFirstRewardCardForCustomers =>
-      'Create your first reward card for customers';
+      'Skep jou eerste beloningskaart vir kliënte';
 
   @override
-  String get creationDate => 'Creation Date';
+  String get creationDate => 'Skeppingsdatum';
 
   @override
   String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
-      'Custom images for stamped and unstamped slots. Defaults are used if not set.';
+      'Pasgemaakte beelde vir gestempelde en ongestempelde gleuwe. Verstekwaardes word gebruik indien nie gestel nie.';
 
   @override
-  String get customLink => 'Custom link';
+  String get customLink => 'Pasgemaakte skakel';
 
   @override
-  String get customerDetails => 'Customer Details';
+  String get customerDetails => 'Kliëntbesonderhede';
 
   @override
-  String get customerEnrolledSuccessfully => 'Customer enrolled successfully';
+  String get customerEnrolledSuccessfully => 'Kliënt het suksesvol ingeskryf';
 
   @override
-  String get customerIsNotEnrolledYet => 'Customer is not enrolled yet';
+  String get customerIsNotEnrolledYet => 'Kliënt is nog nie ingeskryf nie';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Kliënt No Show';
 
   @override
-  String get customerOrders => 'Customer Orders';
+  String get customerOrders => 'Kliëntbestellings';
 
   @override
-  String get customizeCardDesign => 'Customize Card Design';
+  String get customizeCardDesign => 'Pas kaartontwerp aan';
 
   @override
-  String get customizeDesign => 'Customize Design';
+  String get customizeDesign => 'Pas ontwerp aan';
 
   @override
   String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
-      'Customize your profile, unlock PRO templates, and get unlimited leads.';
+      'Pas jou profiel aan, ontsluit PRO-sjablone en kry onbeperkte leidrade.';
 
   @override
-  String get customizeYourself => 'Customize yourself';
+  String get customizeYourself => 'Pas jouself aan';
 
   @override
-  String get date => 'Date';
+  String get date => 'Datum';
 
   @override
-  String get dateRange => 'Date Range';
+  String get dateRange => 'Datumreeks';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Weier';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Vee uit';
 
   @override
-  String get deleteCard => 'Delete card?';
+  String get deleteCard => 'Vee kaart uit?';
 
   @override
-  String get deleteCategory => 'Delete Category';
+  String get deleteCategory => 'Vee kategorie uit';
 
   @override
-  String get deleteContact => 'Delete Contact';
+  String get deleteContact => 'Vee kontak uit';
 
   @override
-  String get deleteReward => 'Delete Reward?';
+  String get deleteReward => 'Vee beloning uit?';
 
   @override
-  String get descending => 'Descending';
+  String get descending => 'Dalend';
 
   @override
-  String get description => 'Description';
+  String get description => 'Beskrywing';
 
   @override
-  String get descriptionOptional => 'Description (optional)';
+  String get descriptionOptional => 'Beskrywing (opsioneel)';
 
   @override
-  String get details => 'Details';
+  String get details => 'Besonderhede';
 
   @override
-  String get deviceLinked => 'Device linked';
+  String get deviceLinked => 'Toestel gekoppel';
 
   @override
-  String get deviceLoggedOut => 'Device logged out';
+  String get deviceLoggedOut => 'Toestel afgemeld';
 
   @override
-  String get deviceStatus => 'Device status';
+  String get deviceStatus => 'Toestelstatus';
 
   @override
-  String get digitalBusinessCard => 'Digital Business Card';
+  String get digitalBusinessCard => 'Digitale Besigheidskaartjie';
 
   @override
-  String get digitalBUSINESSCard => 'DIGITAL BUSINESS Card';
+  String get digitalBUSINESSCard => 'DIGITALE SAKE-kaart';
 
   @override
-  String get dontHaveAnAccount => 'Don\'t have an account?';
+  String get dontHaveAnAccount => 'Het jy nie \'n rekening nie?';
 
   @override
-  String get eGFastFood => 'e.g. Fast Food';
+  String get eGFastFood => 'bv. Kitskos';
 
   @override
-  String get eGNoSugarExtraHot => 'e.g. No sugar, extra hot...';
+  String get eGNoSugarExtraHot => 'bv. Geen suiker, ekstra warm...';
 
   @override
-  String get earned50Points => 'Earned 50 Points';
+  String get earned50Points => 'Verdien 50 punte';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Wysig';
 
   @override
-  String get editCard => 'Edit card';
+  String get editCard => 'Wysig kaart';
 
   @override
-  String get editDetails => 'Edit Details';
+  String get editDetails => 'Wysig Besonderhede';
 
   @override
-  String get editProfile2 => 'Edit profile';
+  String get editProfile2 => 'Wysig profiel';
 
   @override
-  String get editSettings => 'Edit Settings';
+  String get editSettings => 'Wysig instellings';
 
   @override
-  String get editYourProfileDetails => 'Edit your profile details';
+  String get editYourProfileDetails => 'Wysig jou profielbesonderhede';
 
   @override
-  String get email => 'Email';
+  String get email => 'E-pos';
 
   @override
-  String get emailPassword => 'Email & password';
+  String get emailPassword => 'E-pos en wagwoord';
 
   @override
-  String get emailAddress => 'Email Address';
+  String get emailAddress => 'E-posadres';
 
   @override
-  String get emailLoginOrScanQR => 'Email login or scan QR';
+  String get emailLoginOrScanQR => 'E-pos aanmelding of skandeer QR';
 
   @override
-  String get employeeCard => 'Employee Card';
+  String get employeeCard => 'Werknemerskaart';
 
   @override
-  String get employeeCARD => 'EMPLOYEE CARD';
+  String get employeeCARD => 'WERKNEMERKAART';
 
   @override
-  String get employeeFacePhoto => 'Employee Face Photo';
+  String get employeeFacePhoto => 'Werknemer Gesig Foto';
 
   @override
-  String get emptySlot => 'Empty slot';
+  String get emptySlot => 'Leë gleuf';
 
   @override
-  String get end => 'END';
+  String get end => 'EINDE';
 
   @override
-  String get endDate => 'End Date';
+  String get endDate => 'Einddatum';
 
   @override
-  String get endHour => 'End hour';
+  String get endHour => 'Eind uur';
 
   @override
-  String get enrollCustomer => 'Enroll Customer';
+  String get enrollCustomer => 'Skryf kliënt in';
 
   @override
-  String get enterBillAmount => 'Enter bill amount';
+  String get enterBillAmount => 'Voer rekeningbedrag in';
 
   @override
-  String get enterCode => 'Enter code';
+  String get enterCode => 'Voer kode in';
 
   @override
-  String get enterCodeInstead => 'Enter code instead';
+  String get enterCodeInstead => 'Voer eerder kode in';
 
   @override
   String get enterNetworkingContactDetailsBelow =>
-      'Enter networking contact details below.';
+      'Voer netwerkkontakbesonderhede hieronder in.';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Voer jou naam in';
 
   @override
-  String get enterYourPassword => 'Enter your password';
+  String get enterYourPassword => 'Voer jou wagwoord in';
 
   @override
-  String get eventBadge => 'Event Badge';
+  String get eventBadge => 'Gebeurteniskenteken';
 
   @override
-  String get exchangeContact => 'Exchange Contact';
+  String get exchangeContact => 'Ruil Kontak';
 
   @override
-  String get exchangingContact => 'Exchanging contact...';
+  String get exchangingContact => 'Ruil tans kontak uit...';
 
   @override
-  String get explore => 'Explore';
+  String get explore => 'Verken';
 
   @override
-  String get failedToUpdateContact => 'Failed to update contact.';
+  String get failedToUpdateContact => 'Kon nie kontak opdateer nie.';
 
   @override
-  String get filledSlot => 'Filled slot';
+  String get filledSlot => 'Gevulde gleuf';
 
   @override
-  String get filterContacts => 'Filter contacts';
+  String get filterContacts => 'Filter kontakte';
 
   @override
-  String get filterContacts2 => 'Filter Contacts';
+  String get filterContacts2 => 'Filter kontakte';
 
   @override
-  String get findPeopleOnBarQody => 'Find people on BarQody';
+  String get findPeopleOnBarQody => 'Soek mense op BarQody';
 
   @override
-  String get findUser => 'Find user';
+  String get findUser => 'Soek gebruiker';
 
   @override
-  String get findUser2 => 'Find User';
+  String get findUser2 => 'Soek gebruiker';
 
   @override
-  String get findUsername => 'Find username';
+  String get findUsername => 'Soek gebruikernaam';
 
   @override
-  String get forgot => 'Forgot?';
+  String get forgot => 'Vergeet?';
 
   @override
-  String get freeCoffee => 'Free Coffee';
+  String get freeCoffee => 'Gratis koffie';
 
   @override
-  String get fullName => 'Full Name';
+  String get fullName => 'Volle Naam';
 
   @override
-  String get general => 'General';
+  String get general => 'Algemeen';
 
   @override
-  String get go => 'Go';
+  String get go => 'Gaan';
 
   @override
-  String get goBusiness => 'Go Business';
+  String get goBusiness => 'Gaan Besigheid';
 
   @override
-  String get guest => 'GUEST';
+  String get guest => 'GAS';
 
   @override
-  String get hello => 'Hello,';
+  String get hello => 'Hallo,';
 
   @override
   String get helpCenterIsDisabledInThisUIDemo =>
-      'Help Center is disabled in this UI demo.';
+      'Hulpsentrum is in hierdie UI-demonstrasie gedeaktiveer.';
 
   @override
-  String get hex => 'Hex: #';
+  String get hex => 'Heks: #';
 
   @override
   String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
-      'Hold the QR code inside the frame — it scans automatically.';
+      'Hou die QR-kode binne die raam - dit skandeer outomaties.';
 
   @override
   String get howDoYouWantToDesignThisCard =>
-      'How do you want to design this card?';
+      'Hoe wil jy hierdie kaart ontwerp?';
 
   @override
-  String get importContacts => 'Import contacts';
+  String get importContacts => 'Voer kontakte in';
 
   @override
   String get importContactsIsNotAvailableYet =>
-      'Import contacts is not available yet.';
+      'Invoer kontakte is nog nie beskikbaar nie.';
 
   @override
   String get inLabel => 'in';
 
   @override
-  String get incomingOrders => 'Incoming orders';
+  String get incomingOrders => 'Inkomende bestellings';
 
   @override
   String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
-      'Invalid profile URL. Scan a valid BarQody card or QR code.';
+      'Ongeldige profiel-URL. Skandeer \'n geldige BarQody-kaart of QR-kode.';
 
   @override
   String get invalidQRCodeUseABarqodyLinkQR =>
-      'Invalid QR code. Use a Barqody link QR.';
+      'Ongeldige QR-kode. Gebruik \'n Barqody-skakel QR.';
 
   @override
   String get inviteEmployeesSetShiftsAndTrackPresence =>
-      'Invite employees, set shifts and track presence';
+      'Nooi werknemers, stel skofte en volg teenwoordigheid';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Invited you to join as employee';
+  String get invitedYouToJoinAsEmployee =>
+      'Het jou genooi om as werknemer aan te sluit';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -814,7 +822,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get janeCompanyCom => 'jane@company.com';
 
   @override
-  String get jobTitle => 'Job Title';
+  String get jobTitle => 'Werkstitel';
 
   @override
   String get johnDoe => 'John Doe';
@@ -823,10 +831,10 @@ class AppLocalizationsAf extends AppLocalizations {
   String get johnSmith => 'John Smith';
 
   @override
-  String get johnEmailCom => 'john@email.com';
+  String get johnEmailCom => 'john@e-pos.com';
 
   @override
-  String get joinedJan152026 => 'Joined: Jan 15, 2026';
+  String get joinedJan152026 => 'Aangesluit: 15 Januarie 2026';
 
   @override
   String get jpg => 'JPG';
@@ -834,10 +842,10 @@ class AppLocalizationsAf extends AppLocalizations {
   @override
   String
   get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
-      'Keep your account safe. Only scan QR codes when you want to link a device you trust.';
+      'Hou jou rekening veilig. Skandeer slegs QR-kodes wanneer jy \'n toestel wat jy vertrou wil koppel.';
 
   @override
-  String get label => 'Label';
+  String get label => 'Etiket';
 
   @override
   String get lat => 'Lat';
@@ -845,1589 +853,1598 @@ class AppLocalizationsAf extends AppLocalizations {
   @override
   String
   get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
-      'Let others point their phone camera to this QR code to instantly view your networking profile.';
+      'Laat ander hul foonkamera na hierdie QR-kode wys om jou netwerkprofiel onmiddellik te sien.';
 
   @override
-  String get link => 'Link';
+  String get link => 'Skakel';
 
   @override
-  String get linkADevice => 'Link a device';
+  String get linkADevice => 'Koppel \'n toestel';
 
   @override
-  String get linkByQROnAnotherPhone => 'Link by QR on another phone';
+  String get linkByQROnAnotherPhone => 'Skakel deur QR op \'n ander foon';
 
   @override
-  String get linkCopiedToClipboard => 'Link copied to clipboard';
+  String get linkCopiedToClipboard => 'Skakel na knipbord gekopieer';
 
   @override
-  String get linkSettings => 'Link Settings';
+  String get linkSettings => 'Skakelinstellings';
 
   @override
-  String get linkSettings2 => 'Link settings';
+  String get linkSettings2 => 'Skakelinstellings';
 
   @override
-  String get linkThisDevice => 'Link this device?';
+  String get linkThisDevice => 'Koppel hierdie toestel?';
 
   @override
-  String get links => 'Links';
+  String get links => 'Skakels';
 
   @override
-  String get linksOnThisCard => 'Links on this card';
+  String get linksOnThisCard => 'Skakels op hierdie kaart';
 
   @override
-  String get locationNotSetYet => 'Location not set yet';
+  String get locationNotSetYet => 'Ligging nog nie gestel nie';
 
   @override
-  String get locationPermissionRequired => 'Location permission required';
+  String get locationPermissionRequired => 'Liggingtoestemming word vereis';
 
   @override
   String get locationPermissionRequiredForAttendance =>
-      'Location permission required for attendance';
+      'Plektoestemming benodig vir bywoning';
 
   @override
-  String get logIn => 'Log In';
+  String get logIn => 'Meld aan';
 
   @override
   String get logInToManageYourDigitalCardAndNetwork =>
-      'Log in to manage your digital card and network.';
+      'Meld aan om jou digitale kaart en netwerk te bestuur.';
 
   @override
-  String get logInWithQRCode => 'Log in with QR code';
+  String get logInWithQRCode => 'Meld aan met QR-kode';
 
   @override
-  String get logOut2 => 'Log out';
+  String get logOut2 => 'Teken uit';
 
   @override
-  String get logOutAll => 'Log out all';
+  String get logOutAll => 'Teken almal uit';
 
   @override
-  String get logOutDevice => 'Log out device?';
+  String get logOutDevice => 'Meld toestel af?';
 
   @override
-  String get loyaltyPrograms => 'Loyalty Programs';
+  String get loyaltyPrograms => 'Lojaliteitsprogramme';
 
   @override
-  String get manageCategories => 'Manage categories';
+  String get manageCategories => 'Bestuur kategorieë';
 
   @override
-  String get manageContact => 'Manage contact';
+  String get manageContact => 'Bestuur kontak';
 
   @override
-  String get manageEmployees => 'Manage Employees';
+  String get manageEmployees => 'Bestuur werknemers';
 
   @override
   String get manageYourPersonalDetailsOtherPreferences =>
-      'Manage your personal details & other preferences';
+      'Bestuur jou persoonlike besonderhede en ander voorkeure';
 
   @override
-  String get markCompleted => 'Mark Completed';
+  String get markCompleted => 'Merk voltooi';
 
   @override
-  String get monthly => 'Monthly';
+  String get monthly => 'Maandeliks';
 
   @override
-  String get myCards => 'My Cards';
+  String get myCards => 'My kaarte';
 
   @override
-  String get myLocation => 'My Location';
+  String get myLocation => 'My ligging';
 
   @override
-  String get myRewards => 'My Rewards';
+  String get myRewards => 'My belonings';
 
   @override
-  String get name => 'Name';
+  String get name => 'Naam';
 
   @override
-  String get name2 => 'NAME';
+  String get name2 => 'NAAM';
 
   @override
-  String get nameIsRequired => 'Name is required';
+  String get nameIsRequired => 'Naam word vereis';
 
   @override
-  String get nameCompanyCom => 'name@company.com';
+  String get nameCompanyCom => 'naam@maatskappy.com';
 
   @override
-  String get newCard => 'New Card';
+  String get newCard => 'Nuwe kaart';
 
   @override
-  String get newCard2 => 'New card';
+  String get newCard2 => 'Nuwe kaart';
 
   @override
-  String get newCategory => 'New Category';
+  String get newCategory => 'Nuwe kategorie';
 
   @override
-  String get newReward => 'New Reward';
+  String get newReward => 'Nuwe beloning';
 
   @override
-  String get next => 'Next';
+  String get next => 'Volgende';
 
   @override
-  String get nextCard => 'Next card';
+  String get nextCard => 'Volgende kaart';
 
   @override
-  String get noActiveLinksConnectedYet => 'No active links connected yet';
+  String get noActiveLinksConnectedYet =>
+      'Nog geen aktiewe skakels gekoppel nie';
 
   @override
   String get noActiveRewardProgramsAvailable =>
-      'No active reward programs available.';
+      'Geen aktiewe beloningsprogramme beskikbaar nie.';
 
   @override
-  String get noEmployeeCardsYet => 'No employee cards yet';
+  String get noEmployeeCardsYet => 'Nog geen werknemerkaarte nie';
 
   @override
-  String get noEmployeesAdded => 'No employees added';
+  String get noEmployeesAdded => 'Geen werknemers bygevoeg nie';
 
   @override
-  String get noEmployeesYet => 'No employees yet';
+  String get noEmployeesYet => 'Nog geen werknemers nie';
 
   @override
-  String get noEmployerFound => 'No employer found';
+  String get noEmployerFound => 'Geen werkgewer gevind nie';
 
   @override
-  String get noItemsInThisCategory => 'No items in this category.';
+  String get noItemsInThisCategory => 'Geen items in hierdie kategorie nie.';
 
   @override
-  String get noLinkTemplatesAvailable => 'No link templates available';
+  String get noLinkTemplatesAvailable => 'Geen skakelsjablone beskikbaar nie';
 
   @override
   String get noNewNotificationsAtThisTime =>
-      'No new notifications at this time.';
+      'Geen nuwe kennisgewings op hierdie stadium nie.';
 
   @override
   String get noOneHasViewedYourProfileYet =>
-      'No one has viewed your profile yet.';
+      'Niemand het nog jou profiel bekyk nie.';
 
   @override
-  String get noPendingInvitations => 'No pending invitations';
+  String get noPendingInvitations => 'Geen hangende uitnodigings nie';
 
   @override
   String get noProgramsAssignedYetAddProgramsBelow =>
-      'No programs assigned yet. Add programs below.';
+      'Geen programme is nog toegewys nie. Voeg programme hieronder by.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'No QR code found in this image.';
+  String get noQRCodeFoundInThisImage =>
+      'Geen QR-kode in hierdie prent gevind nie.';
 
   @override
-  String get noRewardProgramsYet => 'No reward programs yet';
+  String get noRewardProgramsYet => 'Nog geen beloningsprogramme nie';
 
   @override
-  String get noSlotsAvailableOnThisDay => 'No slots available on this day';
+  String get noSlotsAvailableOnThisDay =>
+      'Geen gleuwe beskikbaar op hierdie dag nie';
 
   @override
-  String get noUsersFound => 'No users found';
+  String get noUsersFound => 'Geen gebruikers gevind nie';
 
   @override
-  String get none => 'None';
+  String get none => 'Geen';
 
   @override
   String get notAvailableOnYourCurrentPlan =>
-      'Not available on your current plan';
+      'Nie beskikbaar op jou huidige plan nie';
 
   @override
-  String get notCheckedInYet => 'Not checked in yet';
+  String get notCheckedInYet => 'Nog nie ingeboek nie';
 
   @override
-  String get note => 'Note';
+  String get note => 'Let wel';
 
   @override
-  String get notesOptional => 'Notes (optional)';
+  String get notesOptional => 'Notas (opsioneel)';
 
   @override
-  String get notificationCleared => 'Notification cleared';
+  String get notificationCleared => 'Kennisgewing is uitgevee';
 
   @override
   String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
-      'Only cover, profile photo, name and bio are editable here.';
+      'Slegs omslag, profielfoto, naam en bio kan hier gewysig word.';
 
   @override
   String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
-      'Only enabled links show when someone scans this card.';
+      'Slegs geaktiveerde skakels wys wanneer iemand hierdie kaart skandeer.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown => 'Slegs publieke profiele word gewys';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
-      'Only this phone is using your account right now.';
+      'Net hierdie foon gebruik tans jou rekening.';
 
   @override
-  String get orCONTINUEWITH => 'OR CONTINUE WITH';
+  String get orCONTINUEWITH => 'OF GAAN VOORT MET';
 
   @override
-  String get order => 'Order';
+  String get order => 'Bestel';
 
   @override
-  String get orderDetails => 'Order Details';
+  String get orderDetails => 'Bestel besonderhede';
 
   @override
-  String get orderID => 'Order ID';
+  String get orderID => 'Bestel ID';
 
   @override
-  String get orderNotFound => 'Order not found';
+  String get orderNotFound => 'Bestelling nie gevind nie';
 
   @override
-  String get orders => 'Orders';
+  String get orders => 'Bestellings';
 
   @override
-  String get paperCard => 'Paper Card';
+  String get paperCard => 'Papierkaart';
 
   @override
-  String get password => 'Password';
+  String get password => 'Wagwoord';
 
   @override
-  String get payMonthByMonth => 'Pay month by month';
+  String get payMonthByMonth => 'Betaal maand vir maand';
 
   @override
-  String get pendingACCEPTANCE => 'PENDING ACCEPTANCE';
+  String get pendingACCEPTANCE => 'HANGTENDE AANVAARDING';
 
   @override
-  String get performanceOverview => 'Performance Overview';
+  String get performanceOverview => 'Prestasie-oorsig';
 
   @override
-  String get personalDetails => 'Personal Details';
+  String get personalDetails => 'Persoonlike Besonderhede';
 
   @override
-  String get phone => 'Phone';
+  String get phone => 'Telefoon';
 
   @override
-  String get photos => 'Photos';
+  String get photos => 'Foto\'s';
 
   @override
   String get pickAReadyMadeColorThemeQuickAndClean =>
-      'Pick a ready-made color theme. Quick and clean.';
+      'Kies \'n klaargemaakte kleurtema. Vinnig en skoon.';
 
   @override
-  String get pickColor => 'Pick Color';
+  String get pickColor => 'Kies Kleur';
 
   @override
-  String get pickOnMap => 'Pick on Map';
+  String get pickOnMap => 'Kies op kaart';
 
   @override
-  String get placeOrder => 'Place Order';
+  String get placeOrder => 'Plaas bestelling';
 
   @override
-  String get planExpired => 'Plan Expired';
+  String get planExpired => 'Plan het verval';
 
   @override
   String get pleaseEnterBusinessDetailsToContinue =>
-      'Please enter business details to continue';
+      'Voer asseblief besigheidsbesonderhede in om voort te gaan';
 
   @override
-  String get pleaseEnterItemName => 'Please enter item name';
+  String get pleaseEnterItemName => 'Voer asseblief itemnaam in';
 
   @override
   String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
-      'Please provide your business details before upgrading.';
+      'Verskaf asseblief jou besigheidsbesonderhede voordat jy opgradeer.';
 
   @override
-  String get pleaseSelectACategory => 'Please select a category';
+  String get pleaseSelectACategory => 'Kies asseblief \'n kategorie';
 
   @override
-  String get pleaseSelectATimeSlot => 'Please select a time slot';
+  String get pleaseSelectATimeSlot => 'Kies asseblief \'n tydgleuf';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Please set work location first';
+  String get pleaseSetWorkLocationFirst => 'Stel asseblief eers werkligging in';
 
   @override
   String get png => 'PNG';
 
   @override
   String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
-      'Point your camera at the QR code on the other device';
+      'Rig jou kamera na die QR-kode op die ander toestel';
 
   @override
-  String get points => 'Points';
+  String get points => 'Punte';
 
   @override
-  String get pointsEarned => 'Points Earned';
+  String get pointsEarned => 'Punte Verdien';
 
   @override
-  String get premiumActive => 'Premium active';
+  String get premiumActive => 'Premium aktief';
 
   @override
-  String get previousCard => 'Previous card';
+  String get previousCard => 'Vorige kaart';
 
   @override
-  String get priceRs => 'Price (Rs)';
+  String get priceRs => 'Prys (Rs)';
 
   @override
   String get pro => 'PRO';
 
   @override
-  String get proTemplate => 'PRO template';
+  String get proTemplate => 'PRO sjabloon';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Profiel';
 
   @override
-  String get profileCheck => 'Profile Check';
+  String get profileCheck => 'Profielkontrole';
 
   @override
-  String get profileStrength => 'Profile Strength';
+  String get profileStrength => 'Profiel Sterkte';
 
   @override
-  String get profileViewers => 'Profile Viewers';
+  String get profileViewers => 'Profielkykers';
 
   @override
-  String get profileViews => 'Profile Views';
+  String get profileViews => 'Profielbeskouings';
 
   @override
-  String get programDetails => 'Program Details';
+  String get programDetails => 'Programbesonderhede';
 
   @override
-  String get programName => 'Program Name';
+  String get programName => 'Program Naam';
 
   @override
-  String get programNotFound => 'Program not found';
+  String get programNotFound => 'Program nie gevind nie';
 
   @override
-  String get programType => 'Program Type';
+  String get programType => 'Program Tipe';
 
   @override
-  String get qrCode => 'QR Code';
+  String get qrCode => 'QR-kode';
 
   @override
-  String get qrScans => 'QR Scans';
+  String get qrScans => 'QR-skanderings';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Hoeveelheid';
 
   @override
-  String get readAll => 'Read All';
+  String get readAll => 'Lees Alles';
 
   @override
-  String get readOnly2 => 'Read only';
+  String get readOnly2 => 'Slegs lees';
 
   @override
-  String get received1Stamp => 'Received 1 Stamp';
+  String get received1Stamp => '1 Seël ontvang';
 
   @override
-  String get recentActivity => 'Recent Activity';
+  String get recentActivity => 'Onlangse aktiwiteit';
 
   @override
-  String get redeemAnotherReward => 'Redeem Another Reward';
+  String get redeemAnotherReward => 'Verlos nog \'n beloning';
 
   @override
-  String get redeemReward => 'Redeem Reward';
+  String get redeemReward => 'Verlos beloning';
 
   @override
-  String get redeemedFreeCoffee => 'Redeemed Free Coffee';
+  String get redeemedFreeCoffee => 'Verlos Gratis Koffie';
 
   @override
-  String get refreshQR => 'Refresh QR';
+  String get refreshQR => 'Herlaai QR';
 
   @override
-  String get region => 'Region';
+  String get region => 'Streek';
 
   @override
   String get rembiro => 'Rembiro';
 
   @override
-  String get remove => 'Remove';
+  String get remove => 'Verwyder';
 
   @override
-  String get removeEmployee => 'Remove Employee';
+  String get removeEmployee => 'Verwyder werknemer';
 
   @override
-  String get renewPlan => 'Renew Plan';
+  String get renewPlan => 'Hernu Plan';
 
   @override
-  String get requestPending => 'Request pending';
+  String get requestPending => 'Versoek hangende';
 
   @override
-  String get requestPending2 => 'Request Pending';
+  String get requestPending2 => 'Versoek hangende';
 
   @override
-  String get requestRejected => 'Request rejected';
+  String get requestRejected => 'Versoek afgekeur';
 
   @override
-  String get requestSubscription => 'Request subscription';
+  String get requestSubscription => 'Versoek intekening';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Stel terug';
 
   @override
   String get rewardCompletedShowThisCardToRedeem =>
-      'Reward Completed! Show this card to redeem.';
+      'Beloning voltooi! Wys hierdie kaart om te gebruik.';
 
   @override
-  String get rewardCompleted => 'Reward Completed! 🎉';
+  String get rewardCompleted => 'Beloning voltooi! 🎉';
 
   @override
-  String get rewardDetails => 'Reward Details';
+  String get rewardDetails => 'Beloningsbesonderhede';
 
   @override
-  String get rewardProgram => 'Reward Program';
+  String get rewardProgram => 'Beloningsprogram';
 
   @override
-  String get rewardPrograms => 'Reward Programs';
+  String get rewardPrograms => 'Beloningsprogramme';
 
   @override
-  String get rewardRedeemed => 'Reward Redeemed!';
+  String get rewardRedeemed => 'Beloning verlos!';
 
   @override
-  String get rewards => 'Rewards';
+  String get rewards => 'Belonings';
 
   @override
-  String get rewardsEarned => 'Rewards Earned';
+  String get rewardsEarned => 'Belonings verdien';
 
   @override
-  String get rs1600BilledMonthly => 'Rs 1,600 billed monthly';
+  String get rs1600BilledMonthly => 'Rs 1,600 maandeliks gefaktureer';
 
   @override
-  String get rs8300BilledYearly => 'Rs 8,300 billed yearly';
+  String get rs8300BilledYearly => 'Rs 8,300 per jaar gefaktureer';
 
   @override
   String get saimyousufYGmailCom => 'saimyousuf.y@gmail.com';
 
   @override
-  String get save2 => 'SAVE';
+  String get save2 => 'SPAAR';
 
   @override
   String get saveYourWorkIDCardToPhoneOrWallet =>
-      'Save your work ID card to phone or wallet';
+      'Stoor jou werk-ID-kaart op foon of beursie';
 
   @override
-  String get scan => 'Scan';
+  String get scan => 'Skandeer';
 
   @override
   String get scanAUserQRCodeToAddThemAsEmployee =>
-      'Scan a user QR code to add them as employee';
+      'Skandeer \'n gebruiker QR-kode om hulle as werknemer by te voeg';
 
   @override
   String get scanAnyUserOrBusinessQRToAddEmployee =>
-      'Scan any user or business QR to add employee';
+      'Skandeer enige gebruiker of besigheid QR om werknemer by te voeg';
 
   @override
-  String get scanBusinessQRToRedeem => 'Scan Business QR to Redeem';
+  String get scanBusinessQRToRedeem => 'Skandeer Besigheid QR om te gebruik';
 
   @override
-  String get scanCustomerQRCode => 'Scan Customer QR Code';
+  String get scanCustomerQRCode => 'Skandeer kliënt QR-kode';
 
   @override
-  String get scanEmployeeProfile => 'Scan employee profile';
+  String get scanEmployeeProfile => 'Skandeer werknemerprofiel';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Skandeer QR';
 
   @override
-  String get scanQRShowQR => 'Scan QR / show QR';
+  String get scanQRShowQR => 'Skandeer QR / wys QR';
 
   @override
-  String get scanQRCode => 'Scan QR Code';
+  String get scanQRCode => 'Skandeer QR-kode';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Scan QR shown on the other device';
+  String get scanQRShownOnTheOtherDevice =>
+      'Skandeer QR wat op die ander toestel gewys word';
 
   @override
-  String get scanToInvite => 'Scan to Invite';
+  String get scanToInvite => 'Skandeer om te nooi';
 
   @override
-  String get searchByUsername => 'Search by username...';
+  String get searchByUsername => 'Soek volgens gebruikernaam...';
 
   @override
-  String get searchLinks => 'Search links';
+  String get searchLinks => 'Soek skakels';
 
   @override
-  String get searchNameEmailOrCompany => 'Search name, email or company';
+  String get searchNameEmailOrCompany => 'Soek naam, e-pos of maatskappy';
 
   @override
-  String get seeAll => 'See All';
+  String get seeAll => 'Sien Alles';
 
   @override
   String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
-      'See all activity is mocked. New activities will appear as leads are added.';
+      'Sien alle aktiwiteite word bespot. Nuwe aktiwiteite sal verskyn soos leidrade bygevoeg word.';
 
   @override
-  String get selectDate => 'Select date';
+  String get selectDate => 'Kies datum';
 
   @override
-  String get selectMarkers => 'Select Markers';
+  String get selectMarkers => 'Kies Merkers';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Kies Streek';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Set text under the link icon';
+  String get setTextUnderTheLinkIcon => 'Stel teks onder die skakelikoon';
 
   @override
   String get setYourOwnColorsPhotosAndBackground =>
-      'Set your own colors, photos and background.';
+      'Stel jou eie kleure, foto\'s en agtergrond.';
 
   @override
-  String get share => 'Share';
+  String get share => 'Deel';
 
   @override
-  String get shareCard => 'Share card';
+  String get shareCard => 'Deel kaart';
 
   @override
   String get shareDifferentLinksOnEachCard =>
-      'Share different links on each card';
+      'Deel verskillende skakels op elke kaart';
 
   @override
-  String get shareProfile => 'Share Profile';
+  String get shareProfile => 'Deel profiel';
 
   @override
-  String get showLink => 'Show link';
+  String get showLink => 'Wys skakel';
 
   @override
-  String get showOnThisCard => 'Show on this card';
+  String get showOnThisCard => 'Wys op hierdie kaart';
 
   @override
-  String get signInWithGoogle => 'Sign in with Google';
+  String get signInWithGoogle => 'Meld aan met Google';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'Teken in';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Slaan oor';
 
   @override
-  String get skipForNow => 'Skip for now';
+  String get skipForNow => 'Slaan vir eers oor';
 
   @override
   String get slotMin => 'Slot (min)';
 
   @override
-  String get softwareEngineer => 'Software Engineer';
+  String get softwareEngineer => 'Sagteware-ingenieur';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Iets het verkeerd geloop';
 
   @override
-  String get sortOptions => 'Sort Options';
+  String get sortOptions => 'Sorteer Opsies';
 
   @override
-  String get specialInstructions => 'Special instructions';
+  String get specialInstructions => 'Spesiale instruksies';
 
   @override
-  String get stampCard => 'Stamp Card';
+  String get stampCard => 'Stempelkaart';
 
   @override
-  String get stampIcon => 'Stamp Icon';
+  String get stampIcon => 'Stempel-ikoon';
 
   @override
-  String get stamps => 'Stamps';
+  String get stamps => 'Seëls';
 
   @override
-  String get start => 'START';
+  String get start => 'BEGIN';
 
   @override
-  String get startDate => 'Start Date';
+  String get startDate => 'Begindatum';
 
   @override
-  String get startHour => 'Start hour';
+  String get startHour => 'Begin uur';
 
   @override
   String get startNetworkingSmarterWithBarqody =>
-      'Start networking smarter with Barqody.';
+      'Begin slimmer netwerk met Barqody.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistieke';
 
   @override
   String get status => 'Status';
 
   @override
-  String get subscription => 'Subscription';
+  String get subscription => 'Intekening';
 
   @override
-  String get subscriptionRequestSubmitted => 'Subscription request submitted';
+  String get subscriptionRequestSubmitted => 'Intekeningversoek ingedien';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Subscription request submitted.';
+  String get subscriptionRequestSubmitted2 => 'Intekeningversoek ingedien.';
 
   @override
-  String get swipeToBrowseCards => 'Swipe to browse cards';
+  String get swipeToBrowseCards => 'Swiep om deur kaarte te blaai';
 
   @override
   String get takeAQuickSelfieForAttendanceVerification =>
-      'Take a quick selfie for attendance verification';
+      'Neem \'n vinnige selfie vir bywoningverifikasie';
 
   @override
   String get tapSocialLinksAboveToAddAndActivateProfiles =>
-      'Tap \"Social Links\" above to add and activate profiles.';
+      'Tik \"Sosiale skakels\" hierbo om profiele by te voeg en te aktiveer.';
 
   @override
   String get tapOnTheMapOrUseYourCurrentLocation =>
-      'Tap on the map or use your current location';
+      'Tik op die kaart of gebruik jou huidige ligging';
 
   @override
-  String get tapToAddPhoto => 'Tap to add photo';
+  String get tapToAddPhoto => 'Tik om foto by te voeg';
 
   @override
-  String get tapToShareQRCode => 'Tap to share QR code';
+  String get tapToShareQRCode => 'Tik om QR-kode te deel';
 
   @override
   String get tapni => 'tapni';
 
   @override
-  String get teamAttendance => 'Team Attendance';
+  String get teamAttendance => 'Spanbywoning';
 
   @override
-  String get template => 'Template';
+  String get template => 'Sjabloon';
 
   @override
-  String get templates => 'Templates';
+  String get templates => 'Sjablone';
 
   @override
   String get thankYouFeedbackSubmissionsAreMockOnly =>
-      'Thank you! Feedback submissions are mock only.';
+      'Dankie! Terugvoervoorleggings is slegs spot.';
 
   @override
   String get thisCardAndItsQRCodeWillBeRemoved =>
-      'This card and its QR code will be removed.';
+      'Hierdie kaart en sy QR-kode sal verwyder word.';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
-      'This feature is exclusively available to Business users.';
+      'Hierdie kenmerk is uitsluitlik beskikbaar vir Besigheidsgebruikers.';
 
   @override
-  String get thisIsAlreadyYourUsername => 'This is already your username.';
+  String get thisIsAlreadyYourUsername => 'Dit is reeds jou gebruikersnaam.';
 
   @override
-  String get thisMonth => 'This month';
+  String get thisMonth => 'Hierdie maand';
 
   @override
   String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
-      'This will permanently delete this reward program and all its enrollments.';
+      'Dit sal hierdie beloningsprogram en al sy inskrywings permanent uitvee.';
 
   @override
-  String get todayIsYourWeekend => 'Today is your weekend';
+  String get todayIsYourWeekend => 'Vandag is jou naweek';
 
   @override
-  String get today315PM => 'Today • 3:15 PM';
+  String get today315PM => 'Vandag • 15:15';
 
   @override
-  String get total => 'Total';
+  String get total => 'Totaal';
 
   @override
-  String get trackYourOrders => 'Track your orders';
+  String get trackYourOrders => 'Volg jou bestellings';
 
   @override
-  String get transactionReferenceOptional => 'Transaction reference (optional)';
+  String get transactionReferenceOptional => 'Transaksieverwysing (opsioneel)';
 
   @override
   String get transactionReferenceNumberOptional =>
-      'Transaction reference number (optional)';
+      'Transaksieverwysingsnommer (opsioneel)';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Probeer weer';
 
   @override
-  String get tryBusinessPro => 'Try Business Pro';
+  String get tryBusinessPro => 'Probeer Business Pro';
 
   @override
-  String get tryBusinessPro2 => 'Try Business Pro.';
+  String get tryBusinessPro2 => 'Probeer Business Pro.';
 
   @override
-  String get type => 'Type';
+  String get type => 'Tik';
 
   @override
   String get typeAtLeast2CharactersOfAUsernameToSearch =>
-      'Type at least 2 characters of a username to search.';
+      'Tik ten minste 2 karakters van \'n gebruikernaam om te soek.';
 
   @override
   String get typeThe8CharacterCodeShownUnderTheQR =>
-      'Type the 8-character code shown under the QR.';
+      'Tik die 8-karakter kode wat onder die QR gewys word.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead =>
-      'Under Development - Login via email/password instead.';
+      'Onder Ontwikkeling - Teken eerder in via e-pos/wagwoord.';
 
   @override
-  String get unstampIcon => 'Unstamp Icon';
+  String get unstampIcon => 'Ontstempel ikoon';
 
   @override
-  String get upgradeNow => 'Upgrade now';
+  String get upgradeNow => 'Gradeer nou op';
 
   @override
-  String get upgradeTo => 'Upgrade to';
+  String get upgradeTo => 'Gradeer op na';
 
   @override
-  String get upgradeToTapniPRO => 'Upgrade to Tapni PRO';
+  String get upgradeToTapniPRO => 'Gradeer op na Tapni PRO';
 
   @override
-  String get useATemplate => 'Use a template';
+  String get useATemplate => 'Gebruik \'n sjabloon';
 
   @override
   String
   get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
-      'Use Barqody on other phones or tablets. You stay in control — log out any device anytime.';
+      'Gebruik Barqody op ander fone of tablette. Jy bly in beheer – meld enige toestel enige tyd af.';
 
   @override
   String get useBarqodyOnYourPhoneToScanThisCode =>
-      'Use Barqody on your phone to scan this code';
+      'Gebruik Barqody op jou foon om hierdie kode te skandeer';
 
   @override
-  String get useDefaultIcon => 'Use default icon';
+  String get useDefaultIcon => 'Gebruik verstek ikoon';
 
   @override
-  String get useThisPhoto => 'Use This Photo';
+  String get useThisPhoto => 'Gebruik hierdie foto';
 
   @override
-  String get user => 'USER';
+  String get user => 'GEBRUIKER';
 
   @override
-  String get version101 => 'Version: 1.0.1';
+  String get version101 => 'Weergawe: 1.0.1';
 
   @override
   String get viewAndUpdateOrdersFromYourCustomers =>
-      'View and update orders from your customers';
+      'Bekyk en werk bestellings van jou kliënte op';
 
   @override
-  String get viewProfile => 'View Profile';
+  String get viewProfile => 'Bekyk profiel';
 
   @override
-  String get views => 'Views';
+  String get views => 'Uitsigte';
 
   @override
-  String get website => 'Website';
+  String get website => 'Webwerf';
 
   @override
-  String get welcomeBack => 'Welcome Back';
+  String get welcomeBack => 'Welkom Terug';
 
   @override
-  String get welcomeToAccountCenter => 'Welcome to Account Center';
+  String get welcomeToAccountCenter => 'Welkom by Rekeningsentrum';
 
   @override
   String
   get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
-      'When a business adds you as employee, your employee card will appear here. You can customize its design anytime.';
+      'Wanneer \'n besigheid jou as werknemer byvoeg, sal jou werknemerkaart hier verskyn. U kan enige tyd die ontwerp daarvan aanpas.';
 
   @override
   String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
-      'When a business enrolls you in their reward program, it will appear here.';
+      'Wanneer \'n besigheid jou by hul beloningsprogram inskryf, sal dit hier verskyn.';
 
   @override
   String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
-      'When a business invites you to their team, it will appear here.';
+      'Wanneer \'n besigheid jou na hul span nooi, sal dit hier verskyn.';
 
   @override
   String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
-      'When turned off this link won\'t be shown on your profile';
+      'Wanneer dit afgeskakel is, sal hierdie skakel nie op jou profiel gewys word nie';
 
   @override
   String get writeSomethingAboutYouOrYourBrand =>
-      'Write something about you or your brand';
+      'Skryf iets oor jou of jou handelsmerk';
 
   @override
-  String get yearly => 'Yearly';
+  String get yearly => 'Jaarliks';
 
   @override
-  String get yesterday542PM => 'Yesterday • 5:42 PM';
+  String get yesterday542PM => 'Gister • 17:42';
 
   @override
-  String get yourCategories => 'Your categories';
+  String get yourCategories => 'Jou kategorieë';
 
   @override
   String get yourEmployeeCardsFromEmployers =>
-      'Your employee cards from employers';
+      'Jou werknemerkaarte van werkgewers';
 
   @override
   String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
-      'Your Free Coffee has been successfully redeemed.';
+      'Jou gratis koffie is suksesvol gebruik.';
 
   @override
-  String get yourRewards => 'Your Rewards';
+  String get yourRewards => 'Jou belonings';
 
   @override
   String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
-      'Your subscription has ended. Tap the info icon for details.';
+      'Jou intekening het geëindig. Tik die inligting-ikoon vir besonderhede.';
 
   @override
-  String get yourname => 'yourname';
+  String get yourname => 'jou naam';
 
   @override
-  String get n10Discount => '10% Discount';
+  String get n10Discount => '10% afslag';
 
   @override
-  String get avatarTAPPED => 'AVATAR TAPPED';
+  String get avatarTAPPED => 'AVATAR GETIP';
 
   @override
-  String get accountHolderName => 'Account holder name';
+  String get accountHolderName => 'Rekeninghouer se naam';
 
   @override
-  String get accountNumber => 'Account number';
+  String get accountNumber => 'Rekeningnommer';
 
   @override
-  String get activeNow => 'Active now';
+  String get activeNow => 'Nou aktief';
 
   @override
-  String get addBio => 'Add Bio';
+  String get addBio => 'Voeg Bio by';
 
   @override
-  String get addCoverPhoto => 'Add Cover Photo';
+  String get addCoverPhoto => 'Voeg voorbladfoto by';
 
   @override
-  String get addFacePhoto => 'Add Face Photo';
+  String get addFacePhoto => 'Voeg gesigfoto by';
 
   @override
-  String get addIntroVoiceNote => 'Add Intro Voice Note';
+  String get addIntroVoiceNote => 'Voeg inleidingstemnota by';
 
   @override
-  String get addProfileName => 'Add Profile Name';
+  String get addProfileName => 'Voeg profielnaam by';
 
   @override
-  String get addProfilePhoto => 'Add Profile Photo';
+  String get addProfilePhoto => 'Voeg profielfoto by';
 
   @override
-  String get addSocialLinks3 => 'Add Social Links (3+)';
+  String get addSocialLinks3 => 'Voeg sosiale skakels by (3+)';
 
   @override
-  String get addItem => 'Add item';
+  String get addItem => 'Voeg item by';
 
   @override
-  String get addLink2 => 'Add link';
+  String get addLink2 => 'Voeg skakel by';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Add links to your profile below ';
+  String get addLinksToYourProfileBelow2 =>
+      'Voeg skakels by jou profiel hieronder';
 
   @override
-  String get addPhoto => 'Add photo';
+  String get addPhoto => 'Voeg foto by';
 
   @override
-  String get addToCart => 'Add to cart';
+  String get addToCart => 'Voeg by mandjie';
 
   @override
-  String get addressOptional => 'Address (optional)';
+  String get addressOptional => 'Adres (opsioneel)';
 
   @override
-  String get allContactTypes => 'All contact types';
+  String get allContactTypes => 'Alle kontak tipes';
 
   @override
-  String get allowedRadiusMeters => 'Allowed radius (meters)';
+  String get allowedRadiusMeters => 'Toegelate radius (meter)';
 
   @override
-  String get almostThere => 'Almost there!';
+  String get almostThere => 'Amper daar!';
 
   @override
-  String get alreadyEmployee => 'Already Employee';
+  String get alreadyEmployee => 'Reeds Werknemer';
 
   @override
-  String get alreadyHaveAnAccount2 => 'Already have an account? ';
+  String get alreadyHaveAnAccount2 => 'Het jy reeds \'n rekening?';
 
   @override
-  String get alwaysUpToDate => 'Always Up To Date';
+  String get alwaysUpToDate => 'Altyd op datum';
 
   @override
   String get areYouSureYouWantToLogOutOfBarqody =>
-      'Are you sure you want to log out of Barqody?';
+      'Is jy seker jy wil by Barqody afmeld?';
 
   @override
-  String get attendanceFailed => 'Attendance failed';
+  String get attendanceFailed => 'Bywoning het misluk';
 
   @override
-  String get backgroundColor2 => 'Background Color';
+  String get backgroundColor2 => 'Agtergrondkleur';
 
   @override
-  String get bookingFailed => 'Booking failed';
+  String get bookingFailed => 'Bespreking het misluk';
 
   @override
-  String get brieflyDescribeThisReward => 'Briefly describe this reward...';
+  String get brieflyDescribeThisReward =>
+      'Beskryf kortliks hierdie beloning...';
 
   @override
-  String get businessVerified => 'Business Verified';
+  String get businessVerified => 'Besigheid geverifieer';
 
   @override
-  String get businessEmailAddress => 'Business email address';
+  String get businessEmailAddress => 'Besigheid e-pos adres';
 
   @override
-  String get businessFax => 'Business fax';
+  String get businessFax => 'Besigheidsfaks';
 
   @override
-  String get businessPhoneNumber => 'Business phone number';
+  String get businessPhoneNumber => 'Besigheid telefoonnommer';
 
   @override
-  String get businessWebsite => 'Business website';
+  String get businessWebsite => 'Besigheidswebwerf';
 
   @override
-  String get cameraError => 'Camera error';
+  String get cameraError => 'Kamerafout';
 
   @override
-  String get captureFace => 'Capture Face';
+  String get captureFace => 'Vang gesig vas';
 
   @override
-  String get cardCompleted => 'Card Completed';
+  String get cardCompleted => 'Kaart voltooi';
 
   @override
-  String get cardLabel => 'Card Label';
+  String get cardLabel => 'Kaart Etiket';
 
   @override
-  String get cardLabelName => 'Card Label Name';
+  String get cardLabelName => 'Kaart Etiket Naam';
 
   @override
-  String get cardPreview => 'Card Preview';
+  String get cardPreview => 'Kaartvoorskou';
 
   @override
-  String get cardTheme => 'Card Theme';
+  String get cardTheme => 'Kaart Tema';
 
   @override
-  String get cardCreated => 'Card created';
+  String get cardCreated => 'Kaart geskep';
 
   @override
-  String get cardName => 'Card name';
+  String get cardName => 'Kaart naam';
 
   @override
-  String get cardSavedAsJPG => 'Card saved as JPG';
+  String get cardSavedAsJPG => 'Kaart gestoor as JPG';
 
   @override
-  String get cardSavedAsPNG => 'Card saved as PNG';
+  String get cardSavedAsPNG => 'Kaart gestoor as PNG';
 
   @override
-  String get cardUpdated => 'Card updated';
+  String get cardUpdated => 'Kaart opgedateer';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Verander foto';
 
   @override
-  String get checkInFace => 'Check-in Face';
+  String get checkInFace => 'Inklokgesig';
 
   @override
-  String get checkInSuccessful => 'Check-in successful';
+  String get checkInSuccessful => 'Inklok suksesvol';
 
   @override
   String get checkOutFace => 'Check-out Face';
 
   @override
-  String get checkOutSuccessful => 'Check-out successful';
+  String get checkOutSuccessful => 'Uitklok suksesvol';
 
   @override
-  String get chooseTemplate2 => 'Choose template';
+  String get chooseTemplate2 => 'Kies sjabloon';
 
   @override
-  String get contactCardBusinessAddress => 'Contact card business address';
+  String get contactCardBusinessAddress => 'Kontak kaart besigheid adres';
 
   @override
-  String get contactCardCompanyName => 'Contact card company name';
+  String get contactCardCompanyName => 'Kontak kaart maatskappy naam';
 
   @override
-  String get contactCardEmail => 'Contact card email';
+  String get contactCardEmail => 'Kontak kaart e-pos';
 
   @override
-  String get contactCardHomeAddress => 'Contact card home address';
+  String get contactCardHomeAddress => 'Kontakkaart se huisadres';
 
   @override
-  String get contactCardPhone => 'Contact card phone';
+  String get contactCardPhone => 'Kontak kaart telefoon';
 
   @override
-  String get contactCardWebsite => 'Contact card website';
+  String get contactCardWebsite => 'Kontak kaart webwerf';
 
   @override
-  String get couldNotCompleteLogin => 'Could not complete login';
+  String get couldNotCompleteLogin => 'Kon nie aanmeld nie';
 
   @override
-  String get couldNotCreateQRCode => 'Could not create QR code';
+  String get couldNotCreateQRCode => 'Kon nie QR-kode skep nie';
 
   @override
-  String get couldNotLinkDevice => 'Could not link device';
+  String get couldNotLinkDevice => 'Kon nie toestel koppel nie';
 
   @override
-  String get couldNotLogOutDevice => 'Could not log out device';
+  String get couldNotLogOutDevice => 'Kon nie toestel afmeld nie';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Could not open Google Wallet';
+  String get couldNotOpenGoogleWallet => 'Kon nie Google Wallet oopmaak nie';
 
   @override
-  String get couldNotSaveCardDesign => 'Could not save card design';
+  String get couldNotSaveCardDesign => 'Kon nie kaartontwerp stoor nie';
 
   @override
   String get couldNotUpdateProfileVisibility =>
-      'Could not update profile visibility';
+      'Kon nie profielsigbaarheid opdateer nie';
 
   @override
-  String get createGallery => 'Create Gallery';
+  String get createGallery => 'Skep Gallery';
 
   @override
   String get createACardToShareYourProfile =>
-      'Create a card to share your profile';
+      'Skep \'n kaart om jou profiel te deel';
 
   @override
-  String get createCard => 'Create card';
+  String get createCard => 'Skep kaart';
 
   @override
-  String get customBank => 'Custom bank';
+  String get customBank => 'Pasgemaakte bank';
 
   @override
   String get customersCanBeEnrolledAndStamped =>
-      'Customers can be enrolled and stamped';
+      'Kliënte kan ingeskryf en gestempel word';
 
   @override
-  String get customizeCard => 'Customize card';
+  String get customizeCard => 'Pas kaart';
 
   @override
-  String get describeYourLoyaltyProgram => 'Describe your loyalty program';
+  String get describeYourLoyaltyProgram => 'Beskryf jou lojaliteitsprogram';
 
   @override
-  String get displayName => 'Display name';
+  String get displayName => 'Vertoon naam';
 
   @override
-  String get dontHaveAnAccount2 => 'Don\'t have an account? ';
+  String get dontHaveAnAccount2 => 'Het jy nie \'n rekening nie?';
 
   @override
-  String get eeeDMMMYyyy => 'EEE, d MMM yyyy';
+  String get eeeDMMMYyyy => 'EEE, d MMM jjjj';
 
   @override
-  String get editReward => 'Edit Reward';
+  String get editReward => 'Wysig beloning';
 
   @override
-  String get editItem => 'Edit item';
+  String get editItem => 'Wysig item';
 
   @override
-  String get emailAddress2 => 'Email address';
+  String get emailAddress2 => 'E-pos adres';
 
   @override
-  String get emailIsRequired => 'Email is required';
+  String get emailIsRequired => 'E-pos word vereis';
 
   @override
-  String get employeeCards => 'Employee Cards';
+  String get employeeCards => 'Werknemerskaarte';
 
   @override
-  String get employeeRemoved => 'Employee removed';
+  String get employeeRemoved => 'Werknemer verwyder';
 
   @override
-  String get employeeSettingsSaved => 'Employee settings saved';
+  String get employeeSettingsSaved => 'Werknemerinstellings gestoor';
 
   @override
-  String get enrolledBusinesses => 'Enrolled Businesses';
+  String get enrolledBusinesses => 'Ingeskrewe Besighede';
 
   @override
-  String get enterAValidEmail => 'Enter a valid email';
+  String get enterAValidEmail => 'Voer \'n geldige e-posadres in';
 
   @override
-  String get enterBioForTheContactCard => 'Enter bio for the contact card';
+  String get enterBioForTheContactCard => 'Voer bio vir die kontakkaart in';
 
   @override
-  String get enterProgramName => 'Enter program name';
+  String get enterProgramName => 'Voer programnaam in';
 
   @override
-  String get enterYourBio => 'Enter your bio';
+  String get enterYourBio => 'Voer jou bio in';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number';
+  String get enterYourPhoneNumber => 'Voer jou foonnommer in';
 
   @override
-  String get enterYourWebsiteURL => 'Enter your website URL';
+  String get enterYourWebsiteURL => 'Voer jou webwerf-URL in';
 
   @override
-  String get eventBadge2 => 'Event badge';
+  String get eventBadge2 => 'Gebeurteniskenteken';
 
   @override
-  String get example10StampsFreeCoffee => 'Example: 10 Stamps = Free Coffee';
+  String get example10StampsFreeCoffee => 'Voorbeeld: 10 Seëls = Gratis Koffie';
 
   @override
-  String get facePhotoAdded => 'Face Photo Added';
+  String get facePhotoAdded => 'Gesigfoto bygevoeg';
 
   @override
-  String get failedToAddProgram => 'Failed to add program';
+  String get failedToAddProgram => 'Kon nie program byvoeg nie';
 
   @override
-  String get failedToAddStamp => 'Failed to add stamp';
+  String get failedToAddStamp => 'Kon nie stempel byvoeg nie';
 
   @override
-  String get failedToEnrollCustomer => 'Failed to enroll customer';
+  String get failedToEnrollCustomer => 'Kon nie kliënt inskryf nie';
 
   @override
-  String get failedToExchangeContact => 'Failed to exchange contact';
+  String get failedToExchangeContact => 'Kon nie kontak uitruil nie';
 
   @override
-  String get failedToLoadPrograms => 'Failed to load programs';
+  String get failedToLoadPrograms => 'Kon nie programme laai nie';
 
   @override
-  String get failedToPlaceOrder => 'Failed to place order';
+  String get failedToPlaceOrder => 'Kon nie bestelling plaas nie';
 
   @override
-  String get failedToRemove => 'Failed to remove';
+  String get failedToRemove => 'Kon nie verwyder nie';
 
   @override
-  String get failedToSave => 'Failed to save';
+  String get failedToSave => 'Kon nie stoor nie';
 
   @override
-  String get failedToSaveJPG => 'Failed to save JPG';
+  String get failedToSaveJPG => 'Kon nie JPG stoor nie';
 
   @override
-  String get failedToSavePNG => 'Failed to save PNG';
+  String get failedToSavePNG => 'Kon nie PNG stoor nie';
 
   @override
-  String get failedToSaveQRCode => 'Failed to save QR Code.';
+  String get failedToSaveQRCode => 'Kon nie QR-kode stoor nie.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Failed to save business details';
+  String get failedToSaveBusinessDetails =>
+      'Kon nie besigheidsbesonderhede stoor nie';
 
   @override
-  String get failedToUpdateStatus => 'Failed to update status';
+  String get failedToUpdateStatus => 'Kon nie status opdateer nie';
 
   @override
-  String get firstName => 'First name';
+  String get firstName => 'Voornaam';
 
   @override
-  String get foodBeverage => 'Food & Beverage';
+  String get foodBeverage => 'Kos en Drank';
 
   @override
-  String get freeDessert => 'Free Dessert';
+  String get freeDessert => 'Gratis Nagereg';
 
   @override
   String get galleryPermissionRequiredPleaseEnableItInSettings =>
-      'Gallery permission required. Please enable it in Settings.';
+      'Galerytoestemming word vereis. Aktiveer dit asseblief in Instellings.';
 
   @override
-  String get getStarted => 'Get Started';
+  String get getStarted => 'Begin';
 
   @override
-  String get go2 => 'Go ';
+  String get go2 => 'Gaan';
 
   @override
-  String get goToToolsLinkedDevices => 'Go to Tools → Linked devices';
+  String get goToToolsLinkedDevices =>
+      'Gaan na Gereedskap → Gekoppelde toestelle';
 
   @override
-  String get googleWalletSetupPending => 'Google Wallet setup pending.';
+  String get googleWalletSetupPending => 'Google Wallet-opstelling hangende.';
 
   @override
   String get googleWalletSetupPendingProfileLinkCopied =>
-      'Google Wallet setup pending. Profile link copied.';
+      'Google Wallet-opstelling hangende. Profielskakel is gekopieer.';
 
   @override
-  String get growYourBusiness => 'Grow your business';
+  String get growYourBusiness => 'Laat groei jou besigheid';
 
   @override
-  String get guestUser => 'Guest User';
+  String get guestUser => 'Gasgebruiker';
 
   @override
-  String get ibanNumber => 'IBAN number';
+  String get ibanNumber => 'IBAN nommer';
 
   @override
-  String get inOFFICE => 'IN OFFICE';
+  String get inOFFICE => 'IN KANTOOR';
 
   @override
-  String get invitationPending => 'Invitation Pending';
+  String get invitationPending => 'Uitnodiging hangende';
 
   @override
-  String get invitationDeclined => 'Invitation declined';
+  String get invitationDeclined => 'Uitnodiging is afgekeur';
 
   @override
   String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
-      'Invitation sent. Employee will be added after they accept.';
+      'Uitnodiging gestuur. Werknemer sal bygevoeg word nadat hulle aanvaar het.';
 
   @override
-  String get inviteEmployee => 'Invite Employee';
+  String get inviteEmployee => 'Nooi werknemer';
 
   @override
-  String get inviteAsEmployee => 'Invite as Employee';
+  String get inviteAsEmployee => 'Nooi as werknemer';
 
   @override
-  String get jobTitle2 => 'Job title';
+  String get jobTitle2 => 'Werk titel';
 
   @override
-  String get lastName => 'Last name';
+  String get lastName => 'Van';
 
   @override
-  String get logInWithQR => 'Log in with QR';
+  String get logInWithQR => 'Meld aan met QR';
 
   @override
   String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
-      'Log out of this account only? Other accounts will stay on this phone.';
+      'Meld slegs by hierdie rekening af? Ander rekeninge sal op hierdie foon bly.';
 
   @override
   String get loggedInWithGoogleDemoAccountSaimY =>
-      'Logged in with Google (Demo account: Saim Y)';
+      'Aangeteken met Google (Demo-rekening: Saim Y)';
 
   @override
-  String get loggingYouIn => 'Logging you in…';
+  String get loggingYouIn => 'Meld jou tans aan …';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Try again.';
+  String get loginFailedTryAgain => 'Kon nie aanmeld nie. Probeer weer.';
 
   @override
-  String get mmmDYyyyHMmA => 'MMM d, yyyy - h:mm a';
+  String get mmmDYyyyHMmA => 'MMM d, jjjj - h:mm a';
 
   @override
-  String get mmmmYyyy => 'MMMM yyyy';
+  String get mmmmYyyy => 'MMMM jjjj';
 
   @override
-  String get markAttendance => 'Mark Attendance';
+  String get markAttendance => 'Merk Bywoning';
 
   @override
-  String get myName => 'My Name';
+  String get myName => 'My Naam';
 
   @override
-  String get myTapniProfile => 'My Tapni Profile';
+  String get myTapniProfile => 'My Tapni-profiel';
 
   @override
-  String get nameCannotBeEmpty => 'Name cannot be empty';
+  String get nameCannotBeEmpty => 'Naam kan nie leeg wees nie';
 
   @override
-  String get newLabel => 'New ';
+  String get newLabel => 'Nuut';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Nog geen kontakte nie';
 
   @override
-  String get noDetailsYet => 'No details yet';
+  String get noDetailsYet => 'Nog geen besonderhede nie';
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'No links added yet.\\nTap \"Add link\" to get started.';
+      'Geen skakels is nog bygevoeg nie.\\nTik \"Voeg skakel by\" om te begin.';
 
   @override
-  String get noMatches => 'No matches';
+  String get noMatches => 'Geen wedstryde nie';
 
   @override
-  String get noReasonProvided => 'No reason provided.';
+  String get noReasonProvided => 'Geen rede verskaf nie.';
 
   @override
-  String get notEnrolled => 'Not Enrolled';
+  String get notEnrolled => 'Nie ingeskryf nie';
 
   @override
-  String get numberOfStamps => 'Number of Stamps';
+  String get numberOfStamps => 'Aantal seëls';
 
   @override
-  String get oneTapToShare => 'One Tap To Share';
+  String get oneTapToShare => 'Een tik om te deel';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Open Barqody on your other phone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Maak Barqody op jou ander foon oop';
 
   @override
-  String get openCamera => 'Open Camera';
+  String get openCamera => 'Maak kamera oop';
 
   @override
-  String get orderInfo => 'Order Info';
+  String get orderInfo => 'Bestel inligting';
 
   @override
-  String get paperCard2 => 'Paper card';
+  String get paperCard2 => 'Papier kaart';
 
   @override
   String get passwordMustBeAtLeast4Characters =>
-      'Password must be at least 4 characters';
+      'Wagwoord moet ten minste 4 karakters wees';
 
   @override
   String get passwordMustBeAtLeast6Characters =>
-      'Password must be at least 6 characters';
+      'Wagwoord moet ten minste 6 karakters wees';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get phoneNumber => 'Telefoonnommer';
 
   @override
-  String get phoneIsRequired => 'Phone is required';
+  String get phoneIsRequired => 'Foon word vereis';
 
   @override
-  String get phoneNumber2 => 'Phone number';
+  String get phoneNumber2 => 'Telefoonnommer';
 
   @override
-  String get pickLocation => 'Pick Location';
+  String get pickLocation => 'Kies ligging';
 
   @override
-  String get pleaseEnterAPassword => 'Please enter a password';
+  String get pleaseEnterAPassword => 'Voer asseblief \'n wagwoord in';
 
   @override
-  String get pleaseEnterAUsername => 'Please enter a username';
+  String get pleaseEnterAUsername => 'Voer asseblief \'n gebruikernaam in';
 
   @override
   String get pleaseEnterAValidEmailAddress =>
-      'Please enter a valid email address';
+      'Voer asseblief \'n geldige e-posadres in';
 
   @override
   String get pleaseEnterAValidNumberOfStamps =>
-      'Please enter a valid number of stamps';
+      'Voer asseblief \'n geldige aantal seëls in';
 
   @override
-  String get pleaseEnterYourEmail => 'Please enter your email';
+  String get pleaseEnterYourEmail => 'Voer asseblief jou e-posadres in';
 
   @override
-  String get pleaseEnterYourName => 'Please enter your name';
+  String get pleaseEnterYourName => 'Voer asseblief jou naam in';
 
   @override
-  String get pleaseEnterYourPassword => 'Please enter your password';
+  String get pleaseEnterYourPassword => 'Voer asseblief jou wagwoord in';
 
   @override
   String get pointTheCameraAtAQRCodeToScanAutomatically =>
-      'Point the camera at a QR code to scan automatically.';
+      'Rig die kamera na \'n QR-kode om outomaties te skandeer.';
 
   @override
   String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
-      'Point the camera at an event badge and tap the Camera button.';
+      'Wys die kamera na \'n gebeurteniskenteken en tik op die Kamera-knoppie.';
 
   @override
   String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
-      'Point the camera at paper card and tap the Camera button.';
+      'Wys die kamera na papierkaart en tik die Kamera-knoppie.';
 
   @override
-  String get preparingQRCode => 'Preparing QR code…';
+  String get preparingQRCode => 'Berei tans QR-kode voor …';
 
   @override
-  String get profileNotFound => 'Profile not found.';
+  String get profileNotFound => 'Profiel nie gevind nie.';
 
   @override
-  String get profileUpdatedSuccessfully => 'Profile updated successfully!';
+  String get profileUpdatedSuccessfully => 'Profiel suksesvol opgedateer!';
 
   @override
-  String get qrCodeSavedToGallery => 'QR Code saved to gallery!';
+  String get qrCodeSavedToGallery => 'QR-kode gestoor in gallery!';
 
   @override
-  String get qrCodeExpired => 'QR code expired';
+  String get qrCodeExpired => 'QR-kode het verval';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'QR code expired. Tap refresh.';
+  String get qrCodeExpiredTapRefresh => 'QR-kode het verval. Tik op verfris.';
 
   @override
-  String get realEstate => 'Real Estate';
+  String get realEstate => 'Eiendom';
 
   @override
-  String get receiptAttached => 'Receipt attached';
+  String get receiptAttached => 'Kwitansie aangeheg';
 
   @override
   String
   get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
-      'Renew your subscription to restore full access to your premium features and data.';
+      'Hernu jou intekening om volle toegang tot jou premium kenmerke en data te herstel.';
 
   @override
-  String get retakePhoto => 'Retake Photo';
+  String get retakePhoto => 'Herneem Foto';
 
   @override
-  String get rewardTitle => 'Reward Title';
+  String get rewardTitle => 'Beloning titel';
 
   @override
-  String get rewardUnlocked => 'Reward Unlocked 🎉';
+  String get rewardUnlocked => 'Beloning ontsluit 🎉';
 
   @override
-  String get roleOrCompany => 'Role or company';
+  String get roleOrCompany => 'Rol of maatskappy';
 
   @override
-  String get saveChanges => 'Save Changes';
+  String get saveChanges => 'Stoor veranderinge';
 
   @override
-  String get saveContact => 'Save Contact';
+  String get saveContact => 'Stoor kontak';
 
   @override
-  String get saveProfile => 'Save Profile';
+  String get saveProfile => 'Stoor profiel';
 
   @override
-  String get saveSettings => 'Save Settings';
+  String get saveSettings => 'Stoor instellings';
 
   @override
-  String get saveUsername => 'Save Username';
+  String get saveUsername => 'Stoor gebruikersnaam';
 
   @override
-  String get saveCard => 'Save card';
+  String get saveCard => 'Stoor kaart';
 
   @override
-  String get saveContact2 => 'Save contact';
+  String get saveContact2 => 'Stoor kontak';
 
   @override
   String get savedLocallySyncMayHaveFailed =>
-      'Saved locally. Sync may have failed.';
+      'Plaaslik gestoor. Sinkronisering het dalk misluk.';
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Skandeer \'n QR-kode of voeg iemand by wat jy ontmoet het om jou netwerk te bou.';
 
   @override
-  String get scannedViaQR => 'Scanned via QR';
+  String get scannedViaQR => 'Geskandeer via QR';
 
   @override
-  String get screenTheme => 'Screen Theme';
+  String get screenTheme => 'Skermtema';
 
   @override
-  String get searchFailedTryAgain => 'Search failed. Try again.';
+  String get searchFailedTryAgain => 'Soek het misluk. Probeer weer.';
 
   @override
-  String get selectCompany => 'Select Company';
+  String get selectCompany => 'Kies Maatskappy';
 
   @override
-  String get selectDateRange => 'Select Date Range';
+  String get selectDateRange => 'Kies Datumreeks';
 
   @override
-  String get selectEndDate => 'Select End Date';
+  String get selectEndDate => 'Kies Einddatum';
 
   @override
-  String get selectStartDate => 'Select Start Date';
+  String get selectStartDate => 'Kies Begindatum';
 
   @override
-  String get sendInvitation => 'Send Invitation';
+  String get sendInvitation => 'Stuur uitnodiging';
 
   @override
-  String get sendInvitationForAttendance => 'Send invitation for attendance';
+  String get sendInvitationForAttendance => 'Stuur uitnodiging vir bywoning';
 
   @override
-  String get shareLink => 'Share Link';
+  String get shareLink => 'Deel skakel';
 
   @override
-  String get shiftTiming => 'Shift Timing';
+  String get shiftTiming => 'Verskuiwing Tydsberekening';
 
   @override
-  String get smartContactCapture => 'Smart Contact Capture';
+  String get smartContactCapture => 'Slim kontak vaslegging';
 
   @override
-  String get stampBorderColor => 'Stamp Border Color';
+  String get stampBorderColor => 'Stempel Rand Kleur';
 
   @override
-  String get stampColor => 'Stamp Color';
+  String get stampColor => 'Stempelkleur';
 
   @override
-  String get stampIconsOptional => 'Stamp Icons (Optional)';
+  String get stampIconsOptional => 'Stempelikone (opsioneel)';
 
   @override
-  String get stampsGiven => 'Stamps Given';
+  String get stampsGiven => 'Seëls gegee';
 
   @override
-  String get startBuildingYourNetwork => 'Start building your network';
+  String get startBuildingYourNetwork => 'Begin om jou netwerk te bou';
 
   @override
-  String get streetName => 'Street name';
+  String get streetName => 'Straatnaam';
 
   @override
   String get switchToABusinessAccountToUnlockFullAccess =>
-      'Switch to a Business account to unlock full access.';
+      'Skakel oor na \'n Besigheidsrekening om volle toegang te ontsluit.';
 
   @override
   String get tapLinkADeviceAndScanThisQR =>
-      'Tap Link a device and scan this QR';
+      'Tik Koppel \'n toestel en skandeer hierdie QR';
 
   @override
-  String get tapToAddImage => 'Tap to add image';
+  String get tapToAddImage => 'Tik om prent by te voeg';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'Tik om te verander';
 
   @override
   String get templateAppliedLocallySyncFailed =>
-      'Template applied locally. Sync failed.';
+      'Sjabloon plaaslik toegepas. Kon nie sinkroniseer nie.';
 
   @override
-  String get textColor => 'Text Color';
+  String get textColor => 'Teks kleur';
 
   @override
-  String get thisAccount => 'This account';
+  String get thisAccount => 'Hierdie rekening';
 
   @override
   String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
-      'This feature is exclusively available to Business users. ';
+      'Hierdie kenmerk is uitsluitlik beskikbaar vir Besigheidsgebruikers.';
 
   @override
-  String get thisPersonIsOnYourTeam => 'This person is on your team';
+  String get thisPersonIsOnYourTeam => 'Hierdie persoon is in jou span';
 
   @override
-  String get thisProgramIsPaused => 'This program is paused';
+  String get thisProgramIsPaused => 'Hierdie program is onderbreek';
 
   @override
-  String get totalStamps => 'Total Stamps';
+  String get totalStamps => 'Totale Seëls';
 
   @override
   String get tryADifferentNameEmailOrCompany =>
-      'Try a different name, email, or company.';
+      'Probeer \'n ander naam, e-posadres of maatskappy.';
 
   @override
   String get unableToSaveProfileTryAgain =>
-      'Unable to save profile. Try again.';
+      'Kan nie profiel stoor nie. Probeer weer.';
 
   @override
   String get unableToUpdateUsernameTryAgain =>
-      'Unable to update username. Try again.';
+      'Kan nie gebruikernaam opdateer nie. Probeer weer.';
 
   @override
   String get underDevelopmentLoginViaEmailPasswordInstead2 =>
-      'Under Development - Login via email/password instead. ';
+      'Onder Ontwikkeling - Teken eerder in via e-pos/wagwoord.';
 
   @override
-  String get unknownUser => 'Unknown User';
+  String get unknownUser => 'Onbekende gebruiker';
 
   @override
-  String get updateGPSLocation => 'Update GPS Location';
+  String get updateGPSLocation => 'Dateer GPS-ligging op';
 
   @override
-  String get updateStatus => 'Update Status';
+  String get updateStatus => 'Dateer status op';
 
   @override
-  String get updateCart => 'Update cart';
+  String get updateCart => 'Dateer mandjie op';
 
   @override
-  String get updateItem => 'Update item';
+  String get updateItem => 'Dateer item op';
 
   @override
-  String get upgradeTo2 => 'Upgrade to ';
+  String get upgradeTo2 => 'Gradeer op na';
 
   @override
-  String get upgradeToBusinessPRO => 'Upgrade to Business PRO';
+  String get upgradeToBusinessPRO => 'Gradeer op na Business PRO';
 
   @override
-  String get uploadReceiptOptional => 'Upload receipt (optional)';
+  String get uploadReceiptOptional => 'Laai kwitansie op (opsioneel)';
 
   @override
-  String get useMyLocation => 'Use My Location';
+  String get useMyLocation => 'Gebruik My ligging';
 
   @override
   String get useLettersNumbersUnderscoresOrHyphensOnly =>
-      'Use letters, numbers, underscores or hyphens only';
+      'Gebruik slegs letters, syfers, onderstrepings of koppeltekens';
 
   @override
   String get usernameMustBeAtLeast3Characters =>
-      'Username must be at least 3 characters';
+      'Gebruikersnaam moet ten minste 3 karakters wees';
 
   @override
   String get usernameMustBeAtMost30Characters =>
-      'Username must be at most 30 characters';
+      'Gebruikersnaam moet hoogstens 30 karakters wees';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Username updated successfully!';
+  String get usernameUpdatedSuccessfully =>
+      'Gebruikersnaam is suksesvol opgedateer!';
 
   @override
-  String get waitingForThemToAccept => 'Waiting for them to accept';
+  String get waitingForThemToAccept => 'Wag vir hulle om te aanvaar';
 
   @override
-  String get websiteURL => 'Website URL';
+  String get websiteURL => 'Webwerf URL';
 
   @override
-  String get weekendDays => 'Weekend Days';
+  String get weekendDays => 'Naweek Dae';
 
   @override
-  String get workLocation => 'Work Location';
+  String get workLocation => 'Werk Plek';
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Your PRO subscription has expired.\\n\\n';
+      'Jou PRO-intekening het verval.\\n\\n';
 
   @override
-  String get yourPROSubscriptionHasExpired =>
-      'Your PRO subscription has expired.';
+  String get yourPROSubscriptionHasExpired => 'Jou PRO-intekening het verval.';
 
   @override
   String get premiumFeaturesAreCurrentlyDisabled =>
-      'Premium features are currently disabled.';
+      'Premium-kenmerke is tans gedeaktiveer.';
 
   @override
   String get proLinksAreHiddenFromYourPublicProfile =>
-      'Pro links are hidden from your public profile.';
+      'Pro-skakels word van jou publieke profiel versteek.';
 
   @override
   String get yourBusinessDetailsAndDataAreSafe =>
-      'Your business details and data are safe.';
+      'Jou besigheid se besonderhede en data is veilig.';
 
   @override
   String addCatalogItem(String label) {
-    return 'Add $label item';
+    return 'Voeg $label item by';
   }
 
   @override
   String addAtLeastOneCatalogItem(String label) {
-    return 'Add at least one $label item';
+    return 'Voeg ten minste een $label item by';
   }
 
   @override
   String noCatalogItemsAvailable(String label) {
-    return 'No $label items available.';
+    return 'Geen $label items beskikbaar nie.';
   }
 
   @override
   String noItemsYetAddFirstCatalogItem(String label) {
-    return 'No items yet. Add your first $label item.';
+    return 'Nog geen items nie. Voeg jou eerste $label item by.';
   }
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'Geen publieke profiel pas by \"@$query\" nie.';
   }
 
   @override
   String codeWithValue(String code) {
-    return 'Code: $code';
+    return 'Kode: $code';
   }
 }
