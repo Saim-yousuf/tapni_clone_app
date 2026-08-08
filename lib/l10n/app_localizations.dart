@@ -4173,7 +4173,7 @@ abstract class AppLocalizations {
   /// No description provided for @noLinksAddedYetNTapAddLinkToGetStarted.
   ///
   /// In en, this message translates to:
-  /// **'No links added yet.\\nTap \"Add link\" to get started.'**
+  /// **'No links added yet.\nTap \"Add link\" to get started.'**
   String get noLinksAddedYetNTapAddLinkToGetStarted;
 
   /// No description provided for @noMatches.
@@ -4762,7 +4762,7 @@ abstract class AppLocalizations {
   /// No description provided for @yourPROSubscriptionHasExpiredNN.
   ///
   /// In en, this message translates to:
-  /// **'Your PRO subscription has expired.\\n\\n'**
+  /// **'Your PRO subscription has expired.\n\n'**
   String get yourPROSubscriptionHasExpiredNN;
 
   /// No description provided for @yourPROSubscriptionHasExpired.
@@ -5028,6 +5028,1650 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ZATCA Phase 2 supported'**
   String get zatcaPhase2Supported;
+
+  /// No description provided for @invitations.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitations'**
+  String get invitations;
+
+  /// No description provided for @invitationsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send and manage contact invitations'**
+  String get invitationsSubtitle;
+
+  /// No description provided for @invitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation'**
+  String get invitation;
+
+  /// No description provided for @searchEllipsis.
+  ///
+  /// In en, this message translates to:
+  /// **'Search...'**
+  String get searchEllipsis;
+
+  /// No description provided for @unreadCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unread'**
+  String unreadCountLabel(int count);
+
+  /// No description provided for @unlockBusinessProDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock customer orders, team attendance, loyalty programs, and more for your business.'**
+  String get unlockBusinessProDescription;
+
+  /// No description provided for @received.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get received;
+
+  /// No description provided for @sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get sent;
+
+  /// No description provided for @noInvitationsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No invitations yet'**
+  String get noInvitationsYet;
+
+  /// No description provided for @whenSomeoneInvitesYouItWillShowUpHere.
+  ///
+  /// In en, this message translates to:
+  /// **'When someone invites you, it will show up here.'**
+  String get whenSomeoneInvitesYouItWillShowUpHere;
+
+  /// No description provided for @noSentInvitations.
+  ///
+  /// In en, this message translates to:
+  /// **'No sent invitations'**
+  String get noSentInvitations;
+
+  /// No description provided for @createInvitationSaveDraftOrSendHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an invitation, save as draft, or send to contacts.'**
+  String get createInvitationSaveDraftOrSendHint;
+
+  /// No description provided for @noCardsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards yet'**
+  String get noCardsYet;
+
+  /// No description provided for @designAnInvitationItWillAppearHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Design an invitation — it will appear here'**
+  String get designAnInvitationItWillAppearHere;
+
+  /// No description provided for @contactsOnBarqody.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts on Barqody'**
+  String get contactsOnBarqody;
+
+  /// No description provided for @inviteToBarqody.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite to Barqody'**
+  String get inviteToBarqody;
+
+  /// No description provided for @onBarqody.
+  ///
+  /// In en, this message translates to:
+  /// **'On Barqody'**
+  String get onBarqody;
+
+  /// No description provided for @editText.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit text'**
+  String get editText;
+
+  /// No description provided for @enterTextHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter text…'**
+  String get enterTextHint;
+
+  /// No description provided for @qrCodeDataUrlText.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code data (URL / text)'**
+  String get qrCodeDataUrlText;
+
+  /// No description provided for @newText.
+  ///
+  /// In en, this message translates to:
+  /// **'New text'**
+  String get newText;
+
+  /// No description provided for @draftSavedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft saved successfully'**
+  String get draftSavedSuccessfully;
+
+  /// No description provided for @myInvitationTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'My invitation template'**
+  String get myInvitationTemplate;
+
+  /// No description provided for @publishTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish template'**
+  String get publishTemplate;
+
+  /// No description provided for @shareDesignForGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this design so other users can use it from the gallery.'**
+  String get shareDesignForGallery;
+
+  /// No description provided for @templateName.
+  ///
+  /// In en, this message translates to:
+  /// **'Template name'**
+  String get templateName;
+
+  /// No description provided for @publish.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish'**
+  String get publish;
+
+  /// No description provided for @savedToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to gallery'**
+  String get savedToGallery;
+
+  /// No description provided for @couldNotSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save'**
+  String get couldNotSave;
+
+  /// No description provided for @textLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get textLabel;
+
+  /// No description provided for @infoFieldIconText.
+  ///
+  /// In en, this message translates to:
+  /// **'Info field (icon + text)'**
+  String get infoFieldIconText;
+
+  /// No description provided for @logo.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo'**
+  String get logo;
+
+  /// No description provided for @photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get photo;
+
+  /// No description provided for @divider.
+  ///
+  /// In en, this message translates to:
+  /// **'Divider'**
+  String get divider;
+
+  /// No description provided for @designInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Design invitation'**
+  String get designInvitation;
+
+  /// No description provided for @publishForOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish for others'**
+  String get publishForOthers;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
+  /// No description provided for @redo.
+  ///
+  /// In en, this message translates to:
+  /// **'Redo'**
+  String get redo;
+
+  /// No description provided for @download.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get download;
+
+  /// No description provided for @bgShort.
+  ///
+  /// In en, this message translates to:
+  /// **'BG'**
+  String get bgShort;
+
+  /// No description provided for @photoBg.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo BG'**
+  String get photoBg;
+
+  /// No description provided for @rtl.
+  ///
+  /// In en, this message translates to:
+  /// **'RTL'**
+  String get rtl;
+
+  /// No description provided for @ltr.
+  ///
+  /// In en, this message translates to:
+  /// **'LTR'**
+  String get ltr;
+
+  /// No description provided for @style.
+  ///
+  /// In en, this message translates to:
+  /// **'Style'**
+  String get style;
+
+  /// No description provided for @saveDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Save draft'**
+  String get saveDraft;
+
+  /// No description provided for @continueInvite.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue · Invite'**
+  String get continueInvite;
+
+  /// No description provided for @layerStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Layer style'**
+  String get layerStyle;
+
+  /// No description provided for @font.
+  ///
+  /// In en, this message translates to:
+  /// **'Font'**
+  String get font;
+
+  /// No description provided for @bold.
+  ///
+  /// In en, this message translates to:
+  /// **'Bold'**
+  String get bold;
+
+  /// No description provided for @italic.
+  ///
+  /// In en, this message translates to:
+  /// **'Italic'**
+  String get italic;
+
+  /// No description provided for @icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Icon'**
+  String get icon;
+
+  /// No description provided for @color.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get color;
+
+  /// No description provided for @qrColor.
+  ///
+  /// In en, this message translates to:
+  /// **'QR color'**
+  String get qrColor;
+
+  /// No description provided for @width.
+  ///
+  /// In en, this message translates to:
+  /// **'Width'**
+  String get width;
+
+  /// No description provided for @height.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get height;
+
+  /// No description provided for @blank.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank'**
+  String get blank;
+
+  /// No description provided for @official.
+  ///
+  /// In en, this message translates to:
+  /// **'Official'**
+  String get official;
+
+  /// No description provided for @community.
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get community;
+
+  /// No description provided for @country.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get country;
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// No description provided for @noTemplatesForFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'No templates for this filter'**
+  String get noTemplatesForFilter;
+
+  /// No description provided for @startFromBlank.
+  ///
+  /// In en, this message translates to:
+  /// **'Start from blank'**
+  String get startFromBlank;
+
+  /// No description provided for @noCommunityTemplatesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No community templates yet'**
+  String get noCommunityTemplatesYet;
+
+  /// No description provided for @designAndPublishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Design a card and tap Publish for others to share it here.'**
+  String get designAndPublishHint;
+
+  /// No description provided for @refresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refresh;
+
+  /// No description provided for @templateByPublisherUses.
+  ///
+  /// In en, this message translates to:
+  /// **'by {publisher} · {uses} uses'**
+  String templateByPublisherUses(String publisher, int uses);
+
+  /// No description provided for @newInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'New invitation'**
+  String get newInvitation;
+
+  /// No description provided for @eventType.
+  ///
+  /// In en, this message translates to:
+  /// **'Event type'**
+  String get eventType;
+
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get title;
+
+  /// No description provided for @titleIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Title is required'**
+  String get titleIsRequired;
+
+  /// No description provided for @venue.
+  ///
+  /// In en, this message translates to:
+  /// **'Venue'**
+  String get venue;
+
+  /// No description provided for @shownOnTheCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown on the card'**
+  String get shownOnTheCard;
+
+  /// No description provided for @dateAndTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Date & time'**
+  String get dateAndTime;
+
+  /// No description provided for @optional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get optional;
+
+  /// No description provided for @message.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get message;
+
+  /// No description provided for @optionalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional note'**
+  String get optionalNote;
+
+  /// No description provided for @nextCustomizeCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Next · Customize card'**
+  String get nextCustomizeCard;
+
+  /// No description provided for @saveAsPng.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as PNG'**
+  String get saveAsPng;
+
+  /// No description provided for @saveAsJpg.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as JPG'**
+  String get saveAsJpg;
+
+  /// No description provided for @editInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit invitation'**
+  String get editInvitation;
+
+  /// No description provided for @design.
+  ///
+  /// In en, this message translates to:
+  /// **'Design'**
+  String get design;
+
+  /// No description provided for @theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get theme;
+
+  /// No description provided for @wallpaper.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallpaper'**
+  String get wallpaper;
+
+  /// No description provided for @selectContactsAndSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Select contacts & send'**
+  String get selectContactsAndSend;
+
+  /// No description provided for @updateDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Update draft'**
+  String get updateDraft;
+
+  /// No description provided for @saveAsDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as draft'**
+  String get saveAsDraft;
+
+  /// No description provided for @wallpaperSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallpaper selected'**
+  String get wallpaperSelected;
+
+  /// No description provided for @addWallpaper.
+  ///
+  /// In en, this message translates to:
+  /// **'Add wallpaper'**
+  String get addWallpaper;
+
+  /// No description provided for @fillsFullCardBackground.
+  ///
+  /// In en, this message translates to:
+  /// **'Fills the full card background'**
+  String get fillsFullCardBackground;
+
+  /// No description provided for @invitationNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation not found'**
+  String get invitationNotFound;
+
+  /// No description provided for @downloadInvitationCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Download invitation card'**
+  String get downloadInvitationCard;
+
+  /// No description provided for @failedToDownloadInvitationCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download invitation card'**
+  String get failedToDownloadInvitationCard;
+
+  /// No description provided for @downloadCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Download card'**
+  String get downloadCard;
+
+  /// No description provided for @downloadCardPngJpg.
+  ///
+  /// In en, this message translates to:
+  /// **'Download card (PNG / JPG)'**
+  String get downloadCardPngJpg;
+
+  /// No description provided for @notFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Not found'**
+  String get notFound;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @savingEllipsis.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get savingEllipsis;
+
+  /// No description provided for @sentToCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent to ({count})'**
+  String sentToCount(int count);
+
+  /// No description provided for @usersWhoReceivedInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Users who already received this invitation'**
+  String get usersWhoReceivedInvitation;
+
+  /// No description provided for @sentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent to'**
+  String get sentTo;
+
+  /// No description provided for @noRecipientsOnInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'No recipients on this invitation.'**
+  String get noRecipientsOnInvitation;
+
+  /// No description provided for @phoneContactsPermissionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone contacts need permission to invite people from your address book.'**
+  String get phoneContactsPermissionHint;
+
+  /// No description provided for @contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get contact;
+
+  /// No description provided for @failedToLoadContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load contacts'**
+  String get failedToLoadContacts;
+
+  /// No description provided for @heyImUsingBarqody.
+  ///
+  /// In en, this message translates to:
+  /// **'Hey, I\'m using Barqody — join me: {link}'**
+  String heyImUsingBarqody(String link);
+
+  /// No description provided for @invitationSentSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation sent successfully'**
+  String get invitationSentSuccessfully;
+
+  /// No description provided for @selectContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Select contact'**
+  String get selectContact;
+
+  /// No description provided for @draft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get draft;
+
+  /// No description provided for @searchNameOrNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Search name or number'**
+  String get searchNameOrNumber;
+
+  /// No description provided for @noContactsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No contacts found'**
+  String get noContactsFound;
+
+  /// No description provided for @noResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get noResults;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get openSettings;
+
+  /// No description provided for @selectContactsToSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Select contacts to send'**
+  String get selectContactsToSend;
+
+  /// No description provided for @sendInvitationCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Send invitation ({count})'**
+  String sendInvitationCount(int count);
+
+  /// No description provided for @notOnBarqody.
+  ///
+  /// In en, this message translates to:
+  /// **'Not on Barqody'**
+  String get notOnBarqody;
+
+  /// No description provided for @invite.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite'**
+  String get invite;
+
+  /// No description provided for @untitled.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled'**
+  String get untitled;
+
+  /// No description provided for @pleaseEnterValidPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number'**
+  String get pleaseEnterValidPhoneNumber;
+
+  /// No description provided for @barqodyWillSendOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Barqody will send an OTP to verify your number.'**
+  String get barqodyWillSendOtp;
+
+  /// No description provided for @required.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get required;
+
+  /// No description provided for @tooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Too short'**
+  String get tooShort;
+
+  /// No description provided for @chooseACountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a country'**
+  String get chooseACountry;
+
+  /// No description provided for @searchCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Search country'**
+  String get searchCountry;
+
+  /// No description provided for @noCountriesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No countries found'**
+  String get noCountriesFound;
+
+  /// No description provided for @pleaseEnter6DigitCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the 6-digit code'**
+  String get pleaseEnter6DigitCode;
+
+  /// No description provided for @verificationTokenMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification token missing. Please go back and try again.'**
+  String get verificationTokenMissing;
+
+  /// No description provided for @verifyingYourNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying your number'**
+  String get verifyingYourNumber;
+
+  /// No description provided for @enterTheCodeSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the code sent to'**
+  String get enterTheCodeSentTo;
+
+  /// No description provided for @wrongNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong number?'**
+  String get wrongNumber;
+
+  /// No description provided for @forTesting.
+  ///
+  /// In en, this message translates to:
+  /// **'For testing'**
+  String get forTesting;
+
+  /// No description provided for @enter6DigitCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 6-digit code'**
+  String get enter6DigitCode;
+
+  /// No description provided for @resendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get resendCode;
+
+  /// No description provided for @resendCodeIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code in {time}'**
+  String resendCodeIn(String time);
+
+  /// No description provided for @profileInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile info'**
+  String get profileInfo;
+
+  /// No description provided for @pleaseProvideNameAndPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide your name and an optional profile photo'**
+  String get pleaseProvideNameAndPhoto;
+
+  /// No description provided for @typeYourNameHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your name here'**
+  String get typeYourNameHere;
+
+  /// No description provided for @nameIsTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is too short'**
+  String get nameIsTooShort;
+
+  /// No description provided for @present.
+  ///
+  /// In en, this message translates to:
+  /// **'Present'**
+  String get present;
+
+  /// No description provided for @absent.
+  ///
+  /// In en, this message translates to:
+  /// **'Absent'**
+  String get absent;
+
+  /// No description provided for @partial.
+  ///
+  /// In en, this message translates to:
+  /// **'Partial'**
+  String get partial;
+
+  /// No description provided for @presentUpper.
+  ///
+  /// In en, this message translates to:
+  /// **'PRESENT'**
+  String get presentUpper;
+
+  /// No description provided for @absentUpper.
+  ///
+  /// In en, this message translates to:
+  /// **'ABSENT'**
+  String get absentUpper;
+
+  /// No description provided for @attendance.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance'**
+  String get attendance;
+
+  /// No description provided for @todaysAttendance.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Attendance'**
+  String get todaysAttendance;
+
+  /// No description provided for @employees.
+  ///
+  /// In en, this message translates to:
+  /// **'Employees'**
+  String get employees;
+
+  /// No description provided for @removeEmployeeFromTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name} from your team?'**
+  String removeEmployeeFromTeam(String name);
+
+  /// No description provided for @sunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get sunday;
+
+  /// No description provided for @monday.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday'**
+  String get monday;
+
+  /// No description provided for @tuesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Tuesday'**
+  String get tuesday;
+
+  /// No description provided for @wednesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Wednesday'**
+  String get wednesday;
+
+  /// No description provided for @thursday.
+  ///
+  /// In en, this message translates to:
+  /// **'Thursday'**
+  String get thursday;
+
+  /// No description provided for @friday.
+  ///
+  /// In en, this message translates to:
+  /// **'Friday'**
+  String get friday;
+
+  /// No description provided for @saturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get saturday;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @security.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get security;
+
+  /// No description provided for @billing.
+  ///
+  /// In en, this message translates to:
+  /// **'Billing'**
+  String get billing;
+
+  /// No description provided for @appTitleFull.
+  ///
+  /// In en, this message translates to:
+  /// **'BarQody - Digital Business Card'**
+  String get appTitleFull;
+
+  /// No description provided for @contactsPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts permission is required to find people you know.'**
+  String get contactsPermissionRequired;
+
+  /// No description provided for @heyJoinMeOnBarqody.
+  ///
+  /// In en, this message translates to:
+  /// **'Hey {name}! Join me on Barqody: {link}'**
+  String heyJoinMeOnBarqody(String name, String link);
+
+  /// No description provided for @noResultsForQuery.
+  ///
+  /// In en, this message translates to:
+  /// **'No results for \"{query}\"'**
+  String noResultsForQuery(String query);
+
+  /// No description provided for @savedContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved contact'**
+  String get savedContact;
+
+  /// No description provided for @thisIsYou.
+  ///
+  /// In en, this message translates to:
+  /// **'This is you'**
+  String get thisIsYou;
+
+  /// No description provided for @viewingOwnProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'You are viewing your own profile'**
+  String get viewingOwnProfile;
+
+  /// No description provided for @openMyCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Open my card'**
+  String get openMyCard;
+
+  /// No description provided for @checkOutThisProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Check out this profile: {link}'**
+  String checkOutThisProfile(String link);
+
+  /// No description provided for @enrolled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enrolled'**
+  String get enrolled;
+
+  /// No description provided for @rewardsForName.
+  ///
+  /// In en, this message translates to:
+  /// **'Rewards for {name}'**
+  String rewardsForName(String name);
+
+  /// No description provided for @enrollCustomerInRewardsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enroll {name} in your business rewards programs.'**
+  String enrollCustomerInRewardsHint(String name);
+
+  /// No description provided for @enroll.
+  ///
+  /// In en, this message translates to:
+  /// **'Enroll'**
+  String get enroll;
+
+  /// No description provided for @program.
+  ///
+  /// In en, this message translates to:
+  /// **'Program'**
+  String get program;
+
+  /// No description provided for @deleteCategoryNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{name}\"?'**
+  String deleteCategoryNamed(String name);
+
+  /// No description provided for @optionsForName.
+  ///
+  /// In en, this message translates to:
+  /// **'Options for {name}'**
+  String optionsForName(String name);
+
+  /// No description provided for @removeFromContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove \"{name}\" from your contacts?'**
+  String removeFromContacts(String name);
+
+  /// No description provided for @contactRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} removed.'**
+  String contactRemoved(String name);
+
+  /// No description provided for @labelCapturedProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} captured. Processing...'**
+  String labelCapturedProcessing(String label);
+
+  /// No description provided for @switchedToAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Switched to {name}'**
+  String switchedToAccount(String name);
+
+  /// No description provided for @device.
+  ///
+  /// In en, this message translates to:
+  /// **'Device'**
+  String get device;
+
+  /// No description provided for @lastActiveAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'Last active {time} ago'**
+  String lastActiveAgo(String time);
+
+  /// No description provided for @lastActiveAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Last active {time}'**
+  String lastActiveAt(String time);
+
+  /// No description provided for @thisDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get thisDevice;
+
+  /// No description provided for @thisDeviceWithName.
+  ///
+  /// In en, this message translates to:
+  /// **'This device · {name}'**
+  String thisDeviceWithName(String name);
+
+  /// No description provided for @shiftRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Shift {start} - {end}'**
+  String shiftRange(String start, String end);
+
+  /// No description provided for @todayWithDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Today • {date}'**
+  String todayWithDate(String date);
+
+  /// No description provided for @checkInColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in:'**
+  String get checkInColon;
+
+  /// No description provided for @checkOutColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-out:'**
+  String get checkOutColon;
+
+  /// No description provided for @youJoinedBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'You joined {name}'**
+  String youJoinedBusiness(String name);
+
+  /// No description provided for @shiftLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shift: {start} - {end}'**
+  String shiftLabel(String start, String end);
+
+  /// No description provided for @you.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get you;
+
+  /// No description provided for @inactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get inactive;
+
+  /// No description provided for @failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get failed;
+
+  /// No description provided for @created.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get created;
+
+  /// No description provided for @stampsForReward.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} stamps for reward'**
+  String stampsForReward(int count);
+
+  /// No description provided for @stampsRequiredCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} stamps required'**
+  String stampsRequiredCount(int count);
+
+  /// No description provided for @stampsProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} / {total} Stamps'**
+  String stampsProgress(int current, int total);
+
+  /// No description provided for @businessLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Business'**
+  String get businessLabel;
+
+  /// No description provided for @businesses.
+  ///
+  /// In en, this message translates to:
+  /// **'Businesses'**
+  String get businesses;
+
+  /// No description provided for @programsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} programs'**
+  String programsCount(int count);
+
+  /// No description provided for @programCountOne.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} program'**
+  String programCountOne(int count);
+
+  /// No description provided for @visitBusinessToCollectStamps.
+  ///
+  /// In en, this message translates to:
+  /// **'Visit {name} to collect stamps'**
+  String visitBusinessToCollectStamps(String name);
+
+  /// No description provided for @statusUpdatedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Status updated to {status}'**
+  String statusUpdatedTo(String status);
+
+  /// No description provided for @customer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get customer;
+
+  /// No description provided for @items.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get items;
+
+  /// No description provided for @noStatusOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'No {status} orders'**
+  String noStatusOrders(String status);
+
+  /// No description provided for @menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menu;
+
+  /// No description provided for @catalog.
+  ///
+  /// In en, this message translates to:
+  /// **'Catalog'**
+  String get catalog;
+
+  /// No description provided for @services.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get services;
+
+  /// No description provided for @newMenuOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'New Menu Order'**
+  String get newMenuOrder;
+
+  /// No description provided for @newServiceOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'New Service Order'**
+  String get newServiceOrder;
+
+  /// No description provided for @newCatalogOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'New Catalog Order'**
+  String get newCatalogOrder;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get cancelled;
+
+  /// No description provided for @free.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get free;
+
+  /// No description provided for @itemCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items'**
+  String itemCount(int count);
+
+  /// No description provided for @totalRs.
+  ///
+  /// In en, this message translates to:
+  /// **'Total: Rs {amount}'**
+  String totalRs(String amount);
+
+  /// No description provided for @orderPlacedWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Order placed with {name}!'**
+  String orderPlacedWith(String name);
+
+  /// No description provided for @bookedWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked {item} with {name}!'**
+  String bookedWith(String item, String name);
+
+  /// No description provided for @bookItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Book {name}'**
+  String bookItem(String name);
+
+  /// No description provided for @appliedDesign.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied \"{name}\" design'**
+  String appliedDesign(String name);
+
+  /// No description provided for @appliedTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied \"{name}\" template'**
+  String appliedTemplate(String name);
+
+  /// No description provided for @myCard.
+  ///
+  /// In en, this message translates to:
+  /// **'My Card'**
+  String get myCard;
+
+  /// No description provided for @egWorkEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Work, Events'**
+  String get egWorkEvents;
+
+  /// No description provided for @subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtitle'**
+  String get subtitle;
+
+  /// No description provided for @yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterday;
+
+  /// No description provided for @cordiallyInvites.
+  ///
+  /// In en, this message translates to:
+  /// **'Cordially invites'**
+  String get cordiallyInvites;
+
+  /// No description provided for @yourEventTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your event title'**
+  String get yourEventTitle;
+
+  /// No description provided for @guestNameAppearsOnInvite.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest name appears when they open this invite'**
+  String get guestNameAppearsOnInvite;
+
+  /// No description provided for @hostedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Hosted by {name}'**
+  String hostedBy(String name);
+
+  /// No description provided for @scanToOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan to open'**
+  String get scanToOpen;
+
+  /// No description provided for @tapToEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to edit'**
+  String get tapToEdit;
+
+  /// No description provided for @enterYourPlatformUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your {platform} username'**
+  String enterYourPlatformUsername(String platform);
+
+  /// No description provided for @onboardingShareDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your digital business card instantly with a QR code or link — no paper needed.'**
+  String get onboardingShareDescription;
+
+  /// No description provided for @onboardingUpToDateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your contact details always up to date. One change updates everywhere.'**
+  String get onboardingUpToDateDescription;
+
+  /// No description provided for @onboardingSmartCaptureDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture contacts from paper cards and event badges with your camera.'**
+  String get onboardingSmartCaptureDescription;
+
+  /// No description provided for @pkrPerMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'PKR {amount}/month'**
+  String pkrPerMonth(String amount);
+
+  /// No description provided for @monthsFree.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} months free'**
+  String monthsFree(int count);
+
+  /// No description provided for @unlimitedAiScans.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited AI scans'**
+  String get unlimitedAiScans;
+
+  /// No description provided for @analyticsAndInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics and insights'**
+  String get analyticsAndInsights;
+
+  /// No description provided for @completeProfileVisibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your profile for better visibility'**
+  String get completeProfileVisibility;
+
+  /// No description provided for @greatProfileComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Great! Your profile looks complete'**
+  String get greatProfileComplete;
+
+  /// No description provided for @copiedTypeToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'{type} copied to clipboard'**
+  String copiedTypeToClipboard(String type);
+
+  /// No description provided for @stampType.
+  ///
+  /// In en, this message translates to:
+  /// **'Stamp'**
+  String get stampType;
+
+  /// No description provided for @bothType.
+  ///
+  /// In en, this message translates to:
+  /// **'Both'**
+  String get bothType;
+
+  /// No description provided for @industryTechnology.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology'**
+  String get industryTechnology;
+
+  /// No description provided for @industryRetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Retail'**
+  String get industryRetail;
+
+  /// No description provided for @industryHealthcare.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthcare'**
+  String get industryHealthcare;
+
+  /// No description provided for @industryEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get industryEducation;
+
+  /// No description provided for @industryHospitality.
+  ///
+  /// In en, this message translates to:
+  /// **'Hospitality'**
+  String get industryHospitality;
+
+  /// No description provided for @industryFinance.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get industryFinance;
+
+  /// No description provided for @industryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get industryOther;
+
+  /// No description provided for @industryEntertainment.
+  ///
+  /// In en, this message translates to:
+  /// **'Entertainment'**
+  String get industryEntertainment;
+
+  /// No description provided for @accountAlreadyLoggedInOnDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'This account is already logged in on this device'**
+  String get accountAlreadyLoggedInOnDevice;
+
+  /// No description provided for @deviceLoggedOutFromLinkedDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'This device was logged out from Linked devices'**
+  String get deviceLoggedOutFromLinkedDevices;
+
+  /// No description provided for @selectContactsToSendOrSaveDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Select contacts to send, or save as draft'**
+  String get selectContactsToSendOrSaveDraft;
+
+  /// No description provided for @templatePublishedOthersCanUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Template published! Others can use it now.'**
+  String get templatePublishedOthersCanUse;
+
+  /// No description provided for @subscriptionRequestSubmittedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {plan} request is submitted. We\'ll notify you once reviewed.'**
+  String subscriptionRequestSubmittedOn(String plan);
+
+  /// No description provided for @lng.
+  ///
+  /// In en, this message translates to:
+  /// **'Lng'**
+  String get lng;
+
+  /// No description provided for @enterField.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter {label}'**
+  String enterField(String label);
+
+  /// No description provided for @chooseATemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a template'**
+  String get chooseATemplate;
+
+  /// No description provided for @cardSavedToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Card saved to gallery'**
+  String get cardSavedToGallery;
+
+  /// No description provided for @couldNotSaveCheckGalleryPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save. Check gallery permission.'**
+  String get couldNotSaveCheckGalleryPermission;
+
+  /// No description provided for @failedToLoadContactsWithError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load contacts: {error}'**
+  String failedToLoadContactsWithError(String error);
+
+  /// No description provided for @phoneNumberHintExample.
+  ///
+  /// In en, this message translates to:
+  /// **'+1 (555) 123-4567'**
+  String get phoneNumberHintExample;
+
+  /// No description provided for @httpsExampleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'https://example.com'**
+  String get httpsExampleHint;
+
+  /// No description provided for @egCoffeeClub.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Coffee Club'**
+  String get egCoffeeClub;
+
+  /// No description provided for @egBuy10Get1Free.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Buy 10 Get 1 Free'**
+  String get egBuy10Get1Free;
+
+  /// No description provided for @openingMockLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening mock link: {url}'**
+  String openingMockLink(String url);
+
+  /// No description provided for @saudiEInvoiceShareHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Saudi E-Invoice'**
+  String get saudiEInvoiceShareHeader;
+
+  /// No description provided for @sellerColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller: {name}'**
+  String sellerColon(String name);
+
+  /// No description provided for @vatColon.
+  ///
+  /// In en, this message translates to:
+  /// **'VAT: {value}'**
+  String vatColon(String value);
+
+  /// No description provided for @totalColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Total: {value}'**
+  String totalColon(String value);
+
+  /// No description provided for @dateColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Date: {value}'**
+  String dateColon(String value);
+
+  /// No description provided for @rsAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Rs {amount}'**
+  String rsAmount(String amount);
+
+  /// No description provided for @customizeCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize card'**
+  String get customizeCardTitle;
 }
 
 class _AppLocalizationsDelegate

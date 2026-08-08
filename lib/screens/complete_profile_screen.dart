@@ -9,6 +9,7 @@ import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
@@ -120,7 +121,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                     children: [
                       const SizedBox(height: 8),
                       Text(
-                        'Profile info',
+                        context.l10n.profileInfo,
                         textAlign: TextAlign.center,
                         style: WaUi.headline.copyWith(
                           fontSize: 22,
@@ -129,7 +130,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       ),
                       const SizedBox(height: 14),
                       Text(
-                        'Please provide your name and an optional profile photo',
+                        context.l10n.pleaseProvideNameAndPhoto,
                         textAlign: TextAlign.center,
                         style: WaUi.body.copyWith(color: WaUi.secondaryText),
                       ),
@@ -179,8 +180,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                             authProvider.isLoading ? null : _pickProfilePhoto,
                         child: Text(
                           _profileImage == null
-                              ? 'Add photo'
-                              : 'Change photo',
+                              ? context.l10n.addPhoto
+                              : context.l10n.changePhoto,
                           style: WaUi.bodyMedium.copyWith(
                             color: AppTheme.primaryBlack,
                             fontWeight: FontWeight.w600,
@@ -196,7 +197,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         cursorColor: AppTheme.primaryBlack,
                         onFieldSubmitted: (_) => _handleContinue(),
                         decoration: InputDecoration(
-                          hintText: 'Type your name here',
+                          hintText: context.l10n.typeYourNameHere,
                           hintStyle: WaUi.body.copyWith(
                             color: WaUi.secondaryText,
                           ),
@@ -218,10 +219,10 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Please enter your name';
+                            return context.l10n.pleaseEnterYourName;
                           }
                           if (value.trim().length < 2) {
-                            return 'Name is too short';
+                            return context.l10n.nameIsTooShort;
                           }
                           return null;
                         },
@@ -267,7 +268,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                             ),
                           )
                         : Text(
-                            'Next',
+                            context.l10n.next,
                             style: WaUi.promoButton.copyWith(
                               fontWeight: FontWeight.w600,
                             ),

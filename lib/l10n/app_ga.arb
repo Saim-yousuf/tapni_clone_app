@@ -668,7 +668,7 @@
   "openBarqodyOnYourOtherPhone": "Oscail Barqody ar do ghuthán eile",
   "passwordMustBeAtLeast4Characters": "Caithfidh 4 charachtar ar a laghad a bheith sa phasfhocal",
   "phoneNumber": "Uimhir Theileafóin",
-  "noLinksAddedYetNTapAddLinkToGetStarted": "Níl aon nasc curtha leis fós.\\nTapáil \"Cuir nasc leis\" chun tús a chur leis.",
+  "noLinksAddedYetNTapAddLinkToGetStarted": "Níl aon nasc curtha leis fós.\nTapáil \"Cuir nasc leis\" chun tús a chur leis.",
   "pleaseEnterAValidEmailAddress": "Cuir isteach seoladh ríomhphoist bailí",
   "pleaseEnterAValidNumberOfStamps": "Cuir isteach líon bailí stampaí le do thoil",
   "qrCodeSavedToGallery": "Cód QR sábháilte sa ghailearaí!",
@@ -761,7 +761,7 @@
   "noCatalogItemsAvailable": "Níl aon mhír {label} ar fáil.",
   "noItemsYetAddFirstCatalogItem": "Níl aon earraí fós. Cuir do chéad mhír {label} leis.",
   "addAtLeastOneCatalogItem": "Cuir mír {label} amháin ar a laghad leis",
-  "yourPROSubscriptionHasExpiredNN": "Chuaigh do shíntiús PRO in éag.\\n\\n",
+  "yourPROSubscriptionHasExpiredNN": "Chuaigh do shíntiús PRO in éag.\n\n",
   "yourPROSubscriptionHasExpired": "Tá do shíntiús PRO imithe in éag.",
   "yourBusinessDetailsAndDataAreSafe": "Tá do shonraí gnó agus do shonraí sábháilte.",
   "@appTitle": {

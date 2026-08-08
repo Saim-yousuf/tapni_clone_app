@@ -663,7 +663,7 @@
   "nameCannotBeEmpty": "名稱不能為空",
   "noReasonProvided": "沒有提供理由。",
   "noContactsYet": "還沒有聯絡方式",
-  "noLinksAddedYetNTapAddLinkToGetStarted": "尚未添加連結。 \\n點擊「新增連結」即可開始。",
+  "noLinksAddedYetNTapAddLinkToGetStarted": "尚未添加連結。 \n點擊「新增連結」即可開始。",
   "noDetailsYet": "尚無詳細資訊",
   "orderInfo": "訂單資訊",
   "phoneNumber2": "電話號碼",
@@ -763,7 +763,7 @@
   "noCatalogItemsAvailable": "沒有可用的 {label} 項目。",
   "addAtLeastOneCatalogItem": "增加至少一項 {label} 項目",
   "premiumFeaturesAreCurrentlyDisabled": "高級功能目前已停用。",
-  "yourPROSubscriptionHasExpiredNN": "您的 PRO 訂閱已過期。 \\n\\n",
+  "yourPROSubscriptionHasExpiredNN": "您的 PRO 訂閱已過期。 \n\n",
   "@appTitle": {
     "description": "Application title"
   },

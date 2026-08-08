@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/screens/invitations/customize_invitation_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -93,7 +94,7 @@ class _CreateInvitationScreenState extends State<CreateInvitationScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         foregroundColor: WaUi.primaryText,
-        title: Text('New invitation', style: WaUi.sectionHeader),
+        title: Text(context.l10n.newInvitation, style: WaUi.sectionHeader),
       ),
       body: Form(
         key: _formKey,
@@ -104,7 +105,7 @@ class _CreateInvitationScreenState extends State<CreateInvitationScreen> {
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                 children: [
                   _Section(
-                    title: 'Event type',
+                    title: context.l10n.eventType,
                     child: Wrap(
                       spacing: 8,
                       runSpacing: 8,
@@ -137,28 +138,29 @@ class _CreateInvitationScreenState extends State<CreateInvitationScreen> {
                   ),
                   const SizedBox(height: 12),
                   _Section(
-                    title: 'Details',
+                    title: context.l10n.details,
                     child: Column(
                       children: [
                         TextFormField(
                           controller: _titleController,
-                          decoration: _field('Title', required: true),
+                          decoration:
+                              _field(context.l10n.title, required: true),
                           validator: (v) => (v == null || v.trim().isEmpty)
-                              ? 'Title is required'
+                              ? context.l10n.titleIsRequired
                               : null,
                         ),
                         const SizedBox(height: 12),
                         TextFormField(
                           controller: _venueController,
-                          decoration: _field('Venue'),
+                          decoration: _field(context.l10n.venue),
                         ),
                         const SizedBox(height: 12),
                         TextFormField(
                           controller: _addressController,
                           maxLines: 2,
                           decoration: _field(
-                            'Address',
-                            hint: 'Shown on the card',
+                            context.l10n.address,
+                            hint: context.l10n.shownOnTheCard,
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -166,13 +168,13 @@ class _CreateInvitationScreenState extends State<CreateInvitationScreen> {
                           onTap: _pickDateTime,
                           borderRadius: BorderRadius.circular(12),
                           child: InputDecorator(
-                            decoration: _field('Date & time'),
+                            decoration: _field(context.l10n.dateAndTime),
                             child: Row(
                               children: [
                                 Expanded(
                                   child: Text(
                                     _eventAt == null
-                                        ? 'Optional'
+                                        ? context.l10n.optional
                                         : '${MaterialLocalizations.of(context).formatMediumDate(_eventAt!)} · ${TimeOfDay.fromDateTime(_eventAt!).format(context)}',
                                     style: WaUi.body.copyWith(
                                       color: _eventAt == null
@@ -194,7 +196,10 @@ class _CreateInvitationScreenState extends State<CreateInvitationScreen> {
                         TextFormField(
                           controller: _messageController,
                           maxLines: 3,
-                          decoration: _field('Message', hint: 'Optional note'),
+                          decoration: _field(
+                            context.l10n.message,
+                            hint: context.l10n.optionalNote,
+                          ),
                         ),
                       ],
                     ),
@@ -216,7 +221,7 @@ class _CreateInvitationScreenState extends State<CreateInvitationScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('Next · Customize card'),
+                  child: Text(context.l10n.nextCustomizeCard),
                 ),
               ),
             ),

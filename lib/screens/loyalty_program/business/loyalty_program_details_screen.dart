@@ -45,7 +45,7 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
     if (res.success) {
       _load();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message ?? 'Failed')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message ?? context.l10n.failed)));
     }
   }
 
@@ -72,7 +72,7 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
     if (res.success) {
       Navigator.pop(context, true);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message ?? 'Failed')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res.message ?? context.l10n.failed)));
     }
   }
 
@@ -142,7 +142,7 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(p.isActive ? context.l10n.active : 'Inactive',
+                      Text(p.isActive ? context.l10n.active : context.l10n.inactive,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: p.isActive ? Colors.green : Colors.red)),
@@ -168,7 +168,7 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
             Text(context.l10n.stats, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             SizedBox(height: 12),
             Row(children: [
-              Expanded(child: _statTile('Enrolled', '${stats.totalEnrollments}', Icons.people_outline)),
+              Expanded(child: _statTile(context.l10n.enrolled, '${stats.totalEnrollments}', Icons.people_outline)),
               SizedBox(width: 12),
               Expanded(child: _statTile(context.l10n.stampsGiven, '${stats.totalStampsGiven}', Icons.star_outline)),
             ]),
@@ -178,12 +178,12 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
           // Details
           Text(context.l10n.details, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           SizedBox(height: 12),
-          _detailRow('Title', p.title),
+          _detailRow(context.l10n.title, p.title),
           _detailRow(context.l10n.label, p.label.isNotEmpty ? p.label : '-'),
           _detailRow(context.l10n.description, p.description.isNotEmpty ? p.description : '-'),
           _detailRow(context.l10n.totalStamps, '${p.stamps}'),
           if (p.createdAt != null)
-            _detailRow('Created', '${p.createdAt!.day}/${p.createdAt!.month}/${p.createdAt!.year}'),
+            _detailRow(context.l10n.created, '${p.createdAt!.day}/${p.createdAt!.month}/${p.createdAt!.year}'),
           const SizedBox(height: 40),
         ],
       ),
@@ -232,7 +232,7 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
             )),
           ),
           const SizedBox(height: 8),
-          Text('${p.stamps} stamps for reward',
+          Text(context.l10n.stampsForReward(p.stamps),
               style: TextStyle(color: p.theme.cardTextColor.withOpacity(0.45), fontSize: 11)),
         ],
       ),

@@ -11,7 +11,7 @@ class CreateLoyaltyProgramScreen extends StatefulWidget {
 
 class _CreateLoyaltyProgramScreenState
     extends State<CreateLoyaltyProgramScreen> {
-  String selectedType = 'Stamp';
+  String selectedType = 'stamp';
 
   final programNameController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -65,11 +65,11 @@ class _CreateLoyaltyProgramScreenState
 
             Row(
               children: [
-                _typeChip('Stamp'),
+                _typeChip('stamp', context.l10n.stampType),
                 SizedBox(width: 10),
-                _typeChip(context.l10n.points),
+                _typeChip('points', context.l10n.points),
                 SizedBox(width: 10),
-                _typeChip('Both'),
+                _typeChip('both', context.l10n.bothType),
               ],
             ),
 
@@ -129,7 +129,7 @@ class _CreateLoyaltyProgramScreenState
     );
   }
 
-  Widget _typeChip(String type) {
+  Widget _typeChip(String type, String label) {
     final isSelected = selectedType == type;
 
     return Expanded(
@@ -148,7 +148,7 @@ class _CreateLoyaltyProgramScreenState
             border: Border.all(color: Colors.black),
           ),
           child: Text(
-            type,
+            label,
             style: TextStyle(
               color: isSelected ? Colors.white : Colors.black,
               fontWeight: FontWeight.w600,

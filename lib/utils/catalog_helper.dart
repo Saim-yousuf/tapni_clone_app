@@ -1,11 +1,12 @@
+import 'package:tapni_app/l10n/app_localizations.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/catalog_order.dart';
 
 class CatalogHelper {
-  static String labelForCategory(String? category) {
-    if (category == 'Food & Beverage') return 'Menu';
-    if (category == 'Other') return 'Catalog';
-    return 'Services';
+  static String labelForCategory(String? category, AppLocalizations l10n) {
+    if (category == 'Food & Beverage') return l10n.menu;
+    if (category == 'Other') return l10n.catalog;
+    return l10n.services;
   }
 
   static String typeForCategory(String? category) {
@@ -14,27 +15,38 @@ class CatalogHelper {
     return 'services';
   }
 
-  static String orderTitleForType(String? catalogType) {
+  static String orderTitleForType(String? catalogType, AppLocalizations l10n) {
     switch (catalogType) {
       case 'menu':
-        return 'New Menu Order';
+        return l10n.newMenuOrder;
       case 'services':
-        return 'New Service Order';
+        return l10n.newServiceOrder;
       default:
-        return 'New Catalog Order';
+        return l10n.newCatalogOrder;
     }
   }
 
-  static String statusLabel(OrderStatus status) {
+  static String typeLabel(String? catalogType, AppLocalizations l10n) {
+    switch (catalogType) {
+      case 'menu':
+        return l10n.menu;
+      case 'services':
+        return l10n.services;
+      default:
+        return l10n.catalog;
+    }
+  }
+
+  static String statusLabel(OrderStatus status, AppLocalizations l10n) {
     switch (status) {
       case OrderStatus.pending:
-        return 'Pending';
+        return l10n.pending;
       case OrderStatus.completed:
-        return 'Completed';
+        return l10n.completed;
       case OrderStatus.cancelled:
-        return 'Cancelled';
+        return l10n.cancelled;
       case OrderStatus.noShow:
-        return 'Customer No Show';
+        return l10n.customerNoShow;
     }
   }
 

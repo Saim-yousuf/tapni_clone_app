@@ -79,7 +79,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               WaChatsHeader(
-                title: 'Contacts',
+                title: context.l10n.contacts,
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.photo_camera_outlined, size: 24),
@@ -102,7 +102,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     itemBuilder: (_) => [
                       PopupMenuItem(
                         value: 'invitations',
-                        child: Text('Invitations', style: WaUi.body),
+                        child: Text(context.l10n.invitations, style: WaUi.body),
                       ),
                       PopupMenuItem(
                         value: 'find',
@@ -141,7 +141,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                               child: WaChatSearchBar(
                                 controller: _searchController,
                                 focusNode: _searchFocus,
-                                hintText: 'Search...',
+                                hintText: context.l10n.searchEllipsis,
                                 readOnly: true,
                                 onTap: () {
                                   _dismissKeyboard();
@@ -312,7 +312,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                             builder: (dialogCtx) => AlertDialog(
                               title: Text(context.l10n.deleteCategory, style: WaUi.title),
                               content: Text(
-                                'Delete "${category.name}"?',
+                                context.l10n.deleteCategoryNamed(category.name),
                                 style: WaUi.body,
                               ),
                               actions: [
@@ -520,7 +520,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                       keyboardType: TextInputType.url,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.language_outlined),
-                        hintText: 'https://example.com',
+                        hintText: context.l10n.httpsExampleHint,
                       ),
                     ),
                     SizedBox(height: 16),
@@ -1099,7 +1099,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     ? (isDark ? Colors.white54 : Colors.black54)
                     : (isDark ? Colors.white24 : Colors.grey.shade400),
               ),
-              hintText: isEditing ? 'Enter $label' : '',
+              hintText: isEditing ? context.l10n.enterField(label) : '',
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12,
@@ -1139,7 +1139,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
               ),
               SizedBox(height: 16),
               Text(
-                'Options for ${lead.name}',
+                context.l10n.optionsForName(lead.name),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -1181,7 +1181,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(context.l10n.deleteContact),
-        content: Text('Remove "${lead.name}" from your contacts?'),
+        content: Text(context.l10n.removeFromContacts(lead.name)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -1194,7 +1194,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
               if (success && mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('${lead.name} removed.'),
+                    content: Text(context.l10n.contactRemoved(lead.name)),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
@@ -1382,7 +1382,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     return WaChatListTile(
       name: displayName,
       preview: _contactPreview(lead),
-      date: waFormatContactDate(lead.timestamp),
+      date: waFormatContactDate(lead.timestamp, context),
       imageUrl: photoUrl,
       initial: displayName,
       avatarColor: waAvatarColorFor(displayName),

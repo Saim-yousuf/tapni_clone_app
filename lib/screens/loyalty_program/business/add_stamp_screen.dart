@@ -103,7 +103,7 @@ class _AddStampScreenState extends State<AddStampScreen> {
                 ),
                 child: Column(
                   children: [
-                    Text('$currentStamps / $totalStamps Stamps',
+                    Text(context.l10n.stampsProgress(currentStamps, totalStamps),
                         style: TextStyle(color: theme.cardTextColor, fontWeight: FontWeight.bold, fontSize: 16)),
                     const SizedBox(height: 18),
                     Wrap(

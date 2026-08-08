@@ -54,7 +54,7 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
         content: Text(
           res.success
               ? (accept
-                  ? 'You joined ${invitation.business.displayName}'
+                  ? context.l10n.youJoinedBusiness(invitation.business.displayName)
                   : context.l10n.invitationDeclined)
               : (res.message ?? context.l10n.somethingWentWrong),
         ),
@@ -166,7 +166,10 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                                           ),
                                           SizedBox(height: 4),
                                           Text(
-                                            'Shift: ${invitation.shiftStart} - ${invitation.shiftEnd}',
+                                            context.l10n.shiftLabel(
+                                              invitation.shiftStart,
+                                              invitation.shiftEnd,
+                                            ),
                                             style: AttendanceUi.bodyMuted
                                                 .copyWith(fontSize: 15),
                                           ),

@@ -133,7 +133,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Booked ${widget.item.name} with ${widget.businessName}!',
+            context.l10n.bookedWith(widget.item.name, widget.businessName),
           ),
         ),
       );
@@ -183,7 +183,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                     ),
                     Expanded(
                       child: Text(
-                        'Book ${widget.item.name}',
+                        context.l10n.bookItem(widget.item.name),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
@@ -203,8 +203,10 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                     children: [
                       Text(
                         widget.item.price > 0
-                            ? 'Rs ${widget.item.price.toStringAsFixed(0)}'
-                            : 'Free',
+                            ? context.l10n.rsAmount(
+                                widget.item.price.toStringAsFixed(0),
+                              )
+                            : context.l10n.free,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

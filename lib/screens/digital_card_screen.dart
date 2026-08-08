@@ -332,7 +332,9 @@ class DigitalCardScreen extends StatelessWidget {
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Opening mock link: ${link.fullUrl}'),
+                              content: Text(
+                                context.l10n.openingMockLink(link.fullUrl),
+                              ),
                               behavior: SnackBarBehavior.floating,
                             ),
                           );
@@ -385,7 +387,7 @@ class DigitalCardScreen extends StatelessWidget {
   void _copyToClipboard(BuildContext context, String text, String type) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('$type copied to clipboard: $text'),
+        content: Text(context.l10n.copiedTypeToClipboard(type)),
         behavior: SnackBarBehavior.floating,
       ),
     );

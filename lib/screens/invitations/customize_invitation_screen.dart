@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/screens/invitations/invite_contacts_screen.dart';
@@ -106,7 +107,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
   bool _requireTitle() {
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Title is required')),
+        SnackBar(content: Text(context.l10n.titleIsRequired)),
       );
       return false;
     }
@@ -194,12 +195,12 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
           children: [
             ListTile(
               leading: const Icon(Icons.image_outlined),
-              title: const Text('Save as PNG'),
+              title: Text(ctx.l10n.saveAsPng),
               onTap: () => Navigator.pop(ctx, 'png'),
             ),
             ListTile(
               leading: const Icon(Icons.photo_outlined),
-              title: const Text('Save as JPG'),
+              title: Text(ctx.l10n.saveAsJpg),
               onTap: () => Navigator.pop(ctx, 'jpg'),
             ),
           ],
@@ -220,8 +221,8 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
         SnackBar(
           content: Text(
             ok
-                ? 'Card saved to gallery (${format.toUpperCase()})'
-                : 'Could not save. Check gallery permission.',
+                ? context.l10n.cardSavedToGallery
+                : context.l10n.couldNotSaveCheckGalleryPermission,
           ),
           behavior: SnackBarBehavior.floating,
         ),
@@ -260,7 +261,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
           invitation.coverImage.isEmpty ? null : invitation.coverImage;
       finishInvitationFlow(
         context,
-        message: 'Draft saved successfully',
+        message: context.l10n.draftSavedSuccessfully,
         screensToPop: widget.fromDraftList ? 1 : 2,
       );
     }
@@ -280,12 +281,14 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
         scrolledUnderElevation: 0,
         foregroundColor: WaUi.primaryText,
         title: Text(
-          isEdit ? 'Edit invitation' : 'Customize card',
+          isEdit
+              ? context.l10n.editInvitation
+              : context.l10n.customizeCardTitle,
           style: WaUi.sectionHeader,
         ),
         actions: [
           IconButton(
-            tooltip: 'Download',
+            tooltip: context.l10n.download,
             onPressed: _downloading ? null : _downloadCard,
             icon: _downloading
                 ? const SizedBox(
@@ -328,11 +331,11 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
 
                 // Design
                 _Section(
-                  title: 'Design',
+                  title: context.l10n.design,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Theme', style: WaUi.label),
+                      Text(context.l10n.theme, style: WaUi.label),
                       const SizedBox(height: 10),
                       Wrap(
                         spacing: 10,
@@ -368,7 +371,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
                         }).toList(),
                       ),
                       const SizedBox(height: 18),
-                      Text('Wallpaper', style: WaUi.label),
+                      Text(context.l10n.wallpaper, style: WaUi.label),
                       const SizedBox(height: 10),
                       _WallpaperTile(
                         hasImage: _hasWallpaper,
@@ -396,7 +399,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
 
                 // Type
                 _Section(
-                  title: 'Event type',
+                  title: context.l10n.eventType,
                   child: Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -430,18 +433,19 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
 
                 // Details
                 _Section(
-                  title: 'Details',
+                  title: context.l10n.details,
                   child: Column(
                     children: [
                       TextFormField(
                         controller: _titleController,
-                        decoration: _field('Title', required: true),
+                        decoration:
+                            _field(context.l10n.title, required: true),
                         onChanged: (_) => setState(() {}),
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
                         controller: _venueController,
-                        decoration: _field('Venue'),
+                        decoration: _field(context.l10n.venue),
                         onChanged: (_) => setState(() {}),
                       ),
                       const SizedBox(height: 12),
@@ -449,8 +453,8 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
                         controller: _addressController,
                         maxLines: 2,
                         decoration: _field(
-                          'Address',
-                          hint: 'Shown on the card',
+                          context.l10n.address,
+                          hint: context.l10n.shownOnTheCard,
                         ),
                         onChanged: (_) => setState(() {}),
                       ),
@@ -459,13 +463,13 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
                         onTap: _pickDateTime,
                         borderRadius: BorderRadius.circular(12),
                         child: InputDecorator(
-                          decoration: _field('Date & time'),
+                          decoration: _field(context.l10n.dateAndTime),
                           child: Row(
                             children: [
                               Expanded(
                                 child: Text(
                                   _eventAt == null
-                                      ? 'Optional'
+                                      ? context.l10n.optional
                                       : '${MaterialLocalizations.of(context).formatMediumDate(_eventAt!)} · ${TimeOfDay.fromDateTime(_eventAt!).format(context)}',
                                   style: WaUi.body.copyWith(
                                     color: _eventAt == null
@@ -487,7 +491,10 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
                       TextFormField(
                         controller: _messageController,
                         maxLines: 3,
-                        decoration: _field('Message', hint: 'Optional note'),
+                        decoration: _field(
+                          context.l10n.message,
+                          hint: context.l10n.optionalNote,
+                        ),
                         onChanged: (_) => setState(() {}),
                       ),
                     ],
@@ -513,7 +520,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Select contacts & send'),
+                    child: Text(context.l10n.selectContactsAndSend),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -527,8 +534,8 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
                     ),
                     child: Text(
                       widget.draft.invitationId != null
-                          ? 'Update draft'
-                          : 'Save as draft',
+                          ? context.l10n.updateDraft
+                          : context.l10n.saveAsDraft,
                     ),
                   ),
                 ),
@@ -644,12 +651,14 @@ class _WallpaperTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      hasImage ? 'Wallpaper selected' : 'Add wallpaper',
+                      hasImage
+                          ? context.l10n.wallpaperSelected
+                          : context.l10n.addWallpaper,
                       style: WaUi.bodyMedium,
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Fills the full card background',
+                      context.l10n.fillsFullCardBackground,
                       style: WaUi.label,
                     ),
                   ],
@@ -667,7 +676,7 @@ class _WallpaperTile extends StatelessWidget {
                   icon: const Icon(Icons.close_rounded, size: 20),
                   color: WaUi.secondaryText,
                   visualDensity: VisualDensity.compact,
-                  tooltip: 'Remove',
+                  tooltip: context.l10n.remove,
                 )
               else
                 const Icon(

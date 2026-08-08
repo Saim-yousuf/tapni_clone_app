@@ -94,14 +94,14 @@ flutter_launcher_icons:
 # avoids the blank white gap while auth bootstraps.
 flutter_native_splash:
   color: "#000000"
-  image: assets/images/png/launcher_icon_foreground.png
+  image: assets/images/png/splash_logo.png
   color_dark: "#000000"
-  image_dark: assets/images/png/launcher_icon_foreground.png
+  image_dark: assets/images/png/splash_logo.png
   android_12:
     color: "#000000"
-    image: assets/images/png/launcher_icon_foreground.png
+    image: assets/images/png/splash_logo.png
     color_dark: "#000000"
-    image_dark: assets/images/png/launcher_icon_foreground.png
+    image_dark: assets/images/png/splash_logo.png
   ios: true
   android: true
   web: false

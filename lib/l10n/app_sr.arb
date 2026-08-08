@@ -645,7 +645,7 @@
   "inOFFICE": "У КАНЦЕЛАРИЈИ",
   "growYourBusiness": "Развијте свој посао",
   "newLabel": "Ново",
-  "noLinksAddedYetNTapAddLinkToGetStarted": "Још увек нема додатих веза.\\нДодирните „Додај везу“ да бисте започели.",
+  "noLinksAddedYetNTapAddLinkToGetStarted": "Још увек нема додатих веза.\nДодирните „Додај везу“ да бисте започели.",
   "nameCannotBeEmpty": "Име не може бити празно",
   "oneTapToShare": "Један додир за дељење",
   "markAttendance": "Означите присуство",
@@ -763,7 +763,7 @@
   "noPublicProfileMatchesQuery": "Ниједан јавни профил не одговара „@__ПХ0__“.",
   "addAtLeastOneCatalogItem": "Додајте најмање једну __ПХ0__ ставку",
   "noItemsYetAddFirstCatalogItem": "Још нема ставки. Додајте своју прву __ПХ0__ ставку.",
-  "yourPROSubscriptionHasExpiredNN": "Ваша ПРО претплата је истекла.\\н\\н",
+  "yourPROSubscriptionHasExpiredNN": "Ваша ПРО претплата је истекла.\n\n",
   "@appTitle": {
     "description": "Application title"
   },

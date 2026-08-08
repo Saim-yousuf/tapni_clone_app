@@ -138,8 +138,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               if (subscription?.isRequested == true)
                 _statusPanel(
                   title: context.l10n.requestPending,
-                  text:
-                      'Your ${subscription!.planName} request was submitted on ${_date(subscription.requestedAt)}.',
+                  text: context.l10n.subscriptionRequestSubmittedOn(
+                    subscription!.planName,
+                  ),
                 )
               else if (subscription?.isRejected == true)
                 _statusPanel(
@@ -195,7 +196,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           items: _categories.map((category) {
             return DropdownMenuItem(
               value: category,
-              child: Text(category),
+              child: Text(_industryLabel(context, category)),
             );
           }).toList(),
           onChanged: (value) {
@@ -353,5 +354,30 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   String _date(DateTime? value) {
     if (value == null) return '--';
     return '${value.day}/${value.month}/${value.year}';
+  }
+
+  String _industryLabel(BuildContext context, String category) {
+    switch (category) {
+      case 'Technology':
+        return context.l10n.industryTechnology;
+      case 'Retail':
+        return context.l10n.industryRetail;
+      case 'Health':
+        return context.l10n.industryHealthcare;
+      case 'Education':
+        return context.l10n.industryEducation;
+      case 'Finance':
+        return context.l10n.industryFinance;
+      case 'Real Estate':
+        return context.l10n.realEstate;
+      case 'Food & Beverage':
+        return context.l10n.foodBeverage;
+      case 'Entertainment':
+        return context.l10n.industryEntertainment;
+      case 'Other':
+        return context.l10n.industryOther;
+      default:
+        return category;
+    }
   }
 }

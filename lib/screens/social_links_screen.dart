@@ -24,7 +24,7 @@ class SocialLinksScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Links',
+          context.l10n.links,
           style: WaUi.toolsTitle.copyWith(fontWeight: FontWeight.w500),
         ),
         centerTitle: false,
@@ -210,7 +210,9 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
       // case SocialPlatform.website:
       //   return context.l10n.enterYourWebsiteURL;
       default:
-        return 'Enter your ${_getPlatformNameStr(platform)} username';
+        return context.l10n.enterYourPlatformUsername(
+          _getPlatformNameStr(platform),
+        );
     }
   }
 

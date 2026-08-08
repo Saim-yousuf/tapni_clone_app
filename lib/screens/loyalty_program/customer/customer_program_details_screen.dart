@@ -64,7 +64,7 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
                 ),
               const SizedBox(height: 10),
               Text(
-                program?.displayBusinessName ?? 'Business',
+                program?.displayBusinessName ?? context.l10n.businessLabel,
                 style: TextStyle(
                   color: theme.screenTextColor.withOpacity(0.7),
                   fontSize: 14,
@@ -86,7 +86,7 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
               if (program?.logo.isNotEmpty == true) const SizedBox(height: 12),
 
               Text(
-                program?.title ?? 'Program',
+                program?.title ?? context.l10n.program,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: theme.screenTextColor,
@@ -124,7 +124,7 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      '$currentStamps / $totalStamps Stamps',
+                      context.l10n.stampsProgress(currentStamps, totalStamps),
                       style: TextStyle(
                         color: theme.cardTextColor,
                         fontWeight: FontWeight.bold,
@@ -207,7 +207,9 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Visit ${program?.displayBusinessName ?? 'the business'} to collect stamps',
+                        context.l10n.visitBusinessToCollectStamps(
+                          program?.displayBusinessName ?? context.l10n.businessLabel,
+                        ),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: theme.screenTextColor.withOpacity(0.6),

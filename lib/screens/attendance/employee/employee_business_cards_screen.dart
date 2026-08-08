@@ -121,7 +121,7 @@ class _EmployeeBusinessCardsScreenState
   Widget _buildCard(CompanyBusinessCard card) {
     final template = CardTemplateCatalog.byId(card.cardTemplateId);
     final employeeLabel =
-        card.employeeName.isNotEmpty ? card.employeeName : 'You';
+        card.employeeName.isNotEmpty ? card.employeeName : context.l10n.you;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),

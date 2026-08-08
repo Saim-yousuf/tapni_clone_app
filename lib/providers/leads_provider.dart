@@ -8,8 +8,6 @@ import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/repository/invitation_repo.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/models/invitation.dart';
-import 'package:tapni_app/utils/catalog_helper.dart';
-
 class LeadsProvider extends ChangeNotifier {
   final AuthRepo _authRepo = AuthRepo();
   final CatalogRepo _catalogRepo = CatalogRepo();
@@ -466,7 +464,8 @@ class LeadsProvider extends ChangeNotifier {
         _notifications.add({
           'id': order.id,
           'type': 'catalog_order',
-          'title': CatalogHelper.orderTitleForType(order.catalogType),
+          'catalogType': order.catalogType,
+          'title': order.catalogType,
           'body': '${order.customerName} ordered: ${order.itemsSummary}',
           'time': _formatOrderTime(order.createdAt?.toIso8601String()),
           'isRead': order.isRead,

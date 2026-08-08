@@ -3,6 +3,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/models/lead.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
@@ -75,7 +76,7 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
       if (!mounted) return;
       setState(() {
         _loadingDevice = false;
-        _deviceError = 'Contacts permission is required to show phone contacts.';
+        _deviceError = context.l10n.contactsPermissionRequired;
       });
       return;
     }
@@ -136,7 +137,7 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
       if (!mounted) return;
       setState(() {
         _loadingDevice = false;
-        _deviceError = 'Failed to load contacts.';
+        _deviceError = context.l10n.failedToLoadContacts;
       });
     }
   }
@@ -194,8 +195,7 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
     final link = username.isNotEmpty
         ? '${Constants.appDomain}/$username'
         : Constants.appDomain;
-    final message =
-        'Hey ${contact.displayName}! Join me on Barqody: $link';
+    final message = context.l10n.heyJoinMeOnBarqody(contact.displayName, link);
 
     final smsUri = Uri(
       scheme: 'sms',
@@ -273,7 +273,7 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: WaUi.searchBg,
-                          hintText: 'Search name or number',
+                          hintText: context.l10n.searchNameOrNumber,
                           hintStyle: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -341,15 +341,15 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
                           padding: const EdgeInsets.only(bottom: 32),
                           children: [
                             if (leads.isNotEmpty) ...[
-                              _SectionHeader(title: 'Contacts'),
+                              _SectionHeader(title: context.l10n.contacts),
                               ...leads.map(_buildLeadTile),
                             ],
                             if (onBarqody.isNotEmpty) ...[
-                              _SectionHeader(title: 'Contacts on Barqody'),
+                              _SectionHeader(title: context.l10n.contactsOnBarqody),
                               ...onBarqody.map(_buildOnBarqodyTile),
                             ],
                             if (inviteList.isNotEmpty) ...[
-                              _SectionHeader(title: 'Invite to Barqody'),
+                              _SectionHeader(title: context.l10n.inviteToBarqody),
                               ...inviteList.map(_buildInviteTile),
                             ],
                             if (!_loadingDevice &&
@@ -369,8 +369,8 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
                                     const SizedBox(height: 12),
                                     Text(
                                       _query.isEmpty
-                                          ? 'No contacts found'
-                                          : 'No results for "$_query"',
+                                          ? context.l10n.noContactsFound
+                                          : context.l10n.noResultsForQuery(_query),
                                       style: WaUi.title,
                                       textAlign: TextAlign.center,
                                     ),
@@ -383,7 +383,7 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
                                       ),
                                       TextButton(
                                         onPressed: _loadDeviceContacts,
-                                        child: const Text('Try again'),
+                                        child: Text(context.l10n.tryAgain),
                                       ),
                                     ],
                                   ],
@@ -405,7 +405,9 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
         ? lead.displayPhone
         : (lead.displayCompany.isNotEmpty
             ? lead.displayCompany
-            : (lead.isScannedContact ? 'On Barqody' : 'Saved contact'));
+            : (lead.isScannedContact
+                ? context.l10n.onBarqody
+                : context.l10n.savedContact));
 
     return WaChatListTile(
       name: name,
@@ -422,8 +424,8 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
   Widget _buildOnBarqodyTile(_DeviceContact contact) {
     final user = contact.matchedUser!;
     final preview = user.username.isNotEmpty
-        ? '@${user.username} · On Barqody'
-        : 'On Barqody';
+        ? '@${user.username} · ${context.l10n.onBarqody}'
+        : context.l10n.onBarqody;
 
     return WaChatListTile(
       name: contact.displayName,
@@ -486,7 +488,7 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(
-                  'Invite',
+                  context.l10n.invite,
                   style: WaUi.bodyMedium.copyWith(
                     color: WaUi.accent,
                     fontWeight: FontWeight.w600,
@@ -547,11 +549,11 @@ class _PermissionError extends StatelessWidget {
               style: FilledButton.styleFrom(
                 backgroundColor: WaUi.buttonDark,
               ),
-              child: const Text('Try again'),
+              child: Text(context.l10n.tryAgain),
             ),
             TextButton(
               onPressed: openAppSettings,
-              child: const Text('Open settings'),
+              child: Text(context.l10n.openSettings),
             ),
           ],
         ),

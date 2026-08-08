@@ -64,7 +64,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
   }
 
   String _deviceLabel(Map<String, dynamic> device) {
-    final serverName = device['deviceName']?.toString() ?? 'Device';
+    final serverName = device['deviceName']?.toString() ?? context.l10n.device;
     final isCurrent = device['isCurrent'] == true;
     final local = _localDeviceName;
     if (isCurrent &&
@@ -136,9 +136,10 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
     final diff = now.difference(dt);
     if (diff.inMinutes < 2) return context.l10n.activeNow;
     if (diff.inHours < 24) {
-      return 'Last active ${diff.inHours == 0 ? '${diff.inMinutes}m' : '${diff.inHours}h'} ago';
+      final time = diff.inHours == 0 ? '${diff.inMinutes}m' : '${diff.inHours}h';
+      return context.l10n.lastActiveAgo(time);
     }
-    return 'Last active ${DateFormat('d MMM, h:mm a').format(dt)}';
+    return context.l10n.lastActiveAt(DateFormat('d MMM, h:mm a').format(dt));
   }
 
   IconData _platformIcon(String? platform) {
@@ -263,7 +264,9 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
                         ),
                         subtitle: Text(
                           isCurrent
-                              ? 'This device · ${_formatActive(device['lastActiveAt'])}'
+                              ? context.l10n.thisDeviceWithName(
+                                  _formatActive(device['lastActiveAt']),
+                                )
                               : _formatActive(device['lastActiveAt']),
                           style: WaUi.listSubtitle,
                         ),

@@ -501,7 +501,7 @@ class HomeDashboard extends StatelessWidget {
                     },
                   ),
                   StatCard(
-                    title: 'Contacts',
+                    title: context.l10n.contacts,
                     value: '${leadsProvider.leads.length}',
                     trend: '+24%',
                     icon: Icons.person_add_alt_1_outlined,

@@ -152,7 +152,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Logo
-              _sectionTitle('Logo'),
+              _sectionTitle(context.l10n.logo),
               SizedBox(height: 10),
               GestureDetector(
                 onTap: _pickLogo,
@@ -227,13 +227,13 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
               // Card Label Name
               _sectionTitle(context.l10n.cardLabelName),
               SizedBox(height: 8),
-              _buildTextField(_labelController, 'e.g. Coffee Club', required: true),
+              _buildTextField(_labelController, context.l10n.egCoffeeClub, required: true),
               SizedBox(height: 20),
 
               // Title
-              _sectionTitle('Title'),
+              _sectionTitle(context.l10n.title),
               SizedBox(height: 8),
-              _buildTextField(_titleController, 'e.g. Buy 10 Get 1 Free', required: true),
+              _buildTextField(_titleController, context.l10n.egBuy10Get1Free, required: true),
               SizedBox(height: 20),
 
               // Description
@@ -250,7 +250,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: _inputDecoration('e.g. 10'),
-                validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                validator: (v) => (v == null || v.isEmpty) ? context.l10n.required : null,
               ),
               SizedBox(height: 32),
 
@@ -573,7 +573,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
       controller: ctrl,
       maxLines: maxLines,
       decoration: _inputDecoration(hint),
-      validator: required ? (v) => (v == null || v.isEmpty) ? 'Required' : null : null,
+      validator: required ? (v) => (v == null || v.isEmpty) ? context.l10n.required : null : null,
     );
   }
 

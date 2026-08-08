@@ -319,7 +319,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                       text: context.l10n.shareLink,
                       onTap: () {
                         Share.share(
-                          'Check out my Tapni profile: $profileLink',
+                          context.l10n.checkOutThisProfile(profileLink),
                           subject: context.l10n.myTapniProfile,
                         );
                       },
@@ -330,7 +330,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                   const SizedBox(width: 16),
                   Expanded(
                     child: CustomButton(
-                      text: 'Download',
+                      text: context.l10n.download,
                       onTap: _downloadQr,
                       isSecondary: true,
                       icon: Icons.download_rounded,

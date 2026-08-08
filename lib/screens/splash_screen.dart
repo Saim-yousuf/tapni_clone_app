@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +13,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/services/push_notification_service.dart';
 
-/// Bootstrap only — native splash stays on screen until navigation is ready.
+/// Bootstrap only — native splash stays until the next route is ready (local prefs).
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -23,12 +25,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToNext();
+    // Defer past the first build — Navigator / notifyListeners are unsafe in initState.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(_navigateToNext());
+    });
   }
 
   Future<void> _navigateToNext() async {
     try {
-      await Future<void>.delayed(Duration.zero);
       if (!mounted) return;
 
       final token = SharedPrefHelper.getString(
@@ -46,7 +51,6 @@ class _SplashScreenState extends State<SplashScreen> {
         await SharedPrefHelper.remove(
           SharedPrefHelper.utils.pendingRemoteLogoutSessionId,
         );
-        // Background FCM may already have cleared the account.
         if (AccountStorage.getActiveAccount() != null) {
           await AccountStorage.removeActive();
         }
@@ -56,24 +60,27 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (isLoggedIn) {
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
-        authProvider.refreshAccounts();
-        await authProvider.ensureDeviceSessionRegistered();
-
         final subProvider = Provider.of<SubscriptionProvider>(
           context,
           listen: false,
         );
-        await subProvider.checkSubscriptionStatus();
         final profileProvider = Provider.of<ProfileProvider>(
           context,
           listen: false,
         );
-        await profileProvider.fetchProfile();
-        await PushNotificationService.syncTokenWithBackend();
+        authProvider.refreshAccounts();
 
-        if (!mounted) return;
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const MainShell()),
+        );
+
+        // Network bootstrap after UI is shown (WhatsApp / IG style).
+        unawaited(
+          _bootstrapLoggedIn(
+            authProvider: authProvider,
+            subProvider: subProvider,
+            profileProvider: profileProvider,
+          ),
         );
       } else {
         Navigator.of(context).pushReplacement(
@@ -81,16 +88,29 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       }
     } finally {
-      // Drop native splash only after the next screen is pushed (or on error).
       WidgetsBinding.instance.addPostFrameCallback((_) {
         FlutterNativeSplash.remove();
       });
     }
   }
 
+  Future<void> _bootstrapLoggedIn({
+    required AuthProvider authProvider,
+    required SubscriptionProvider subProvider,
+    required ProfileProvider profileProvider,
+  }) async {
+    try {
+      await authProvider.ensureDeviceSessionRegistered();
+      await Future.wait([
+        subProvider.checkSubscriptionStatus(),
+        profileProvider.fetchProfile(),
+        PushNotificationService.syncTokenWithBackend(),
+      ]);
+    } catch (_) {}
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Match native splash (black + RQ) if splash is already removed.
     return const Scaffold(
       backgroundColor: AppTheme.primaryBlack,
       body: SizedBox.expand(),

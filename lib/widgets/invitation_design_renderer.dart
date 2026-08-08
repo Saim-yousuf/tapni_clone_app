@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 
 Color designColorFromHex(String hex, {Color fallback = Colors.white}) {
@@ -207,7 +208,7 @@ class _LayerWidget extends StatelessWidget {
     final width = layer.width * canvasW;
     final height = layer.height * canvasH;
 
-    Widget child = _buildContent(width, height);
+    Widget child = _buildContent(context, width, height);
 
     if (layer.rotation != 0) {
       child = Transform.rotate(
@@ -247,16 +248,16 @@ class _LayerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(double w, double h) {
+  Widget _buildContent(BuildContext context, double w, double h) {
     switch (layer.type) {
       case DesignLayerType.text:
-        return _textBox(w, h);
+        return _textBox(context, w, h);
       case DesignLayerType.iconField:
         return _iconField(w, h);
       case DesignLayerType.qr:
         return _qr(w, h);
       case DesignLayerType.logo:
-        return _logo(w, h);
+        return _logo(context, w, h);
       case DesignLayerType.image:
         return _image(w, h);
       case DesignLayerType.shape:
@@ -276,7 +277,7 @@ class _LayerWidget extends StatelessWidget {
     }
   }
 
-  Widget _textBox(double w, double h) {
+  Widget _textBox(BuildContext context, double w, double h) {
     final color = designColorFromHex(layer.color);
     final fontSize = layer.fontSize * canvasW;
     return SizedBox(
@@ -284,7 +285,7 @@ class _LayerWidget extends StatelessWidget {
       height: h,
       child: Center(
         child: Text(
-          layer.text.isEmpty ? 'Tap to edit' : layer.text,
+          layer.text.isEmpty ? context.l10n.tapToEdit : layer.text,
           textAlign: _align,
           textDirection: design.rtl ? TextDirection.rtl : TextDirection.ltr,
           style: designFontStyle(
@@ -364,7 +365,7 @@ class _LayerWidget extends StatelessWidget {
     );
   }
 
-  Widget _logo(double w, double h) {
+  Widget _logo(BuildContext context, double w, double h) {
     final color = designColorFromHex(layer.color, fallback: Colors.amber);
     if (layer.imageSrc.isNotEmpty) {
       return ClipRRect(
@@ -384,7 +385,7 @@ class _LayerWidget extends StatelessWidget {
             Icon(Icons.add_photo_alternate_outlined, color: color, size: w * 0.35),
             if (w > 40)
               Text(
-                'Logo',
+                context.l10n.logo,
                 style: TextStyle(color: color, fontSize: 10),
               ),
           ],

@@ -54,7 +54,7 @@ class _OrdersListScreenState extends State<OrdersListScreen>
           unselectedLabelColor: Colors.grey,
           indicatorColor: AppTheme.primaryBlack,
           tabs: _tabs
-              .map((s) => Tab(text: CatalogHelper.statusLabel(s)))
+              .map((s) => Tab(text: CatalogHelper.statusLabel(s, context.l10n)))
               .toList(),
         ),
       ),
@@ -140,7 +140,10 @@ class _OrdersTabPageState extends State<_OrdersTabPage>
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'No ${CatalogHelper.statusLabel(widget.status).toLowerCase()} orders',
+                      context.l10n.noStatusOrders(
+                        CatalogHelper.statusLabel(widget.status, context.l10n)
+                            .toLowerCase(),
+                      ),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.grey.shade600,
@@ -245,7 +248,7 @@ class _OrderTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'Rs ${order.totalAmount.toStringAsFixed(0)}',
+                    context.l10n.rsAmount(order.totalAmount.toStringAsFixed(0)),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
@@ -298,7 +301,7 @@ class _StatusChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        CatalogHelper.statusLabel(status),
+        CatalogHelper.statusLabel(status, context.l10n),
         style: TextStyle(
           color: _color,
           fontSize: 11,

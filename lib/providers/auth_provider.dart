@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/l10n/l10n_lookup.dart';
 import 'package:tapni_app/models/stored_account.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -230,7 +231,7 @@ class AuthProvider extends ChangeNotifier {
     if (_isAlreadyOnThisDevice(phone: phone)) {
       if (context.mounted) {
         ShowAlert.error(
-          message: 'This account is already logged in on this device',
+          message: l10nOr((l) => l.accountAlreadyLoggedInOnDevice, 'This account is already logged in on this device'),
           context: context,
         );
       }
@@ -276,7 +277,7 @@ class AuthProvider extends ChangeNotifier {
         )) {
           if (context.mounted) {
             ShowAlert.error(
-              message: 'This account is already logged in on this device',
+              message: l10nOr((l) => l.accountAlreadyLoggedInOnDevice, 'This account is already logged in on this device'),
               context: context,
             );
           }
@@ -348,7 +349,7 @@ class AuthProvider extends ChangeNotifier {
     if (_isAlreadyOnThisDevice(email: email)) {
       if (context.mounted) {
         ShowAlert.error(
-          message: 'This account is already logged in on this device',
+          message: l10nOr((l) => l.accountAlreadyLoggedInOnDevice, 'This account is already logged in on this device'),
           context: context,
         );
       }
@@ -370,7 +371,7 @@ class AuthProvider extends ChangeNotifier {
         if (_isAlreadyOnThisDevice(email: userEmail, userId: userId)) {
           if (context.mounted) {
             ShowAlert.error(
-              message: 'This account is already logged in on this device',
+              message: l10nOr((l) => l.accountAlreadyLoggedInOnDevice, 'This account is already logged in on this device'),
               context: context,
             );
           }
@@ -463,7 +464,7 @@ class AuthProvider extends ChangeNotifier {
     if (_isAlreadyOnThisDevice(email: email, phone: phone, userId: userId)) {
       if (context.mounted) {
         ShowAlert.error(
-          message: 'This account is already logged in on this device',
+          message: l10nOr((l) => l.accountAlreadyLoggedInOnDevice, 'This account is already logged in on this device'),
           context: context,
         );
       }
@@ -593,7 +594,7 @@ class AuthProvider extends ChangeNotifier {
       await PushNotificationService.syncTokenWithBackend();
       if (!context.mounted) return;
       ShowAlert.error(
-        message: 'This device was logged out from Linked devices',
+        message: l10nOr((l) => l.deviceLoggedOutFromLinkedDevices, 'This device was logged out from Linked devices'),
         context: context,
       );
       nav.pushAndRemoveUntil(
@@ -602,7 +603,7 @@ class AuthProvider extends ChangeNotifier {
       );
     } else {
       ShowAlert.error(
-        message: 'This device was logged out from Linked devices',
+        message: l10nOr((l) => l.deviceLoggedOutFromLinkedDevices, 'This device was logged out from Linked devices'),
         context: context,
       );
       nav.pushAndRemoveUntil(

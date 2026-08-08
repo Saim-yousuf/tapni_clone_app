@@ -7,6 +7,7 @@ import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
 import 'package:tapni_app/screens/invitations/invitation_detail_screen.dart';
 import 'package:tapni_app/models/invitation.dart';
+import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 
@@ -182,7 +183,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            item['title'],
+                                            item['type'] == 'catalog_order'
+                                                ? CatalogHelper.orderTitleForType(
+                                                    item['catalogType'] as String? ??
+                                                        item['title'] as String?,
+                                                    context.l10n,
+                                                  )
+                                                : item['title'],
                                             style: TextStyle(
                                               fontWeight: isRead ? FontWeight.w600 : FontWeight.bold,
                                               fontSize: 14,

@@ -8,6 +8,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/complete_profile_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
@@ -103,7 +104,7 @@ class _OtpScreenState extends State<OtpScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Please enter the 6-digit code',
+            context.l10n.pleaseEnter6DigitCode,
             style: WaUi.body.copyWith(color: Colors.white),
           ),
           backgroundColor: WaUi.primaryText,
@@ -135,7 +136,7 @@ class _OtpScreenState extends State<OtpScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Verification token missing. Please try again.',
+                context.l10n.verificationTokenMissing,
                 style: WaUi.body.copyWith(color: Colors.white),
               ),
               backgroundColor: WaUi.primaryText,
@@ -215,7 +216,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   children: [
                     const SizedBox(height: 8),
                     Text(
-                      'Verifying your number',
+                      context.l10n.verifyingYourNumber,
                       textAlign: TextAlign.center,
                       style: WaUi.headline.copyWith(
                         fontSize: 22,
@@ -227,7 +228,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       TextSpan(
                         style: WaUi.body.copyWith(color: WaUi.secondaryText),
                         children: [
-                          const TextSpan(text: 'Enter the code sent to '),
+                          TextSpan(text: '${context.l10n.enterTheCodeSentTo} '),
                           TextSpan(
                             text: widget.phone,
                             style: WaUi.bodyMedium.copyWith(
@@ -248,7 +249,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: Text(
-                        'Wrong number?',
+                        context.l10n.wrongNumber,
                         style: WaUi.bodyMedium.copyWith(color: AppTheme.primaryBlack),
                       ),
                     ),
@@ -270,7 +271,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         child: Column(
                           children: [
                             Text(
-                              'For testing',
+                              context.l10n.forTesting,
                               style: WaUi.caption.copyWith(
                                 color: AppTheme.primaryBlack,
                               ),
@@ -338,7 +339,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                     const SizedBox(height: 28),
                     Text(
-                      'Enter 6-digit code',
+                      context.l10n.enter6DigitCode,
                       style: WaUi.caption,
                     ),
                     const SizedBox(height: 24),
@@ -356,8 +357,10 @@ class _OtpScreenState extends State<OtpScreen> {
                         onPressed: _secondsLeft > 0 ? null : _handleResend,
                         child: Text(
                           _secondsLeft > 0
-                              ? 'Resend code in 0:${_secondsLeft.toString().padLeft(2, '0')}'
-                              : 'Resend code',
+                              ? context.l10n.resendCodeIn(
+                                  '0:${_secondsLeft.toString().padLeft(2, '0')}',
+                                )
+                              : context.l10n.resendCode,
                           style: WaUi.bodyMedium.copyWith(
                             color: _secondsLeft > 0
                                 ? WaUi.secondaryText
@@ -386,7 +389,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                   ),
                   child: Text(
-                    'Next',
+                    context.l10n.next,
                     style: WaUi.promoButton.copyWith(
                       fontWeight: FontWeight.w600,
                     ),

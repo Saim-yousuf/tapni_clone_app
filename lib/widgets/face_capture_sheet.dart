@@ -8,9 +8,9 @@ import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class FaceCaptureSheet extends StatefulWidget {
-  final String title;
+  final String? title;
 
-  FaceCaptureSheet({super.key, this.title = 'Capture Face'});
+  FaceCaptureSheet({super.key, this.title});
 
   static Future<String?> show(BuildContext context, {String? title}) {
     return showModalBottomSheet<String>(
@@ -19,7 +19,7 @@ class FaceCaptureSheet extends StatefulWidget {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
       useSafeArea: true,
-      builder: (_) => FaceCaptureSheet(title: title ?? context.l10n.captureFace),
+      builder: (_) => FaceCaptureSheet(title: title),
     );
   }
 
@@ -84,7 +84,10 @@ class _FaceCaptureSheetState extends State<FaceCaptureSheet> {
             ),
           ),
           SizedBox(height: 20),
-          Text(widget.title, style: AttendanceUi.sectionTitle),
+          Text(
+            widget.title ?? context.l10n.captureFace,
+            style: AttendanceUi.sectionTitle,
+          ),
           SizedBox(height: 10),
           Text(
             context.l10n.takeAQuickSelfieForAttendanceVerification,

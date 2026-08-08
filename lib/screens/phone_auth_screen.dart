@@ -43,7 +43,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Please enter a valid phone number',
+            context.l10n.pleaseEnterValidPhoneNumber,
             style: WaUi.body.copyWith(color: Colors.white),
           ),
           backgroundColor: WaUi.primaryText,
@@ -127,7 +127,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                     children: [
                       const SizedBox(height: 48),
                       Text(
-                        'Enter your phone number',
+                        context.l10n.enterYourPhoneNumber,
                         textAlign: TextAlign.center,
                         style: WaUi.headline.copyWith(
                           fontSize: 22,
@@ -136,7 +136,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                       ),
                       const SizedBox(height: 14),
                       Text(
-                        'Barqody will send an OTP to verify your number.',
+                        context.l10n.barqodyWillSendOtp,
                         textAlign: TextAlign.center,
                         style: WaUi.body.copyWith(color: WaUi.secondaryText),
                       ),
@@ -211,17 +211,17 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                               ],
                               onFieldSubmitted: (_) => _handleContinue(),
                               decoration: _underlineDecoration(
-                                hint: 'phone number',
+                                hint: context.l10n.phoneNumber2,
                               ),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Required';
+                                  return context.l10n.required;
                                 }
                                 if (value
                                         .replaceAll(RegExp(r'\D'), '')
                                         .length <
                                     7) {
-                                  return 'Too short';
+                                  return context.l10n.tooShort;
                                 }
                                 return null;
                               },
@@ -278,7 +278,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                             ),
                           )
                         : Text(
-                            'Next',
+                            context.l10n.next,
                             style: WaUi.promoButton.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -333,7 +333,7 @@ class _CountryPickerScreenState extends State<_CountryPickerScreen> {
         backgroundColor: WaUi.toolsScaffold,
         elevation: 0,
         foregroundColor: WaUi.primaryText,
-        title: Text('Choose a country', style: WaUi.headline),
+        title: Text(context.l10n.chooseACountry, style: WaUi.headline),
       ),
       body: Column(
         children: [
@@ -344,7 +344,7 @@ class _CountryPickerScreenState extends State<_CountryPickerScreen> {
               style: WaUi.body,
               cursorColor: AppTheme.primaryBlack,
               decoration: InputDecoration(
-                hintText: 'Search country',
+                hintText: context.l10n.searchCountry,
                 hintStyle: WaUi.body.copyWith(color: WaUi.secondaryText),
                 prefixIcon: const Icon(Icons.search, color: WaUi.secondaryText),
                 filled: true,
@@ -361,7 +361,7 @@ class _CountryPickerScreenState extends State<_CountryPickerScreen> {
           Expanded(
             child: countries.isEmpty
                 ? Center(
-                    child: Text('No countries found', style: WaUi.caption),
+                    child: Text(context.l10n.noCountriesFound, style: WaUi.caption),
                   )
                 : ListView.separated(
                     itemCount: countries.length,

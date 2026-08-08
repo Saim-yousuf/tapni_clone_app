@@ -3,6 +3,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/models/lead.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
@@ -71,6 +72,10 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
       _permissionHint = null;
     });
 
+    final l10n = context.l10n;
+    final contactFallback = l10n.contact;
+    final permissionHint = l10n.phoneContactsPermissionHint;
+
     try {
       final invitationProvider = context.read<InvitationProvider>();
       final leadsProvider = context.read<LeadsProvider>();
@@ -100,8 +105,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
           }
         }
       } else if (mounted) {
-        _permissionHint =
-            'Phone contacts need permission. Saved contacts still shown below.';
+        _permissionHint = permissionHint;
       }
 
       // Match phones for device + saved (without known user id)
@@ -143,7 +147,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
           _ContactRow(
             displayName: lead.displayName.trim().isNotEmpty
                 ? lead.displayName.trim()
-                : (PhoneUtils.isValid(phone) ? phone : 'Contact'),
+                : (PhoneUtils.isValid(phone) ? phone : contactFallback),
             phone: PhoneUtils.isValid(phone) ? phone : lead.displayPhone,
             userId: isRegistered ? userId : null,
             username: lead.contactUserData?.username ?? matched?.username,
@@ -204,7 +208,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
       if (!mounted) return;
       setState(() {
         _loading = false;
-        _permissionHint = 'Failed to load contacts: $e';
+        _permissionHint = l10n.failedToLoadContactsWithError('$e');
       });
     }
   }
@@ -233,7 +237,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
 
   Future<void> _inviteViaSms(_ContactRow contact) async {
     final message =
-        "Hey, I'm using Barqody. Download it here: ${Constants.appDomain}";
+        context.l10n.heyImUsingBarqody(Constants.appDomain);
 
     final phone = contact.phone.trim();
     final smsUri = phone.isNotEmpty
@@ -286,8 +290,8 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
       finishInvitationFlow(
         context,
         message: saveAsDraft
-            ? 'Draft saved successfully'
-            : 'Invitation sent successfully',
+            ? context.l10n.draftSavedSuccessfully
+            : context.l10n.invitationSentSuccessfully,
         screensToPop: fromExistingDraft ? 2 : 3,
       );
     }
@@ -326,7 +330,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Select contact',
+              context.l10n.selectContact,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -344,7 +348,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
               onPressed:
                   provider.isSending ? null : () => _send(saveAsDraft: true),
               child: Text(
-                'Draft',
+                context.l10n.draft,
                 style: theme.textTheme.bodyMedium?.copyWith(color: muted),
               ),
             ),
@@ -358,7 +362,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
               controller: _searchController,
               style: theme.textTheme.bodyMedium,
               decoration: InputDecoration(
-                hintText: 'Search name or number',
+                hintText: context.l10n.searchNameOrNumber,
                 hintStyle: theme.textTheme.bodyMedium?.copyWith(color: muted),
                 prefixIcon: Icon(Icons.search, color: muted),
                 suffixIcon: _searchController.text.isNotEmpty
@@ -411,8 +415,8 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                           children: [
                             Text(
                               _query.isEmpty
-                                  ? 'No contacts found'
-                                  : 'No results',
+                                  ? context.l10n.noContactsFound
+                                  : context.l10n.noResults,
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: muted,
                               ),
@@ -421,11 +425,11 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                               const SizedBox(height: 12),
                               TextButton(
                                 onPressed: _loadContacts,
-                                child: const Text('Try again'),
+                                child: Text(context.l10n.tryAgain),
                               ),
                               TextButton(
                                 onPressed: openAppSettings,
-                                child: const Text('Open settings'),
+                                child: Text(context.l10n.openSettings),
                               ),
                             ],
                           ],
@@ -435,15 +439,15 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                         padding: const EdgeInsets.only(bottom: 16),
                         children: [
                           if (saved.isNotEmpty) ...[
-                            _SectionHeader(title: 'Contacts'),
+                            _SectionHeader(title: context.l10n.contacts),
                             ...saved.map((r) => _buildTile(r, theme)),
                           ],
                           if (onBarqody.isNotEmpty) ...[
-                            _SectionHeader(title: 'On Barqody'),
+                            _SectionHeader(title: context.l10n.onBarqody),
                             ...onBarqody.map((r) => _buildTile(r, theme)),
                           ],
                           if (inviteList.isNotEmpty) ...[
-                            _SectionHeader(title: 'Invite to Barqody'),
+                            _SectionHeader(title: context.l10n.inviteToBarqody),
                             ...inviteList.map((r) => _buildTile(r, theme)),
                           ],
                         ],
@@ -493,8 +497,8 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                         )
                       : Text(
                           selectedCount == 0
-                              ? 'Select contacts to send'
-                              : 'Send invitation ($selectedCount)',
+                              ? context.l10n.selectContactsToSend
+                              : context.l10n.sendInvitationCount(selectedCount),
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: onPrimary,
                             fontWeight: FontWeight.w600,
@@ -523,7 +527,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
     final muted = onSurface.withValues(alpha: 0.55);
     final subtitle = (row.username != null && row.username!.isNotEmpty)
         ? '@${row.username}'
-        : (row.phone.isNotEmpty ? row.phone : 'On Barqody');
+        : (row.phone.isNotEmpty ? row.phone : context.l10n.onBarqody);
 
     return Material(
       color: theme.scaffoldBackgroundColor,
@@ -669,7 +673,9 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      row.phone.isNotEmpty ? row.phone : 'Not on Barqody',
+                      row.phone.isNotEmpty
+                          ? row.phone
+                          : context.l10n.notOnBarqody,
                       style: theme.textTheme.bodySmall?.copyWith(color: muted),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -686,7 +692,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(
-                  'Invite',
+                  context.l10n.invite,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.primary,
                     fontWeight: FontWeight.w600,

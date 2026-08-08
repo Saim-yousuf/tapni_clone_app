@@ -113,7 +113,7 @@ class _AccountSwitcherBody extends StatelessWidget {
 
     if (ok) {
       ShowAlert.success(
-        message: 'Switched to ${account.displayName}',
+        message: hostContext.l10n.switchedToAccount(account.displayName),
         context: hostContext,
       );
       Navigator.of(hostContext).pushAndRemoveUntil(
@@ -161,7 +161,7 @@ class _AccountSwitcherBody extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.phone_outlined, color: WaUi.promoIconFg),
-              title: Text('Phone number', style: WaUi.listTitle),
+              title: Text(hostContext.l10n.phoneNumber2, style: WaUi.listTitle),
               onTap: () {
                 Navigator.pop(ctx);
                 if (!hostContext.mounted) return;

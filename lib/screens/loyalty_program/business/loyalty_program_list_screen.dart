@@ -161,7 +161,7 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    program.isActive ? context.l10n.active : 'Inactive',
+                    program.isActive ? context.l10n.active : context.l10n.inactive,
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -195,7 +195,7 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen> {
               )),
             ),
             const SizedBox(height: 6),
-            Text('${program.stamps} stamps required',
+            Text(context.l10n.stampsRequiredCount(program.stamps),
                 style: TextStyle(color: program.theme.cardTextColor.withOpacity(0.5), fontSize: 11)),
           ],
         ),

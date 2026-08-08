@@ -239,7 +239,9 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24),
                       child: Text(
-                        "Your ${subscription!.planName} request is submitted and waiting for approval on ${_date(subscription.requestedAt)}.",
+                        context.l10n.subscriptionRequestSubmittedOn(
+                          subscription!.planName,
+                        ),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 14,
@@ -324,7 +326,10 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
             border: OutlineInputBorder(),
           ),
           items: _categories.map((category) {
-            return DropdownMenuItem(value: category, child: Text(category));
+            return DropdownMenuItem(
+              value: category,
+              child: Text(_industryLabel(context, category)),
+            );
           }).toList(),
           onChanged: (value) {
             setState(() {
@@ -408,8 +413,8 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
             selected: _isYearlySelected,
             title: context.l10n.yearly,
             subtitle: context.l10n.rs8300BilledYearly,
-            price: "PKR 691.66/month",
-            badge: "7 months free",
+            price: context.l10n.pkrPerMonth('691.66'),
+            badge: context.l10n.monthsFree(7),
           ),
         ),
 
@@ -423,7 +428,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
             selected: !_isYearlySelected,
             title: context.l10n.monthly,
             subtitle: context.l10n.rs1600BilledMonthly,
-            price: "PKR 1,600/month",
+            price: context.l10n.pkrPerMonth('1,600'),
             badge: null,
           ),
         ),
@@ -452,9 +457,12 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           ),
           child: Column(
             children: [
-              _benefit(Icons.palette_outlined, "Customize your profile"),
-              _benefit(Icons.qr_code_scanner, "Unlimited AI scans"),
-              _benefit(Icons.analytics_outlined, "Analytics & insights"),
+              _benefit(Icons.palette_outlined, context.l10n.customizeYourself),
+              _benefit(Icons.qr_code_scanner, context.l10n.unlimitedAiScans),
+              _benefit(
+                Icons.analytics_outlined,
+                context.l10n.analyticsAndInsights,
+              ),
             ],
           ),
         ),
@@ -617,5 +625,30 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
   String _date(DateTime? value) {
     if (value == null) return '--';
     return '${value.day}/${value.month}/${value.year}';
+  }
+
+  String _industryLabel(BuildContext context, String category) {
+    switch (category) {
+      case 'Technology':
+        return context.l10n.industryTechnology;
+      case 'Retail':
+        return context.l10n.industryRetail;
+      case 'Health':
+        return context.l10n.industryHealthcare;
+      case 'Education':
+        return context.l10n.industryEducation;
+      case 'Finance':
+        return context.l10n.industryFinance;
+      case 'Real Estate':
+        return context.l10n.realEstate;
+      case 'Food & Beverage':
+        return context.l10n.foodBeverage;
+      case 'Entertainment':
+        return context.l10n.industryEntertainment;
+      case 'Other':
+        return context.l10n.industryOther;
+      default:
+        return category;
+    }
   }
 }

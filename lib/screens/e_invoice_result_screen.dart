@@ -20,14 +20,15 @@ class EInvoiceResultScreen extends StatelessWidget {
     );
   }
 
-  String get _shareText {
+  String _shareText(BuildContext context) {
+    final l10n = context.l10n;
     final buffer = StringBuffer()
-      ..writeln('Saudi E-Invoice (ZATCA)')
-      ..writeln('Seller: ${invoice.sellerName}')
-      ..writeln('VAT No: ${invoice.vatNumber}')
-      ..writeln('Date: ${invoice.timestamp}')
-      ..writeln('Total: ${invoice.invoiceTotal} SAR')
-      ..writeln('VAT: ${invoice.vatTotal} SAR');
+      ..writeln(l10n.saudiEInvoiceShareHeader)
+      ..writeln(l10n.sellerColon(invoice.sellerName))
+      ..writeln(l10n.vatColon(invoice.vatNumber))
+      ..writeln(l10n.dateColon(invoice.timestamp))
+      ..writeln(l10n.totalColon('${invoice.invoiceTotal} SAR'))
+      ..writeln(l10n.vatColon('${invoice.vatTotal} SAR'));
     return buffer.toString();
   }
 
@@ -158,7 +159,7 @@ class EInvoiceResultScreen extends StatelessWidget {
             width: double.infinity,
             height: 48,
             child: FilledButton.icon(
-              onPressed: () => _copy(context, _shareText),
+              onPressed: () => _copy(context, _shareText(context)),
               icon: const Icon(Icons.copy_rounded, size: 20),
               label: Text(l10n.copyAllDetails),
               style: FilledButton.styleFrom(
@@ -175,7 +176,7 @@ class EInvoiceResultScreen extends StatelessWidget {
             width: double.infinity,
             height: 48,
             child: OutlinedButton.icon(
-              onPressed: () => Share.share(_shareText),
+              onPressed: () => Share.share(_shareText(context)),
               icon: const Icon(Icons.share_outlined, size: 20),
               label: Text(l10n.share),
               style: OutlinedButton.styleFrom(

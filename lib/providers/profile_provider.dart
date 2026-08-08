@@ -45,19 +45,24 @@ class ProfileProvider extends ChangeNotifier {
 
   bool _isProUser = false;
   bool _isLoading = false;
+  bool _hasFetchedProfile = false;
   bool _isLinkCatalogLoading = false;
   List<LinkCategory> _linkCatalog = [];
 
   bool get isLoading => _isLoading;
+  /// False until the first [fetchProfile] attempt finishes (success or failure).
+  bool get hasFetchedProfile => _hasFetchedProfile;
   bool get isLinkCatalogLoading => _isLinkCatalogLoading;
   List<LinkCategory> get linkCatalog => _linkCatalog;
 
-  // ProfileProvider() {
-  //   _profile = MockDataService.getInitialProfile();
-  // }
+  ProfileProvider() {
+    _profile = MockDataService.getInitialProfile();
+  }
+
   void clearData() {
     _profile = MockDataService.getInitialProfile();
     _isProUser = false;
+    _hasFetchedProfile = false;
     _linkCatalog.clear();
     _selectedTemplateIndex = 1;
     _activeCardId = UserCustomCard.primaryId;
@@ -80,43 +85,46 @@ class ProfileProvider extends ChangeNotifier {
     _loadActiveCardId();
     notifyListeners();
 
-    final repo = AuthRepo();
-    final response = await repo.profile();
+    try {
+      final repo = AuthRepo();
+      final response = await repo.profile();
 
-    if (response.success && response.data != null) {
-      final data = response.data;
-      try {
-        if (data is Map<String, dynamic> && data.containsKey('user')) {
-          _profile = UserProfile.fromApiJson(
-            data['user'] as Map<String, dynamic>,
+      if (response.success && response.data != null) {
+        final data = response.data;
+        try {
+          if (data is Map<String, dynamic> && data.containsKey('user')) {
+            _profile = UserProfile.fromApiJson(
+              data['user'] as Map<String, dynamic>,
+            );
+            _isProUser = _profile.isPro;
+            _selectedTemplateIndex =
+                CardTemplateCatalog.indexById(_profile.cardTemplateId);
+            _ensureActiveCardExists();
+          } else if (data is Map<String, dynamic>) {
+            _profile = UserProfile.fromApiJson(data);
+            _isProUser = _profile.isPro;
+            _selectedTemplateIndex =
+                CardTemplateCatalog.indexById(_profile.cardTemplateId);
+            _ensureActiveCardExists();
+          }
+          await AccountStorage.updateActiveProfileMeta(
+            userId: _profile.id,
+            name: _profile.name,
+            email: _profile.email,
+            phone: _profile.phone,
+            username: _profile.username,
+            profilePhoto: _profile.profilePhotoUrl,
           );
-          _isProUser = _profile.isPro;
-          _selectedTemplateIndex =
-              CardTemplateCatalog.indexById(_profile.cardTemplateId);
-          _ensureActiveCardExists();
-        } else if (data is Map<String, dynamic>) {
-          _profile = UserProfile.fromApiJson(data);
-          _isProUser = _profile.isPro;
-          _selectedTemplateIndex =
-              CardTemplateCatalog.indexById(_profile.cardTemplateId);
-          _ensureActiveCardExists();
+        } catch (e) {
+          // Fallback to mock data if there's an issue mapping
         }
-        await AccountStorage.updateActiveProfileMeta(
-          userId: _profile.id,
-          name: _profile.name,
-          email: _profile.email,
-          phone: _profile.phone,
-          username: _profile.username,
-          profilePhoto: _profile.profilePhotoUrl,
-        );
-        notifyListeners();
-      } catch (e) {
-        // Fallback to mock data if there's an issue mapping
       }
+      profileScore();
+    } finally {
+      _hasFetchedProfile = true;
+      _isLoading = false;
+      notifyListeners();
     }
-    profileScore();
-    _isLoading = false;
-    notifyListeners();
   }
 
   Future<void> fetchLinkCatalog() async {

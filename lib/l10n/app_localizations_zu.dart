@@ -2103,7 +2103,7 @@ class AppLocalizationsZu extends AppLocalizations {
 
   @override
   String get noLinksAddedYetNTapAddLinkToGetStarted =>
-      'Azikho izixhumanisi ezingeziwe okwamanje.\\nThepha okuthi \"Engeza isixhumanisi\" ukuze uqalise.';
+      'Azikho izixhumanisi ezingeziwe okwamanje.\nThepha okuthi \"Engeza isixhumanisi\" ukuze uqalise.';
 
   @override
   String get noMatches => 'Akukho okufanayo';
@@ -2423,7 +2423,7 @@ class AppLocalizationsZu extends AppLocalizations {
 
   @override
   String get yourPROSubscriptionHasExpiredNN =>
-      'Ukubhalisa kwakho kwe-PRO kuphelelwe yisikhathi.\\n\\n';
+      'Ukubhalisa kwakho kwe-PRO kuphelelwe yisikhathi.\n\n';
 
   @override
   String get yourPROSubscriptionHasExpired =>
@@ -2575,4 +2575,957 @@ class AppLocalizationsZu extends AppLocalizations {
 
   @override
   String get zatcaPhase2Supported => 'ZATCA Phase 2 supported';
+
+  @override
+  String get invitations => 'Invitations';
+
+  @override
+  String get invitationsSubtitle => 'Send and manage contact invitations';
+
+  @override
+  String get invitation => 'Invitation';
+
+  @override
+  String get searchEllipsis => 'Search...';
+
+  @override
+  String unreadCountLabel(int count) {
+    return '$count unread';
+  }
+
+  @override
+  String get unlockBusinessProDescription =>
+      'Unlock customer orders, team attendance, loyalty programs, and more for your business.';
+
+  @override
+  String get received => 'Received';
+
+  @override
+  String get sent => 'Sent';
+
+  @override
+  String get noInvitationsYet => 'No invitations yet';
+
+  @override
+  String get whenSomeoneInvitesYouItWillShowUpHere =>
+      'When someone invites you, it will show up here.';
+
+  @override
+  String get noSentInvitations => 'No sent invitations';
+
+  @override
+  String get createInvitationSaveDraftOrSendHint =>
+      'Create an invitation, save as draft, or send to contacts.';
+
+  @override
+  String get noCardsYet => 'No cards yet';
+
+  @override
+  String get designAnInvitationItWillAppearHere =>
+      'Design an invitation — it will appear here';
+
+  @override
+  String get contactsOnBarqody => 'Contacts on Barqody';
+
+  @override
+  String get inviteToBarqody => 'Invite to Barqody';
+
+  @override
+  String get onBarqody => 'On Barqody';
+
+  @override
+  String get editText => 'Edit text';
+
+  @override
+  String get enterTextHint => 'Enter text…';
+
+  @override
+  String get qrCodeDataUrlText => 'QR code data (URL / text)';
+
+  @override
+  String get newText => 'New text';
+
+  @override
+  String get draftSavedSuccessfully => 'Draft saved successfully';
+
+  @override
+  String get myInvitationTemplate => 'My invitation template';
+
+  @override
+  String get publishTemplate => 'Publish template';
+
+  @override
+  String get shareDesignForGallery =>
+      'Share this design so other users can use it from the gallery.';
+
+  @override
+  String get templateName => 'Template name';
+
+  @override
+  String get publish => 'Publish';
+
+  @override
+  String get savedToGallery => 'Saved to gallery';
+
+  @override
+  String get couldNotSave => 'Could not save';
+
+  @override
+  String get textLabel => 'Text';
+
+  @override
+  String get infoFieldIconText => 'Info field (icon + text)';
+
+  @override
+  String get logo => 'Logo';
+
+  @override
+  String get photo => 'Photo';
+
+  @override
+  String get divider => 'Divider';
+
+  @override
+  String get designInvitation => 'Design invitation';
+
+  @override
+  String get publishForOthers => 'Publish for others';
+
+  @override
+  String get undo => 'Undo';
+
+  @override
+  String get redo => 'Redo';
+
+  @override
+  String get download => 'Download';
+
+  @override
+  String get bgShort => 'BG';
+
+  @override
+  String get photoBg => 'Photo BG';
+
+  @override
+  String get rtl => 'RTL';
+
+  @override
+  String get ltr => 'LTR';
+
+  @override
+  String get style => 'Style';
+
+  @override
+  String get saveDraft => 'Save draft';
+
+  @override
+  String get continueInvite => 'Continue · Invite';
+
+  @override
+  String get layerStyle => 'Layer style';
+
+  @override
+  String get font => 'Font';
+
+  @override
+  String get bold => 'Bold';
+
+  @override
+  String get italic => 'Italic';
+
+  @override
+  String get icon => 'Icon';
+
+  @override
+  String get color => 'Color';
+
+  @override
+  String get qrColor => 'QR color';
+
+  @override
+  String get width => 'Width';
+
+  @override
+  String get height => 'Height';
+
+  @override
+  String get blank => 'Blank';
+
+  @override
+  String get official => 'Official';
+
+  @override
+  String get community => 'Community';
+
+  @override
+  String get country => 'Country';
+
+  @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get noTemplatesForFilter => 'No templates for this filter';
+
+  @override
+  String get startFromBlank => 'Start from blank';
+
+  @override
+  String get noCommunityTemplatesYet => 'No community templates yet';
+
+  @override
+  String get designAndPublishHint =>
+      'Design a card and tap Publish for others to share it here.';
+
+  @override
+  String get refresh => 'Refresh';
+
+  @override
+  String templateByPublisherUses(String publisher, int uses) {
+    return 'by $publisher · $uses uses';
+  }
+
+  @override
+  String get newInvitation => 'New invitation';
+
+  @override
+  String get eventType => 'Event type';
+
+  @override
+  String get title => 'Title';
+
+  @override
+  String get titleIsRequired => 'Title is required';
+
+  @override
+  String get venue => 'Venue';
+
+  @override
+  String get shownOnTheCard => 'Shown on the card';
+
+  @override
+  String get dateAndTime => 'Date & time';
+
+  @override
+  String get optional => 'Optional';
+
+  @override
+  String get message => 'Message';
+
+  @override
+  String get optionalNote => 'Optional note';
+
+  @override
+  String get nextCustomizeCard => 'Next · Customize card';
+
+  @override
+  String get saveAsPng => 'Save as PNG';
+
+  @override
+  String get saveAsJpg => 'Save as JPG';
+
+  @override
+  String get editInvitation => 'Edit invitation';
+
+  @override
+  String get design => 'Design';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get wallpaper => 'Wallpaper';
+
+  @override
+  String get selectContactsAndSend => 'Select contacts & send';
+
+  @override
+  String get updateDraft => 'Update draft';
+
+  @override
+  String get saveAsDraft => 'Save as draft';
+
+  @override
+  String get wallpaperSelected => 'Wallpaper selected';
+
+  @override
+  String get addWallpaper => 'Add wallpaper';
+
+  @override
+  String get fillsFullCardBackground => 'Fills the full card background';
+
+  @override
+  String get invitationNotFound => 'Invitation not found';
+
+  @override
+  String get downloadInvitationCard => 'Download invitation card';
+
+  @override
+  String get failedToDownloadInvitationCard =>
+      'Failed to download invitation card';
+
+  @override
+  String get downloadCard => 'Download card';
+
+  @override
+  String get downloadCardPngJpg => 'Download card (PNG / JPG)';
+
+  @override
+  String get notFound => 'Not found';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get savingEllipsis => 'Saving...';
+
+  @override
+  String sentToCount(int count) {
+    return 'Sent to ($count)';
+  }
+
+  @override
+  String get usersWhoReceivedInvitation =>
+      'Users who already received this invitation';
+
+  @override
+  String get sentTo => 'Sent to';
+
+  @override
+  String get noRecipientsOnInvitation => 'No recipients on this invitation.';
+
+  @override
+  String get phoneContactsPermissionHint =>
+      'Phone contacts need permission to invite people from your address book.';
+
+  @override
+  String get contact => 'Contact';
+
+  @override
+  String get failedToLoadContacts => 'Failed to load contacts';
+
+  @override
+  String heyImUsingBarqody(String link) {
+    return 'Hey, I\'m using Barqody — join me: $link';
+  }
+
+  @override
+  String get invitationSentSuccessfully => 'Invitation sent successfully';
+
+  @override
+  String get selectContact => 'Select contact';
+
+  @override
+  String get draft => 'Draft';
+
+  @override
+  String get searchNameOrNumber => 'Search name or number';
+
+  @override
+  String get noContactsFound => 'No contacts found';
+
+  @override
+  String get noResults => 'No results';
+
+  @override
+  String get openSettings => 'Open settings';
+
+  @override
+  String get selectContactsToSend => 'Select contacts to send';
+
+  @override
+  String sendInvitationCount(int count) {
+    return 'Send invitation ($count)';
+  }
+
+  @override
+  String get notOnBarqody => 'Not on Barqody';
+
+  @override
+  String get invite => 'Invite';
+
+  @override
+  String get untitled => 'Untitled';
+
+  @override
+  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number';
+
+  @override
+  String get barqodyWillSendOtp =>
+      'Barqody will send an OTP to verify your number.';
+
+  @override
+  String get required => 'Required';
+
+  @override
+  String get tooShort => 'Too short';
+
+  @override
+  String get chooseACountry => 'Choose a country';
+
+  @override
+  String get searchCountry => 'Search country';
+
+  @override
+  String get noCountriesFound => 'No countries found';
+
+  @override
+  String get pleaseEnter6DigitCode => 'Please enter the 6-digit code';
+
+  @override
+  String get verificationTokenMissing =>
+      'Verification token missing. Please go back and try again.';
+
+  @override
+  String get verifyingYourNumber => 'Verifying your number';
+
+  @override
+  String get enterTheCodeSentTo => 'Enter the code sent to';
+
+  @override
+  String get wrongNumber => 'Wrong number?';
+
+  @override
+  String get forTesting => 'For testing';
+
+  @override
+  String get enter6DigitCode => 'Enter 6-digit code';
+
+  @override
+  String get resendCode => 'Resend code';
+
+  @override
+  String resendCodeIn(String time) {
+    return 'Resend code in $time';
+  }
+
+  @override
+  String get profileInfo => 'Profile info';
+
+  @override
+  String get pleaseProvideNameAndPhoto =>
+      'Please provide your name and an optional profile photo';
+
+  @override
+  String get typeYourNameHere => 'Type your name here';
+
+  @override
+  String get nameIsTooShort => 'Name is too short';
+
+  @override
+  String get present => 'Present';
+
+  @override
+  String get absent => 'Absent';
+
+  @override
+  String get partial => 'Partial';
+
+  @override
+  String get presentUpper => 'PRESENT';
+
+  @override
+  String get absentUpper => 'ABSENT';
+
+  @override
+  String get attendance => 'Attendance';
+
+  @override
+  String get todaysAttendance => 'Today\'s Attendance';
+
+  @override
+  String get employees => 'Employees';
+
+  @override
+  String removeEmployeeFromTeam(String name) {
+    return 'Remove $name from your team?';
+  }
+
+  @override
+  String get sunday => 'Sunday';
+
+  @override
+  String get monday => 'Monday';
+
+  @override
+  String get tuesday => 'Tuesday';
+
+  @override
+  String get wednesday => 'Wednesday';
+
+  @override
+  String get thursday => 'Thursday';
+
+  @override
+  String get friday => 'Friday';
+
+  @override
+  String get saturday => 'Saturday';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get security => 'Security';
+
+  @override
+  String get billing => 'Billing';
+
+  @override
+  String get appTitleFull => 'BarQody - Digital Business Card';
+
+  @override
+  String get contactsPermissionRequired =>
+      'Contacts permission is required to find people you know.';
+
+  @override
+  String heyJoinMeOnBarqody(String name, String link) {
+    return 'Hey $name! Join me on Barqody: $link';
+  }
+
+  @override
+  String noResultsForQuery(String query) {
+    return 'No results for \"$query\"';
+  }
+
+  @override
+  String get savedContact => 'Saved contact';
+
+  @override
+  String get thisIsYou => 'This is you';
+
+  @override
+  String get viewingOwnProfile => 'You are viewing your own profile';
+
+  @override
+  String get openMyCard => 'Open my card';
+
+  @override
+  String checkOutThisProfile(String link) {
+    return 'Check out this profile: $link';
+  }
+
+  @override
+  String get enrolled => 'Enrolled';
+
+  @override
+  String rewardsForName(String name) {
+    return 'Rewards for $name';
+  }
+
+  @override
+  String enrollCustomerInRewardsHint(String name) {
+    return 'Enroll $name in your business rewards programs.';
+  }
+
+  @override
+  String get enroll => 'Enroll';
+
+  @override
+  String get program => 'Program';
+
+  @override
+  String deleteCategoryNamed(String name) {
+    return 'Delete \"$name\"?';
+  }
+
+  @override
+  String optionsForName(String name) {
+    return 'Options for $name';
+  }
+
+  @override
+  String removeFromContacts(String name) {
+    return 'Remove \"$name\" from your contacts?';
+  }
+
+  @override
+  String contactRemoved(String name) {
+    return '$name removed.';
+  }
+
+  @override
+  String labelCapturedProcessing(String label) {
+    return '$label captured. Processing...';
+  }
+
+  @override
+  String switchedToAccount(String name) {
+    return 'Switched to $name';
+  }
+
+  @override
+  String get device => 'Device';
+
+  @override
+  String lastActiveAgo(String time) {
+    return 'Last active $time ago';
+  }
+
+  @override
+  String lastActiveAt(String time) {
+    return 'Last active $time';
+  }
+
+  @override
+  String get thisDevice => 'This device';
+
+  @override
+  String thisDeviceWithName(String name) {
+    return 'This device · $name';
+  }
+
+  @override
+  String shiftRange(String start, String end) {
+    return 'Shift $start - $end';
+  }
+
+  @override
+  String todayWithDate(String date) {
+    return 'Today • $date';
+  }
+
+  @override
+  String get checkInColon => 'Check-in:';
+
+  @override
+  String get checkOutColon => 'Check-out:';
+
+  @override
+  String youJoinedBusiness(String name) {
+    return 'You joined $name';
+  }
+
+  @override
+  String shiftLabel(String start, String end) {
+    return 'Shift: $start - $end';
+  }
+
+  @override
+  String get you => 'You';
+
+  @override
+  String get inactive => 'Inactive';
+
+  @override
+  String get failed => 'Failed';
+
+  @override
+  String get created => 'Created';
+
+  @override
+  String stampsForReward(int count) {
+    return '$count stamps for reward';
+  }
+
+  @override
+  String stampsRequiredCount(int count) {
+    return '$count stamps required';
+  }
+
+  @override
+  String stampsProgress(int current, int total) {
+    return '$current / $total Stamps';
+  }
+
+  @override
+  String get businessLabel => 'Business';
+
+  @override
+  String get businesses => 'Businesses';
+
+  @override
+  String programsCount(int count) {
+    return '$count programs';
+  }
+
+  @override
+  String programCountOne(int count) {
+    return '$count program';
+  }
+
+  @override
+  String visitBusinessToCollectStamps(String name) {
+    return 'Visit $name to collect stamps';
+  }
+
+  @override
+  String statusUpdatedTo(String status) {
+    return 'Status updated to $status';
+  }
+
+  @override
+  String get customer => 'Customer';
+
+  @override
+  String get items => 'Items';
+
+  @override
+  String noStatusOrders(String status) {
+    return 'No $status orders';
+  }
+
+  @override
+  String get menu => 'Menu';
+
+  @override
+  String get catalog => 'Catalog';
+
+  @override
+  String get services => 'Services';
+
+  @override
+  String get newMenuOrder => 'New Menu Order';
+
+  @override
+  String get newServiceOrder => 'New Service Order';
+
+  @override
+  String get newCatalogOrder => 'New Catalog Order';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get completed => 'Completed';
+
+  @override
+  String get cancelled => 'Cancelled';
+
+  @override
+  String get free => 'Free';
+
+  @override
+  String itemCount(int count) {
+    return '$count items';
+  }
+
+  @override
+  String totalRs(String amount) {
+    return 'Total: Rs $amount';
+  }
+
+  @override
+  String orderPlacedWith(String name) {
+    return 'Order placed with $name!';
+  }
+
+  @override
+  String bookedWith(String item, String name) {
+    return 'Booked $item with $name!';
+  }
+
+  @override
+  String bookItem(String name) {
+    return 'Book $name';
+  }
+
+  @override
+  String appliedDesign(String name) {
+    return 'Applied \"$name\" design';
+  }
+
+  @override
+  String appliedTemplate(String name) {
+    return 'Applied \"$name\" template';
+  }
+
+  @override
+  String get myCard => 'My Card';
+
+  @override
+  String get egWorkEvents => 'e.g. Work, Events';
+
+  @override
+  String get subtitle => 'Subtitle';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get cordiallyInvites => 'Cordially invites';
+
+  @override
+  String get yourEventTitle => 'Your event title';
+
+  @override
+  String get guestNameAppearsOnInvite =>
+      'Guest name appears when they open this invite';
+
+  @override
+  String hostedBy(String name) {
+    return 'Hosted by $name';
+  }
+
+  @override
+  String get scanToOpen => 'Scan to open';
+
+  @override
+  String get tapToEdit => 'Tap to edit';
+
+  @override
+  String enterYourPlatformUsername(String platform) {
+    return 'Enter your $platform username';
+  }
+
+  @override
+  String get onboardingShareDescription =>
+      'Share your digital business card instantly with a QR code or link — no paper needed.';
+
+  @override
+  String get onboardingUpToDateDescription =>
+      'Keep your contact details always up to date. One change updates everywhere.';
+
+  @override
+  String get onboardingSmartCaptureDescription =>
+      'Capture contacts from paper cards and event badges with your camera.';
+
+  @override
+  String pkrPerMonth(String amount) {
+    return 'PKR $amount/month';
+  }
+
+  @override
+  String monthsFree(int count) {
+    return '$count months free';
+  }
+
+  @override
+  String get unlimitedAiScans => 'Unlimited AI scans';
+
+  @override
+  String get analyticsAndInsights => 'Analytics and insights';
+
+  @override
+  String get completeProfileVisibility =>
+      'Complete your profile for better visibility';
+
+  @override
+  String get greatProfileComplete => 'Great! Your profile looks complete';
+
+  @override
+  String copiedTypeToClipboard(String type) {
+    return '$type copied to clipboard';
+  }
+
+  @override
+  String get stampType => 'Stamp';
+
+  @override
+  String get bothType => 'Both';
+
+  @override
+  String get industryTechnology => 'Technology';
+
+  @override
+  String get industryRetail => 'Retail';
+
+  @override
+  String get industryHealthcare => 'Healthcare';
+
+  @override
+  String get industryEducation => 'Education';
+
+  @override
+  String get industryHospitality => 'Hospitality';
+
+  @override
+  String get industryFinance => 'Finance';
+
+  @override
+  String get industryOther => 'Other';
+
+  @override
+  String get industryEntertainment => 'Entertainment';
+
+  @override
+  String get accountAlreadyLoggedInOnDevice =>
+      'This account is already logged in on this device';
+
+  @override
+  String get deviceLoggedOutFromLinkedDevices =>
+      'This device was logged out from Linked devices';
+
+  @override
+  String get selectContactsToSendOrSaveDraft =>
+      'Select contacts to send, or save as draft';
+
+  @override
+  String get templatePublishedOthersCanUse =>
+      'Template published! Others can use it now.';
+
+  @override
+  String subscriptionRequestSubmittedOn(String plan) {
+    return 'Your $plan request is submitted. We\'ll notify you once reviewed.';
+  }
+
+  @override
+  String get lng => 'Lng';
+
+  @override
+  String enterField(String label) {
+    return 'Enter $label';
+  }
+
+  @override
+  String get chooseATemplate => 'Choose a template';
+
+  @override
+  String get cardSavedToGallery => 'Card saved to gallery';
+
+  @override
+  String get couldNotSaveCheckGalleryPermission =>
+      'Could not save. Check gallery permission.';
+
+  @override
+  String failedToLoadContactsWithError(String error) {
+    return 'Failed to load contacts: $error';
+  }
+
+  @override
+  String get phoneNumberHintExample => '+1 (555) 123-4567';
+
+  @override
+  String get httpsExampleHint => 'https://example.com';
+
+  @override
+  String get egCoffeeClub => 'e.g. Coffee Club';
+
+  @override
+  String get egBuy10Get1Free => 'e.g. Buy 10 Get 1 Free';
+
+  @override
+  String openingMockLink(String url) {
+    return 'Opening mock link: $url';
+  }
+
+  @override
+  String get saudiEInvoiceShareHeader => 'Saudi E-Invoice';
+
+  @override
+  String sellerColon(String name) {
+    return 'Seller: $name';
+  }
+
+  @override
+  String vatColon(String value) {
+    return 'VAT: $value';
+  }
+
+  @override
+  String totalColon(String value) {
+    return 'Total: $value';
+  }
+
+  @override
+  String dateColon(String value) {
+    return 'Date: $value';
+  }
+
+  @override
+  String rsAmount(String amount) {
+    return 'Rs $amount';
+  }
+
+  @override
+  String get customizeCardTitle => 'Customize card';
 }

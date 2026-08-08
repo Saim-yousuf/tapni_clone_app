@@ -228,7 +228,10 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                                         ),
                                         const SizedBox(height: 4),
                                         Text(
-                                          'Shift ${employer.shiftStart} - ${employer.shiftEnd}',
+                                          context.l10n.shiftRange(
+                                            employer.shiftStart,
+                                            employer.shiftEnd,
+                                          ),
                                           style: AttendanceUi.bodyMuted.copyWith(
                                             color: selected
                                                 ? Colors.white70
@@ -271,7 +274,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Today • ${DateFormat('EEE, MMM d').format(DateTime.now())}',
+            context.l10n.todayWithDate(
+              DateFormat('EEE, MMM d').format(DateTime.now()),
+            ),
             style: AttendanceUi.sectionTitle,
           ),
           SizedBox(height: 12),
@@ -280,12 +285,12 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
           else ...[
             if (record?.checkInTime != null)
               Text(
-                'Check-in: ${DateFormat('hh:mm a').format(record!.checkInTime!.toLocal())}',
+                '${context.l10n.checkInColon} ${DateFormat('hh:mm a').format(record!.checkInTime!.toLocal())}',
                 style: AttendanceUi.body,
               ),
             if (record?.checkOutTime != null)
               Text(
-                'Check-out: ${DateFormat('hh:mm a').format(record!.checkOutTime!.toLocal())}',
+                '${context.l10n.checkOutColon} ${DateFormat('hh:mm a').format(record!.checkOutTime!.toLocal())}',
                 style: AttendanceUi.body,
               ),
             if (record == null || record.checkInTime == null)
@@ -347,9 +352,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
           const SizedBox(height: 16),
           Row(
             children: [
-              _miniStat('Present', summary.present, Colors.green.shade700),
-              _miniStat('Absent', summary.absent, Colors.red.shade700),
-              _miniStat('Partial', summary.partial, Colors.orange.shade800),
+              _miniStat(context.l10n.present, summary.present, Colors.green.shade700),
+              _miniStat(context.l10n.absent, summary.absent, Colors.red.shade700),
+              _miniStat(context.l10n.partial, summary.partial, Colors.orange.shade800),
             ],
           ),
         ],

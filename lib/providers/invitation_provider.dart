@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/l10n/l10n_lookup.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 import 'package:tapni_app/models/published_invitation_template.dart';
@@ -192,7 +193,7 @@ class InvitationProvider extends ChangeNotifier {
     if (!saveAsDraft && recipientIds.isEmpty) {
       if (showFeedback && context != null && context.mounted) {
         ShowAlert.error(
-          message: 'Select contacts to send, or save as draft',
+          message: l10nOr((l) => l.selectContactsToSendOrSaveDraft, 'Select contacts to send, or save as draft'),
           context: context,
         );
       }
@@ -319,7 +320,7 @@ class InvitationProvider extends ChangeNotifier {
           notifyListeners();
           if (context != null && context.mounted) {
             ShowAlert.success(
-              message: 'Template published! Others can use it now.',
+              message: l10nOr((l) => l.templatePublishedOthersCanUse, 'Template published! Others can use it now.'),
               context: context,
             );
           }

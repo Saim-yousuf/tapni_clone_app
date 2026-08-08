@@ -16,6 +16,7 @@ import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
+import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 import 'package:tapni_app/widgets/templates_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -36,25 +37,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
   File? profileImageFile;
   File? coverImageFile;
   bool _showProfileStrengthCard = false;
+  bool _didResolveStrengthCard = false;
 
   @override
   void initState() {
     super.initState();
-    final profile = Provider.of<ProfileProvider>(
-      context,
-      listen: false,
-    ).profile;
-    _nameController = TextEditingController(text: profile.name);
-    _bioController = TextEditingController(text: profile.bio);
-    _showProfileStrengthCard = _resolveProfileStrengthCardVisibility();
-  }
-
-  bool _resolveProfileStrengthCardVisibility() {
     final profileProvider = Provider.of<ProfileProvider>(
       context,
       listen: false,
     );
+    final profile = profileProvider.profile;
+    _nameController = TextEditingController(text: profile.name);
+    _bioController = TextEditingController(text: profile.bio);
 
+    // Safety net if splash bootstrap hasn't started fetch yet.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final provider = Provider.of<ProfileProvider>(context, listen: false);
+      if (!provider.hasFetchedProfile && !provider.isLoading) {
+        provider.fetchProfile();
+      }
+    });
+  }
+
+  void _maybeResolveStrengthCard(ProfileProvider profileProvider) {
+    if (_didResolveStrengthCard || !profileProvider.hasFetchedProfile) {
+      return;
+    }
+    _didResolveStrengthCard = true;
+    _showProfileStrengthCard = _resolveProfileStrengthCardVisibility(
+      profileProvider,
+    );
+  }
+
+  bool _resolveProfileStrengthCardVisibility(
+    ProfileProvider profileProvider,
+  ) {
     if (profileProvider.score >= 100) {
       return false;
     }
@@ -76,6 +94,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _nameController.dispose();
     _bioController.dispose();
     super.dispose();
+  }
+
+  void _syncControllersFromProfile(UserProfile profile) {
+    if (_nameController.text != profile.name) {
+      _nameController.text = profile.name;
+    }
+    if (_bioController.text != profile.bio) {
+      _bioController.text = profile.bio;
+    }
   }
 
   void _enterEditMode(ProfileProvider profileProvider) {
@@ -132,6 +159,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final profile = profileProvider.profile;
     final isEditing = profileProvider.isEditingProfile;
+    final showShimmer = !profileProvider.hasFetchedProfile;
+
+    if (!showShimmer) {
+      _syncControllersFromProfile(profile);
+      _maybeResolveStrengthCard(profileProvider);
+    }
 
     // Maintain current save trigger in case provider changes
     if (isEditing) {
@@ -160,9 +193,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       body: SafeArea(
-        child: isEditing
-            ? _buildEditMode(profileProvider, profile)
-            : _buildViewMode(profileProvider, profile),
+        child: showShimmer
+            ? const ProfileScreenShimmer()
+            : isEditing
+                ? _buildEditMode(profileProvider, profile)
+                : _buildViewMode(profileProvider, profile),
       ),
     );
   }

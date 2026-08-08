@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
+import 'package:tapni_app/utils/app_fonts.dart';
 
 class AppTheme {
   // Brand Colors (UNCHANGED NAMES)
@@ -21,6 +22,25 @@ class AppTheme {
   static const Color greyBorderDark = Color(0xFFFFFFFF);
   static const Color textGreyLight = Color(0xFF000000);
   static const Color textGreyDark = Color(0xFFFFFFFF);
+
+  /// Status + nav bar colors matching app theme (WhatsApp-style).
+  static SystemUiOverlayStyle systemUiFor(Brightness brightness) {
+    final isDark = brightness == Brightness.dark;
+    return SystemUiOverlayStyle(
+      statusBarColor: isDark ? primaryBlack : secondaryWhite,
+      statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+      statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      systemNavigationBarColor: isDark ? primaryBlack : secondaryWhite,
+      systemNavigationBarIconBrightness:
+          isDark ? Brightness.light : Brightness.dark,
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarContrastEnforced: false,
+    );
+  }
+
+  static void applySystemUi(Brightness brightness) {
+    SystemChrome.setSystemUIOverlayStyle(systemUiFor(brightness));
+  }
 
   // PURE BLACK GRADIENT (NO OTHER COLOR)
   static const LinearGradient goldGradient = LinearGradient(
@@ -61,9 +81,15 @@ class AppTheme {
     );
   }
 
-  // LIGHT THEME — WhatsApp-style Roboto typography
-  static ThemeData get lightTheme {
+  /// Backwards-compatible getters (Latin / Roboto).
+  static ThemeData get lightTheme => lightThemeFor(null);
+  static ThemeData get darkTheme => darkThemeFor(null);
+
+  // LIGHT THEME — locale-aware typography
+  static ThemeData lightThemeFor(Locale? locale) {
+    AppFonts.bind(locale);
     final baseText = ThemeData.light().textTheme.apply(bodyColor: primaryBlack);
+    final height = AppFonts.defaultHeight;
 
     return ThemeData(
       useMaterial3: true,
@@ -71,7 +97,7 @@ class AppTheme {
       primaryColor: primaryBlack,
       scaffoldBackgroundColor: secondaryWhite,
       cardColor: secondaryWhite,
-      fontFamily: GoogleFonts.roboto().fontFamily,
+      fontFamily: AppFonts.fontFamily,
       colorScheme: const ColorScheme.light(
         primary: primaryBlack,
         secondary: primaryBlack,
@@ -80,79 +106,87 @@ class AppTheme {
         onPrimary: secondaryWhite,
         onSecondary: secondaryWhite,
       ),
-      textTheme: GoogleFonts.robotoTextTheme(baseText).copyWith(
-        displayLarge: GoogleFonts.roboto(
+      textTheme: AppFonts.textTheme(baseText).copyWith(
+        displayLarge: AppFonts.textStyle(
           fontSize: 40,
           fontWeight: FontWeight.w700,
           color: primaryBlack,
-          letterSpacing: -0.3,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
+          height: height,
         ),
-        displayMedium: GoogleFonts.roboto(
+        displayMedium: AppFonts.textStyle(
           fontSize: 34,
           fontWeight: FontWeight.w700,
           color: primaryBlack,
-          letterSpacing: -0.3,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
+          height: height,
         ),
-        headlineLarge: GoogleFonts.roboto(
+        headlineLarge: AppFonts.textStyle(
           fontSize: 28,
           fontWeight: FontWeight.w700,
           color: primaryBlack,
-          letterSpacing: -0.3,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
+          height: height,
         ),
-        headlineMedium: GoogleFonts.roboto(
+        headlineMedium: AppFonts.textStyle(
           fontSize: 24,
           fontWeight: FontWeight.w600,
           color: primaryBlack,
-          letterSpacing: -0.2,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
+          height: height,
         ),
-        titleLarge: GoogleFonts.roboto(
+        titleLarge: AppFonts.textStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: primaryBlack,
-          letterSpacing: -0.2,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
+          height: height,
         ),
-        titleMedium: GoogleFonts.roboto(
+        titleMedium: AppFonts.textStyle(
           fontSize: 17,
           fontWeight: FontWeight.w500,
           color: primaryBlack,
+          height: height,
         ),
-        bodyLarge: GoogleFonts.roboto(
+        bodyLarge: AppFonts.textStyle(
           fontSize: 16,
           fontWeight: FontWeight.w400,
           color: primaryBlack,
-          height: 1.35,
+          height: height,
         ),
-        bodyMedium: GoogleFonts.roboto(
+        bodyMedium: AppFonts.textStyle(
           fontSize: 15,
           fontWeight: FontWeight.w400,
           color: primaryBlack,
-          height: 1.35,
+          height: height,
         ),
-        bodySmall: GoogleFonts.roboto(
+        bodySmall: AppFonts.textStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: primaryBlack,
-          height: 1.35,
+          height: height,
         ),
-        labelLarge: GoogleFonts.roboto(
+        labelLarge: AppFonts.textStyle(
           fontSize: 15,
           fontWeight: FontWeight.w500,
           color: primaryBlack,
+          height: height,
         ),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: secondaryWhite,
         elevation: 0,
+        systemOverlayStyle: systemUiFor(Brightness.light),
         iconTheme: const IconThemeData(color: primaryBlack),
         centerTitle: true,
-        titleTextStyle: GoogleFonts.roboto(
+        titleTextStyle: AppFonts.textStyle(
           color: primaryBlack,
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          letterSpacing: -0.2,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
+          height: height,
         ),
       ),
-
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryBlack,
@@ -162,9 +196,13 @@ class AppTheme {
           ),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           elevation: 0,
+          textStyle: AppFonts.textStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            height: height,
+          ),
         ),
       ),
-
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: secondaryWhite,
@@ -182,7 +220,6 @@ class AppTheme {
           borderSide: const BorderSide(color: primaryBlack, width: 1.5),
         ),
       ),
-
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: secondaryWhite,
         selectedItemColor: primaryBlack,
@@ -192,9 +229,12 @@ class AppTheme {
     );
   }
 
-  // DARK THEME — WhatsApp-style Roboto typography
-  static ThemeData get darkTheme {
-    final baseText = ThemeData.dark().textTheme.apply(bodyColor: secondaryWhite);
+  // DARK THEME — locale-aware typography
+  static ThemeData darkThemeFor(Locale? locale) {
+    AppFonts.bind(locale);
+    final baseText =
+        ThemeData.dark().textTheme.apply(bodyColor: secondaryWhite);
+    final height = AppFonts.defaultHeight;
 
     return ThemeData(
       useMaterial3: true,
@@ -202,7 +242,7 @@ class AppTheme {
       primaryColor: secondaryWhite,
       scaffoldBackgroundColor: primaryBlack,
       cardColor: primaryBlack,
-      fontFamily: GoogleFonts.roboto().fontFamily,
+      fontFamily: AppFonts.fontFamily,
       colorScheme: const ColorScheme.dark(
         primary: secondaryWhite,
         secondary: secondaryWhite,
@@ -211,79 +251,87 @@ class AppTheme {
         onPrimary: primaryBlack,
         onSecondary: primaryBlack,
       ),
-      textTheme: GoogleFonts.robotoTextTheme(baseText).copyWith(
-        displayLarge: GoogleFonts.roboto(
+      textTheme: AppFonts.textTheme(baseText).copyWith(
+        displayLarge: AppFonts.textStyle(
           fontSize: 40,
           fontWeight: FontWeight.w700,
           color: secondaryWhite,
-          letterSpacing: -0.3,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
+          height: height,
         ),
-        displayMedium: GoogleFonts.roboto(
+        displayMedium: AppFonts.textStyle(
           fontSize: 34,
           fontWeight: FontWeight.w700,
           color: secondaryWhite,
-          letterSpacing: -0.3,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
+          height: height,
         ),
-        headlineLarge: GoogleFonts.roboto(
+        headlineLarge: AppFonts.textStyle(
           fontSize: 28,
           fontWeight: FontWeight.w700,
           color: secondaryWhite,
-          letterSpacing: -0.3,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
+          height: height,
         ),
-        headlineMedium: GoogleFonts.roboto(
+        headlineMedium: AppFonts.textStyle(
           fontSize: 24,
           fontWeight: FontWeight.w600,
           color: secondaryWhite,
-          letterSpacing: -0.2,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
+          height: height,
         ),
-        titleLarge: GoogleFonts.roboto(
+        titleLarge: AppFonts.textStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: secondaryWhite,
-          letterSpacing: -0.2,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
+          height: height,
         ),
-        titleMedium: GoogleFonts.roboto(
+        titleMedium: AppFonts.textStyle(
           fontSize: 17,
           fontWeight: FontWeight.w500,
           color: secondaryWhite,
+          height: height,
         ),
-        bodyLarge: GoogleFonts.roboto(
+        bodyLarge: AppFonts.textStyle(
           fontSize: 16,
           fontWeight: FontWeight.w400,
           color: secondaryWhite,
-          height: 1.35,
+          height: height,
         ),
-        bodyMedium: GoogleFonts.roboto(
+        bodyMedium: AppFonts.textStyle(
           fontSize: 15,
           fontWeight: FontWeight.w400,
           color: secondaryWhite,
-          height: 1.35,
+          height: height,
         ),
-        bodySmall: GoogleFonts.roboto(
+        bodySmall: AppFonts.textStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: secondaryWhite,
-          height: 1.35,
+          height: height,
         ),
-        labelLarge: GoogleFonts.roboto(
+        labelLarge: AppFonts.textStyle(
           fontSize: 15,
           fontWeight: FontWeight.w500,
           color: secondaryWhite,
+          height: height,
         ),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: primaryBlack,
         elevation: 0,
+        systemOverlayStyle: systemUiFor(Brightness.dark),
         iconTheme: const IconThemeData(color: secondaryWhite),
         centerTitle: true,
-        titleTextStyle: GoogleFonts.roboto(
+        titleTextStyle: AppFonts.textStyle(
           color: secondaryWhite,
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          letterSpacing: -0.2,
+          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
+          height: height,
         ),
       ),
-
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: secondaryWhite,
@@ -292,9 +340,13 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
+          textStyle: AppFonts.textStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            height: height,
+          ),
         ),
       ),
-
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: primaryBlack,
@@ -312,7 +364,6 @@ class AppTheme {
           borderSide: const BorderSide(color: secondaryWhite, width: 1.5),
         ),
       ),
-
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: primaryBlack,
         selectedItemColor: secondaryWhite,

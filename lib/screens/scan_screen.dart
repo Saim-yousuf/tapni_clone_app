@@ -245,7 +245,7 @@ class _ScanScreenState extends State<ScanScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('$label captured. Processing...'),
+        content: Text(context.l10n.labelCapturedProcessing(label)),
         behavior: SnackBarBehavior.floating,
       ),
     );

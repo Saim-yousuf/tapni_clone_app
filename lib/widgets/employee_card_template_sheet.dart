@@ -67,11 +67,15 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
     super.dispose();
   }
 
-  String get _employeeName =>
-      widget.card.employeeName.isNotEmpty ? widget.card.employeeName : 'You';
+  String _employeeName(BuildContext context) =>
+      widget.card.employeeName.isNotEmpty
+          ? widget.card.employeeName
+          : context.l10n.you;
 
-  String get _employeeInitial =>
-      _employeeName.isNotEmpty ? _employeeName[0].toUpperCase() : 'Y';
+  String _employeeInitial(BuildContext context) {
+    final name = _employeeName(context);
+    return name.isNotEmpty ? name[0].toUpperCase() : 'Y';
+  }
 
   String get _profileUrl {
     if (widget.card.employeeProfileUrl.isNotEmpty) {
@@ -122,7 +126,7 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
 
     messenger.showSnackBar(
       SnackBar(
-        content: Text('Applied "${selected.name}" design'),
+        content: Text(context.l10n.appliedDesign(selected.name)),
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.green,
       ),
@@ -193,9 +197,9 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
                           fit: BoxFit.scaleDown,
                           child: EmployeeCompanyCardPreview(
                             template: template,
-                            employeeName: _employeeName,
+                            employeeName: _employeeName(context),
                             employeeId: widget.card.employeeDisplayId,
-                            employeeInitial: _employeeInitial,
+                            employeeInitial: _employeeInitial(context),
                             employeePhotoUrl:
                                 widget.card.employeePhoto.isNotEmpty
                                     ? widget.card.employeePhoto

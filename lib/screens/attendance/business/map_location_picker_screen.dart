@@ -198,8 +198,8 @@ class _MapLocationPickerScreenState extends State<MapLocationPickerScreen> {
                         padding: EdgeInsets.all(16),
                         decoration: AttendanceUi.thickCard,
                         child: Text(
-                          'Lat: ${_selectedPoint.latitude.toStringAsFixed(5)}\n'
-                          'Lng: ${_selectedPoint.longitude.toStringAsFixed(5)}',
+                          '${context.l10n.lat}: ${_selectedPoint.latitude.toStringAsFixed(5)}\n'
+                          '${context.l10n.lng}: ${_selectedPoint.longitude.toStringAsFixed(5)}',
                           style: AttendanceUi.body.copyWith(
                             fontWeight: FontWeight.w800,
                           ),

@@ -40,15 +40,15 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
   bool _isSaving = false;
   bool _isLoadingLocation = false;
 
-  static const _dayNames = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
+  List<String> _dayNames(BuildContext context) => [
+        context.l10n.sunday,
+        context.l10n.monday,
+        context.l10n.tuesday,
+        context.l10n.wednesday,
+        context.l10n.thursday,
+        context.l10n.friday,
+        context.l10n.saturday,
+      ];
 
   @override
   void initState() {
@@ -281,6 +281,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
     final title = widget.employee?.employee.displayName ??
         widget.employeeName ??
         context.l10n.inviteEmployee;
+    final dayNames = _dayNames(context);
 
     return Scaffold(
       backgroundColor: AttendanceUi.scaffoldBg,
@@ -366,7 +367,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
                       ),
                       SizedBox(width: 14),
                       Text(
-                        _dayNames[index],
+                        dayNames[index],
                         style: AttendanceUi.cardTitle.copyWith(
                           color: selected ? Colors.white : Colors.black,
                           fontSize: 19,

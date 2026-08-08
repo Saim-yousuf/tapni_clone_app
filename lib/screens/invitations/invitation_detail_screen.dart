@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -49,7 +50,7 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
       if (!silent) {
         setState(() {
           _loading = false;
-          _error = 'Invitation not found';
+          _error = context.l10n.invitationNotFound;
         });
       }
       return;
@@ -71,7 +72,7 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
         _invitation = inv;
         _error = null;
       } else if (_invitation == null) {
-        _error = 'Invitation not found';
+        _error = context.l10n.invitationNotFound;
       }
     });
   }
@@ -100,16 +101,16 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Download invitation card', style: WaUi.bodyMedium),
+              Text(ctx.l10n.downloadInvitationCard, style: WaUi.bodyMedium),
               const SizedBox(height: 8),
               ListTile(
                 leading: const Icon(Icons.image_outlined),
-                title: const Text('Save as PNG'),
+                title: Text(ctx.l10n.saveAsPng),
                 onTap: () => Navigator.pop(ctx, 'png'),
               ),
               ListTile(
                 leading: const Icon(Icons.photo_outlined),
-                title: const Text('Save as JPG'),
+                title: Text(ctx.l10n.saveAsJpg),
                 onTap: () => Navigator.pop(ctx, 'jpg'),
               ),
             ],
@@ -134,8 +135,8 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
         SnackBar(
           content: Text(
             ok
-                ? 'Invitation card saved to gallery (${format.toUpperCase()})'
-                : 'Could not save card. Check gallery permission.',
+                ? context.l10n.cardSavedToGallery
+                : context.l10n.couldNotSaveCheckGalleryPermission,
           ),
           behavior: SnackBarBehavior.floating,
           backgroundColor: ok ? null : Colors.redAccent,
@@ -144,8 +145,8 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
     } catch (_) {
       if (!mounted) return;
       messenger.showSnackBar(
-        const SnackBar(
-          content: Text('Failed to download invitation card'),
+        SnackBar(
+          content: Text(context.l10n.failedToDownloadInvitationCard),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.redAccent,
         ),
@@ -169,11 +170,11 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
         backgroundColor: WaUi.surface,
         elevation: 0,
         foregroundColor: WaUi.primaryText,
-        title: Text('Invitation', style: WaUi.sectionHeader),
+        title: Text(context.l10n.invitation, style: WaUi.sectionHeader),
         actions: [
           if (inv != null)
             IconButton(
-              tooltip: 'Download card',
+              tooltip: context.l10n.downloadCard,
               onPressed: _downloading ? null : _downloadCard,
               icon: _downloading
                   ? const SizedBox(
@@ -194,11 +195,14 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(_error ?? 'Not found', style: WaUi.body),
+                        Text(
+                          _error ?? context.l10n.notFound,
+                          style: WaUi.body,
+                        ),
                         const SizedBox(height: 12),
                         TextButton(
                           onPressed: () => _load(),
-                          child: const Text('Retry'),
+                          child: Text(context.l10n.retry),
                         ),
                       ],
                     ),
@@ -237,8 +241,8 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
                           icon: const Icon(Icons.download_rounded, size: 18),
                           label: Text(
                             _downloading
-                                ? 'Saving...'
-                                : 'Download card (PNG / JPG)',
+                                ? context.l10n.savingEllipsis
+                                : context.l10n.downloadCardPngJpg,
                           ),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: WaUi.primaryText,
@@ -253,12 +257,12 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
                       if (!isGuest && inv.recipients.isNotEmpty) ...[
                         const SizedBox(height: 24),
                         Text(
-                          'Sent to (${inv.recipients.length})',
+                          context.l10n.sentToCount(inv.recipients.length),
                           style: WaUi.bodyMedium,
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Users who already received this invitation',
+                          context.l10n.usersWhoReceivedInvitation,
                           style: WaUi.caption,
                         ),
                         const SizedBox(height: 12),
@@ -329,7 +333,7 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
                                               BorderRadius.circular(10),
                                         ),
                                         child: Text(
-                                          'Sent',
+                                          context.l10n.sent,
                                           style: WaUi.caption.copyWith(
                                             color: WaUi.accent,
                                             fontWeight: FontWeight.w700,
@@ -360,10 +364,10 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
                           inv.status == 'sent' &&
                           inv.recipients.isEmpty) ...[
                         const SizedBox(height: 24),
-                        Text('Sent to', style: WaUi.bodyMedium),
+                        Text(context.l10n.sentTo, style: WaUi.bodyMedium),
                         const SizedBox(height: 8),
                         Text(
-                          'No recipients on this invitation.',
+                          context.l10n.noRecipientsOnInvitation,
                           style: WaUi.caption,
                         ),
                       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/screens/invitations/invite_contacts_screen.dart';
@@ -124,7 +125,7 @@ class _InvitationDesignEditorScreenState
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Edit text', style: WaUi.sectionHeader),
+              Text(ctx.l10n.editText, style: WaUi.sectionHeader),
               const SizedBox(height: 12),
               TextField(
                 controller: controller,
@@ -133,7 +134,7 @@ class _InvitationDesignEditorScreenState
                 textDirection:
                     _design.rtl ? TextDirection.rtl : TextDirection.ltr,
                 decoration: InputDecoration(
-                  hintText: 'Enter text…',
+                  hintText: ctx.l10n.enterTextHint,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -145,7 +146,7 @@ class _InvitationDesignEditorScreenState
                 style: FilledButton.styleFrom(
                   backgroundColor: WaUi.buttonDark,
                 ),
-                child: const Text('Done'),
+                child: Text(ctx.l10n.done),
               ),
             ],
           ),
@@ -178,7 +179,7 @@ class _InvitationDesignEditorScreenState
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('QR code data (URL / text)', style: WaUi.sectionHeader),
+              Text(ctx.l10n.qrCodeDataUrlText, style: WaUi.sectionHeader),
               const SizedBox(height: 12),
               TextField(
                 controller: controller,
@@ -195,7 +196,7 @@ class _InvitationDesignEditorScreenState
                 style: FilledButton.styleFrom(
                   backgroundColor: WaUi.buttonDark,
                 ),
-                child: const Text('Done'),
+                child: Text(ctx.l10n.done),
               ),
             ],
           ),
@@ -240,7 +241,7 @@ class _InvitationDesignEditorScreenState
           id: InvitationDesign.newId(),
           type: DesignLayerType.text,
           fieldKey: 'custom',
-          text: _design.rtl ? 'نص جديد' : 'New text',
+          text: _design.rtl ? 'نص جديد' : context.l10n.newText,
           fontFamily: _design.rtl ? 'cairo' : 'playfair',
           fontSize: 0.04,
           color: _isDarkBg ? '#FFFFFF' : '#212121',
@@ -255,7 +256,7 @@ class _InvitationDesignEditorScreenState
           id: InvitationDesign.newId(),
           type: DesignLayerType.iconField,
           fieldKey: 'custom',
-          text: _design.rtl ? 'تفاصيل' : 'Details',
+          text: _design.rtl ? 'تفاصيل' : context.l10n.details,
           iconName: 'calendar',
           fontFamily: _design.rtl ? 'cairo' : 'roboto',
           fontSize: 0.028,
@@ -348,7 +349,7 @@ class _InvitationDesignEditorScreenState
   InvitationDraft _toDraft() {
     final title = _design.textForField('title') ??
         _design.textForField('names') ??
-        'Invitation';
+        context.l10n.invitation;
     final message = _design.textForField('message') ??
         _design.textForField('greeting') ??
         '';
@@ -375,7 +376,7 @@ class _InvitationDesignEditorScreenState
     return InvitationDraft(
       invitationId: existing?.invitationId,
       type: type,
-      title: title.trim().isEmpty ? 'Invitation' : title.trim(),
+      title: title.trim().isEmpty ? context.l10n.invitation : title.trim(),
       message: [message, if (host.isNotEmpty) host].where((e) => e.isNotEmpty).join('\n'),
       venue: venue,
       address: address,
@@ -424,7 +425,7 @@ class _InvitationDesignEditorScreenState
       widget.existingDraft?.invitationId = invitation.id;
       finishInvitationFlow(
         context,
-        message: 'Draft saved successfully',
+        message: context.l10n.draftSavedSuccessfully,
         screensToPop: widget.existingDraft != null ? 1 : 2,
       );
     }
@@ -432,34 +433,32 @@ class _InvitationDesignEditorScreenState
 
   Future<void> _publishTemplate() async {
     final nameCtrl = TextEditingController(
-      text: _design.textForField('title') ?? 'My invitation template',
+      text: _design.textForField('title') ?? context.l10n.myInvitationTemplate,
     );
     final descCtrl = TextEditingController();
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Publish template'),
+        title: Text(ctx.l10n.publishTemplate),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Share this design so other users can use it from the template gallery.',
-            ),
+            Text(ctx.l10n.shareDesignForGallery),
             const SizedBox(height: 16),
             TextField(
               controller: nameCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Template name',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: ctx.l10n.templateName,
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: descCtrl,
               maxLines: 2,
-              decoration: const InputDecoration(
-                labelText: 'Description (optional)',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: ctx.l10n.descriptionOptional,
+                border: const OutlineInputBorder(),
               ),
             ),
           ],
@@ -467,12 +466,12 @@ class _InvitationDesignEditorScreenState
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
+            child: Text(ctx.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: FilledButton.styleFrom(backgroundColor: WaUi.buttonDark),
-            child: const Text('Publish'),
+            child: Text(ctx.l10n.publish),
           ),
         ],
       ),
@@ -481,7 +480,7 @@ class _InvitationDesignEditorScreenState
     final name = nameCtrl.text.trim();
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Name is required')),
+        SnackBar(content: Text(context.l10n.nameIsRequired)),
       );
       return;
     }
@@ -506,7 +505,9 @@ class _InvitationDesignEditorScreenState
       if (!mounted) return;
       messenger.showSnackBar(
         SnackBar(
-          content: Text(ok ? 'Saved to gallery' : 'Could not save'),
+          content: Text(
+            ok ? context.l10n.savedToGallery : context.l10n.couldNotSave,
+          ),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -541,7 +542,7 @@ class _InvitationDesignEditorScreenState
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Background color', style: WaUi.sectionHeader),
+              Text(ctx.l10n.backgroundColor, style: WaUi.sectionHeader),
               const SizedBox(height: 16),
               Wrap(
                 spacing: 12,
@@ -596,7 +597,7 @@ class _InvitationDesignEditorScreenState
           children: [
             ListTile(
               leading: const Icon(Icons.text_fields),
-              title: const Text('Text'),
+              title: Text(ctx.l10n.textLabel),
               onTap: () {
                 Navigator.pop(ctx);
                 _addLayer(DesignLayerType.text);
@@ -604,7 +605,7 @@ class _InvitationDesignEditorScreenState
             ),
             ListTile(
               leading: const Icon(Icons.calendar_today_outlined),
-              title: const Text('Info field (icon + text)'),
+              title: Text(ctx.l10n.infoFieldIconText),
               onTap: () {
                 Navigator.pop(ctx);
                 _addLayer(DesignLayerType.iconField);
@@ -612,7 +613,7 @@ class _InvitationDesignEditorScreenState
             ),
             ListTile(
               leading: const Icon(Icons.image_outlined),
-              title: const Text('Logo'),
+              title: Text(ctx.l10n.logo),
               onTap: () {
                 Navigator.pop(ctx);
                 _addLayer(DesignLayerType.logo);
@@ -620,7 +621,7 @@ class _InvitationDesignEditorScreenState
             ),
             ListTile(
               leading: const Icon(Icons.photo_outlined),
-              title: const Text('Photo'),
+              title: Text(ctx.l10n.photo),
               onTap: () {
                 Navigator.pop(ctx);
                 _addLayer(DesignLayerType.image);
@@ -628,7 +629,7 @@ class _InvitationDesignEditorScreenState
             ),
             ListTile(
               leading: const Icon(Icons.qr_code_2),
-              title: const Text('QR code'),
+              title: Text(ctx.l10n.qrCode),
               onTap: () {
                 Navigator.pop(ctx);
                 _addLayer(DesignLayerType.qr);
@@ -636,7 +637,7 @@ class _InvitationDesignEditorScreenState
             ),
             ListTile(
               leading: const Icon(Icons.horizontal_rule),
-              title: const Text('Divider'),
+              title: Text(ctx.l10n.divider),
               onTap: () {
                 Navigator.pop(ctx);
                 _addLayer(DesignLayerType.shape);
@@ -682,10 +683,10 @@ class _InvitationDesignEditorScreenState
         backgroundColor: WaUi.surface,
         elevation: 0,
         foregroundColor: WaUi.primaryText,
-        title: Text('Design invitation', style: WaUi.sectionHeader),
+        title: Text(context.l10n.designInvitation, style: WaUi.sectionHeader),
         actions: [
           IconButton(
-            tooltip: 'Publish for others',
+            tooltip: context.l10n.publishForOthers,
             onPressed: isPublishing ? null : _publishTemplate,
             icon: isPublishing
                 ? const SizedBox(
@@ -696,17 +697,17 @@ class _InvitationDesignEditorScreenState
                 : const Icon(Icons.public),
           ),
           IconButton(
-            tooltip: 'Undo',
+            tooltip: context.l10n.undo,
             onPressed: _undo.isEmpty ? null : _doUndo,
             icon: const Icon(Icons.undo),
           ),
           IconButton(
-            tooltip: 'Redo',
+            tooltip: context.l10n.redo,
             onPressed: _redo.isEmpty ? null : _doRedo,
             icon: const Icon(Icons.redo),
           ),
           IconButton(
-            tooltip: 'Download',
+            tooltip: context.l10n.download,
             onPressed: _downloading ? null : _download,
             icon: _downloading
                 ? const SizedBox(
@@ -730,22 +731,22 @@ class _InvitationDesignEditorScreenState
                 children: [
                   _ToolBtn(
                     icon: Icons.add_box_outlined,
-                    label: 'Add',
+                    label: context.l10n.add,
                     onTap: _showAddMenu,
                   ),
                   _ToolBtn(
                     icon: Icons.palette_outlined,
-                    label: 'BG',
+                    label: context.l10n.bgShort,
                     onTap: _pickBackgroundColor,
                   ),
                   _ToolBtn(
                     icon: Icons.wallpaper_outlined,
-                    label: 'Photo BG',
+                    label: context.l10n.photoBg,
                     onTap: _pickBackgroundImage,
                   ),
                   _ToolBtn(
                     icon: Icons.translate,
-                    label: _design.rtl ? 'RTL' : 'LTR',
+                    label: _design.rtl ? context.l10n.rtl : context.l10n.ltr,
                     onTap: () {
                       _pushUndo();
                       setState(() => _design.rtl = !_design.rtl);
@@ -753,18 +754,18 @@ class _InvitationDesignEditorScreenState
                   ),
                   _ToolBtn(
                     icon: Icons.public,
-                    label: 'Publish',
+                    label: context.l10n.publish,
                     onTap: _publishTemplate,
                   ),
                   if (selected != null) ...[
                     _ToolBtn(
                       icon: Icons.tune,
-                      label: 'Style',
+                      label: context.l10n.style,
                       onTap: _showLayerStyleSheet,
                     ),
                     _ToolBtn(
                       icon: Icons.delete_outline,
-                      label: 'Delete',
+                      label: context.l10n.delete,
                       onTap: _deleteSelected,
                     ),
                   ],
@@ -820,7 +821,7 @@ class _InvitationDesignEditorScreenState
                               height: 18,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Text('Save draft'),
+                          : Text(context.l10n.saveDraft),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -832,7 +833,7 @@ class _InvitationDesignEditorScreenState
                         backgroundColor: WaUi.buttonDark,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      child: const Text('Continue · Invite'),
+                      child: Text(context.l10n.continueInvite),
                     ),
                   ),
                 ],
@@ -948,11 +949,11 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
           controller: scroll,
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
           children: [
-            Text('Layer style', style: WaUi.sectionHeader),
+            Text(context.l10n.layerStyle, style: WaUi.sectionHeader),
             const SizedBox(height: 16),
             if (_layer.type == DesignLayerType.text ||
                 _layer.type == DesignLayerType.iconField) ...[
-              Text('Font', style: WaUi.label),
+              Text(context.l10n.font, style: WaUi.label),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -980,13 +981,13 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
               Row(
                 children: [
                   FilterChip(
-                    label: const Text('Bold'),
+                    label: Text(context.l10n.bold),
                     selected: _layer.bold,
                     onSelected: (v) => _apply(_layer.copyWith(bold: v)),
                   ),
                   const SizedBox(width: 8),
                   FilterChip(
-                    label: const Text('Italic'),
+                    label: Text(context.l10n.italic),
                     selected: _layer.italic,
                     onSelected: (v) => _apply(_layer.copyWith(italic: v)),
                   ),
@@ -995,7 +996,7 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
               const SizedBox(height: 12),
             ],
             if (_layer.type == DesignLayerType.iconField) ...[
-              Text('Icon', style: WaUi.label),
+              Text(context.l10n.icon, style: WaUi.label),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -1011,7 +1012,7 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
               ),
               const SizedBox(height: 12),
             ],
-            Text('Color', style: WaUi.label),
+            Text(context.l10n.color, style: WaUi.label),
             const SizedBox(height: 8),
             Wrap(
               spacing: 10,
@@ -1037,7 +1038,7 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
             ),
             if (_layer.type == DesignLayerType.qr) ...[
               const SizedBox(height: 16),
-              Text('QR color', style: WaUi.label),
+              Text(context.l10n.qrColor, style: WaUi.label),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 10,
@@ -1059,14 +1060,14 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
               ),
             ],
             const SizedBox(height: 16),
-            Text('Width', style: WaUi.label),
+            Text(context.l10n.width, style: WaUi.label),
             Slider(
               value: _layer.width.clamp(0.1, 1.0),
               min: 0.1,
               max: 1.0,
               onChanged: (v) => _apply(_layer.copyWith(width: v)),
             ),
-            Text('Height', style: WaUi.label),
+            Text(context.l10n.height, style: WaUi.label),
             Slider(
               value: _layer.height.clamp(0.04, 0.8),
               min: 0.04,

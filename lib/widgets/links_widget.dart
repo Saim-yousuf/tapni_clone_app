@@ -1268,7 +1268,9 @@ class LinkSheet {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Enter your ${SocialLink.getPlatformName(platform)} username',
+                      context.l10n.enterYourPlatformUsername(
+                        SocialLink.getPlatformName(platform),
+                      ),
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey.shade800,
@@ -1426,7 +1428,10 @@ class LinkSheet {
 
       final label = link.platformName.isNotEmpty
           ? link.platformName
-          : CatalogHelper.labelForCategory(provider.profile.businessCategory);
+          : CatalogHelper.labelForCategory(
+              provider.profile.businessCategory,
+              context.l10n,
+            );
       final catalogType = link.catalogType ??
           CatalogHelper.typeForCategory(provider.profile.businessCategory);
       showMenuCatalogSheet(
@@ -1645,7 +1650,9 @@ class LinkSheet {
                     const SizedBox(height: 6),
                     Text(
                       link.fieldLabel ??
-                          'Enter your ${SocialLink.getPlatformName(link.platform)} username',
+                          context.l10n.enterYourPlatformUsername(
+                            SocialLink.getPlatformName(link.platform),
+                          ),
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey.shade800,

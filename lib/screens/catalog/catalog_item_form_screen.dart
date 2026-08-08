@@ -109,7 +109,9 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final title = _isEditing ? context.l10n.editItem : 'Add ${widget.catalogLabel} item';
+    final title = _isEditing
+        ? context.l10n.editItem
+        : context.l10n.addCatalogItem(widget.catalogLabel);
 
     return Scaffold(
       backgroundColor: Colors.white,

@@ -68,8 +68,8 @@ class ProfileScoreCard extends StatelessWidget {
             // MESSAGE
             Text(
               profileProvider.score < 100
-                  ? "Complete your profile to get more visibility"
-                  : "Great! Your profile is complete 🎉",
+                  ? context.l10n.completeProfileVisibility
+                  : context.l10n.greatProfileComplete,
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.black54,

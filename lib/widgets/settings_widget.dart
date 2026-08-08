@@ -172,7 +172,7 @@ void _generalBottomSheet(BuildContext context) {
                         if (phoneDisplay.isNotEmpty) ...[
                           _buildReadOnlyField(
                             context,
-                            label: 'Phone',
+                            label: context.l10n.phone,
                             value: phoneDisplay,
                           ),
                           const SizedBox(height: 12),
@@ -387,7 +387,7 @@ void _showTapniAccountBottomSheet(BuildContext context) {
       ? profile.name.trim()
       : (active?.name.trim().isNotEmpty == true
           ? active!.name.trim()
-          : 'Account');
+          : context.l10n.account);
 
   showModalBottomSheet(
     context: context,
@@ -431,8 +431,8 @@ void _showTapniAccountBottomSheet(BuildContext context) {
               Navigator.pop(context);
               _generalBottomSheet(context);
             }),
-            _buildMenuItem(Icons.security, 'Security', () {}),
-            _buildMenuItem(Icons.credit_card, 'Billing', () {}),
+            _buildMenuItem(Icons.security, context.l10n.security, () {}),
+            _buildMenuItem(Icons.credit_card, context.l10n.billing, () {}),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),

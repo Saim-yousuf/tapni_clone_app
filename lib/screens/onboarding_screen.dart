@@ -18,22 +18,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   List<Map<String, dynamic>> _pages(BuildContext context) => [
     {
       'title': context.l10n.oneTapToShare,
-      'description':
-          'Share your digital card instantly via NFC or QR Code. No app required for others to view your details.',
+      'description': context.l10n.onboardingShareDescription,
       'icon': Icons.contactless_rounded,
       'gradient': [Color(0xFF1E1E24), Color(0xFF0D0D0E)],
     },
     {
       'title': context.l10n.alwaysUpToDate,
-      'description':
-          'Keep your info updated in real time. Modify your social handles, title, or phone number and watch it update immediately.',
+      'description': context.l10n.onboardingUpToDateDescription,
       'icon': Icons.sync_lock_rounded,
       'gradient': [Color(0xFF251F14), Color(0xFF0D0D0E)],
     },
     {
       'title': context.l10n.smartContactCapture,
-      'description':
-          'Collect contacts during meetings. Let prospects fill out their details directly on your profile page to save them instantly.',
+      'description': context.l10n.onboardingSmartCaptureDescription,
       'icon': Icons.people_outline_rounded,
       'gradient': [Color(0xFF15221F), Color(0xFF0D0D0E)],
     },

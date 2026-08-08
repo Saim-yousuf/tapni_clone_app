@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/screens/invitations/customize_invitation_screen.dart';
@@ -87,7 +88,7 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
         backgroundColor: WaUi.surface,
         elevation: 0,
         foregroundColor: WaUi.primaryText,
-        title: Text('Invitations', style: WaUi.sectionHeader),
+        title: Text(context.l10n.invitations, style: WaUi.sectionHeader),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -98,7 +99,7 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
         backgroundColor: WaUi.buttonDark,
         foregroundColor: Colors.white,
         icon: const Icon(Icons.add),
-        label: const Text('Create'),
+        label: Text(context.l10n.create),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -114,7 +115,7 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
-                      Text('My cards', style: WaUi.sectionHeader),
+                      Text(context.l10n.myCards, style: WaUi.sectionHeader),
                       const Spacer(),
                       if (myCards.isNotEmpty)
                         Text(
@@ -174,9 +175,9 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
               labelColor: WaUi.primaryText,
               unselectedLabelColor: WaUi.secondaryText,
               indicatorColor: WaUi.accent,
-              tabs: const [
-                Tab(text: 'Received'),
-                Tab(text: 'Sent'),
+              tabs: [
+                Tab(text: context.l10n.received),
+                Tab(text: context.l10n.sent),
               ],
             ),
           ),
@@ -187,17 +188,17 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
                 _InvitationList(
                   items: provider.received,
                   isLoading: provider.isLoading,
-                  emptyTitle: 'No invitations yet',
+                  emptyTitle: context.l10n.noInvitationsYet,
                   emptySubtitle:
-                      'When someone invites you, it will show up here.',
+                      context.l10n.whenSomeoneInvitesYouItWillShowUpHere,
                   onRefresh: () => provider.fetchAll(),
                 ),
                 _InvitationList(
                   items: provider.sent,
                   isLoading: provider.isLoading,
-                  emptyTitle: 'No sent invitations',
+                  emptyTitle: context.l10n.noSentInvitations,
                   emptySubtitle:
-                      'Create an invitation, save as draft, or send to contacts.',
+                      context.l10n.createInvitationSaveDraftOrSendHint,
                   onRefresh: () => provider.fetchAll(),
                   showRecipientCount: true,
                   onOpen: _openMyCard,
@@ -230,10 +231,10 @@ class _EmptyMyCards extends StatelessWidget {
         children: [
           Icon(Icons.style_outlined, size: 36, color: WaUi.promoIconFg),
           const SizedBox(height: 10),
-          Text('No cards yet', style: WaUi.bodyMedium),
+          Text(context.l10n.noCardsYet, style: WaUi.bodyMedium),
           const SizedBox(height: 4),
           Text(
-            'Design an invitation — it will appear here',
+            context.l10n.designAnInvitationItWillAppearHere,
             textAlign: TextAlign.center,
             style: WaUi.caption,
           ),
@@ -241,7 +242,7 @@ class _EmptyMyCards extends StatelessWidget {
           TextButton.icon(
             onPressed: onCreate,
             icon: const Icon(Icons.add, size: 18),
-            label: const Text('Create card'),
+            label: Text(context.l10n.createCard),
           ),
         ],
       ),
@@ -302,7 +303,9 @@ class _MyCardTile extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              invitation.title.isEmpty ? 'Untitled' : invitation.title,
+              invitation.title.isEmpty
+                  ? context.l10n.untitled
+                  : invitation.title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -314,7 +317,7 @@ class _MyCardTile extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               invitation.status == 'draft'
-                  ? 'Draft'
+                  ? context.l10n.draft
                   : invitation.typeDisplay,
               style: TextStyle(
                 fontSize: 11,
@@ -448,7 +451,7 @@ class _InvitationList extends StatelessWidget {
                                               BorderRadius.circular(10),
                                         ),
                                         child: Text(
-                                          'Draft',
+                                          context.l10n.draft,
                                           style: WaUi.caption.copyWith(
                                             fontSize: 11,
                                             fontWeight: FontWeight.w700,
@@ -462,7 +465,7 @@ class _InvitationList extends StatelessWidget {
                                 Text(
                                   showRecipientCount
                                       ? inv.status == 'draft'
-                                          ? '${inv.typeDisplay} · Draft'
+                                          ? '${inv.typeDisplay} · ${context.l10n.draft}'
                                           : _sentToLabel(inv)
                                       : '${inv.sender.displayName} · ${inv.typeDisplay}',
                                   style: WaUi.caption,

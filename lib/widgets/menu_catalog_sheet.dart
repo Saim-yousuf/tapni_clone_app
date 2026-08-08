@@ -739,9 +739,9 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('$itemCount items'),
+                Text(context.l10n.itemCount(itemCount)),
                 Text(
-                  'Total: Rs ${total.toStringAsFixed(0)}',
+                  context.l10n.totalRs(total.toStringAsFixed(0)),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ],
@@ -1011,7 +1011,13 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     if (res.success) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Order placed with ${widget.businessName ?? "business"}!')),
+        SnackBar(
+          content: Text(
+            context.l10n.orderPlacedWith(
+              widget.businessName ?? context.l10n.businessLabel,
+            ),
+          ),
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -1031,7 +1037,7 @@ void openCatalogLink({
   final catalogType = link.catalogType ?? CatalogHelper.typeForCategory(businessCategory);
   final catalogLabel = link.platformName.isNotEmpty
       ? link.platformName
-      : CatalogHelper.labelForCategory(businessCategory);
+      : CatalogHelper.labelForCategory(businessCategory, context.l10n);
 
   showMenuCatalogSheet(
     context: context,

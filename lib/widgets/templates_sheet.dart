@@ -187,7 +187,9 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                           SnackBar(
                             content: Text(
                               saved
-                                  ? 'Applied "${selectedTemplate.name}" template'
+                                  ? context.l10n.appliedTemplate(
+                                      selectedTemplate.name,
+                                    )
                                   : context.l10n.templateAppliedLocallySyncFailed,
                             ),
                             duration: Duration(seconds: 2),

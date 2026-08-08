@@ -665,7 +665,7 @@
   "newLabel": "New ",
   "noContactsYet": "No contacts yet",
   "noDetailsYet": "No details yet",
-  "noLinksAddedYetNTapAddLinkToGetStarted": "No links added yet.\\nTap \"Add link\" to get started.",
+  "noLinksAddedYetNTapAddLinkToGetStarted": "No links added yet.\nTap \"Add link\" to get started.",
   "noMatches": "No matches",
   "noReasonProvided": "No reason provided.",
   "notEnrolled": "Not Enrolled",
@@ -763,7 +763,7 @@
   "websiteURL": "Website URL",
   "weekendDays": "Weekend Days",
   "workLocation": "Work Location",
-  "yourPROSubscriptionHasExpiredNN": "Your PRO subscription has expired.\\n\\n",
+  "yourPROSubscriptionHasExpiredNN": "Your PRO subscription has expired.\n\n",
   "yourPROSubscriptionHasExpired": "Your PRO subscription has expired.",
   "premiumFeaturesAreCurrentlyDisabled": "Premium features are currently disabled.",
   "proLinksAreHiddenFromYourPublicProfile": "Pro links are hidden from your public profile.",
@@ -849,5 +849,675 @@
   "invoiceHash": "Invoice hash",
   "copyAllDetails": "Copy all details",
   "zatcaPhase1Invoice": "ZATCA Phase 1 invoice",
-  "zatcaPhase2Supported": "ZATCA Phase 2 supported"
+  "zatcaPhase2Supported": "ZATCA Phase 2 supported",
+  "invitations": "Invitations",
+  "invitationsSubtitle": "Send and manage contact invitations",
+  "invitation": "Invitation",
+  "searchEllipsis": "Search...",
+  "unreadCountLabel": "{count} unread",
+  "@unreadCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unlockBusinessProDescription": "Unlock customer orders, team attendance, loyalty programs, and more for your business.",
+  "received": "Received",
+  "sent": "Sent",
+  "noInvitationsYet": "No invitations yet",
+  "whenSomeoneInvitesYouItWillShowUpHere": "When someone invites you, it will show up here.",
+  "noSentInvitations": "No sent invitations",
+  "createInvitationSaveDraftOrSendHint": "Create an invitation, save as draft, or send to contacts.",
+  "noCardsYet": "No cards yet",
+  "designAnInvitationItWillAppearHere": "Design an invitation — it will appear here",
+  "contactsOnBarqody": "Contacts on Barqody",
+  "inviteToBarqody": "Invite to Barqody",
+  "onBarqody": "On Barqody",
+  "editText": "Edit text",
+  "enterTextHint": "Enter text…",
+  "qrCodeDataUrlText": "QR code data (URL / text)",
+  "newText": "New text",
+  "draftSavedSuccessfully": "Draft saved successfully",
+  "myInvitationTemplate": "My invitation template",
+  "publishTemplate": "Publish template",
+  "shareDesignForGallery": "Share this design so other users can use it from the gallery.",
+  "templateName": "Template name",
+  "publish": "Publish",
+  "savedToGallery": "Saved to gallery",
+  "couldNotSave": "Could not save",
+  "textLabel": "Text",
+  "infoFieldIconText": "Info field (icon + text)",
+  "logo": "Logo",
+  "photo": "Photo",
+  "divider": "Divider",
+  "designInvitation": "Design invitation",
+  "publishForOthers": "Publish for others",
+  "undo": "Undo",
+  "redo": "Redo",
+  "download": "Download",
+  "bgShort": "BG",
+  "photoBg": "Photo BG",
+  "rtl": "RTL",
+  "ltr": "LTR",
+  "style": "Style",
+  "saveDraft": "Save draft",
+  "continueInvite": "Continue · Invite",
+  "layerStyle": "Layer style",
+  "font": "Font",
+  "bold": "Bold",
+  "italic": "Italic",
+  "icon": "Icon",
+  "color": "Color",
+  "qrColor": "QR color",
+  "width": "Width",
+  "height": "Height",
+  "blank": "Blank",
+  "official": "Official",
+  "community": "Community",
+  "country": "Country",
+  "categoryLabel": "Category",
+  "noTemplatesForFilter": "No templates for this filter",
+  "startFromBlank": "Start from blank",
+  "noCommunityTemplatesYet": "No community templates yet",
+  "designAndPublishHint": "Design a card and tap Publish for others to share it here.",
+  "refresh": "Refresh",
+  "templateByPublisherUses": "by {publisher} · {uses} uses",
+  "@templateByPublisherUses": {
+    "placeholders": {
+      "publisher": {
+        "type": "String"
+      },
+      "uses": {
+        "type": "int"
+      }
+    }
+  },
+  "newInvitation": "New invitation",
+  "eventType": "Event type",
+  "title": "Title",
+  "titleIsRequired": "Title is required",
+  "venue": "Venue",
+  "shownOnTheCard": "Shown on the card",
+  "dateAndTime": "Date & time",
+  "optional": "Optional",
+  "message": "Message",
+  "optionalNote": "Optional note",
+  "nextCustomizeCard": "Next · Customize card",
+  "saveAsPng": "Save as PNG",
+  "saveAsJpg": "Save as JPG",
+  "editInvitation": "Edit invitation",
+  "design": "Design",
+  "theme": "Theme",
+  "wallpaper": "Wallpaper",
+  "selectContactsAndSend": "Select contacts & send",
+  "updateDraft": "Update draft",
+  "saveAsDraft": "Save as draft",
+  "wallpaperSelected": "Wallpaper selected",
+  "addWallpaper": "Add wallpaper",
+  "fillsFullCardBackground": "Fills the full card background",
+  "invitationNotFound": "Invitation not found",
+  "downloadInvitationCard": "Download invitation card",
+  "failedToDownloadInvitationCard": "Failed to download invitation card",
+  "downloadCard": "Download card",
+  "downloadCardPngJpg": "Download card (PNG / JPG)",
+  "notFound": "Not found",
+  "retry": "Retry",
+  "savingEllipsis": "Saving...",
+  "sentToCount": "Sent to ({count})",
+  "@sentToCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "usersWhoReceivedInvitation": "Users who already received this invitation",
+  "sentTo": "Sent to",
+  "noRecipientsOnInvitation": "No recipients on this invitation.",
+  "phoneContactsPermissionHint": "Phone contacts need permission to invite people from your address book.",
+  "contact": "Contact",
+  "failedToLoadContacts": "Failed to load contacts",
+  "heyImUsingBarqody": "Hey, I'm using Barqody — join me: {link}",
+  "@heyImUsingBarqody": {
+    "placeholders": {
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "invitationSentSuccessfully": "Invitation sent successfully",
+  "selectContact": "Select contact",
+  "draft": "Draft",
+  "searchNameOrNumber": "Search name or number",
+  "noContactsFound": "No contacts found",
+  "noResults": "No results",
+  "openSettings": "Open settings",
+  "selectContactsToSend": "Select contacts to send",
+  "sendInvitationCount": "Send invitation ({count})",
+  "@sendInvitationCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notOnBarqody": "Not on Barqody",
+  "invite": "Invite",
+  "untitled": "Untitled",
+  "pleaseEnterValidPhoneNumber": "Please enter a valid phone number",
+  "barqodyWillSendOtp": "Barqody will send an OTP to verify your number.",
+  "required": "Required",
+  "tooShort": "Too short",
+  "chooseACountry": "Choose a country",
+  "searchCountry": "Search country",
+  "noCountriesFound": "No countries found",
+  "pleaseEnter6DigitCode": "Please enter the 6-digit code",
+  "verificationTokenMissing": "Verification token missing. Please go back and try again.",
+  "verifyingYourNumber": "Verifying your number",
+  "enterTheCodeSentTo": "Enter the code sent to",
+  "wrongNumber": "Wrong number?",
+  "forTesting": "For testing",
+  "enter6DigitCode": "Enter 6-digit code",
+  "resendCode": "Resend code",
+  "resendCodeIn": "Resend code in {time}",
+  "@resendCodeIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "profileInfo": "Profile info",
+  "pleaseProvideNameAndPhoto": "Please provide your name and an optional profile photo",
+  "typeYourNameHere": "Type your name here",
+  "nameIsTooShort": "Name is too short",
+  "present": "Present",
+  "absent": "Absent",
+  "partial": "Partial",
+  "presentUpper": "PRESENT",
+  "absentUpper": "ABSENT",
+  "attendance": "Attendance",
+  "todaysAttendance": "Today's Attendance",
+  "employees": "Employees",
+  "removeEmployeeFromTeam": "Remove {name} from your team?",
+  "@removeEmployeeFromTeam": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sunday": "Sunday",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday",
+  "account": "Account",
+  "security": "Security",
+  "billing": "Billing",
+  "appTitleFull": "BarQody - Digital Business Card",
+  "contactsPermissionRequired": "Contacts permission is required to find people you know.",
+  "heyJoinMeOnBarqody": "Hey {name}! Join me on Barqody: {link}",
+  "@heyJoinMeOnBarqody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "noResultsForQuery": "No results for \"{query}\"",
+  "@noResultsForQuery": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "savedContact": "Saved contact",
+  "thisIsYou": "This is you",
+  "viewingOwnProfile": "You are viewing your own profile",
+  "openMyCard": "Open my card",
+  "checkOutThisProfile": "Check out this profile: {link}",
+  "@checkOutThisProfile": {
+    "placeholders": {
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "enrolled": "Enrolled",
+  "rewardsForName": "Rewards for {name}",
+  "@rewardsForName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "enrollCustomerInRewardsHint": "Enroll {name} in your business rewards programs.",
+  "@enrollCustomerInRewardsHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "enroll": "Enroll",
+  "program": "Program",
+  "deleteCategoryNamed": "Delete \"{name}\"?",
+  "@deleteCategoryNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "optionsForName": "Options for {name}",
+  "@optionsForName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "removeFromContacts": "Remove \"{name}\" from your contacts?",
+  "@removeFromContacts": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "contactRemoved": "{name} removed.",
+  "@contactRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "labelCapturedProcessing": "{label} captured. Processing...",
+  "@labelCapturedProcessing": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "switchedToAccount": "Switched to {name}",
+  "@switchedToAccount": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "device": "Device",
+  "lastActiveAgo": "Last active {time} ago",
+  "@lastActiveAgo": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lastActiveAt": "Last active {time}",
+  "@lastActiveAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "thisDevice": "This device",
+  "thisDeviceWithName": "This device · {name}",
+  "@thisDeviceWithName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shiftRange": "Shift {start} - {end}",
+  "@shiftRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "todayWithDate": "Today • {date}",
+  "@todayWithDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "checkInColon": "Check-in:",
+  "checkOutColon": "Check-out:",
+  "youJoinedBusiness": "You joined {name}",
+  "@youJoinedBusiness": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shiftLabel": "Shift: {start} - {end}",
+  "@shiftLabel": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "you": "You",
+  "inactive": "Inactive",
+  "failed": "Failed",
+  "created": "Created",
+  "stampsForReward": "{count} stamps for reward",
+  "@stampsForReward": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stampsRequiredCount": "{count} stamps required",
+  "@stampsRequiredCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stampsProgress": "{current} / {total} Stamps",
+  "@stampsProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "businessLabel": "Business",
+  "businesses": "Businesses",
+  "programsCount": "{count} programs",
+  "@programsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "programCountOne": "{count} program",
+  "@programCountOne": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "visitBusinessToCollectStamps": "Visit {name} to collect stamps",
+  "@visitBusinessToCollectStamps": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "statusUpdatedTo": "Status updated to {status}",
+  "@statusUpdatedTo": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "customer": "Customer",
+  "items": "Items",
+  "noStatusOrders": "No {status} orders",
+  "@noStatusOrders": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "menu": "Menu",
+  "catalog": "Catalog",
+  "services": "Services",
+  "newMenuOrder": "New Menu Order",
+  "newServiceOrder": "New Service Order",
+  "newCatalogOrder": "New Catalog Order",
+  "pending": "Pending",
+  "completed": "Completed",
+  "cancelled": "Cancelled",
+  "free": "Free",
+  "itemCount": "{count} items",
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "totalRs": "Total: Rs {amount}",
+  "@totalRs": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "orderPlacedWith": "Order placed with {name}!",
+  "@orderPlacedWith": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "bookedWith": "Booked {item} with {name}!",
+  "@bookedWith": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "bookItem": "Book {name}",
+  "@bookItem": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "appliedDesign": "Applied \"{name}\" design",
+  "@appliedDesign": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "appliedTemplate": "Applied \"{name}\" template",
+  "@appliedTemplate": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "myCard": "My Card",
+  "egWorkEvents": "e.g. Work, Events",
+  "subtitle": "Subtitle",
+  "yesterday": "Yesterday",
+  "cordiallyInvites": "Cordially invites",
+  "yourEventTitle": "Your event title",
+  "guestNameAppearsOnInvite": "Guest name appears when they open this invite",
+  "hostedBy": "Hosted by {name}",
+  "@hostedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "scanToOpen": "Scan to open",
+  "tapToEdit": "Tap to edit",
+  "enterYourPlatformUsername": "Enter your {platform} username",
+  "@enterYourPlatformUsername": {
+    "placeholders": {
+      "platform": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingShareDescription": "Share your digital business card instantly with a QR code or link — no paper needed.",
+  "onboardingUpToDateDescription": "Keep your contact details always up to date. One change updates everywhere.",
+  "onboardingSmartCaptureDescription": "Capture contacts from paper cards and event badges with your camera.",
+  "pkrPerMonth": "PKR {amount}/month",
+  "@pkrPerMonth": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthsFree": "{count} months free",
+  "@monthsFree": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unlimitedAiScans": "Unlimited AI scans",
+  "analyticsAndInsights": "Analytics and insights",
+  "completeProfileVisibility": "Complete your profile for better visibility",
+  "greatProfileComplete": "Great! Your profile looks complete",
+  "copiedTypeToClipboard": "{type} copied to clipboard",
+  "@copiedTypeToClipboard": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "stampType": "Stamp",
+  "bothType": "Both",
+  "industryTechnology": "Technology",
+  "industryRetail": "Retail",
+  "industryHealthcare": "Healthcare",
+  "industryEducation": "Education",
+  "industryHospitality": "Hospitality",
+  "industryFinance": "Finance",
+  "industryOther": "Other",
+  "industryEntertainment": "Entertainment",
+  "accountAlreadyLoggedInOnDevice": "This account is already logged in on this device",
+  "deviceLoggedOutFromLinkedDevices": "This device was logged out from Linked devices",
+  "selectContactsToSendOrSaveDraft": "Select contacts to send, or save as draft",
+  "templatePublishedOthersCanUse": "Template published! Others can use it now.",
+  "subscriptionRequestSubmittedOn": "Your {plan} request is submitted. We'll notify you once reviewed.",
+  "@subscriptionRequestSubmittedOn": {
+    "placeholders": {
+      "plan": {
+        "type": "String"
+      }
+    }
+  },
+  "lng": "Lng",
+  "enterField": "Enter {label}",
+  "@enterField": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "chooseATemplate": "Choose a template",
+  "cardSavedToGallery": "Card saved to gallery",
+  "couldNotSaveCheckGalleryPermission": "Could not save. Check gallery permission.",
+  "failedToLoadContactsWithError": "Failed to load contacts: {error}",
+  "@failedToLoadContactsWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "phoneNumberHintExample": "+1 (555) 123-4567",
+  "httpsExampleHint": "https://example.com",
+  "egCoffeeClub": "e.g. Coffee Club",
+  "egBuy10Get1Free": "e.g. Buy 10 Get 1 Free",
+  "openingMockLink": "Opening mock link: {url}",
+  "@openingMockLink": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "saudiEInvoiceShareHeader": "Saudi E-Invoice",
+  "sellerColon": "Seller: {name}",
+  "@sellerColon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vatColon": "VAT: {value}",
+  "@vatColon": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "totalColon": "Total: {value}",
+  "@totalColon": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "dateColon": "Date: {value}",
+  "@dateColon": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "rsAmount": "Rs {amount}",
+  "@rsAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customizeCardTitle": "Customize card"
 }

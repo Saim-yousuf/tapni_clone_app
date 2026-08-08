@@ -60,17 +60,28 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
     return null;
   }
 
-  String _statusLabel(AttendanceRecord? record) {
-    if (record == null || record.checkInTime == null) return 'ABSENT';
-    if (record.checkOutTime == null) return context.l10n.inOFFICE;
-    return 'PRESENT';
+  String _statusKey(AttendanceRecord? record) {
+    if (record == null || record.checkInTime == null) return 'absent';
+    if (record.checkOutTime == null) return 'in_office';
+    return 'present';
   }
 
-  Color _statusColor(String status) {
-    switch (status) {
-      case 'PRESENT':
+  String _statusLabel(String statusKey) {
+    switch (statusKey) {
+      case 'present':
+        return context.l10n.presentUpper;
+      case 'in_office':
+        return context.l10n.inOFFICE;
+      default:
+        return context.l10n.absentUpper;
+    }
+  }
+
+  Color _statusColor(String statusKey) {
+    switch (statusKey) {
+      case 'present':
         return Colors.green.shade700;
-      case 'IN OFFICE':
+      case 'in_office':
         return Colors.orange.shade800;
       default:
         return Colors.red.shade700;
@@ -91,7 +102,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
     return Scaffold(
       backgroundColor: AttendanceUi.scaffoldBg,
       appBar: AttendanceUi.appBar(
-        'Attendance',
+        context.l10n.attendance,
         actions: [
           IconButton(
             icon: Icon(Icons.people_outline, size: 24),
@@ -114,21 +125,22 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                 children: [
                   Row(
                     children: [
-                      _statCard('PRESENT', presentCount, Colors.green.shade700),
+                      _statCard(context.l10n.presentUpper, presentCount, Colors.green.shade700),
                       SizedBox(width: 12),
                       _statCard(context.l10n.inOFFICE, checkedInCount, Colors.orange.shade800),
                       const SizedBox(width: 12),
-                      _statCard('ABSENT', absentCount, Colors.red.shade700),
+                      _statCard(context.l10n.absentUpper, absentCount, Colors.red.shade700),
                     ],
                   ),
                   const SizedBox(height: 28),
-                  AttendanceUi.sectionHeader("Today's Attendance"),
+                  AttendanceUi.sectionHeader(context.l10n.todaysAttendance),
                   if (_employees.isEmpty)
                     _emptyState()
                   else
                     ..._employees.map((employee) {
                       final record = _recordForEmployee(employee.id);
-                      final status = _statusLabel(record);
+                      final statusKey = _statusKey(record);
+                      final status = _statusLabel(statusKey);
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 14),
                         child: InkWell(
@@ -193,7 +205,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                                     Text(
                                       status,
                                       style: AttendanceUi.statLabel.copyWith(
-                                        color: _statusColor(status),
+                                        color: _statusColor(statusKey),
                                         fontSize: 14,
                                       ),
                                     ),

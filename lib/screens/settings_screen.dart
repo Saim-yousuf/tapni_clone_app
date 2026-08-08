@@ -252,8 +252,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               WaSectionHeader(context.l10n.forYou),
               WaForYouCard(
                 title: context.l10n.tryBusinessPro2,
-                description:
-                    'Unlock customer orders, team attendance, loyalty programs, and more for your business.',
+                description: context.l10n.unlockBusinessProDescription,
                 buttonLabel: context.l10n.tryBusinessPro,
                 onTap: () => SubcriptionSheet.show(context),
                 onDismiss: () => setState(() => _promoDismissed = true),
@@ -321,8 +320,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             WaToolsListTile(
               icon: Icons.mark_email_unread_outlined,
-              title: 'Invitations',
-              subtitle: 'Send and manage contact invitations',
+              title: context.l10n.invitations,
+              subtitle: context.l10n.invitationsSubtitle,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -335,7 +334,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icons.notifications_outlined,
               title: context.l10n.notifications,
               subtitle: unreadCount > 0
-                  ? '$unreadCount unread'
+                  ? context.l10n.unreadCountLabel(unreadCount)
                   : context.l10n.noNewNotificationsAtThisTime,
               showBadge: unreadCount > 0,
               onTap: () {

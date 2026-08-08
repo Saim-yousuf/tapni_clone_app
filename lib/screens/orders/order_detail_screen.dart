@@ -56,7 +56,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       await _loadOrder();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Status updated to ${CatalogHelper.statusLabel(status)}')),
+          SnackBar(
+            content: Text(
+              context.l10n.statusUpdatedTo(
+                CatalogHelper.statusLabel(status, context.l10n),
+              ),
+            ),
+          ),
         );
       }
     } else {
@@ -97,7 +103,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   _StatusBanner(status: _order!.status),
                   SizedBox(height: 20),
                   _SectionTitle(
-                    widget.isBusinessView ? 'Customer' : 'Business',
+                    widget.isBusinessView
+                        ? context.l10n.customer
+                        : context.l10n.businessLabel,
                   ),
                   SizedBox(height: 10),
                   _PersonCard(
@@ -124,8 +132,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   _SectionTitle(context.l10n.orderInfo),
                   SizedBox(height: 10),
                   _InfoRow(label: context.l10n.orderID, value: '#${_order!.id.substring(_order!.id.length > 6 ? _order!.id.length - 6 : 0)}'),
-                  _InfoRow(label: context.l10n.type, value: CatalogHelper.orderTitleForType(_order!.catalogType).replaceAll(context.l10n.newLabel, '')),
-                  _InfoRow(label: context.l10n.status, value: CatalogHelper.statusLabel(_order!.status)),
+                  _InfoRow(label: context.l10n.type, value: CatalogHelper.typeLabel(_order!.catalogType, context.l10n)),
+                  _InfoRow(label: context.l10n.status, value: CatalogHelper.statusLabel(_order!.status, context.l10n)),
                   if (_order!.createdAt != null)
                     _InfoRow(
                       label: context.l10n.date,
@@ -139,7 +147,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       _InfoRow(label: context.l10n.bookingTime, value: _order!.bookingTime!),
                   ],
                   SizedBox(height: 24),
-                  const _SectionTitle('Items'),
+                  _SectionTitle(context.l10n.items),
                   const SizedBox(height: 10),
                   ..._order!.items.map(
                     (item) => Container(
@@ -174,7 +182,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               ],
                             ),
                           ),
-                          Text('Rs ${item.lineTotal.toStringAsFixed(0)}'),
+                          Text(context.l10n.rsAmount(item.lineTotal.toStringAsFixed(0))),
                         ],
                       ),
                     ),
@@ -187,7 +195,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Rs ${_order!.totalAmount.toStringAsFixed(0)}',
+                        context.l10n.rsAmount(_order!.totalAmount.toStringAsFixed(0)),
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -279,7 +287,7 @@ class _StatusBanner extends StatelessWidget {
           Icon(Icons.info_outline, color: _color),
           const SizedBox(width: 10),
           Text(
-            CatalogHelper.statusLabel(status),
+            CatalogHelper.statusLabel(status, context.l10n),
             style: TextStyle(
               color: _color,
               fontWeight: FontWeight.bold,

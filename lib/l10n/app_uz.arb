@@ -656,7 +656,7 @@
   "logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone": "Faqat shu hisobdan chiqasizmi? Boshqa hisoblar ushbu telefonda qoladi.",
   "loggedInWithGoogleDemoAccountSaimY": "Google bilan tizimga kirgan (Demo hisob: Saim Y)",
   "phoneNumber2": "Telefon raqami",
-  "noLinksAddedYetNTapAddLinkToGetStarted": "Havolalar qo‘shilmagan.\\nBoshlash uchun “Havola qo‘shish” tugmasini bosing.",
+  "noLinksAddedYetNTapAddLinkToGetStarted": "Havolalar qo‘shilmagan.\nBoshlash uchun “Havola qo‘shish” tugmasini bosing.",
   "phoneIsRequired": "Telefon kerak",
   "notEnrolled": "Roʻyxatdan oʻtmagan",
   "noReasonProvided": "Hech qanday sabab ko'rsatilmagan.",
@@ -762,7 +762,7 @@
   "addAtLeastOneCatalogItem": "Kamida bitta {label} element qo‘shing",
   "proLinksAreHiddenFromYourPublicProfile": "Pro havolalari umumiy profilingizdan berkitilgan.",
   "premiumFeaturesAreCurrentlyDisabled": "Premium funksiyalar hozirda o‘chirib qo‘yilgan.",
-  "yourPROSubscriptionHasExpiredNN": "PRO obunangiz muddati tugadi.\\n\\n",
+  "yourPROSubscriptionHasExpiredNN": "PRO obunangiz muddati tugadi.\n\n",
   "codeWithValue": "Kod: {code}",
   "@appTitle": {
     "description": "Application title"

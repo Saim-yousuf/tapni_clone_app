@@ -375,7 +375,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              'You',
+                              context.l10n.you,
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
@@ -390,7 +390,9 @@ class _FindUserScreenState extends State<FindUserScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      isMe ? '@${user.username} · This is you' : '@${user.username}',
+                      isMe
+                          ? '@${user.username} · ${context.l10n.thisIsYou}'
+                          : '@${user.username}',
                       style: TextStyle(
                         fontSize: 13,
                         color: isDark ? Colors.white54 : Colors.black54,

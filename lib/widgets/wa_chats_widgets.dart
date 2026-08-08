@@ -87,7 +87,7 @@ class WaChatSearchBar extends StatelessWidget {
           decoration: InputDecoration(
             filled: true,
             fillColor: WaUi.searchBg,
-            hintText: hintText ?? 'Search...',
+            hintText: hintText ?? context.l10n.searchEllipsis,
             hintStyle: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w400,
@@ -650,7 +650,7 @@ Color waAvatarColorFor(String seed) {
   return WaUi.avatarPalette[index];
 }
 
-String waFormatContactDate(DateTime date) {
+String waFormatContactDate(DateTime date, [BuildContext? context]) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   final day = DateTime(date.year, date.month, date.day);
@@ -663,7 +663,7 @@ String waFormatContactDate(DateTime date) {
     final h = hour % 12 == 0 ? 12 : hour % 12;
     return '$h:$minute $period';
   }
-  if (diff == 1) return 'Yesterday';
+  if (diff == 1) return context?.l10n.yesterday ?? 'Yesterday';
   final dd = date.day.toString().padLeft(2, '0');
   final mm = date.month.toString().padLeft(2, '0');
   return '$dd/$mm/${date.year}';

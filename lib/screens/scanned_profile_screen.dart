@@ -357,7 +357,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         : '${Constants.appDomain}/$username';
 
     await Share.share(
-      'Check out this profile: $url',
+      context.l10n.checkOutThisProfile(url),
       subject: context.l10n.shareProfile,
     );
   }
@@ -480,7 +480,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         _hasActivePrograms &&
         profile.id != null;
     final rewardButtonLabel = _isCustomerEnrolledInBusiness
-        ? 'Enrolled'
+        ? context.l10n.enrolled
         : context.l10n.notEnrolled;
 
     return SingleChildScrollView(
@@ -513,7 +513,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
               child: Column(
                 children: [
                   Text(
-                    'This is you',
+                    context.l10n.thisIsYou,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -522,7 +522,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'You are viewing your own profile',
+                    context.l10n.viewingOwnProfile,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 13, color: Colors.black54),
                   ),
@@ -530,7 +530,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                   FilledButton.icon(
                     onPressed: _openMyCard,
                     icon: Icon(Icons.badge_outlined),
-                    label: Text('Open my card'),
+                    label: Text(context.l10n.openMyCard),
                     style: FilledButton.styleFrom(
                       backgroundColor: Colors.black,
                       shape: RoundedRectangleBorder(
@@ -1043,7 +1043,7 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Rewards for ${widget.customer.name}',
+                        context.l10n.rewardsForName(widget.customer.name),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -1051,7 +1051,7 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
                       ),
                       Text(
                         _isBusinessEnrolled
-                            ? 'Enrolled'
+                            ? context.l10n.enrolled
                             : context.l10n.notEnrolled,
                         style: TextStyle(
                           fontSize: 12,
@@ -1101,7 +1101,7 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
             ),
             SizedBox(height: 6),
             Text(
-              'Enroll ${widget.customer.name} in your business rewards, then assign programs below.',
+              context.l10n.enrollCustomerInRewardsHint(widget.customer.name),
               style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
             ),
             SizedBox(height: 14),
@@ -1142,7 +1142,9 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
             ),
           ),
         ),
-        ..._notEnrolled.map((p) => _availableTile(p, enrollLabel: 'Enroll')),
+        ..._notEnrolled.map(
+          (p) => _availableTile(p, enrollLabel: context.l10n.enroll),
+        ),
       ] else
         Padding(
           padding: EdgeInsets.all(24),
@@ -1243,7 +1245,7 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    prog?.title ?? 'Program',
+                    prog?.title ?? context.l10n.program,
                     style: TextStyle(
                       color: prog?.theme.cardTextColor ?? Colors.white,
                       fontWeight: FontWeight.bold,

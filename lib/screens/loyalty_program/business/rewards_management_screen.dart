@@ -8,11 +8,11 @@ class RewardsManagementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final rewards = [
-      {"title": context.l10n.freeCoffee, "type": "Stamp", "requirement": "10 Stamps"},
+      {"title": context.l10n.freeCoffee, "type": context.l10n.stampType, "requirement": "10 Stamps"},
       {"title": context.l10n.n10Discount, "type": context.l10n.points, "requirement": "500 Points"},
       {
         "title": context.l10n.freeDessert,
-        "type": "Both",
+        "type": context.l10n.bothType,
         "requirement": "8 Stamps + 300 Points",
       },
     ];

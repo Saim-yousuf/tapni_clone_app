@@ -48,7 +48,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
         ),
         title: Text(context.l10n.removeEmployee, style: AttendanceUi.sectionTitle),
         content: Text(
-          'Remove ${employee.employee.displayName} from your team?',
+          context.l10n.removeEmployeeFromTeam(employee.employee.displayName),
           style: AttendanceUi.body,
         ),
         actions: [
@@ -91,7 +91,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AttendanceUi.scaffoldBg,
-      appBar: AttendanceUi.appBar('Employees'),
+      appBar: AttendanceUi.appBar(context.l10n.employees),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(

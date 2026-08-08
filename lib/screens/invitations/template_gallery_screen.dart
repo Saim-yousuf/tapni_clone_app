@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 import 'package:tapni_app/models/published_invitation_template.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
@@ -110,11 +111,11 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
         backgroundColor: WaUi.surface,
         elevation: 0,
         foregroundColor: WaUi.primaryText,
-        title: Text('Choose a template', style: WaUi.sectionHeader),
+        title: Text(context.l10n.chooseATemplate, style: WaUi.sectionHeader),
         actions: [
           TextButton(
             onPressed: _startBlank,
-            child: const Text('Blank'),
+            child: Text(context.l10n.blank),
           ),
         ],
       ),
@@ -125,9 +126,17 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SegmentedButton<int>(
-              segments: const [
-                ButtonSegment(value: 0, label: Text('Official'), icon: Icon(Icons.star_outline, size: 16)),
-                ButtonSegment(value: 1, label: Text('Community'), icon: Icon(Icons.people_outline, size: 16)),
+              segments: [
+                ButtonSegment(
+                  value: 0,
+                  label: Text(context.l10n.official),
+                  icon: const Icon(Icons.star_outline, size: 16),
+                ),
+                ButtonSegment(
+                  value: 1,
+                  label: Text(context.l10n.community),
+                  icon: const Icon(Icons.people_outline, size: 16),
+                ),
               ],
               selected: {_segment},
               onSelectionChanged: (s) {
@@ -139,7 +148,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text('Country', style: WaUi.label),
+            child: Text(context.l10n.country, style: WaUi.label),
           ),
           const SizedBox(height: 8),
           SizedBox(
@@ -149,7 +158,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
                 _Chip(
-                  label: 'All',
+                  label: context.l10n.all,
                   selected: _country == null,
                   onTap: () {
                     _country = null;
@@ -172,7 +181,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text('Category', style: WaUi.label),
+            child: Text(context.l10n.categoryLabel, style: WaUi.label),
           ),
           const SizedBox(height: 8),
           SizedBox(
@@ -182,7 +191,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
                 _Chip(
-                  label: 'All',
+                  label: context.l10n.all,
                   selected: _category == null,
                   onTap: () {
                     _category = null;
@@ -253,11 +262,11 @@ class _OfficialGrid extends StatelessWidget {
           children: [
             Icon(Icons.inbox_outlined, size: 48, color: WaUi.secondaryText),
             const SizedBox(height: 8),
-            Text('No templates for this filter', style: WaUi.listSubtitle),
+            Text(context.l10n.noTemplatesForFilter, style: WaUi.listSubtitle),
             const SizedBox(height: 12),
             OutlinedButton(
               onPressed: onBlank,
-              child: const Text('Start from blank'),
+              child: Text(context.l10n.startFromBlank),
             ),
           ],
         ),
@@ -308,18 +317,21 @@ class _CommunityGrid extends StatelessWidget {
               Icon(Icons.people_outline, size: 48, color: WaUi.secondaryText),
               const SizedBox(height: 8),
               Text(
-                'No community templates yet',
+                context.l10n.noCommunityTemplatesYet,
                 style: WaUi.sectionHeader,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                'Design a card and tap Publish so others can use your design.',
+                context.l10n.designAndPublishHint,
                 style: WaUi.listSubtitle,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
-              TextButton(onPressed: onRefresh, child: const Text('Refresh')),
+              TextButton(
+                onPressed: onRefresh,
+                child: Text(context.l10n.refresh),
+              ),
             ],
           ),
         ),
@@ -441,9 +453,9 @@ class _TemplateCard extends StatelessWidget {
                 ),
               ),
               if (template.rtl)
-                const Text(
-                  'RTL',
-                  style: TextStyle(
+                Text(
+                  context.l10n.rtl,
+                  style: const TextStyle(
                     fontSize: 10,
                     color: WaUi.secondaryText,
                     fontWeight: FontWeight.w600,
@@ -495,7 +507,10 @@ class _CommunityCard extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            'by ${template.publisher.displayName} · ${template.useCount} uses',
+            context.l10n.templateByPublisherUses(
+              template.publisher.displayName,
+              template.useCount,
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 11, color: WaUi.secondaryText),

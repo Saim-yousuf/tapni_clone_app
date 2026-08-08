@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 
@@ -261,7 +262,7 @@ class InvitationCardPreview extends StatelessWidget {
                   const SizedBox(height: 14),
 
                   Text(
-                    hasTitle ? title.trim() : 'Your event title',
+                    hasTitle ? title.trim() : context.l10n.yourEventTitle,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.playfairDisplay(
                       color: Colors.white.withValues(
@@ -283,7 +284,7 @@ class InvitationCardPreview extends StatelessWidget {
                   if (hasGuest) ...[
                     const SizedBox(height: 16),
                     Text(
-                      'Cordially invites',
+                      context.l10n.cordiallyInvites,
                       style: GoogleFonts.cormorantGaramond(
                         color: Colors.white.withValues(alpha: 0.75),
                         fontSize: 14,
@@ -314,7 +315,7 @@ class InvitationCardPreview extends StatelessWidget {
                   ] else if (isPreview) ...[
                     const SizedBox(height: 12),
                     Text(
-                      'Guest name appears when they open this invite',
+                      context.l10n.guestNameAppearsOnInvite,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.5),
@@ -393,7 +394,7 @@ class InvitationCardPreview extends StatelessWidget {
 
                   if (hasSender) ...[
                     Text(
-                      'Hosted by ${senderName!.trim()}',
+                      context.l10n.hostedBy(senderName!.trim()),
                       textAlign: TextAlign.center,
                       style: GoogleFonts.cormorantGaramond(
                         color: Colors.white.withValues(alpha: 0.8),
@@ -577,7 +578,9 @@ class _GlassQr extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            inviteCode != null ? 'INV · $inviteCode' : 'Scan to open',
+            inviteCode != null
+                ? 'INV · $inviteCode'
+                : context.l10n.scanToOpen,
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.8),
               fontSize: 10,

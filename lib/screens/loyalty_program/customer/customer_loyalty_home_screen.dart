@@ -222,12 +222,12 @@ class _SummaryCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            '$businessCount ${businessCount == 1 ? 'Business' : 'Businesses'}',
+            '$businessCount ${businessCount == 1 ? context.l10n.businessLabel : context.l10n.businesses}',
             style: WaUi.toolsTitle.copyWith(color: Colors.white, fontSize: 30),
           ),
           const SizedBox(height: 6),
           Text(
-            '$activeCount active · $completedCount completed',
+            '$activeCount ${context.l10n.active} · $completedCount ${context.l10n.completed}',
             style: WaUi.listSubtitle.copyWith(color: Colors.white70),
           ),
         ],
@@ -255,7 +255,7 @@ class _BusinessSectionState extends State<_BusinessSection> {
   @override
   Widget build(BuildContext context) {
     final program = widget.enrollments.first.program;
-    final businessName = program?.displayBusinessName ?? 'Business';
+    final businessName = program?.displayBusinessName ?? context.l10n.businessLabel;
     final businessPhoto = program?.businessPhoto;
 
     return Container(
@@ -297,7 +297,9 @@ class _BusinessSectionState extends State<_BusinessSection> {
                               Text(businessName, style: WaUi.chatName),
                               const SizedBox(height: 2),
                               Text(
-                                '${widget.enrollments.length} ${widget.enrollments.length == 1 ? 'program' : 'programs'}',
+                                widget.enrollments.length == 1
+                                    ? context.l10n.programCountOne(widget.enrollments.length)
+                                    : context.l10n.programsCount(widget.enrollments.length),
                                 style: WaUi.listSubtitle,
                               ),
                             ],
@@ -395,12 +397,15 @@ class _ProgramTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      program?.title ?? 'Program',
+                      program?.title ?? context.l10n.program,
                       style: WaUi.listTitle,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${enrollment.stamps} / ${program?.stamps ?? '?'} stamps',
+                      context.l10n.stampsProgress(
+                        enrollment.stamps,
+                        program?.stamps ?? 0,
+                      ),
                       style: WaUi.listSubtitle,
                     ),
                   ],

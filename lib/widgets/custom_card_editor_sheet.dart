@@ -110,7 +110,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     return UserCustomCard(
       id: id,
       title: _titleController.text.trim().isEmpty
-          ? 'My Card'
+          ? context.l10n.myCard
           : _titleController.text.trim(),
       displayName: _nameController.text.trim().isEmpty
           ? context.l10n.myName
@@ -322,11 +322,19 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
           ),
         ),
         SizedBox(height: 20),
-        _field(context.l10n.cardName, _titleController, hint: 'e.g. Work, Events'),
+        _field(
+          context.l10n.cardName,
+          _titleController,
+          hint: context.l10n.egWorkEvents,
+        ),
         SizedBox(height: 10),
         _field(context.l10n.displayName, _nameController),
         SizedBox(height: 10),
-        _field('Subtitle', _subtitleController, hint: context.l10n.roleOrCompany),
+        _field(
+          context.l10n.subtitle,
+          _subtitleController,
+          hint: context.l10n.roleOrCompany,
+        ),
         SizedBox(height: 10),
         _field(context.l10n.bio2, _bioController, maxLines: 2),
         SizedBox(height: 16),

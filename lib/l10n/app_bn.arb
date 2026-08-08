@@ -660,7 +660,7 @@
   "openCamera": "ক্যামেরা খুলুন",
   "orderInfo": "অর্ডার তথ্য",
   "phoneNumber": "ফোন নম্বর",
-  "noLinksAddedYetNTapAddLinkToGetStarted": "এখনো কোনো লিঙ্ক যোগ করা হয়নি।\\nশুরু করতে \"লিঙ্ক যোগ করুন\" এ ট্যাপ করুন।",
+  "noLinksAddedYetNTapAddLinkToGetStarted": "এখনো কোনো লিঙ্ক যোগ করা হয়নি।\nশুরু করতে \"লিঙ্ক যোগ করুন\" এ ট্যাপ করুন।",
   "phoneNumber2": "ফোন নম্বর",
   "passwordMustBeAtLeast4Characters": "পাসওয়ার্ড কমপক্ষে 4 অক্ষরের হতে হবে",
   "pleaseEnterAPassword": "একটি পাসওয়ার্ড লিখুন",
@@ -763,7 +763,7 @@
   "noItemsYetAddFirstCatalogItem": "এখনও কোন আইটেম. আপনার প্রথম {label} আইটেম যোগ করুন।",
   "noPublicProfileMatchesQuery": "কোন পাবলিক প্রোফাইল \"@{query}\" এর সাথে মেলে না।",
   "codeWithValue": "কোড: {code}",
-  "yourPROSubscriptionHasExpiredNN": "আপনার PRO সদস্যতার মেয়াদ শেষ হয়ে গেছে।\\n\\n",
+  "yourPROSubscriptionHasExpiredNN": "আপনার PRO সদস্যতার মেয়াদ শেষ হয়ে গেছে।\n\n",
   "@appTitle": {
     "description": "Application title"
   },
