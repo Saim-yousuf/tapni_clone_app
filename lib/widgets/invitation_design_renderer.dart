@@ -263,6 +263,8 @@ class _LayerWidget extends StatelessWidget {
       case DesignLayerType.shape:
       case DesignLayerType.ornament:
         return _shape(w, h);
+      case DesignLayerType.stampGrid:
+        return const SizedBox.shrink();
     }
   }
 

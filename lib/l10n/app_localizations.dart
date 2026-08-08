@@ -5665,6 +5665,18 @@ abstract class AppLocalizations {
   /// **'Invitation sent successfully'**
   String get invitationSentSuccessfully;
 
+  /// No description provided for @inviteMorePeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite more people'**
+  String get inviteMorePeople;
+
+  /// No description provided for @alreadyInvited.
+  ///
+  /// In en, this message translates to:
+  /// **'Already invited'**
+  String get alreadyInvited;
+
   /// No description provided for @selectContact.
   ///
   /// In en, this message translates to:
@@ -6672,6 +6684,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Customize card'**
   String get customizeCardTitle;
+
+  /// No description provided for @quickEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Edit'**
+  String get quickEdit;
+
+  /// No description provided for @saveProgram.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Program'**
+  String get saveProgram;
+
+  /// No description provided for @promoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo title'**
+  String get promoTitle;
+
+  /// No description provided for @stampShape.
+  ///
+  /// In en, this message translates to:
+  /// **'Stamp shape'**
+  String get stampShape;
+
+  /// No description provided for @circle.
+  ///
+  /// In en, this message translates to:
+  /// **'Circle'**
+  String get circle;
+
+  /// No description provided for @square.
+  ///
+  /// In en, this message translates to:
+  /// **'Square'**
+  String get square;
+
+  /// No description provided for @emptyStampIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty stamp icon'**
+  String get emptyStampIcon;
+
+  /// No description provided for @loyaltyProgramSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Loyalty program saved'**
+  String get loyaltyProgramSaved;
+
+  /// No description provided for @myLoyaltyTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'My loyalty template'**
+  String get myLoyaltyTemplate;
+
+  /// No description provided for @noLoyaltyTemplatesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No templates found'**
+  String get noLoyaltyTemplatesFound;
+
+  /// No description provided for @loyaltyTextLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get loyaltyTextLayer;
+
+  /// No description provided for @loyaltyImageLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get loyaltyImageLayer;
 }
 
 class _AppLocalizationsDelegate

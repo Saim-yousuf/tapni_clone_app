@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/business/create_reward_screen.dart';
+import 'package:tapni_app/screens/loyalty_program/business/loyalty_design_editor_screen.dart';
+import 'package:tapni_app/screens/loyalty_program/business/loyalty_template_gallery_screen.dart';
+import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LoyaltyProgramDetailsScreen extends StatefulWidget {
@@ -90,10 +93,59 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
             IconButton(
               icon: Icon(Icons.edit_outlined),
               onPressed: () async {
-                final changed = await Navigator.push<bool>(
-                  context,
-                  MaterialPageRoute(builder: (_) => CreateRewardScreen(existing: _program)),
-                );
+                final p = _program!;
+                bool? changed;
+                if (p.hasDesign) {
+                  changed = await Navigator.push<bool>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => LoyaltyDesignEditorScreen(
+                        design: p.design!.copy(),
+                        existingProgramId: p.id,
+                        existingProgram: p,
+                      ),
+                    ),
+                  );
+                } else {
+                  // Offer template gallery redesign or classic form edit
+                  final choice = await showModalBottomSheet<String>(
+                    context: context,
+                    builder: (ctx) => SafeArea(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.palette_outlined),
+                            title: Text(ctx.l10n.chooseATemplate),
+                            onTap: () => Navigator.pop(ctx, 'template'),
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.edit_outlined),
+                            title: Text(ctx.l10n.editReward),
+                            onTap: () => Navigator.pop(ctx, 'classic'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                  if (!mounted) return;
+                  if (choice == 'template') {
+                    changed = await Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            LoyaltyTemplateGalleryScreen(existing: p),
+                      ),
+                    );
+                  } else if (choice == 'classic') {
+                    changed = await Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CreateRewardScreen(existing: p),
+                      ),
+                    );
+                  }
+                }
                 if (changed == true) _load();
               },
             ),
@@ -191,6 +243,12 @@ class _LoyaltyProgramDetailsScreenState extends State<LoyaltyProgramDetailsScree
   }
 
   Widget _buildCardPreview(RewardProgram p) {
+    if (p.hasDesign) {
+      return LoyaltyCardDesignRenderer(
+        design: p.design!,
+        borderRadius: 20,
+      );
+    }
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(22),

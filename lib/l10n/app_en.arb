@@ -987,6 +987,8 @@
     }
   },
   "invitationSentSuccessfully": "Invitation sent successfully",
+  "inviteMorePeople": "Invite more people",
+  "alreadyInvited": "Already invited",
   "selectContact": "Select contact",
   "draft": "Draft",
   "searchNameOrNumber": "Search name or number",
@@ -1519,5 +1521,17 @@
       }
     }
   },
-  "customizeCardTitle": "Customize card"
+  "customizeCardTitle": "Customize card",
+  "quickEdit": "Quick Edit",
+  "saveProgram": "Save Program",
+  "promoTitle": "Promo title",
+  "stampShape": "Stamp shape",
+  "circle": "Circle",
+  "square": "Square",
+  "emptyStampIcon": "Empty stamp icon",
+  "loyaltyProgramSaved": "Loyalty program saved",
+  "myLoyaltyTemplate": "My loyalty template",
+  "noLoyaltyTemplatesFound": "No templates found",
+  "loyaltyTextLayer": "Text",
+  "loyaltyImageLayer": "Image"
 }

@@ -23,6 +23,18 @@ class InvitationRepo {
     );
   }
 
+  Future<ApiResponse> addRecipients(
+    String id,
+    List<String> recipientIds,
+  ) async {
+    return ApiHandler.request(
+      api: Api.invitation.addRecipients(id),
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: {'recipientIds': recipientIds},
+    );
+  }
+
   Future<ApiResponse> getSent() async {
     return ApiHandler.request(
       api: Api.invitation.sent,

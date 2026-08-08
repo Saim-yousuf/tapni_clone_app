@@ -2894,6 +2894,12 @@ class AppLocalizationsSw extends AppLocalizations {
   String get invitationSentSuccessfully => 'Invitation sent successfully';
 
   @override
+  String get inviteMorePeople => 'Invite more people';
+
+  @override
+  String get alreadyInvited => 'Already invited';
+
+  @override
   String get selectContact => 'Select contact';
 
   @override
@@ -3510,4 +3516,40 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get customizeCardTitle => 'Customize card';
+
+  @override
+  String get quickEdit => 'Quick Edit';
+
+  @override
+  String get saveProgram => 'Save Program';
+
+  @override
+  String get promoTitle => 'Promo title';
+
+  @override
+  String get stampShape => 'Stamp shape';
+
+  @override
+  String get circle => 'Circle';
+
+  @override
+  String get square => 'Square';
+
+  @override
+  String get emptyStampIcon => 'Empty stamp icon';
+
+  @override
+  String get loyaltyProgramSaved => 'Loyalty program saved';
+
+  @override
+  String get myLoyaltyTemplate => 'My loyalty template';
+
+  @override
+  String get noLoyaltyTemplatesFound => 'No templates found';
+
+  @override
+  String get loyaltyTextLayer => 'Text';
+
+  @override
+  String get loyaltyImageLayer => 'Image';
 }

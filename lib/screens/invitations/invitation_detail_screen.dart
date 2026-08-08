@@ -5,6 +5,7 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/screens/invitations/invite_contacts_screen.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
@@ -86,6 +87,42 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
     return userId.isNotEmpty && inv.sender.id == userId;
   }
 
+  Future<void> _inviteMore() async {
+    final inv = _invitation;
+    if (inv == null || inv.status != 'sent') return;
+
+    final draft = InvitationDraft.fromInvitation(inv);
+    final alreadyInvited = inv.recipients
+        .map((r) => r.user.id.trim())
+        .where((id) => id.isNotEmpty)
+        .toSet();
+
+    final updated = await Navigator.of(context).push<EventInvitation>(
+      MaterialPageRoute(
+        builder: (_) => InviteContactsScreen(
+          draft: draft,
+          addMoreMode: true,
+          alreadyInvitedUserIds: alreadyInvited,
+        ),
+      ),
+    );
+
+    if (!mounted) return;
+    if (updated != null) {
+      setState(() => _invitation = updated);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.invitationSentSuccessfully),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } else {
+      // Refresh in case recipients were added (flow pops without result).
+      await _load(silent: true);
+    }
+  }
+
   Future<void> _downloadCard() async {
     if (_invitation == null || _downloading) return;
 
@@ -163,6 +200,8 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
     final inv = _invitation;
     final isGuest =
         inv != null && _isRecipient(inv, userId) && !_isSender(inv, userId);
+    final canInviteMore =
+        inv != null && _isSender(inv, userId) && inv.status == 'sent';
 
     return Scaffold(
       backgroundColor: WaUi.scaffold,
@@ -172,6 +211,12 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
         foregroundColor: WaUi.primaryText,
         title: Text(context.l10n.invitation, style: WaUi.sectionHeader),
         actions: [
+          if (canInviteMore)
+            IconButton(
+              tooltip: context.l10n.inviteMorePeople,
+              onPressed: _inviteMore,
+              icon: const Icon(Icons.person_add_alt_1_rounded),
+            ),
           if (inv != null)
             IconButton(
               tooltip: context.l10n.downloadCard,
@@ -233,6 +278,26 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
                               ),
                       ),
                       const SizedBox(height: 16),
+                      if (canInviteMore) ...[
+                        SizedBox(
+                          width: double.infinity,
+                          height: 48,
+                          child: FilledButton.icon(
+                            onPressed: _inviteMore,
+                            icon: const Icon(Icons.person_add_alt_1_rounded,
+                                size: 18),
+                            label: Text(context.l10n.inviteMorePeople),
+                            style: FilledButton.styleFrom(
+                              backgroundColor: WaUi.accent,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
                       SizedBox(
                         width: double.infinity,
                         height: 48,

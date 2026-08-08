@@ -1,8 +1,17 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
-/// Layer kinds supported on the invitation canvas (Canva-style).
-enum DesignLayerType { text, image, logo, iconField, qr, shape, ornament }
+/// Layer kinds supported on the invitation / loyalty canvas (Canva-style).
+enum DesignLayerType {
+  text,
+  image,
+  logo,
+  iconField,
+  qr,
+  shape,
+  ornament,
+  stampGrid,
+}
 
 enum DesignTextAlign { left, center, right }
 

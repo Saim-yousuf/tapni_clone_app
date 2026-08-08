@@ -12,6 +12,8 @@ class RewardStampSlot extends StatelessWidget {
   final String? stampIconBase64;
   final String? unstampIconBase64;
   final bool animated;
+  /// circle (default) or square
+  final String shape;
 
   const RewardStampSlot({
     super.key,
@@ -23,7 +25,29 @@ class RewardStampSlot extends StatelessWidget {
     this.stampIconBase64,
     this.unstampIconBase64,
     this.animated = false,
+    this.shape = 'circle',
   });
+
+  bool get _isSquare => shape == 'square';
+
+  BoxDecoration _decoration({required bool hasCustomImage}) {
+    return BoxDecoration(
+      color: filled && !hasCustomImage ? theme.stampColor : Colors.transparent,
+      shape: _isSquare ? BoxShape.rectangle : BoxShape.circle,
+      borderRadius: _isSquare ? BorderRadius.circular(size * 0.12) : null,
+      border: Border.all(color: theme.stampBorderColor, width: 2.5),
+    );
+  }
+
+  Widget _clip(Widget child) {
+    if (_isSquare) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(size * 0.12),
+        child: child,
+      );
+    }
+    return ClipOval(child: child);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,28 +57,22 @@ class RewardStampSlot extends StatelessWidget {
         (customUrl != null && customUrl.isNotEmpty) ||
         (customBase64 != null && customBase64.isNotEmpty);
 
-    final container = Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: filled && !hasCustomImage ? theme.stampColor : Colors.transparent,
-        shape: BoxShape.circle,
-        border: Border.all(color: theme.stampBorderColor, width: 2.5),
-      ),
-      child: ClipOval(child: _buildContent(hasCustomImage, customUrl, customBase64)),
-    );
+    final content = _clip(_buildContent(hasCustomImage, customUrl, customBase64));
 
-    if (!animated) return container;
+    if (!animated) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: _decoration(hasCustomImage: hasCustomImage),
+        child: content,
+      );
+    }
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: filled && !hasCustomImage ? theme.stampColor : Colors.transparent,
-        shape: BoxShape.circle,
-        border: Border.all(color: theme.stampBorderColor, width: 2.5),
-      ),
-      child: ClipOval(child: _buildContent(hasCustomImage, customUrl, customBase64)),
+      decoration: _decoration(hasCustomImage: hasCustomImage),
+      child: content,
     );
   }
 

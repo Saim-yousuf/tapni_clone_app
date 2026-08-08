@@ -1,41 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation_design.dart';
-import 'package:tapni_app/providers/invitation_provider.dart';
-import 'package:tapni_app/screens/invitations/invite_contacts_screen.dart';
-import 'package:tapni_app/screens/invitations/invitation_nav.dart';
+import 'package:tapni_app/models/loyalty_card_design.dart';
+import 'package:tapni_app/models/reward.dart';
+import 'package:tapni_app/repository/reward_repo.dart';
+import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
+import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 
-/// Canva-like invitation design editor: select, drag, add/remove layers,
-/// edit text, upload logo, toggle RTL, change colors.
-class InvitationDesignEditorScreen extends StatefulWidget {
-  final InvitationDesign design;
-  final InvitationDraft? existingDraft;
+/// Full Canva-style loyalty stamp-card editor (same tools as invitations).
+class LoyaltyDesignEditorScreen extends StatefulWidget {
+  final LoyaltyCardDesign design;
+  final String? existingProgramId;
+  final RewardProgram? existingProgram;
 
-  const InvitationDesignEditorScreen({
+  const LoyaltyDesignEditorScreen({
     super.key,
     required this.design,
-    this.existingDraft,
+    this.existingProgramId,
+    this.existingProgram,
   });
 
   @override
-  State<InvitationDesignEditorScreen> createState() =>
-      _InvitationDesignEditorScreenState();
+  State<LoyaltyDesignEditorScreen> createState() =>
+      _LoyaltyDesignEditorScreenState();
 }
 
-class _InvitationDesignEditorScreenState
-    extends State<InvitationDesignEditorScreen> {
-  late InvitationDesign _design;
+class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
+  late LoyaltyCardDesign _design;
   String? _selectedId;
   final GlobalKey _cardKey = GlobalKey();
-  final List<InvitationDesign> _undo = [];
-  final List<InvitationDesign> _redo = [];
+  final List<LoyaltyCardDesign> _undo = [];
+  final List<LoyaltyCardDesign> _redo = [];
+  bool _saving = false;
+  bool _publishing = false;
   bool _downloading = false;
+  final _labelCtrl = TextEditingController();
+  final _descCtrl = TextEditingController();
+  final _stampsCtrl = TextEditingController();
 
   DesignLayer? get _selected {
     if (_selectedId == null) return null;
@@ -50,6 +57,24 @@ class _InvitationDesignEditorScreenState
   void initState() {
     super.initState();
     _design = widget.design.copy();
+    // Unlock stamp grids so they can be moved like other layers.
+    for (var i = 0; i < _design.layers.length; i++) {
+      if (_design.layers[i].type == DesignLayerType.stampGrid) {
+        _design.layers[i] = _design.layers[i].copyWith(locked: false);
+      }
+    }
+    final existing = widget.existingProgram;
+    _labelCtrl.text = existing?.label ?? '';
+    _descCtrl.text = existing?.description ?? '';
+    _stampsCtrl.text = _design.stamps.toString();
+  }
+
+  @override
+  void dispose() {
+    _labelCtrl.dispose();
+    _descCtrl.dispose();
+    _stampsCtrl.dispose();
+    super.dispose();
   }
 
   void _pushUndo() {
@@ -70,11 +95,30 @@ class _InvitationDesignEditorScreenState
     setState(() => _design = _redo.removeLast());
   }
 
-  void _updateLayer(String id, DesignLayer Function(DesignLayer) fn) {
-    _pushUndo();
+  void _updateLayer(String id, DesignLayer Function(DesignLayer) fn, {bool recordUndo = true}) {
+    if (recordUndo) _pushUndo();
     setState(() {
       final i = _design.layers.indexWhere((l) => l.id == id);
-      if (i >= 0) _design.layers[i] = fn(_design.layers[i]);
+      if (i >= 0) {
+        _design.layers[i] = fn(_design.layers[i]);
+        if (_design.layers[i].type == DesignLayerType.stampGrid) {
+          final n = int.tryParse(_design.layers[i].text);
+          if (n != null) _design.stamps = n.clamp(1, 24);
+          if (_design.layers[i].shape.isNotEmpty) {
+            _design.stampShape = _design.layers[i].shape;
+          }
+          if (_design.layers[i].color.isNotEmpty) {
+            _design.stampColor = _design.layers[i].color;
+          }
+          if (_design.layers[i].borderColor.isNotEmpty) {
+            _design.stampBorderColor = _design.layers[i].borderColor;
+          }
+        }
+        if (_design.layers[i].fieldKey == 'logo' &&
+            _design.layers[i].imageSrc.isNotEmpty) {
+          _design.logo = _design.layers[i].imageSrc;
+        }
+      }
     });
   }
 
@@ -89,6 +133,8 @@ class _InvitationDesignEditorScreenState
       _pickImageForLayer(layer);
     } else if (layer.type == DesignLayerType.qr) {
       _editQr(layer);
+    } else if (layer.type == DesignLayerType.stampGrid) {
+      _showLayerStyleSheet();
     }
   }
 
@@ -184,7 +230,7 @@ class _InvitationDesignEditorScreenState
               TextField(
                 controller: controller,
                 decoration: InputDecoration(
-                  hintText: 'https://maps.google.com/…',
+                  hintText: 'https://…',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -217,6 +263,9 @@ class _InvitationDesignEditorScreenState
         : 'image/jpeg';
     final dataUri = 'data:$mime;base64,$b64';
     _updateLayer(layer.id, (l) => l.copyWith(imageSrc: dataUri));
+    if (layer.fieldKey == 'logo' || layer.type == DesignLayerType.logo) {
+      setState(() => _design.logo = dataUri);
+    }
   }
 
   void _deleteSelected() {
@@ -235,32 +284,34 @@ class _InvitationDesignEditorScreenState
         : _design.layers.map((e) => e.zIndex).reduce((a, b) => a > b ? a : b) +
             1;
     late DesignLayer layer;
+    final dark = _isDarkBg;
     switch (type) {
       case DesignLayerType.text:
         layer = DesignLayer(
-          id: InvitationDesign.newId(),
+          id: LoyaltyCardDesign.newId(),
           type: DesignLayerType.text,
           fieldKey: 'custom',
           text: _design.rtl ? 'نص جديد' : context.l10n.newText,
           fontFamily: _design.rtl ? 'cairo' : 'playfair',
           fontSize: 0.04,
-          color: _isDarkBg ? '#FFFFFF' : '#212121',
+          color: dark ? '#FFFFFF' : '#212121',
           x: 0.15,
           y: 0.4,
           width: 0.7,
           height: 0.08,
           zIndex: z,
+          bold: true,
         );
       case DesignLayerType.iconField:
         layer = DesignLayer(
-          id: InvitationDesign.newId(),
+          id: LoyaltyCardDesign.newId(),
           type: DesignLayerType.iconField,
           fieldKey: 'custom',
-          text: _design.rtl ? 'تفاصيل' : context.l10n.details,
-          iconName: 'calendar',
+          text: context.l10n.details,
+          iconName: 'star',
           fontFamily: _design.rtl ? 'cairo' : 'roboto',
           fontSize: 0.028,
-          color: _isDarkBg ? '#FFFFFF' : '#212121',
+          color: dark ? '#FFFFFF' : '#212121',
           x: 0.3,
           y: 0.5,
           width: 0.4,
@@ -269,48 +320,47 @@ class _InvitationDesignEditorScreenState
         );
       case DesignLayerType.logo:
         layer = DesignLayer(
-          id: InvitationDesign.newId(),
+          id: LoyaltyCardDesign.newId(),
           type: DesignLayerType.logo,
           fieldKey: 'logo',
-          color: _isDarkBg ? '#D4AF37' : '#212121',
+          color: dark ? '#D4AF37' : '#212121',
           x: 0.35,
-          y: 0.1,
+          y: 0.08,
           width: 0.3,
-          height: 0.15,
+          height: 0.14,
           zIndex: z,
-          borderWidth: 1.5,
-          borderColor: _isDarkBg ? '#D4AF37' : '#212121',
+          shape: 'circle',
         );
       case DesignLayerType.image:
         layer = DesignLayer(
-          id: InvitationDesign.newId(),
+          id: LoyaltyCardDesign.newId(),
           type: DesignLayerType.image,
           fieldKey: 'photo',
           x: 0.2,
           y: 0.3,
           width: 0.6,
-          height: 0.3,
+          height: 0.25,
           zIndex: z,
         );
       case DesignLayerType.qr:
         layer = DesignLayer(
-          id: InvitationDesign.newId(),
+          id: LoyaltyCardDesign.newId(),
           type: DesignLayerType.qr,
           fieldKey: 'qr',
-          qrData: 'barqody://invitation/preview',
+          qrData: 'barqody://loyalty/preview',
           qrColor: '#000000',
           x: 0.35,
-          y: 0.65,
+          y: 0.7,
           width: 0.3,
-          height: 0.18,
+          height: 0.16,
           zIndex: z,
         );
       case DesignLayerType.shape:
         layer = DesignLayer(
-          id: InvitationDesign.newId(),
+          id: LoyaltyCardDesign.newId(),
           type: DesignLayerType.shape,
           shape: 'divider',
-          color: _isDarkBg ? '#D4AF37' : '#212121',
+          color: dark ? '#D4AF37' : '#212121',
           x: 0.25,
           y: 0.5,
           width: 0.5,
@@ -319,10 +369,10 @@ class _InvitationDesignEditorScreenState
         );
       case DesignLayerType.ornament:
         layer = DesignLayer(
-          id: InvitationDesign.newId(),
+          id: LoyaltyCardDesign.newId(),
           type: DesignLayerType.ornament,
           shape: 'diamond',
-          color: _isDarkBg ? '#D4AF37' : '#212121',
+          color: dark ? '#D4AF37' : '#212121',
           x: 0.45,
           y: 0.5,
           width: 0.1,
@@ -330,21 +380,20 @@ class _InvitationDesignEditorScreenState
           zIndex: z,
         );
       case DesignLayerType.stampGrid:
-        // Loyalty-only layer type; not offered in invitation toolbar.
         layer = DesignLayer(
-          id: InvitationDesign.newId(),
+          id: LoyaltyCardDesign.newId(),
           type: DesignLayerType.stampGrid,
           fieldKey: 'stampGrid',
-          text: '8',
-          shape: 'circle',
-          color: _isDarkBg ? '#FFFFFF' : '#212121',
-          borderColor: _isDarkBg ? '#FFFFFF' : '#212121',
-          x: 0.15,
+          text: _design.stamps.toString(),
+          shape: _design.stampShape,
+          color: _design.stampColor,
+          borderColor: _design.stampBorderColor,
+          x: 0.12,
           y: 0.35,
-          width: 0.7,
-          height: 0.3,
+          width: 0.76,
+          height: 0.35,
           zIndex: z,
-          locked: true,
+          locked: false,
         );
     }
     setState(() {
@@ -359,192 +408,25 @@ class _InvitationDesignEditorScreenState
   }
 
   bool get _isDarkBg {
-    final c = designColorFromHex(_design.backgroundColor, fallback: Colors.black);
+    final c =
+        designColorFromHex(_design.backgroundColor, fallback: Colors.black);
     return c.computeLuminance() < 0.45;
   }
 
-  InvitationDraft _toDraft() {
-    final title = _design.textForField('title') ??
-        _design.textForField('names') ??
-        context.l10n.invitation;
-    final message = _design.textForField('message') ??
-        _design.textForField('greeting') ??
-        '';
-    final venue = _design.textForField('venue') ?? '';
-    final address = _design.textForField('address') ?? '';
-    final host = _design.textForField('host') ?? '';
-
-    String type = 'other';
-    switch (_design.category) {
-      case 'wedding':
-      case 'engagement':
-        type = 'wedding';
-      case 'birthday':
-        type = 'birthday';
-      case 'anniversary':
-        type = 'anniversary';
-      case 'business':
-        type = 'business_meeting';
-      default:
-        type = 'other';
-    }
-
-    final existing = widget.existingDraft;
-    return InvitationDraft(
-      invitationId: existing?.invitationId,
-      type: type,
-      title: title.trim().isEmpty ? context.l10n.invitation : title.trim(),
-      message: [message, if (host.isNotEmpty) host].where((e) => e.isNotEmpty).join('\n'),
-      venue: venue,
-      address: address,
-      eventAt: existing?.eventAt,
-      themeColor: _design.backgroundColor.startsWith('#')
-          ? _design.backgroundColor
-          : '#E85D2A',
-      coverImageFile: existing?.coverImageFile,
-      coverImageBase64: existing?.coverImageBase64,
-      existingCoverUrl: existing?.existingCoverUrl,
-      clearCoverImage: existing?.clearCoverImage ?? false,
-      design: _design,
-    );
-  }
-
-  void _continue() {
-    final draft = _toDraft();
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => InviteContactsScreen(draft: draft),
-      ),
-    );
-  }
-
-  Future<void> _saveDraft() async {
-    final draft = _toDraft();
-    final provider = context.read<InvitationProvider>();
-    final invitation = await provider.sendInvitation(
-      type: draft.type,
-      title: draft.title,
-      message: draft.message,
-      venue: draft.venue,
-      address: draft.address,
-      eventAt: draft.eventAt,
-      themeColor: draft.themeColor,
-      coverImageBase64: draft.coverImageBase64,
-      clearCoverImage: draft.clearCoverImage,
-      design: draft.design?.toJson(),
-      recipientIds: const [],
-      saveAsDraft: true,
-      showFeedback: false,
-      invitationId: draft.invitationId,
-      context: context,
-    );
-    if (invitation != null && mounted) {
-      widget.existingDraft?.invitationId = invitation.id;
-      finishInvitationFlow(
-        context,
-        message: context.l10n.draftSavedSuccessfully,
-        screensToPop: widget.existingDraft != null ? 1 : 2,
-      );
-    }
-  }
-
-  Future<void> _publishTemplate() async {
-    final nameCtrl = TextEditingController(
-      text: _design.textForField('title') ?? context.l10n.myInvitationTemplate,
-    );
-    final descCtrl = TextEditingController();
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(ctx.l10n.publishTemplate),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(ctx.l10n.shareDesignForGallery),
-            const SizedBox(height: 16),
-            TextField(
-              controller: nameCtrl,
-              decoration: InputDecoration(
-                labelText: ctx.l10n.templateName,
-                border: const OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: descCtrl,
-              maxLines: 2,
-              decoration: InputDecoration(
-                labelText: ctx.l10n.descriptionOptional,
-                border: const OutlineInputBorder(),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(ctx.l10n.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            style: FilledButton.styleFrom(backgroundColor: WaUi.buttonDark),
-            child: Text(ctx.l10n.publish),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true || !mounted) return;
-    final name = nameCtrl.text.trim();
-    if (name.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.nameIsRequired)),
-      );
-      return;
-    }
-    await context.read<InvitationProvider>().publishTemplate(
-          name: name,
-          description: descCtrl.text.trim(),
-          design: _design,
-          context: context,
-        );
-  }
-
-  Future<void> _download() async {
-    if (_downloading) return;
-    setState(() => _downloading = true);
-    final messenger = ScaffoldMessenger.of(context);
-    try {
-      final name = 'invitation_${_design.templateId}';
-      final ok = await BusinessCardExportHelper.savePng(
-        _cardKey,
-        fileName: name,
-      );
-      if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            ok ? context.l10n.savedToGallery : context.l10n.couldNotSave,
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    } finally {
-      if (mounted) setState(() => _downloading = false);
-    }
-  }
-
   Future<void> _pickBackgroundColor() async {
-    final presets = [
-      '#0A0A0A',
-      '#F5F2EB',
-      '#F7EDE8',
+    const presets = [
+      '#1B4332',
+      '#D4A5A5',
+      '#7BA3A8',
+      '#121212',
       '#0B3D2E',
-      '#1A0A2E',
-      '#0D1B2A',
+      '#1A2744',
+      '#5C4033',
       '#FAFAFA',
-      '#6C63FF',
+      '#0A0A0A',
+      '#F7EDE8',
       '#8D1B3D',
-      '#1C2833',
+      '#6C63FF',
     ];
     final picked = await showModalBottomSheet<String>(
       context: context,
@@ -645,6 +527,14 @@ class _InvitationDesignEditorScreenState
               },
             ),
             ListTile(
+              leading: const Icon(Icons.grid_view_rounded),
+              title: Text(ctx.l10n.stampCard),
+              onTap: () {
+                Navigator.pop(ctx);
+                _addLayer(DesignLayerType.stampGrid);
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.qr_code_2),
               title: Text(ctx.l10n.qrCode),
               onTap: () {
@@ -677,22 +567,279 @@ class _InvitationDesignEditorScreenState
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (ctx) {
-        return _LayerStyleSheet(
+        return _LoyaltyLayerStyleSheet(
           layer: layer,
-          rtl: _design.rtl,
+          stamps: _design.stamps,
+          stampIcon: _design.stampIcon,
+          unstampIcon: _design.unstampIcon,
           onChanged: (updated) {
-            _updateLayer(layer.id, (_) => updated);
+            // Style sheet already holds local UI state; avoid undo-spam on sliders.
+            _updateLayer(layer.id, (_) => updated, recordUndo: false);
+          },
+          onStampsChanged: (n) {
+            // Don't push undo every slider tick — canvas updates live.
+            setState(() {
+              _design.syncStampCount(n);
+              _stampsCtrl.text = n.toString();
+            });
+          },
+          onPickStampIcon: (filled) async {
+            final picked = await pickSingleFile();
+            if (picked?.file == null) return;
+            final b64 = await fileToBase64(picked!.file!);
+            final mime = picked.mimeType.startsWith('image/')
+                ? picked.mimeType
+                : 'image/jpeg';
+            final uri = 'data:$mime;base64,$b64';
+            _pushUndo();
+            setState(() {
+              if (filled) {
+                _design.stampIcon = uri;
+              } else {
+                _design.unstampIcon = uri;
+              }
+            });
           },
         );
       },
     );
   }
 
+  Future<void> _showProgramMeta() async {
+    _stampsCtrl.text = _design.stamps.toString();
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: WaUi.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 16,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(ctx.l10n.rewardProgram, style: WaUi.sectionHeader),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _labelCtrl,
+                decoration: InputDecoration(
+                  labelText: ctx.l10n.label,
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _descCtrl,
+                maxLines: 2,
+                decoration: InputDecoration(
+                  labelText: ctx.l10n.descriptionOptional,
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _stampsCtrl,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: InputDecoration(
+                  labelText: ctx.l10n.stamps,
+                  border: const OutlineInputBorder(),
+                ),
+                onChanged: (v) {
+                  final n = int.tryParse(v);
+                  if (n != null && n >= 1) {
+                    setState(() => _design.syncStampCount(n));
+                  }
+                },
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx),
+                style: FilledButton.styleFrom(backgroundColor: WaUi.buttonDark),
+                child: Text(ctx.l10n.done),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    setState(() {});
+  }
+
+  Future<void> _download() async {
+    if (_downloading) return;
+    setState(() => _downloading = true);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final name = 'loyalty_${_design.templateId}';
+      final ok = await BusinessCardExportHelper.savePng(
+        _cardKey,
+        fileName: name,
+      );
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            ok ? context.l10n.savedToGallery : context.l10n.couldNotSave,
+          ),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _downloading = false);
+    }
+  }
+
+  Map<String, dynamic> _programBody() {
+    final title = _design.titleText.isNotEmpty
+        ? _design.titleText
+        : (_labelCtrl.text.trim().isNotEmpty
+            ? _labelCtrl.text.trim()
+            : 'Loyalty Rewards');
+    final theme = RewardTheme(
+      cardBackgroundColor: designColorFromHex(_design.backgroundColor),
+      cardTextColor: Colors.white,
+      stampColor: designColorFromHex(_design.stampColor),
+      stampBorderColor: designColorFromHex(_design.stampBorderColor),
+      screenBackgroundColor: const Color(0xFFF0F2F5),
+      screenTextColor: Colors.black,
+    );
+    return {
+      'label': _labelCtrl.text.trim().isNotEmpty
+          ? _labelCtrl.text.trim()
+          : title,
+      'title': title,
+      'description': _descCtrl.text.trim(),
+      'stamps': _design.stamps,
+      'theme': theme.toJson(),
+      'design': _design.toJson(),
+      if (_design.logo.isNotEmpty) 'logo': _design.logo,
+      if (_design.stampIcon.isNotEmpty) 'stampIcon': _design.stampIcon,
+      if (_design.unstampIcon.isNotEmpty) 'unstampIcon': _design.unstampIcon,
+    };
+  }
+
+  Future<void> _saveProgram() async {
+    if (_saving) return;
+    if (_design.stamps < 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.pleaseEnterAValidNumberOfStamps)),
+      );
+      return;
+    }
+    setState(() => _saving = true);
+    final body = _programBody();
+    final repo = RewardRepo();
+    late ApiResponse res;
+    final id = widget.existingProgramId;
+    if (id != null && id.isNotEmpty) {
+      res = await repo.updateProgram(id, body);
+    } else {
+      res = await repo.createProgram(body);
+    }
+    if (!mounted) return;
+    setState(() => _saving = false);
+    if (res.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.loyaltyProgramSaved)),
+      );
+      Navigator.of(context).pop(true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(res.message ?? context.l10n.failedToSave)),
+      );
+    }
+  }
+
+  Future<void> _publishTemplate() async {
+    final nameCtrl = TextEditingController(
+      text: _design.titleText.isNotEmpty
+          ? _design.titleText
+          : context.l10n.myLoyaltyTemplate,
+    );
+    final descCtrl = TextEditingController(text: _descCtrl.text);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(ctx.l10n.publishTemplate),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(ctx.l10n.shareDesignForGallery),
+            const SizedBox(height: 16),
+            TextField(
+              controller: nameCtrl,
+              decoration: InputDecoration(
+                labelText: ctx.l10n.templateName,
+                border: const OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: descCtrl,
+              maxLines: 2,
+              decoration: InputDecoration(
+                labelText: ctx.l10n.descriptionOptional,
+                border: const OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(ctx.l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: FilledButton.styleFrom(backgroundColor: WaUi.buttonDark),
+            child: Text(ctx.l10n.publish),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    final name = nameCtrl.text.trim();
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.nameIsRequired)),
+      );
+      return;
+    }
+    setState(() => _publishing = true);
+    final res = await RewardRepo().publishLoyaltyTemplate({
+      'name': name,
+      'description': descCtrl.text.trim(),
+      'category': _design.category,
+      'locale': _design.locale,
+      'rtl': _design.rtl,
+      'previewColor': _design.backgroundColor,
+      'accentColor': _design.stampColor,
+      'design': _design.toJson(),
+    });
+    if (!mounted) return;
+    setState(() => _publishing = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          res.success
+              ? context.l10n.templatePublishedOthersCanUse
+              : (res.message ?? context.l10n.failedToSave),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final selected = _selected;
-    final isSending = context.watch<InvitationProvider>().isSending;
-    final isPublishing = context.watch<InvitationProvider>().isPublishing;
 
     return Scaffold(
       backgroundColor: const Color(0xFFE8EAED),
@@ -700,12 +847,12 @@ class _InvitationDesignEditorScreenState
         backgroundColor: WaUi.surface,
         elevation: 0,
         foregroundColor: WaUi.primaryText,
-        title: Text(context.l10n.designInvitation, style: WaUi.sectionHeader),
+        title: Text(context.l10n.customizeCard, style: WaUi.sectionHeader),
         actions: [
           IconButton(
             tooltip: context.l10n.publishForOthers,
-            onPressed: isPublishing ? null : _publishTemplate,
-            icon: isPublishing
+            onPressed: _publishing ? null : _publishTemplate,
+            icon: _publishing
                 ? const SizedBox(
                     width: 20,
                     height: 20,
@@ -738,7 +885,6 @@ class _InvitationDesignEditorScreenState
       ),
       body: Column(
         children: [
-          // Toolbar
           Container(
             color: WaUi.surface,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -770,6 +916,11 @@ class _InvitationDesignEditorScreenState
                     },
                   ),
                   _ToolBtn(
+                    icon: Icons.settings_outlined,
+                    label: context.l10n.stamps,
+                    onTap: _showProgramMeta,
+                  ),
+                  _ToolBtn(
                     icon: Icons.public,
                     label: context.l10n.publish,
                     onTap: _publishTemplate,
@@ -791,8 +942,6 @@ class _InvitationDesignEditorScreenState
             ),
           ),
           const Divider(height: 1),
-
-          // Canvas
           Expanded(
             child: Center(
               child: SingleChildScrollView(
@@ -803,16 +952,12 @@ class _InvitationDesignEditorScreenState
                     onTap: () => setState(() => _selectedId = null),
                     child: RepaintBoundary(
                       key: _cardKey,
-                      child: InvitationDesignRenderer(
+                      child: LoyaltyCardDesignRenderer(
                         design: _design,
                         interactive: true,
                         selectedLayerId: _selectedId,
                         onLayerTap: _onLayerTap,
-                        onLayerDrag: (id, d) {
-                          // Don't push undo every frame — only on first move of gesture
-                          // handled simply by updating without undo during drag
-                          _onLayerDrag(id, d);
-                        },
+                        onLayerDrag: _onLayerDrag,
                       ),
                     ),
                   ),
@@ -820,8 +965,6 @@ class _InvitationDesignEditorScreenState
               ),
             ),
           ),
-
-          // Bottom bar
           SafeArea(
             top: false,
             child: Container(
@@ -831,26 +974,29 @@ class _InvitationDesignEditorScreenState
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: isSending ? null : _saveDraft,
-                      child: isSending
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : Text(context.l10n.saveDraft),
+                      onPressed: _showProgramMeta,
+                      child: Text(context.l10n.details),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     flex: 2,
                     child: FilledButton(
-                      onPressed: _continue,
+                      onPressed: _saving ? null : _saveProgram,
                       style: FilledButton.styleFrom(
-                        backgroundColor: WaUi.buttonDark,
+                        backgroundColor: const Color(0xFFFF8A3D),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      child: Text(context.l10n.continueInvite),
+                      child: _saving
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(context.l10n.saveProgram),
                     ),
                   ),
                 ],
@@ -893,23 +1039,33 @@ class _ToolBtn extends StatelessWidget {
   }
 }
 
-class _LayerStyleSheet extends StatefulWidget {
+class _LoyaltyLayerStyleSheet extends StatefulWidget {
   final DesignLayer layer;
-  final bool rtl;
+  final int stamps;
+  final String stampIcon;
+  final String unstampIcon;
   final ValueChanged<DesignLayer> onChanged;
+  final ValueChanged<int> onStampsChanged;
+  final Future<void> Function(bool filled) onPickStampIcon;
 
-  const _LayerStyleSheet({
+  const _LoyaltyLayerStyleSheet({
     required this.layer,
-    required this.rtl,
+    required this.stamps,
+    required this.stampIcon,
+    required this.unstampIcon,
     required this.onChanged,
+    required this.onStampsChanged,
+    required this.onPickStampIcon,
   });
 
   @override
-  State<_LayerStyleSheet> createState() => _LayerStyleSheetState();
+  State<_LoyaltyLayerStyleSheet> createState() =>
+      _LoyaltyLayerStyleSheetState();
 }
 
-class _LayerStyleSheetState extends State<_LayerStyleSheet> {
+class _LoyaltyLayerStyleSheetState extends State<_LoyaltyLayerStyleSheet> {
   late DesignLayer _layer;
+  late int _stamps;
 
   static const _fonts = [
     'cairo',
@@ -931,6 +1087,8 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
     '#4FC3F7',
     '#FF8C00',
     '#C0392B',
+    '#F4A261',
+    '#1B4332',
   ];
 
   static const _icons = [
@@ -947,6 +1105,7 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
   void initState() {
     super.initState();
     _layer = widget.layer.copyWith();
+    _stamps = widget.stamps.clamp(1, 24);
   }
 
   void _apply(DesignLayer next) {
@@ -954,13 +1113,22 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
     widget.onChanged(next);
   }
 
+  void _setStamps(int n) {
+    final count = n.clamp(1, 24);
+    setState(() {
+      _stamps = count;
+      _layer = _layer.copyWith(text: count.toString());
+    });
+    widget.onStampsChanged(count);
+  }
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.55,
+      initialChildSize: 0.6,
       minChildSize: 0.35,
-      maxChildSize: 0.9,
+      maxChildSize: 0.92,
       builder: (ctx, scroll) {
         return ListView(
           controller: scroll,
@@ -979,8 +1147,7 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
                   return ChoiceChip(
                     label: Text(f),
                     selected: sel,
-                    onSelected: (_) =>
-                        _apply(_layer.copyWith(fontFamily: f)),
+                    onSelected: (_) => _apply(_layer.copyWith(fontFamily: f)),
                   );
                 }).toList(),
               ),
@@ -1029,6 +1196,60 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
               ),
               const SizedBox(height: 12),
             ],
+            if (_layer.type == DesignLayerType.stampGrid) ...[
+              Text(
+                '${context.l10n.stamps}: $_stamps',
+                style: WaUi.label,
+              ),
+              Slider(
+                value: _stamps.toDouble(),
+                min: 1,
+                max: 24,
+                divisions: 23,
+                label: '$_stamps',
+                onChanged: (v) => _setStamps(v.round()),
+              ),
+              Text(context.l10n.stampShape, style: WaUi.label),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  ChoiceChip(
+                    label: Text(context.l10n.circle),
+                    selected: _layer.shape == 'circle',
+                    onSelected: (_) =>
+                        _apply(_layer.copyWith(shape: 'circle')),
+                  ),
+                  const SizedBox(width: 8),
+                  ChoiceChip(
+                    label: Text(context.l10n.square),
+                    selected: _layer.shape == 'square',
+                    onSelected: (_) =>
+                        _apply(_layer.copyWith(shape: 'square')),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => widget.onPickStampIcon(true),
+                      icon: const Icon(Icons.verified_outlined),
+                      label: Text(context.l10n.stampIcon),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => widget.onPickStampIcon(false),
+                      icon: const Icon(Icons.circle_outlined),
+                      label: Text(context.l10n.emptyStampIcon),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+            ],
             Text(context.l10n.color, style: WaUi.label),
             const SizedBox(height: 8),
             Wrap(
@@ -1053,6 +1274,29 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
                 );
               }).toList(),
             ),
+            if (_layer.type == DesignLayerType.stampGrid) ...[
+              const SizedBox(height: 12),
+              Text(context.l10n.stampIcon, style: WaUi.label),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: _colors.map((hex) {
+                  return GestureDetector(
+                    onTap: () => _apply(_layer.copyWith(borderColor: hex)),
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: invitationColorFromHex(hex),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: WaUi.chipBorder),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
             if (_layer.type == DesignLayerType.qr) ...[
               const SizedBox(height: 16),
               Text(context.l10n.qrColor, style: WaUi.label),
@@ -1077,6 +1321,12 @@ class _LayerStyleSheetState extends State<_LayerStyleSheet> {
               ),
             ],
             const SizedBox(height: 16),
+            FilterChip(
+              label: Text(_layer.locked ? 'Locked' : 'Unlocked'),
+              selected: _layer.locked,
+              onSelected: (v) => _apply(_layer.copyWith(locked: v)),
+            ),
+            const SizedBox(height: 12),
             Text(context.l10n.width, style: WaUi.label),
             Slider(
               value: _layer.width.clamp(0.1, 1.0),

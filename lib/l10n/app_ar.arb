@@ -1519,5 +1519,17 @@
       }
     }
   },
-  "customizeCardTitle": "تخصيص البطاقة"
+  "customizeCardTitle": "تخصيص البطاقة",
+  "quickEdit": "تعديل سريع",
+  "saveProgram": "حفظ البرنامج",
+  "promoTitle": "عنوان العرض",
+  "stampShape": "شكل الختم",
+  "circle": "دائرة",
+  "square": "مربع",
+  "emptyStampIcon": "أيقونة الختم الفارغ",
+  "loyaltyProgramSaved": "تم حفظ برنامج الولاء",
+  "myLoyaltyTemplate": "قالب الولاء الخاص بي",
+  "noLoyaltyTemplatesFound": "لا توجد قوالب",
+  "loyaltyTextLayer": "نص",
+  "loyaltyImageLayer": "صورة"
 }

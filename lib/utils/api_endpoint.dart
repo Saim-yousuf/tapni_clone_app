@@ -20,8 +20,8 @@ class Api {
   static void init(
     // Environment env
   ) {
-    // baseUrl = _localBaseUrl;
-    baseUrl = _liveBaseUrl;
+    baseUrl = _localBaseUrl;
+    // baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }
@@ -119,6 +119,12 @@ class _LoyaltyApi {
   String program(String id) => "${Api.baseUrl}/api/loyalty/programs/$id";
   String toggleActive(String id) =>
       "${Api.baseUrl}/api/loyalty/programs/$id/toggle";
+
+  String get templates => "${Api.baseUrl}/api/loyalty-templates";
+  String get myTemplates => "${Api.baseUrl}/api/loyalty-templates/mine";
+  String templateById(String id) => "${Api.baseUrl}/api/loyalty-templates/$id";
+  String useTemplate(String id) =>
+      "${Api.baseUrl}/api/loyalty-templates/$id/use";
 }
 
 class _EnrollmentApi {
@@ -183,6 +189,8 @@ class _InvitationApi {
   String get received => "${Api.baseUrl}/api/invitations/received";
   String byId(String id) => "${Api.baseUrl}/api/invitations/$id";
   String update(String id) => "${Api.baseUrl}/api/invitations/$id";
+  String addRecipients(String id) =>
+      "${Api.baseUrl}/api/invitations/$id/recipients";
 
   String get templates => "${Api.baseUrl}/api/invitation-templates";
   String get myTemplates => "${Api.baseUrl}/api/invitation-templates/mine";

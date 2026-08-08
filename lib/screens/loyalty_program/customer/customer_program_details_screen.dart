@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/reward.dart';
+import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -107,49 +108,69 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
               ],
               const SizedBox(height: 28),
 
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(22),
-                decoration: BoxDecoration(
-                  color: theme.cardBackgroundColor,
-                  borderRadius: BorderRadius.circular(22),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 16,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
+              if (program?.hasDesign == true)
+                Column(
                   children: [
+                    LoyaltyCardDesignRenderer(
+                      design: program!.design!,
+                      filledStamps: currentStamps,
+                      borderRadius: 22,
+                    ),
+                    const SizedBox(height: 12),
                     Text(
                       context.l10n.stampsProgress(currentStamps, totalStamps),
                       style: TextStyle(
-                        color: theme.cardTextColor,
+                        color: theme.screenTextColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
-                    const SizedBox(height: 18),
-                    Wrap(
-                      spacing: 20,
-                      runSpacing: 20,
-                      alignment: WrapAlignment.center,
-                      children: List.generate(totalStamps, (i) {
-                        final filled = i < currentStamps;
-                        return RewardStampSlot(
-                          filled: filled,
-                          theme: theme,
-                          stampIconUrl: program?.stampIcon,
-                          unstampIconUrl: program?.unstampIcon,
-                          size: 60,
-                        );
-                      }),
-                    ),
                   ],
+                )
+              else
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(22),
+                  decoration: BoxDecoration(
+                    color: theme.cardBackgroundColor,
+                    borderRadius: BorderRadius.circular(22),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        context.l10n.stampsProgress(currentStamps, totalStamps),
+                        style: TextStyle(
+                          color: theme.cardTextColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Wrap(
+                        spacing: 20,
+                        runSpacing: 20,
+                        alignment: WrapAlignment.center,
+                        children: List.generate(totalStamps, (i) {
+                          final filled = i < currentStamps;
+                          return RewardStampSlot(
+                            filled: filled,
+                            theme: theme,
+                            stampIconUrl: program?.stampIcon,
+                            unstampIconUrl: program?.unstampIcon,
+                            size: 60,
+                          );
+                        }),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               SizedBox(height: 24),
 
               if (enrollment.isCompleted)

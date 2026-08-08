@@ -111,4 +111,42 @@ class RewardRepo {
       body: {},
     );
   }
+
+  Future<ApiResponse> getCommunityTemplates({String? category}) async {
+    final q = category != null && category.isNotEmpty
+        ? '?category=${Uri.encodeQueryComponent(category)}'
+        : '';
+    return await ApiHandler.request(
+      api: '${Api.loyalty.templates}$q',
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> publishLoyaltyTemplate(Map<String, dynamic> body) async {
+    return await ApiHandler.request(
+      api: Api.loyalty.templates,
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: body,
+    );
+  }
+
+  Future<ApiResponse> useLoyaltyTemplate(String id) async {
+    return await ApiHandler.request(
+      api: Api.loyalty.useTemplate(id),
+      method: ApiMethod.post,
+      headers: {'Content-Type': 'application/json'},
+      authorization: true,
+      body: {},
+    );
+  }
+
+  Future<ApiResponse> deleteLoyaltyTemplate(String id) async {
+    return await ApiHandler.request(
+      api: Api.loyalty.templateById(id),
+      method: ApiMethod.delete,
+      authorization: true,
+    );
+  }
 }

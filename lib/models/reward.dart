@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/models/loyalty_card_design.dart';
 
 class RewardTheme {
   final Color cardBackgroundColor;
@@ -84,6 +85,7 @@ class RewardProgram {
   final String? businessName;
   final String? businessUsername;
   final String? businessPhoto;
+  final LoyaltyCardDesign? design;
 
   RewardProgram({
     required this.id,
@@ -102,7 +104,10 @@ class RewardProgram {
     this.businessName,
     this.businessUsername,
     this.businessPhoto,
+    this.design,
   });
+
+  bool get hasDesign => design != null && design!.hasLayers;
 
   String get displayBusinessName =>
       (businessName?.trim().isNotEmpty == true) ? businessName! : 'Business';
@@ -123,15 +128,39 @@ class RewardProgram {
       businessPhoto = user['profilePhoto']?.toString();
     }
 
+    LoyaltyCardDesign? design;
+    final designJson = json['design'];
+    if (designJson is Map<String, dynamic>) {
+      design = LoyaltyCardDesign.fromJson(designJson);
+    } else if (designJson is Map) {
+      design = LoyaltyCardDesign.fromJson(Map<String, dynamic>.from(designJson));
+    }
+
+    final logo = json['logo']?.toString() ?? '';
+    final stampIcon = json['stampIcon']?.toString() ?? '';
+    final unstampIcon = json['unstampIcon']?.toString() ?? '';
+    final stamps = (json['stamps'] as num?)?.toInt() ?? 10;
+
+    if (design != null) {
+      if (design.logo.isEmpty && logo.isNotEmpty) design.logo = logo;
+      if (design.stampIcon.isEmpty && stampIcon.isNotEmpty) {
+        design.stampIcon = stampIcon;
+      }
+      if (design.unstampIcon.isEmpty && unstampIcon.isNotEmpty) {
+        design.unstampIcon = unstampIcon;
+      }
+      if (design.stamps != stamps) design.syncStampCount(stamps);
+    }
+
     return RewardProgram(
       id: json['_id']?.toString() ?? json['id']?.toString() ?? '',
-      logo: json['logo']?.toString() ?? '',
-      stampIcon: json['stampIcon']?.toString() ?? '',
-      unstampIcon: json['unstampIcon']?.toString() ?? '',
+      logo: logo,
+      stampIcon: stampIcon,
+      unstampIcon: unstampIcon,
       label: json['label']?.toString() ?? '',
       title: json['title']?.toString() ?? '',
       description: json['description']?.toString() ?? '',
-      stamps: (json['stamps'] as num?)?.toInt() ?? 10,
+      stamps: stamps,
       theme: json['theme'] != null
           ? RewardTheme.fromJson(json['theme'] as Map<String, dynamic>)
           : RewardTheme(),
@@ -146,6 +175,7 @@ class RewardProgram {
       businessName: businessName,
       businessUsername: businessUsername,
       businessPhoto: businessPhoto,
+      design: design,
     );
   }
 }

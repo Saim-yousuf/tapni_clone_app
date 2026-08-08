@@ -31,6 +31,12 @@ class InvitationProvider extends ChangeNotifier {
   /// Cards the user created (sent + drafts) — for home carousel.
   List<EventInvitation> get myCards => List.unmodifiable(_sent);
 
+  void clearSendingState() {
+    if (!_isSending) return;
+    _isSending = false;
+    notifyListeners();
+  }
+
   void setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
@@ -249,6 +255,67 @@ class InvitationProvider extends ChangeNotifier {
               (saveAsDraft
                   ? 'Failed to save draft'
                   : 'Failed to send invitation'),
+          context: context,
+        );
+      }
+      return null;
+    } finally {
+      _isSending = false;
+      notifyListeners();
+    }
+  }
+
+  /// Add more recipients to an already-sent invitation.
+  Future<EventInvitation?> addRecipients({
+    required String invitationId,
+    required List<String> recipientIds,
+    bool showFeedback = true,
+    BuildContext? context,
+  }) async {
+    if (invitationId.isEmpty || recipientIds.isEmpty) {
+      if (showFeedback && context != null && context.mounted) {
+        ShowAlert.error(
+          message: l10nOr(
+            (l) => l.selectContactsToSend,
+            'Select contacts to send',
+          ),
+          context: context,
+        );
+      }
+      return null;
+    }
+
+    _isSending = true;
+    notifyListeners();
+    try {
+      final response = await _repo.addRecipients(invitationId, recipientIds);
+      if (response.success && response.data != null) {
+        final data = response.data;
+        final json = data is Map<String, dynamic> && data['data'] != null
+            ? data['data']
+            : data;
+        if (json is Map<String, dynamic>) {
+          final invitation = EventInvitation.fromJson(json);
+          _sent.removeWhere((e) => e.id == invitation.id && e.id.isNotEmpty);
+          _sent.insert(0, invitation);
+          if (_selected?.id == invitation.id) {
+            _selected = invitation;
+          }
+          notifyListeners();
+          if (showFeedback && context != null && context.mounted) {
+            ShowAlert.success(
+              message: l10nOr(
+                (l) => l.invitationSentSuccessfully,
+                'Invitation sent successfully',
+              ),
+              context: context,
+            );
+          }
+          return invitation;
+        }
+      } else if (showFeedback && context != null && context.mounted) {
+        ShowAlert.error(
+          message: response.message ?? 'Failed to send invitation',
           context: context,
         );
       }

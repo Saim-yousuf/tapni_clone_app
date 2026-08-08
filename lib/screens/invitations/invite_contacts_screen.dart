@@ -17,7 +17,18 @@ import 'package:url_launcher/url_launcher.dart';
 class InviteContactsScreen extends StatefulWidget {
   final InvitationDraft draft;
 
-  const InviteContactsScreen({super.key, required this.draft});
+  /// When true, only add recipients to an already-sent invitation.
+  final bool addMoreMode;
+
+  /// User IDs already invited — shown as disabled / skipped from new selection.
+  final Set<String> alreadyInvitedUserIds;
+
+  const InviteContactsScreen({
+    super.key,
+    required this.draft,
+    this.addMoreMode = false,
+    this.alreadyInvitedUserIds = const {},
+  });
 
   @override
   State<InviteContactsScreen> createState() => _InviteContactsScreenState();
@@ -55,7 +66,12 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
   void initState() {
     super.initState();
     _searchController.addListener(() => setState(() {}));
-    _loadContacts();
+    // Clear stuck send spinner from a previous failed/interrupted send.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<InvitationProvider>().clearSendingState();
+      _loadContacts();
+    });
   }
 
   @override
@@ -67,6 +83,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
   String get _query => _searchController.text.trim().toLowerCase();
 
   Future<void> _loadContacts() async {
+    if (!mounted) return;
     setState(() {
       _loading = true;
       _permissionHint = null;
@@ -80,45 +97,74 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
       final invitationProvider = context.read<InvitationProvider>();
       final leadsProvider = context.read<LeadsProvider>();
 
-      // Ensure saved contacts (leads) are loaded
-      if (leadsProvider.allLeads.isEmpty) {
-        await leadsProvider.fetchLeads();
-      }
-      final leads = List<Lead>.from(leadsProvider.allLeads);
-
-      // Device phone contacts (optional if permission denied)
-      final phoneToName = <String, String>{};
-      final status = await Permission.contacts.request();
-      if (status.isGranted) {
-        final contacts =
-            await FlutterContacts.getContacts(withProperties: true);
-        for (final contact in contacts) {
-          for (final phone in contact.phones) {
-            final normalized = PhoneUtils.normalize(phone.number);
-            if (!PhoneUtils.isValid(normalized)) continue;
-            phoneToName.putIfAbsent(
-              normalized,
-              () => contact.displayName.trim().isEmpty
-                  ? normalized
-                  : contact.displayName.trim(),
-            );
-          }
+      // 1) Saved contacts first — unblock UI quickly
+      try {
+        if (leadsProvider.allLeads.isEmpty) {
+          await leadsProvider.fetchLeads().timeout(const Duration(seconds: 10));
         }
-      } else if (mounted) {
-        _permissionHint = permissionHint;
+      } catch (_) {}
+
+      final leads = List<Lead>.from(leadsProvider.allLeads);
+      var savedRows = _mapLeadRows(leads, const {}, contactFallback);
+
+      if (!mounted) return;
+      setState(() {
+        _savedRows = savedRows;
+        _deviceRows = [];
+        _loading = false;
+      });
+
+      // 2) Device contacts + phone match (best-effort, never block forever)
+      final phoneToName = <String, String>{};
+      try {
+        var status = await Permission.contacts.status
+            .timeout(const Duration(seconds: 3));
+        if (status.isDenied || status.isRestricted) {
+          status = await Permission.contacts
+              .request()
+              .timeout(const Duration(seconds: 10));
+        }
+        if (status.isGranted) {
+          final contacts = await FlutterContacts.getContacts(
+            withProperties: true,
+          ).timeout(const Duration(seconds: 12));
+          for (final contact in contacts) {
+            for (final phone in contact.phones) {
+              final normalized = PhoneUtils.normalize(phone.number);
+              if (!PhoneUtils.isValid(normalized)) continue;
+              phoneToName.putIfAbsent(
+                normalized,
+                () => contact.displayName.trim().isEmpty
+                    ? normalized
+                    : contact.displayName.trim(),
+              );
+            }
+          }
+        } else if (mounted) {
+          setState(() => _permissionHint = permissionHint);
+        }
+      } catch (_) {
+        if (mounted && phoneToName.isEmpty) {
+          setState(() => _permissionHint = permissionHint);
+        }
       }
 
-      // Match phones for device + saved (without known user id)
       final phonesToMatch = <String>{
         ...phoneToName.keys,
         for (final lead in leads)
           if (lead.contactUser == null || lead.contactUser!.isEmpty)
             PhoneUtils.normalize(lead.displayPhone),
-      }.where(PhoneUtils.isValid).toList();
+      }.where(PhoneUtils.isValid).take(400).toList();
 
       PhoneMatchResult? match;
       if (phonesToMatch.isNotEmpty) {
-        match = await invitationProvider.matchPhones(phonesToMatch);
+        try {
+          match = await invitationProvider
+              .matchPhones(phonesToMatch)
+              .timeout(const Duration(seconds: 12));
+        } catch (_) {
+          match = null;
+        }
       }
 
       final matchedByPhone = <String, MatchedPhoneUser>{};
@@ -126,49 +172,16 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
         matchedByPhone[m.phone] = m;
       }
 
-      // Saved contacts (app contact list / leads)
-      final savedRows = <_ContactRow>[];
+      savedRows = _mapLeadRows(leads, matchedByPhone, contactFallback);
       final savedPhones = <String>{};
       final savedUserIds = <String>{};
-
-      for (final lead in leads) {
-        final phone = PhoneUtils.normalize(lead.displayPhone);
-        final scannedId = lead.contactUser?.trim() ?? '';
-        final matched = PhoneUtils.isValid(phone) ? matchedByPhone[phone] : null;
-        final userId = scannedId.isNotEmpty
-            ? scannedId
-            : (matched?.userId ?? '');
-        final isRegistered = userId.isNotEmpty;
-
-        if (PhoneUtils.isValid(phone)) savedPhones.add(phone);
-        if (isRegistered) savedUserIds.add(userId);
-
-        savedRows.add(
-          _ContactRow(
-            displayName: lead.displayName.trim().isNotEmpty
-                ? lead.displayName.trim()
-                : (PhoneUtils.isValid(phone) ? phone : contactFallback),
-            phone: PhoneUtils.isValid(phone) ? phone : lead.displayPhone,
-            userId: isRegistered ? userId : null,
-            username: lead.contactUserData?.username ?? matched?.username,
-            profilePhoto:
-                lead.displayProfilePhoto ?? matched?.profilePhoto,
-            isRegistered: isRegistered,
-            isSavedContact: true,
-          ),
-        );
+      for (final row in savedRows) {
+        if (PhoneUtils.isValid(row.phone)) savedPhones.add(row.phone);
+        if (row.userId != null && row.userId!.isNotEmpty) {
+          savedUserIds.add(row.userId!);
+        }
       }
 
-      savedRows.sort((a, b) {
-        if (a.isRegistered != b.isRegistered) {
-          return a.isRegistered ? -1 : 1;
-        }
-        return a.displayName
-            .toLowerCase()
-            .compareTo(b.displayName.toLowerCase());
-      });
-
-      // Device contacts — skip phones / users already in saved list
       final deviceRows = <_ContactRow>[];
       for (final entry in phoneToName.entries) {
         if (savedPhones.contains(entry.key)) continue;
@@ -210,7 +223,49 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
         _loading = false;
         _permissionHint = l10n.failedToLoadContactsWithError('$e');
       });
+    } finally {
+      if (mounted && _loading) {
+        setState(() => _loading = false);
+      }
     }
+  }
+
+  List<_ContactRow> _mapLeadRows(
+    List<Lead> leads,
+    Map<String, MatchedPhoneUser> matchedByPhone,
+    String contactFallback,
+  ) {
+    final savedRows = <_ContactRow>[];
+    for (final lead in leads) {
+      final phone = PhoneUtils.normalize(lead.displayPhone);
+      final scannedId = lead.contactUser?.trim() ?? '';
+      final matched = PhoneUtils.isValid(phone) ? matchedByPhone[phone] : null;
+      final userId =
+          scannedId.isNotEmpty ? scannedId : (matched?.userId ?? '');
+      final isRegistered = userId.isNotEmpty;
+
+      savedRows.add(
+        _ContactRow(
+          displayName: lead.displayName.trim().isNotEmpty
+              ? lead.displayName.trim()
+              : (PhoneUtils.isValid(phone) ? phone : contactFallback),
+          phone: PhoneUtils.isValid(phone) ? phone : lead.displayPhone,
+          userId: isRegistered ? userId : null,
+          username: lead.contactUserData?.username ?? matched?.username,
+          profilePhoto: lead.displayProfilePhoto ?? matched?.profilePhoto,
+          isRegistered: isRegistered,
+          isSavedContact: true,
+        ),
+      );
+    }
+
+    savedRows.sort((a, b) {
+      if (a.isRegistered != b.isRegistered) {
+        return a.isRegistered ? -1 : 1;
+      }
+      return a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase());
+    });
+    return savedRows;
   }
 
   List<_ContactRow> _filter(List<_ContactRow> rows) {
@@ -226,6 +281,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
   void _toggleSelect(_ContactRow row) {
     if (!row.isRegistered || row.userId == null) return;
     final id = row.userId!;
+    if (widget.alreadyInvitedUserIds.contains(id)) return;
     setState(() {
       if (_selectedUserIds.contains(id)) {
         _selectedUserIds.remove(id);
@@ -265,6 +321,23 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
     if (!saveAsDraft && _selectedUserIds.isEmpty) return;
     final provider = context.read<InvitationProvider>();
     final draft = widget.draft;
+
+    if (widget.addMoreMode) {
+      final invitationId = draft.invitationId?.trim() ?? '';
+      if (invitationId.isEmpty) return;
+
+      final invitation = await provider.addRecipients(
+        invitationId: invitationId,
+        recipientIds: _selectedUserIds.toList(),
+        showFeedback: false,
+        context: context,
+      );
+
+      if (invitation != null && mounted) {
+        Navigator.of(context).pop(invitation);
+      }
+      return;
+    }
 
     final invitation = await provider.sendInvitation(
       type: draft.type,
@@ -343,7 +416,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
           ],
         ),
         actions: [
-          if (!_loading)
+          if (!_loading && !widget.addMoreMode)
             TextButton(
               onPressed:
                   provider.isSending ? null : () => _send(saveAsDraft: true),
@@ -518,6 +591,8 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
   }
 
   Widget _buildRegisteredTile(_ContactRow row, ThemeData theme) {
+    final alreadyInvited = row.userId != null &&
+        widget.alreadyInvitedUserIds.contains(row.userId);
     final selected =
         row.userId != null && _selectedUserIds.contains(row.userId);
     final photo = row.profilePhoto ?? '';
@@ -525,17 +600,21 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
     final onPrimary = theme.colorScheme.onPrimary;
     final onSurface = theme.colorScheme.onSurface;
     final muted = onSurface.withValues(alpha: 0.55);
-    final subtitle = (row.username != null && row.username!.isNotEmpty)
-        ? '@${row.username}'
-        : (row.phone.isNotEmpty ? row.phone : context.l10n.onBarqody);
+    final subtitle = alreadyInvited
+        ? context.l10n.alreadyInvited
+        : ((row.username != null && row.username!.isNotEmpty)
+            ? '@${row.username}'
+            : (row.phone.isNotEmpty ? row.phone : context.l10n.onBarqody));
 
     return Material(
       color: theme.scaffoldBackgroundColor,
       child: InkWell(
-        onTap: () => _toggleSelect(row),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-          child: Row(
+        onTap: alreadyInvited ? null : () => _toggleSelect(row),
+        child: Opacity(
+          opacity: alreadyInvited ? 0.55 : 1,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+            child: Row(
             children: [
               Stack(
                 children: [
@@ -603,25 +682,27 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                   ],
                 ),
               ),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: selected ? primary : Colors.transparent,
-                  border: Border.all(
-                    color: selected
-                        ? primary
-                        : onSurface.withValues(alpha: 0.25),
-                    width: 2,
+              if (!alreadyInvited)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: selected ? primary : Colors.transparent,
+                    border: Border.all(
+                      color: selected
+                          ? primary
+                          : onSurface.withValues(alpha: 0.25),
+                      width: 2,
+                    ),
                   ),
+                  child: selected
+                      ? Icon(Icons.check, size: 14, color: onPrimary)
+                      : null,
                 ),
-                child: selected
-                    ? Icon(Icons.check, size: 14, color: onPrimary)
-                    : null,
-              ),
             ],
+          ),
           ),
         ),
       ),

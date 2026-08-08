@@ -2849,6 +2849,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invitationSentSuccessfully => 'تم إرسال الدعوة بنجاح';
 
   @override
+  String get inviteMorePeople => 'Invite more people';
+
+  @override
+  String get alreadyInvited => 'Already invited';
+
+  @override
   String get selectContact => 'اختر جهة اتصال';
 
   @override
@@ -3460,4 +3466,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get customizeCardTitle => 'تخصيص البطاقة';
+
+  @override
+  String get quickEdit => 'تعديل سريع';
+
+  @override
+  String get saveProgram => 'حفظ البرنامج';
+
+  @override
+  String get promoTitle => 'عنوان العرض';
+
+  @override
+  String get stampShape => 'شكل الختم';
+
+  @override
+  String get circle => 'دائرة';
+
+  @override
+  String get square => 'مربع';
+
+  @override
+  String get emptyStampIcon => 'أيقونة الختم الفارغ';
+
+  @override
+  String get loyaltyProgramSaved => 'تم حفظ برنامج الولاء';
+
+  @override
+  String get myLoyaltyTemplate => 'قالب الولاء الخاص بي';
+
+  @override
+  String get noLoyaltyTemplatesFound => 'لا توجد قوالب';
+
+  @override
+  String get loyaltyTextLayer => 'نص';
+
+  @override
+  String get loyaltyImageLayer => 'صورة';
 }
