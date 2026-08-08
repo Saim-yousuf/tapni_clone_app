@@ -136,14 +136,15 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
     _notifyTopChanged();
   }
 
-  void _onPanUpdate(DragUpdateDetails details) {
+  void _onHorizontalDragUpdate(DragUpdateDetails details) {
     if (_isAnimating || widget.cards.length <= 1) return;
     setState(() {
-      _dragOffset += details.delta;
+      // Cards swipe left/right only — vertical goes to the sheet scroll.
+      _dragOffset = Offset(_dragOffset.dx + details.delta.dx, 0);
     });
   }
 
-  void _onPanEnd(DragEndDetails details) {
+  void _onHorizontalDragEnd(DragEndDetails details) {
     if (_isAnimating || widget.cards.length <= 1) return;
 
     final velocity = details.velocity.pixelsPerSecond.dx;
@@ -166,7 +167,7 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
 
     final startOffset = _dragOffset;
     final startRotation = _dragRotation(startOffset.dx);
-    final endOffset = Offset(direction * 420, _dragOffset.dy + 28);
+    final endOffset = Offset(direction * 420, 0);
     final endRotation = direction * 0.28;
 
     _offsetAnim = Tween<Offset>(begin: startOffset, end: endOffset).animate(
@@ -422,12 +423,15 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
       return Align(alignment: Alignment.topCenter, child: card);
     }
 
-    return Positioned.fill(
+    // Gesture only on the card itself (not full width), and horizontal-only
+    // so vertical pulls on the sides dismiss the sheet.
+    return Align(
+      alignment: Alignment.topCenter,
       child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onPanUpdate: _onPanUpdate,
-        onPanEnd: _onPanEnd,
-        child: Align(alignment: Alignment.topCenter, child: card),
+        behavior: HitTestBehavior.opaque,
+        onHorizontalDragUpdate: _onHorizontalDragUpdate,
+        onHorizontalDragEnd: _onHorizontalDragEnd,
+        child: card,
       ),
     );
   }

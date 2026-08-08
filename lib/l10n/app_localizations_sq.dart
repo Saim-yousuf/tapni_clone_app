@@ -2464,6 +2464,18 @@ class AppLocalizationsSq extends AppLocalizations {
   String get eInvoiceDetails => 'E-Invoice Details';
 
   @override
+  String get eInvoiceVerification => 'Electronic Invoice Verification';
+
+  @override
+  String get validTaxInvoice => 'Valid Tax Invoice';
+
+  @override
+  String get invoiceRegistered => 'Registered';
+
+  @override
+  String get invoiceTotalWithTax => 'Invoice total (with tax)';
+
+  @override
   String get saudiEInvoice => 'Saudi E-Invoice';
 
   @override
@@ -2539,10 +2551,10 @@ class AppLocalizationsSq extends AppLocalizations {
   String get sellerName => 'Seller name';
 
   @override
-  String get vatRegistrationNumber => 'VAT registration number';
+  String get vatRegistrationNumber => 'Tax number';
 
   @override
-  String get invoiceDateTime => 'Invoice date & time';
+  String get invoiceDateTime => 'Invoice date';
 
   @override
   String get invoiceTotal => 'Invoice total';

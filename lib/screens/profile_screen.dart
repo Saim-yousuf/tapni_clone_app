@@ -206,99 +206,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final theme = Theme.of(context);
     final activeCard = profileProvider.activeCardDisplay;
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          children: [
-            if (_showProfileStrengthCard) ...[
-              const ProfileScoreCard(),
-              const SizedBox(height: 20),
-            ],
-            // if (profile.isPro == false)
-            //   GestureDetector(
-            //     onTap: () {
-            //       showModalBottomSheet(
-            //         context: context,
-            //         isScrollControlled: true,
-            //         backgroundColor: Colors.transparent,
-            //         builder: (context) => const ProUpgradeSheet(),
-            //       );
-            //     },
-            //     child: Container(
-            //       padding: const EdgeInsets.symmetric(
-            //         horizontal: 16,
-            //         vertical: 16,
-            //       ),
-            //       decoration: BoxDecoration(
-            //         gradient: LinearGradient(
-            //           colors: isDark
-            //               ? [Color(0xFF2C1E14), const Color(0xFF16100B)]
-            //               : [const Color(0xFFFFF7F0), const Color(0xFFFFF0E5)],
-            //           begin: Alignment.topLeft,
-            //           end: Alignment.bottomRight,
-            //         ),
-            //         borderRadius: BorderRadius.circular(16),
-            //         border: Border.all(
-            //           color: isDark
-            //               ? const Color(0xFF4C3625)
-            //               : const Color(0xFFFFD1B3),
-            //           width: 1.2,
-            //         ),
-            //       ),
-            //       child: Row(
-            //         children: [
-            //           Container(
-            //             padding: EdgeInsets.all(8),
-            //             decoration: BoxDecoration(
-            //               color: Color(0xFFFF9500).withOpacity(0.12),
-            //               shape: BoxShape.circle,
-            //             ),
-            //             child: Icon(
-            //               Icons.star_rounded,
-            //               color: Color(0xFFFF9500),
-            //               size: 24,
-            //             ),
-            //           ),
-            //           SizedBox(width: 14),
-            //           Expanded(
-            //             child: Column(
-            //               crossAxisAlignment: CrossAxisAlignment.start,
-            //               children: [
-            //                 Text(
-            //                   context.l10n.upgradeToBusinessPRO,
-            //                   style: theme.textTheme.titleMedium?.copyWith(
-            //                     fontWeight: FontWeight.w900,
-            //                     fontSize: 15,
-            //                     color: isDark ? Colors.white : Colors.black87,
-            //                     letterSpacing: -0.2,
-            //                   ),
-            //                 ),
-            //                 const SizedBox(height: 2),
-            //                 Text(
-            //                   'Customize your profile, unlock PRO templates & links, and get unlimited access premium features.',
-            //                   style: TextStyle(
-            //                     fontSize: 12,
-            //                     color: isDark ? Colors.white60 : Colors.black54,
-            //                     height: 1.3,
-            //                   ),
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
-            //           const SizedBox(width: 8),
-            //           Icon(
-            //             Icons.chevron_right_rounded,
-            //             color: isDark ? Colors.white38 : Colors.black38,
-            //             size: 20,
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-
-            SizedBox(height: 20),
-            _buildProfileAvatar(profile),
-            SizedBox(height: 20),
+      child: Column(
+        children: [
+          if (_showProfileStrengthCard) ...[
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+              child: ProfileScoreCard(),
+            ),
+            const SizedBox(height: 20),
+          ],
+          _buildProfileAvatar(profile),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            child: Column(
+              children: [
             Text(
               profile.name,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
@@ -425,8 +346,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             // Spacer(),
             const SizedBox(height: 40),
-          ],
-        ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -769,16 +692,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final isCover =
         (profile.coverPhotoUrl != null &&
         profile.coverPhotoUrl!.trim().isNotEmpty);
+    const avatarSize = 110.0;
     final avatar = Container(
-      width: isCover ? 100 : 130,
-      height: isCover ? 100 : 130,
+      width: isCover ? avatarSize : 130,
+      height: isCover ? avatarSize : 130,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: const Color(0xFF1E2022),
+        border: isCover
+            ? Border.all(color: Colors.white, width: 3.5)
+            : null,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
+            color: Colors.black.withValues(alpha: 0.12),
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
         ],
@@ -797,7 +724,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       : '?',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 40,
+                    fontSize: isCover ? 36 : 40,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -807,24 +734,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     // No cover photo: skip the tall empty cover area to avoid white space.
     if (!isCover) {
-      return Center(child: avatar);
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Center(child: avatar),
+      );
     }
 
-    return Stack(
-      clipBehavior: Clip.none,
+    // Full-bleed cover + WhatsApp-style avatar sitting lower over the cover edge.
+    return Column(
       children: [
-        Container(
-          height: 220,
-          width: double.infinity,
-          color: const Color(0xFFF5F5F5),
-          child: Image.network(profile.coverPhotoUrl!, fit: BoxFit.cover),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            SizedBox(
+              height: 200,
+              width: double.infinity,
+              child: ColoredBox(
+                color: const Color(0xFFF5F5F5),
+                child: Image.network(
+                  profile.coverPhotoUrl!,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 200,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -48,
+              left: 0,
+              right: 0,
+              child: Center(child: avatar),
+            ),
+          ],
         ),
-        Positioned(
-          bottom: -6,
-          left: 0,
-          right: 0,
-          child: Center(child: avatar),
-        ),
+        const SizedBox(height: 60),
       ],
     );
   }

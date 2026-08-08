@@ -13,7 +13,6 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/custom_card_editor_sheet.dart';
 import 'package:tapni_app/widgets/qr_card_stack_carousel.dart';
-import 'package:tapni_app/widgets/sheet_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -58,7 +57,7 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   }
 
   void _snack(String message, {Color color = WaUi.accent}) {
-    sheetMessenger(context).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: TextStyle(fontSize: 14)),
         behavior: SnackBarBehavior.floating,
@@ -193,150 +192,153 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
     final activeIndex = cards.indexWhere((c) => c.id == provider.activeCardId);
     final stackIndex = activeIndex >= 0 ? activeIndex : _currentIndex;
     final bottomPadding = MediaQuery.paddingOf(context).bottom;
-    final maxHeight = MediaQuery.sizeOf(context).height * 0.94;
 
-    return SheetScaffold(
-      body: Container(
-        width: double.infinity,
-        constraints: BoxConstraints(maxHeight: maxHeight),
-        decoration: WaUi.sheetDecoration,
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            Container(
-              width: 36,
-              height: 4,
-              decoration: BoxDecoration(
-                color: WaUi.divider,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 16, 20, 4),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(context.l10n.shareCard, style: WaUi.headline),
-                        SizedBox(height: 2),
-                        Text(
-                          card != null
-                              ? '${card.template.name} · Swipe for more cards'
-                              : context.l10n.createACardToShareYourProfile,
-                          style: WaUi.caption,
-                        ),
-                      ],
-                    ),
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.94,
+      minChildSize: 0.45,
+      maxChildSize: 0.94,
+      shouldCloseOnMinExtent: true,
+      builder: (context, scrollController) {
+        return Container(
+          width: double.infinity,
+          decoration: WaUi.sheetDecoration,
+          child: ListView(
+            controller: scrollController,
+            padding: EdgeInsets.fromLTRB(16, 10, 16, 16 + bottomPadding),
+            children: [
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: WaUi.divider,
+                    borderRadius: BorderRadius.circular(2),
                   ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: WaUi.secondaryText),
-                  ),
-                ],
+                ),
               ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(16, 8, 16, 16 + bottomPadding),
-                child: Column(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(4, 16, 4, 4),
+                child: Row(
                   children: [
-                    QrCardStackCarousel(
-                      key: ValueKey(cards.length),
-                      cards: cards,
-                      initialIndex: stackIndex.clamp(0, cards.isEmpty ? 0 : cards.length - 1),
-                      cardKey: _cardKey,
-                      onPageChanged: (i) => _onPageChanged(i, provider),
-                      onAddCard: () => _openEditor(),
-                      onEditCard: card != null && !card.isPrimary
-                          ? () {
-                              final custom = provider.customCardById(card.id);
-                              if (custom != null) _openEditor(existing: custom);
-                            }
-                          : null,
-                      onDeleteCard: card != null &&
-                              !card.isPrimary &&
-                              cards.length > 1
-                          ? _deleteCurrentCard
-                          : null,
-                    ),
-                    SizedBox(height: 28),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: WaUi.scaffold,
-                        borderRadius: BorderRadius.circular(WaUi.radiusLg),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 6),
-                      child: Row(
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: _ExportAction(
-                              label: context.l10n.download,
-                              icon: Icons.download_rounded,
-                              onTap: _openDownloadSheet,
-                            ),
-                          ),
-                          _ExportDivider(),
-                          Expanded(
-                            child: _ExportAction(
-                              label: context.l10n.share,
-                              icon: Icons.ios_share_rounded,
-                              onTap: _shareCard,
-                            ),
+                          Text(context.l10n.shareCard, style: WaUi.headline),
+                          const SizedBox(height: 2),
+                          Text(
+                            card != null
+                                ? '${card.template.name} · Swipe for more cards'
+                                : context.l10n.createACardToShareYourProfile,
+                            style: WaUi.caption,
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 14),
-                    Material(
-                      color: WaUi.buttonDark,
-                      borderRadius: BorderRadius.circular(WaUi.radiusLg),
-                      child: InkWell(
-                        onTap: _walletLoading ? null : _addToGoogleWallet,
-                        borderRadius: BorderRadius.circular(WaUi.radiusLg),
-                        child: SizedBox(
-                          height: 54,
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (_walletLoading)
-                                const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              else
-                                const Icon(
-                                  Icons.account_balance_wallet_outlined,
-                                  size: 20,
-                                  color: Colors.white,
-                                ),
-                              const SizedBox(width: 10),
-                              Text(
-                                context.l10n.addToGoogleWallet,
-                                style: WaUi.button.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.1,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close, color: WaUi.secondaryText),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              QrCardStackCarousel(
+                key: ValueKey(cards.length),
+                cards: cards,
+                initialIndex: stackIndex.clamp(
+                  0,
+                  cards.isEmpty ? 0 : cards.length - 1,
+                ),
+                cardKey: _cardKey,
+                onPageChanged: (i) => _onPageChanged(i, provider),
+                onAddCard: () => _openEditor(),
+                onEditCard: card != null && !card.isPrimary
+                    ? () {
+                        final custom = provider.customCardById(card.id);
+                        if (custom != null) _openEditor(existing: custom);
+                      }
+                    : null,
+                onDeleteCard:
+                    card != null && !card.isPrimary && cards.length > 1
+                        ? _deleteCurrentCard
+                        : null,
+              ),
+              const SizedBox(height: 28),
+              Container(
+                decoration: BoxDecoration(
+                  color: WaUi.scaffold,
+                  borderRadius: BorderRadius.circular(WaUi.radiusLg),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 18, horizontal: 6),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _ExportAction(
+                        label: context.l10n.download,
+                        icon: Icons.download_rounded,
+                        onTap: _openDownloadSheet,
+                      ),
+                    ),
+                    _ExportDivider(),
+                    Expanded(
+                      child: _ExportAction(
+                        label: context.l10n.share,
+                        icon: Icons.ios_share_rounded,
+                        onTap: _shareCard,
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+              const SizedBox(height: 14),
+              Material(
+                color: WaUi.buttonDark,
+                borderRadius: BorderRadius.circular(WaUi.radiusLg),
+                child: InkWell(
+                  onTap: _walletLoading ? null : _addToGoogleWallet,
+                  borderRadius: BorderRadius.circular(WaUi.radiusLg),
+                  child: SizedBox(
+                    height: 54,
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (_walletLoading)
+                          const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        else
+                          const Icon(
+                            Icons.account_balance_wallet_outlined,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                        const SizedBox(width: 10),
+                        Text(
+                          context.l10n.addToGoogleWallet,
+                          style: WaUi.button.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -9,6 +9,11 @@ class EInvoiceResultScreen extends StatelessWidget {
 
   const EInvoiceResultScreen({super.key, required this.invoice});
 
+  static const Color _successGreen = Color(0xFF22C55E);
+  static const Color _badgeGreen = Color(0xFF86EFAC);
+  static const Color _cardBg = Color(0xFFF3F4F6);
+  static const Color _labelGray = Color(0xFF9CA3AF);
+
   Future<void> _copy(BuildContext context, String value) async {
     await Clipboard.setData(ClipboardData(text: value));
     if (!context.mounted) return;
@@ -27,143 +32,161 @@ class EInvoiceResultScreen extends StatelessWidget {
       ..writeln(l10n.sellerColon(invoice.sellerName))
       ..writeln(l10n.vatColon(invoice.vatNumber))
       ..writeln(l10n.dateColon(invoice.timestamp))
-      ..writeln(l10n.totalColon('${invoice.invoiceTotal} SAR'))
+      ..writeln(l10n.totalColon(invoice.invoiceTotal))
       ..writeln(l10n.vatColon('${invoice.vatTotal} SAR'));
     return buffer.toString();
+  }
+
+  String _displayTimestamp() {
+    final raw = invoice.timestamp.trim();
+    if (raw.isEmpty) return '—';
+
+    // Prefer a readable local-style display when ISO-like.
+    final parsed = DateTime.tryParse(raw);
+    if (parsed != null) {
+      final local = parsed.toLocal();
+      final dd = local.day.toString().padLeft(2, '0');
+      final mm = local.month.toString().padLeft(2, '0');
+      final yyyy = local.year.toString();
+      final hh = local.hour.toString().padLeft(2, '0');
+      final min = local.minute.toString().padLeft(2, '0');
+      return '$hh:$min $dd/$mm/$yyyy';
+    }
+    return raw;
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final timestamp = _displayTimestamp();
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(l10n.eInvoiceDetails),
+        title: Text(
+          l10n.eInvoiceVerification,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+          ),
+        ),
+        centerTitle: true,
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.black87,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
+        leading: IconButton(
+          icon: const Icon(Icons.close_rounded),
+          onPressed: () => Navigator.of(context).maybePop(),
+        ),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+        padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
         children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF0B5E3C), Color(0xFF1A8A5A)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          const SizedBox(height: 12),
+          Center(
+            child: Container(
+              width: 88,
+              height: 88,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: _successGreen, width: 5),
               ),
+              child: const Icon(
+                Icons.check_rounded,
+                color: _successGreen,
+                size: 52,
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            l10n.validTaxInvoice,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: Colors.black87,
+              height: 1.3,
+            ),
+          ),
+          const SizedBox(height: 28),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 18),
+            decoration: BoxDecoration(
+              color: _cardBg,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.18),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.receipt_long_rounded,
-                    color: Colors.white,
-                    size: 26,
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: _badgeGreen.withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      l10n.invoiceRegistered,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF166534),
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.saudiEInvoice,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        invoice.isPhase2
-                            ? l10n.zatcaPhase2Supported
-                            : l10n.zatcaPhase1Invoice,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.85),
-                          fontSize: 12.5,
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 12),
+                Text(
+                  invoice.sellerName,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black87,
+                    height: 1.35,
                   ),
+                ),
+                const SizedBox(height: 14),
+                Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: Colors.black.withValues(alpha: 0.08),
+                ),
+                const SizedBox(height: 16),
+                _DetailField(
+                  label: l10n.vatRegistrationNumber,
+                  value: invoice.vatNumber,
+                ),
+                const SizedBox(height: 16),
+                _DetailField(
+                  label: l10n.invoiceDateTime,
+                  value: timestamp,
+                ),
+                const SizedBox(height: 16),
+                _DetailField(
+                  label: l10n.invoiceTotalWithTax,
+                  value: invoice.invoiceTotal,
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          _FieldCard(
-            label: l10n.sellerName,
-            value: invoice.sellerName,
-            onCopy: () => _copy(context, invoice.sellerName),
-          ),
-          _FieldCard(
-            label: l10n.vatRegistrationNumber,
-            value: invoice.vatNumber,
-            onCopy: () => _copy(context, invoice.vatNumber),
-          ),
-          _FieldCard(
-            label: l10n.invoiceDateTime,
-            value: invoice.timestamp.isEmpty ? '—' : invoice.timestamp,
-            onCopy: invoice.timestamp.isEmpty
-                ? null
-                : () => _copy(context, invoice.timestamp),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: _FieldCard(
-                  label: l10n.invoiceTotal,
-                  value: '${invoice.invoiceTotal} SAR',
-                  highlight: true,
-                  onCopy: () => _copy(context, invoice.invoiceTotal),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _FieldCard(
-                  label: l10n.vatAmount,
-                  value: invoice.vatTotal.isEmpty
-                      ? '—'
-                      : '${invoice.vatTotal} SAR',
-                  onCopy: invoice.vatTotal.isEmpty
-                      ? null
-                      : () => _copy(context, invoice.vatTotal),
-                ),
-              ),
-            ],
-          ),
-          if (invoice.invoiceHash != null &&
-              invoice.invoiceHash!.isNotEmpty) ...[
-            const SizedBox(height: 4),
-            _FieldCard(
-              label: l10n.invoiceHash,
-              value: invoice.invoiceHash!,
-              compact: true,
-              onCopy: () => _copy(context, invoice.invoiceHash!),
-            ),
-          ],
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
-            height: 48,
+            height: 50,
             child: FilledButton.icon(
               onPressed: () => _copy(context, _shareText(context)),
               icon: const Icon(Icons.copy_rounded, size: 20),
               label: Text(l10n.copyAllDetails),
               style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF0B5E3C),
+                backgroundColor: _successGreen,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -174,14 +197,14 @@ class EInvoiceResultScreen extends StatelessWidget {
           const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
-            height: 48,
+            height: 50,
             child: OutlinedButton.icon(
               onPressed: () => Share.share(_shareText(context)),
               icon: const Icon(Icons.share_outlined, size: 20),
               label: Text(l10n.share),
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.black87,
-                side: BorderSide(color: Colors.black.withValues(alpha: 0.15)),
+                side: BorderSide(color: Colors.black.withValues(alpha: 0.12)),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -194,77 +217,39 @@ class EInvoiceResultScreen extends StatelessWidget {
   }
 }
 
-class _FieldCard extends StatelessWidget {
+class _DetailField extends StatelessWidget {
   final String label;
   final String value;
-  final VoidCallback? onCopy;
-  final bool highlight;
-  final bool compact;
 
-  const _FieldCard({
+  const _DetailField({
     required this.label,
     required this.value,
-    this.onCopy,
-    this.highlight = false,
-    this.compact = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.fromLTRB(14, 12, onCopy != null ? 4 : 14, 12),
-      decoration: BoxDecoration(
-        color: highlight
-            ? const Color(0xFF0B5E3C).withValues(alpha: 0.08)
-            : const Color(0xFFF5F6F8),
-        borderRadius: BorderRadius.circular(14),
-        border: highlight
-            ? Border.all(
-                color: const Color(0xFF0B5E3C).withValues(alpha: 0.25),
-              )
-            : null,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black.withValues(alpha: 0.45),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                SelectableText(
-                  value,
-                  maxLines: compact ? 3 : null,
-                  style: TextStyle(
-                    fontSize: highlight ? 17 : 15,
-                    fontWeight: highlight ? FontWeight.w700 : FontWeight.w500,
-                    color: highlight
-                        ? const Color(0xFF0B5E3C)
-                        : Colors.black87,
-                    height: 1.35,
-                  ),
-                ),
-              ],
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: EInvoiceResultScreen._labelGray,
           ),
-          if (onCopy != null)
-            IconButton(
-              onPressed: onCopy,
-              icon: const Icon(Icons.copy_rounded, size: 18),
-              color: Colors.black54,
-            ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+            height: 1.3,
+          ),
+        ),
+      ],
     );
   }
 }

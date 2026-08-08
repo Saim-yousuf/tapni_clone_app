@@ -13,7 +13,6 @@ import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/employee_card_template_sheet.dart';
 import 'package:tapni_app/widgets/employee_company_card_preview.dart';
-import 'package:tapni_app/widgets/sheet_scaffold.dart';
 import 'package:tapni_app/widgets/template_business_card_preview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -215,7 +214,7 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
   }
 
   Future<void> _addToGoogleWallet() async {
-    final messenger = sheetMessenger(context);
+    final messenger = ScaffoldMessenger.of(context);
     setState(() => _walletLoading = true);
 
     final res = widget.useMyCardWallet || widget.businessUserId == null
@@ -258,126 +257,129 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final maxHeight = MediaQuery.sizeOf(context).height * 0.92;
     final bottomPadding = MediaQuery.paddingOf(context).bottom;
 
-    return SheetScaffold(
-      body: Container(
-        width: double.infinity,
-        constraints: BoxConstraints(maxHeight: maxHeight),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          border: Border.all(
-            color: Colors.black,
-            width: AttendanceUi.borderWidth,
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.92,
+      minChildSize: 0.45,
+      maxChildSize: 0.92,
+      shouldCloseOnMinExtent: true,
+      builder: (context, scrollController) {
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            border: Border.all(
+              color: Colors.black,
+              width: AttendanceUi.borderWidth,
+            ),
           ),
-        ),
-        child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(20, 12, 20, 24 + bottomPadding),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: ListView(
+            controller: scrollController,
+            padding: EdgeInsets.fromLTRB(20, 12, 20, 24 + bottomPadding),
             children: [
-            Container(
-              width: 48,
-              height: 5,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(3),
-              ),
-            ),
-            SizedBox(height: 18),
-            Text(
-              widget.isEmployeeCard ? context.l10n.employeeCard : widget.displayName,
-              textAlign: TextAlign.center,
-              style: AttendanceUi.sectionTitle,
-            ),
-            SizedBox(height: 6),
-            Text(
-              widget.isEmployeeCard
-                  ? '${widget.companyName ?? ''} • ${_template.name} template'
-                  : '${_template.name} template',
-              textAlign: TextAlign.center,
-              style: AttendanceUi.bodyMuted,
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: RepaintBoundary(
-                key: _cardKey,
-                child: widget.isEmployeeCard
-                  ? EmployeeCompanyCardPreview(
-                      template: _template,
-                      employeeName: widget.employeeName ?? 'Employee',
-                      employeeId: widget.employeeId ?? '',
-                      employeeInitial: widget.employeeInitial ?? 'E',
-                      employeePhotoUrl: widget.employeePhotoUrl,
-                      profileUrl: widget.profileUrl,
-                    )
-                  : TemplateBusinessCardPreview(
-                      template: _template,
-                      name: widget.displayName,
-                      profileUrl: widget.profileUrl,
-                      userInitial: widget.userInitial,
-                      profilePhotoUrl: widget.profilePhotoUrl,
-                      coverPhotoUrl: widget.coverPhotoUrl,
-                      subtitle: widget.subtitle,
-                      bio: widget.bio,
-                    ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: AttendanceUi.secondaryButton(
-                    label: context.l10n.download,
-                    icon: Icons.download_rounded,
-                    height: 56,
-                    onPressed: _openDownloadSheet,
+              Center(
+                child: Container(
+                  width: 48,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(3),
                   ),
                 ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: AttendanceUi.secondaryButton(
-                    label: context.l10n.share,
-                    icon: Icons.share_rounded,
-                    height: 56,
-                    onPressed: () => Share.share(
-                      widget.isEmployeeCard
-                          ? 'Employee card - ${widget.employeeName}: ${widget.profileUrl}'
-                          : 'Business card: ${widget.profileUrl}',
-                      subject: widget.isEmployeeCard
-                          ? 'Employee Card - ${widget.employeeName}'
-                          : widget.displayName,
+              ),
+              const SizedBox(height: 18),
+              Text(
+                widget.isEmployeeCard
+                    ? context.l10n.employeeCard
+                    : widget.displayName,
+                textAlign: TextAlign.center,
+                style: AttendanceUi.sectionTitle,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                widget.isEmployeeCard
+                    ? '${widget.companyName ?? ''} • ${_template.name} template'
+                    : '${_template.name} template',
+                textAlign: TextAlign.center,
+                style: AttendanceUi.bodyMuted,
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: RepaintBoundary(
+                  key: _cardKey,
+                  child: widget.isEmployeeCard
+                      ? EmployeeCompanyCardPreview(
+                          template: _template,
+                          employeeName: widget.employeeName ?? 'Employee',
+                          employeeId: widget.employeeId ?? '',
+                          employeeInitial: widget.employeeInitial ?? 'E',
+                          employeePhotoUrl: widget.employeePhotoUrl,
+                          profileUrl: widget.profileUrl,
+                        )
+                      : TemplateBusinessCardPreview(
+                          template: _template,
+                          name: widget.displayName,
+                          profileUrl: widget.profileUrl,
+                          userInitial: widget.userInitial,
+                          profilePhotoUrl: widget.profilePhotoUrl,
+                          coverPhotoUrl: widget.coverPhotoUrl,
+                          subtitle: widget.subtitle,
+                          bio: widget.bio,
+                        ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: AttendanceUi.secondaryButton(
+                      label: context.l10n.download,
+                      icon: Icons.download_rounded,
+                      height: 56,
+                      onPressed: _openDownloadSheet,
                     ),
                   ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: AttendanceUi.secondaryButton(
+                      label: context.l10n.share,
+                      icon: Icons.share_rounded,
+                      height: 56,
+                      onPressed: () => Share.share(
+                        widget.isEmployeeCard
+                            ? 'Employee card - ${widget.employeeName}: ${widget.profileUrl}'
+                            : 'Business card: ${widget.profileUrl}',
+                        subject: widget.isEmployeeCard
+                            ? 'Employee Card - ${widget.employeeName}'
+                            : widget.displayName,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              if (widget.isEmployeeCard && widget.companyCard != null) ...[
+                const SizedBox(height: 14),
+                AttendanceUi.secondaryButton(
+                  label: context.l10n.customizeDesign,
+                  icon: Icons.palette_outlined,
+                  height: 56,
+                  onPressed: _openCustomizeDesign,
                 ),
               ],
-            ),
-            if (widget.isEmployeeCard && widget.companyCard != null) ...[
-              SizedBox(height: 14),
-              AttendanceUi.secondaryButton(
-                label: context.l10n.customizeDesign,
-                icon: Icons.palette_outlined,
-                height: 56,
-                onPressed: _openCustomizeDesign,
+              const SizedBox(height: 14),
+              AttendanceUi.primaryButton(
+                label: context.l10n.addToGoogleWallet,
+                icon: Icons.account_balance_wallet_outlined,
+                loading: _walletLoading,
+                onPressed: _addToGoogleWallet,
               ),
             ],
-            SizedBox(height: 14),
-            AttendanceUi.primaryButton(
-              label: context.l10n.addToGoogleWallet,
-              icon: Icons.account_balance_wallet_outlined,
-              loading: _walletLoading,
-              onPressed: _addToGoogleWallet,
-            ),
-          ],
-            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

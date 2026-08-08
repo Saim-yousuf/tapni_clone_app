@@ -42,6 +42,47 @@ class GeneralQrResult {
         return 'Text / Product';
     }
   }
+
+  /// Whether this payload can be opened in an external app (browser, dialer, etc.).
+  bool get canLaunchExternally {
+    switch (type) {
+      case GeneralQrType.url:
+      case GeneralQrType.email:
+      case GeneralQrType.phone:
+      case GeneralQrType.sms:
+        return true;
+      case GeneralQrType.wifi:
+      case GeneralQrType.text:
+        return false;
+    }
+  }
+
+  /// URI for [launchUrl], or null if this type is not directly openable.
+  Uri? get launchUri {
+    switch (type) {
+      case GeneralQrType.url:
+        return Uri.tryParse(rawValue);
+      case GeneralQrType.email:
+        final address = rawValue.toLowerCase().startsWith('mailto:')
+            ? rawValue
+            : 'mailto:$rawValue';
+        return Uri.tryParse(address);
+      case GeneralQrType.phone:
+        var tel = rawValue;
+        if (!tel.toLowerCase().startsWith('tel:')) {
+          tel = 'tel:${tel.replaceFirst(RegExp(r'^(PHONE:|phone:)'), '')}';
+        }
+        return Uri.tryParse(tel);
+      case GeneralQrType.sms:
+        final sms = rawValue.toLowerCase().startsWith('sms')
+            ? rawValue
+            : 'sms:${rawValue.replaceFirst(RegExp(r'^(SMSTO:|smsto:)'), '')}';
+        return Uri.tryParse(sms);
+      case GeneralQrType.wifi:
+      case GeneralQrType.text:
+        return null;
+    }
+  }
 }
 
 class GeneralQrParser {

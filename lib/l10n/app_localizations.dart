@@ -4837,6 +4837,30 @@ abstract class AppLocalizations {
   /// **'E-Invoice Details'**
   String get eInvoiceDetails;
 
+  /// No description provided for @eInvoiceVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronic Invoice Verification'**
+  String get eInvoiceVerification;
+
+  /// No description provided for @validTaxInvoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid Tax Invoice'**
+  String get validTaxInvoice;
+
+  /// No description provided for @invoiceRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered'**
+  String get invoiceRegistered;
+
+  /// No description provided for @invoiceTotalWithTax.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice total (with tax)'**
+  String get invoiceTotalWithTax;
+
   /// No description provided for @saudiEInvoice.
   ///
   /// In en, this message translates to:
@@ -4984,13 +5008,13 @@ abstract class AppLocalizations {
   /// No description provided for @vatRegistrationNumber.
   ///
   /// In en, this message translates to:
-  /// **'VAT registration number'**
+  /// **'Tax number'**
   String get vatRegistrationNumber;
 
   /// No description provided for @invoiceDateTime.
   ///
   /// In en, this message translates to:
-  /// **'Invoice date & time'**
+  /// **'Invoice date'**
   String get invoiceDateTime;
 
   /// No description provided for @invoiceTotal.

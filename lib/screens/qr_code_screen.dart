@@ -3,15 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
+import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
-
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class QrCodeScreen extends StatefulWidget {
   const QrCodeScreen({Key? key}) : super(key: key);
 
@@ -23,6 +23,28 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
   final GlobalKey _globalKey = GlobalKey();
 
   Future<void> _downloadQr(String profileUrl, String fileName) async {
+    final isBusiness =
+        Provider.of<ProfileProvider>(context, listen: false).isProUser;
+
+    // Individual: save the on-screen QR card as-is (no size picker).
+    if (!isBusiness) {
+      final ok = await BusinessCardExportHelper.savePng(
+        _globalKey,
+        fileName: fileName,
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            ok ? context.l10n.savedToGallery : context.l10n.couldNotSave,
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: ok ? Colors.green : Colors.red,
+        ),
+      );
+      return;
+    }
+
     await CardDownloadSizeSheet.show(
       context,
       profileUrl: profileUrl,

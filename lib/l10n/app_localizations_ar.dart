@@ -2417,6 +2417,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get eInvoiceDetails => 'تفاصيل الفاتورة الإلكترونية';
 
   @override
+  String get eInvoiceVerification => 'التحقق من صحة الفاتورة الإلكترونية';
+
+  @override
+  String get validTaxInvoice => 'فاتورة ضريبية صحيحة';
+
+  @override
+  String get invoiceRegistered => 'مسجلة';
+
+  @override
+  String get invoiceTotalWithTax => 'إجمالي الفاتورة(مع الضريبة)';
+
+  @override
   String get saudiEInvoice => 'الفاتورة الإلكترونية السعودية';
 
   @override
@@ -2492,10 +2504,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get sellerName => 'اسم البائع';
 
   @override
-  String get vatRegistrationNumber => 'رقم تسجيل VAT';
+  String get vatRegistrationNumber => 'الرقم الضريبي';
 
   @override
-  String get invoiceDateTime => 'تاريخ ووقت الفاتورة';
+  String get invoiceDateTime => 'تاريخ الفاتورة';
 
   @override
   String get invoiceTotal => 'إجمالي الفاتورة';

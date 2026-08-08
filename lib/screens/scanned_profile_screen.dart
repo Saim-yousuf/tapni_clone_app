@@ -484,149 +484,166 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         : context.l10n.notEnrolled;
 
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Column(
         children: [
           _buildProfileAvatar(profile, displayPhoto, displayCover),
-          SizedBox(height: 20),
-          Text(
-            displayName,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-          ),
-          if (displayBio.isNotEmpty) ...[
-            SizedBox(height: 8),
-            Text(
-              displayBio,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.black54),
-            ),
-          ],
-          SizedBox(height: 16),
-          if (isOwn) ...[
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    context.l10n.thisIsYou,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black87,
-                    ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                Text(
+                  displayName,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
                   ),
-                  SizedBox(height: 4),
+                ),
+                if (displayBio.isNotEmpty) ...[
+                  const SizedBox(height: 8),
                   Text(
-                    context.l10n.viewingOwnProfile,
+                    displayBio,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 13, color: Colors.black54),
-                  ),
-                  SizedBox(height: 12),
-                  FilledButton.icon(
-                    onPressed: _openMyCard,
-                    icon: Icon(Icons.badge_outlined),
-                    label: Text(context.l10n.openMyCard),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                    ),
+                    style: const TextStyle(fontSize: 14, color: Colors.black54),
                   ),
                 ],
-              ),
-            ),
-          ] else
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FilledButton.icon(
-                  onPressed: () async {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(context.l10n.exchangingContact)),
-                    );
-                    final res = await AuthRepo().exchangeContact(
-                      username: widget.username,
-                      id: widget.user,
-                    );
-                    if (mounted) {
-                      if (res.success) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              context.l10n.contactExchangedSuccessfully,
+                const SizedBox(height: 16),
+                if (isOwn) ...[
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          context.l10n.thisIsYou,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          context.l10n.viewingOwnProfile,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        FilledButton.icon(
+                          onPressed: _openMyCard,
+                          icon: const Icon(Icons.badge_outlined),
+                          label: Text(context.l10n.openMyCard),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
                             ),
                           ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              res.message ??
-                                  context.l10n.failedToExchangeContact,
+                        ),
+                      ],
+                    ),
+                  ),
+                ] else
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FilledButton.icon(
+                        onPressed: () async {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(context.l10n.exchangingContact),
+                            ),
+                          );
+                          final res = await AuthRepo().exchangeContact(
+                            username: widget.username,
+                            id: widget.user,
+                          );
+                          if (mounted) {
+                            if (res.success) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    context.l10n.contactExchangedSuccessfully,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    res.message ??
+                                        context.l10n.failedToExchangeContact,
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        icon: const Icon(Icons.sync_alt),
+                        label: Text(context.l10n.exchangeContact),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                      if (showRewardsButton) ...[
+                        const SizedBox(width: 10),
+                        OutlinedButton.icon(
+                          onPressed: () => _showRewardSheet(profile),
+                          icon: Icon(
+                            _isCustomerEnrolledInBusiness
+                                ? Icons.check_circle_outline
+                                : Icons.card_giftcard_outlined,
+                            size: 18,
+                          ),
+                          label: Text(rewardButtonLabel),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: _isCustomerEnrolledInBusiness
+                                ? Colors.green.shade700
+                                : Colors.black,
+                            side: BorderSide(
+                              color: _isCustomerEnrolledInBusiness
+                                  ? Colors.green.shade700
+                                  : Colors.black,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 18,
+                              vertical: 12,
                             ),
                           ),
-                        );
-                      }
-                    }
-                  },
-                  icon: Icon(Icons.sync_alt),
-                  label: Text(context.l10n.exchangeContact),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
+                        ),
+                      ],
+                    ],
                   ),
-                ),
-                if (showRewardsButton) ...[
-                  const SizedBox(width: 10),
-                  OutlinedButton.icon(
-                    onPressed: () => _showRewardSheet(profile),
-                    icon: Icon(
-                      _isCustomerEnrolledInBusiness
-                          ? Icons.check_circle_outline
-                          : Icons.card_giftcard_outlined,
-                      size: 18,
-                    ),
-                    label: Text(rewardButtonLabel),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: _isCustomerEnrolledInBusiness
-                          ? Colors.green.shade700
-                          : Colors.black,
-                    side: BorderSide(
-                      color: _isCustomerEnrolledInBusiness
-                          ? Colors.green.shade700
-                          : Colors.black,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 12,
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 20),
+                _buildLinkSection(profile, card),
+                const SizedBox(height: 24),
               ],
-            ],
+            ),
           ),
-          const SizedBox(height: 20),
-          _buildLinkSection(profile, card),
-          const SizedBox(height: 24),
         ],
       ),
     );
@@ -638,17 +655,21 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     String? coverUrl,
   ) {
     final hasCover = coverUrl != null && coverUrl.trim().isNotEmpty;
+    const avatarSize = 110.0;
 
     final avatar = Container(
-      width: hasCover ? 100 : 130,
-      height: hasCover ? 100 : 130,
+      width: hasCover ? avatarSize : 130,
+      height: hasCover ? avatarSize : 130,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: const Color(0xFF1E2022),
+        border: hasCover
+            ? Border.all(color: Colors.white, width: 3.5)
+            : null,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
+            color: Colors.black.withValues(alpha: 0.12),
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
         ],
@@ -661,9 +682,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                   profile.name.isNotEmpty
                       ? profile.name[0].toUpperCase()
                       : '?',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 40,
+                    fontSize: hasCover ? 36 : 40,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -673,24 +694,40 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
 
     // No cover photo: skip the tall empty cover area to avoid white space.
     if (!hasCover) {
-      return Center(child: avatar);
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Center(child: avatar),
+      );
     }
 
-    return Stack(
-      clipBehavior: Clip.none,
+    // Full-bleed cover + WhatsApp-style avatar sitting lower over the cover edge.
+    return Column(
       children: [
-        Container(
-          height: 220,
-          width: double.infinity,
-          color: const Color(0xFFF5F5F5),
-          child: Image.network(coverUrl!, fit: BoxFit.cover),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            SizedBox(
+              height: 200,
+              width: double.infinity,
+              child: ColoredBox(
+                color: const Color(0xFFF5F5F5),
+                child: Image.network(
+                  coverUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 200,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -48,
+              left: 0,
+              right: 0,
+              child: Center(child: avatar),
+            ),
+          ],
         ),
-        Positioned(
-          bottom: -6,
-          left: 0,
-          right: 0,
-          child: Center(child: avatar),
-        ),
+        const SizedBox(height: 60),
       ],
     );
   }

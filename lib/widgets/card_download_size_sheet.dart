@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/business_card_design.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 /// Bottom sheet: download full business card or QR-only PNG at selectable sizes.
+/// Size options are shown for business (pro) users only; individuals get a
+/// single direct PNG save.
 class CardDownloadSizeSheet extends StatefulWidget {
   final GlobalKey? cardCaptureKey;
   final String profileUrl;
@@ -36,7 +41,24 @@ class CardDownloadSizeSheet extends StatefulWidget {
     PrintExportKind initialKind = PrintExportKind.fullCard,
     Color? qrForeground,
     Color? qrBackground,
-  }) {
+  }) async {
+    final isBusiness =
+        Provider.of<ProfileProvider>(context, listen: false).isProUser;
+
+    // Individual: one download is enough — skip size picker.
+    if (!isBusiness) {
+      await _saveSimple(
+        context,
+        cardCaptureKey: cardCaptureKey,
+        profileUrl: profileUrl,
+        fileName: fileName,
+        initialKind: initialKind,
+        qrForeground: qrForeground,
+        qrBackground: qrBackground,
+      );
+      return;
+    }
+
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -51,6 +73,44 @@ class CardDownloadSizeSheet extends StatefulWidget {
         initialKind: initialKind,
         qrForeground: qrForeground,
         qrBackground: qrBackground,
+      ),
+    );
+  }
+
+  static Future<void> _saveSimple(
+    BuildContext context, {
+    GlobalKey? cardCaptureKey,
+    required String profileUrl,
+    String? fileName,
+    PrintExportKind initialKind = PrintExportKind.fullCard,
+    Color? qrForeground,
+    Color? qrBackground,
+  }) async {
+    final l10n = context.l10n;
+    var ok = false;
+
+    if (cardCaptureKey != null &&
+        cardCaptureKey.currentContext != null &&
+        initialKind == PrintExportKind.fullCard) {
+      ok = await BusinessCardExportHelper.savePng(
+        cardCaptureKey,
+        fileName: fileName ?? 'business_card',
+      );
+    } else {
+      ok = await BusinessCardExportHelper.saveQrPng(
+        profileUrl,
+        fileName: '${fileName ?? 'tapni'}_qr',
+        foreground: qrForeground ?? Colors.black,
+        background: qrBackground ?? Colors.white,
+      );
+    }
+
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(ok ? l10n.savedToGallery : l10n.couldNotSave),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: ok ? Colors.green : Colors.red,
       ),
     );
   }

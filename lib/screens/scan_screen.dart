@@ -6,8 +6,10 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/screens/e_invoice_result_screen.dart';
 import 'package:tapni_app/screens/general_qr_result_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
+import 'package:tapni_app/utils/general_qr_parser.dart';
 import 'package:tapni_app/utils/profile_url_validator.dart';
 import 'package:tapni_app/utils/zatca_qr_parser.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum ScanMode { paperCard, qrCode, eInvoice, eventBadge }
 
@@ -82,19 +84,6 @@ class _ScanScreenState extends State<ScanScreen> {
     super.dispose();
   }
 
-  String get _instructionText {
-    switch (_selectedMode) {
-      case ScanMode.paperCard:
-        return context.l10n.pointTheCameraAtPaperCardAndTapTheCameraButton;
-      case ScanMode.qrCode:
-        return context.l10n.pointTheCameraAtAnyQRCodeWebsiteWifiOrProduct;
-      case ScanMode.eInvoice:
-        return context.l10n.pointTheCameraAtASaudiEInvoiceQRCode;
-      case ScanMode.eventBadge:
-        return context.l10n.pointTheCameraAtAnEventBadgeAndTapTheCameraButton;
-    }
-  }
-
   void _onBarcodeDetect(BarcodeCapture capture) {
     if (!_isAutoScanMode || _scanHandled) return;
 
@@ -108,7 +97,7 @@ class _ScanScreenState extends State<ScanScreen> {
     }
   }
 
-  void _handleScanResult(String value) {
+  Future<void> _handleScanResult(String value) async {
     if (!mounted) return;
 
     if (_selectedMode == ScanMode.eInvoice) {
@@ -150,6 +139,23 @@ class _ScanScreenState extends State<ScanScreen> {
       return;
     }
 
+    // Links / email / phone / SMS → open externally (no result page).
+    final general = GeneralQrParser.parse(value);
+    if (general.canLaunchExternally) {
+      final uri = general.launchUri;
+      if (uri != null) {
+        final opened = await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+        if (opened) {
+          if (mounted) setState(() => _scanHandled = false);
+          return;
+        }
+      }
+    }
+
+    if (!mounted) return;
     Navigator.of(context)
         .push(
           MaterialPageRoute(
@@ -315,40 +321,6 @@ class _ScanScreenState extends State<ScanScreen> {
                         color: Colors.white,
                         size: 28,
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.55),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            _instructionText,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.white,
-                              height: 1.35,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        _LanguageChip(),
-                        const SizedBox(width: 6),
-                        _AiButton(),
-                      ],
                     ),
                   ),
                 ),
@@ -617,64 +589,6 @@ class _CircleIconButton extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         child: Icon(icon, color: Colors.white, size: 22),
-      ),
-    );
-  }
-}
-
-class _LanguageChip extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white24),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.language, size: 12, color: Colors.white),
-          const SizedBox(width: 3),
-          Text(
-            context.l10n.lat,
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          const Icon(Icons.arrow_drop_down, size: 14, color: Colors.white),
-        ],
-      ),
-    );
-  }
-}
-
-class _AiButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            context.l10n.ai,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1A1AFF),
-            ),
-          ),
-          const SizedBox(width: 2),
-          const Icon(Icons.auto_awesome, size: 12, color: Color(0xFF4A90FF)),
-        ],
       ),
     );
   }

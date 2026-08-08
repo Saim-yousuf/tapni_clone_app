@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:gal/gal.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
 
 class BusinessCardExportHelper {
@@ -59,6 +60,56 @@ class BusinessCardExportHelper {
     final bytes = await capturePngBytes(key);
     if (bytes == null) return false;
     return savePngBytes(bytes, fileName: fileName);
+  }
+
+  /// Renders a QR PNG at [size] px and saves it to the gallery (no size picker).
+  static Future<bool> saveQrPng(
+    String data, {
+    String? fileName,
+    int size = 1024,
+    Color foreground = Colors.black,
+    Color background = Colors.white,
+  }) async {
+    try {
+      final painter = QrPainter(
+        data: data,
+        version: QrVersions.auto,
+        gapless: true,
+        eyeStyle: QrEyeStyle(
+          eyeShape: QrEyeShape.square,
+          color: foreground,
+        ),
+        dataModuleStyle: QrDataModuleStyle(
+          dataModuleShape: QrDataModuleShape.square,
+          color: foreground,
+        ),
+      );
+      final byteData = await painter.toImageData(size.toDouble());
+      if (byteData == null) return false;
+
+      var bytes = byteData.buffer.asUint8List();
+      if (background != Colors.transparent) {
+        final decoded = img.decodeImage(bytes);
+        if (decoded != null) {
+          final canvas = img.Image(width: size, height: size);
+          img.fill(
+            canvas,
+            color: img.ColorRgba8(
+              (background.r * 255.0).round().clamp(0, 255),
+              (background.g * 255.0).round().clamp(0, 255),
+              (background.b * 255.0).round().clamp(0, 255),
+              (background.a * 255.0).round().clamp(0, 255),
+            ),
+          );
+          img.compositeImage(canvas, decoded);
+          bytes = Uint8List.fromList(img.encodePng(canvas));
+        }
+      }
+      return savePngBytes(bytes, fileName: fileName ?? 'qr');
+    } catch (e) {
+      log('saveQrPng: $e');
+      return false;
+    }
   }
 
   static Future<bool> saveJpg(GlobalKey key, {String? fileName}) async {

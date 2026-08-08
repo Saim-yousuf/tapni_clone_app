@@ -23,8 +23,8 @@ class GeneralQrResultScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _openUrl(BuildContext context, String value) async {
-    final uri = Uri.tryParse(value);
+  Future<void> _launchResult(BuildContext context, GeneralQrResult result) async {
+    final uri = result.launchUri;
     if (uri == null) return;
     final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!ok && context.mounted) {
@@ -35,28 +35,6 @@ class GeneralQrResultScreen extends StatelessWidget {
         ),
       );
     }
-  }
-
-  Future<void> _openEmail(BuildContext context, String value) async {
-    final address = value.toLowerCase().startsWith('mailto:')
-        ? value
-        : 'mailto:$value';
-    await _openUrl(context, address);
-  }
-
-  Future<void> _openPhone(BuildContext context, String value) async {
-    var tel = value;
-    if (!tel.toLowerCase().startsWith('tel:')) {
-      tel = 'tel:${tel.replaceFirst(RegExp(r'^(PHONE:|phone:)'), '')}';
-    }
-    await _openUrl(context, tel);
-  }
-
-  Future<void> _openSms(BuildContext context, String value) async {
-    final uri = value.toLowerCase().startsWith('sms')
-        ? value
-        : 'sms:${value.replaceFirst(RegExp(r'^(SMSTO:|smsto:)'), '')}';
-    await _openUrl(context, uri);
   }
 
   IconData _iconFor(GeneralQrType type) {
@@ -175,25 +153,25 @@ class GeneralQrResultScreen extends StatelessWidget {
             _ActionButton(
               icon: Icons.open_in_browser_rounded,
               label: context.l10n.openLink,
-              onTap: () => _openUrl(context, result.rawValue),
+              onTap: () => _launchResult(context, result),
             ),
           if (result.type == GeneralQrType.email)
             _ActionButton(
               icon: Icons.email_outlined,
               label: context.l10n.openEmail,
-              onTap: () => _openEmail(context, result.rawValue),
+              onTap: () => _launchResult(context, result),
             ),
           if (result.type == GeneralQrType.phone)
             _ActionButton(
               icon: Icons.phone_outlined,
               label: context.l10n.callNumber,
-              onTap: () => _openPhone(context, result.rawValue),
+              onTap: () => _launchResult(context, result),
             ),
           if (result.type == GeneralQrType.sms)
             _ActionButton(
               icon: Icons.sms_outlined,
               label: context.l10n.sendSms,
-              onTap: () => _openSms(context, result.rawValue),
+              onTap: () => _launchResult(context, result),
             ),
           _ActionButton(
             icon: Icons.copy_rounded,
