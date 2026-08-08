@@ -1,17 +1,13 @@
-import 'dart:developer';
-import 'dart:ui' as ui;
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:gal/gal.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
+import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
@@ -26,56 +22,13 @@ class QrCodeScreen extends StatefulWidget {
 class _QrCodeScreenState extends State<QrCodeScreen> {
   final GlobalKey _globalKey = GlobalKey();
 
-  ScaffoldMessengerState? _messengerRef;
-
-  void _showSnackBar(String message, {Color color = Colors.green}) {
-    _messengerRef?.showSnackBar(
-      SnackBar(
-        content: Text(message),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: color,
-      ),
+  Future<void> _downloadQr(String profileUrl, String fileName) async {
+    await CardDownloadSizeSheet.show(
+      context,
+      profileUrl: profileUrl,
+      fileName: fileName,
+      initialKind: PrintExportKind.qrOnly,
     );
-  }
-
-  Future<void> _downloadQr() async {
-    // Capture BEFORE any await — context may be gone after async
-    _messengerRef = ScaffoldMessenger.of(context);
-    try {
-      RenderRepaintBoundary boundary =
-          _globalKey.currentContext!.findRenderObject()
-              as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData = await image.toByteData(
-        format: ui.ImageByteFormat.png,
-      );
-      if (byteData != null) {
-        final Uint8List pngBytes = byteData.buffer.asUint8List();
-
-        final tempDir = await getTemporaryDirectory();
-        final file = await File('${tempDir.path}/Tapni_QR_${DateTime.now().millisecondsSinceEpoch}.png').create();
-        await file.writeAsBytes(pngBytes);
-
-        bool hasAccess = await Gal.hasAccess();
-        if (!hasAccess) {
-          hasAccess = await Gal.requestAccess();
-        }
-
-        if (hasAccess) {
-          await Gal.putImage(file.path);
-          _showSnackBar(context.l10n.qrCodeSavedToGallery);
-        } else {
-          _showSnackBar(
-            context.l10n.galleryPermissionRequiredPleaseEnableItInSettings,
-            color: Colors.red,
-          );
-        }
-      }
-    } catch (e) {
-      log("$e");
-      _showSnackBar(context.l10n.failedToSaveQRCode, color: Colors.red);
-    }
-
   }
 
   @override
@@ -84,9 +37,8 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
     final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final profileProvider = Provider.of<ProfileProvider>(context);
     final profile = profileProvider.profile;
-
-    final profileLink =
-        'https://tapni.com/${profile.name.replaceAll(' ', '').toLowerCase()}';
+    final active = profileProvider.activeCardDisplay;
+    final profileLink = active.profileUrl;
 
     return Scaffold(
       appBar: AppBar(
@@ -331,7 +283,10 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                   Expanded(
                     child: CustomButton(
                       text: context.l10n.download,
-                      onTap: _downloadQr,
+                      onTap: () => _downloadQr(
+                        profileLink,
+                        profile.name.isNotEmpty ? profile.name : 'tapni_qr',
+                      ),
                       isSecondary: true,
                       icon: Icons.download_rounded,
                     ),

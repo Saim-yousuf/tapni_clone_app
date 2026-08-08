@@ -1,3 +1,4 @@
+import 'package:tapni_app/models/business_card_design.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/user_custom_card.dart';
 
@@ -26,6 +27,8 @@ class UserProfile {
   final int leadsCount;
   final String cardTemplateId;
   final List<UserCustomCard> customCards;
+  /// Print design for the primary digital card.
+  final BusinessCardDesign? cardPrintDesign;
 
   UserProfile({
     this.id,
@@ -50,12 +53,14 @@ class UserProfile {
     this.leadsCount = 0,
     this.cardTemplateId = 't2',
     this.customCards = const [],
+    this.cardPrintDesign,
   });
 
   factory UserProfile.fromApiJson(Map<String, dynamic> json) {
     final links = (json['links'] as List<dynamic>? ?? [])
         .map((e) => SocialLink.fromApiJson(e as Map<String, dynamic>))
         .toList();
+    final printDesignJson = json['cardPrintDesign'];
 
     return UserProfile(
       id: json['id']?.toString(),
@@ -77,6 +82,11 @@ class UserProfile {
           .map((e) => UserCustomCard.fromJson(e as Map<String, dynamic>))
           .where((card) => card.id.isNotEmpty && !card.isPrimary)
           .toList(),
+      cardPrintDesign: printDesignJson is Map
+          ? BusinessCardDesign.fromJson(
+              Map<String, dynamic>.from(printDesignJson),
+            )
+          : null,
     );
   }
 
@@ -119,6 +129,8 @@ class UserProfile {
     bool? isPublic,
     String? cardTemplateId,
     List<UserCustomCard>? customCards,
+    BusinessCardDesign? cardPrintDesign,
+    bool clearCardPrintDesign = false,
   }) {
     return UserProfile(
       id: id ?? this.id,
@@ -143,6 +155,9 @@ class UserProfile {
       leadsCount: leadsCount ?? this.leadsCount,
       cardTemplateId: cardTemplateId ?? this.cardTemplateId,
       customCards: customCards ?? this.customCards,
+      cardPrintDesign: clearCardPrintDesign
+          ? null
+          : (cardPrintDesign ?? this.cardPrintDesign),
     );
   }
 }

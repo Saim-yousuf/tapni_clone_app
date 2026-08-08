@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/profile.dart';
+import 'package:tapni_app/models/business_card_design.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/card_template.dart';
@@ -179,6 +180,7 @@ class ProfileProvider extends ChangeNotifier {
           ? '${Constants.appDomain}/$username'
           : Constants.appDomain,
       isPrimary: true,
+      printDesign: _profile.cardPrintDesign,
     );
   }
 
@@ -222,6 +224,7 @@ class ProfileProvider extends ChangeNotifier {
       enabledLinkIds: enabledIds,
       profileUrl: card.profileUrl(username),
       isPrimary: false,
+      printDesign: card.design,
     );
   }
 
@@ -280,6 +283,10 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   Future<bool> deleteCustomCard(String cardId) async {
+    // Keep at least one card (primary main card).
+    if (allCardDisplays.length <= 1) return false;
+    if (cardId == UserCustomCard.primaryId) return false;
+
     final updated =
         _profile.customCards.where((c) => c.id != cardId).toList();
     if (_activeCardId == cardId) {
@@ -287,6 +294,77 @@ class ProfileProvider extends ChangeNotifier {
       await _persistActiveCardId();
     }
     return saveCustomCards(updated);
+  }
+
+  /// Save Canva-style print design for primary or a custom card.
+  /// When [createNewCard] is true, creates a new custom card with this design.
+  Future<bool> savePrintDesign({
+    required BusinessCardDesign design,
+    required String cardId,
+    bool createNewCard = false,
+  }) async {
+    try {
+      if (createNewCard) {
+        final id = (cardId.isEmpty ||
+                cardId == UserCustomCard.primaryId ||
+                cardId == 'preview')
+            ? DateTime.now().millisecondsSinceEpoch.toString()
+            : cardId;
+        final displayName = design.textForField('name')?.trim();
+        final title = design.textForField('company')?.trim();
+        final subtitle = design.textForField('title')?.trim();
+        final username = _profile.username ?? '';
+        final designToSave = design.copy();
+        designToSave.setQrData(
+          username.isNotEmpty
+              ? '${Constants.appDomain}/$username?card=$id'
+              : Constants.appDomain,
+        );
+        final card = UserCustomCard(
+          id: id,
+          title: (title != null && title.isNotEmpty) ? title : 'My Card',
+          displayName: (displayName != null && displayName.isNotEmpty)
+              ? displayName
+              : (_profile.name.isNotEmpty ? _profile.name : 'My Name'),
+          subtitle: (subtitle != null && subtitle.isNotEmpty) ? subtitle : null,
+          cardTemplateId: CardTemplateCatalog.defaultTemplateId,
+          design: designToSave,
+          enabledLinkIds: _profile.socialLinks
+              .where((l) => l.isActive)
+              .map((l) => l.id)
+              .toList(),
+        );
+        return addCustomCard(card);
+      }
+
+      final repo = AuthRepo();
+      if (cardId == UserCustomCard.primaryId || cardId.isEmpty) {
+        final response = await repo.updateProfile(
+          jsonBody: {'cardPrintDesign': design.toJson()},
+        );
+        if (response.success) {
+          _profile = _profile.copyWith(cardPrintDesign: design.copy());
+          notifyListeners();
+          return true;
+        }
+        _profile = _profile.copyWith(cardPrintDesign: design.copy());
+        notifyListeners();
+        return false;
+      }
+
+      final existing = customCardById(cardId);
+      if (existing == null) return false;
+      final updatedCard = existing.copyWith(design: design.copy());
+      return updateCustomCard(updatedCard);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  BusinessCardDesign? printDesignForCard(String? cardId) {
+    final id = cardId ?? _activeCardId;
+    if (id == UserCustomCard.primaryId) return _profile.cardPrintDesign;
+    return customCardById(id)?.design;
   }
 
   UserCustomCard? customCardById(String? cardId) {

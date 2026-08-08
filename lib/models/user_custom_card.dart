@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/models/business_card_design.dart';
 import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
@@ -20,6 +21,8 @@ class UserCustomCard {
   final String? profilePhotoUrl;
   final String? coverPhotoUrl;
   final List<String> enabledLinkIds;
+  /// Optional Canva-style print design for sized exports.
+  final BusinessCardDesign? design;
 
   const UserCustomCard({
     required this.id,
@@ -35,11 +38,13 @@ class UserCustomCard {
     this.profilePhotoUrl,
     this.coverPhotoUrl,
     this.enabledLinkIds = const [],
+    this.design,
   });
 
   bool get isPrimary => id == primaryId;
 
   factory UserCustomCard.fromJson(Map<String, dynamic> json) {
+    final designJson = json['design'];
     return UserCustomCard(
       id: json['id']?.toString() ?? '',
       title: json['title']?.toString() ?? 'My Card',
@@ -57,6 +62,9 @@ class UserCustomCard {
       enabledLinkIds: (json['enabledLinkIds'] as List<dynamic>? ?? [])
           .map((e) => e.toString())
           .toList(),
+      design: designJson is Map
+          ? BusinessCardDesign.fromJson(Map<String, dynamic>.from(designJson))
+          : null,
     );
   }
 
@@ -74,6 +82,7 @@ class UserCustomCard {
         if (profilePhotoUrl != null) 'profilePhotoUrl': profilePhotoUrl,
         if (coverPhotoUrl != null) 'coverPhotoUrl': coverPhotoUrl,
         'enabledLinkIds': enabledLinkIds,
+        if (design != null && design!.hasLayers) 'design': design!.toJson(),
       };
 
   UserCustomCard copyWith({
@@ -90,10 +99,12 @@ class UserCustomCard {
     String? profilePhotoUrl,
     String? coverPhotoUrl,
     List<String>? enabledLinkIds,
+    BusinessCardDesign? design,
     bool clearSubtitle = false,
     bool clearBio = false,
     bool clearBackgroundColor = false,
     bool clearCoverPhoto = false,
+    bool clearDesign = false,
   }) {
     return UserCustomCard(
       id: id ?? this.id,
@@ -111,6 +122,7 @@ class UserCustomCard {
       coverPhotoUrl:
           clearCoverPhoto ? null : (coverPhotoUrl ?? this.coverPhotoUrl),
       enabledLinkIds: enabledLinkIds ?? this.enabledLinkIds,
+      design: clearDesign ? null : (design ?? this.design),
     );
   }
 
@@ -163,6 +175,7 @@ class CardDisplayData {
   final List<String> enabledLinkIds;
   final String profileUrl;
   final bool isPrimary;
+  final BusinessCardDesign? printDesign;
 
   const CardDisplayData({
     required this.id,
@@ -176,5 +189,6 @@ class CardDisplayData {
     this.coverPhotoUrl,
     this.enabledLinkIds = const [],
     this.isPrimary = false,
+    this.printDesign,
   });
 }

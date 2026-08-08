@@ -4,10 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/models/company_business_card.dart';
+import 'package:tapni_app/models/business_card_design.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/wallet_repo.dart';
-import 'package:tapni_app/utils/business_card_export_helper.dart';
+import 'package:tapni_app/screens/business_card/business_card_design_editor_screen.dart';
+import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/custom_card_editor_sheet.dart';
 import 'package:tapni_app/widgets/qr_card_stack_carousel.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
@@ -36,8 +39,6 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   final GlobalKey _cardKey = GlobalKey();
   int _currentIndex = 0;
   bool _walletLoading = false;
-  bool _pngLoading = false;
-  bool _jpgLoading = false;
 
   @override
   void initState() {
@@ -66,24 +67,17 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
     );
   }
 
-  Future<void> _downloadPng() async {
+  Future<void> _openDownloadSheet() async {
     final card = _currentCard(Provider.of<ProfileProvider>(context, listen: false));
     if (card == null) return;
-    setState(() => _pngLoading = true);
-    final ok = await BusinessCardExportHelper.savePng(_cardKey, fileName: card.name);
-    if (!mounted) return;
-    setState(() => _pngLoading = false);
-    _snack(ok ? context.l10n.cardSavedAsPNG : context.l10n.failedToSavePNG, color: Colors.red);
-  }
-
-  Future<void> _downloadJpg() async {
-    final card = _currentCard(Provider.of<ProfileProvider>(context, listen: false));
-    if (card == null) return;
-    setState(() => _jpgLoading = true);
-    final ok = await BusinessCardExportHelper.saveJpg(_cardKey, fileName: card.name);
-    if (!mounted) return;
-    setState(() => _jpgLoading = false);
-    _snack(ok ? context.l10n.cardSavedAsJPG : context.l10n.failedToSaveJPG, color: Colors.red);
+    await CardDownloadSizeSheet.show(
+      context,
+      cardCaptureKey: _cardKey,
+      profileUrl: card.profileUrl,
+      fileName: card.name,
+      cardAspectRatio: BusinessCardDesign.defaultAspectRatio,
+      initialKind: PrintExportKind.fullCard,
+    );
   }
 
   Future<void> _shareCard() async {
@@ -136,7 +130,59 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   }
 
   void _openEditor({UserCustomCard? existing}) {
+    if (existing?.design != null && existing!.design!.hasLayers) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => BusinessCardDesignEditorScreen(
+            design: existing.design!.copy(),
+            cardId: existing.id,
+          ),
+        ),
+      );
+      return;
+    }
     CustomCardEditorSheet.show(context, existing: existing);
+  }
+
+  Future<void> _deleteCurrentCard() async {
+    final provider = Provider.of<ProfileProvider>(context, listen: false);
+    final cards = provider.allCardDisplays;
+    final card = _currentCard(provider);
+    if (card == null || card.isPrimary) return;
+    if (cards.length <= 1) {
+      _snack('Last card cannot be deleted', color: Colors.red);
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(ctx.l10n.deleteCard, style: WaUi.title),
+        content: Text(
+          ctx.l10n.thisCardAndItsQRCodeWillBeRemoved,
+          style: WaUi.body,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(ctx.l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            child: Text(ctx.l10n.delete),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    final ok = await provider.deleteCustomCard(card.id);
+    if (!mounted) return;
+    _snack(
+      ok ? 'Card deleted' : 'Could not delete card',
+      color: ok ? WaUi.accent : Colors.red,
+    );
   }
 
   @override
@@ -209,6 +255,11 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
                               if (custom != null) _openEditor(existing: custom);
                             }
                           : null,
+                      onDeleteCard: card != null &&
+                              !card.isPrimary &&
+                              cards.length > 1
+                          ? _deleteCurrentCard
+                          : null,
                     ),
                     SizedBox(height: 28),
                     Container(
@@ -221,19 +272,9 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
                         children: [
                           Expanded(
                             child: _ExportAction(
-                              label: context.l10n.png,
+                              label: context.l10n.download,
                               icon: Icons.download_rounded,
-                              loading: _pngLoading,
-                              onTap: _downloadPng,
-                            ),
-                          ),
-                          _ExportDivider(),
-                          Expanded(
-                            child: _ExportAction(
-                              label: context.l10n.jpg,
-                              icon: Icons.photo_outlined,
-                              loading: _jpgLoading,
-                              onTap: _downloadJpg,
+                              onTap: _openDownloadSheet,
                             ),
                           ),
                           _ExportDivider(),

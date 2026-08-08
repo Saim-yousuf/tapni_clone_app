@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/models/company_business_card.dart';
+import 'package:tapni_app/models/business_card_design.dart';
 import 'package:tapni_app/widgets/my_cards_share_sheet.dart';
 import 'package:tapni_app/repository/wallet_repo.dart';
-import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
+import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/employee_card_template_sheet.dart';
 import 'package:tapni_app/widgets/employee_company_card_preview.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
@@ -163,8 +165,6 @@ class BusinessCardShareSheet extends StatefulWidget {
 class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
   final GlobalKey _cardKey = GlobalKey();
   bool _walletLoading = false;
-  bool _pngLoading = false;
-  bool _jpgLoading = false;
   late CardTemplate _template;
 
   @override
@@ -203,35 +203,14 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
     );
   }
 
-  Future<void> _downloadPng() async {
-    final messenger = sheetMessenger(context);
-    setState(() => _pngLoading = true);
-    final ok = await BusinessCardExportHelper.savePng(
-      _cardKey,
+  Future<void> _openDownloadSheet() async {
+    await CardDownloadSizeSheet.show(
+      context,
+      cardCaptureKey: _cardKey,
+      profileUrl: widget.profileUrl,
       fileName: widget.displayName,
-    );
-    if (!mounted) return;
-    setState(() => _pngLoading = false);
-    _snack(
-      messenger,
-      ok ? context.l10n.cardSavedAsPNG : context.l10n.failedToSavePNG,
-      color: ok ? Colors.green : Colors.red,
-    );
-  }
-
-  Future<void> _downloadJpg() async {
-    final messenger = sheetMessenger(context);
-    setState(() => _jpgLoading = true);
-    final ok = await BusinessCardExportHelper.saveJpg(
-      _cardKey,
-      fileName: widget.displayName,
-    );
-    if (!mounted) return;
-    setState(() => _jpgLoading = false);
-    _snack(
-      messenger,
-      ok ? context.l10n.cardSavedAsJPG : context.l10n.failedToSaveJPG,
-      color: ok ? Colors.green : Colors.red,
+      cardAspectRatio: BusinessCardDesign.defaultAspectRatio,
+      initialKind: PrintExportKind.fullCard,
     );
   }
 
@@ -354,21 +333,10 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
               children: [
                 Expanded(
                   child: AttendanceUi.secondaryButton(
-                    label: context.l10n.png,
-                    icon: Icons.image_outlined,
-                    loading: _pngLoading,
+                    label: context.l10n.download,
+                    icon: Icons.download_rounded,
                     height: 56,
-                    onPressed: _downloadPng,
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: AttendanceUi.secondaryButton(
-                    label: context.l10n.jpg,
-                    icon: Icons.photo_outlined,
-                    loading: _jpgLoading,
-                    height: 56,
-                    onPressed: _downloadJpg,
+                    onPressed: _openDownloadSheet,
                   ),
                 ),
                 SizedBox(width: 10),

@@ -8,6 +8,27 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 
+/// Shared cache so swipe/rebuilds don't re-decode huge data-URI backgrounds
+/// (avoids a white flash while Image.memory reloads).
+final Map<String, Uint8List> _designImageBytesCache = {};
+
+Uint8List? cachedBytesForDesignImageSrc(String src) {
+  final cached = _designImageBytesCache[src];
+  if (cached != null) return cached;
+  try {
+    final comma = src.indexOf(',');
+    final raw = comma >= 0 ? src.substring(comma + 1) : src;
+    final bytes = base64Decode(raw);
+    if (_designImageBytesCache.length > 40) {
+      _designImageBytesCache.remove(_designImageBytesCache.keys.first);
+    }
+    _designImageBytesCache[src] = bytes;
+    return bytes;
+  } catch (_) {
+    return null;
+  }
+}
+
 Color designColorFromHex(String hex, {Color fallback = Colors.white}) {
   var value = hex.trim().replaceAll('#', '');
   if (value.length == 6) value = 'FF$value';
@@ -148,12 +169,20 @@ class InvitationDesignRenderer extends StatelessWidget {
             ),
             clipBehavior: Clip.antiAlias,
             child: Stack(
+              fit: StackFit.expand,
               children: [
                 if (design.backgroundImage.isNotEmpty)
                   Positioned.fill(
-                    child: _ImageSrc(
-                      src: design.backgroundImage,
-                      fit: BoxFit.cover,
+                    child: ColoredBox(
+                      // Avoid white flash under async/memory image paint.
+                      color: designColorFromHex(
+                        design.backgroundColor,
+                        fallback: const Color(0xFF111111),
+                      ),
+                      child: _ImageSrc(
+                        src: design.backgroundImage,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ...design.sortedLayers
@@ -487,34 +516,30 @@ class _ImageSrc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (src.startsWith('data:')) {
-      try {
-        final b64 = src.split(',').last;
-        final bytes = base64Decode(b64);
-        return Image.memory(Uint8List.fromList(bytes), fit: fit);
-      } catch (_) {
-        return const SizedBox.shrink();
-      }
+    if (src.startsWith('data:') ||
+        (src.length > 100 && !src.contains('/') && !src.startsWith('http'))) {
+      final bytes = cachedBytesForDesignImageSrc(src);
+      if (bytes == null) return const SizedBox.shrink();
+      return Image.memory(
+        bytes,
+        fit: fit,
+        gaplessPlayback: true,
+        filterQuality: FilterQuality.medium,
+      );
     }
     if (src.startsWith('http://') || src.startsWith('https://')) {
       return Image.network(
         src,
         fit: fit,
+        gaplessPlayback: true,
         errorBuilder: (_, __, ___) => const SizedBox.shrink(),
       );
     }
     if (src.startsWith('/') || src.contains(r'\')) {
       final file = File(src);
       if (file.existsSync()) {
-        return Image.file(file, fit: fit);
+        return Image.file(file, fit: fit, gaplessPlayback: true);
       }
-    }
-    // raw base64 without data: prefix
-    if (src.length > 100 && !src.contains('/')) {
-      try {
-        final bytes = base64Decode(src);
-        return Image.memory(Uint8List.fromList(bytes), fit: fit);
-      } catch (_) {}
     }
     return const SizedBox.shrink();
   }

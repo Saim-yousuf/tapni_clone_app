@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/social_icon_button.dart';
 import 'package:tapni_app/widgets/templates_sheet.dart';
+import 'package:tapni_app/widgets/business_card_share_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class DigitalCardScreen extends StatelessWidget {
@@ -36,6 +37,13 @@ class DigitalCardScreen extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 builder: (context) => const TemplatesSheet(),
               );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.download_rounded),
+            tooltip: context.l10n.download,
+            onPressed: () {
+              BusinessCardShareSheet.showMyCard(context);
             },
           ),
           IconButton(

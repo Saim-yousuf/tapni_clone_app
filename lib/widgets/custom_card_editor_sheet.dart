@@ -7,6 +7,7 @@ import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/screens/business_card/business_card_template_gallery_screen.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/template_business_card_preview.dart';
 
@@ -44,6 +45,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
   String? _coverPhotoPath;
   late Set<String> _enabledLinkIds;
   bool _saving = false;
+  bool _didSeedTitle = false;
 
   static const _colorPresets = [
     '#1E2022',
@@ -64,9 +66,8 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     final profile = Provider.of<ProfileProvider>(context, listen: false).profile;
     final existing = widget.existing;
 
-    _titleController = TextEditingController(
-      text: existing?.title ?? context.l10n.newCard,
-    );
+    // Do not use context.l10n here — Localizations is not ready in initState.
+    _titleController = TextEditingController(text: existing?.title ?? '');
     _nameController = TextEditingController(
       text: existing?.displayName ?? profile.name,
     );
@@ -94,6 +95,16 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
       _step = hasCustomDesign ? _CardSetupMode.customize : _CardSetupMode.template;
     } else {
       _step = _CardSetupMode.pick;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didSeedTitle) return;
+    _didSeedTitle = true;
+    if (!_isEditing && _titleController.text.isEmpty) {
+      _titleController.text = context.l10n.newCard;
     }
   }
 
@@ -181,6 +192,21 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
 
   Future<void> _delete() async {
     if (widget.existing == null) return;
+    final provider = Provider.of<ProfileProvider>(context, listen: false);
+    if (provider.allCardDisplays.length <= 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Last card cannot be deleted',
+            style: WaUi.body.copyWith(color: Colors.white),
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -198,7 +224,6 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     );
     if (confirmed != true || !mounted) return;
 
-    final provider = Provider.of<ProfileProvider>(context, listen: false);
     await provider.deleteCustomCard(widget.existing!.id);
     if (!mounted) return;
     Navigator.pop(context);
@@ -281,64 +306,93 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
           icon: Icons.palette_outlined,
           title: context.l10n.useATemplate,
           subtitle: context.l10n.pickAReadyMadeColorThemeQuickAndClean,
-          onTap: () => setState(() => _step = _CardSetupMode.template),
+          onTap: () => setState(() {
+            _step = _CardSetupMode.template;
+            _backgroundColorHex = null;
+            _coverPhotoPath = null;
+          }),
         ),
         SizedBox(height: 10),
         _ModeTile(
           icon: Icons.tune_rounded,
           title: context.l10n.customizeYourself,
-          subtitle: context.l10n.setYourOwnColorsPhotosAndBackground,
-          onTap: () => setState(() => _step = _CardSetupMode.customize),
+          subtitle: 'Full editor — text, logo, QR, colors like invitation cards',
+          onTap: () {
+            final navigator = Navigator.of(context);
+            Navigator.pop(context); // close New Card sheet
+            navigator.push(
+              MaterialPageRoute(
+                builder: (_) => const BusinessCardTemplateGalleryScreen(
+                  createNewCard: true,
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
   }
 
   Widget _buildForm() {
+    if (_step == _CardSetupMode.customize) {
+      return _buildCustomizeForm();
+    }
+    return _buildTemplateForm();
+  }
+
+  Widget _buildPreview() {
     final provider = Provider.of<ProfileProvider>(context);
     final profile = provider.profile;
     final username = profile.username ?? '';
     final previewCard = _buildCard(widget.existing?.id ?? 'preview');
     final previewUrl = previewCard.profileUrl(username);
-    final links = profile.socialLinks.where((l) => l.isActive).toList();
     final isCustomize = _step == _CardSetupMode.customize;
 
+    return Center(
+      child: TemplateBusinessCardPreview(
+        template: previewCard.effectiveTemplate(),
+        name: previewCard.displayName,
+        profileUrl: previewUrl,
+        userInitial: previewCard.displayName.isNotEmpty
+            ? previewCard.displayName[0].toUpperCase()
+            : '?',
+        profilePhotoUrl: _profilePhotoPath,
+        coverPhotoUrl: isCustomize ? _coverPhotoPath : null,
+        subtitle: previewCard.subtitle,
+        bio: previewCard.bio,
+        width: 300,
+      ),
+    );
+  }
+
+  Widget _buildBasicFields() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
-          child: TemplateBusinessCardPreview(
-            template: previewCard.effectiveTemplate(),
-            name: previewCard.displayName,
-            profileUrl: previewUrl,
-            userInitial: previewCard.displayName.isNotEmpty
-                ? previewCard.displayName[0].toUpperCase()
-                : '?',
-            profilePhotoUrl: _profilePhotoPath,
-            coverPhotoUrl: isCustomize ? _coverPhotoPath : null,
-            subtitle: previewCard.subtitle,
-            bio: previewCard.bio,
-            width: 300,
-          ),
-        ),
-        SizedBox(height: 20),
         _field(
           context.l10n.cardName,
           _titleController,
           hint: context.l10n.egWorkEvents,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         _field(context.l10n.displayName, _nameController),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         _field(
           context.l10n.subtitle,
           _subtitleController,
           hint: context.l10n.roleOrCompany,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         _field(context.l10n.bio2, _bioController, maxLines: 2),
-        SizedBox(height: 16),
-        Text(context.l10n.template, style: WaUi.bodyMedium),
+      ],
+    );
+  }
+
+  Widget _buildTemplatePicker() {
+    final provider = Provider.of<ProfileProvider>(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(context.l10n.chooseTemplate2, style: WaUi.bodyMedium),
         const SizedBox(height: 8),
         SizedBox(
           height: 42,
@@ -360,10 +414,14 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
                     );
                     return;
                   }
-                  setState(() => _templateId = template.id);
+                  setState(() {
+                    _templateId = template.id;
+                    // Template path uses theme colors only.
+                    _backgroundColorHex = null;
+                  });
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 14),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
                   decoration: BoxDecoration(
                     color: template.backgroundColor,
                     borderRadius: BorderRadius.circular(21),
@@ -386,59 +444,28 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
             },
           ),
         ),
-        if (isCustomize) ...[
-          SizedBox(height: 16),
-          Text(context.l10n.photos, style: WaUi.bodyMedium),
-          SizedBox(height: 8),
-          Row(
-            children: [
-              _photoPicker(
-                label: context.l10n.profile,
-                path: _profilePhotoPath,
-                onPick: () async {
-                  final file = await pickFile();
-                  if (file?.file != null) {
-                    setState(() => _profilePhotoPath = file!.file!.path);
-                  }
-                },
-              ),
-              SizedBox(width: 12),
-              _photoPicker(
-                label: context.l10n.background,
-                path: _coverPhotoPath,
-                onPick: () async {
-                  final file = await pickFile();
-                  if (file?.file != null) {
-                    setState(() => _coverPhotoPath = file!.file!.path);
-                  }
-                },
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-          Text(context.l10n.backgroundColor, style: WaUi.bodyMedium),
-          SizedBox(height: 8),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              _colorDot(null, label: context.l10n.template),
-              ..._colorPresets.map(_colorDot),
-            ],
-          ),
-        ],
-        SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildLinksSection() {
+    final provider = Provider.of<ProfileProvider>(context);
+    final links = provider.profile.socialLinks.where((l) => l.isActive).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Text(context.l10n.linksOnThisCard, style: WaUi.bodyMedium),
-        SizedBox(height: 4),
+        const SizedBox(height: 4),
         Text(
           context.l10n.onlyEnabledLinksShowWhenSomeoneScansThisCard,
           style: WaUi.caption,
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         if (links.isEmpty)
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(14),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: WaUi.scaffold,
               borderRadius: BorderRadius.circular(WaUi.radiusMd),
@@ -466,33 +493,107 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
               },
             );
           }),
-        SizedBox(height: 20),
-        SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: FilledButton(
-            onPressed: _saving ? null : _save,
-            style: FilledButton.styleFrom(
-              backgroundColor: WaUi.primaryText,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(WaUi.radiusMd),
-              ),
-            ),
-            child: _saving
-                ? SizedBox(
-                    width: 22,
-                    height: 22,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : Text(
-                    _isEditing ? context.l10n.saveCard : context.l10n.createCard,
-                    style: WaUi.button.copyWith(color: Colors.white),
-                  ),
+      ],
+    );
+  }
+
+  Widget _buildSaveButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: FilledButton(
+        onPressed: _saving ? null : _save,
+        style: FilledButton.styleFrom(
+          backgroundColor: WaUi.primaryText,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(WaUi.radiusMd),
           ),
         ),
+        child: _saving
+            ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
+            : Text(
+                _isEditing ? context.l10n.saveCard : context.l10n.createCard,
+                style: WaUi.button.copyWith(color: Colors.white),
+              ),
+      ),
+    );
+  }
+
+  /// Ready-made color themes only — no photo / custom color controls.
+  Widget _buildTemplateForm() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildPreview(),
+        const SizedBox(height: 20),
+        _buildTemplatePicker(),
+        const SizedBox(height: 16),
+        _buildBasicFields(),
+        const SizedBox(height: 16),
+        _buildLinksSection(),
+        const SizedBox(height: 20),
+        _buildSaveButton(),
+      ],
+    );
+  }
+
+  /// Custom colors + photos — no template theme chips.
+  Widget _buildCustomizeForm() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildPreview(),
+        const SizedBox(height: 20),
+        _buildBasicFields(),
+        const SizedBox(height: 16),
+        Text(context.l10n.photos, style: WaUi.bodyMedium),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            _photoPicker(
+              label: context.l10n.profile,
+              path: _profilePhotoPath,
+              onPick: () async {
+                final file = await pickFile();
+                if (file?.file != null) {
+                  setState(() => _profilePhotoPath = file!.file!.path);
+                }
+              },
+            ),
+            const SizedBox(width: 12),
+            _photoPicker(
+              label: context.l10n.background,
+              path: _coverPhotoPath,
+              onPick: () async {
+                final file = await pickFile();
+                if (file?.file != null) {
+                  setState(() => _coverPhotoPath = file!.file!.path);
+                }
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Text(context.l10n.backgroundColor, style: WaUi.bodyMedium),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: [
+            ..._colorPresets.map(_colorDot),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _buildLinksSection(),
+        const SizedBox(height: 20),
+        _buildSaveButton(),
       ],
     );
   }

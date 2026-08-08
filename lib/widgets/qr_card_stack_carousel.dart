@@ -1,8 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:tapni_app/models/invitation_design.dart';
 import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/business_card_design_renderer.dart';
+import 'package:tapni_app/widgets/invitation_design_renderer.dart';
 import 'package:tapni_app/widgets/template_business_card_preview.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -12,6 +15,7 @@ class QrCardStackCarousel extends StatefulWidget {
   final GlobalKey cardKey;
   final ValueChanged<int> onPageChanged;
   final VoidCallback? onEditCard;
+  final VoidCallback? onDeleteCard;
   final VoidCallback onAddCard;
 
   const QrCardStackCarousel({
@@ -22,6 +26,7 @@ class QrCardStackCarousel extends StatefulWidget {
     required this.onPageChanged,
     required this.onAddCard,
     this.onEditCard,
+    this.onDeleteCard,
   });
 
   @override
@@ -347,6 +352,17 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
                     onTap: widget.onEditCard!,
                   ),
                 ],
+                // Last remaining card cannot be deleted.
+                if (widget.onDeleteCard != null &&
+                    cards.length > 1 &&
+                    !cards[topIndex].isPrimary) ...[
+                  SizedBox(width: 8),
+                  _IconCircleButton(
+                    icon: Icons.delete_outline,
+                    tooltip: context.l10n.deleteCard,
+                    onTap: widget.onDeleteCard!,
+                  ),
+                ],
               ],
             ),
             const SizedBox(height: 6),
@@ -424,17 +440,46 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
   }) {
     final initial = card.name.isNotEmpty ? card.name[0].toUpperCase() : '?';
 
-    final preview = TemplateBusinessCardPreview(
-      template: card.template,
-      name: card.name,
-      profileUrl: card.profileUrl,
-      userInitial: initial,
-      profilePhotoUrl: card.profilePhotoUrl,
-      coverPhotoUrl: card.coverPhotoUrl,
-      subtitle: card.subtitle,
-      bio: card.bio,
-      width: cardWidth,
-    );
+    final Widget preview;
+    final customDesign = card.printDesign;
+    if (customDesign != null && customDesign.hasLayers) {
+      // Warm cache so swipe frames don't decode base64 mid-animation.
+      final bg = customDesign.backgroundImage;
+      if (bg.isNotEmpty) cachedBytesForDesignImageSrc(bg);
+
+      var design = customDesign;
+      final needsQrSync = design.layers.any(
+        (l) =>
+            (l.type == DesignLayerType.qr || l.fieldKey == 'qr') &&
+            l.qrData != card.profileUrl,
+      );
+      if (needsQrSync) {
+        design = design.copy();
+        design.setQrData(card.profileUrl);
+      }
+      preview = SizedBox(
+        width: cardWidth,
+        child: BusinessCardDesignRenderer(
+          key: ValueKey('design_${card.id}'),
+          design: design,
+          interactive: false,
+          borderRadius: 24,
+        ),
+      );
+    } else {
+      preview = TemplateBusinessCardPreview(
+        key: ValueKey('template_${card.id}'),
+        template: card.template,
+        name: card.name,
+        profileUrl: card.profileUrl,
+        userInitial: initial,
+        profilePhotoUrl: card.profilePhotoUrl,
+        coverPhotoUrl: card.coverPhotoUrl,
+        subtitle: card.subtitle,
+        bio: card.bio,
+        width: cardWidth,
+      );
+    }
 
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.circular(24),
