@@ -8,6 +8,7 @@ import 'package:tapni_app/widgets/custom_app_button.dart';
 import 'package:tapni_app/widgets/go_bussiness_button.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
+import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class SocialLinksScreen extends StatelessWidget {
@@ -362,21 +363,11 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
                     ),
                   if (widget.onDelete != null) SizedBox(width: 12),
                   Expanded(
-                    child: ElevatedButton(
+                    child: WaPrimaryButton(
+                      label: widget.isNew
+                          ? context.l10n.add
+                          : context.l10n.save,
                       onPressed: widget.onSave,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                        shape: StadiumBorder(),
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: Text(
-                        widget.isNew ? context.l10n.add : context.l10n.save,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
                     ),
                   ),
                 ],

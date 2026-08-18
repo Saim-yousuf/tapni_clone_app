@@ -1511,6 +1511,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tryBusinessPro2 => 'جرّب Business Pro.';
 
   @override
+  String get businessProBrand => 'Business Pro';
+
+  @override
+  String get upgradeYourBusiness => 'طوّر أعمالك';
+
+  @override
+  String get businessProIntroBody =>
+      'أنجز المزيد مع BarQody للأعمال، وابنِ الثقة بشارة التوثيق، واحصل على مزايا مميزة أخرى في اشتراك واحد.';
+
+  @override
+  String get byContinuingYouAgreeTo => 'بالمتابعة، فإنك توافق على';
+
+  @override
+  String get privacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get termsOfService => 'شروط الخدمة';
+
+  @override
+  String get andConjunction => 'و';
+
+  @override
   String get type => 'النوع';
 
   @override

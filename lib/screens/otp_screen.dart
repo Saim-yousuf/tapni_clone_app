@@ -11,6 +11,7 @@ import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({
@@ -358,27 +359,10 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(28, 8, 28, 20),
-              child: SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: authProvider.isLoading ? null : _handleVerify,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryBlack,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: AppTheme.primaryBlack.withValues(alpha: 0.5),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(WaUi.radiusPill),
-                    ),
-                  ),
-                  child: Text(
-                    context.l10n.next,
-                    style: WaUi.promoButton.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+              child: WaPrimaryButton(
+                label: context.l10n.next,
+                loading: authProvider.isLoading,
+                onPressed: authProvider.isLoading ? null : _handleVerify,
               ),
             ),
           ],

@@ -28,6 +28,7 @@ class WaUi {
   static const double radiusMd = 14;
   static const double radiusLg = 16;
   static const double radiusPill = 100;
+  static const double primaryButtonHeight = 48;
 
   static String get fontFamily => AppFonts.fontFamily;
 
@@ -121,8 +122,9 @@ class WaUi {
       );
 
   static TextStyle get button => _style(
-        size: 15,
-        weight: FontWeight.w500,
+        size: 16,
+        weight: FontWeight.w600,
+        height: 1.0,
       );
 
   static TextStyle get promoTitle => _style(
@@ -138,9 +140,10 @@ class WaUi {
       );
 
   static TextStyle get promoButton => _style(
-        size: 15,
-        weight: FontWeight.w500,
+        size: 16,
+        weight: FontWeight.w600,
         color: Colors.white,
+        height: 1.0,
       );
 
   /// Chats / contacts list row.

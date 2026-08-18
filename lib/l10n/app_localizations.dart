@@ -3130,6 +3130,48 @@ abstract class AppLocalizations {
   /// **'Try Business Pro.'**
   String get tryBusinessPro2;
 
+  /// No description provided for @businessProBrand.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Pro'**
+  String get businessProBrand;
+
+  /// No description provided for @upgradeYourBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade your business'**
+  String get upgradeYourBusiness;
+
+  /// No description provided for @businessProIntroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Do more with BarQody for Business, build trust with a verified badge, and access other premium benefits all in one subscription.'**
+  String get businessProIntroBody;
+
+  /// No description provided for @byContinuingYouAgreeTo.
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing, you agree to the'**
+  String get byContinuingYouAgreeTo;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @termsOfService.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfService;
+
+  /// No description provided for @andConjunction.
+  ///
+  /// In en, this message translates to:
+  /// **'and'**
+  String get andConjunction;
+
   /// No description provided for @type.
   ///
   /// In en, this message translates to:

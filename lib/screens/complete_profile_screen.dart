@@ -12,6 +12,7 @@ import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
   const CompleteProfileScreen({
@@ -225,39 +226,11 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(28, 8, 28, 20),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed:
-                        authProvider.isLoading ? null : _handleContinue,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryBlack,
-                      foregroundColor: Colors.white,
-                      disabledBackgroundColor:
-                          AppTheme.primaryBlack.withValues(alpha: 0.5),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(WaUi.radiusPill),
-                      ),
-                    ),
-                    child: authProvider.isLoading
-                        ? const SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : Text(
-                            context.l10n.next,
-                            style: WaUi.promoButton.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                  ),
+                child: WaPrimaryButton(
+                  label: context.l10n.next,
+                  loading: authProvider.isLoading,
+                  onPressed:
+                      authProvider.isLoading ? null : _handleContinue,
                 ),
               ),
             ],

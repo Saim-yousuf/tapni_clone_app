@@ -1520,6 +1520,28 @@ class AppLocalizationsLo extends AppLocalizations {
   String get tryBusinessPro2 => 'ລອງ Business Pro.';
 
   @override
+  String get businessProBrand => 'Business Pro';
+
+  @override
+  String get upgradeYourBusiness => 'Upgrade your business';
+
+  @override
+  String get businessProIntroBody =>
+      'Do more with BarQody for Business, build trust with a verified badge, and access other premium benefits all in one subscription.';
+
+  @override
+  String get byContinuingYouAgreeTo => 'By continuing, you agree to the';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get andConjunction => 'and';
+
+  @override
   String get type => 'ປະເພດ';
 
   @override

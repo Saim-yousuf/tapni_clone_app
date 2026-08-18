@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 class CustomButton extends StatefulWidget {
   final String text;
@@ -23,7 +24,8 @@ class CustomButton extends StatefulWidget {
   State<CustomButton> createState() => _CustomButtonState();
 }
 
-class _CustomButtonState extends State<CustomButton> with SingleTickerProviderStateMixin {
+class _CustomButtonState extends State<CustomButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -45,82 +47,19 @@ class _CustomButtonState extends State<CustomButton> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    Widget buttonBody = Center(
-      child: widget.isLoading
-          ? const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (widget.icon != null) ...[
-                  Icon(
-                    widget.icon,
-                    size: 18,
-                    color: widget.isSecondary 
-                        ? (isDark ? Colors.white : Colors.black)
-                        : (widget.isGold ? AppTheme.secondaryWhite : AppTheme.secondaryWhite),
-                  ),
-                  const SizedBox(width: 8),
-                ],
-                Text(
-                  widget.text,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: widget.isSecondary 
-                        ? (isDark ? Colors.white : Colors.black)
-                        : (widget.isGold ? AppTheme.secondaryWhite : AppTheme.secondaryWhite),
-                  ),
-                ),
-              ],
-            ),
-    );
-
     return GestureDetector(
       onTapDown: (_) => _controller.forward(),
-      onTapUp: (_) {
-        _controller.reverse();
-        if (!widget.isLoading) widget.onTap();
-      },
+      onTapUp: (_) => _controller.reverse(),
       onTapCancel: () => _controller.reverse(),
       child: ScaleTransition(
         scale: _scaleAnimation,
-        child: Container(
-          height: 56,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: widget.isGold && !widget.isSecondary ? AppTheme.goldGradient : null,
-            color: widget.isGold 
-                ? null 
-                : widget.isSecondary
-                    ? Colors.transparent
-                    : (isDark ? Colors.white : Colors.black),
-            border: widget.isSecondary
-                ? Border.all(
-                    color: isDark ? Colors.white24 : Colors.black12,
-                    width: 1.5,
-                  )
-                : null,
-            boxShadow: widget.isGold && !widget.isSecondary
-                ? [
-                    BoxShadow(
-                      color: AppTheme.accentGold.withOpacity(0.3),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    )
-                  ]
-                : null,
-          ),
-          child: buttonBody,
+        child: WaPrimaryButton(
+          label: widget.text,
+          onPressed: widget.isLoading ? null : widget.onTap,
+          loading: widget.isLoading,
+          icon: widget.icon,
+          outlined: widget.isSecondary,
+          backgroundColor: widget.isGold ? AppTheme.accentGold : null,
         ),
       ),
     );

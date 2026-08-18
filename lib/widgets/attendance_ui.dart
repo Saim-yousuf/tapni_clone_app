@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 /// Attendance screens — WhatsApp Business–style surfaces and typography.
 class AttendanceUi {
   static String get fontFamily => WaUi.fontFamily;
 
-  static const double buttonHeight = 52;
+  static const double buttonHeight = WaUi.primaryButtonHeight;
   static const double borderWidth = 1;
   static const double radius = WaUi.radiusLg;
 
@@ -73,39 +74,11 @@ class AttendanceUi {
     bool loading = false,
     double? height,
   }) {
-    return SizedBox(
-      width: double.infinity,
-      height: height ?? buttonHeight,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: buttonDark,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(WaUi.radiusPill),
-          ),
-        ),
-        onPressed: loading ? null : onPressed,
-        child: loading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
-                  color: Colors.white,
-                ),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (icon != null) ...[
-                    Icon(icon, size: 22),
-                    const SizedBox(width: 8),
-                  ],
-                  Text(label, style: buttonLabel),
-                ],
-              ),
-      ),
+    return WaPrimaryButton(
+      label: label,
+      onPressed: onPressed,
+      loading: loading,
+      icon: icon,
     );
   }
 
@@ -116,38 +89,12 @@ class AttendanceUi {
     bool loading = false,
     double? height,
   }) {
-    return SizedBox(
-      width: double.infinity,
-      height: height ?? buttonHeight,
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: primaryText,
-          side: const BorderSide(color: WaUi.divider, width: 1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(WaUi.radiusPill),
-          ),
-        ),
-        onPressed: loading ? null : onPressed,
-        child: loading
-            ? const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(strokeWidth: 2.5),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (icon != null) ...[
-                    Icon(icon, size: 22),
-                    const SizedBox(width: 8),
-                  ],
-                  Text(
-                    label,
-                    style: WaUi.button.copyWith(color: primaryText),
-                  ),
-                ],
-              ),
-      ),
+    return WaPrimaryButton(
+      label: label,
+      onPressed: onPressed,
+      loading: loading,
+      icon: icon,
+      outlined: true,
     );
   }
 
