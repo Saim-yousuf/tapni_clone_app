@@ -3,6 +3,7 @@ import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 void showContactCardBottomSheet(
@@ -704,16 +705,9 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     };
   }
 
-  InputDecoration _inputDecoration(String hint) => InputDecoration(
+  InputDecoration _inputDecoration(String hint) => WaUi.fieldDecoration(
     hintText: hint,
-    hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
-    filled: true,
-    fillColor: Colors.grey[100],
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide.none,
-    ),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    radius: 12,
   );
 
   Widget _buildTextField(

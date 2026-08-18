@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/utils/app_fonts.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 class AppTheme {
   // Brand Colors (UNCHANGED NAMES)
@@ -205,20 +206,19 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: secondaryWhite,
-        contentPadding: const EdgeInsets.all(16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: primaryBlack),
+        fillColor: WaUi.fieldFill,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        hintStyle: AppFonts.textStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+          color: WaUi.secondaryText,
+          height: height,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: primaryBlack),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: primaryBlack, width: 1.5),
-        ),
+        border: WaUi.fieldEnabledBorder,
+        enabledBorder: WaUi.fieldEnabledBorder,
+        focusedBorder: WaUi.fieldFocusedBorder,
+        errorBorder: WaUi.fieldErrorBorder,
+        focusedErrorBorder: WaUi.fieldErrorBorder,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: secondaryWhite,
@@ -349,20 +349,28 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: primaryBlack,
-        contentPadding: const EdgeInsets.all(16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: secondaryWhite),
+        fillColor: const Color(0xFF3A3B3C),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        hintStyle: AppFonts.textStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+          color: const Color(0xFFB0B3B8),
+          height: height,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: secondaryWhite),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(WaUi.radiusMd)),
+          borderSide: BorderSide(color: Color(0xFF4E4F50)),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: secondaryWhite, width: 1.5),
+        enabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(WaUi.radiusMd)),
+          borderSide: BorderSide(color: Color(0xFF4E4F50)),
         ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(WaUi.radiusMd)),
+          borderSide: BorderSide(color: Color(0xFFB0B3B8)),
+        ),
+        errorBorder: WaUi.fieldErrorBorder,
+        focusedErrorBorder: WaUi.fieldErrorBorder,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: primaryBlack,

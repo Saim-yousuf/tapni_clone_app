@@ -465,7 +465,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: primary, width: 1.5),
+                  borderSide: BorderSide.none,
                 ),
               ),
             ),

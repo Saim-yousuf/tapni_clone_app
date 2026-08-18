@@ -549,26 +549,11 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
   }
 
   InputDecoration _field(String label, {String? hint, bool required = false}) {
-    return InputDecoration(
+    return WaUi.fieldDecoration(
       labelText: required ? '$label *' : label,
       hintText: hint,
-      filled: true,
-      fillColor: WaUi.scaffold,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      alignLabelWithHint: true,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: WaUi.accent, width: 1.5),
-      ),
-    );
+      radius: 12,
+    ).copyWith(alignLabelWithHint: true);
   }
 }
 

@@ -16,6 +16,9 @@ class WaUi {
   static const Color chipSelected = Color(0xFFE9EDEF);
   static const Color chipBorder = Color(0xFFD1D7DB);
   static const Color searchBg = Color(0xFFF0F2F5);
+  static const Color fieldFill = Color(0xFFFFFFFF);
+  static const Color fieldOutline = Color(0xFFDDDFE2);
+  static const Color fieldOutlineFocused = Color(0xFFBEC3C9);
   static const Color promoIconBg = Color(0xFFE7F3FF);
   static const Color promoIconFg = Color(0xFF54656F);
   static const Color buttonDark = Color(0xFF111B21);
@@ -201,4 +204,72 @@ class WaUi {
         borderRadius: BorderRadius.circular(radiusLg),
         border: Border.all(color: divider, width: 1),
       );
+
+  /// Facebook-style field: white fill + light grey outline (never black).
+  static const OutlineInputBorder fieldEnabledBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(radiusMd)),
+    borderSide: BorderSide(color: fieldOutline),
+  );
+
+  static const OutlineInputBorder fieldFocusedBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(radiusMd)),
+    borderSide: BorderSide(color: fieldOutlineFocused),
+  );
+
+  static const OutlineInputBorder fieldErrorBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(radiusMd)),
+    borderSide: BorderSide(color: Color(0xFFE53935)),
+  );
+
+  static BoxDecoration get fieldBox => BoxDecoration(
+        color: fieldFill,
+        borderRadius: BorderRadius.circular(radiusMd),
+        border: Border.all(color: fieldOutline),
+      );
+
+  static OutlineInputBorder fieldBorder({double radius = radiusMd}) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(radius),
+      borderSide: const BorderSide(color: fieldOutline),
+    );
+  }
+
+  static OutlineInputBorder fieldFocused({double radius = radiusMd}) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(radius),
+      borderSide: const BorderSide(color: fieldOutlineFocused),
+    );
+  }
+
+  static InputDecoration fieldDecoration({
+    String? hintText,
+    String? labelText,
+    Widget? prefixIcon,
+    Widget? suffixIcon,
+    EdgeInsetsGeometry? contentPadding,
+    double radius = radiusMd,
+  }) {
+    return InputDecoration(
+      hintText: hintText,
+      labelText: labelText,
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
+      filled: true,
+      fillColor: fieldFill,
+      hintStyle: _style(size: 15, color: secondaryText),
+      contentPadding: contentPadding ??
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      border: fieldBorder(radius: radius),
+      enabledBorder: fieldBorder(radius: radius),
+      focusedBorder: fieldFocused(radius: radius),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(radius),
+        borderSide: const BorderSide(color: Color(0xFFE53935)),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(radius),
+        borderSide: const BorderSide(color: Color(0xFFE53935), width: 1.2),
+      ),
+    );
+  }
 }

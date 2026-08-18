@@ -138,28 +138,8 @@ void _generalBottomSheet(BuildContext context) {
                           keyboardType: TextInputType.name,
                           textInputAction: TextInputAction.next,
                           style: WaUi.body,
-                          decoration: InputDecoration(
+                          decoration: WaUi.fieldDecoration(
                             hintText: context.l10n.name,
-                            hintStyle: WaUi.body.copyWith(
-                              color: WaUi.secondaryText,
-                            ),
-                            fillColor: WaUi.navPill,
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(WaUi.radiusMd),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(WaUi.radiusMd),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(WaUi.radiusMd),
-                              borderSide: BorderSide.none,
-                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -182,28 +162,8 @@ void _generalBottomSheet(BuildContext context) {
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.next,
                           style: WaUi.body,
-                          decoration: InputDecoration(
+                          decoration: WaUi.fieldDecoration(
                             hintText: context.l10n.emailAddress,
-                            hintStyle: WaUi.body.copyWith(
-                              color: WaUi.secondaryText,
-                            ),
-                            fillColor: WaUi.navPill,
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(WaUi.radiusMd),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(WaUi.radiusMd),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(WaUi.radiusMd),
-                              borderSide: BorderSide.none,
-                            ),
                           ),
                           validator: (value) {
                             final email = value?.trim() ?? '';
@@ -319,10 +279,7 @@ Widget _buildReadOnlyField(
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-    decoration: BoxDecoration(
-      color: WaUi.navPill,
-      borderRadius: BorderRadius.circular(WaUi.radiusMd),
-    ),
+    decoration: WaUi.fieldBox,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -350,10 +307,7 @@ Widget _buildDropdown({
 }) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 16),
-    decoration: BoxDecoration(
-      color: WaUi.navPill,
-      borderRadius: BorderRadius.circular(WaUi.radiusMd),
-    ),
+    decoration: WaUi.fieldBox,
     child: DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         value: value,

@@ -293,11 +293,13 @@ class _CardDownloadSizeSheetState extends State<CardDownloadSizeSheet> {
                 TextField(
                   controller: _customPxCtrl,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
+                  decoration: WaUi.fieldDecoration(
                     labelText: 'Size (px)',
                     hintText: '128 – 4096',
-                    border: OutlineInputBorder(),
-                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                   ),
                   onChanged: (_) => setState(() {}),
                 ),

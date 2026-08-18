@@ -8,6 +8,7 @@ import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/contact_card_sheet.dart' as contact_card;
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
@@ -746,19 +747,9 @@ class LinkSheet {
       controller: controller,
       readOnly: readOnly,
       keyboardType: keyboardType,
-      decoration: InputDecoration(
+      decoration: WaUi.fieldDecoration(
         hintText: hint,
-        fillColor: Color(0xFFF5F5F5),
-        filled: true,
-        border: InputBorder.none,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide.none,
-        ),
+        radius: 10,
       ),
     );
   }
@@ -963,23 +954,9 @@ class LinkSheet {
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: WaUi.fieldDecoration(
                                   hintText: ctx.l10n.label,
-                                  fillColor: Color(0xFFF5F5F5),
-                                  filled: true,
-                                  border: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide.none,
-                                  ),
+                                  radius: 10,
                                 ),
                               ),
                               SizedBox(height: 5),
@@ -1001,20 +978,9 @@ class LinkSheet {
                       autofocus: true,
                       keyboardType: _keyboardTypeFor(template.fieldType),
                       style: TextStyle(fontSize: 15),
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         hintText: template.fieldLabel,
-                        hintStyle: TextStyle(color: Colors.grey.shade400),
-                        fillColor: const Color(0xFFF5F5F5),
-                        filled: true,
-                        border: InputBorder.none,
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide.none,
-                        ),
+                        radius: 10,
                       ),
                     ),
                     SizedBox(height: 6),
@@ -1209,23 +1175,9 @@ class LinkSheet {
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: WaUi.fieldDecoration(
                                   hintText: ctx.l10n.label,
-                                  fillColor: Color(0xFFF5F5F5),
-                                  filled: true,
-                                  border: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide.none,
-                                  ),
+                                  radius: 10,
                                 ),
                               ),
                               SizedBox(height: 5),
@@ -1249,21 +1201,10 @@ class LinkSheet {
                       autofocus: true,
                       style: TextStyle(fontSize: 15),
 
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         hintText:
                             '${SocialLink.getPlatformName(platform)} username',
-                        hintStyle: TextStyle(color: Colors.grey.shade400),
-                        fillColor: const Color(0xFFF5F5F5),
-                        filled: true,
-                        border: InputBorder.none,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide.none,
-                        ),
+                        radius: 10,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -1589,23 +1530,9 @@ class LinkSheet {
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                 ),
-                                decoration: InputDecoration(
+                                decoration: WaUi.fieldDecoration(
                                   hintText: ctx.l10n.label,
-                                  fillColor: Color(0xFFF5F5F5),
-                                  filled: true,
-                                  border: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide.none,
-                                  ),
+                                  radius: 10,
                                 ),
                               ),
                               SizedBox(height: 5),
@@ -1629,22 +1556,11 @@ class LinkSheet {
                       autofocus: true,
                       style: TextStyle(fontSize: 15),
 
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         hintText:
                             link.fieldLabel ??
                             '${SocialLink.getPlatformName(link.platform)} username',
-                        hintStyle: TextStyle(color: Colors.grey.shade400),
-                        fillColor: const Color(0xFFF5F5F5),
-                        filled: true,
-                        border: InputBorder.none,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide.none,
-                        ),
+                        radius: 10,
                       ),
                     ),
                     const SizedBox(height: 6),

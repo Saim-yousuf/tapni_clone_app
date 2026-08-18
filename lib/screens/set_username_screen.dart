@@ -140,36 +140,9 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
                   LengthLimitingTextInputFormatter(30),
                 ],
                 style: WaUi.body,
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   hintText: context.l10n.yourname,
-                  prefixIcon: Icon(Icons.alternate_email, size: 22),
-                  prefixIconColor: WaUi.secondaryText,
-                  filled: true,
-                  fillColor: WaUi.navBarBg,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                    borderSide: BorderSide.none,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                    borderSide: const BorderSide(color: WaUi.primaryText),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                    borderSide: BorderSide(color: Colors.redAccent),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                    borderSide: BorderSide(color: Colors.redAccent),
-                  ),
+                  prefixIcon: const Icon(Icons.alternate_email, size: 22),
                 ),
                 validator: _validateUsername,
                 onChanged: (_) => setState(() {}),
@@ -182,10 +155,7 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
                   horizontal: 14,
                   vertical: 12,
                 ),
-                decoration: BoxDecoration(
-                  color: WaUi.navBarBg,
-                  borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                ),
+                decoration: WaUi.fieldBox,
                 child: Text(
                   '${Constants.appDomain}/$previewUsername',
                   style: WaUi.bodyMedium.copyWith(color: WaUi.secondaryText),

@@ -7,6 +7,7 @@ import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 class SubcriptionSheet {
   static void show(BuildContext context) {
     showModalBottomSheet(
@@ -313,17 +314,15 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
         SizedBox(height: 24),
         TextField(
           controller: _businessNameController,
-          decoration: InputDecoration(
+          decoration: WaUi.fieldDecoration(
             labelText: context.l10n.businessName,
-            border: OutlineInputBorder(),
           ),
         ),
         SizedBox(height: 16),
         DropdownButtonFormField<String>(
           value: _selectedCategory,
-          decoration: InputDecoration(
+          decoration: WaUi.fieldDecoration(
             labelText: context.l10n.businessCategory,
-            border: OutlineInputBorder(),
           ),
           items: _categories.map((category) {
             return DropdownMenuItem(
@@ -472,9 +471,8 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
         /// TRANSACTION FIELD (added from subscription screen)
         TextField(
           controller: _transactionController,
-          decoration: InputDecoration(
+          decoration: WaUi.fieldDecoration(
             labelText: context.l10n.transactionReferenceOptional,
-            border: OutlineInputBorder(),
           ),
         ),
 

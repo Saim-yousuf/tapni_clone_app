@@ -456,7 +456,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                       controller: nameController,
                       keyboardType: TextInputType.name,
                       textCapitalization: TextCapitalization.words,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         prefixIcon: Icon(Icons.person_outline),
                         hintText: ctx.l10n.janeDoe,
                       ),
@@ -469,7 +469,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     TextFormField(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         prefixIcon: Icon(Icons.email_outlined),
                         hintText: ctx.l10n.janeCompanyCom,
                       ),
@@ -485,7 +485,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     TextFormField(
                       controller: phoneController,
                       keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         prefixIcon: Icon(Icons.phone_outlined),
                         hintText: '+1 (555) 123-4567',
                       ),
@@ -497,7 +497,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     _buildFieldLabel(context.l10n.company),
                     TextFormField(
                       controller: companyController,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         prefixIcon: Icon(Icons.business_outlined),
                         hintText: context.l10n.companyInc,
                       ),
@@ -507,7 +507,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     _buildFieldLabel(context.l10n.jobTitle),
                     TextFormField(
                       controller: jobTitleController,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         prefixIcon: Icon(Icons.work_outline),
                         hintText: context.l10n.softwareEngineer,
                       ),
@@ -518,7 +518,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     TextFormField(
                       controller: websiteController,
                       keyboardType: TextInputType.url,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         prefixIcon: Icon(Icons.language_outlined),
                         hintText: context.l10n.httpsExampleHint,
                       ),
@@ -528,7 +528,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     _buildFieldLabel(context.l10n.address),
                     TextFormField(
                       controller: addressController,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         prefixIcon: Icon(Icons.location_on_outlined),
                         hintText: context.l10n.n123MainStCity,
                       ),
@@ -539,11 +539,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     TextFormField(
                       controller: noteController,
                       maxLines: 3,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         prefixIcon: Icon(Icons.note_alt_outlined),
                         hintText: context.l10n.addANote,
-                        alignLabelWithHint: true,
-                      ),
+                      ).copyWith(alignLabelWithHint: true),
                     ),
                     SizedBox(height: 28),
 
@@ -1064,48 +1063,26 @@ class _LeadsScreenState extends State<LeadsScreen> {
           ),
         ),
         const SizedBox(height: 6),
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            color: isEditing
-                ? (isDark
-                      ? Colors.white.withOpacity(0.07)
-                      : Colors.grey.shade50)
-                : (isDark
-                      ? Colors.white.withOpacity(0.04)
-                      : Colors.grey.shade100),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isEditing
-                  ? (isDark ? Colors.white24 : Colors.grey.shade300)
-                  : Colors.transparent,
-            ),
+        TextField(
+          controller: controller,
+          readOnly: !isEditing,
+          keyboardType: keyboardType,
+          maxLines: maxLines,
+          style: TextStyle(
+            fontSize: 14,
+            color: isDark ? Colors.white : Colors.black87,
+            fontWeight: FontWeight.w500,
           ),
-          child: TextField(
-            controller: controller,
-            readOnly: !isEditing,
-            keyboardType: keyboardType,
-            maxLines: maxLines,
-            style: TextStyle(
-              fontSize: 14,
-              color: isDark ? Colors.white : Colors.black87,
-              fontWeight: FontWeight.w500,
+          decoration: WaUi.fieldDecoration(
+            prefixIcon: Icon(
+              icon,
+              size: 18,
+              color: isEditing
+                  ? (isDark ? Colors.white54 : Colors.black54)
+                  : (isDark ? Colors.white24 : Colors.grey.shade400),
             ),
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                icon,
-                size: 18,
-                color: isEditing
-                    ? (isDark ? Colors.white54 : Colors.black54)
-                    : (isDark ? Colors.white24 : Colors.grey.shade400),
-              ),
-              hintText: isEditing ? context.l10n.enterField(label) : '',
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 12,
-              ),
-            ),
+            hintText: isEditing ? context.l10n.enterField(label) : '',
+            radius: 12,
           ),
         ),
       ],
@@ -1279,7 +1256,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                 children: [
                   TextField(
                     controller: nameCtrl,
-                    decoration: InputDecoration(
+                    decoration: WaUi.fieldDecoration(
                       labelText: ctx.l10n.categoryName,
                     ),
                   ),

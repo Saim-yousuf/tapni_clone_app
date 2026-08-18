@@ -133,11 +133,9 @@ class _InvitationDesignEditorScreenState
                 autofocus: true,
                 textDirection:
                     _design.rtl ? TextDirection.rtl : TextDirection.ltr,
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   hintText: ctx.l10n.enterTextHint,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  radius: 12,
                 ),
               ),
               const SizedBox(height: 12),
@@ -183,11 +181,9 @@ class _InvitationDesignEditorScreenState
               const SizedBox(height: 12),
               TextField(
                 controller: controller,
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   hintText: 'https://maps.google.com/…',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  radius: 12,
                 ),
               ),
               const SizedBox(height: 12),
@@ -464,18 +460,16 @@ class _InvitationDesignEditorScreenState
             const SizedBox(height: 16),
             TextField(
               controller: nameCtrl,
-              decoration: InputDecoration(
+              decoration: WaUi.fieldDecoration(
                 labelText: ctx.l10n.templateName,
-                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: descCtrl,
               maxLines: 2,
-              decoration: InputDecoration(
+              decoration: WaUi.fieldDecoration(
                 labelText: ctx.l10n.descriptionOptional,
-                border: const OutlineInputBorder(),
               ),
             ),
           ],

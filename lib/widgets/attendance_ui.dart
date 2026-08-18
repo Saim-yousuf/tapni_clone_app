@@ -152,25 +152,7 @@ class AttendanceUi {
   }
 
   static InputDecoration inputDecoration(String label) {
-    return InputDecoration(
-      labelText: label,
-      labelStyle: WaUi.bodyMedium.copyWith(color: secondaryText),
-      filled: true,
-      fillColor: WaUi.navBarBg,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(WaUi.radiusMd),
-        borderSide: BorderSide.none,
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(WaUi.radiusMd),
-        borderSide: const BorderSide(color: WaUi.divider),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(WaUi.radiusMd),
-        borderSide: const BorderSide(color: WaUi.buttonDark, width: 1.2),
-      ),
-    );
+    return WaUi.fieldDecoration(labelText: label);
   }
 
   static Widget timeChip({

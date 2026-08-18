@@ -9,6 +9,7 @@ import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/screens/catalog/catalog_item_form_screen.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
 import 'package:tapni_app/widgets/catalog_product_card.dart';
 import 'package:tapni_app/widgets/service_booking_sheet.dart';
@@ -295,20 +296,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                   controller: _newCategoryCtrl,
                   textInputAction: TextInputAction.done,
                   onSubmitted: (_) => _addCategory(),
-                  decoration: InputDecoration(
+                  decoration: WaUi.fieldDecoration(
                     hintText: context.l10n.eGFastFood,
-                    isDense: true,
-                    filled: true,
-                    fillColor: isDark ? const Color(0xFF111111) : Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 12,
-                    ),
-                  ),
+                    radius: 10,
+                  ).copyWith(isDense: true),
                 ),
               ),
               const SizedBox(width: 8),

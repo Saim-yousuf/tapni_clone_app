@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/utils/api_handler.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -532,11 +533,13 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                     controller: hexController,
                     maxLength: 6,
                     inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9A-Fa-f]'))],
-                    decoration: InputDecoration(
-                      counterText: '',
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                    ),
+                    decoration: WaUi.fieldDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      radius: 10,
+                    ).copyWith(counterText: ''),
                   ),
                 ),
                 SizedBox(width: 10),
@@ -577,13 +580,6 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
     );
   }
 
-  InputDecoration _inputDecoration(String hint) => InputDecoration(
-    hintText: hint,
-    filled: true,
-    fillColor: Colors.white,
-    contentPadding: const EdgeInsets.all(14),
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade300)),
-    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade300)),
-    focusedBorder: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12)), borderSide: BorderSide(color: Colors.black, width: 1.5)),
-  );
+  InputDecoration _inputDecoration(String hint) =>
+      WaUi.fieldDecoration(hintText: hint, radius: 12);
 }

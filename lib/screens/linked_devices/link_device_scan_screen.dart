@@ -151,14 +151,8 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
               TextField(
                 controller: _manualController,
                 textCapitalization: TextCapitalization.characters,
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   hintText: ctx.l10n.aabbccdd,
-                  filled: true,
-                  fillColor: WaUi.navBarBg,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                    borderSide: BorderSide.none,
-                  ),
                 ),
               ),
               SizedBox(height: 16),

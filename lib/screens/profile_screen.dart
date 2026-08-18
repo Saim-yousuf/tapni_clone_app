@@ -12,6 +12,7 @@ import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
@@ -564,23 +565,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               controller: _nameController,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              decoration: InputDecoration(
-                fillColor: Color(0xFFF3F3F3),
-                filled: true,
+              decoration: WaUi.fieldDecoration(
                 hintText: context.l10n.enterYourName,
-                contentPadding: EdgeInsets.symmetric(vertical: 2),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
-                ),
+                radius: 16,
+              ).copyWith(
+                contentPadding: const EdgeInsets.symmetric(vertical: 2),
               ),
               validator: (value) => value == null || value.trim().isEmpty
                   ? context.l10n.nameCannotBeEmpty
@@ -595,25 +584,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               textAlign: TextAlign.center,
               maxLines: 2,
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              decoration: InputDecoration(
-                fillColor: Color(0xFFF3F3F3),
-                filled: true,
+              decoration: WaUi.fieldDecoration(
                 hintText: context.l10n.writeSomethingAboutYouOrYourBrand,
+                radius: 16,
+              ).copyWith(
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 6,
                   vertical: 6,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: BorderSide.none,
                 ),
               ),
             ),

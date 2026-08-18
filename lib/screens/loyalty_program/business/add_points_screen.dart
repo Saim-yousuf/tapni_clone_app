@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 class AddPointsScreen extends StatefulWidget {
   AddPointsScreen({super.key});
 
@@ -48,16 +48,10 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
               controller: billController,
               keyboardType: TextInputType.number,
               onChanged: calculatePoints,
-              decoration: InputDecoration(
+              decoration: WaUi.fieldDecoration(
                 hintText: context.l10n.enterBillAmount,
-                prefixIcon: Icon(Icons.receipt_long),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide(color: Colors.black, width: 1.5),
-                ),
+                prefixIcon: const Icon(Icons.receipt_long),
+                radius: 14,
               ),
             ),
 

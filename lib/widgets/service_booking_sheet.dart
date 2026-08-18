@@ -4,6 +4,7 @@ import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/service_schedule.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 Future<bool?> showServiceBookingSheet({
@@ -303,16 +304,9 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                       TextField(
                         controller: _notesCtrl,
                         maxLines: 2,
-                        decoration: InputDecoration(
+                        decoration: WaUi.fieldDecoration(
                           hintText: context.l10n.anySpecialRequests,
-                          filled: true,
-                          fillColor: isDark
-                              ? Color(0xFF1E1E1E)
-                              : const Color(0xFFF5F5F5),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
+                          radius: 12,
                         ),
                       ),
                     ],

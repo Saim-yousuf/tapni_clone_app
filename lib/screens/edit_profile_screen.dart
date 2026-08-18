@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -193,7 +194,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 SizedBox(height: 24),
                 TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(
+                  decoration: WaUi.fieldDecoration(
                     labelText: context.l10n.name,
                     prefixIcon: Icon(Icons.person_outline),
                   ),
@@ -203,14 +204,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 TextFormField(
                   controller: _bioController,
                   maxLines: 4,
-                  decoration: InputDecoration(
+                  decoration: WaUi.fieldDecoration(
                     labelText: context.l10n.bio2,
                     prefixIcon: Padding(
                       padding: EdgeInsets.only(bottom: 8.0),
                       child: Icon(Icons.edit_outlined),
                     ),
-                    alignLabelWithHint: true,
-                  ),
+                  ).copyWith(alignLabelWithHint: true),
                   validator: (value) => value == null || value.isEmpty ? context.l10n.enterYourBio : null,
                 ),
                 SizedBox(height: 32),

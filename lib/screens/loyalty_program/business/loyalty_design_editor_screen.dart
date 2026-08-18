@@ -179,11 +179,9 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
                 autofocus: true,
                 textDirection:
                     _design.rtl ? TextDirection.rtl : TextDirection.ltr,
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   hintText: ctx.l10n.enterTextHint,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  radius: 12,
                 ),
               ),
               const SizedBox(height: 12),
@@ -229,11 +227,9 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
               const SizedBox(height: 12),
               TextField(
                 controller: controller,
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   hintText: 'https://…',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  radius: 12,
                 ),
               ),
               const SizedBox(height: 12),
@@ -630,18 +626,16 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
               const SizedBox(height: 16),
               TextField(
                 controller: _labelCtrl,
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   labelText: ctx.l10n.label,
-                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: _descCtrl,
                 maxLines: 2,
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   labelText: ctx.l10n.descriptionOptional,
-                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12),
@@ -649,9 +643,8 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
                 controller: _stampsCtrl,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   labelText: ctx.l10n.stamps,
-                  border: const OutlineInputBorder(),
                 ),
                 onChanged: (v) {
                   final n = int.tryParse(v);
@@ -776,18 +769,16 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
             const SizedBox(height: 16),
             TextField(
               controller: nameCtrl,
-              decoration: InputDecoration(
+              decoration: WaUi.fieldDecoration(
                 labelText: ctx.l10n.templateName,
-                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: descCtrl,
               maxLines: 2,
-              decoration: InputDecoration(
+              decoration: WaUi.fieldDecoration(
                 labelText: ctx.l10n.descriptionOptional,
-                border: const OutlineInputBorder(),
               ),
             ),
           ],

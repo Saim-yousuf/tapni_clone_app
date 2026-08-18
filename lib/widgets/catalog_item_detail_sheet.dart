@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 Future<({int quantity, String notes})?> showCatalogItemDetailSheet({
@@ -131,16 +132,9 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
                       TextField(
                         controller: _notesCtrl,
                         maxLines: 3,
-                        decoration: InputDecoration(
+                        decoration: WaUi.fieldDecoration(
                           hintText: context.l10n.eGNoSugarExtraHot,
-                          filled: true,
-                          fillColor: isDark
-                              ? Color(0xFF1E1E1E)
-                              : Color(0xFFF5F5F5),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
+                          radius: 12,
                         ),
                       ),
                       SizedBox(height: 20),

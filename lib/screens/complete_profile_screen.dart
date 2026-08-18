@@ -198,26 +198,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         style: WaUi.bodyMedium.copyWith(fontSize: 16),
                         cursorColor: AppTheme.primaryBlack,
                         onFieldSubmitted: (_) => _handleContinue(),
-                        decoration: InputDecoration(
+                        decoration: WaUi.fieldDecoration(
                           hintText: context.l10n.typeYourNameHere,
-                          hintStyle: WaUi.body.copyWith(
-                            color: WaUi.secondaryText,
-                          ),
-                          border: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: WaUi.divider),
-                          ),
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: WaUi.divider),
-                          ),
-                          focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppTheme.primaryBlack,
-                              width: 2,
-                            ),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {

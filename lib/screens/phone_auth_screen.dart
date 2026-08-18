@@ -85,28 +85,8 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     }
   }
 
-  InputDecoration _underlineDecoration({String? hint}) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: WaUi.body.copyWith(color: WaUi.secondaryText),
-      border: const UnderlineInputBorder(
-        borderSide: BorderSide(color: WaUi.divider, width: 1),
-      ),
-      enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: WaUi.divider, width: 1),
-      ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppTheme.primaryBlack, width: 2),
-      ),
-      errorBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.redAccent, width: 1),
-      ),
-      focusedErrorBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.redAccent, width: 2),
-      ),
-      contentPadding: const EdgeInsets.symmetric(vertical: 12),
-      isDense: true,
-    );
+  InputDecoration _fieldDecoration({String? hint}) {
+    return WaUi.fieldDecoration(hintText: hint);
   }
 
   @override
@@ -143,14 +123,8 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                       const SizedBox(height: 36),
                       InkWell(
                         onTap: _pickCountry,
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.only(bottom: 10),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: WaUi.divider, width: 1),
-                            ),
-                          ),
+                        child: InputDecorator(
+                          decoration: WaUi.fieldDecoration(),
                           child: Row(
                             children: [
                               Expanded(
@@ -170,27 +144,16 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 12),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           InkWell(
                             onTap: _pickCountry,
                             child: SizedBox(
-                              width: 80,
-                              child: Container(
-                                padding: const EdgeInsets.only(
-                                  top: 12,
-                                  bottom: 12,
-                                ),
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: WaUi.divider,
-                                      width: 1,
-                                    ),
-                                  ),
-                                ),
+                              width: 92,
+                              child: InputDecorator(
+                                decoration: WaUi.fieldDecoration(),
                                 child: Text(
                                   _country.code,
                                   style: WaUi.bodyMedium,
@@ -198,7 +161,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: TextFormField(
                               controller: _phoneController,
@@ -210,7 +173,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                                 LengthLimitingTextInputFormatter(15),
                               ],
                               onFieldSubmitted: (_) => _handleContinue(),
-                              decoration: _underlineDecoration(
+                              decoration: _fieldDecoration(
                                 hint: context.l10n.phoneNumber2,
                               ),
                               validator: (value) {

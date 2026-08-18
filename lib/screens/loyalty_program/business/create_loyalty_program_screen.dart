@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 class CreateLoyaltyProgramScreen extends StatefulWidget {
   CreateLoyaltyProgramScreen({super.key});
 
@@ -179,23 +179,6 @@ class _CreateLoyaltyProgramScreenState
   }
 
   InputDecoration _inputDecoration(String hint) {
-    return InputDecoration(
-      hintText: hint,
-      filled: true,
-      fillColor: Colors.white,
-      contentPadding: const EdgeInsets.all(16),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: Colors.grey.shade300),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: Colors.grey.shade300),
-      ),
-      focusedBorder: const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(14)),
-        borderSide: BorderSide(color: Colors.black, width: 1.5),
-      ),
-    );
+    return WaUi.fieldDecoration(hintText: hint);
   }
 }

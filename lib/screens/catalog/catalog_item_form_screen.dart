@@ -6,6 +6,7 @@ import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/utils/theme.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 class CatalogItemFormScreen extends StatefulWidget {
   final String catalogLabel;
   final CatalogItem? existingItem;
@@ -151,14 +152,8 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                     TextField(
                       controller: _nameCtrl,
                       textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         labelText: context.l10n.name,
-                        filled: true,
-                        fillColor: Color(0xFFF5F5F5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
                       ),
                     ),
                     SizedBox(height: 16),
@@ -166,14 +161,8 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                       controller: _priceCtrl,
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         labelText: context.l10n.priceRs,
-                        filled: true,
-                        fillColor: Color(0xFFF5F5F5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
                       ),
                     ),
                     SizedBox(height: 16),
@@ -182,14 +171,8 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                         value: widget.existingCategories.contains(_selectedCategory)
                             ? _selectedCategory
                             : null,
-                        decoration: InputDecoration(
+                        decoration: WaUi.fieldDecoration(
                           labelText: context.l10n.category,
-                          filled: true,
-                          fillColor: Color(0xFFF5F5F5),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
                         ),
                         items: widget.existingCategories
                             .map(
@@ -211,16 +194,9 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                       controller: _descCtrl,
                       maxLines: 4,
                       textInputAction: TextInputAction.done,
-                      decoration: InputDecoration(
+                      decoration: WaUi.fieldDecoration(
                         labelText: context.l10n.descriptionOptional,
-                        alignLabelWithHint: true,
-                        filled: true,
-                        fillColor: const Color(0xFFF5F5F5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                      ).copyWith(alignLabelWithHint: true),
                     ),
                   ],
                 ),

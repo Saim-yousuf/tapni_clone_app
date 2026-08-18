@@ -294,7 +294,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(_otpLength, (index) {
                         return Container(
-                          width: 36,
+                          width: 40,
                           margin: const EdgeInsets.symmetric(horizontal: 4),
                           child: TextField(
                             controller: _controllers[index],
@@ -310,28 +310,12 @@ class _OtpScreenState extends State<OtpScreen> {
                               FilteringTextInputFormatter.digitsOnly,
                               LengthLimitingTextInputFormatter(1),
                             ],
-                            decoration: const InputDecoration(
-                              counterText: '',
-                              contentPadding: EdgeInsets.only(bottom: 8),
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: WaUi.divider,
-                                  width: 1.5,
-                                ),
+                            decoration: WaUi.fieldDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10,
                               ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: WaUi.divider,
-                                  width: 1.5,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppTheme.primaryBlack,
-                                  width: 2,
-                                ),
-                              ),
-                            ),
+                              radius: 8,
+                            ).copyWith(counterText: ''),
                             onChanged: (value) => _onOtpChanged(index, value),
                           ),
                         );

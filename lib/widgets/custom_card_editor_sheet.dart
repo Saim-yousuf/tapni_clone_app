@@ -609,18 +609,15 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
       maxLines: maxLines,
       onChanged: (_) => setState(() {}),
       style: WaUi.body,
-      decoration: InputDecoration(
+      decoration: WaUi.fieldDecoration(
         labelText: label,
-        labelStyle: WaUi.caption,
         hintText: hint,
+      ).copyWith(
+        labelStyle: WaUi.caption,
         hintStyle: WaUi.caption,
-        filled: true,
-        fillColor: WaUi.scaffold,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(WaUi.radiusMd),
-          borderSide: BorderSide.none,
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        contentPadding: maxLines > 1
+            ? const EdgeInsets.symmetric(horizontal: 14, vertical: 12)
+            : null,
       ),
     );
   }

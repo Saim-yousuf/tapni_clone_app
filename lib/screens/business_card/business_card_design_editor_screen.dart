@@ -145,11 +145,9 @@ class _BusinessCardDesignEditorScreenState
                 controller: controller,
                 maxLines: 4,
                 autofocus: true,
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   hintText: ctx.l10n.enterTextHint,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  radius: 12,
                 ),
               ),
               const SizedBox(height: 12),
@@ -195,11 +193,9 @@ class _BusinessCardDesignEditorScreenState
               const SizedBox(height: 12),
               TextField(
                 controller: controller,
-                decoration: InputDecoration(
+                decoration: WaUi.fieldDecoration(
                   hintText: 'https://…',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  radius: 12,
                 ),
               ),
               const SizedBox(height: 12),

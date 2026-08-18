@@ -223,8 +223,8 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     final fieldColor = widget.isDark
-        ? Color(0xFF222222)
-        : Color(0xFFF5F5F5);
+        ? const Color(0xFF222222)
+        : const Color(0xFFF5F5F5);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -274,22 +274,13 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 10,
+                        TextField(
+                          controller: widget.labelController,
+                          decoration: WaUi.fieldDecoration(
+                            hintText: context.l10n.label,
+                            radius: 10,
                           ),
-                          decoration: BoxDecoration(
-                            color: fieldColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextField(
-                            controller: widget.labelController,
-                            decoration: InputDecoration.collapsed(
-                              hintText: context.l10n.label,
-                            ),
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.w500),
                         ),
                         SizedBox(height: 4),
                         Padding(
@@ -307,20 +298,10 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
               SizedBox(height: 16),
 
               // Username field
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: fieldColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextField(
-                  controller: widget.usernameController,
-                  decoration: InputDecoration.collapsed(hintText: ''),
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
+              TextField(
+                controller: widget.usernameController,
+                decoration: WaUi.fieldDecoration(radius: 10),
+                style: TextStyle(fontWeight: FontWeight.w500),
               ),
               Padding(
                 padding: EdgeInsets.only(left: 4, top: 4),
@@ -337,8 +318,7 @@ class _LinkSettingsSheetState extends State<_LinkSettingsSheet> {
                   horizontal: 14,
                   vertical: 4,
                 ),
-                decoration: BoxDecoration(
-                  color: fieldColor,
+                decoration: WaUi.fieldBox.copyWith(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
