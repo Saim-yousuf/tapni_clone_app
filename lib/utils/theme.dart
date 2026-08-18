@@ -177,6 +177,9 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: secondaryWhite,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
         systemOverlayStyle: systemUiFor(Brightness.light),
         iconTheme: const IconThemeData(color: primaryBlack),
         centerTitle: true,
@@ -323,6 +326,9 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: primaryBlack,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
         systemOverlayStyle: systemUiFor(Brightness.dark),
         iconTheme: const IconThemeData(color: secondaryWhite),
         centerTitle: true,

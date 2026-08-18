@@ -1735,6 +1735,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Fügen Sie unten Links zu Ihrem Profil hinzu';
 
   @override
+  String get holdAndDragToReorderLinks => 'Hold and drag to reorder';
+
+  @override
   String get addPhoto => 'Foto hinzufügen';
 
   @override
@@ -3020,7 +3023,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get chooseACountry => 'Choose a country';
 
   @override
-  String get searchCountry => 'Search country';
+  String get searchCountry => 'Search for country';
+
+  @override
+  String get selectCountryHelper =>
+      'Select your country so we can show the right options for your region.';
+
+  @override
+  String get searchCategory => 'Search for category';
+
+  @override
+  String get selectCategoryHelper =>
+      'Select the category that best describes your business.';
+
+  @override
+  String get noCategoriesFound => 'No categories found';
 
   @override
   String get noCountriesFound => 'No countries found';

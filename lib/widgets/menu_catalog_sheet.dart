@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/cart_line_item.dart';
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/service_schedule.dart';
 import 'package:tapni_app/models/social_link.dart';
@@ -1000,16 +1001,17 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     setState(() => _isOrdering = false);
 
     if (res.success) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.l10n.orderPlacedWith(
+      final token = CatalogOrder.tokenFromApi(res.data);
+      final message = token > 0
+          ? 'Token #$token — ${context.l10n.orderPlacedWith(
               widget.businessName ?? context.l10n.businessLabel,
-            ),
-          ),
-        ),
-      );
+            )}'
+          : context.l10n.orderPlacedWith(
+              widget.businessName ?? context.l10n.businessLabel,
+            );
+      final messenger = ScaffoldMessenger.of(context);
+      Navigator.pop(context);
+      messenger.showSnackBar(SnackBar(content: Text(message)));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(res.message ?? context.l10n.failedToPlaceOrder)),

@@ -94,7 +94,7 @@ class LeadsProvider extends ChangeNotifier {
     return filtered;
   }
 
-  List<ContactCategory> get categories => _categories;
+  List<ContactCategory> get categories => List.unmodifiable(_categories);
   bool get isLoading => _isLoading;
   String? get activeCategoryId => _activeCategoryId;
 
@@ -172,8 +172,13 @@ class LeadsProvider extends ChangeNotifier {
     try {
       final res = await _authRepo.getContactCategories();
       if (res.success && res.data is Map) {
-        final List data = (res.data as Map)['categories'] ?? [];
-        _categories = data.map((e) => ContactCategory.fromJson(e)).toList();
+        final map = _asStringMap(res.data);
+        final raw = map?['categories'] ?? map?['data'] ?? [];
+        final List data = raw is List ? raw : [];
+        _categories = data
+            .map(_categoryFromJson)
+            .whereType<ContactCategory>()
+            .toList();
         notifyListeners();
       }
     } catch (e) {
@@ -330,14 +335,20 @@ class LeadsProvider extends ChangeNotifier {
         name: name,
         color: color,
       );
-      if (res.success && res.data is Map) {
-        final data = (res.data as Map)['category'];
-        if (data != null) {
-          _categories.insert(0, ContactCategory.fromJson(data));
-          notifyListeners();
-          return true;
-        }
+      if (!res.success) return false;
+
+      final created = _categoryFromResponse(res.data);
+      if (created != null) {
+        _categories = [
+          created,
+          ..._categories.where((c) => c.id != created.id),
+        ];
+        notifyListeners();
       }
+
+      // Always refetch so chips update even if create response has no `category`.
+      await fetchCategories();
+      return true;
     } catch (e) {
       debugPrint("Error creating category: $e");
     }
@@ -349,7 +360,7 @@ class LeadsProvider extends ChangeNotifier {
     try {
       final res = await _authRepo.deleteContactCategory(id);
       if (res.success) {
-        _categories.removeWhere((c) => c.id == id);
+        _categories = _categories.where((c) => c.id != id).toList();
 
         // Clear category from leads locally
         for (int i = 0; i < _leads.length; i++) {
@@ -466,7 +477,9 @@ class LeadsProvider extends ChangeNotifier {
           'type': 'catalog_order',
           'catalogType': order.catalogType,
           'title': order.catalogType,
-          'body': '${order.customerName} ordered: ${order.itemsSummary}',
+          'body': order.hasToken
+              ? '${order.tokenLabel} · ${order.customerName} ordered: ${order.itemsSummary}'
+              : '${order.customerName} ordered: ${order.itemsSummary}',
           'time': _formatOrderTime(order.createdAt?.toIso8601String()),
           'isRead': order.isRead,
         });
@@ -561,5 +574,27 @@ class LeadsProvider extends ChangeNotifier {
     if (_activities.length > 20) {
       _activities.removeLast();
     }
+  }
+
+  Map<String, dynamic>? _asStringMap(dynamic value) {
+    if (value is Map<String, dynamic>) return value;
+    if (value is Map) return Map<String, dynamic>.from(value);
+    return null;
+  }
+
+  ContactCategory? _categoryFromJson(dynamic value) {
+    final map = _asStringMap(value);
+    if (map == null) return null;
+    final category = ContactCategory.fromJson(map);
+    if (category.id.isEmpty && category.name.isEmpty) return null;
+    return category;
+  }
+
+  ContactCategory? _categoryFromResponse(dynamic payload) {
+    final map = _asStringMap(payload);
+    if (map == null) return null;
+    return _categoryFromJson(map['category']) ??
+        _categoryFromJson(map['data']) ??
+        _categoryFromJson(map);
   }
 }

@@ -20,12 +20,8 @@ class EInvoiceResultScreen extends StatelessWidget {
 
   static const String _zatcaLookupAr =
       'https://zatca.gov.sa/ar/eServices/Pages/TaxpayerLookup.aspx';
-  static const String _zatcaLookupEn =
-      'https://zatca.gov.sa/en/eServices/Pages/TaxpayerLookup.aspx';
   static const String _zatcaReportAr =
       'https://zatca.gov.sa/ar/eServices/Pages/SubmitaReport.aspx';
-  static const String _zatcaReportEn =
-      'https://zatca.gov.sa/en/eServices/Pages/SubmitaReport.aspx';
 
   Future<void> _copy(BuildContext context, String value) async {
     await Clipboard.setData(ClipboardData(text: value));
@@ -86,28 +82,18 @@ class EInvoiceResultScreen extends StatelessWidget {
     return raw;
   }
 
-  /// Official KSA invoice apps use a geometric Arabic sans (Tajawal-like).
-  /// Tajawal has 400 / 500 / 700 — map w600 to w700 so glyphs stay correct.
-  static TextStyle _style(
-    BuildContext context, {
+  /// Official KSA invoice apps always use Tajawal, even if the rest of
+  /// the app is in English.
+  static TextStyle _style({
     required double size,
     FontWeight weight = FontWeight.w400,
     Color color = Colors.black87,
     double height = 1.4,
   }) {
-    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
     final resolved = weight == FontWeight.w600 ? FontWeight.w700 : weight;
-    if (isArabic) {
-      return GoogleFonts.tajawal(
-        fontSize: size,
-        fontWeight: resolved,
-        color: color,
-        height: height,
-      );
-    }
-    return TextStyle(
+    return GoogleFonts.tajawal(
       fontSize: size,
-      fontWeight: weight,
+      fontWeight: resolved,
       color: color,
       height: height,
     );
@@ -115,13 +101,25 @@ class EInvoiceResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Localizations.override(
+      context: context,
+      locale: const Locale('ar'),
+      child: Builder(
+        builder: (context) {
+          return Directionality(
+            textDirection: TextDirection.rtl,
+            child: _buildArabicScaffold(context),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildArabicScaffold(BuildContext context) {
     final l10n = context.l10n;
     final timestamp = _displayTimestamp();
     final isValid = invoice.isValidTaxInvoice;
-    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
     final statusColor = isValid ? _successGreen : _errorRed;
-    final lookupUrl = isArabic ? _zatcaLookupAr : _zatcaLookupEn;
-    final reportUrl = isArabic ? _zatcaReportAr : _zatcaReportEn;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -129,7 +127,6 @@ class EInvoiceResultScreen extends StatelessWidget {
         title: Text(
           l10n.eInvoiceVerification,
           style: _style(
-            context,
             size: 16,
             weight: FontWeight.w500,
           ),
@@ -168,7 +165,6 @@ class EInvoiceResultScreen extends StatelessWidget {
             isValid ? l10n.validTaxInvoice : l10n.invalidTaxInvoice,
             textAlign: TextAlign.center,
             style: _style(
-              context,
               size: 22,
               weight: FontWeight.w700,
               height: 1.35,
@@ -203,7 +199,6 @@ class EInvoiceResultScreen extends StatelessWidget {
                           ? l10n.invoiceRegistered
                           : l10n.invoiceNotRegistered,
                       style: _style(
-                        context,
                         size: 12,
                         weight: FontWeight.w500,
                         color: isValid
@@ -217,8 +212,8 @@ class EInvoiceResultScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     invoice.sellerName,
+                    textAlign: TextAlign.start,
                     style: _style(
-                      context,
                       size: 18,
                       weight: FontWeight.w700,
                       height: 1.4,
@@ -260,7 +255,6 @@ class EInvoiceResultScreen extends StatelessWidget {
                 label: Text(
                   l10n.copyAllDetails,
                   style: _style(
-                    context,
                     size: 16,
                     weight: FontWeight.w700,
                     color: Colors.white,
@@ -285,7 +279,6 @@ class EInvoiceResultScreen extends StatelessWidget {
                 label: Text(
                   l10n.share,
                   style: _style(
-                    context,
                     size: 16,
                     weight: FontWeight.w500,
                   ),
@@ -304,11 +297,10 @@ class EInvoiceResultScreen extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: TextButton(
-                onPressed: () => _openUrl(lookupUrl),
+                onPressed: () => _openUrl(_zatcaLookupAr),
                 child: Text(
                   l10n.verifyVatRegistration,
                   style: _style(
-                    context,
                     size: 15,
                     weight: FontWeight.w500,
                     color: const Color(0xFF166534),
@@ -321,7 +313,7 @@ class EInvoiceResultScreen extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: FilledButton(
-                onPressed: () => _openUrl(reportUrl),
+                onPressed: () => _openUrl(_zatcaReportAr),
                 style: FilledButton.styleFrom(
                   backgroundColor: _successGreen,
                   foregroundColor: Colors.white,
@@ -332,7 +324,6 @@ class EInvoiceResultScreen extends StatelessWidget {
                 child: Text(
                   l10n.submitVatReport,
                   style: _style(
-                    context,
                     size: 16,
                     weight: FontWeight.w700,
                     color: Colors.white,
@@ -345,7 +336,7 @@ class EInvoiceResultScreen extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: OutlinedButton(
-                onPressed: () => _openUrl(lookupUrl),
+                onPressed: () => _openUrl(_zatcaLookupAr),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.black87,
                   side: BorderSide(color: Colors.black.withValues(alpha: 0.12)),
@@ -356,7 +347,6 @@ class EInvoiceResultScreen extends StatelessWidget {
                 child: Text(
                   l10n.verifyVatRegistration,
                   style: _style(
-                    context,
                     size: 15,
                     weight: FontWeight.w500,
                   ),
@@ -387,7 +377,6 @@ class _DetailField extends StatelessWidget {
         Text(
           label,
           style: EInvoiceResultScreen._style(
-            context,
             size: 13,
             weight: FontWeight.w400,
             color: EInvoiceResultScreen._labelGray,
@@ -397,7 +386,6 @@ class _DetailField extends StatelessWidget {
         Text(
           value,
           style: EInvoiceResultScreen._style(
-            context,
             size: 16,
             weight: FontWeight.w700,
             height: 1.35,

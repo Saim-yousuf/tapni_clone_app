@@ -11,9 +11,9 @@ class ContactCategory {
 
   factory ContactCategory.fromJson(Map<String, dynamic> json) {
     return ContactCategory(
-      id: json['id'] ?? json['_id'] ?? '',
-      name: json['name'] ?? '',
-      color: json['color'] ?? '',
+      id: (json['id'] ?? json['_id'] ?? '').toString(),
+      name: (json['name'] ?? '').toString(),
+      color: (json['color'] ?? '').toString(),
     );
   }
 }

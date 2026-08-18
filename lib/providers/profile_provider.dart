@@ -873,6 +873,43 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  int _reorderSaveToken = 0;
+
+  /// Reorders active profile links. [oldIndex] / [newIndex] refer to the
+  /// visible (active) list. Inactive links keep their relative order after.
+  void reorderSocialLinks(int oldIndex, int newIndex) {
+    if (oldIndex == newIndex) return;
+
+    final active = _profile.socialLinks.where((l) => l.isActive).toList();
+    final inactive = _profile.socialLinks.where((l) => !l.isActive).toList();
+    if (oldIndex < 0 || oldIndex >= active.length) return;
+    if (newIndex < 0 || newIndex >= active.length) return;
+
+    final item = active.removeAt(oldIndex);
+    newIndex = newIndex.clamp(0, active.length);
+    active.insert(newIndex, item);
+
+    _profile = _profile.copyWith(socialLinks: [...active, ...inactive]);
+    notifyListeners();
+
+    final token = ++_reorderSaveToken;
+    Future.delayed(const Duration(milliseconds: 400), () {
+      if (token != _reorderSaveToken) return;
+      _persistLinkOrder();
+    });
+  }
+
+  Future<void> _persistLinkOrder() async {
+    try {
+      final repo = AuthRepo();
+      await repo.updateProfile(
+        jsonBody: {
+          'links': _profile.socialLinks.map((link) => link.toApiJson()).toList(),
+        },
+      );
+    } catch (_) {}
+  }
+
   void incrementViews() {
     _profile = _profile.copyWith(viewsCount: _profile.viewsCount + 1);
     notifyListeners();

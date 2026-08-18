@@ -1278,7 +1278,7 @@ abstract class AppLocalizations {
   /// No description provided for @customerNoShow.
   ///
   /// In en, this message translates to:
-  /// **'Customer No Show'**
+  /// **'Unattended'**
   String get customerNoShow;
 
   /// No description provided for @customerOrders.
@@ -3467,6 +3467,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add links to your profile below '**
   String get addLinksToYourProfileBelow2;
+
+  /// No description provided for @holdAndDragToReorderLinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold and drag to reorder'**
+  String get holdAndDragToReorderLinks;
 
   /// No description provided for @addPhoto.
   ///
@@ -5866,8 +5872,32 @@ abstract class AppLocalizations {
   /// No description provided for @searchCountry.
   ///
   /// In en, this message translates to:
-  /// **'Search country'**
+  /// **'Search for country'**
   String get searchCountry;
+
+  /// No description provided for @selectCountryHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your country so we can show the right options for your region.'**
+  String get selectCountryHelper;
+
+  /// No description provided for @searchCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for category'**
+  String get searchCategory;
+
+  /// No description provided for @selectCategoryHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the category that best describes your business.'**
+  String get selectCategoryHelper;
+
+  /// No description provided for @noCategoriesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories found'**
+  String get noCategoriesFound;
 
   /// No description provided for @noCountriesFound.
   ///

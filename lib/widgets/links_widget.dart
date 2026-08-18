@@ -7,6 +7,8 @@ import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/contact_card_sheet.dart' as contact_card;
@@ -117,9 +119,13 @@ class LinkSheet {
                             final query = searchController.text
                                 .trim()
                                 .toLowerCase();
+                            final countryFiltered = filterCatalogByUserCountry(
+                              watchedProvider.linkCatalog,
+                              _userCountry(watchedProvider),
+                            );
                             final catalog = query.isEmpty
-                                ? watchedProvider.linkCatalog
-                                : watchedProvider.linkCatalog
+                                ? countryFiltered
+                                : countryFiltered
                                       .map((category) {
                                         final templates = category.templates
                                             .where(
@@ -308,6 +314,15 @@ class LinkSheet {
           ),
         ],
       ),
+    );
+  }
+
+  String? _userCountry(ProfileProvider provider) {
+    final fromProfile = provider.profile.country?.trim();
+    if (fromProfile != null && fromProfile.isNotEmpty) return fromProfile;
+    return regionKeyFromPhone(
+      provider.profile.phone,
+      regionOptions: Constants.countries,
     );
   }
 

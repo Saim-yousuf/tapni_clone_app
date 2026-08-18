@@ -93,7 +93,7 @@ class UserProfile {
   Map<String, dynamic> toApiJson() {
     return {
       'name': name,
-      'email': email,
+      if (email.trim().isNotEmpty) 'email': email,
       'bio': bio,
       'country': country,
       'isPublic': isPublic,

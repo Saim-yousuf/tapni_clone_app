@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/phone_utils.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/country_picker_sheet.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 class PhoneAuthScreen extends StatefulWidget {
@@ -76,10 +77,9 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   }
 
   Future<void> _pickCountry() async {
-    final selected = await Navigator.of(context).push<CountryDialCode>(
-      MaterialPageRoute(
-        builder: (_) => _CountryPickerScreen(selectedIso: _country.iso),
-      ),
+    final selected = await showCountryPickerSheet(
+      context,
+      selectedIso: _country.iso,
     );
     if (selected != null) {
       setState(() => _country = selected);
@@ -225,111 +225,6 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _CountryPickerScreen extends StatefulWidget {
-  const _CountryPickerScreen({required this.selectedIso});
-
-  final String selectedIso;
-
-  @override
-  State<_CountryPickerScreen> createState() => _CountryPickerScreenState();
-}
-
-class _CountryPickerScreenState extends State<_CountryPickerScreen> {
-  final _searchController = TextEditingController();
-  String _query = '';
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  List<CountryDialCode> get _filtered {
-    final q = _query.trim().toLowerCase();
-    if (q.isEmpty) return kCountryDialCodes;
-    return kCountryDialCodes.where((c) {
-      return c.name.toLowerCase().contains(q) ||
-          c.code.contains(q) ||
-          c.iso.toLowerCase().contains(q);
-    }).toList();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final countries = _filtered;
-
-    return Scaffold(
-      backgroundColor: WaUi.toolsScaffold,
-      appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        foregroundColor: WaUi.primaryText,
-        title: Text(context.l10n.chooseACountry, style: WaUi.headline),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-            child: TextField(
-              controller: _searchController,
-              style: WaUi.body,
-              cursorColor: AppTheme.primaryBlack,
-              decoration: InputDecoration(
-                hintText: context.l10n.searchCountry,
-                hintStyle: WaUi.body.copyWith(color: WaUi.secondaryText),
-                prefixIcon: const Icon(Icons.search, color: WaUi.secondaryText),
-                filled: true,
-                fillColor: WaUi.navPill,
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(WaUi.radiusPill),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (value) => setState(() => _query = value),
-            ),
-          ),
-          Expanded(
-            child: countries.isEmpty
-                ? Center(
-                    child: Text(context.l10n.noCountriesFound, style: WaUi.caption),
-                  )
-                : ListView.separated(
-                    itemCount: countries.length,
-                    separatorBuilder: (_, __) => const Divider(
-                      height: 1,
-                      color: WaUi.divider,
-                    ),
-                    itemBuilder: (context, index) {
-                      final c = countries[index];
-                      final selected = c.iso == widget.selectedIso;
-                      return ListTile(
-                        title: Text(c.name, style: WaUi.listTitle),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(c.code, style: WaUi.listSubtitle),
-                            if (selected) ...[
-                              const SizedBox(width: 8),
-                              const Icon(
-                                Icons.check,
-                                color: AppTheme.primaryBlack,
-                                size: 20,
-                              ),
-                            ],
-                          ],
-                        ),
-                        onTap: () => Navigator.pop(context, c),
-                      );
-                    },
-                  ),
-          ),
-        ],
       ),
     );
   }

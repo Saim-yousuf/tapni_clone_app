@@ -1734,6 +1734,9 @@ class AppLocalizationsTa extends AppLocalizations {
       'கீழே உங்கள் சுயவிவரத்திற்கான இணைப்புகளைச் சேர்க்கவும்';
 
   @override
+  String get holdAndDragToReorderLinks => 'Hold and drag to reorder';
+
+  @override
   String get addPhoto => 'புகைப்படத்தைச் சேர்க்கவும்';
 
   @override
@@ -3016,7 +3019,21 @@ class AppLocalizationsTa extends AppLocalizations {
   String get chooseACountry => 'Choose a country';
 
   @override
-  String get searchCountry => 'Search country';
+  String get searchCountry => 'Search for country';
+
+  @override
+  String get selectCountryHelper =>
+      'Select your country so we can show the right options for your region.';
+
+  @override
+  String get searchCategory => 'Search for category';
+
+  @override
+  String get selectCategoryHelper =>
+      'Select the category that best describes your business.';
+
+  @override
+  String get noCategoriesFound => 'No categories found';
 
   @override
   String get noCountriesFound => 'No countries found';

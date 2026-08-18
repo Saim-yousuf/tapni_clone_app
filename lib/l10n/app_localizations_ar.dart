@@ -1694,6 +1694,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addLinksToYourProfileBelow2 => 'أضف الروابط إلى ملفك أدناه ';
 
   @override
+  String get holdAndDragToReorderLinks => 'Hold and drag to reorder';
+
+  @override
   String get addPhoto => 'إضافة صورة';
 
   @override
@@ -2953,6 +2956,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get searchCountry => 'ابحث عن دولة';
+
+  @override
+  String get selectCountryHelper =>
+      'اختر دولتك حتى نعرض الخيارات المناسبة لمنطقتك.';
+
+  @override
+  String get searchCategory => 'ابحث عن فئة';
+
+  @override
+  String get selectCategoryHelper => 'اختر الفئة التي تصف نشاطك بشكل أفضل.';
+
+  @override
+  String get noCategoriesFound => 'لم يتم العثور على فئات';
 
   @override
   String get noCountriesFound => 'لم يتم العثور على دول';

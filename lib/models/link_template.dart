@@ -18,6 +18,18 @@ class LinkCategory {
           .toList(),
     );
   }
+
+  LinkCategory copyWith({
+    String? id,
+    String? name,
+    List<LinkTemplate>? templates,
+  }) {
+    return LinkCategory(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      templates: templates ?? this.templates,
+    );
+  }
 }
 
 class LinkTemplate {
@@ -33,6 +45,7 @@ class LinkTemplate {
   final bool isSystem;
   final String actionType;
   final String? catalogType;
+  final String country;
 
   LinkTemplate({
     required this.id,
@@ -47,6 +60,7 @@ class LinkTemplate {
     required this.isSystem,
     required this.actionType,
     this.catalogType,
+    this.country = '',
   });
 
   factory LinkTemplate.fromJson(Map<String, dynamic> json) {
@@ -63,6 +77,32 @@ class LinkTemplate {
       isSystem: json['isSystem'] as bool? ?? false,
       actionType: json['actionType']?.toString() ?? 'link',
       catalogType: json['catalogType']?.toString(),
+      country: json['country']?.toString() ?? '',
     );
   }
+}
+
+bool isBankVisibleToUser(LinkTemplate template, String? userCountry) {
+  if (template.fieldType != 'bank' || template.isSystem) return true;
+  final country = (userCountry ?? '').trim().toLowerCase();
+  if (country.isEmpty) return true;
+  final bankCountry = template.country.trim().toLowerCase();
+  if (bankCountry.isEmpty) return false;
+  return bankCountry == country;
+}
+
+List<LinkCategory> filterCatalogByUserCountry(
+  List<LinkCategory> catalog,
+  String? userCountry,
+) {
+  return catalog
+      .map(
+        (category) => category.copyWith(
+          templates: category.templates
+              .where((template) => isBankVisibleToUser(template, userCountry))
+              .toList(),
+        ),
+      )
+      .where((category) => category.templates.isNotEmpty)
+      .toList();
 }

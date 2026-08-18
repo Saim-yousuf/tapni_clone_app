@@ -101,6 +101,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _StatusBanner(status: _order!.status),
+                  if (_order!.hasToken) ...[
+                    SizedBox(height: 16),
+                    _TokenBanner(tokenNumber: _order!.tokenNumber),
+                  ],
                   SizedBox(height: 20),
                   _SectionTitle(
                     widget.isBusinessView
@@ -131,6 +135,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   SizedBox(height: 24),
                   _SectionTitle(context.l10n.orderInfo),
                   SizedBox(height: 10),
+                  if (_order!.hasToken)
+                    _InfoRow(label: 'Token', value: '#${_order!.tokenNumber}'),
                   _InfoRow(label: context.l10n.orderID, value: '#${_order!.id.substring(_order!.id.length > 6 ? _order!.id.length - 6 : 0)}'),
                   _InfoRow(label: context.l10n.type, value: CatalogHelper.typeLabel(_order!.catalogType, context.l10n)),
                   _InfoRow(label: context.l10n.status, value: CatalogHelper.statusLabel(_order!.status, context.l10n)),
@@ -251,6 +257,45 @@ class _SectionTitle extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    );
+  }
+}
+
+class _TokenBanner extends StatelessWidget {
+  final int tokenNumber;
+  const _TokenBanner({required this.tokenNumber});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+      decoration: BoxDecoration(
+        color: AppTheme.primaryBlack,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Token',
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.7),
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '#$tokenNumber',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 36,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -560,7 +560,7 @@ class AppLocalizationsSi extends AppLocalizations {
   String get customerIsNotEnrolledYet => 'පාරිභෝගිකයා තවමත් ලියාපදිංචි වී නැත';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Unattended';
 
   @override
   String get customerOrders => 'පාරිභෝගික ඇණවුම්';
@@ -1717,6 +1717,9 @@ class AppLocalizationsSi extends AppLocalizations {
   @override
   String get addLinksToYourProfileBelow2 =>
       'පහතින් ඔබගේ පැතිකඩ වෙත සබැඳි එක් කරන්න';
+
+  @override
+  String get holdAndDragToReorderLinks => 'Hold and drag to reorder';
 
   @override
   String get addPhoto => 'ඡායාරූපය එක් කරන්න';
@@ -2998,7 +3001,21 @@ class AppLocalizationsSi extends AppLocalizations {
   String get chooseACountry => 'Choose a country';
 
   @override
-  String get searchCountry => 'Search country';
+  String get searchCountry => 'Search for country';
+
+  @override
+  String get selectCountryHelper =>
+      'Select your country so we can show the right options for your region.';
+
+  @override
+  String get searchCategory => 'Search for category';
+
+  @override
+  String get selectCategoryHelper =>
+      'Select the category that best describes your business.';
+
+  @override
+  String get noCategoriesFound => 'No categories found';
 
   @override
   String get noCountriesFound => 'No countries found';
@@ -4231,7 +4248,7 @@ class AppLocalizationsSiLk extends AppLocalizationsSi {
   String get customerIsNotEnrolledYet => 'පාරිභෝගිකයා තවමත් ලියාපදිංචි වී නැත';
 
   @override
-  String get customerNoShow => 'Customer No Show';
+  String get customerNoShow => 'Unattended';
 
   @override
   String get customerOrders => 'පාරිභෝගික ඇණවුම්';

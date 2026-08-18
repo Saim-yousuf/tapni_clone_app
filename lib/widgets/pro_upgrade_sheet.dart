@@ -5,8 +5,10 @@ import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
+import 'package:tapni_app/utils/business_categories.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/radio_option_picker_sheet.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,17 +41,6 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
   int _step = 0; // 0 = intro, 1 = Business Details, 2 = Plan Selection
   final _businessNameController = TextEditingController();
   String? _selectedCategory;
-  final List<String> _categories = const [
-    'Technology',
-    'Retail',
-    'Health',
-    'Education',
-    'Finance',
-    'Real Estate',
-    'Food & Beverage',
-    'Entertainment',
-    'Other',
-  ];
   bool _isSavingBusinessData = false;
 
   @override
@@ -61,7 +52,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
         listen: false,
       ).profile;
       _businessNameController.text = profile.businessName ?? '';
-      if (_categories.contains(profile.businessCategory)) {
+      if (kBusinessCategories.contains(profile.businessCategory)) {
         _selectedCategory = profile.businessCategory;
       }
       setState(() {});
@@ -432,22 +423,12 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           ),
         ),
         SizedBox(height: 16),
-        DropdownButtonFormField<String>(
-          value: _selectedCategory,
-          decoration: WaUi.fieldDecoration(
-            labelText: context.l10n.businessCategory,
-          ),
-          items: _categories.map((category) {
-            return DropdownMenuItem(
-              value: category,
-              child: Text(_industryLabel(context, category)),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              _selectedCategory = value;
-            });
-          },
+        RadioPickerField(
+          labelText: context.l10n.businessCategory,
+          valueText: _selectedCategory == null
+              ? null
+              : businessCategoryLabel(context, _selectedCategory!),
+          onTap: _pickBusinessCategory,
         ),
         SizedBox(height: 24),
         WaPrimaryButton(
@@ -720,34 +701,28 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
     );
   }
 
+  Future<void> _pickBusinessCategory() async {
+    final selected = await showRadioOptionPickerSheet(
+      context: context,
+      options: [
+        for (final category in kBusinessCategories)
+          RadioPickerOption(
+            id: category,
+            label: businessCategoryLabel(context, category),
+          ),
+      ],
+      selectedId: _selectedCategory,
+      searchHint: context.l10n.searchCategory,
+      helperText: context.l10n.selectCategoryHelper,
+      emptyText: context.l10n.noCategoriesFound,
+    );
+    if (selected == null || !mounted) return;
+    setState(() => _selectedCategory = selected);
+  }
+
   String _date(DateTime? value) {
     if (value == null) return '--';
     return '${value.day}/${value.month}/${value.year}';
-  }
-
-  String _industryLabel(BuildContext context, String category) {
-    switch (category) {
-      case 'Technology':
-        return context.l10n.industryTechnology;
-      case 'Retail':
-        return context.l10n.industryRetail;
-      case 'Health':
-        return context.l10n.industryHealthcare;
-      case 'Education':
-        return context.l10n.industryEducation;
-      case 'Finance':
-        return context.l10n.industryFinance;
-      case 'Real Estate':
-        return context.l10n.realEstate;
-      case 'Food & Beverage':
-        return context.l10n.foodBeverage;
-      case 'Entertainment':
-        return context.l10n.industryEntertainment;
-      case 'Other':
-        return context.l10n.industryOther;
-      default:
-        return category;
-    }
   }
 }
 

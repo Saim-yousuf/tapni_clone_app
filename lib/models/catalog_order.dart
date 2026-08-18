@@ -18,6 +18,7 @@ class CatalogOrder {
   final String? bookingTime;
   final OrderStatus status;
   final bool isRead;
+  final int tokenNumber;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -39,6 +40,7 @@ class CatalogOrder {
     this.bookingTime,
     this.status = OrderStatus.pending,
     this.isRead = false,
+    this.tokenNumber = 0,
     this.createdAt,
     this.updatedAt,
   });
@@ -66,6 +68,7 @@ class CatalogOrder {
       bookingTime: json['bookingTime']?.toString(),
       status: _parseStatus(json['status']?.toString()),
       isRead: json['isRead'] as bool? ?? false,
+      tokenNumber: _parseToken(json['tokenNumber']),
       createdAt: _parseDate(json['createdAt']),
       updatedAt: _parseDate(json['updatedAt']),
     );
@@ -82,6 +85,11 @@ class CatalogOrder {
       default:
         return OrderStatus.pending;
     }
+  }
+
+  static int _parseToken(dynamic value) {
+    if (value is num) return value.toInt();
+    return int.tryParse(value?.toString() ?? '') ?? 0;
   }
 
   static DateTime? _parseDate(dynamic value) {
@@ -108,6 +116,19 @@ class CatalogOrder {
 
   String get itemsSummary =>
       items.map((e) => '${e.quantity}x ${e.name}').join(', ');
+
+  bool get hasToken => tokenNumber > 0;
+
+  String get tokenLabel => hasToken ? 'Token #$tokenNumber' : '';
+
+  static int tokenFromApi(dynamic data) {
+    if (data is! Map) return 0;
+    final payload = data['data'] is Map ? data['data'] : data;
+    if (payload is! Map) return 0;
+    final value = payload['tokenNumber'];
+    if (value is num) return value.toInt();
+    return int.tryParse(value?.toString() ?? '') ?? 0;
+  }
 }
 
 class CatalogOrderLineItem {

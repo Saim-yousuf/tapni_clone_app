@@ -557,7 +557,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get customerIsNotEnrolledYet => 'کسٹمر نے ابھی تک اندراج نہیں کیا ہے';
 
   @override
-  String get customerNoShow => 'کسٹمر نمبر شو';
+  String get customerNoShow => 'غیر حاضر';
 
   @override
   String get customerOrders => 'کسٹمر کے آرڈرز';
@@ -1716,6 +1716,9 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get addLinksToYourProfileBelow2 =>
       'نیچے اپنے پروفائل میں لنکس شامل کریں۔';
+
+  @override
+  String get holdAndDragToReorderLinks => 'آرڈر بدلنے کے لیے دبا کر گھسیٹیں';
 
   @override
   String get addPhoto => 'تصویر شامل کریں۔';
@@ -2992,7 +2995,21 @@ class AppLocalizationsUr extends AppLocalizations {
   String get chooseACountry => 'Choose a country';
 
   @override
-  String get searchCountry => 'Search country';
+  String get searchCountry => 'Search for country';
+
+  @override
+  String get selectCountryHelper =>
+      'Select your country so we can show the right options for your region.';
+
+  @override
+  String get searchCategory => 'Search for category';
+
+  @override
+  String get selectCategoryHelper =>
+      'Select the category that best describes your business.';
+
+  @override
+  String get noCategoriesFound => 'No categories found';
 
   @override
   String get noCountriesFound => 'No countries found';

@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/loyalty_template_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
+import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 
 /// Browse loyalty stamp-card templates (curated + community).
 class LoyaltyTemplateGalleryScreen extends StatefulWidget {
@@ -162,12 +163,12 @@ class _LoyaltyTemplateGalleryScreenState
           ),
           const SizedBox(height: 12),
           SizedBox(
-            height: 40,
+            height: 42,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
               children: [
-                _Chip(
+                WaPillFilterChip(
                   label: context.l10n.all,
                   selected: _category == null,
                   onTap: () {
@@ -176,7 +177,7 @@ class _LoyaltyTemplateGalleryScreenState
                   },
                 ),
                 ...LoyaltyTemplateCatalog.categories.map((c) {
-                  return _Chip(
+                  return WaPillFilterChip(
                     label: preferAr ? (c['nameAr'] ?? c['name']!) : c['name']!,
                     selected: _category == c['id'],
                     onTap: () {
@@ -303,37 +304,6 @@ class _LoyaltyTemplateGalleryScreenState
           ),
         );
       },
-    );
-  }
-}
-
-class _Chip extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _Chip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: ChoiceChip(
-        label: Text(label),
-        selected: selected,
-        onSelected: (_) => onTap(),
-        selectedColor: WaUi.chipSelected,
-        backgroundColor: WaUi.surface,
-        side: BorderSide(color: WaUi.chipBorder),
-        labelStyle: WaUi.label.copyWith(
-          color: WaUi.primaryText,
-          fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-        ),
-      ),
     );
   }
 }

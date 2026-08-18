@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/invitation_template_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
+import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 
 /// Browse invitation templates by country and category (Canva-style start).
 class TemplateGalleryScreen extends StatefulWidget {
@@ -152,23 +153,29 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
           ),
           const SizedBox(height: 8),
           SizedBox(
-            height: 40,
+            height: 42,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
               children: [
-                _Chip(
+                WaPillFilterChip(
                   label: context.l10n.all,
                   selected: _country == null,
+                  selectedColor: WaUi.chipBg,
                   onTap: () {
                     _country = null;
                     _onFilterChanged();
                   },
                 ),
                 ...InvitationTemplateCatalog.countries.map((c) {
-                  return _Chip(
-                    label: '${c['flag']} ${c['name']}',
+                  return WaPillFilterChip(
+                    label: c['name']!,
                     selected: _country == c['code'],
+                    selectedColor: WaUi.chipBg,
+                    leading: Text(
+                      c['flag']!,
+                      style: const TextStyle(fontSize: 14, height: 1),
+                    ),
                     onTap: () {
                       _country = c['code'];
                       _onFilterChanged();
@@ -178,30 +185,32 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(context.l10n.categoryLabel, style: WaUi.label),
           ),
           const SizedBox(height: 8),
           SizedBox(
-            height: 40,
+            height: 42,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
               children: [
-                _Chip(
+                WaPillFilterChip(
                   label: context.l10n.all,
                   selected: _category == null,
+                  selectedColor: WaUi.chipBg,
                   onTap: () {
                     _category = null;
                     _onFilterChanged();
                   },
                 ),
                 ...InvitationTemplateCatalog.categories.map((c) {
-                  return _Chip(
+                  return WaPillFilterChip(
                     label: c['name']!,
                     selected: _category == c['id'],
+                    selectedColor: WaUi.chipBg,
                     onTap: () {
                       _category = c['id'];
                       _onFilterChanged();
@@ -352,39 +361,6 @@ class _CommunityGrid extends StatelessWidget {
           final t = templates[i];
           return _CommunityCard(template: t, onTap: () => onOpen(t));
         },
-      ),
-    );
-  }
-}
-
-class _Chip extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _Chip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: ChoiceChip(
-        label: Text(label, style: const TextStyle(fontSize: 13)),
-        selected: selected,
-        onSelected: (_) => onTap(),
-        selectedColor: WaUi.chipBg,
-        backgroundColor: WaUi.surface,
-        side: BorderSide(
-          color: selected ? WaUi.accent : WaUi.chipBorder,
-        ),
-        labelStyle: TextStyle(
-          color: WaUi.primaryText,
-          fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-        ),
       ),
     );
   }

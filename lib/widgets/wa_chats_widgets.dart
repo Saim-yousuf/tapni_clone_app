@@ -137,6 +137,74 @@ class WaChatSearchBar extends StatelessWidget {
   }
 }
 
+class WaPillFilterChip extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  final Widget? leading;
+  final Color? selectedColor;
+  final Color? borderColor;
+  final Color? selectedBorderColor;
+
+  const WaPillFilterChip({
+    super.key,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    this.leading,
+    this.selectedColor,
+    this.borderColor,
+    this.selectedBorderColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final fill = selected
+        ? (selectedColor ?? WaUi.chipSelected)
+        : Colors.transparent;
+    final outline = selected
+        ? (selectedBorderColor ?? selectedColor ?? WaUi.chipSelected)
+        : (borderColor ?? WaUi.chipBorder);
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(WaUi.radiusPill),
+          child: Container(
+            height: 34,
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              color: fill,
+              borderRadius: BorderRadius.circular(WaUi.radiusPill),
+              border: Border.all(color: outline),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (leading != null) ...[
+                  leading!,
+                  const SizedBox(width: 6),
+                ],
+                Text(
+                  label,
+                  style: WaUi.body.copyWith(
+                    fontSize: 14,
+                    fontWeight: selected ? FontWeight.w500 : FontWeight.w400,
+                    color: WaUi.primaryText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class WaContactFilterChips extends StatelessWidget {
   final List<ContactCategory> categories;
   final String? activeCategoryId;
@@ -161,7 +229,7 @@ class WaContactFilterChips extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
         children: [
-          _chip(
+          WaPillFilterChip(
             label: context.l10n.all,
             selected: activeCategoryId == null,
             onTap: onAllTap,
@@ -173,10 +241,17 @@ class WaContactFilterChips extends StatelessWidget {
             } catch (_) {
               color = WaUi.secondaryText;
             }
-            return _chip(
+            return WaPillFilterChip(
               label: category.name,
               selected: activeCategoryId == category.id,
-              dotColor: color,
+              leading: Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                ),
+              ),
               onTap: () => onCategoryTap(category.id),
             );
           }),
@@ -205,59 +280,6 @@ class WaContactFilterChips extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _chip({
-    required String label,
-    required bool selected,
-    required VoidCallback onTap,
-    Color? dotColor,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(WaUi.radiusPill),
-          child: Container(
-            height: 34,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            decoration: BoxDecoration(
-              color: selected ? WaUi.chipSelected : Colors.transparent,
-              borderRadius: BorderRadius.circular(WaUi.radiusPill),
-              border: Border.all(
-                color: selected ? WaUi.chipSelected : WaUi.chipBorder,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (dotColor != null) ...[
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: dotColor,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                ],
-                Text(
-                  label,
-                  style: WaUi.body.copyWith(
-                    fontSize: 14,
-                    fontWeight: selected ? FontWeight.w500 : FontWeight.w400,
-                    color: WaUi.primaryText,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

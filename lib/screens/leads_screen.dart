@@ -27,10 +27,27 @@ class _LeadsScreenState extends State<LeadsScreen> {
   final _searchFocus = FocusNode();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<LeadsProvider>().fetchCategories();
+    });
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     _searchFocus.dispose();
     super.dispose();
+  }
+
+  Future<void> _refreshContacts() {
+    final provider = context.read<LeadsProvider>();
+    return Future.wait([
+      provider.fetchLeads(),
+      provider.fetchCategories(),
+    ]);
   }
 
   void _dismissKeyboard() {
@@ -133,7 +150,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     ? const Center(child: CircularProgressIndicator())
                     : RefreshIndicator(
                         color: WaUi.accent,
-                        onRefresh: leadsProvider.fetchLeads,
+                        onRefresh: _refreshContacts,
                         child: CustomScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           slivers: [
@@ -156,7 +173,12 @@ class _LeadsScreenState extends State<LeadsScreen> {
                             ),
                             SliverToBoxAdapter(
                               child: WaContactFilterChips(
-                                categories: leadsProvider.categories,
+                                key: ValueKey(
+                                  leadsProvider.categories
+                                      .map((c) => c.id)
+                                      .join(','),
+                                ),
+                                categories: List.of(leadsProvider.categories),
                                 activeCategoryId:
                                     leadsProvider.activeCategoryId,
                                 onAllTap: () =>

@@ -247,6 +247,26 @@ class _OrderTile extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  if (order.hasToken) ...[
+                    Container(
+                      width: 48,
+                      height: 48,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryBlack,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '${order.tokenNumber}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                   Text(
                     context.l10n.rsAmount(order.totalAmount.toStringAsFixed(0)),
                     style: const TextStyle(fontWeight: FontWeight.bold),

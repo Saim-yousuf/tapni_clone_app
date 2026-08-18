@@ -1724,6 +1724,9 @@ class AppLocalizationsKk extends AppLocalizations {
       'Төменде профиліңізге сілтемелер қосыңыз';
 
   @override
+  String get holdAndDragToReorderLinks => 'Hold and drag to reorder';
+
+  @override
   String get addPhoto => 'Фото қосу';
 
   @override
@@ -3000,7 +3003,21 @@ class AppLocalizationsKk extends AppLocalizations {
   String get chooseACountry => 'Choose a country';
 
   @override
-  String get searchCountry => 'Search country';
+  String get searchCountry => 'Search for country';
+
+  @override
+  String get selectCountryHelper =>
+      'Select your country so we can show the right options for your region.';
+
+  @override
+  String get searchCategory => 'Search for category';
+
+  @override
+  String get selectCategoryHelper =>
+      'Select the category that best describes your business.';
+
+  @override
+  String get noCategoriesFound => 'No categories found';
 
   @override
   String get noCountriesFound => 'No countries found';

@@ -2,10 +2,12 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/models/profile.dart';
+import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/progress_score_card.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
@@ -39,6 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   File? coverImageFile;
   bool _showProfileStrengthCard = false;
   bool _didResolveStrengthCard = false;
+  bool _isReorderingLink = false;
 
   @override
   void initState() {
@@ -359,6 +362,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
+        physics: _isReorderingLink
+            ? const NeverScrollableScrollPhysics()
+            : null,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -605,13 +611,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   Center(
-                    child: Text(
-                      context.l10n.addLinksToYourProfileBelow2,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          context.l10n.addLinksToYourProfileBelow2,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        if (profile.socialLinks.any((l) => l.isActive)) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            context.l10n.holdAndDragToReorderLinks,
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
 
@@ -773,98 +794,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
           runSpacing: 16,
           alignment: WrapAlignment.center,
           children: [
-            ...activeLinks.map((link) {
+            ...activeLinks.asMap().entries.map((entry) {
+              final index = entry.key;
+              final link = entry.value;
+              final cell = _buildLinkCell(
+                link: link,
+                cellWidth: cellWidth,
+                iconSize: iconSize,
+                radius: radius,
+                isEditable: isEditable,
+                profileProvider: profileProvider,
+              );
+
+              if (!isEditable) {
+                return SizedBox(width: cellWidth, child: cell);
+              }
+
               return SizedBox(
                 width: cellWidth,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.topCenter,
-                  children: [
-                    GestureDetector(
-                      onTap: isEditable
-                          ? () => LinkSheet().showExistingLinkBottomSheet(
-                              context,
-                              link,
-                              profileProvider,
-                            )
-                          : () {
-                              Launcher.openLink(link, context);
-                            },
-                      child: Column(
-                        children: [
-                          Container(
-                            width: iconSize,
-                            height: iconSize,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(radius),
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: 1,
+                child: DragTarget<int>(
+                  onWillAcceptWithDetails: (details) => details.data != index,
+                  onAcceptWithDetails: (details) {
+                    HapticFeedback.selectionClick();
+                    profileProvider.reorderSocialLinks(details.data, index);
+                  },
+                  builder: (context, candidateData, rejectedData) {
+                    final isDropTarget = candidateData.isNotEmpty;
+                    return AnimatedScale(
+                      scale: isDropTarget ? 0.92 : 1,
+                      duration: const Duration(milliseconds: 120),
+                      child: LongPressDraggable<int>(
+                        data: index,
+                        delay: const Duration(milliseconds: 180),
+                        hapticFeedbackOnStart: true,
+                        onDragStarted: () {
+                          setState(() => _isReorderingLink = true);
+                        },
+                        onDragEnd: (_) {
+                          setState(() => _isReorderingLink = false);
+                        },
+                        feedback: Material(
+                          color: Colors.transparent,
+                          elevation: 8,
+                          borderRadius: BorderRadius.circular(radius),
+                          child: SizedBox(
+                            width: cellWidth,
+                            child: Opacity(
+                              opacity: 0.92,
+                              child: _buildLinkCell(
+                                link: link,
+                                cellWidth: cellWidth,
+                                iconSize: iconSize,
+                                radius: radius,
+                                isEditable: true,
+                                profileProvider: profileProvider,
+                                showEditBadge: false,
                               ),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(radius - 1),
-                              child: Image.network(
-                                link.logoUrl ?? "",
-                                fit: BoxFit.cover,
-                                width: iconSize,
-                                height: iconSize,
-                                alignment: Alignment.center,
-                                errorBuilder: (_, __, ___) => const Center(
-                                  child: Icon(Icons.link, size: 32),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            link.platformName,
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (isEditable)
-                      Positioned(
-                        top: -4,
-                        right: (cellWidth - iconSize) / 2 - 2,
-                        child: GestureDetector(
-                          onTap: () =>
-                              LinkSheet().showExistingLinkBottomSheet(
-                            context,
-                            link,
-                            profileProvider,
-                          ),
-                          child: Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.12),
-                                  blurRadius: 4,
-                                ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.edit,
-                              size: 12,
-                              color: Colors.black54,
                             ),
                           ),
                         ),
+                        childWhenDragging: Opacity(
+                          opacity: 0.28,
+                          child: cell,
+                        ),
+                        child: cell,
                       ),
-                  ],
+                    );
+                  },
                 ),
               );
             }),
@@ -897,6 +893,114 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildLinkCell({
+    required SocialLink link,
+    required double cellWidth,
+    required double iconSize,
+    required double radius,
+    required bool isEditable,
+    required ProfileProvider profileProvider,
+    bool showEditBadge = true,
+  }) {
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.topCenter,
+      children: [
+        GestureDetector(
+          onTap: isEditable
+              ? () => LinkSheet().showExistingLinkBottomSheet(
+                  context,
+                  link,
+                  profileProvider,
+                )
+              : () {
+                  Launcher.openLink(link, context);
+                },
+          child: Column(
+            children: [
+              Container(
+                width: iconSize,
+                height: iconSize,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(radius),
+                  border: Border.all(
+                    color: Colors.grey.shade300,
+                    width: 1,
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(radius - 1),
+                  child: Image.network(
+                    link.logoUrl ?? "",
+                    fit: BoxFit.cover,
+                    width: iconSize,
+                    height: iconSize,
+                    alignment: Alignment.center,
+                    errorBuilder: (_, __, ___) => const Center(
+                      child: Icon(Icons.link, size: 32),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                link.platformName,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (isEditable) ...[
+                const SizedBox(height: 2),
+                const Icon(
+                  Icons.drag_indicator,
+                  size: 16,
+                  color: Colors.black38,
+                ),
+              ],
+            ],
+          ),
+        ),
+        if (isEditable && showEditBadge)
+          Positioned(
+            top: -4,
+            right: (cellWidth - iconSize) / 2 - 2,
+            child: GestureDetector(
+              onTap: () => LinkSheet().showExistingLinkBottomSheet(
+                context,
+                link,
+                profileProvider,
+              ),
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.12),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.edit,
+                  size: 12,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

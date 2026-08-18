@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/models/service_schedule.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/utils/theme.dart';
@@ -130,14 +131,13 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
     setState(() => _isBooking = false);
 
     if (res.success) {
+      final token = CatalogOrder.tokenFromApi(res.data);
+      final message = token > 0
+          ? 'Token #$token — ${context.l10n.bookedWith(widget.item.name, widget.businessName)}'
+          : context.l10n.bookedWith(widget.item.name, widget.businessName);
+      final messenger = ScaffoldMessenger.of(context);
       Navigator.pop(context, true);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.l10n.bookedWith(widget.item.name, widget.businessName),
-          ),
-        ),
-      );
+      messenger.showSnackBar(SnackBar(content: Text(message)));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(res.message ?? context.l10n.bookingFailed)),
