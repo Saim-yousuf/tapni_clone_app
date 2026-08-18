@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
 import 'package:tapni_app/screens/leads_screen.dart';
 import 'package:tapni_app/screens/profile_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/settings_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
+import 'package:tapni_app/screens/contacts_sync_screen.dart';
+import 'package:tapni_app/screens/caller_id_setup_screen.dart';
+import 'package:tapni_app/services/contacts_sync_service.dart';
+import 'package:tapni_app/services/caller_id_service.dart';
 import 'package:tapni_app/services/device_session_guard.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -24,12 +29,45 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   String? _currentPage;
+  bool _contactsPromptShown = false;
   @override
   void initState() {
     _currentPage = widget._currentPage ?? 'My Card';
     super.initState();
     DeviceSessionGuard.instance.start();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _loadCatalogNotifications());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _loadCatalogNotifications();
+      await _maybePromptContactsSync();
+      await CallerIdService.ensureDefaultEnabled();
+      await _maybePromptCallerId();
+    });
+  }
+
+  Future<void> _maybePromptContactsSync() async {
+    if (!mounted || _contactsPromptShown) return;
+    final userId =
+        Provider.of<AuthProvider>(context, listen: false).activeAccount?.userId ??
+            '';
+    if (userId.isEmpty || ContactsSyncService.wasPrompted(userId)) return;
+    _contactsPromptShown = true;
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const ContactsSyncScreen()),
+    );
+  }
+
+  Future<void> _maybePromptCallerId() async {
+    if (!mounted || !CallerIdService.isSupported) return;
+    if (!CallerIdService.isEnabled) return;
+    if (CallerIdService.wasPermissionPrompted) return;
+    if (await CallerIdService.hasAllPermissions()) {
+      await CallerIdService.syncNative();
+      return;
+    }
+    await CallerIdService.markPermissionPrompted();
+    if (!mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const CallerIdSetupScreen()),
+    );
   }
 
   void _loadCatalogNotifications() {

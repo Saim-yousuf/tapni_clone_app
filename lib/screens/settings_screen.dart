@@ -24,6 +24,8 @@ import 'package:tapni_app/screens/qr_code_screen.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/screens/set_username_screen.dart';
 import 'package:tapni_app/screens/workplace_screen.dart';
+import 'package:tapni_app/screens/contacts_sync_screen.dart';
+import 'package:tapni_app/screens/caller_id_setup_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/settings_widget.dart';
@@ -317,6 +319,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: context.l10n.shareQr,
               subtitle: context.l10n.shareQrSubtitle,
               onTap: () => SharingProfileSheet.show(context),
+            ),
+            WaToolsListTile(
+              icon: Icons.contacts_outlined,
+              title: context.l10n.syncContacts,
+              subtitle: context.l10n.syncContactsSubtitle,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const ContactsSyncScreen(fromSettings: true),
+                  ),
+                );
+              },
+            ),
+            WaToolsListTile(
+              icon: Icons.call_outlined,
+              title: context.l10n.callerIdTitle,
+              subtitle: context.l10n.callerIdSubtitle,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const CallerIdSetupScreen(),
+                  ),
+                );
+              },
             ),
             WaToolsListTile(
               icon: Icons.mark_email_unread_outlined,

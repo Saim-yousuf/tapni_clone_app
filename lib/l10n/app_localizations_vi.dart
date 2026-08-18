@@ -3559,4 +3559,78 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get loyaltyImageLayer => 'Image';
+
+  @override
+  String get syncContacts => 'Sync contacts';
+
+  @override
+  String get syncContactsSubtitle =>
+      'Upload your address book to identify callers';
+
+  @override
+  String get syncContactsTitle => 'Find people you know';
+
+  @override
+  String get syncContactsDisclosure =>
+      'Barqody uses your contacts to identify names for phone numbers, like caller ID. Your address book is uploaded securely and you can skip this step.';
+
+  @override
+  String get allowAndSync => 'Allow and sync';
+
+  @override
+  String get syncingContacts => 'Uploading contacts…';
+
+  @override
+  String get contactsSyncFailed => 'Could not sync contacts. Please try again.';
+
+  @override
+  String get contactsPermissionDeniedOpenSettings =>
+      'Contacts access is turned off. Enable it in Settings to sync.';
+
+  @override
+  String contactsSyncedCount(int count) {
+    return '$count contacts uploaded';
+  }
+
+  @override
+  String get callerIdTitle => 'Caller ID';
+
+  @override
+  String get callerIdSubtitle => 'Show names on incoming calls';
+
+  @override
+  String get callerIdDisclosure =>
+      'When someone calls, Barqody can show their name over the call screen using names saved by the community.';
+
+  @override
+  String get callerIdMajorityHint =>
+      'If 10 people saved a number as Ali and 5 saved Ali Shaikh, the call overlay shows Ali.';
+
+  @override
+  String get callerIdEnable => 'Identify incoming calls';
+
+  @override
+  String get callerIdEnabled => 'Caller ID overlay is on';
+
+  @override
+  String get callerIdDisabled => 'Turn on to identify unknown callers';
+
+  @override
+  String get callerIdPhonePermission => 'Phone and call log access';
+
+  @override
+  String get callerIdOverlayPermission => 'Display over other apps';
+
+  @override
+  String get callerIdScreeningRole => 'Set as caller ID / spam app';
+
+  @override
+  String get callerIdPermissionNeeded => 'Required to identify incoming calls';
+
+  @override
+  String get callerIdAndroidOnly =>
+      'Incoming-call name overlay is available on Android. iOS does not allow apps to draw over the Phone screen.';
+
+  @override
+  String get grantPermission => 'Allow';
 }

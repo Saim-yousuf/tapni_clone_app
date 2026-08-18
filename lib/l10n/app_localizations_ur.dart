@@ -3559,4 +3559,79 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get loyaltyImageLayer => 'Image';
+
+  @override
+  String get syncContacts => 'رابطے سنک کریں';
+
+  @override
+  String get syncContactsSubtitle =>
+      'کالرز کی شناخت کے لیے اپنی ایڈریس بک اپ لوڈ کریں';
+
+  @override
+  String get syncContactsTitle => 'جنہیں آپ جانتے ہیں تلاش کریں';
+
+  @override
+  String get syncContactsDisclosure =>
+      'Barqody آپ کے رابطوں سے فون نمبروں کے نام شناخت کرتا ہے، جیسے کالر آئی ڈی۔ آپ کی ایڈریس بک محفوظ طریقے سے اپ لوڈ ہوتی ہے اور آپ یہ قدم چھوڑ سکتے ہیں۔';
+
+  @override
+  String get allowAndSync => 'اجازت دیں اور سنک کریں';
+
+  @override
+  String get syncingContacts => 'رابطے اپ لوڈ ہو رہے ہیں…';
+
+  @override
+  String get contactsSyncFailed => 'رابطے سنک نہیں ہو سکے۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get contactsPermissionDeniedOpenSettings =>
+      'رابطوں کی رسائی بند ہے۔ سنک کے لیے سیٹنگز میں آن کریں۔';
+
+  @override
+  String contactsSyncedCount(int count) {
+    return '$count رابطے اپ لوڈ ہو گئے';
+  }
+
+  @override
+  String get callerIdTitle => 'کالر آئی ڈی';
+
+  @override
+  String get callerIdSubtitle => 'آنے والی کالز پر نام دکھائیں';
+
+  @override
+  String get callerIdDisclosure =>
+      'جب کوئی کال کرے تو Barqody کمیونٹی میں محفوظ نام سے کال اسکرین پر نام دکھا سکتا ہے۔';
+
+  @override
+  String get callerIdMajorityHint =>
+      'اگر 10 لوگوں نے نمبر Ali کے نام سے محفوظ کیا اور 5 نے Ali Shaikh، تو کال پر Ali دکھے گا۔';
+
+  @override
+  String get callerIdEnable => 'آنے والی کالز کی شناخت';
+
+  @override
+  String get callerIdEnabled => 'کالر آئی ڈی آن ہے';
+
+  @override
+  String get callerIdDisabled => 'نامعلوم کالرز کی شناخت کے لیے آن کریں';
+
+  @override
+  String get callerIdPhonePermission => 'فون اور کال لاگ کی رسائی';
+
+  @override
+  String get callerIdOverlayPermission => 'دیگر ایپس کے اوپر دکھائیں';
+
+  @override
+  String get callerIdScreeningRole =>
+      'کالر آئی ڈی / سپیم ایپ کے طور پر سیٹ کریں';
+
+  @override
+  String get callerIdPermissionNeeded => 'آنے والی کالز کی شناخت کے لیے ضروری';
+
+  @override
+  String get callerIdAndroidOnly =>
+      'آنے والی کال پر نام Android پر دستیاب ہے۔ iOS فون اسکرین کے اوپر ایپس کو دکھانے کی اجازت نہیں دیتا۔';
+
+  @override
+  String get grantPermission => 'اجازت دیں';
 }

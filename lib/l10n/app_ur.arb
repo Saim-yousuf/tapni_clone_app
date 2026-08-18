@@ -815,5 +815,34 @@
         "type": "String"
       }
     }
-  }
+  },
+  "syncContacts": "رابطے سنک کریں",
+  "syncContactsSubtitle": "کالرز کی شناخت کے لیے اپنی ایڈریس بک اپ لوڈ کریں",
+  "syncContactsTitle": "جنہیں آپ جانتے ہیں تلاش کریں",
+  "syncContactsDisclosure": "Barqody آپ کے رابطوں سے فون نمبروں کے نام شناخت کرتا ہے، جیسے کالر آئی ڈی۔ آپ کی ایڈریس بک محفوظ طریقے سے اپ لوڈ ہوتی ہے اور آپ یہ قدم چھوڑ سکتے ہیں۔",
+  "allowAndSync": "اجازت دیں اور سنک کریں",
+  "syncingContacts": "رابطے اپ لوڈ ہو رہے ہیں…",
+  "contactsSyncFailed": "رابطے سنک نہیں ہو سکے۔ دوبارہ کوشش کریں۔",
+  "contactsPermissionDeniedOpenSettings": "رابطوں کی رسائی بند ہے۔ سنک کے لیے سیٹنگز میں آن کریں۔",
+  "contactsSyncedCount": "{count} رابطے اپ لوڈ ہو گئے",
+  "@contactsSyncedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callerIdTitle": "کالر آئی ڈی",
+  "callerIdSubtitle": "آنے والی کالز پر نام دکھائیں",
+  "callerIdDisclosure": "جب کوئی کال کرے تو Barqody کمیونٹی میں محفوظ نام سے کال اسکرین پر نام دکھا سکتا ہے۔",
+  "callerIdMajorityHint": "اگر 10 لوگوں نے نمبر Ali کے نام سے محفوظ کیا اور 5 نے Ali Shaikh، تو کال پر Ali دکھے گا۔",
+  "callerIdEnable": "آنے والی کالز کی شناخت",
+  "callerIdEnabled": "کالر آئی ڈی آن ہے",
+  "callerIdDisabled": "نامعلوم کالرز کی شناخت کے لیے آن کریں",
+  "callerIdPhonePermission": "فون اور کال لاگ کی رسائی",
+  "callerIdOverlayPermission": "دیگر ایپس کے اوپر دکھائیں",
+  "callerIdScreeningRole": "کالر آئی ڈی / سپیم ایپ کے طور پر سیٹ کریں",
+  "callerIdPermissionNeeded": "آنے والی کالز کی شناخت کے لیے ضروری",
+  "callerIdAndroidOnly": "آنے والی کال پر نام Android پر دستیاب ہے۔ iOS فون اسکرین کے اوپر ایپس کو دکھانے کی اجازت نہیں دیتا۔",
+  "grantPermission": "اجازت دیں"
 }

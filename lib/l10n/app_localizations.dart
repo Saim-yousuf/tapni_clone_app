@@ -6780,6 +6780,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Image'**
   String get loyaltyImageLayer;
+
+  /// No description provided for @syncContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync contacts'**
+  String get syncContacts;
+
+  /// No description provided for @syncContactsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload your address book to identify callers'**
+  String get syncContactsSubtitle;
+
+  /// No description provided for @syncContactsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find people you know'**
+  String get syncContactsTitle;
+
+  /// No description provided for @syncContactsDisclosure.
+  ///
+  /// In en, this message translates to:
+  /// **'Barqody uses your contacts to identify names for phone numbers, like caller ID. Your address book is uploaded securely and you can skip this step.'**
+  String get syncContactsDisclosure;
+
+  /// No description provided for @allowAndSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow and sync'**
+  String get allowAndSync;
+
+  /// No description provided for @syncingContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading contacts…'**
+  String get syncingContacts;
+
+  /// No description provided for @contactsSyncFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not sync contacts. Please try again.'**
+  String get contactsSyncFailed;
+
+  /// No description provided for @contactsPermissionDeniedOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts access is turned off. Enable it in Settings to sync.'**
+  String get contactsPermissionDeniedOpenSettings;
+
+  /// No description provided for @contactsSyncedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} contacts uploaded'**
+  String contactsSyncedCount(int count);
+
+  /// No description provided for @callerIdTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Caller ID'**
+  String get callerIdTitle;
+
+  /// No description provided for @callerIdSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show names on incoming calls'**
+  String get callerIdSubtitle;
+
+  /// No description provided for @callerIdDisclosure.
+  ///
+  /// In en, this message translates to:
+  /// **'When someone calls, Barqody can show their name over the call screen using names saved by the community.'**
+  String get callerIdDisclosure;
+
+  /// No description provided for @callerIdMajorityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'If 10 people saved a number as Ali and 5 saved Ali Shaikh, the call overlay shows Ali.'**
+  String get callerIdMajorityHint;
+
+  /// No description provided for @callerIdEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Identify incoming calls'**
+  String get callerIdEnable;
+
+  /// No description provided for @callerIdEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Caller ID overlay is on'**
+  String get callerIdEnabled;
+
+  /// No description provided for @callerIdDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on to identify unknown callers'**
+  String get callerIdDisabled;
+
+  /// No description provided for @callerIdPhonePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone and call log access'**
+  String get callerIdPhonePermission;
+
+  /// No description provided for @callerIdOverlayPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Display over other apps'**
+  String get callerIdOverlayPermission;
+
+  /// No description provided for @callerIdScreeningRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as caller ID / spam app'**
+  String get callerIdScreeningRole;
+
+  /// No description provided for @callerIdPermissionNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Required to identify incoming calls'**
+  String get callerIdPermissionNeeded;
+
+  /// No description provided for @callerIdAndroidOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming-call name overlay is available on Android. iOS does not allow apps to draw over the Phone screen.'**
+  String get callerIdAndroidOnly;
+
+  /// No description provided for @grantPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get grantPermission;
 }
 
 class _AppLocalizationsDelegate

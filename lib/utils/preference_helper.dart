@@ -12,6 +12,9 @@ class PrefUtils {
   String activeDeviceSessionId = "active_device_session_id";
   String pendingRemoteLogout = "pending_remote_logout";
   String pendingRemoteLogoutSessionId = "pending_remote_logout_session_id";
+  String contactsSyncPromptedPrefix = "contacts_sync_prompted_";
+  String callerIdEnabled = "caller_id_enabled";
+  String callerIdPermissionPrompted = "caller_id_permission_prompted";
 }
 
 class SharedPrefHelper {

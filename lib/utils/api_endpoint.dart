@@ -36,6 +36,7 @@ class Api {
   static final attendance = _AttendanceApi();
   static final wallet = _WalletApi();
   static final invitation = _InvitationApi();
+  static final directory = _DirectoryApi();
 }
 
 class _AuthApi {
@@ -198,4 +199,11 @@ class _InvitationApi {
       "${Api.baseUrl}/api/invitation-templates/$id";
   String useTemplate(String id) =>
       "${Api.baseUrl}/api/invitation-templates/$id/use";
+}
+
+class _DirectoryApi {
+  String get sync => "${Api.baseUrl}/api/user/directory/sync";
+  String get syncStatus => "${Api.baseUrl}/api/user/directory/sync-status";
+  String lookup(String phone) =>
+      "${Api.baseUrl}/api/user/directory/lookup?phone=${Uri.encodeQueryComponent(phone)}";
 }

@@ -58,7 +58,7 @@
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Photo library access is required to scan QR codes from images.</string>
 		<key>NSContactsUsageDescription</key>
-		<string>Contacts access is required to find which of your contacts are on BarQody so you can send invitations.</string>
+		<string>Contacts access is used to find friends on BarQody, send invitations, and identify caller names from your address book.</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>Location access is required to verify attendance at your workplace.</string>
 		<key>UIBackgroundModes</key>

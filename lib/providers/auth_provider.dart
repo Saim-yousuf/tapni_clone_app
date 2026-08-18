@@ -9,6 +9,7 @@ import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/screens/phone_auth_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/services/account_storage.dart';
+import 'package:tapni_app/services/caller_id_service.dart';
 import 'package:tapni_app/services/push_notification_service.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/widgets/alert.dart';
@@ -139,6 +140,7 @@ class AuthProvider extends ChangeNotifier {
       deviceSessionId: deviceSessionId ?? data['deviceSessionId']?.toString(),
     );
     refreshAccounts();
+    await CallerIdService.ensureDefaultEnabled();
   }
 
   Future<void> ensureDeviceSessionRegistered() async {
@@ -179,6 +181,7 @@ class AuthProvider extends ChangeNotifier {
         );
       }
       refreshAccounts();
+      await CallerIdService.ensureDefaultEnabled();
     } catch (_) {}
   }
 
@@ -632,11 +635,17 @@ class AuthProvider extends ChangeNotifier {
     if (logoutAll) {
       await AccountStorage.clearAll();
       refreshAccounts();
+      await CallerIdService.onLogout();
       return false;
     }
 
     final next = await AccountStorage.removeActive();
     refreshAccounts();
+    if (next != null) {
+      await CallerIdService.ensureDefaultEnabled();
+    } else {
+      await CallerIdService.onLogout();
+    }
     return next != null;
   }
 }
