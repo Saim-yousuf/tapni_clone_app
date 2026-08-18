@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/zatca_qr_parser.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EInvoiceResultScreen extends StatelessWidget {
   final ZatcaInvoice invoice;
@@ -11,8 +13,19 @@ class EInvoiceResultScreen extends StatelessWidget {
 
   static const Color _successGreen = Color(0xFF22C55E);
   static const Color _badgeGreen = Color(0xFF86EFAC);
+  static const Color _errorRed = Color(0xFFEF4444);
+  static const Color _badgeRed = Color(0xFFFECACA);
   static const Color _cardBg = Color(0xFFF3F4F6);
   static const Color _labelGray = Color(0xFF9CA3AF);
+
+  static const String _zatcaLookupAr =
+      'https://zatca.gov.sa/ar/eServices/Pages/TaxpayerLookup.aspx';
+  static const String _zatcaLookupEn =
+      'https://zatca.gov.sa/en/eServices/Pages/TaxpayerLookup.aspx';
+  static const String _zatcaReportAr =
+      'https://zatca.gov.sa/ar/eServices/Pages/SubmitaReport.aspx';
+  static const String _zatcaReportEn =
+      'https://zatca.gov.sa/en/eServices/Pages/SubmitaReport.aspx';
 
   Future<void> _copy(BuildContext context, String value) async {
     await Clipboard.setData(ClipboardData(text: value));
@@ -25,50 +38,100 @@ class EInvoiceResultScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
   String _shareText(BuildContext context) {
     final l10n = context.l10n;
     final buffer = StringBuffer()
       ..writeln(l10n.saudiEInvoiceShareHeader)
       ..writeln(l10n.sellerColon(invoice.sellerName))
       ..writeln(l10n.vatColon(invoice.vatNumber))
-      ..writeln(l10n.dateColon(invoice.timestamp))
+      ..writeln(l10n.dateColon(_displayTimestamp()))
       ..writeln(l10n.totalColon(invoice.invoiceTotal))
       ..writeln(l10n.vatColon('${invoice.vatTotal} SAR'));
     return buffer.toString();
   }
 
+  /// Show the QR wall-clock time as encoded (ZATCA ISO-8601), without
+  /// converting UTC → device local. That extra +3h was turning
+  /// `21:51 31/07/2026` into `00:51 01/08/2026`.
   String _displayTimestamp() {
     final raw = invoice.timestamp.trim();
     if (raw.isEmpty) return '—';
 
-    // Prefer a readable local-style display when ISO-like.
+    final match = RegExp(
+      r'(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})',
+    ).firstMatch(raw);
+    if (match != null) {
+      final yyyy = match.group(1)!;
+      final mm = match.group(2)!;
+      final dd = match.group(3)!;
+      final hh = match.group(4)!;
+      final min = match.group(5)!;
+      return '$hh:$min $dd/$mm/$yyyy';
+    }
+
     final parsed = DateTime.tryParse(raw);
     if (parsed != null) {
-      final local = parsed.toLocal();
-      final dd = local.day.toString().padLeft(2, '0');
-      final mm = local.month.toString().padLeft(2, '0');
-      final yyyy = local.year.toString();
-      final hh = local.hour.toString().padLeft(2, '0');
-      final min = local.minute.toString().padLeft(2, '0');
+      final dd = parsed.day.toString().padLeft(2, '0');
+      final mm = parsed.month.toString().padLeft(2, '0');
+      final yyyy = parsed.year.toString();
+      final hh = parsed.hour.toString().padLeft(2, '0');
+      final min = parsed.minute.toString().padLeft(2, '0');
       return '$hh:$min $dd/$mm/$yyyy';
     }
     return raw;
+  }
+
+  /// Official KSA invoice apps use a geometric Arabic sans (Tajawal-like).
+  /// Tajawal has 400 / 500 / 700 — map w600 to w700 so glyphs stay correct.
+  static TextStyle _style(
+    BuildContext context, {
+    required double size,
+    FontWeight weight = FontWeight.w400,
+    Color color = Colors.black87,
+    double height = 1.4,
+  }) {
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final resolved = weight == FontWeight.w600 ? FontWeight.w700 : weight;
+    if (isArabic) {
+      return GoogleFonts.tajawal(
+        fontSize: size,
+        fontWeight: resolved,
+        color: color,
+        height: height,
+      );
+    }
+    return TextStyle(
+      fontSize: size,
+      fontWeight: weight,
+      color: color,
+      height: height,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final timestamp = _displayTimestamp();
+    final isValid = invoice.isValidTaxInvoice;
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final statusColor = isValid ? _successGreen : _errorRed;
+    final lookupUrl = isArabic ? _zatcaLookupAr : _zatcaLookupEn;
+    final reportUrl = isArabic ? _zatcaReportAr : _zatcaReportEn;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           l10n.eInvoiceVerification,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.black87,
+          style: _style(
+            context,
+            size: 16,
+            weight: FontWeight.w500,
           ),
         ),
         centerTitle: true,
@@ -91,24 +154,24 @@ class EInvoiceResultScreen extends StatelessWidget {
               height: 88,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: _successGreen, width: 5),
+                border: Border.all(color: statusColor, width: 5),
               ),
-              child: const Icon(
-                Icons.check_rounded,
-                color: _successGreen,
+              child: Icon(
+                isValid ? Icons.check_rounded : Icons.close_rounded,
+                color: statusColor,
                 size: 52,
               ),
             ),
           ),
           const SizedBox(height: 18),
           Text(
-            l10n.validTaxInvoice,
+            isValid ? l10n.validTaxInvoice : l10n.invalidTaxInvoice,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: Colors.black87,
-              height: 1.3,
+            style: _style(
+              context,
+              size: 22,
+              weight: FontWeight.w700,
+              height: 1.35,
             ),
           ),
           const SizedBox(height: 28),
@@ -130,29 +193,38 @@ class EInvoiceResultScreen extends StatelessWidget {
                       vertical: 5,
                     ),
                     decoration: BoxDecoration(
-                      color: _badgeGreen.withValues(alpha: 0.55),
+                      color: isValid
+                          ? _badgeGreen.withValues(alpha: 0.55)
+                          : _badgeRed,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      l10n.invoiceRegistered,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF166534),
+                      isValid
+                          ? l10n.invoiceRegistered
+                          : l10n.invoiceNotRegistered,
+                      style: _style(
+                        context,
+                        size: 12,
+                        weight: FontWeight.w500,
+                        color: isValid
+                            ? const Color(0xFF166534)
+                            : const Color(0xFF991B1B),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  invoice.sellerName,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black87,
-                    height: 1.35,
+                if (invoice.sellerName.trim().isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    invoice.sellerName,
+                    style: _style(
+                      context,
+                      size: 18,
+                      weight: FontWeight.w700,
+                      height: 1.4,
+                    ),
                   ),
-                ),
+                ],
                 const SizedBox(height: 14),
                 Divider(
                   height: 1,
@@ -178,39 +250,120 @@ class EInvoiceResultScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: FilledButton.icon(
-              onPressed: () => _copy(context, _shareText(context)),
-              icon: const Icon(Icons.copy_rounded, size: 20),
-              label: Text(l10n.copyAllDetails),
-              style: FilledButton.styleFrom(
-                backgroundColor: _successGreen,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          if (isValid) ...[
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: FilledButton.icon(
+                onPressed: () => _copy(context, _shareText(context)),
+                icon: const Icon(Icons.copy_rounded, size: 20),
+                label: Text(
+                  l10n.copyAllDetails,
+                  style: _style(
+                    context,
+                    size: 16,
+                    weight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+                style: FilledButton.styleFrom(
+                  backgroundColor: _successGreen,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: OutlinedButton.icon(
-              onPressed: () => Share.share(_shareText(context)),
-              icon: const Icon(Icons.share_outlined, size: 20),
-              label: Text(l10n.share),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.black87,
-                side: BorderSide(color: Colors.black.withValues(alpha: 0.12)),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: OutlinedButton.icon(
+                onPressed: () => Share.share(_shareText(context)),
+                icon: const Icon(Icons.share_outlined, size: 20),
+                label: Text(
+                  l10n.share,
+                  style: _style(
+                    context,
+                    size: 16,
+                    weight: FontWeight.w500,
+                  ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.black87,
+                  side: BorderSide(color: Colors.black.withValues(alpha: 0.12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),
-          ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: TextButton(
+                onPressed: () => _openUrl(lookupUrl),
+                child: Text(
+                  l10n.verifyVatRegistration,
+                  style: _style(
+                    context,
+                    size: 15,
+                    weight: FontWeight.w500,
+                    color: const Color(0xFF166534),
+                  ),
+                ),
+              ),
+            ),
+          ] else ...[
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: FilledButton(
+                onPressed: () => _openUrl(reportUrl),
+                style: FilledButton.styleFrom(
+                  backgroundColor: _successGreen,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  l10n.submitVatReport,
+                  style: _style(
+                    context,
+                    size: 16,
+                    weight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: OutlinedButton(
+                onPressed: () => _openUrl(lookupUrl),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.black87,
+                  side: BorderSide(color: Colors.black.withValues(alpha: 0.12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  l10n.verifyVatRegistration,
+                  style: _style(
+                    context,
+                    size: 15,
+                    weight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -233,20 +386,21 @@ class _DetailField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
+          style: EInvoiceResultScreen._style(
+            context,
+            size: 13,
+            weight: FontWeight.w400,
             color: EInvoiceResultScreen._labelGray,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.black87,
-            height: 1.3,
+          style: EInvoiceResultScreen._style(
+            context,
+            size: 16,
+            weight: FontWeight.w700,
+            height: 1.35,
           ),
         ),
       ],

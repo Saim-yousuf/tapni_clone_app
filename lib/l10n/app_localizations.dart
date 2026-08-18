@@ -4849,11 +4849,35 @@ abstract class AppLocalizations {
   /// **'Valid Tax Invoice'**
   String get validTaxInvoice;
 
+  /// No description provided for @invalidTaxInvoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Tax Invoice'**
+  String get invalidTaxInvoice;
+
   /// No description provided for @invoiceRegistered.
   ///
   /// In en, this message translates to:
   /// **'Registered'**
   String get invoiceRegistered;
+
+  /// No description provided for @invoiceNotRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Not registered'**
+  String get invoiceNotRegistered;
+
+  /// No description provided for @submitVatReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit a report'**
+  String get submitVatReport;
+
+  /// No description provided for @verifyVatRegistration.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify VAT registration'**
+  String get verifyVatRegistration;
 
   /// No description provided for @invoiceTotalWithTax.
   ///

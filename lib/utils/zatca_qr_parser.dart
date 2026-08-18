@@ -32,6 +32,30 @@ class ZatcaInvoice {
   bool get isPhase2 =>
       (invoiceHash != null && invoiceHash!.isNotEmpty) ||
       (digitalSignature != null && digitalSignature!.isNotEmpty);
+
+  /// True only when the QR VAT number matches a ZATCA VAT account format.
+  /// Decoding a QR is not the same as the seller being VAT-registered.
+  bool get isVatRegistered => ZatcaVatValidator.isValidVatNumber(vatNumber);
+
+  bool get isValidTaxInvoice => isVatRegistered;
+}
+
+/// ZATCA VAT account number rules used by the official taxpayer lookup.
+///
+/// A VAT account number is 15 digits, starts with `3` (KSA), and ends with
+/// `00003` (head-office branch + VAT tax type). Values such as `54757` are
+/// not registered and must show the invalid / not-registered state.
+class ZatcaVatValidator {
+  ZatcaVatValidator._();
+
+  static final _nonDigits = RegExp(r'\D');
+
+  static String digitsOnly(String raw) => raw.replaceAll(_nonDigits, '');
+
+  static bool isValidVatNumber(String raw) {
+    final vat = digitsOnly(raw);
+    return vat.length == 15 && vat.startsWith('3') && vat.endsWith('00003');
+  }
 }
 
 /// Decodes Base64 TLV QR codes used on ZATCA-compliant Saudi e-invoices.
@@ -54,17 +78,12 @@ class ZatcaQrParser {
     final total = tags[4]?.trim();
     final vatAmount = tags[5]?.trim();
 
-    if (seller == null ||
-        seller.isEmpty ||
-        vat == null ||
-        vat.isEmpty ||
-        total == null ||
-        total.isEmpty) {
+    if (vat == null || vat.isEmpty || total == null || total.isEmpty) {
       return null;
     }
 
     return ZatcaInvoice(
-      sellerName: seller,
+      sellerName: seller ?? '',
       vatNumber: vat,
       timestamp: timestamp ?? '',
       invoiceTotal: total,

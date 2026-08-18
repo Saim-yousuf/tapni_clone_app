@@ -3,7 +3,7 @@ package com.example.tapni_app.callerid
 import android.os.Build
 import android.telecom.Call
 import android.telecom.CallScreeningService
-import android.telecom.TelecomManager
+import android.telecom.PhoneAccount
 
 class BarqodyCallScreeningService : CallScreeningService() {
     override fun onScreenCall(callDetails: Call.Details) {
@@ -18,7 +18,7 @@ class BarqodyCallScreeningService : CallScreeningService() {
         }
 
         val handle = callDetails.handle ?: return
-        if (handle.scheme != TelecomManager.SCHEME_TEL && handle.scheme != "tel") return
+        if (handle.scheme != PhoneAccount.SCHEME_TEL && handle.scheme != "tel") return
         val number = handle.schemeSpecificPart ?: return
         if (number.isBlank()) return
         CallerIdOverlay.showIncoming(this, number)

@@ -2465,7 +2465,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get validTaxInvoice => 'Valid Tax Invoice';
 
   @override
+  String get invalidTaxInvoice => 'Invalid Tax Invoice';
+
+  @override
   String get invoiceRegistered => 'Registered';
+
+  @override
+  String get invoiceNotRegistered => 'Not registered';
+
+  @override
+  String get submitVatReport => 'Submit a report';
+
+  @override
+  String get verifyVatRegistration => 'Verify VAT registration';
 
   @override
   String get invoiceTotalWithTax => 'Invoice total (with tax)';

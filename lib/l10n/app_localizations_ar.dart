@@ -2423,7 +2423,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get validTaxInvoice => 'فاتورة ضريبية صحيحة';
 
   @override
+  String get invalidTaxInvoice => 'فاتورة ضريبية غير صحيحة';
+
+  @override
   String get invoiceRegistered => 'مسجلة';
+
+  @override
+  String get invoiceNotRegistered => 'غير مسجلة';
+
+  @override
+  String get submitVatReport => 'تقديم بلاغ';
+
+  @override
+  String get verifyVatRegistration =>
+      'التحقق من التسجيل في ضريبة القيمة المضافة';
 
   @override
   String get invoiceTotalWithTax => 'إجمالي الفاتورة(مع الضريبة)';
