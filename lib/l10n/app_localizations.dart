@@ -323,7 +323,7 @@ abstract class AppLocalizations {
   /// No description provided for @publicProfileOff.
   ///
   /// In en, this message translates to:
-  /// **'Hidden from search — your QR and profile link still work'**
+  /// **'Only people you approve can see your links and details'**
   String get publicProfileOff;
 
   /// No description provided for @shareQr.
@@ -2221,7 +2221,7 @@ abstract class AppLocalizations {
   /// No description provided for @onlyPublicProfilesAreShown.
   ///
   /// In en, this message translates to:
-  /// **'Only public profiles are shown'**
+  /// **'Private profiles stay locked until they accept your request'**
   String get onlyPublicProfilesAreShown;
 
   /// No description provided for @onlyThisPhoneIsUsingYourAccountRightNow.
@@ -4864,7 +4864,7 @@ abstract class AppLocalizations {
   /// No description provided for @noPublicProfileMatchesQuery.
   ///
   /// In en, this message translates to:
-  /// **'No public profile matches \"@{query}\".'**
+  /// **'No profile matches \"@{query}\".'**
   String noPublicProfileMatchesQuery(String query);
 
   /// No description provided for @codeWithValue.
@@ -7122,6 +7122,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use PDF / Word icon'**
   String get useFileTypeIcon;
+
+  /// No description provided for @thisProfileIsPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'This profile is private'**
+  String get thisProfileIsPrivate;
+
+  /// No description provided for @privateProfileHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a request to view their profile. You\'ll be notified when they accept.'**
+  String get privateProfileHint;
+
+  /// No description provided for @requestToView.
+  ///
+  /// In en, this message translates to:
+  /// **'Request'**
+  String get requestToView;
+
+  /// No description provided for @requested.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested'**
+  String get requested;
+
+  /// No description provided for @followRequestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Request sent'**
+  String get followRequestSent;
+
+  /// No description provided for @couldNotSendFollowRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not send request'**
+  String get couldNotSendFollowRequest;
+
+  /// No description provided for @followRequestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow request'**
+  String get followRequestTitle;
+
+  /// No description provided for @followRequestBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} wants to view your profile'**
+  String followRequestBody(String name);
+
+  /// No description provided for @followRequestAcceptedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Request accepted'**
+  String get followRequestAcceptedTitle;
+
+  /// No description provided for @followRequestAcceptedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} accepted your request'**
+  String followRequestAcceptedBody(String name);
+
+  /// No description provided for @requestAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Request accepted'**
+  String get requestAccepted;
+
+  /// No description provided for @removeAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove access'**
+  String get removeAccess;
 }
 
 class _AppLocalizationsDelegate

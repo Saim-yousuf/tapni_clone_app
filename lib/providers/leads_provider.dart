@@ -6,6 +6,7 @@ import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/repository/invitation_repo.dart';
+import 'package:tapni_app/repository/follow_repo.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/models/invitation.dart';
 class LeadsProvider extends ChangeNotifier {
@@ -13,6 +14,7 @@ class LeadsProvider extends ChangeNotifier {
   final CatalogRepo _catalogRepo = CatalogRepo();
   final AttendanceRepo _attendanceRepo = AttendanceRepo();
   final InvitationRepo _invitationRepo = InvitationRepo();
+  final FollowRepo _followRepo = FollowRepo();
 
   List<Lead> _leads = [];
   List<ContactCategory> _categories = [];
@@ -386,6 +388,7 @@ class LeadsProvider extends ChangeNotifier {
   Future<void> refreshNotifications({required bool isBusinessUser}) async {
     await fetchEmployeeInvitationNotifications();
     await fetchEventInvitationNotifications();
+    await fetchFollowNotifications();
     if (isBusinessUser) {
       await fetchCatalogOrderNotifications(isBusinessUser: true);
     }
@@ -456,6 +459,83 @@ class LeadsProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> fetchFollowNotifications() async {
+    try {
+      final res = await _followRepo.notifications();
+      if (!res.success || res.data == null) return;
+
+      _notifications.removeWhere(
+        (n) => n['type'] == 'follow_request' || n['type'] == 'follow_accepted',
+      );
+
+      final data = res.data;
+      final map = data is Map<String, dynamic> ? data : <String, dynamic>{};
+      final requests = map['requests'] as List? ?? [];
+      final accepted = map['accepted'] as List? ?? [];
+
+      for (final item in requests.whereType<Map>()) {
+        final json = Map<String, dynamic>.from(item);
+        final user = json['user'] is Map
+            ? Map<String, dynamic>.from(json['user'] as Map)
+            : <String, dynamic>{};
+        final name = (user['name'] ?? user['username'] ?? '').toString();
+        _notifications.add({
+          'id': json['id']?.toString() ?? '',
+          'type': 'follow_request',
+          'title': 'Follow request',
+          'body': '$name wants to view your profile',
+          'time': 'Just now',
+          'isRead': json['isRead'] == true,
+          'userId': user['id']?.toString(),
+          'username': user['username']?.toString(),
+          'userName': name,
+          'profilePhoto': user['profilePhoto']?.toString(),
+        });
+      }
+
+      for (final item in accepted.whereType<Map>()) {
+        final json = Map<String, dynamic>.from(item);
+        final user = json['user'] is Map
+            ? Map<String, dynamic>.from(json['user'] as Map)
+            : <String, dynamic>{};
+        final name = (user['name'] ?? user['username'] ?? '').toString();
+        _notifications.add({
+          'id': json['id']?.toString() ?? '',
+          'type': 'follow_accepted',
+          'title': 'Request accepted',
+          'body': '$name accepted your request',
+          'time': 'Just now',
+          'isRead': json['isRead'] == true,
+          'userId': user['id']?.toString(),
+          'username': user['username']?.toString(),
+          'userName': name,
+          'profilePhoto': user['profilePhoto']?.toString(),
+        });
+      }
+
+      _sortNotifications();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching follow notifications: $e');
+    }
+  }
+
+  Future<bool> acceptFollowRequest(String followId) async {
+    final res = await _followRepo.accept(followId: followId);
+    if (res.success) {
+      await fetchFollowNotifications();
+    }
+    return res.success;
+  }
+
+  Future<bool> declineFollowRequest(String followId) async {
+    final res = await _followRepo.decline(followId: followId);
+    if (res.success) {
+      await fetchFollowNotifications();
+    }
+    return res.success;
+  }
+
   void _sortNotifications() {
     _notifications.sort((a, b) {
       if (a['isRead'] == b['isRead']) return 0;
@@ -513,6 +593,7 @@ class LeadsProvider extends ChangeNotifier {
       n['isRead'] = true;
     }
     _catalogRepo.markAllOrdersRead();
+    _followRepo.markAllRead();
     notifyListeners();
   }
 
@@ -535,6 +616,11 @@ class LeadsProvider extends ChangeNotifier {
       _notifications[idx]['isRead'] = !wasRead;
       if (!wasRead && _notifications[idx]['type'] == 'catalog_order') {
         _catalogRepo.markOrderRead(id);
+      }
+      if (!wasRead &&
+          (_notifications[idx]['type'] == 'follow_request' ||
+              _notifications[idx]['type'] == 'follow_accepted')) {
+        _followRepo.markRead(followId: id);
       }
       notifyListeners();
     }

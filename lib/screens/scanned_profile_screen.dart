@@ -8,6 +8,7 @@ import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:tapni_app/repository/follow_repo.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/business/add_stamp_screen.dart';
@@ -58,6 +59,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   bool _isEmployee = false;
   bool _isPendingEmployee = false;
   bool _employeeStatusChecked = false;
+  bool _followBusy = false;
 
   @override
   void initState() {
@@ -252,6 +254,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       final userJson = data['user'] as Map<String, dynamic>?;
 
       if (userJson != null) {
+        userJson['canView'] = data['canView'] ?? userJson['canView'] ?? true;
+        userJson['followStatus'] =
+            data['followStatus'] ?? userJson['followStatus'] ?? 'none';
         final profile = UserProfile.fromApiJson(userJson);
         UserCustomCard? scannedCard;
         if (widget.cardId != null && widget.cardId!.isNotEmpty) {
@@ -274,6 +279,15 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
           }
         });
         if (isOwn) return;
+
+        if (!profile.canView) {
+          setState(() {
+            _programsChecked = true;
+            _enrollmentStatusChecked = true;
+            _employeeStatusChecked = true;
+          });
+          return;
+        }
 
         if (profile.id != null) {
           _loadCustomerEnrollmentStatus(profile.id!);
@@ -331,7 +345,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   }
 
   Widget _buildShareButton() {
-    if (_isLoading || _errorMessage != null || _profile == null) {
+    if (_isLoading ||
+        _errorMessage != null ||
+        _profile == null ||
+        !_profile!.canView) {
       return const SizedBox.shrink();
     }
 
@@ -374,7 +391,11 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       context,
       listen: false,
     ).isProUser;
-    if (!isBusinessUser || !_employeeStatusChecked || _profile!.id == null) {
+    final canUnfollow = _profile!.followStatus == 'following' &&
+        (_profile!.id ?? '').isNotEmpty;
+    final showEmployee =
+        isBusinessUser && _employeeStatusChecked && _profile!.id != null;
+    if (!canUnfollow && !showEmployee) {
       return SizedBox.shrink();
     }
 
@@ -382,11 +403,20 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       icon: Icon(Icons.more_vert),
       tooltip: context.l10n.businessOptions,
       onSelected: (value) {
+        if (value == 'unfollow') {
+          _cancelFollowRequest(_profile!);
+        }
         if (value == 'add_employee' && !_isEmployee && !_isPendingEmployee) {
           _addAsEmployee(_profile!);
         }
       },
       itemBuilder: (context) => [
+        if (canUnfollow)
+          PopupMenuItem<String>(
+            value: 'unfollow',
+            child: Text(context.l10n.removeAccess),
+          ),
+        if (showEmployee)
         PopupMenuItem<String>(
           value: 'add_employee',
           enabled: !_isEmployee && !_isPendingEmployee,
@@ -433,6 +463,142 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     );
   }
 
+  Future<void> _sendFollowRequest(UserProfile profile) async {
+    final userId = profile.id;
+    if (userId == null || userId.isEmpty || _followBusy) return;
+    setState(() => _followBusy = true);
+    final res = await FollowRepo().requestFollow(userId: userId);
+    if (!mounted) return;
+    setState(() {
+      _followBusy = false;
+      if (res.success) {
+        final status = (res.data is Map ? res.data['followStatus'] : null)
+            ?.toString();
+        _profile = profile.copyWith(followStatus: status ?? 'requested');
+      }
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          res.success
+              ? context.l10n.followRequestSent
+              : (res.message ?? context.l10n.couldNotSendFollowRequest),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _cancelFollowRequest(UserProfile profile) async {
+    final userId = profile.id;
+    if (userId == null || userId.isEmpty || _followBusy) return;
+    setState(() => _followBusy = true);
+    final res = await FollowRepo().unfollow(userId: userId);
+    if (!mounted) return;
+    if (res.success && profile.canView) {
+      setState(() => _followBusy = false);
+      await _fetchProfile();
+      return;
+    }
+    setState(() {
+      _followBusy = false;
+      if (res.success) {
+        _profile = profile.copyWith(followStatus: 'none', canView: false);
+      }
+    });
+  }
+
+  Widget _buildPrivateProfileView(
+    UserProfile profile,
+    String displayName,
+    String? photoUrl,
+  ) {
+    final requested = profile.followStatus == 'requested';
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Column(
+        children: [
+          _buildProfileAvatar(profile, photoUrl, null),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28),
+            child: Column(
+              children: [
+                VerifiedName(
+                  name: displayName,
+                  verified: profile.isPro,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                if ((profile.username ?? '').trim().isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    '@${profile.username}',
+                    style: const TextStyle(fontSize: 14, color: Colors.black54),
+                  ),
+                ],
+                const SizedBox(height: 28),
+                const Icon(Icons.lock_outline_rounded, size: 42, color: Colors.black54),
+                const SizedBox(height: 12),
+                Text(
+                  context.l10n.thisProfileIsPrivate,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  context.l10n.privateProfileHint,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+                const SizedBox(height: 20),
+                if (_followBusy)
+                  const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: CircularProgressIndicator(),
+                  )
+                else if (requested)
+                  OutlinedButton(
+                    onPressed: () => _cancelFollowRequest(profile),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black87,
+                      side: const BorderSide(color: Colors.black26),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 28,
+                        vertical: 12,
+                      ),
+                    ),
+                    child: Text(context.l10n.requested),
+                  )
+                else
+                  FilledButton(
+                    onPressed: () => _sendFollowRequest(profile),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 28,
+                        vertical: 12,
+                      ),
+                    ),
+                    child: Text(context.l10n.requestToView),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildErrorView() {
     return Center(
       child: Padding(
@@ -471,6 +637,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     final displayBio = card?.bio?.isNotEmpty == true ? card!.bio! : profile.bio;
     final displayPhoto = card?.profilePhotoUrl ?? profile.profilePhotoUrl;
     final displayCover = card?.coverPhotoUrl ?? profile.coverPhotoUrl;
+
+    if (!isOwn && !profile.canView) {
+      return _buildPrivateProfileView(profile, displayName, displayPhoto);
+    }
     final showRewardsButton =
         !isOwn &&
         _programsChecked &&

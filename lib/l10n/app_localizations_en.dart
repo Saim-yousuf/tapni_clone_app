@@ -52,7 +52,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — your QR and profile link still work';
+      'Only people you approve can see your links and details';
 
   @override
   String get shareQr => 'Share My QR Code';
@@ -1044,7 +1044,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'Only enabled links show when someone scans this card.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Only public profiles are shown';
+  String get onlyPublicProfilesAreShown =>
+      'Private profiles stay locked until they accept your request';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
@@ -2448,7 +2449,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'No public profile matches \"@$query\".';
+    return 'No profile matches \"@$query\".';
   }
 
   @override
@@ -3726,4 +3727,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get useFileTypeIcon => 'Use PDF / Word icon';
+
+  @override
+  String get thisProfileIsPrivate => 'This profile is private';
+
+  @override
+  String get privateProfileHint =>
+      'Send a request to view their profile. You\'ll be notified when they accept.';
+
+  @override
+  String get requestToView => 'Request';
+
+  @override
+  String get requested => 'Requested';
+
+  @override
+  String get followRequestSent => 'Request sent';
+
+  @override
+  String get couldNotSendFollowRequest => 'Could not send request';
+
+  @override
+  String get followRequestTitle => 'Follow request';
+
+  @override
+  String followRequestBody(String name) {
+    return '$name wants to view your profile';
+  }
+
+  @override
+  String get followRequestAcceptedTitle => 'Request accepted';
+
+  @override
+  String followRequestAcceptedBody(String name) {
+    return '$name accepted your request';
+  }
+
+  @override
+  String get requestAccepted => 'Request accepted';
+
+  @override
+  String get removeAccess => 'Remove access';
 }

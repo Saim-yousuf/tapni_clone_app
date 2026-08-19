@@ -17,7 +17,7 @@
   "socialLinksSubtitle": "Add Instagram, WhatsApp, website and more",
   "publicProfile": "Public profile",
   "publicProfileOn": "Anyone can find and view your profile",
-  "publicProfileOff": "Hidden from search — your QR and profile link still work",
+  "publicProfileOff": "Only people you approve can see your links and details",
   "shareQr": "Share My QR Code",
   "shareQrSubtitle": "Let others scan your digital business card",
   "shoppingRewards": "Shopping & rewards",
@@ -340,7 +340,7 @@
   "notificationCleared": "Notification cleared",
   "onlyCoverProfilePhotoNameAndBioAreEditableHere": "Only cover, profile photo, name and bio are editable here.",
   "onlyEnabledLinksShowWhenSomeoneScansThisCard": "Only enabled links show when someone scans this card.",
-  "onlyPublicProfilesAreShown": "Only public profiles are shown",
+  "onlyPublicProfilesAreShown": "Private profiles stay locked until they accept your request",
   "onlyThisPhoneIsUsingYourAccountRightNow": "Only this phone is using your account right now.",
   "orCONTINUEWITH": "OR CONTINUE WITH",
   "order": "Order",
@@ -808,7 +808,7 @@
       }
     }
   },
-  "noPublicProfileMatchesQuery": "No public profile matches \"@{query}\".",
+  "noPublicProfileMatchesQuery": "No profile matches \"@{query}\".",
   "@noPublicProfileMatchesQuery": {
     "placeholders": {
       "query": {
@@ -1601,5 +1601,31 @@
   "noDocumentsAvailable": "No documents available.",
   "documentName": "Document name",
   "setCustomIcon": "Set custom icon",
-  "useFileTypeIcon": "Use PDF / Word icon"
+  "useFileTypeIcon": "Use PDF / Word icon",
+  "thisProfileIsPrivate": "This profile is private",
+  "privateProfileHint": "Send a request to view their profile. You'll be notified when they accept.",
+  "requestToView": "Request",
+  "requested": "Requested",
+  "followRequestSent": "Request sent",
+  "couldNotSendFollowRequest": "Could not send request",
+  "followRequestTitle": "Follow request",
+  "followRequestBody": "{name} wants to view your profile",
+  "@followRequestBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "followRequestAcceptedTitle": "Request accepted",
+  "followRequestAcceptedBody": "{name} accepted your request",
+  "@followRequestAcceptedBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "requestAccepted": "Request accepted",
+  "removeAccess": "Remove access"
 }

@@ -14,7 +14,7 @@
   "socialLinksSubtitle": "انسٹاگرام، واٹس ایپ، ویب سائٹ اور بہت کچھ شامل کریں",
   "publicProfile": "عوامی پروفائل",
   "publicProfileOn": "کوئی بھی آپ کی پروفائل تلاش اور دیکھ سکتا ہے",
-  "publicProfileOff": "تلاش سے پوشیدہ — آپ کا QR اور پروفائل لنک پھر بھی کام کرے گا",
+  "publicProfileOff": "صرف وہی لوگ تفصیلات دیکھ سکتے ہیں جن کی آپ منظوری دیں",
   "shareQr": "میرا QR کوڈ شیئر کریں",
   "shareQrSubtitle": "دوسروں کو آپ کا ڈیجیٹل کاروباری کارڈ اسکین کرنے دیں",
   "shoppingRewards": "خریداری اور انعامات",
@@ -333,7 +333,7 @@
   "lat": "لات",
   "order": "آرڈر",
   "onlyCoverProfilePhotoNameAndBioAreEditableHere": "یہاں صرف کور، پروفائل فوٹو، نام اور بائیو قابل تدوین ہیں۔",
-  "onlyPublicProfilesAreShown": "صرف عوامی پروفائلز دکھائے جاتے ہیں۔",
+  "onlyPublicProfilesAreShown": "پرائیویٹ پروفائلز درخواست منظور ہونے تک بند رہتی ہیں",
   "onlyEnabledLinksShowWhenSomeoneScansThisCard": "جب کوئی اس کارڈ کو اسکین کرتا ہے تو صرف فعال لنکس دکھائی دیتے ہیں۔",
   "orCONTINUEWITH": "یا اس کے ساتھ جاری رکھیں",
   "onlyThisPhoneIsUsingYourAccountRightNow": "اس وقت صرف یہ فون آپ کا اکاؤنٹ استعمال کر رہا ہے۔",
@@ -763,7 +763,7 @@
   "addAtLeastOneCatalogItem": "کم از کم ایک {label} آئٹم شامل کریں۔",
   "noCatalogItemsAvailable": "کوئی {label} آئٹمز دستیاب نہیں ہیں۔",
   "noItemsYetAddFirstCatalogItem": "ابھی تک کوئی آئٹمز نہیں ہیں۔ اپنا پہلا {label} آئٹم شامل کریں۔",
-  "noPublicProfileMatchesQuery": "کوئی عوامی پروفائل \"@{query}\" سے مماثل نہیں ہے۔",
+  "noPublicProfileMatchesQuery": "کوئی پروفائل \"@{query}\" سے مماثل نہیں ہے۔",
   "codeWithValue": "کوڈ: {code}",
   "@appTitle": {
     "description": "Application title"
@@ -864,5 +864,31 @@
   "noDocumentsAvailable": "کوئی دستاویز دستیاب نہیں۔",
   "documentName": "دستاویز کا نام",
   "setCustomIcon": "اپنی آئیکن سیٹ کریں",
-  "useFileTypeIcon": "PDF / Word آئیکن استعمال کریں"
+  "useFileTypeIcon": "PDF / Word آئیکن استعمال کریں",
+  "thisProfileIsPrivate": "یہ پروفائل پرائیویٹ ہے",
+  "privateProfileHint": "پروفائل دیکھنے کے لیے درخواست بھیجیں۔ قبول ہونے پر آپ کو اطلاع ملے گی۔",
+  "requestToView": "درخواست",
+  "requested": "درخواست بھیج دی",
+  "followRequestSent": "درخواست بھیج دی گئی",
+  "couldNotSendFollowRequest": "درخواست نہیں بھیجی جا سکی",
+  "followRequestTitle": "فالو درخواست",
+  "followRequestBody": "{name} آپ کی پروفائل دیکھنا چاہتے ہیں",
+  "@followRequestBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "followRequestAcceptedTitle": "درخواست قبول ہو گئی",
+  "followRequestAcceptedBody": "{name} نے آپ کی درخواست قبول کر لی",
+  "@followRequestAcceptedBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "requestAccepted": "درخواست قبول ہو گئی",
+  "removeAccess": "رسائی ہٹائیں"
 }

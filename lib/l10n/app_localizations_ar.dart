@@ -51,7 +51,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get publicProfileOn => 'يمكن لأي شخص العثور على ملفك وعرضه';
 
   @override
-  String get publicProfileOff => 'مخفي عن البحث — لا يمكن للآخرين اكتشافك';
+  String get publicProfileOff =>
+      'يمكن فقط للأشخاص الذين توافق عليهم رؤية تفاصيلك';
 
   @override
   String get shareQr => 'مشاركة رمز QR الخاص بي';
@@ -1035,7 +1036,8 @@ class AppLocalizationsAr extends AppLocalizations {
       'تظهر الروابط المفعّلة فقط عند مسح هذه البطاقة.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'تُعرض الملفات العامة فقط';
+  String get onlyPublicProfilesAreShown =>
+      'الملفات الخاصة تبقى مقفلة حتى يوافقوا على طلبك';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
@@ -2427,7 +2429,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'لا ملف عام يطابق \"@$query\".';
+    return 'لا ملف يطابق \"@$query\".';
   }
 
   @override
@@ -3698,4 +3700,45 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get useFileTypeIcon => 'استخدام أيقونة PDF / Word';
+
+  @override
+  String get thisProfileIsPrivate => 'هذا الملف خاص';
+
+  @override
+  String get privateProfileHint =>
+      'أرسل طلباً لعرض الملف. سنُعلمك عند الموافقة.';
+
+  @override
+  String get requestToView => 'طلب';
+
+  @override
+  String get requested => 'تم الطلب';
+
+  @override
+  String get followRequestSent => 'تم إرسال الطلب';
+
+  @override
+  String get couldNotSendFollowRequest => 'تعذر إرسال الطلب';
+
+  @override
+  String get followRequestTitle => 'طلب متابعة';
+
+  @override
+  String followRequestBody(String name) {
+    return '$name يريد عرض ملفك';
+  }
+
+  @override
+  String get followRequestAcceptedTitle => 'تم قبول الطلب';
+
+  @override
+  String followRequestAcceptedBody(String name) {
+    return '$name قبل طلبك';
+  }
+
+  @override
+  String get requestAccepted => 'تم قبول الطلب';
+
+  @override
+  String get removeAccess => 'إزالة الوصول';
 }

@@ -6,6 +6,7 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
 import 'package:tapni_app/screens/invitations/invitation_detail_screen.dart';
+import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
@@ -20,6 +21,8 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
+  String? _busyId;
+
   @override
   void initState() {
     super.initState();
@@ -153,6 +156,26 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 ),
                               ),
                             );
+                          } else if (item['type'] == 'follow_accepted') {
+                            final username =
+                                (item['username'] as String?)?.trim() ?? '';
+                            final userId =
+                                (item['userId'] as String?)?.trim() ?? '';
+                            if (username.isNotEmpty) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      ScannedProfileScreen(username: username),
+                                ),
+                              );
+                            } else if (userId.isNotEmpty) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      ScannedProfileScreen(user: userId),
+                                ),
+                              );
+                            }
                           }
                         },
                         child: GlassCard(
@@ -189,6 +212,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                         item['title'] as String?,
                                                     context.l10n,
                                                   )
+                                                : item['type'] == 'follow_request'
+                                                ? context.l10n.followRequestTitle
+                                                : item['type'] == 'follow_accepted'
+                                                ? context.l10n.followRequestAcceptedTitle
                                                 : item['title'],
                                             style: TextStyle(
                                               fontWeight: isRead ? FontWeight.w600 : FontWeight.bold,
@@ -210,7 +237,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                     ),
                                     const SizedBox(height: 6),
                                     Text(
-                                      item['body'],
+                                      item['type'] == 'follow_request'
+                                          ? context.l10n.followRequestBody(
+                                              (item['userName'] as String?) ??
+                                                  '',
+                                            )
+                                          : item['type'] == 'follow_accepted'
+                                          ? context.l10n.followRequestAcceptedBody(
+                                              (item['userName'] as String?) ??
+                                                  '',
+                                            )
+                                          : item['body'],
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: isRead 
@@ -218,6 +255,69 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                             : (isDark ? Colors.white70 : Colors.black87),
                                       ),
                                     ),
+                                    if (item['type'] == 'follow_request') ...[
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          FilledButton(
+                                            onPressed: _busyId == item['id']
+                                                ? null
+                                                : () async {
+                                                    final followId =
+                                                        item['id'] as String;
+                                                    final l10n = context.l10n;
+                                                    final messenger =
+                                                        ScaffoldMessenger.of(
+                                                      context,
+                                                    );
+                                                    setState(
+                                                      () => _busyId = followId,
+                                                    );
+                                                    final ok = await leadsProvider
+                                                        .acceptFollowRequest(
+                                                      followId,
+                                                    );
+                                                    if (!mounted) return;
+                                                    setState(() => _busyId = null);
+                                                    messenger.showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                          ok
+                                                              ? l10n.requestAccepted
+                                                              : l10n.somethingWentWrong,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                            style: FilledButton.styleFrom(
+                                              backgroundColor: AppTheme.accentGold,
+                                              foregroundColor: Colors.black,
+                                              visualDensity: VisualDensity.compact,
+                                            ),
+                                            child: Text(context.l10n.accept),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          OutlinedButton(
+                                            onPressed: _busyId == item['id']
+                                                ? null
+                                                : () async {
+                                                    setState(() =>
+                                                        _busyId = item['id'] as String);
+                                                    await leadsProvider
+                                                        .declineFollowRequest(
+                                                      item['id'] as String,
+                                                    );
+                                                    if (!mounted) return;
+                                                    setState(() => _busyId = null);
+                                                  },
+                                            style: OutlinedButton.styleFrom(
+                                              visualDensity: VisualDensity.compact,
+                                            ),
+                                            child: Text(context.l10n.decline),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ],
                                 ),
                               ),

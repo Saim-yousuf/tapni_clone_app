@@ -17,7 +17,7 @@
   "socialLinksSubtitle": "إضافة Instagram وWhatsApp والموقع والمزيد",
   "publicProfile": "الملف العام",
   "publicProfileOn": "يمكن لأي شخص العثور على ملفك وعرضه",
-  "publicProfileOff": "مخفي عن البحث — لا يمكن للآخرين اكتشافك",
+  "publicProfileOff": "يمكن فقط للأشخاص الذين توافق عليهم رؤية تفاصيلك",
   "shareQr": "مشاركة رمز QR الخاص بي",
   "shareQrSubtitle": "دع الآخرين يمسحون بطاقة أعمالك الرقمية",
   "shoppingRewards": "التسوق والمكافآت",
@@ -340,7 +340,7 @@
   "notificationCleared": "تم مسح الإشعار",
   "onlyCoverProfilePhotoNameAndBioAreEditableHere": "يمكن تعديل الغلاف وصورة الملف والاسم والنبذة فقط هنا.",
   "onlyEnabledLinksShowWhenSomeoneScansThisCard": "تظهر الروابط المفعّلة فقط عند مسح هذه البطاقة.",
-  "onlyPublicProfilesAreShown": "تُعرض الملفات العامة فقط",
+  "onlyPublicProfilesAreShown": "الملفات الخاصة تبقى مقفلة حتى يوافقوا على طلبك",
   "onlyThisPhoneIsUsingYourAccountRightNow": "هذا الهاتف وحده يستخدم حسابك حاليًا.",
   "orCONTINUEWITH": "أو المتابعة عبر",
   "order": "طلب",
@@ -807,7 +807,7 @@
       }
     }
   },
-  "noPublicProfileMatchesQuery": "لا ملف عام يطابق \"@{query}\".",
+  "noPublicProfileMatchesQuery": "لا ملف يطابق \"@{query}\".",
   "@noPublicProfileMatchesQuery": {
     "placeholders": {
       "query": {
@@ -1569,5 +1569,31 @@
   "noDocumentsAvailable": "لا توجد مستندات متاحة.",
   "documentName": "اسم المستند",
   "setCustomIcon": "تعيين أيقونة مخصصة",
-  "useFileTypeIcon": "استخدام أيقونة PDF / Word"
+  "useFileTypeIcon": "استخدام أيقونة PDF / Word",
+  "thisProfileIsPrivate": "هذا الملف خاص",
+  "privateProfileHint": "أرسل طلباً لعرض الملف. سنُعلمك عند الموافقة.",
+  "requestToView": "طلب",
+  "requested": "تم الطلب",
+  "followRequestSent": "تم إرسال الطلب",
+  "couldNotSendFollowRequest": "تعذر إرسال الطلب",
+  "followRequestTitle": "طلب متابعة",
+  "followRequestBody": "{name} يريد عرض ملفك",
+  "@followRequestBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "followRequestAcceptedTitle": "تم قبول الطلب",
+  "followRequestAcceptedBody": "{name} قبل طلبك",
+  "@followRequestAcceptedBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "requestAccepted": "تم قبول الطلب",
+  "removeAccess": "إزالة الوصول"
 }

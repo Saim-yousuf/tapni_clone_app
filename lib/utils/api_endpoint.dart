@@ -37,6 +37,7 @@ class Api {
   static final wallet = _WalletApi();
   static final invitation = _InvitationApi();
   static final directory = _DirectoryApi();
+  static final follow = _FollowApi();
 }
 
 class _AuthApi {
@@ -206,4 +207,18 @@ class _DirectoryApi {
   String get syncStatus => "${Api.baseUrl}/api/user/directory/sync-status";
   String lookup(String phone) =>
       "${Api.baseUrl}/api/user/directory/lookup?phone=${Uri.encodeQueryComponent(phone)}";
+}
+
+class _FollowApi {
+  String request(String userId) => "${Api.baseUrl}/api/user/follow/$userId";
+  String unfollow(String userId) => "${Api.baseUrl}/api/user/follow/$userId";
+  String accept(String followId) =>
+      "${Api.baseUrl}/api/user/follow/$followId/accept";
+  String decline(String followId) =>
+      "${Api.baseUrl}/api/user/follow/$followId/decline";
+  String get notifications => "${Api.baseUrl}/api/user/follow/notifications";
+  String get markAllRead =>
+      "${Api.baseUrl}/api/user/follow/notifications/read";
+  String markRead(String followId) =>
+      "${Api.baseUrl}/api/user/follow/notifications/$followId/read";
 }

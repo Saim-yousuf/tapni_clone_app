@@ -19,6 +19,7 @@ import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/screens/subscription_screen.dart';
+import 'package:tapni_app/screens/notifications_screen.dart';
 import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/services/device_session_guard.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
@@ -263,6 +264,8 @@ class PushNotificationService {
         return 'leads';
       case 'subscription':
       case 'employee_invitation':
+      case 'follow_request':
+      case 'follow_accepted':
         return 'account';
       case 'event_invitation':
         return 'invitations';
@@ -347,6 +350,11 @@ class PushNotificationService {
         _openEmployeeInvitations(context);
       case 'event_invitation':
         _openEventInvitation(context, data['invitationId']?.toString());
+      case 'follow_request':
+      case 'follow_accepted':
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+        );
       default:
         break;
     }
@@ -435,6 +443,11 @@ class PushNotificationService {
           .fetchReceivedQuiet();
       Provider.of<LeadsProvider>(context, listen: false)
           .fetchEventInvitationNotifications();
+    }
+
+    if (type == 'follow_request' || type == 'follow_accepted') {
+      Provider.of<LeadsProvider>(context, listen: false)
+          .fetchFollowNotifications();
     }
 
     if (type == 'subscription') {

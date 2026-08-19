@@ -16,6 +16,7 @@ class PublicUserResult {
   final String? profilePhoto;
   final String bio;
   final String businessName;
+  final bool isPublic;
 
   const PublicUserResult({
     required this.id,
@@ -24,6 +25,7 @@ class PublicUserResult {
     this.profilePhoto,
     this.bio = '',
     this.businessName = '',
+    this.isPublic = true,
   });
 
   factory PublicUserResult.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class PublicUserResult {
       profilePhoto: json['profilePhoto']?.toString(),
       bio: json['bio']?.toString() ?? '',
       businessName: json['businessName']?.toString() ?? '',
+      isPublic: json['isPublic'] as bool? ?? true,
     );
   }
 
@@ -361,6 +364,14 @@ class _FindUserScreenState extends State<FindUserScreen> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        if (!user.isPublic) ...[
+                          const SizedBox(width: 6),
+                          Icon(
+                            Icons.lock_outline,
+                            size: 14,
+                            color: isDark ? Colors.white54 : Colors.black45,
+                          ),
+                        ],
                         if (isMe) ...[
                           const SizedBox(width: 8),
                           Container(

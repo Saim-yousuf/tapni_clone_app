@@ -29,6 +29,8 @@ class UserProfile {
   final List<UserCustomCard> customCards;
   /// Print design for the primary digital card.
   final BusinessCardDesign? cardPrintDesign;
+  final bool canView;
+  final String followStatus;
 
   UserProfile({
     this.id,
@@ -54,6 +56,8 @@ class UserProfile {
     this.cardTemplateId = 't2',
     this.customCards = const [],
     this.cardPrintDesign,
+    this.canView = true,
+    this.followStatus = 'none',
   });
 
   factory UserProfile.fromApiJson(Map<String, dynamic> json) {
@@ -69,6 +73,8 @@ class UserProfile {
       coverPhotoUrl: json['coverPhoto']?.toString(),
       isPro: json['isPro'] as bool? ?? json['IsPro'] as bool? ?? false,
       isPublic: json['isPublic'] as bool? ?? true,
+      canView: json['canView'] as bool? ?? true,
+      followStatus: json['followStatus']?.toString() ?? 'none',
       name: json['name']?.toString() ?? '',
       email: json['email']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
@@ -131,6 +137,8 @@ class UserProfile {
     List<UserCustomCard>? customCards,
     BusinessCardDesign? cardPrintDesign,
     bool clearCardPrintDesign = false,
+    bool? canView,
+    String? followStatus,
   }) {
     return UserProfile(
       id: id ?? this.id,
@@ -158,6 +166,8 @@ class UserProfile {
       cardPrintDesign: clearCardPrintDesign
           ? null
           : (cardPrintDesign ?? this.cardPrintDesign),
+      canView: canView ?? this.canView,
+      followStatus: followStatus ?? this.followStatus,
     );
   }
 }

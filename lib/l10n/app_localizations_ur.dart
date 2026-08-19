@@ -53,7 +53,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get publicProfileOff =>
-      'تلاش سے پوشیدہ — آپ کا QR اور پروفائل لنک پھر بھی کام کرے گا';
+      'صرف وہی لوگ تفصیلات دیکھ سکتے ہیں جن کی آپ منظوری دیں';
 
   @override
   String get shareQr => 'میرا QR کوڈ شیئر کریں';
@@ -1054,7 +1054,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get onlyPublicProfilesAreShown =>
-      'صرف عوامی پروفائلز دکھائے جاتے ہیں۔';
+      'پرائیویٹ پروفائلز درخواست منظور ہونے تک بند رہتی ہیں';
 
   @override
   String get onlyThisPhoneIsUsingYourAccountRightNow =>
@@ -2465,7 +2465,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String noPublicProfileMatchesQuery(String query) {
-    return 'کوئی عوامی پروفائل \"@$query\" سے مماثل نہیں ہے۔';
+    return 'کوئی پروفائل \"@$query\" سے مماثل نہیں ہے۔';
   }
 
   @override
@@ -3744,4 +3744,45 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get useFileTypeIcon => 'PDF / Word آئیکن استعمال کریں';
+
+  @override
+  String get thisProfileIsPrivate => 'یہ پروفائل پرائیویٹ ہے';
+
+  @override
+  String get privateProfileHint =>
+      'پروفائل دیکھنے کے لیے درخواست بھیجیں۔ قبول ہونے پر آپ کو اطلاع ملے گی۔';
+
+  @override
+  String get requestToView => 'درخواست';
+
+  @override
+  String get requested => 'درخواست بھیج دی';
+
+  @override
+  String get followRequestSent => 'درخواست بھیج دی گئی';
+
+  @override
+  String get couldNotSendFollowRequest => 'درخواست نہیں بھیجی جا سکی';
+
+  @override
+  String get followRequestTitle => 'فالو درخواست';
+
+  @override
+  String followRequestBody(String name) {
+    return '$name آپ کی پروفائل دیکھنا چاہتے ہیں';
+  }
+
+  @override
+  String get followRequestAcceptedTitle => 'درخواست قبول ہو گئی';
+
+  @override
+  String followRequestAcceptedBody(String name) {
+    return '$name نے آپ کی درخواست قبول کر لی';
+  }
+
+  @override
+  String get requestAccepted => 'درخواست قبول ہو گئی';
+
+  @override
+  String get removeAccess => 'رسائی ہٹائیں';
 }
