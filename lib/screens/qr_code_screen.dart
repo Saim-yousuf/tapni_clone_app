@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -9,6 +8,7 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/branded_qr_image.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
@@ -157,48 +157,11 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                             ),
                           ],
                         ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            QrImageView(
-                              data: profileLink,
-                              version: QrVersions.auto,
-                              size: 200.0,
-                              gapless: false,
-                              foregroundColor: Colors.black,
-                            ),
-                            // Custom Gold Accent Center overlay with initial letter
-                            Container(
-                              width: 42,
-                              height: 42,
-                              decoration: BoxDecoration(
-                                gradient: AppTheme.goldGradient,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white,
-                                  width: 3,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.15),
-                                    blurRadius: 6,
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Text(
-                                  profile.name.isNotEmpty
-                                      ? profile.name[0].toUpperCase()
-                                      : 'S',
-                                  style: TextStyle(
-                                    color: AppTheme.secondaryWhite,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                        child: BrandedQrImage(
+                          data: profileLink,
+                          size: 200,
+                          gapless: false,
+                          backgroundColor: Colors.white,
                         ),
                       ),
                       SizedBox(height: 24),

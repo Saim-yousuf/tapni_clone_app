@@ -19,7 +19,9 @@ class FaceCaptureSheet extends StatefulWidget {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
       useSafeArea: true,
-      builder: (_) => FaceCaptureSheet(title: title),
+      builder: (_) => SheetMessengerScope(
+        child: FaceCaptureSheet(title: title),
+      ),
     );
   }
 

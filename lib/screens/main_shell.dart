@@ -19,8 +19,8 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 class MainShell extends StatefulWidget {
-  final String? _currentPage;
-  const MainShell({Key? key, this._currentPage}) : super(key: key);
+  final String? currentPage;
+  const MainShell({super.key, this.currentPage});
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -29,13 +29,18 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   static const _navPages = ['Links', 'Contacts', 'Explore', 'Settings'];
 
-  String? _currentPage;
+  late String _currentPage;
   int _navIndex = 0;
   bool _contactsPromptShown = false;
+
+  bool get _onProfile => _currentPage == 'My Card';
+
   @override
   void initState() {
-    _currentPage = widget._currentPage ?? 'My Card';
     super.initState();
+    _currentPage = widget.currentPage ?? 'My Card';
+    final index = _navPages.indexOf(_currentPage);
+    _navIndex = index >= 0 ? index : 0;
     DeviceSessionGuard.instance.start();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _loadCatalogNotifications();
@@ -109,19 +114,41 @@ class _MainShellState extends State<MainShell> {
     Provider.of<ProfileProvider>(context, listen: false).setEditingProfile(false);
   }
 
+  void _goToProfile() {
+    setState(() => _currentPage = 'My Card');
+    Provider.of<ProfileProvider>(context, listen: false).setEditingProfile(false);
+  }
+
   void _onCenterButtonTap() {
     final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     if (profileProvider.isEditingProfile) {
       profileProvider.triggerSave();
       return;
     }
-    if (_currentPage == 'My Card') {
+    if (_onProfile) {
       Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => const ScanScreen()),
       );
       return;
     }
-    setState(() => _currentPage = 'My Card');
+    _goToProfile();
+  }
+
+  BottomBarItem _navItem({
+    required IconData icon,
+    required IconData selectedIcon,
+    required String title,
+    required Color selectedColor,
+    required Color unselectedColor,
+  }) {
+    final highlight = !_onProfile;
+    return BottomBarItem(
+      icon: Icon(icon),
+      selectedIcon: Icon(highlight ? selectedIcon : icon),
+      selectedColor: highlight ? selectedColor : unselectedColor,
+      unSelectedColor: unselectedColor,
+      title: Text(title),
+    );
   }
 
   Widget _buildCenterFab({
@@ -136,7 +163,7 @@ class _MainShellState extends State<MainShell> {
     Widget child;
     if (isEditing) {
       child = Icon(Icons.check_rounded, size: 38, color: fabFg);
-    } else if (_currentPage == 'My Card') {
+    } else if (_onProfile) {
       child = Icon(Icons.qr_code_scanner_rounded, size: 38, color: fabFg);
     } else if (hasPhoto) {
       child = SizedBox.expand(
@@ -214,33 +241,33 @@ class _MainShellState extends State<MainShell> {
           opacity: 0.12,
         ),
         items: [
-          BottomBarItem(
-            icon: const Icon(Icons.link_outlined),
-            selectedIcon: const Icon(Icons.link),
+          _navItem(
+            icon: Icons.link_outlined,
+            selectedIcon: Icons.link,
+            title: l10n.links,
             selectedColor: selectedColor,
-            unSelectedColor: unselectedColor,
-            title: Text(l10n.links),
+            unselectedColor: unselectedColor,
           ),
-          BottomBarItem(
-            icon: const Icon(Icons.people_outline),
-            selectedIcon: const Icon(Icons.people),
+          _navItem(
+            icon: Icons.people_outline,
+            selectedIcon: Icons.people,
+            title: l10n.contacts,
             selectedColor: selectedColor,
-            unSelectedColor: unselectedColor,
-            title: Text(l10n.contacts),
+            unselectedColor: unselectedColor,
           ),
-          BottomBarItem(
-            icon: const Icon(Icons.insights_outlined),
-            selectedIcon: const Icon(Icons.insights),
+          _navItem(
+            icon: Icons.insights_outlined,
+            selectedIcon: Icons.insights,
+            title: l10n.explore,
             selectedColor: selectedColor,
-            unSelectedColor: unselectedColor,
-            title: Text(l10n.explore),
+            unselectedColor: unselectedColor,
           ),
-          BottomBarItem(
-            icon: const Icon(Icons.storefront_outlined),
-            selectedIcon: const Icon(Icons.storefront),
+          _navItem(
+            icon: Icons.storefront_outlined,
+            selectedIcon: Icons.storefront,
+            title: l10n.tools,
             selectedColor: selectedColor,
-            unSelectedColor: unselectedColor,
-            title: Text(l10n.tools),
+            unselectedColor: unselectedColor,
           ),
         ],
         backgroundColor: barColor,

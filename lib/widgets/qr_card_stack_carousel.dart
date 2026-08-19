@@ -1,8 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 import 'package:tapni_app/models/user_custom_card.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/business_card_design_renderer.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
@@ -481,6 +483,7 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
         coverPhotoUrl: card.coverPhotoUrl,
         subtitle: card.subtitle,
         bio: card.bio,
+        verified: Provider.of<ProfileProvider>(context, listen: false).isProUser,
         width: cardWidth,
       );
     }

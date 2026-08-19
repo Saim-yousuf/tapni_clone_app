@@ -21,7 +21,7 @@ class SubcriptionSheet {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
       useSafeArea: true,
-      builder: (_) => ProUpgradeSheet(),
+      builder: (_) => const SheetMessengerScope(child: ProUpgradeSheet()),
     );
   }
 }

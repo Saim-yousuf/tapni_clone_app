@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/screens/business_card/business_card_template_gallery_screen.dart';
+import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/template_business_card_preview.dart';
 
@@ -360,6 +362,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
         coverPhotoUrl: isCustomize ? _coverPhotoPath : null,
         subtitle: previewCard.subtitle,
         bio: previewCard.bio,
+        verified: profile.isPro,
         width: 300,
       ),
     );
@@ -479,8 +482,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
           ...links.map((link) {
             final enabled = _enabledLinkIds.contains(link.id);
             return _LinkToggleRow(
-              linkName: link.platformName,
-              logoUrl: link.logoUrl,
+              link: link,
               enabled: enabled,
               onChanged: (val) {
                 setState(() {
@@ -707,14 +709,12 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
 }
 
 class _LinkToggleRow extends StatelessWidget {
-  final String linkName;
-  final String? logoUrl;
+  final SocialLink link;
   final bool enabled;
   final ValueChanged<bool> onChanged;
 
   const _LinkToggleRow({
-    required this.linkName,
-    this.logoUrl,
+    required this.link,
     required this.enabled,
     required this.onChanged,
   });
@@ -728,26 +728,24 @@ class _LinkToggleRow extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
         child: Row(
           children: [
-            if (logoUrl?.isNotEmpty == true)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  logoUrl!,
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) =>
-                      Icon(Icons.link, color: WaUi.secondaryText),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: SizedBox(
+                width: 40,
+                height: 40,
+                child: LinkPlatformIcon(
+                  link: link,
+                  size: 40,
+                  fit: BoxFit.contain,
                 ),
-              )
-            else
-              Icon(Icons.link, color: WaUi.secondaryText, size: 40),
+              ),
+            ),
             SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(linkName, style: WaUi.bodyMedium),
+                  Text(link.platformName, style: WaUi.bodyMedium),
                   Text(context.l10n.showOnThisCard, style: WaUi.caption),
                 ],
               ),

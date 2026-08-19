@@ -64,9 +64,11 @@ class ProfileProvider extends ChangeNotifier {
     _profile = MockDataService.getInitialProfile();
     _isProUser = false;
     _hasFetchedProfile = false;
+    _isEditingProfile = false;
     _linkCatalog.clear();
     _selectedTemplateIndex = 1;
     _activeCardId = UserCustomCard.primaryId;
+    SharedPrefHelper.remove(_activeCardPrefKey);
     notifyListeners();
   }
 

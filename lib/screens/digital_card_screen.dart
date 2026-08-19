@@ -5,7 +5,9 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/edit_profile_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/screens/qr_code_screen.dart';
+import 'package:tapni_app/utils/branded_qr.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/verified_name.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/social_icon_button.dart';
 import 'package:tapni_app/widgets/templates_sheet.dart';
@@ -85,10 +87,14 @@ class DigitalCardScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(
-                        Icons.contactless,
-                        color: currentTemplate.brandingColor.withOpacity(0.8),
-                        size: 28,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: Image.asset(
+                          BrandedQr.logoAsset,
+                          width: 28,
+                          height: 28,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       Row(
                         children: [
@@ -167,13 +173,15 @@ class DigitalCardScreen extends StatelessWidget {
                   const SizedBox(height: 18),
                   
                   // Name and Designation
-                  Text(
-                    profile.name,
+                  VerifiedName(
+                    name: profile.name,
+                    verified: profile.isPro,
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
                       color: currentTemplate.textColor,
                     ),
+                    badgeColor: currentTemplate.textColor,
                   ),
                   const SizedBox(height: 4),
                   Text(

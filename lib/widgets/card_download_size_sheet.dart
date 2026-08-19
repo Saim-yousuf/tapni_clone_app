@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/branded_qr_image.dart';
 import 'package:tapni_app/models/business_card_design.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
@@ -59,20 +59,34 @@ class CardDownloadSizeSheet extends StatefulWidget {
       return;
     }
 
-    return showModalBottomSheet(
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
+
+    final saved = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
       useSafeArea: true,
-      builder: (_) => CardDownloadSizeSheet(
-        cardCaptureKey: cardCaptureKey,
-        profileUrl: profileUrl,
-        fileName: fileName,
-        cardAspectRatio: cardAspectRatio,
-        initialKind: initialKind,
-        qrForeground: qrForeground,
-        qrBackground: qrBackground,
+      builder: (_) => SheetMessengerScope(
+        child: CardDownloadSizeSheet(
+          cardCaptureKey: cardCaptureKey,
+          profileUrl: profileUrl,
+          fileName: fileName,
+          cardAspectRatio: cardAspectRatio,
+          initialKind: initialKind,
+          qrForeground: qrForeground,
+          qrBackground: qrBackground,
+        ),
+      ),
+    );
+
+    if (!context.mounted || saved != true) return;
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(l10n.savedToGallery),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.green,
       ),
     );
   }
@@ -86,7 +100,9 @@ class CardDownloadSizeSheet extends StatefulWidget {
     Color? qrForeground,
     Color? qrBackground,
   }) async {
+    final messenger = ScaffoldMessenger.of(context);
     final l10n = context.l10n;
+    final inSheet = ModalRoute.of(context) is ModalBottomSheetRoute;
     var ok = false;
 
     if (cardCaptureKey != null &&
@@ -106,7 +122,10 @@ class CardDownloadSizeSheet extends StatefulWidget {
     }
 
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
+    if (inSheet && Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+    messenger.showSnackBar(
       SnackBar(
         content: Text(ok ? l10n.savedToGallery : l10n.couldNotSave),
         behavior: SnackBarBehavior.floating,
@@ -188,15 +207,17 @@ class _CardDownloadSizeSheetState extends State<CardDownloadSizeSheet> {
     }
 
     if (!mounted) return;
+    if (ok) {
+      Navigator.pop(context, true);
+      return;
+    }
     setState(() => _saving = false);
     messenger.showSnackBar(
-      SnackBar(
-        content: Text(ok ? 'Saved to gallery' : 'Failed to save'),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: ok ? Colors.green : Colors.red,
+      sheetSnackBar(
+        context.l10n.couldNotSave,
+        backgroundColor: Colors.red,
       ),
     );
-    if (ok) Navigator.pop(context);
   }
 
   @override
@@ -311,19 +332,11 @@ class _CardDownloadSizeSheetState extends State<CardDownloadSizeSheet> {
                   child: Container(
                     color: widget.qrBackground ?? Colors.white,
                     padding: const EdgeInsets.all(16),
-                    child: QrImageView(
+                    child: BrandedQrImage(
                       data: widget.profileUrl,
-                      version: QrVersions.auto,
                       size: 200,
                       backgroundColor: widget.qrBackground ?? Colors.white,
-                      eyeStyle: QrEyeStyle(
-                        eyeShape: QrEyeShape.square,
-                        color: widget.qrForeground ?? Colors.black,
-                      ),
-                      dataModuleStyle: QrDataModuleStyle(
-                        dataModuleShape: QrDataModuleShape.square,
-                        color: widget.qrForeground ?? Colors.black,
-                      ),
+                      foregroundColor: widget.qrForeground ?? Colors.black,
                     ),
                   ),
                 ),

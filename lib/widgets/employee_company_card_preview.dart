@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/models/card_template.dart';
+import 'package:tapni_app/widgets/branded_qr_image.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 /// Employee card — business template colors, employee profile QR and details.
@@ -141,11 +141,11 @@ class EmployeeCompanyCardPreview extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(compact ? 12 : 14),
                     ),
-                    child: QrImageView(
+                    child: BrandedQrImage(
                       data: profileUrl,
                       size: _qrSize,
+                      padding: EdgeInsets.zero,
                       backgroundColor: Colors.white,
-                      errorCorrectionLevel: QrErrorCorrectLevel.H,
                     ),
                   ),
                   SizedBox(height: compact ? 6 : 8),

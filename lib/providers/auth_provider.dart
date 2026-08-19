@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/l10n_lookup.dart';
 import 'package:tapni_app/models/stored_account.dart';
+import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
@@ -69,6 +70,7 @@ class AuthProvider extends ChangeNotifier {
       _clearProfileData(context),
       _clearLeadsData(context),
       _clearSubscriptionData(context),
+      _clearInvitationData(context),
     ]);
   }
 
@@ -96,6 +98,12 @@ class AuthProvider extends ChangeNotifier {
         listen: false,
       );
       subscriptionProvider.clearData();
+    }
+  }
+
+  Future<void> _clearInvitationData(BuildContext context) async {
+    if (context.mounted) {
+      Provider.of<InvitationProvider>(context, listen: false).clearData();
     }
   }
 
@@ -507,26 +515,18 @@ class AuthProvider extends ChangeNotifier {
     final active = AccountStorage.getActiveAccount();
     if (active?.userId == userId) return true;
 
+    try {
+      await PushNotificationService.removeTokenFromBackend()
+          .timeout(const Duration(seconds: 3));
+    } catch (_) {}
+
     final ok = await AccountStorage.switchTo(userId);
     if (!ok) return false;
 
-    await PushNotificationService.removeTokenFromBackend();
-    await _clearAllUserData(context);
+    try {
+      await _clearAllUserData(context);
+    } catch (_) {}
     refreshAccounts();
-
-    if (context.mounted) {
-      final subProvider = Provider.of<SubscriptionProvider>(
-        context,
-        listen: false,
-      );
-      await subProvider.checkSubscriptionStatus();
-      final profileProvider = Provider.of<ProfileProvider>(
-        context,
-        listen: false,
-      );
-      await profileProvider.fetchProfile();
-      await PushNotificationService.syncTokenWithBackend();
-    }
     return true;
   }
 

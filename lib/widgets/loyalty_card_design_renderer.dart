@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/models/invitation_design.dart';
+import 'package:tapni_app/widgets/branded_qr_image.dart';
 import 'package:tapni_app/models/loyalty_card_design.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
@@ -276,14 +276,11 @@ class _LoyaltyLayerWidget extends StatelessWidget {
         height: size,
         color: Colors.white,
         padding: const EdgeInsets.all(4),
-        child: QrImageView(
+        child: BrandedQrImage(
           data: data,
-          version: QrVersions.auto,
-          eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.square, color: color),
-          dataModuleStyle: QrDataModuleStyle(
-            dataModuleShape: QrDataModuleShape.square,
-            color: color,
-          ),
+          padding: EdgeInsets.zero,
+          foregroundColor: color,
+          backgroundColor: Colors.white,
         ),
       ),
     );

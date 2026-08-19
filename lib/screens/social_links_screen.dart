@@ -77,7 +77,7 @@ class SocialLinksScreen extends StatelessWidget {
           Material(
             color: theme.scaffoldBackgroundColor,
             child: Padding(
-              padding: EdgeInsets.fromLTRB(16, 8, 16, isTab ? 88 : 24),
+              padding: EdgeInsets.fromLTRB(16, 8, 16, isTab ? 45 : 24),
               child: CustomAppButton(
                 width: double.infinity,
                 text: context.l10n.addLink2,

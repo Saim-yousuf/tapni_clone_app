@@ -4,7 +4,8 @@ import 'package:tapni_app/models/stored_account.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/screens/linked_devices/qr_login_screen.dart';
 import 'package:tapni_app/screens/phone_auth_screen.dart';
-import 'package:tapni_app/screens/main_shell.dart';
+import 'package:tapni_app/screens/splash_screen.dart';
+import 'package:tapni_app/services/push_notification_service.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
 
@@ -105,25 +106,34 @@ class _AccountSwitcherBody extends StatelessWidget {
 
   Future<void> _switch(BuildContext sheetContext, StoredAccount account) async {
     Navigator.pop(sheetContext);
-    if (!hostContext.mounted) return;
 
-    final auth = Provider.of<AuthProvider>(hostContext, listen: false);
-    final ok = await auth.switchAccount(account.userId, hostContext);
-    if (!hostContext.mounted) return;
+    final nav = PushNotificationService.navigatorKey.currentState;
+    final navContext = PushNotificationService.navigatorKey.currentContext;
+    final ctx = hostContext.mounted
+        ? hostContext
+        : (navContext != null && navContext.mounted ? navContext : null);
+    if (ctx == null) return;
+
+    final auth = Provider.of<AuthProvider>(ctx, listen: false);
+    var ok = false;
+    try {
+      ok = await auth.switchAccount(account.userId, ctx);
+    } catch (_) {
+      ok = false;
+    }
 
     if (ok) {
-      ShowAlert.success(
-        message: hostContext.l10n.switchedToAccount(account.displayName),
-        context: hostContext,
-      );
-      Navigator.of(hostContext).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => MainShell()),
+      (nav ?? Navigator.of(ctx)).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const SplashScreen()),
         (_) => false,
       );
-    } else {
+      return;
+    }
+
+    if (ctx.mounted) {
       ShowAlert.error(
-        message: hostContext.l10n.couldNotSwitchAccount,
-        context: hostContext,
+        message: ctx.l10n.couldNotSwitchAccount,
+        context: ctx,
       );
     }
   }

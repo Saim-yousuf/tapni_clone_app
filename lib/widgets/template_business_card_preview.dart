@@ -3,8 +3,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/models/card_template.dart';
+import 'package:tapni_app/utils/branded_qr.dart';
+import 'package:tapni_app/widgets/branded_qr_image.dart';
+import 'package:tapni_app/widgets/verified_name.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class TemplateBusinessCardPreview extends StatelessWidget {
@@ -16,6 +18,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
   final String? coverPhotoUrl;
   final String? subtitle;
   final String? bio;
+  final bool verified;
   final double width;
 
   const TemplateBusinessCardPreview({
@@ -28,6 +31,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
     this.coverPhotoUrl,
     this.subtitle,
     this.bio,
+    this.verified = false,
     this.width = 340,
   });
 
@@ -65,10 +69,14 @@ class TemplateBusinessCardPreview extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(
-                Icons.contactless,
-                color: template.brandingColor.withValues(alpha: 0.85),
-                size: 26,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Image.asset(
+                  BrandedQr.logoAsset,
+                  width: 26,
+                  height: 26,
+                  fit: BoxFit.cover,
+                ),
               ),
               Text(
                 context.l10n.barqody,
@@ -84,8 +92,9 @@ class TemplateBusinessCardPreview extends StatelessWidget {
           const SizedBox(height: 18),
           _buildAvatar(),
           const SizedBox(height: 14),
-          Text(
-            name,
+          VerifiedName(
+            name: name,
+            verified: verified,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: template.textColor,
@@ -94,6 +103,8 @@ class TemplateBusinessCardPreview extends StatelessWidget {
               letterSpacing: -0.3,
               height: 1.2,
             ),
+            badgeColor: template.textColor,
+            badgeSize: 20,
           ),
           if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
             const SizedBox(height: 6),
@@ -129,11 +140,11 @@ class TemplateBusinessCardPreview extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: QrImageView(
+            child: BrandedQrImage(
               data: profileUrl,
               size: 148,
+              padding: EdgeInsets.zero,
               backgroundColor: Colors.white,
-              errorCorrectionLevel: QrErrorCorrectLevel.H,
             ),
           ),
           const SizedBox(height: 10),

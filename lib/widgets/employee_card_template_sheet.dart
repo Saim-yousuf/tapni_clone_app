@@ -32,9 +32,11 @@ class EmployeeCardTemplateSheet extends StatefulWidget {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
       useSafeArea: true,
-      builder: (_) => EmployeeCardTemplateSheet(
-        card: card,
-        onApplied: onApplied,
+      builder: (_) => SheetMessengerScope(
+        child: EmployeeCardTemplateSheet(
+          card: card,
+          onApplied: onApplied,
+        ),
       ),
     );
   }

@@ -4,8 +4,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/branded_qr_image.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 
 /// Shared cache so swipe/rebuilds don't re-decode huge data-URI backgrounds
@@ -383,14 +383,11 @@ class _LayerWidget extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: QrImageView(
+        child: BrandedQrImage(
           data: data,
-          version: QrVersions.auto,
-          eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.square, color: color),
-          dataModuleStyle: QrDataModuleStyle(
-            dataModuleShape: QrDataModuleShape.square,
-            color: color,
-          ),
+          padding: EdgeInsets.zero,
+          foregroundColor: color,
+          backgroundColor: Colors.white,
         ),
       ),
     );

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/branded_qr_image.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 
@@ -566,14 +566,11 @@ class _GlassQr extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: QrImageView(
+            child: BrandedQrImage(
               data: qrData,
-              version: QrVersions.auto,
-              eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.square, color: qrColor),
-              dataModuleStyle: QrDataModuleStyle(
-                dataModuleShape: QrDataModuleShape.square,
-                color: qrColor,
-              ),
+              padding: EdgeInsets.zero,
+              foregroundColor: qrColor,
+              backgroundColor: Colors.white,
             ),
           ),
           const SizedBox(height: 8),

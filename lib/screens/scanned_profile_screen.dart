@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
+import 'package:tapni_app/widgets/verified_name.dart';
 import 'package:tapni_app/widgets/bank_widgets.dart';
 import 'package:tapni_app/widgets/loading_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -493,8 +494,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                Text(
-                  displayName,
+                VerifiedName(
+                  name: displayName,
+                  verified: profile.isPro,
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,

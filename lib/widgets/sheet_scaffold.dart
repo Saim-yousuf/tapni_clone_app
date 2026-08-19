@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
 
-/// Wrap bottom sheet content so [SnackBar]s appear above the sheet immediately.
+/// Root wrapper for a modal sheet. Put this **outside** the sheet widget
+/// (in [showModalBottomSheet] builder) so [ScaffoldMessenger.of] from the
+/// sheet's [State] finds this messenger — a messenger inside [build] is a
+/// descendant and is never used.
+class SheetMessengerScope extends StatelessWidget {
+  final Widget child;
+
+  const SheetMessengerScope({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaffoldMessenger(child: child);
+  }
+}
+
+/// Sheet layout (transparent full-height [Scaffold]). Do not nest another
+/// [ScaffoldMessenger] here — the sheet [State] cannot see descendants.
 class SheetScaffold extends StatelessWidget {
   final Widget body;
   final Color backgroundColor;
@@ -26,6 +42,20 @@ class SheetScaffold extends StatelessWidget {
   }
 }
 
+SnackBar sheetSnackBar(
+  String message, {
+  Color? backgroundColor,
+  Duration duration = const Duration(seconds: 3),
+}) {
+  return SnackBar(
+    content: Text(message),
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: backgroundColor,
+    duration: duration,
+    margin: const EdgeInsets.fromLTRB(16, 0, 16, 88),
+  );
+}
+
 void showSheetSnackBar(
   BuildContext context,
   String message, {
@@ -33,9 +63,8 @@ void showSheetSnackBar(
   Duration duration = const Duration(seconds: 3),
 }) {
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(message),
-      behavior: SnackBarBehavior.floating,
+    sheetSnackBar(
+      message,
       backgroundColor: backgroundColor,
       duration: duration,
     ),

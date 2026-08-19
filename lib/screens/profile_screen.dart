@@ -21,7 +21,7 @@ import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
-import 'package:tapni_app/widgets/templates_sheet.dart';
+import 'package:tapni_app/widgets/verified_name.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class ProfileScreen extends StatefulWidget {
@@ -228,9 +228,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
             child: Column(
               children: [
-            Text(
-              profile.name,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+            VerifiedName(
+              name: profile.name,
+              verified: profile.isPro,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
             SizedBox(height: 30),
             _buildLinkSection(
@@ -649,35 +650,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     profileProvider: profileProvider,
                   ),
                 ],
-              ),
-            ),
-
-            SizedBox(height: 15),
-
-            // Templates Button
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: ElevatedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => TemplatesSheet(),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFF3F3F3),
-                  foregroundColor: Colors.black,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                child: Text(context.l10n.templates,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
               ),
             ),
 

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/models/company_business_card.dart';
 import 'package:tapni_app/models/business_card_design.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/widgets/my_cards_share_sheet.dart';
 import 'package:tapni_app/repository/wallet_repo.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
@@ -328,6 +330,8 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
                           coverPhotoUrl: widget.coverPhotoUrl,
                           subtitle: widget.subtitle,
                           bio: widget.bio,
+                          verified: !widget.isEmployeeCard &&
+                              Provider.of<ProfileProvider>(context).isProUser,
                         ),
                 ),
               ),

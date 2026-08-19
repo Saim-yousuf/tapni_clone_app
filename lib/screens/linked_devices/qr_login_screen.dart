@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
@@ -12,8 +12,7 @@ import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
-
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/branded_qr_image.dart';
 /// WhatsApp Web style: this device shows a QR, another logged-in phone scans it.
 class QrLoginScreen extends StatefulWidget {
   const QrLoginScreen({super.key, this.addAccount = false});
@@ -284,19 +283,11 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
           ),
         ],
       ),
-      child: QrImageView(
+      child: BrandedQrImage(
         data: _qrPayload!,
-        version: QrVersions.auto,
         size: 240,
         backgroundColor: Colors.white,
-        eyeStyle: const QrEyeStyle(
-          eyeShape: QrEyeShape.square,
-          color: WaUi.primaryText,
-        ),
-        dataModuleStyle: const QrDataModuleStyle(
-          dataModuleShape: QrDataModuleShape.square,
-          color: WaUi.primaryText,
-        ),
+        foregroundColor: WaUi.primaryText,
       ),
     );
   }
