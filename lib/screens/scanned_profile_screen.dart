@@ -581,6 +581,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                     onPressed: () => _sendFollowRequest(profile),
                     style: FilledButton.styleFrom(
                       backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),

@@ -23,6 +23,40 @@ class NotificationsScreen extends StatefulWidget {
 class _NotificationsScreenState extends State<NotificationsScreen> {
   String? _busyId;
 
+  ButtonStyle get _compactFilledStyle => FilledButton.styleFrom(
+        visualDensity: VisualDensity.compact,
+        minimumSize: const Size(72, 36),
+        maximumSize: const Size(double.infinity, 40),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+      );
+
+  ButtonStyle get _compactOutlinedStyle => OutlinedButton.styleFrom(
+        visualDensity: VisualDensity.compact,
+        minimumSize: const Size(72, 36),
+        maximumSize: const Size(double.infinity, 40),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+      );
+
+  void _openFollowUser(Map item) {
+    final username = (item['username'] as String?)?.trim() ?? '';
+    final userId = (item['userId'] as String?)?.trim() ?? '';
+    if (username.isNotEmpty) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => ScannedProfileScreen(username: username),
+        ),
+      );
+      return;
+    }
+    if (userId.isNotEmpty) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => ScannedProfileScreen(user: userId),
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -157,25 +191,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               ),
                             );
                           } else if (item['type'] == 'follow_accepted') {
-                            final username =
-                                (item['username'] as String?)?.trim() ?? '';
-                            final userId =
-                                (item['userId'] as String?)?.trim() ?? '';
-                            if (username.isNotEmpty) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      ScannedProfileScreen(username: username),
-                                ),
-                              );
-                            } else if (userId.isNotEmpty) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      ScannedProfileScreen(user: userId),
-                                ),
-                              );
-                            }
+                            _openFollowUser(item);
                           }
                         },
                         child: GlassCard(
@@ -236,28 +252,46 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       ],
                                     ),
                                     const SizedBox(height: 6),
-                                    Text(
-                                      item['type'] == 'follow_request'
-                                          ? context.l10n.followRequestBody(
-                                              (item['userName'] as String?) ??
-                                                  '',
-                                            )
-                                          : item['type'] == 'follow_accepted'
-                                          ? context.l10n.followRequestAcceptedBody(
-                                              (item['userName'] as String?) ??
-                                                  '',
-                                            )
-                                          : item['body'],
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: isRead 
-                                            ? (isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight)
-                                            : (isDark ? Colors.white70 : Colors.black87),
+                                    GestureDetector(
+                                      onTap: item['type'] == 'follow_request' ||
+                                              item['type'] == 'follow_accepted'
+                                          ? () => _openFollowUser(item)
+                                          : null,
+                                      child: Text(
+                                        item['type'] == 'follow_request'
+                                            ? context.l10n.followRequestBody(
+                                                (item['userName'] as String?) ??
+                                                    '',
+                                              )
+                                            : item['type'] == 'follow_accepted'
+                                            ? context.l10n.followRequestAcceptedBody(
+                                                (item['userName'] as String?) ??
+                                                    '',
+                                              )
+                                            : item['body'],
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          decoration: item['type'] ==
+                                                      'follow_request' ||
+                                                  item['type'] ==
+                                                      'follow_accepted'
+                                              ? TextDecoration.underline
+                                              : TextDecoration.none,
+                                          color: isRead
+                                              ? (isDark
+                                                  ? AppTheme.textGreyDark
+                                                  : AppTheme.textGreyLight)
+                                              : (isDark
+                                                  ? Colors.white70
+                                                  : Colors.black87),
+                                        ),
                                       ),
                                     ),
                                     if (item['type'] == 'follow_request') ...[
                                       const SizedBox(height: 10),
-                                      Row(
+                                      Wrap(
+                                        spacing: 8,
+                                        runSpacing: 8,
                                         children: [
                                           FilledButton(
                                             onPressed: _busyId == item['id']
@@ -289,14 +323,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                       ),
                                                     );
                                                   },
-                                            style: FilledButton.styleFrom(
-                                              backgroundColor: AppTheme.accentGold,
-                                              foregroundColor: Colors.black,
-                                              visualDensity: VisualDensity.compact,
-                                            ),
+                                            style: _compactFilledStyle,
                                             child: Text(context.l10n.accept),
                                           ),
-                                          const SizedBox(width: 8),
                                           OutlinedButton(
                                             onPressed: _busyId == item['id']
                                                 ? null
@@ -310,10 +339,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                     if (!mounted) return;
                                                     setState(() => _busyId = null);
                                                   },
-                                            style: OutlinedButton.styleFrom(
-                                              visualDensity: VisualDensity.compact,
-                                            ),
+                                            style: _compactOutlinedStyle,
                                             child: Text(context.l10n.decline),
+                                          ),
+                                          OutlinedButton(
+                                            onPressed: () => _openFollowUser(item),
+                                            style: _compactOutlinedStyle,
+                                            child: Text(context.l10n.profile),
                                           ),
                                         ],
                                       ),

@@ -191,6 +191,43 @@ class AppTheme {
           height: height,
         ),
       ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: primaryBlack,
+          foregroundColor: secondaryWhite,
+          disabledBackgroundColor: Colors.black26,
+          disabledForegroundColor: Colors.white70,
+          shape: const StadiumBorder(),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          minimumSize: const Size(64, WaUi.primaryButtonHeight),
+          maximumSize: const Size(double.infinity, WaUi.primaryButtonHeight),
+          elevation: 0,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
+          textStyle: AppFonts.textStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            height: 1.0,
+          ),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: primaryBlack,
+          side: const BorderSide(color: primaryBlack),
+          shape: const StadiumBorder(),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          minimumSize: const Size(64, WaUi.primaryButtonHeight),
+          maximumSize: const Size(double.infinity, WaUi.primaryButtonHeight),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
+          textStyle: AppFonts.textStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            height: 1.0,
+          ),
+        ),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryBlack,
@@ -338,6 +375,43 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
           height: height,
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: secondaryWhite,
+          foregroundColor: primaryBlack,
+          disabledBackgroundColor: Colors.white24,
+          disabledForegroundColor: Colors.black54,
+          shape: const StadiumBorder(),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          minimumSize: const Size(64, WaUi.primaryButtonHeight),
+          maximumSize: const Size(double.infinity, WaUi.primaryButtonHeight),
+          elevation: 0,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
+          textStyle: AppFonts.textStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            height: 1.0,
+          ),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: secondaryWhite,
+          side: const BorderSide(color: secondaryWhite),
+          shape: const StadiumBorder(),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          minimumSize: const Size(64, WaUi.primaryButtonHeight),
+          maximumSize: const Size(double.infinity, WaUi.primaryButtonHeight),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
+          textStyle: AppFonts.textStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            height: 1.0,
+          ),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

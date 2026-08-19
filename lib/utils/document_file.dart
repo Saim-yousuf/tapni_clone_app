@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
+import 'package:tapni_app/utils/api_endpoint.dart';
 
 enum DocumentKind { pdf, word, image, file }
 
@@ -222,7 +223,57 @@ class DocumentFileHelper {
     return ext == null ? null : _extKinds[ext];
   }
 
-  static Future<Uint8List> downloadBytes(
+  static String _withExtension(String url, String ext) {
+    final uri = Uri.tryParse(url.trim());
+    if (uri == null || !(uri.isScheme('http') || uri.isScheme('https'))) {
+      return url.toLowerCase().endsWith('.$ext') ? url : '$url.$ext';
+    }
+    if (normalizeExt(_extensionOf(uri.path)) == ext) return url;
+    final path = uri.path.endsWith('/')
+        ? '${uri.path}file.$ext'
+        : '${uri.path}.$ext';
+    return uri.replace(path: path).toString();
+  }
+
+  static List<String> deliveryCandidates(String url, [String? fileExt]) {
+    final raw = url.trim();
+    if (raw.isEmpty) return const [];
+    final ext = normalizeExt(fileExt) ?? normalizeExt(_extensionOf(raw));
+    final out = <String>[];
+    void add(String value) {
+      if (value.isNotEmpty && !out.contains(value)) out.add(value);
+    }
+
+    final lower = raw.toLowerCase();
+    if (lower.contains('res.cloudinary.com') &&
+        lower.contains('.pdf') &&
+        !lower.contains('/api/documents/file')) {
+      add(
+        '${Api.baseUrl}/api/documents/file?src=${Uri.encodeQueryComponent(raw)}',
+      );
+    }
+    add(raw);
+    if (raw.contains('/image/upload/')) {
+      add(raw.replaceFirst('/image/upload/', '/raw/upload/'));
+    }
+    if (raw.contains('/raw/upload/')) {
+      add(raw.replaceFirst('/raw/upload/', '/image/upload/'));
+    }
+    if (ext != null) {
+      add(_withExtension(raw, ext));
+      if (raw.contains('/image/upload/')) {
+        add(
+          _withExtension(
+            raw.replaceFirst('/image/upload/', '/raw/upload/'),
+            ext,
+          ),
+        );
+      }
+    }
+    return out;
+  }
+
+  static Future<Uint8List> _downloadOne(
     String url, {
     void Function(int received, int? total)? onProgress,
   }) async {
@@ -250,5 +301,33 @@ class DocumentFileHelper {
     } finally {
       client.close();
     }
+  }
+
+  static Future<Uint8List> downloadBytes(
+    String url, {
+    String? fileExt,
+    void Function(int received, int? total)? onProgress,
+  }) async {
+    final wanted = kindFrom(url, null, fileExt);
+    Uint8List? fallback;
+    Object? lastError;
+
+    for (final candidate in deliveryCandidates(url, fileExt)) {
+      try {
+        final bytes = await _downloadOne(
+          candidate,
+          onProgress: onProgress,
+        );
+        final magic = kindFromMagic(bytes);
+        if (magic == wanted) return bytes;
+        if (wanted == DocumentKind.file) return bytes;
+        if (magic != null) fallback ??= bytes;
+      } catch (e) {
+        lastError = e;
+      }
+    }
+
+    if (fallback != null) return fallback;
+    throw lastError ?? Exception('download failed');
   }
 }

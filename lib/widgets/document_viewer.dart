@@ -81,6 +81,7 @@ class _InAppDocumentScreenState extends State<InAppDocumentScreen> {
       );
       final bytes = await DocumentFileHelper.downloadBytes(
         widget.fileUrl,
+        fileExt: widget.fileExt,
         onProgress: (received, total) {
           if (!mounted || total == null || total <= 0) return;
           setState(() => _progress = received / total);
