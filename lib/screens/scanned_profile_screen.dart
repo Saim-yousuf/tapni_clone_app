@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
+import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
-import 'package:tapni_app/widgets/bank_widgets.dart';
-import 'package:tapni_app/widgets/loading_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/models/social_link.dart';
@@ -793,38 +790,13 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   }
 
   Future<void> _openScannedLink(SocialLink link, UserProfile profile) async {
-    if (link.isCatalogLink) {
-      openCatalogLink(
-        context: context,
-        link: link,
-        businessId: profile.id,
-        businessName: profile.businessName ?? profile.name,
-        businessCategory: profile.businessCategory,
-      );
-      return;
-    }
-
-    if (link.fieldType == 'bank' && link.bankDetails != null) {
-      CustomDialog.showDailog(
-        context: context,
-        child: BlurredDialog(
-          child: BankDetailDialog(
-            bankDetails: Map<String, dynamic>.from(link.bankDetails!),
-          ),
-        ),
-      );
-      return;
-    }
-
-    final target = (link.url?.trim().isNotEmpty == true)
-        ? link.url!.trim()
-        : link.fullUrl;
-    if (target.isEmpty || target.startsWith('bank:')) return;
-
-    final uri = Uri.tryParse(target);
-    if (uri == null) return;
-
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
+    await Launcher.openLink(
+      link,
+      context,
+      businessId: profile.id,
+      businessName: profile.businessName ?? profile.name,
+      businessCategory: profile.businessCategory,
+    );
   }
 
   Widget _buildLinkIcon(SocialLink link, {required double size}) {

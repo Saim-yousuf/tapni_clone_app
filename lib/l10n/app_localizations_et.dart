@@ -3702,4 +3702,44 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get quickAddSnapchatHint => 'Snapchat username';
+
+  @override
+  String get documents => 'Documents';
+
+  @override
+  String get addDocument => 'Add document';
+
+  @override
+  String get uploadDocument => 'Upload document';
+
+  @override
+  String get changeDocument => 'Change document';
+
+  @override
+  String get tapToUploadDocument => 'Tap to upload a file';
+
+  @override
+  String get pleaseUploadADocument => 'Please upload a document or image';
+
+  @override
+  String get pleaseEnterDocumentName => 'Please enter a document name';
+
+  @override
+  String get viewDocument => 'View';
+
+  @override
+  String get noDocumentsYet =>
+      'No documents yet. Upload a certificate, degree, agreement, or any file.';
+
+  @override
+  String get noDocumentsAvailable => 'No documents available.';
+
+  @override
+  String get documentName => 'Document name';
+
+  @override
+  String get setCustomIcon => 'Set custom icon';
+
+  @override
+  String get useFileTypeIcon => 'Use PDF / Word icon';
 }

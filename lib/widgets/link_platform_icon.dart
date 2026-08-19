@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/widgets/document_kind_icon.dart';
 
 /// Same catalog brand tiles as Add Link. Falls back to bundled assets.
 class LinkPlatformIcon extends StatelessWidget {
@@ -42,6 +43,16 @@ class LinkPlatformIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (link.isDocumentLink) {
+      return DocumentKindIcon(
+        fileUrl: link.fullUrl,
+        fileName: link.platformName,
+        customLogoUrl: link.logoUrl,
+        size: size,
+        radius: size * 0.22,
+      );
+    }
+
     final provider = Provider.of<ProfileProvider>(context);
     final logo = _networkLogo(link.logoUrl) ??
         _networkLogo(provider.catalogLogoFor(link));

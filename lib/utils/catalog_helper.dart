@@ -32,6 +32,8 @@ class CatalogHelper {
         return l10n.menu;
       case 'services':
         return l10n.services;
+      case 'documents':
+        return l10n.documents;
       default:
         return l10n.catalog;
     }

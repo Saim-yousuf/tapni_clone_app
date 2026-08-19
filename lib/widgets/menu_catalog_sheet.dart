@@ -13,7 +13,9 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
 import 'package:tapni_app/widgets/catalog_product_card.dart';
+import 'package:tapni_app/widgets/document_viewer.dart';
 import 'package:tapni_app/widgets/service_booking_sheet.dart';
+import 'package:tapni_app/utils/document_file.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 void showMenuCatalogSheet({
@@ -83,6 +85,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   String? _selectedCategory;
 
   bool get _isServices => widget.catalogType == 'services';
+  bool get _isDocuments => widget.catalogType == 'documents';
 
   @override
   void initState() {
@@ -189,7 +192,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                         ? _buildCustomerView(scrollController, isDark)
                         : _buildBusinessView(scrollController, isDark),
                   ),
-                  if (widget.isCustomerView && !_isServices) _buildOrderBar(isDark),
+                  if (widget.isCustomerView && !_isServices && !_isDocuments)
+                    _buildOrderBar(isDark),
                   if (!widget.isCustomerView) _buildBusinessActions(isDark),
                 ],
               ),
@@ -212,24 +216,36 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       controller: scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       children: [
-        _buildCategoryManager(isDark),
-        const SizedBox(height: 16),
+        if (!_isDocuments) ...[
+          _buildCategoryManager(isDark),
+          const SizedBox(height: 16),
+        ],
         if (_items.isEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 40),
             child: Column(
               children: [
-                Icon(Icons.inventory_2_outlined,
-                    size: 48, color: Colors.grey.shade400),
+                Icon(
+                    _isDocuments
+                        ? Icons.folder_open_outlined
+                        : Icons.inventory_2_outlined,
+                    size: 48,
+                    color: Colors.grey.shade400),
                 const SizedBox(height: 12),
                 Text(
-                  context.l10n.noItemsYetAddFirstCatalogItem(_catalogLabel),
+                  _isDocuments
+                      ? context.l10n.noDocumentsYet
+                      : context.l10n.noItemsYetAddFirstCatalogItem(_catalogLabel),
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey.shade600),
                 ),
               ],
             ),
           )
+        else if (_isDocuments)
+          ...List.generate(_items.length, (index) {
+            return _businessItemTile(index, isDark);
+          })
         else
           ...categoryKeys.expand((category) {
             final categoryItems = grouped[category]!;
@@ -254,7 +270,11 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         OutlinedButton.icon(
           onPressed: _addItem,
           icon: Icon(Icons.add),
-          label: Text(context.l10n.addCatalogItem(_catalogLabel)),
+          label: Text(
+            _isDocuments
+                ? context.l10n.addDocument
+                : context.l10n.addCatalogItem(_catalogLabel),
+          ),
           style: OutlinedButton.styleFrom(
             minimumSize: Size(double.infinity, 48),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -532,11 +552,13 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
-                const SizedBox(height: 4),
-                Text(
-                  item.price > 0 ? 'Rs ${item.price.toStringAsFixed(0)}' : 'Free',
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
+                if (!_isDocuments) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    item.price > 0 ? 'Rs ${item.price.toStringAsFixed(0)}' : 'Free',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                ],
               ],
             ),
           ),
@@ -557,9 +579,24 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     if (_items.where((i) => i.isActive).isEmpty) {
       return Center(
         child: Text(
-          context.l10n.noCatalogItemsAvailable(_catalogLabel),
+          _isDocuments
+              ? context.l10n.noDocumentsAvailable
+              : context.l10n.noCatalogItemsAvailable(_catalogLabel),
           style: TextStyle(color: Colors.grey.shade600),
         ),
+      );
+    }
+
+    if (_isDocuments) {
+      final docs = _items.where((i) => i.isActive).toList();
+      return ListView.builder(
+        controller: scrollController,
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+        itemCount: docs.length,
+        itemBuilder: (context, index) {
+          final item = docs[index];
+          return _customerDocumentTile(item, isDark);
+        },
       );
     }
 
@@ -653,6 +690,33 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     );
   }
 
+  Widget _customerDocumentTile(CatalogItem item, bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Material(
+        color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(12),
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          leading: _itemImage(item),
+          title: Text(
+            item.name,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+          subtitle: item.description.isNotEmpty
+              ? Text(
+                  item.description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                )
+              : Text(context.l10n.viewDocument),
+          trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+          onTap: () => openCatalogDocument(context, item),
+        ),
+      ),
+    );
+  }
+
   Widget _categoryChip(String label, bool selected, VoidCallback onTap) {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
@@ -671,6 +735,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   }
 
   Future<void> _onCustomerItemTap(int index, CatalogItem item) async {
+    if (_isDocuments) {
+      await openCatalogDocument(context, item);
+      return;
+    }
     if (_isServices) {
       if (widget.businessId == null || widget.existingLink == null) return;
       await showServiceBookingSheet(
@@ -842,7 +910,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   }
 
   Future<void> _addItem() async {
-    if (_catalogCategories.isEmpty) {
+    if (!_isDocuments && _catalogCategories.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.l10n.addAtLeastOneCategoryFirst)),
       );
@@ -854,7 +922,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         builder: (_) => CatalogItemFormScreen(
           catalogLabel: _catalogLabel,
           existingCategories: _catalogCategories,
-          requireCategory: true,
+          requireCategory: !_isDocuments,
+          isDocument: _isDocuments,
         ),
       ),
     );
@@ -874,7 +943,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           catalogLabel: _catalogLabel,
           existingItem: _items[index],
           existingCategories: _catalogCategories,
-          requireCategory: _catalogCategories.isNotEmpty,
+          requireCategory: !_isDocuments && _catalogCategories.isNotEmpty,
+          isDocument: _isDocuments,
         ),
       ),
     );
@@ -895,10 +965,18 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Icon(Icons.fastfood_outlined, color: Colors.grey.shade500, size: 28),
+      child: Icon(
+        _isDocuments
+            ? (DocumentFileHelper.isPdf(image)
+                ? Icons.picture_as_pdf_outlined
+                : Icons.insert_drive_file_outlined)
+            : Icons.fastfood_outlined,
+        color: Colors.grey.shade500,
+        size: 28,
+      ),
     );
 
-    if (image.isEmpty) return placeholder;
+    if (image.isEmpty || !DocumentFileHelper.isImage(image)) return placeholder;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),

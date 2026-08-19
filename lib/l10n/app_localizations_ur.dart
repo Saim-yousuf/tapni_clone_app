@@ -3704,4 +3704,44 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get quickAddSnapchatHint => 'Snapchat یوزرنیم';
+
+  @override
+  String get documents => 'دستاویزات';
+
+  @override
+  String get addDocument => 'دستاویز شامل کریں';
+
+  @override
+  String get uploadDocument => 'دستاویز اپ لوڈ کریں';
+
+  @override
+  String get changeDocument => 'دستاویز تبدیل کریں';
+
+  @override
+  String get tapToUploadDocument => 'فائل اپ لوڈ کرنے کے لیے ٹیپ کریں';
+
+  @override
+  String get pleaseUploadADocument => 'براہ کرم دستاویز یا تصویر اپ لوڈ کریں';
+
+  @override
+  String get pleaseEnterDocumentName => 'براہ کرم دستاویز کا نام درج کریں';
+
+  @override
+  String get viewDocument => 'دیکھیں';
+
+  @override
+  String get noDocumentsYet =>
+      'ابھی کوئی دستاویز نہیں۔ سرٹیفکیٹ، ڈگری، معاہدہ یا کوئی بھی فائل اپ لوڈ کریں۔';
+
+  @override
+  String get noDocumentsAvailable => 'کوئی دستاویز دستیاب نہیں۔';
+
+  @override
+  String get documentName => 'دستاویز کا نام';
+
+  @override
+  String get setCustomIcon => 'اپنی آئیکن سیٹ کریں';
+
+  @override
+  String get useFileTypeIcon => 'PDF / Word آئیکن استعمال کریں';
 }

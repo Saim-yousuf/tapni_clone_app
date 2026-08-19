@@ -1588,5 +1588,18 @@
   "quickAddWhatsAppHint": "WhatsApp number",
   "quickAddInstagramHint": "Instagram username",
   "quickAddTiktokHint": "TikTok username",
-  "quickAddSnapchatHint": "Snapchat username"
+  "quickAddSnapchatHint": "Snapchat username",
+  "documents": "Documents",
+  "addDocument": "Add document",
+  "uploadDocument": "Upload document",
+  "changeDocument": "Change document",
+  "tapToUploadDocument": "Tap to upload a file",
+  "pleaseUploadADocument": "Please upload a document or image",
+  "pleaseEnterDocumentName": "Please enter a document name",
+  "viewDocument": "View",
+  "noDocumentsYet": "No documents yet. Upload a certificate, degree, agreement, or any file.",
+  "noDocumentsAvailable": "No documents available.",
+  "documentName": "Document name",
+  "setCustomIcon": "Set custom icon",
+  "useFileTypeIcon": "Use PDF / Word icon"
 }

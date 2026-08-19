@@ -106,3 +106,69 @@ List<LinkCategory> filterCatalogByUserCountry(
       .where((category) => category.templates.isNotEmpty)
       .toList();
 }
+
+bool isDocumentsLinkTemplate(LinkTemplate template) {
+  return _isDocumentsTemplate(template);
+}
+
+bool _isDocumentsTemplate(LinkTemplate template) {
+  return template.actionType == 'document' ||
+      template.fieldType == 'document' ||
+      template.catalogType == 'documents' ||
+      template.label.trim().toLowerCase() == 'documents';
+}
+
+LinkTemplate documentsLinkTemplate({String categoryId = ''}) {
+  return LinkTemplate(
+    id: '',
+    categoryId: categoryId,
+    label: 'Documents',
+    fieldType: 'document',
+    fieldLabel: 'Documents',
+    prefix: '',
+    logo: '',
+    isPro: false,
+    isFeatured: false,
+    isSystem: true,
+    actionType: 'document',
+    catalogType: 'documents',
+  );
+}
+
+/// Always show Documents next to Catalog, even if the API has not seeded it yet.
+List<LinkCategory> ensureDocumentsCatalogTemplate(List<LinkCategory> catalog) {
+  if (catalog.any(
+    (category) => category.templates.any(_isDocumentsTemplate),
+  )) {
+    return catalog;
+  }
+
+  final documents = documentsLinkTemplate();
+  final businessIndex = catalog.indexWhere(
+    (category) => category.name.trim().toLowerCase() == 'business',
+  );
+
+  if (businessIndex == -1) {
+    return [
+      ...catalog,
+      LinkCategory(id: 'documents', name: 'Documents', templates: [documents]),
+    ];
+  }
+
+  final business = catalog[businessIndex];
+  final templates = List<LinkTemplate>.from(business.templates);
+  final catalogIndex = templates.indexWhere(
+    (template) =>
+        template.catalogType == 'catalog' ||
+        template.label.trim().toLowerCase() == 'catalog',
+  );
+  final insertAt = catalogIndex >= 0 ? catalogIndex + 1 : templates.length;
+  templates.insert(
+    insertAt,
+    documentsLinkTemplate(categoryId: business.id),
+  );
+
+  final updated = List<LinkCategory>.from(catalog);
+  updated[businessIndex] = business.copyWith(templates: templates);
+  return updated;
+}

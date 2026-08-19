@@ -95,6 +95,16 @@ Future<String> fileToBase64(File file) async {
   return base64Encode(bytes);
 }
 
+Future<String> fileToDataUri(File file, {String? mimeType}) async {
+  final bytes = await file.readAsBytes();
+  final mime = (mimeType != null &&
+          mimeType.isNotEmpty &&
+          mimeType != 'unknown')
+      ? mimeType
+      : lookupMimeType(file.path) ?? 'application/octet-stream';
+  return 'data:$mime;base64,${base64Encode(bytes)}';
+}
+
 class FilePickerM {
   final List<File> files;
   final List<String> names;

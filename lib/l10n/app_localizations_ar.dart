@@ -3658,4 +3658,44 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get quickAddSnapchatHint => 'اسم مستخدم سناب شات';
+
+  @override
+  String get documents => 'المستندات';
+
+  @override
+  String get addDocument => 'إضافة مستند';
+
+  @override
+  String get uploadDocument => 'رفع مستند';
+
+  @override
+  String get changeDocument => 'تغيير المستند';
+
+  @override
+  String get tapToUploadDocument => 'اضغط لرفع ملف';
+
+  @override
+  String get pleaseUploadADocument => 'يرجى رفع مستند أو صورة';
+
+  @override
+  String get pleaseEnterDocumentName => 'يرجى إدخال اسم المستند';
+
+  @override
+  String get viewDocument => 'عرض';
+
+  @override
+  String get noDocumentsYet =>
+      'لا توجد مستندات بعد. ارفع شهادة أو درجة أو اتفاقية أو أي ملف.';
+
+  @override
+  String get noDocumentsAvailable => 'لا توجد مستندات متاحة.';
+
+  @override
+  String get documentName => 'اسم المستند';
+
+  @override
+  String get setCustomIcon => 'تعيين أيقونة مخصصة';
+
+  @override
+  String get useFileTypeIcon => 'استخدام أيقونة PDF / Word';
 }

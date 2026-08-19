@@ -7044,6 +7044,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Snapchat username'**
   String get quickAddSnapchatHint;
+
+  /// No description provided for @documents.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get documents;
+
+  /// No description provided for @addDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Add document'**
+  String get addDocument;
+
+  /// No description provided for @uploadDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload document'**
+  String get uploadDocument;
+
+  /// No description provided for @changeDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Change document'**
+  String get changeDocument;
+
+  /// No description provided for @tapToUploadDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to upload a file'**
+  String get tapToUploadDocument;
+
+  /// No description provided for @pleaseUploadADocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload a document or image'**
+  String get pleaseUploadADocument;
+
+  /// No description provided for @pleaseEnterDocumentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a document name'**
+  String get pleaseEnterDocumentName;
+
+  /// No description provided for @viewDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get viewDocument;
+
+  /// No description provided for @noDocumentsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No documents yet. Upload a certificate, degree, agreement, or any file.'**
+  String get noDocumentsYet;
+
+  /// No description provided for @noDocumentsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No documents available.'**
+  String get noDocumentsAvailable;
+
+  /// No description provided for @documentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Document name'**
+  String get documentName;
+
+  /// No description provided for @setCustomIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Set custom icon'**
+  String get setCustomIcon;
+
+  /// No description provided for @useFileTypeIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Use PDF / Word icon'**
+  String get useFileTypeIcon;
 }
 
 class _AppLocalizationsDelegate

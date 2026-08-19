@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/utils/document_file.dart';
 import 'package:tapni_app/utils/theme.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -12,6 +13,7 @@ class CatalogItemFormScreen extends StatefulWidget {
   final CatalogItem? existingItem;
   final List<String> existingCategories;
   final bool requireCategory;
+  final bool isDocument;
 
   const CatalogItemFormScreen({
     super.key,
@@ -19,6 +21,7 @@ class CatalogItemFormScreen extends StatefulWidget {
     this.existingItem,
     this.existingCategories = const [],
     this.requireCategory = false,
+    this.isDocument = false,
   });
 
   @override
@@ -31,6 +34,8 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   late final TextEditingController _descCtrl;
   String? _selectedCategory;
   String? _pickedImagePath;
+  String? _pickedMimeType;
+  String? _pickedFileName;
   String? _savedImageUrl;
   bool _isSaving = false;
 
@@ -61,11 +66,24 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   }
 
   Future<void> _pickImage() async {
-    final file = await pickSingleFile();
+    final file = await pickSingleFile(
+      allowedExtensions: widget.isDocument
+          ? DocumentFileHelper.allowedExtensions
+          : const ['png', 'jpg', 'jpeg', 'webp'],
+    );
     if (file?.file == null) return;
     setState(() {
       _pickedImagePath = file!.file!.path;
+      _pickedMimeType = file.mimeType;
+      _pickedFileName = file.name;
       _savedImageUrl = '';
+      if (widget.isDocument && _nameCtrl.text.trim().isEmpty) {
+        final raw = file.name ?? '';
+        final withoutExt = raw.contains('.')
+            ? raw.substring(0, raw.lastIndexOf('.'))
+            : raw;
+        if (withoutExt.isNotEmpty) _nameCtrl.text = withoutExt;
+      }
     });
   }
 
@@ -73,7 +91,13 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
     final name = _nameCtrl.text.trim();
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.pleaseEnterItemName)),
+        SnackBar(
+          content: Text(
+            widget.isDocument
+                ? context.l10n.pleaseEnterDocumentName
+                : context.l10n.pleaseEnterItemName,
+          ),
+        ),
       );
       return;
     }
@@ -90,7 +114,21 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
 
     var imageValue = _savedImageUrl ?? '';
     if (_pickedImagePath != null) {
-      imageValue = await fileToBase64(File(_pickedImagePath!));
+      imageValue = widget.isDocument
+          ? await fileToDataUri(
+              File(_pickedImagePath!),
+              mimeType: _pickedMimeType,
+            )
+          : await fileToBase64(File(_pickedImagePath!));
+    }
+
+    if (widget.isDocument && imageValue.trim().isEmpty) {
+      if (!mounted) return;
+      setState(() => _isSaving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.pleaseUploadADocument)),
+      );
+      return;
     }
 
     if (!mounted) return;
@@ -112,7 +150,9 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   Widget build(BuildContext context) {
     final title = _isEditing
         ? context.l10n.editItem
-        : context.l10n.addCatalogItem(widget.catalogLabel);
+        : widget.isDocument
+            ? context.l10n.addDocument
+            : context.l10n.addCatalogItem(widget.catalogLabel);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -139,12 +179,20 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                     Center(
                       child: TextButton.icon(
                         onPressed: _pickImage,
-                        icon: Icon(Icons.photo_outlined),
+                        icon: Icon(
+                          widget.isDocument
+                              ? Icons.upload_file_outlined
+                              : Icons.photo_outlined,
+                        ),
                         label: Text(
                           _pickedImagePath != null ||
                                   (_savedImageUrl?.isNotEmpty == true)
-                              ? context.l10n.changePhoto
-                              : context.l10n.addPhoto,
+                              ? (widget.isDocument
+                                  ? context.l10n.changeDocument
+                                  : context.l10n.changePhoto)
+                              : (widget.isDocument
+                                  ? context.l10n.uploadDocument
+                                  : context.l10n.addPhoto),
                         ),
                       ),
                     ),
@@ -156,39 +204,45 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                         labelText: context.l10n.name,
                       ),
                     ),
-                    SizedBox(height: 16),
-                    TextField(
-                      controller: _priceCtrl,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                      decoration: WaUi.fieldDecoration(
-                        labelText: context.l10n.priceRs,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    if (widget.existingCategories.isNotEmpty)
-                      DropdownButtonFormField<String>(
-                        value: widget.existingCategories.contains(_selectedCategory)
-                            ? _selectedCategory
-                            : null,
+                    if (!widget.isDocument) ...[
+                      SizedBox(height: 16),
+                      TextField(
+                        controller: _priceCtrl,
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
                         decoration: WaUi.fieldDecoration(
-                          labelText: context.l10n.category,
+                          labelText: context.l10n.priceRs,
                         ),
-                        items: widget.existingCategories
-                            .map(
-                              (cat) => DropdownMenuItem(
-                                value: cat,
-                                child: Text(cat),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (val) => setState(() => _selectedCategory = val),
-                      )
-                    else
-                      Text(
-                        context.l10n.addCategoriesInYourCatalogSettingsFirst,
-                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
                       ),
+                      SizedBox(height: 16),
+                      if (widget.existingCategories.isNotEmpty)
+                        DropdownButtonFormField<String>(
+                          value: widget.existingCategories.contains(_selectedCategory)
+                              ? _selectedCategory
+                              : null,
+                          decoration: WaUi.fieldDecoration(
+                            labelText: context.l10n.category,
+                          ),
+                          items: widget.existingCategories
+                              .map(
+                                (cat) => DropdownMenuItem(
+                                  value: cat,
+                                  child: Text(cat),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (val) =>
+                              setState(() => _selectedCategory = val),
+                        )
+                      else
+                        Text(
+                          context.l10n.addCategoriesInYourCatalogSettingsFirst,
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                          ),
+                        ),
+                    ],
                     SizedBox(height: 16),
                     TextField(
                       controller: _descCtrl,
@@ -225,7 +279,11 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                           ),
                         )
                       : Text(
-                          _isEditing ? context.l10n.updateItem : context.l10n.addItem,
+                          _isEditing
+                              ? context.l10n.updateItem
+                              : widget.isDocument
+                                  ? context.l10n.addDocument
+                                  : context.l10n.addItem,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
@@ -243,8 +301,10 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
 
   Widget _buildImagePicker() {
     const size = 160.0;
+    final pickedIsImage = _pickedImagePath != null &&
+        DocumentFileHelper.isImage(_pickedImagePath!);
 
-    if (_pickedImagePath != null) {
+    if (_pickedImagePath != null && pickedIsImage) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Image.file(
@@ -256,8 +316,15 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       );
     }
 
+    if (_pickedImagePath != null) {
+      return _filePlaceholder(
+        size,
+        _pickedFileName ?? _pickedImagePath!,
+      );
+    }
+
     final saved = _savedImageUrl?.trim() ?? '';
-    if (saved.isNotEmpty) {
+    if (saved.isNotEmpty && DocumentFileHelper.isImage(saved)) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Image.network(
@@ -270,9 +337,46 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       );
     }
 
+    if (saved.isNotEmpty) {
+      return _filePlaceholder(size, saved.split('/').last);
+    }
+
     return GestureDetector(
       onTap: _pickImage,
       child: _imagePlaceholder(size),
+    );
+  }
+
+  Widget _filePlaceholder(double size, String label) {
+    return Container(
+      width: size,
+      height: size,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            DocumentFileHelper.isPdf(label)
+                ? Icons.picture_as_pdf_outlined
+                : Icons.insert_drive_file_outlined,
+            color: Colors.grey.shade600,
+            size: 40,
+          ),
+          SizedBox(height: 8),
+          Text(
+            label,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+          ),
+        ],
+      ),
     );
   }
 
@@ -288,10 +392,19 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.add_a_photo_outlined, color: Colors.grey.shade500, size: 40),
+          Icon(
+            widget.isDocument
+                ? Icons.upload_file_outlined
+                : Icons.add_a_photo_outlined,
+            color: Colors.grey.shade500,
+            size: 40,
+          ),
           SizedBox(height: 8),
           Text(
-            context.l10n.tapToAddPhoto,
+            widget.isDocument
+                ? context.l10n.tapToUploadDocument
+                : context.l10n.tapToAddPhoto,
+            textAlign: TextAlign.center,
             style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
           ),
         ],

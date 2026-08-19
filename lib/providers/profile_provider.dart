@@ -140,10 +140,12 @@ class ProfileProvider extends ChangeNotifier {
 
       if (response.success && response.data is Map<String, dynamic>) {
         final data = response.data as Map<String, dynamic>;
-        _linkCatalog = (data['categories'] as List<dynamic>? ?? [])
-            .map((item) => LinkCategory.fromJson(item as Map<String, dynamic>))
-            .where((category) => category.templates.isNotEmpty)
-            .toList();
+        _linkCatalog = ensureDocumentsCatalogTemplate(
+          (data['categories'] as List<dynamic>? ?? [])
+              .map((item) => LinkCategory.fromJson(item as Map<String, dynamic>))
+              .where((category) => category.templates.isNotEmpty)
+              .toList(),
+        );
       }
     } finally {
       _isLinkCatalogLoading = false;

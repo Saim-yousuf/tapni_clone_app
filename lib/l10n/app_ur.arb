@@ -851,5 +851,18 @@
   "quickAddWhatsAppHint": "WhatsApp نمبر",
   "quickAddInstagramHint": "Instagram یوزرنیم",
   "quickAddTiktokHint": "TikTok یوزرنیم",
-  "quickAddSnapchatHint": "Snapchat یوزرنیم"
+  "quickAddSnapchatHint": "Snapchat یوزرنیم",
+  "documents": "دستاویزات",
+  "addDocument": "دستاویز شامل کریں",
+  "uploadDocument": "دستاویز اپ لوڈ کریں",
+  "changeDocument": "دستاویز تبدیل کریں",
+  "tapToUploadDocument": "فائل اپ لوڈ کرنے کے لیے ٹیپ کریں",
+  "pleaseUploadADocument": "براہ کرم دستاویز یا تصویر اپ لوڈ کریں",
+  "pleaseEnterDocumentName": "براہ کرم دستاویز کا نام درج کریں",
+  "viewDocument": "دیکھیں",
+  "noDocumentsYet": "ابھی کوئی دستاویز نہیں۔ سرٹیفکیٹ، ڈگری، معاہدہ یا کوئی بھی فائل اپ لوڈ کریں۔",
+  "noDocumentsAvailable": "کوئی دستاویز دستیاب نہیں۔",
+  "documentName": "دستاویز کا نام",
+  "setCustomIcon": "اپنی آئیکن سیٹ کریں",
+  "useFileTypeIcon": "PDF / Word آئیکن استعمال کریں"
 }

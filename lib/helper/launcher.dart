@@ -1,6 +1,8 @@
 import 'package:tapni_app/helper/log_helper.dart';
+import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/widgets/bank_widgets.dart';
+import 'package:tapni_app/widgets/document_viewer.dart';
 import 'package:tapni_app/widgets/loading_widget.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,6 +16,16 @@ class Launcher {
     String? businessCategory,
   }) async {
     PrintLog.logMessage("model.fieldType: ${model.fieldType}");
+    if (model.isDocumentLink) {
+      await openCatalogDocument(
+        context,
+        CatalogItem(
+          name: model.platformName,
+          imageUrl: model.fullUrl,
+        ),
+      );
+      return;
+    }
     if (model.isCatalogLink) {
       openCatalogLink(
         context: context,

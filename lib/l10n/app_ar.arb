@@ -1556,5 +1556,18 @@
   "quickAddWhatsAppHint": "رقم واتساب",
   "quickAddInstagramHint": "اسم مستخدم إنستغرام",
   "quickAddTiktokHint": "اسم مستخدم تيك توك",
-  "quickAddSnapchatHint": "اسم مستخدم سناب شات"
+  "quickAddSnapchatHint": "اسم مستخدم سناب شات",
+  "documents": "المستندات",
+  "addDocument": "إضافة مستند",
+  "uploadDocument": "رفع مستند",
+  "changeDocument": "تغيير المستند",
+  "tapToUploadDocument": "اضغط لرفع ملف",
+  "pleaseUploadADocument": "يرجى رفع مستند أو صورة",
+  "pleaseEnterDocumentName": "يرجى إدخال اسم المستند",
+  "viewDocument": "عرض",
+  "noDocumentsYet": "لا توجد مستندات بعد. ارفع شهادة أو درجة أو اتفاقية أو أي ملف.",
+  "noDocumentsAvailable": "لا توجد مستندات متاحة.",
+  "documentName": "اسم المستند",
+  "setCustomIcon": "تعيين أيقونة مخصصة",
+  "useFileTypeIcon": "استخدام أيقونة PDF / Word"
 }

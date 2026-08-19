@@ -14,6 +14,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/contact_card_sheet.dart' as contact_card;
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
+import 'package:tapni_app/screens/catalog/document_link_form_screen.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 
@@ -120,9 +121,11 @@ class LinkSheet {
                             final query = searchController.text
                                 .trim()
                                 .toLowerCase();
-                            final countryFiltered = filterCatalogByUserCountry(
-                              watchedProvider.linkCatalog,
-                              _userCountry(watchedProvider),
+                            final countryFiltered = ensureDocumentsCatalogTemplate(
+                              filterCatalogByUserCountry(
+                                watchedProvider.linkCatalog,
+                                _userCountry(watchedProvider),
+                              ),
                             );
                             final catalog = query.isEmpty
                                 ? countryFiltered
@@ -252,7 +255,18 @@ class LinkSheet {
                         );
                         return;
                       }
-                      if (template.actionType == 'menu_catalog') {
+                      if (isDocumentsLinkTemplate(template) ||
+                          template.actionType == 'document') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => DocumentLinkFormScreen(
+                              provider: provider,
+                              template: template,
+                            ),
+                          ),
+                        );
+                      } else if (template.actionType == 'menu_catalog') {
                         _openMenuCatalogFromTemplate(
                           context,
                           template,
@@ -292,6 +306,7 @@ class LinkSheet {
                           radius: 24,
                           isPro: template.isPro,
                           context: context,
+                          template: template,
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -833,12 +848,15 @@ class LinkSheet {
     double radius = 14,
     required bool isPro,
     required BuildContext context,
+    LinkTemplate? template,
   }) {
     final isProUser = Provider.of<ProfileProvider>(
       context,
       listen: false,
     ).isProUser;
     final innerRadius = (radius - 1).clamp(0.0, radius);
+    final isDocuments = template?.catalogType == 'documents' ||
+        template?.label.trim().toLowerCase() == 'documents';
 
     Widget logoImage({required Widget errorWidget}) {
       return Container(
@@ -868,10 +886,21 @@ class LinkSheet {
       );
     }
 
-    final placeholder = ColoredBox(
-      color: Colors.grey.shade200,
-      child: Center(child: Icon(Icons.link)),
-    );
+    final placeholder = isDocuments
+        ? ColoredBox(
+            color: const Color(0xFF1B4F72),
+            child: Center(
+              child: Icon(
+                Icons.description_outlined,
+                color: Colors.white,
+                size: size * 0.42,
+              ),
+            ),
+          )
+        : ColoredBox(
+            color: Colors.grey.shade200,
+            child: Center(child: Icon(Icons.link)),
+          );
 
     final image = logoImage(errorWidget: placeholder);
 
@@ -1371,6 +1400,23 @@ class LinkSheet {
     }
 
     final isMenuCatalog = link.isCatalogLink;
+
+    if (link.isDocumentLink ||
+        (catalogTemplate != null &&
+            isDocumentsLinkTemplate(catalogTemplate))) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DocumentLinkFormScreen(
+            provider: provider,
+            template: catalogTemplate ??
+                documentsLinkTemplate(),
+            existingLink: link,
+          ),
+        ),
+      );
+      return;
+    }
 
     if (isMenuCatalog) {
       if (catalogTemplate?.actionType == 'menu_catalog') {

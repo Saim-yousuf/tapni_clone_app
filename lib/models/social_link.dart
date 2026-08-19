@@ -148,18 +148,25 @@ class SocialLink {
   Map<String, dynamic> toApiJson() {
     return {
       if (RegExp(r'^[a-fA-F0-9]{24}$').hasMatch(id)) '_id': id,
-      if (templateId != null && templateId!.isNotEmpty)
+      if (templateId != null &&
+          RegExp(r'^[a-fA-F0-9]{24}$').hasMatch(templateId!))
         'templateId': templateId,
       'label': platformName,
       'title': platformName,
-      'type': catalogItems != null ? 'menu_catalog' : (fieldType ?? apiType),
+      'type': isDocumentLink
+          ? 'document'
+          : (catalogItems != null && catalogItems!.isNotEmpty
+                ? 'menu_catalog'
+                : (fieldType ?? apiType)),
       'value': value,
       if (logoUrl != null && logoUrl!.isNotEmpty) 'logo': logoUrl,
       if (bankDetails != null) 'bankDetails': bankDetails,
       if (contactCard != null) 'contactCard': contactCard,
-      if (catalogItems != null)
+      if (catalogItems != null && catalogItems!.isNotEmpty)
         'catalogItems': catalogItems!.map((e) => e.toJson()).toList(),
-      if (catalogCategories != null && catalogCategories!.isNotEmpty)
+      if (!isDocumentLink &&
+          catalogCategories != null &&
+          catalogCategories!.isNotEmpty)
         'catalogCategories': catalogCategories,
       if (catalogType != null) 'catalogType': catalogType,
       if (serviceSchedule != null) 'serviceSchedule': serviceSchedule!.toJson(),
@@ -170,7 +177,14 @@ class SocialLink {
     };
   }
 
+  bool get isDocumentLink {
+    if (fieldType == 'document' || actionType == 'document') return true;
+    if (catalogType == 'documents') return true;
+    return false;
+  }
+
   bool get isCatalogLink {
+    if (isDocumentLink) return false;
     if (actionType == 'menu_catalog') return true;
     if (actionType == 'link' || actionType == 'contact_card') return false;
     if (fieldType == 'menu_catalog') {
@@ -197,8 +211,14 @@ class SocialLink {
     SocialPlatform platform = SocialPlatform.wave;
     final combined =
         "${type.toLowerCase()} ${title.toLowerCase()} ${url.toLowerCase()}";
+    final isDocumentType =
+        type == 'document' ||
+        actionType == 'document' ||
+        json['catalogType']?.toString() == 'documents';
 
-    if (combined.contains('whatsapp')) {
+    if (isDocumentType) {
+      platform = SocialPlatform.wave;
+    } else if (combined.contains('whatsapp')) {
       platform = SocialPlatform.whatsApp;
     } else if (combined.contains('linkedin')) {
       platform = SocialPlatform.linkedIn;
@@ -274,8 +294,8 @@ class SocialLink {
       templateId: templateId,
       customLabel: title.isNotEmpty ? title : null,
       fieldLabel: fieldLabel,
-      fieldType: type,
-      actionType: actionType,
+      fieldType: isDocumentType ? 'document' : type,
+      actionType: isDocumentType ? 'document' : actionType,
       isCustom: json['isCustom'] as bool? ?? false,
       logoUrl: logo,
       url: url,
@@ -285,7 +305,9 @@ class SocialLink {
       contactCard: contactCardJson?.map(
         (key, value) => MapEntry(key, value?.toString() ?? ''),
       ),
-      catalogItems: catalogItemsJson != null && catalogItemsJson.isNotEmpty
+      catalogItems: !isDocumentType &&
+              catalogItemsJson != null &&
+              catalogItemsJson.isNotEmpty
           ? catalogItemsJson
               .map((e) => CatalogItem.fromJson(e as Map<String, dynamic>))
               .toList()
@@ -528,6 +550,14 @@ class SocialLink {
   }
 
   String get fullUrl {
+    if (isDocumentLink) {
+      if (url != null &&
+          url!.isNotEmpty &&
+          !url!.startsWith('catalog:')) {
+        return url!;
+      }
+      return value;
+    }
     if (bankDetails != null) {
       final identifier = bankDetails!['iban']?.isNotEmpty == true
           ? bankDetails!['iban']!
