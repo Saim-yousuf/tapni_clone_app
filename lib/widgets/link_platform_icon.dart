@@ -46,7 +46,8 @@ class LinkPlatformIcon extends StatelessWidget {
     if (link.isDocumentLink) {
       return DocumentKindIcon(
         fileUrl: link.fullUrl,
-        fileName: link.platformName,
+        fileName: link.fileExt,
+        fileExt: link.fileExt,
         customLogoUrl: link.logoUrl,
         size: size,
         radius: size * 0.22,

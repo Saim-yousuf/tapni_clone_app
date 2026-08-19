@@ -23,6 +23,7 @@ class Launcher {
           name: model.platformName,
           imageUrl: model.fullUrl,
         ),
+        fileExt: model.fileExt,
       );
       return;
     }

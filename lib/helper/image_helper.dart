@@ -12,12 +12,18 @@ import 'package:path/path.dart' as path;
 Future<FilePickerM?> pickFile({
   bool allowMultiple = false,
   List<String> allowedExtensions = const ['png', 'jpg', 'jpeg'],
+  bool anyFileType = false,
 }) async {
   try {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: allowedExtensions.isEmpty ? FileType.any : FileType.custom,
-      allowedExtensions: allowedExtensions,
+      type: anyFileType || allowedExtensions.isEmpty
+          ? FileType.any
+          : FileType.custom,
+      allowedExtensions: anyFileType || allowedExtensions.isEmpty
+          ? null
+          : allowedExtensions,
       allowMultiple: allowMultiple,
+      withData: true,
     );
 
     if (result != null && result.files.isNotEmpty) {
@@ -28,30 +34,33 @@ Future<FilePickerM?> pickFile({
       List<int> sizes = [];
 
       for (var file in result.files) {
-        if (file.path != null) {
-          File pickedFile = File(file.path!);
-          files.add(pickedFile);
-          names.add(file.name);
+        final File? pickedFile = await _fileFromPlatformFile(file);
+        if (pickedFile == null) continue;
 
-          String? mimeType = lookupMimeType(file.path!);
-          mimeTypes.add(mimeType ?? 'unknown');
+        files.add(pickedFile);
+        names.add(file.name);
 
-          String extension = path.extension(file.path!);
-          extensions.add(
-            extension.isNotEmpty ? extension.replaceAll(".", "") : 'unknown',
-          );
+        String? mimeType =
+            lookupMimeType(pickedFile.path) ?? lookupMimeType(file.name);
+        mimeTypes.add(mimeType ?? 'unknown');
 
-          int fileSizeInBytes = pickedFile.lengthSync();
-          sizes.add(fileSizeInBytes);
+        String extension = path.extension(pickedFile.path);
+        if (extension.isEmpty && file.extension != null) {
+          extension = '.${file.extension}';
         }
+        extensions.add(
+          extension.isNotEmpty ? extension.replaceAll(".", "") : 'unknown',
+        );
+
+        int fileSizeInBytes = pickedFile.lengthSync();
+        sizes.add(fileSizeInBytes);
       }
+
+      if (files.isEmpty) return null;
 
       List<String> sizeInKB = sizes
           .map((size) => '${(size / 1024).toStringAsFixed(2)} KB')
           .toList();
-      // List<String> sizeInMB = sizes
-      //     .map((size) => '${(size / (1024 * 1024)).toStringAsFixed(2)} MB')
-      //     .toList();
 
       return FilePickerM(
         files: allowMultiple ? files : [files.first],
@@ -72,6 +81,19 @@ Future<FilePickerM?> pickFile({
   return null;
 }
 
+Future<File?> _fileFromPlatformFile(PlatformFile file) async {
+  if (file.path != null && file.path!.isNotEmpty) {
+    return File(file.path!);
+  }
+  if (file.bytes == null || file.bytes!.isEmpty) return null;
+  final safeName = file.name.replaceAll(RegExp(r'[^\w.\-]+'), '_');
+  final tmp = File(
+    '${Directory.systemTemp.path}/${DateTime.now().millisecondsSinceEpoch}_$safeName',
+  );
+  await tmp.writeAsBytes(file.bytes!, flush: true);
+  return tmp;
+}
+
 Future<FilePickerM?> pickSingleFile({
   List<String> allowedExtensions = const ['png', 'jpg', 'jpeg'],
 }) async {
@@ -79,6 +101,32 @@ Future<FilePickerM?> pickSingleFile({
     allowMultiple: false,
     allowedExtensions: allowedExtensions,
   );
+}
+
+Future<FilePickerM?> pickDocumentFile({
+  List<String> allowedExtensions = const [
+    'png',
+    'jpg',
+    'jpeg',
+    'webp',
+    'pdf',
+    'doc',
+    'docx',
+  ],
+}) async {
+  final picked = await pickFile(
+    allowMultiple: false,
+    allowedExtensions: allowedExtensions,
+    anyFileType: true,
+  );
+  if (picked == null) return null;
+
+  final ext = (picked.extension).toLowerCase();
+  final allowed = allowedExtensions.map((e) => e.toLowerCase()).toSet();
+  if (allowed.isNotEmpty && ext != 'unknown' && !allowed.contains(ext)) {
+    return null;
+  }
+  return picked;
 }
 
 Future<FilePickerM?> pickMultiFile({

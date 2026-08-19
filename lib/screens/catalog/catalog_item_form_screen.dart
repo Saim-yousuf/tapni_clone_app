@@ -66,11 +66,13 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   }
 
   Future<void> _pickImage() async {
-    final file = await pickSingleFile(
-      allowedExtensions: widget.isDocument
-          ? DocumentFileHelper.allowedExtensions
-          : const ['png', 'jpg', 'jpeg', 'webp'],
-    );
+    final file = widget.isDocument
+        ? await pickDocumentFile(
+            allowedExtensions: DocumentFileHelper.allowedExtensions,
+          )
+        : await pickSingleFile(
+            allowedExtensions: const ['png', 'jpg', 'jpeg', 'webp'],
+          );
     if (file?.file == null) return;
     setState(() {
       _pickedImagePath = file!.file!.path;

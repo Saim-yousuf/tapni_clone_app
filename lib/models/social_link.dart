@@ -46,6 +46,7 @@ class SocialLink {
   final List<CatalogItem>? catalogItems;
   final List<String>? catalogCategories;
   final String? catalogType;
+  final String? fileExt;
   final ServiceSchedule? serviceSchedule;
   final bool isCustom;
   final String value; // username, phone number, or URL
@@ -67,6 +68,7 @@ class SocialLink {
     this.catalogItems,
     this.catalogCategories,
     this.catalogType,
+    this.fileExt,
     this.serviceSchedule,
     this.isCustom = false,
     required this.value,
@@ -89,6 +91,7 @@ class SocialLink {
     List<CatalogItem>? catalogItems,
     List<String>? catalogCategories,
     String? catalogType,
+    String? fileExt,
     ServiceSchedule? serviceSchedule,
     bool? isCustom,
     String? value,
@@ -110,6 +113,7 @@ class SocialLink {
       catalogItems: catalogItems ?? this.catalogItems,
       catalogCategories: catalogCategories ?? this.catalogCategories,
       catalogType: catalogType ?? this.catalogType,
+      fileExt: fileExt ?? this.fileExt,
       serviceSchedule: serviceSchedule ?? this.serviceSchedule,
       isCustom: isCustom ?? this.isCustom,
       value: value ?? this.value,
@@ -169,6 +173,8 @@ class SocialLink {
           catalogCategories!.isNotEmpty)
         'catalogCategories': catalogCategories,
       if (catalogType != null) 'catalogType': catalogType,
+      if (isDocumentLink && (fileExt?.trim().isNotEmpty ?? false))
+        'fileExt': fileExt!.trim().toLowerCase(),
       if (serviceSchedule != null) 'serviceSchedule': serviceSchedule!.toJson(),
       'isCustom': isCustom,
       'url': fullUrl,
@@ -313,6 +319,7 @@ class SocialLink {
               .toList()
           : null,
       catalogType: json['catalogType']?.toString(),
+      fileExt: json['fileExt']?.toString(),
       catalogCategories: (json['catalogCategories'] as List<dynamic>?)
           ?.map((e) => e.toString().trim())
           .where((e) => e.isNotEmpty)

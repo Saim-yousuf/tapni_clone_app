@@ -32,6 +32,7 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
   String? _pickedFilePath;
   String? _pickedMimeType;
   String? _pickedFileName;
+  String? _fileExt;
   String? _savedFileUrl;
   String? _pickedLogoPath;
   String? _savedLogoUrl;
@@ -61,6 +62,7 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
                     : existing.value))
         : (migrated?.imageUrl ?? existing?.url ?? existing?.value ?? '');
     _savedFileUrl = fileUrl;
+    _fileExt = DocumentFileHelper.normalizeExt(existing?.fileExt);
     final logo = existing?.logoUrl?.trim() ?? '';
     _savedLogoUrl = logo;
     _useCustomIcon = logo.startsWith('http://') || logo.startsWith('https://');
@@ -74,7 +76,7 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
   }
 
   Future<void> _pickDocument() async {
-    final file = await pickSingleFile(
+    final file = await pickDocumentFile(
       allowedExtensions: DocumentFileHelper.allowedExtensions,
     );
     if (file?.file == null) return;
@@ -82,6 +84,8 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
       _pickedFilePath = file!.file!.path;
       _pickedMimeType = file.mimeType;
       _pickedFileName = file.name;
+      _fileExt = DocumentFileHelper.normalizeExt(file.extension) ??
+          DocumentFileHelper.normalizeExt(file.name);
       _savedFileUrl = '';
       if (_nameCtrl.text.trim().isEmpty) {
         final raw = file.name ?? '';
@@ -118,7 +122,11 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
     if (_pickedFilePath != null) {
       fileValue = await fileToDataUri(
         File(_pickedFilePath!),
-        mimeType: _pickedMimeType,
+        mimeType: DocumentFileHelper.mimeFor(
+          mimeType: _pickedMimeType,
+          fileName: _pickedFileName,
+          path: _pickedFilePath,
+        ),
       );
     }
     if (fileValue.trim().isEmpty || fileValue.startsWith('catalog:')) {
@@ -150,6 +158,7 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
             fieldType: 'document',
             actionType: 'document',
             catalogType: 'documents',
+            fileExt: _fileExt,
             templateId: templateId,
             logoUrl: logoValue,
             url: fileValue,
@@ -166,6 +175,7 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
             fieldType: 'document',
             actionType: 'document',
             catalogType: 'documents',
+            fileExt: _fileExt,
             logoUrl: logoValue,
             url: fileValue,
             value: fileValue,
@@ -226,7 +236,8 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
                     Center(
                       child: DocumentKindIcon(
                         fileUrl: previewUrl,
-                        fileName: previewName,
+                        fileName: _pickedFileName ?? previewName,
+                        fileExt: _fileExt,
                         customLogoUrl: _useCustomIcon ? _savedLogoUrl : null,
                         localImagePath: _pickedLogoPath,
                         size: 120,
