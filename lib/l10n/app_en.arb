@@ -17,7 +17,7 @@
   "socialLinksSubtitle": "Add Instagram, WhatsApp, website and more",
   "publicProfile": "Public profile",
   "publicProfileOn": "Anyone can find and view your profile",
-  "publicProfileOff": "Hidden from search — others can't discover you",
+  "publicProfileOff": "Hidden from search — your QR and profile link still work",
   "shareQr": "Share My QR Code",
   "shareQrSubtitle": "Let others scan your digital business card",
   "shoppingRewards": "Shopping & rewards",
@@ -1582,5 +1582,11 @@
   "callerIdScreeningRole": "Set as caller ID / spam app",
   "callerIdPermissionNeeded": "Required to identify incoming calls",
   "callerIdAndroidOnly": "Incoming-call name overlay is available on Android. iOS does not allow apps to draw over the Phone screen.",
-  "grantPermission": "Allow"
+  "grantPermission": "Allow",
+  "quickAddLinksTitle": "Add your links",
+  "quickAddLinksSubtitle": "Add WhatsApp, Instagram, TikTok, and Snapchat so people can reach you quickly. You can skip this and add more later.",
+  "quickAddWhatsAppHint": "WhatsApp number",
+  "quickAddInstagramHint": "Instagram username",
+  "quickAddTiktokHint": "TikTok username",
+  "quickAddSnapchatHint": "Snapchat username"
 }

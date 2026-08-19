@@ -1550,5 +1550,11 @@
   "myLoyaltyTemplate": "قالب الولاء الخاص بي",
   "noLoyaltyTemplatesFound": "لا توجد قوالب",
   "loyaltyTextLayer": "نص",
-  "loyaltyImageLayer": "صورة"
+  "loyaltyImageLayer": "صورة",
+  "quickAddLinksTitle": "أضف روابطك",
+  "quickAddLinksSubtitle": "أضف واتساب وإنستغرام وتيك توك وسناب شات ليصلك الآخرون بسرعة. يمكنك التخطي وإضافة المزيد لاحقًا.",
+  "quickAddWhatsAppHint": "رقم واتساب",
+  "quickAddInstagramHint": "اسم مستخدم إنستغرام",
+  "quickAddTiktokHint": "اسم مستخدم تيك توك",
+  "quickAddSnapchatHint": "اسم مستخدم سناب شات"
 }

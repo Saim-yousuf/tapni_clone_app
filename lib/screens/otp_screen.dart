@@ -201,6 +201,9 @@ class _OtpScreenState extends State<OtpScreen> {
       appBar: AppBar(
         backgroundColor: WaUi.toolsScaffold,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
         foregroundColor: WaUi.primaryText,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, size: 22),

@@ -62,8 +62,12 @@ class SocialIconButton extends StatelessWidget {
         child: Image.network(
           socialLink.logoUrl!,
           fit: BoxFit.contain,
-          errorBuilder: (_, __, ___) =>
-              Icon(Icons.link, color: Colors.white, size: 24),
+          errorBuilder: (_, __, ___) => Image.asset(
+            SocialLink.getAssetPath(socialLink.platform),
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) =>
+                Icon(Icons.link, color: Colors.white, size: 24),
+          ),
         ),
       );
     }

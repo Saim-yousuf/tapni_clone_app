@@ -3707,4 +3707,23 @@ class AppLocalizationsZu extends AppLocalizations {
 
   @override
   String get grantPermission => 'Allow';
+
+  @override
+  String get quickAddLinksTitle => 'Add your links';
+
+  @override
+  String get quickAddLinksSubtitle =>
+      'Add WhatsApp, Instagram, TikTok, and Snapchat so people can reach you quickly. You can skip this and add more later.';
+
+  @override
+  String get quickAddWhatsAppHint => 'WhatsApp number';
+
+  @override
+  String get quickAddInstagramHint => 'Instagram username';
+
+  @override
+  String get quickAddTiktokHint => 'TikTok username';
+
+  @override
+  String get quickAddSnapchatHint => 'Snapchat username';
 }

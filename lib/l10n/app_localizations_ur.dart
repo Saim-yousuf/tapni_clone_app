@@ -53,7 +53,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get publicProfileOff =>
-      'تلاش سے پوشیدہ — دوسرے آپ کو دریافت نہیں کر سکتے';
+      'تلاش سے پوشیدہ — آپ کا QR اور پروفائل لنک پھر بھی کام کرے گا';
 
   @override
   String get shareQr => 'میرا QR کوڈ شیئر کریں';
@@ -3685,4 +3685,23 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get grantPermission => 'اجازت دیں';
+
+  @override
+  String get quickAddLinksTitle => 'اپنے لنکس شامل کریں';
+
+  @override
+  String get quickAddLinksSubtitle =>
+      'WhatsApp، Instagram، TikTok اور Snapchat شامل کریں تاکہ لوگ جلدی آپ تک پہنچ سکیں۔ آپ اسے چھوڑ بھی سکتے ہیں اور بعد میں مزید لنکس شامل کر سکتے ہیں۔';
+
+  @override
+  String get quickAddWhatsAppHint => 'WhatsApp نمبر';
+
+  @override
+  String get quickAddInstagramHint => 'Instagram یوزرنیم';
+
+  @override
+  String get quickAddTiktokHint => 'TikTok یوزرنیم';
+
+  @override
+  String get quickAddSnapchatHint => 'Snapchat یوزرنیم';
 }

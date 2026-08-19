@@ -32,4 +32,25 @@ class PhoneUtils {
   static bool isValid(String phone) {
     return RegExp(r'^\+[1-9]\d{7,14}$').hasMatch(phone);
   }
+
+  static String digitsOnly(String? phone) {
+    return (phone ?? '').replaceAll(RegExp(r'\D'), '');
+  }
+
+  /// Compare numbers ignoring formatting / leading zeros / country prefix.
+  static bool sameNumber(String? a, String? b) {
+    var da = digitsOnly(a);
+    var db = digitsOnly(b);
+    if (da.isEmpty || db.isEmpty) return false;
+    if (da.startsWith('0')) da = da.substring(1);
+    if (db.startsWith('0')) db = db.substring(1);
+    if (da.isEmpty || db.isEmpty) return false;
+    if (da == db) return true;
+    const localLen = 10;
+    if (da.length >= localLen && db.length >= localLen) {
+      return da.substring(da.length - localLen) ==
+          db.substring(db.length - localLen);
+    }
+    return da.endsWith(db) || db.endsWith(da);
+  }
 }

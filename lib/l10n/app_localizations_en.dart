@@ -52,7 +52,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get publicProfileOff =>
-      'Hidden from search — others can\'t discover you';
+      'Hidden from search — your QR and profile link still work';
 
   @override
   String get shareQr => 'Share My QR Code';
@@ -3667,4 +3667,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get grantPermission => 'Allow';
+
+  @override
+  String get quickAddLinksTitle => 'Add your links';
+
+  @override
+  String get quickAddLinksSubtitle =>
+      'Add WhatsApp, Instagram, TikTok, and Snapchat so people can reach you quickly. You can skip this and add more later.';
+
+  @override
+  String get quickAddWhatsAppHint => 'WhatsApp number';
+
+  @override
+  String get quickAddInstagramHint => 'Instagram username';
+
+  @override
+  String get quickAddTiktokHint => 'TikTok username';
+
+  @override
+  String get quickAddSnapchatHint => 'Snapchat username';
 }

@@ -6,7 +6,7 @@ import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
-import 'package:tapni_app/screens/contacts_sync_screen.dart';
+import 'package:tapni_app/screens/quick_add_links_screen.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -88,7 +88,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => const ContactsSyncScreen(isOnboarding: true),
+          builder: (_) => QuickAddLinksScreen(phone: widget.phone),
         ),
         (_) => false,
       );
@@ -106,6 +106,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       appBar: AppBar(
         backgroundColor: WaUi.toolsScaffold,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
         foregroundColor: WaUi.primaryText,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, size: 22),

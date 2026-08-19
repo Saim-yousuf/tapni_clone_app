@@ -6,6 +6,7 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/custom_app_button.dart';
 import 'package:tapni_app/widgets/go_bussiness_button.dart';
+import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
@@ -76,8 +77,7 @@ class SocialLinksScreen extends StatelessWidget {
           Material(
             color: theme.scaffoldBackgroundColor,
             child: Padding(
-              // Clear MainShell center-docked profile FAB (~80px).
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 56),
+              padding: EdgeInsets.fromLTRB(16, 8, 16, isTab ? 88 : 24),
               child: CustomAppButton(
                 width: double.infinity,
                 text: context.l10n.addLink2,
@@ -116,20 +116,11 @@ class SocialLinksScreen extends StatelessWidget {
           ),
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: link.logoUrl?.isNotEmpty == true
-                ? Image.network(
-                    link.logoUrl!,
-                    width: 44,
-                    height: 44,
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, __, ___) => _linkPlaceholder(),
-                  )
-                : Image.asset(
-                    _getPlatformAsset(link.platform),
-                    width: 44,
-                    height: 44,
-                    errorBuilder: (_, __, ___) => _linkPlaceholder(),
-                  ),
+            child: LinkPlatformIcon(
+              link: link,
+              size: 44,
+              fit: BoxFit.contain,
+            ),
           ),
           title: Text(
             link.platformName,
@@ -151,26 +142,6 @@ class SocialLinksScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _linkPlaceholder() {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade300,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Icon(Icons.link, size: 20),
-    );
-  }
-
-  String _getPlatformAsset(SocialPlatform platform) {
-    return SocialLink.getAssetPath(platform);
-  }
-
-  String _getPlatformName(SocialPlatform platform) {
-    return SocialLink.getPlatformName(platform);
   }
 }
 

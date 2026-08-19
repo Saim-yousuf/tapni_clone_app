@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
@@ -14,11 +15,9 @@ import 'package:tapni_app/screens/caller_id_setup_screen.dart';
 import 'package:tapni_app/services/contacts_sync_service.dart';
 import 'package:tapni_app/services/caller_id_service.dart';
 import 'package:tapni_app/services/device_session_guard.dart';
-import 'package:tapni_app/utils/theme.dart';
-import 'package:tapni_app/utils/whatsapp_ui.dart';
-import 'package:tapni_app/widgets/wa_tools_widgets.dart';
-
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+
 class MainShell extends StatefulWidget {
   final String? _currentPage;
   const MainShell({Key? key, this._currentPage}) : super(key: key);
@@ -28,7 +27,10 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
+  static const _navPages = ['Links', 'Contacts', 'Explore', 'Settings'];
+
   String? _currentPage;
+  int _navIndex = 0;
   bool _contactsPromptShown = false;
   @override
   void initState() {
@@ -99,8 +101,90 @@ class _MainShellState extends State<MainShell> {
   }
 
   void _switchTab(String page) {
-    setState(() => _currentPage = page);
+    setState(() {
+      _currentPage = page;
+      final index = _navPages.indexOf(page);
+      if (index >= 0) _navIndex = index;
+    });
     Provider.of<ProfileProvider>(context, listen: false).setEditingProfile(false);
+  }
+
+  void _onCenterButtonTap() {
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    if (profileProvider.isEditingProfile) {
+      profileProvider.triggerSave();
+      return;
+    }
+    if (_currentPage == 'My Card') {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const ScanScreen()),
+      );
+      return;
+    }
+    setState(() => _currentPage = 'My Card');
+  }
+
+  Widget _buildCenterFab({
+    required bool isEditing,
+    required Color fabBg,
+    required Color fabFg,
+    required String name,
+    required String? photoUrl,
+  }) {
+    final hasPhoto = photoUrl != null && photoUrl.isNotEmpty;
+
+    Widget child;
+    if (isEditing) {
+      child = Icon(Icons.check_rounded, size: 38, color: fabFg);
+    } else if (_currentPage == 'My Card') {
+      child = Icon(Icons.qr_code_scanner_rounded, size: 38, color: fabFg);
+    } else if (hasPhoto) {
+      child = SizedBox.expand(
+        child: Image.network(
+          photoUrl,
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+          width: 80,
+          height: 80,
+          errorBuilder: (_, __, ___) => _fabInitials(name, fabFg),
+          loadingBuilder: (context, image, progress) {
+            if (progress == null) return image;
+            return _fabInitials(name, fabFg);
+          },
+        ),
+      );
+    } else {
+      child = _fabInitials(name, fabFg);
+    }
+
+    return SizedBox(
+      width: 80,
+      height: 80,
+      child: FloatingActionButton(
+        heroTag: 'tapni_main_fab',
+        onPressed: _onCenterButtonTap,
+        elevation: 6,
+        highlightElevation: 8,
+        backgroundColor: fabBg,
+        foregroundColor: fabFg,
+        shape: const CircleBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: child,
+      ),
+    );
+  }
+
+  Widget _fabInitials(String name, Color color) {
+    return Center(
+      child: Text(
+        name.isNotEmpty ? name[0].toUpperCase() : '?',
+        style: TextStyle(
+          color: color,
+          fontSize: 34,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 
   @override
@@ -108,6 +192,13 @@ class _MainShellState extends State<MainShell> {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final isEditing = profileProvider.isEditingProfile;
     final profile = profileProvider.profile;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = context.l10n;
+    final selectedColor = isDark ? Colors.white : Colors.black;
+    final unselectedColor = const Color(0xFF8E8E93);
+    final barColor = isDark ? Colors.black : Colors.white;
+    final fabBg = isDark ? Colors.white : Colors.black;
+    final fabFg = isDark ? Colors.black : Colors.white;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -116,258 +207,62 @@ class _MainShellState extends State<MainShell> {
         bottom: false,
         child: _buildCurrentScreen(),
       ),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          decoration: BoxDecoration(
-            color: WaUi.navBarBg,
-            border: Border(top: BorderSide(color: WaUi.divider, width: 0.5)),
-          ),
-          padding: const EdgeInsets.only(top: 6, bottom: 4),
-          child: SizedBox(
-            height: 64,
-            child: Row(
-              children: [
-                WaBottomNavItem(
-                  icon: Icons.link_outlined,
-                  selectedIcon: Icons.link,
-                  label: context.l10n.links,
-                  selected: _currentPage == 'Links',
-                  onTap: () => _switchTab('Links'),
-                ),
-                WaBottomNavItem(
-                  icon: Icons.people_outline,
-                  selectedIcon: Icons.people,
-                  label: context.l10n.contacts,
-                  selected: _currentPage == 'Contacts',
-                  onTap: () => _switchTab('Contacts'),
-                ),
-                SizedBox(width: 72),
-                WaBottomNavItem(
-                  icon: Icons.insights_outlined,
-                  selectedIcon: Icons.insights,
-                  label: context.l10n.explore,
-                  selected: _currentPage == 'Explore',
-                  onTap: () => _switchTab('Explore'),
-                ),
-                WaBottomNavItem(
-                  icon: Icons.storefront_outlined,
-                  selectedIcon: Icons.storefront,
-                  label: context.l10n.tools,
-                  selected: _currentPage == 'Settings',
-                  onTap: () => _switchTab('Settings'),
-                ),
-              ],
-            ),
-          ),
+      bottomNavigationBar: StylishBottomBar(
+        option: AnimatedBarOptions(
+          iconStyle: IconStyle.Default,
+          barAnimation: BarAnimation.fade,
+          opacity: 0.12,
         ),
+        items: [
+          BottomBarItem(
+            icon: const Icon(Icons.link_outlined),
+            selectedIcon: const Icon(Icons.link),
+            selectedColor: selectedColor,
+            unSelectedColor: unselectedColor,
+            title: Text(l10n.links),
+          ),
+          BottomBarItem(
+            icon: const Icon(Icons.people_outline),
+            selectedIcon: const Icon(Icons.people),
+            selectedColor: selectedColor,
+            unSelectedColor: unselectedColor,
+            title: Text(l10n.contacts),
+          ),
+          BottomBarItem(
+            icon: const Icon(Icons.insights_outlined),
+            selectedIcon: const Icon(Icons.insights),
+            selectedColor: selectedColor,
+            unSelectedColor: unselectedColor,
+            title: Text(l10n.explore),
+          ),
+          BottomBarItem(
+            icon: const Icon(Icons.storefront_outlined),
+            selectedIcon: const Icon(Icons.storefront),
+            selectedColor: selectedColor,
+            unSelectedColor: unselectedColor,
+            title: Text(l10n.tools),
+          ),
+        ],
+        backgroundColor: barColor,
+        elevation: 8,
+        currentIndex: _navIndex,
+        hasNotch: true,
+        fabLocation: StylishBarFabLocation.center,
+        notchStyle: NotchStyle.circle,
+        onTap: (index) {
+          if (index < 0 || index >= _navPages.length) return;
+          _switchTab(_navPages[index]);
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
-      floatingActionButton: Container(
-        width: 80,
-        height: 80,
-        decoration: BoxDecoration(shape: BoxShape.circle),
-        child: isEditing
-            ? ClipOval(
-                child: InkWell(
-                  onTap: () {
-                    profileProvider.triggerSave();
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppTheme.primaryBlack,
-                    ),
-                    child: const Icon(
-                      Icons.check,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              )
-            : _currentPage == "My Card"
-            ? ClipOval(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const ScanScreen()),
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppTheme.primaryBlack,
-                    ),
-                    child: const Icon(
-                      Icons.qr_code_scanner_rounded,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              )
-            : profile.profilePhotoUrl == null ||
-                  profile.profilePhotoUrl!.isEmpty
-            ? ClipOval(
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _currentPage = 'My Card';
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppTheme.primaryBlack,
-                    ),
-                    child: Center(
-                      child: Text(
-                        profile.name.isNotEmpty
-                            ? profile.name[0].toUpperCase()
-                            : '?',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            : ClipOval(
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _currentPage = 'My Card';
-                    });
-                  },
-                  child: Image.network(
-                    profile.profilePhotoUrl ?? "",
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppTheme.primaryBlack,
-                      ),
-                      child: Center(
-                        child: Text(
-                          profile.name.isNotEmpty
-                              ? profile.name[0].toUpperCase()
-                              : '?',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    loadingBuilder: (_, __, ___) => Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppTheme.primaryBlack,
-                      ),
-                      child: Center(
-                        child: Text(
-                          profile.name.isNotEmpty
-                              ? profile.name[0].toUpperCase()
-                              : '?',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+      floatingActionButton: _buildCenterFab(
+        isEditing: isEditing,
+        fabBg: fabBg,
+        fabFg: fabFg,
+        name: profile.name,
+        photoUrl: profile.profilePhotoUrl,
       ),
-
-      // floatingActionButton: InkWell(
-      //   onTap: () {
-      //     if (isEditing) {
-      //       profileProvider.triggerSave();
-      //     } else {
-      //       if (_currentPage != 'My Card') {
-      //         profileProvider.setEditingProfile(true);
-      //       }
-      //       setState(() {
-      //         _currentPage = 'My Card';
-      //       });
-      //     }
-      //   },
-      //   child: Container(
-      //     width: 80,
-      //     height: 80,
-      //     decoration: BoxDecoration(shape: BoxShape.circle),
-      //     child: isEditing
-      //         ? Container(
-      //             decoration: BoxDecoration(
-      //               shape: BoxShape.circle,
-      //               color: AppTheme.primaryBlack,
-      //             ),
-      //             child: const Icon(Icons.check, size: 40, color: Colors.white),
-      //           )
-      //         : _currentPage != 'My Card'
-      //         ? profile.profilePhotoUrl == null ||
-      //                   profile.profilePhotoUrl!.isEmpty
-      //               ? Container(
-      //                   decoration: BoxDecoration(
-      //                     shape: BoxShape.circle,
-      //                     color: AppTheme.primaryBlack,
-      //                   ),
-      //                   child: const Icon(
-      //                     Icons.ios_share,
-      //                     size: 40,
-      //                     color: Colors.white,
-      //                   ),
-      //                 )
-      // : ClipOval(
-      //     child: Image.network(
-      //       profile.profilePhotoUrl ?? "",
-      //       fit: BoxFit.cover,
-      //     ),
-      //   )
-      //         : ClipOval(
-      //             child:
-      //                 // Container(
-      //                 //   decoration: BoxDecoration(
-      //                 //     shape: BoxShape.circle,
-      //                 //     color: AppTheme.primaryBlack,
-      //                 //   ),
-      //                 //   child: Center(
-      //                 //     child: Text(
-      //                 //       profile.name.isNotEmpty
-      //                 //           ? profile.name[0].toUpperCase()
-      //                 //           : '?',
-      //                 //       style: TextStyle(
-      //                 //         color: Colors.white,
-      //                 //         fontSize: 40,
-      //                 //         fontWeight: FontWeight.bold,
-      //                 //       ),
-      //                 //     ),
-      //                 //   ),
-      //                 // ),
-      //                 Container(
-      //                   decoration: BoxDecoration(
-      //                     shape: BoxShape.circle,
-      //                     color: AppTheme.primaryBlack,
-      //                   ),
-      //                   child: Icon(
-      //                     Icons.ios_share,
-      //                     size: 40,
-      //                     color: Colors.white,
-      //                   ),
-      //                 ),
-      //           ),
-      //   ),
-      // ),
     );
   }
 }

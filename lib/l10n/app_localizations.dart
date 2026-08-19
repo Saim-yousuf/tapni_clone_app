@@ -323,7 +323,7 @@ abstract class AppLocalizations {
   /// No description provided for @publicProfileOff.
   ///
   /// In en, this message translates to:
-  /// **'Hidden from search — others can\'t discover you'**
+  /// **'Hidden from search — your QR and profile link still work'**
   String get publicProfileOff;
 
   /// No description provided for @shareQr.
@@ -7008,6 +7008,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Allow'**
   String get grantPermission;
+
+  /// No description provided for @quickAddLinksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your links'**
+  String get quickAddLinksTitle;
+
+  /// No description provided for @quickAddLinksSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add WhatsApp, Instagram, TikTok, and Snapchat so people can reach you quickly. You can skip this and add more later.'**
+  String get quickAddLinksSubtitle;
+
+  /// No description provided for @quickAddWhatsAppHint.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp number'**
+  String get quickAddWhatsAppHint;
+
+  /// No description provided for @quickAddInstagramHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Instagram username'**
+  String get quickAddInstagramHint;
+
+  /// No description provided for @quickAddTiktokHint.
+  ///
+  /// In en, this message translates to:
+  /// **'TikTok username'**
+  String get quickAddTiktokHint;
+
+  /// No description provided for @quickAddSnapchatHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Snapchat username'**
+  String get quickAddSnapchatHint;
 }
 
 class _AppLocalizationsDelegate

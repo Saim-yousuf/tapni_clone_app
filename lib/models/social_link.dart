@@ -195,7 +195,8 @@ class SocialLink {
     final actionType = json['actionType'] as String?;
 
     SocialPlatform platform = SocialPlatform.wave;
-    final combined = "${type.toLowerCase()} ${title.toLowerCase()}";
+    final combined =
+        "${type.toLowerCase()} ${title.toLowerCase()} ${url.toLowerCase()}";
 
     if (combined.contains('whatsapp')) {
       platform = SocialPlatform.whatsApp;

@@ -185,7 +185,7 @@ class AuthProvider extends ChangeNotifier {
     } catch (_) {}
   }
 
-  bool _isAlreadyOnThisDevice({String? email, String? phone, String? userId}) {
+  bool isAlreadyOnThisDevice({String? email, String? phone, String? userId}) {
     return AccountStorage.findAccountByEmailOrId(
           email: email,
           phone: phone,
@@ -199,6 +199,25 @@ class AuthProvider extends ChangeNotifier {
     BuildContext context, {
     bool showErrors = true,
   }) async {
+    if (isAlreadyOnThisDevice(phone: phone)) {
+      if (showErrors && context.mounted) {
+        ShowAlert.error(
+          message: l10nOr(
+            (l) => l.accountAlreadyLoggedInOnDevice,
+            'This account is already logged in on this device',
+          ),
+          context: context,
+        );
+      }
+      return OtpSendResult(
+        success: false,
+        message: l10nOr(
+          (l) => l.accountAlreadyLoggedInOnDevice,
+          'This account is already logged in on this device',
+        ),
+      );
+    }
+
     final response = await _authRepo.sendPhoneOtp(phone: phone);
 
     if (response.success && response.data != null) {
@@ -231,7 +250,7 @@ class AuthProvider extends ChangeNotifier {
     BuildContext context, {
     bool addAccount = false,
   }) async {
-    if (_isAlreadyOnThisDevice(phone: phone)) {
+    if (isAlreadyOnThisDevice(phone: phone)) {
       if (context.mounted) {
         ShowAlert.error(
           message: l10nOr((l) => l.accountAlreadyLoggedInOnDevice, 'This account is already logged in on this device'),
@@ -273,7 +292,7 @@ class AuthProvider extends ChangeNotifier {
         final userEmail =
             user is Map ? user['email']?.toString() : null;
 
-        if (_isAlreadyOnThisDevice(
+        if (isAlreadyOnThisDevice(
           email: userEmail,
           phone: userPhone,
           userId: userId,
@@ -349,7 +368,7 @@ class AuthProvider extends ChangeNotifier {
     BuildContext context, {
     bool addAccount = false,
   }) async {
-    if (_isAlreadyOnThisDevice(email: email)) {
+    if (isAlreadyOnThisDevice(email: email)) {
       if (context.mounted) {
         ShowAlert.error(
           message: l10nOr((l) => l.accountAlreadyLoggedInOnDevice, 'This account is already logged in on this device'),
@@ -371,7 +390,7 @@ class AuthProvider extends ChangeNotifier {
         final userEmail =
             user is Map ? user['email']?.toString() : email;
 
-        if (_isAlreadyOnThisDevice(email: userEmail, userId: userId)) {
+        if (isAlreadyOnThisDevice(email: userEmail, userId: userId)) {
           if (context.mounted) {
             ShowAlert.error(
               message: l10nOr((l) => l.accountAlreadyLoggedInOnDevice, 'This account is already logged in on this device'),
@@ -464,7 +483,7 @@ class AuthProvider extends ChangeNotifier {
     final userId = (user['id'] ?? user['_id'])?.toString();
     final email = user['email']?.toString();
     final phone = user['phone']?.toString();
-    if (_isAlreadyOnThisDevice(email: email, phone: phone, userId: userId)) {
+    if (isAlreadyOnThisDevice(email: email, phone: phone, userId: userId)) {
       if (context.mounted) {
         ShowAlert.error(
           message: l10nOr((l) => l.accountAlreadyLoggedInOnDevice, 'This account is already logged in on this device'),

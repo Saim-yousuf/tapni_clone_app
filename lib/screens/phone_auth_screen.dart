@@ -25,6 +25,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
   CountryDialCode _country = defaultCountryDialCode;
+  bool _alreadyOnDevice = false;
 
   @override
   void dispose() {
@@ -32,20 +33,48 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     super.dispose();
   }
 
+  String _normalizedPhone() {
+    return PhoneUtils.normalize(
+      _phoneController.text,
+      countryCode: _country.code,
+    );
+  }
+
+  void _checkAlreadyOnDevice() {
+    final phone = _normalizedPhone();
+    final already = PhoneUtils.digitsOnly(phone).length >= 10 &&
+        context.read<AuthProvider>().isAlreadyOnThisDevice(phone: phone);
+    if (already != _alreadyOnDevice) {
+      setState(() => _alreadyOnDevice = already);
+    }
+  }
+
   Future<void> _handleContinue() async {
     if (!_formKey.currentState!.validate()) return;
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final phone = PhoneUtils.normalize(
-      _phoneController.text,
-      countryCode: _country.code,
-    );
+    final phone = _normalizedPhone();
 
     if (!PhoneUtils.isValid(phone)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
             context.l10n.pleaseEnterValidPhoneNumber,
+            style: WaUi.body.copyWith(color: Colors.white),
+          ),
+          backgroundColor: WaUi.primaryText,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    if (authProvider.isAlreadyOnThisDevice(phone: phone)) {
+      setState(() => _alreadyOnDevice = true);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.l10n.accountAlreadyLoggedInOnDevice,
             style: WaUi.body.copyWith(color: Colors.white),
           ),
           backgroundColor: WaUi.primaryText,
@@ -83,6 +112,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     );
     if (selected != null) {
       setState(() => _country = selected);
+      _checkAlreadyOnDevice();
     }
   }
 
@@ -173,9 +203,15 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                                 FilteringTextInputFormatter.digitsOnly,
                                 LengthLimitingTextInputFormatter(15),
                               ],
+                              onChanged: (_) => _checkAlreadyOnDevice(),
                               onFieldSubmitted: (_) => _handleContinue(),
                               decoration: _fieldDecoration(
                                 hint: context.l10n.phoneNumber2,
+                              ).copyWith(
+                                errorText: _alreadyOnDevice
+                                    ? context.l10n.accountAlreadyLoggedInOnDevice
+                                    : null,
+                                errorMaxLines: 2,
                               ),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
@@ -186,6 +222,10 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                                         .length <
                                     7) {
                                   return context.l10n.tooShort;
+                                }
+                                if (_alreadyOnDevice) {
+                                  return context
+                                      .l10n.accountAlreadyLoggedInOnDevice;
                                 }
                                 return null;
                               },

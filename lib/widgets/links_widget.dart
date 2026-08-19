@@ -12,6 +12,7 @@ import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/contact_card_sheet.dart' as contact_card;
+import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
@@ -1515,19 +1516,11 @@ class LinkSheet {
                           width: 60,
                           height: 60,
 
-                          child: link.logoUrl?.isNotEmpty == true
-                              ? Image.network(
-                                  link.logoUrl!,
-                                  fit: BoxFit.contain,
-                                  errorBuilder: (_, __, ___) =>
-                                      const Icon(Icons.link, size: 28),
-                                )
-                              : Image.asset(
-                                  SocialLink.getAssetPath(link.platform),
-                                  fit: BoxFit.contain,
-                                  errorBuilder: (_, __, ___) =>
-                                      Icon(Icons.link, size: 28),
-                                ),
+                          child: LinkPlatformIcon(
+                            link: link,
+                            size: 60,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                         SizedBox(width: 14),
 

@@ -6,8 +6,10 @@ class WaUi {
   static const Color scaffold = Color(0xFFF0F2F5);
   static const Color toolsScaffold = Color(0xFFFFFFFF);
   static const Color surface = Color(0xFFFFFFFF);
-  static const Color navBarBg = Color(0xFFF7F8FA);
+  static const Color navBarBg = Color(0xFFFFFFFF);
   static const Color navPill = Color(0xFFE9EDEF);
+  static const Color navGreen = Color(0xFF10A375);
+  static const Color navInactive = Color(0xFFBDBDBD);
   static const Color primaryText = Color(0xFF111B21);
   static const Color secondaryText = Color(0xFF667781);
   static const Color divider = Color(0xFFE9EDEF);

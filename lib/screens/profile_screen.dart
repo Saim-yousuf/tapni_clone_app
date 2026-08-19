@@ -16,6 +16,7 @@ import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
+import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
@@ -60,6 +61,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final provider = Provider.of<ProfileProvider>(context, listen: false);
       if (!provider.hasFetchedProfile && !provider.isLoading) {
         provider.fetchProfile();
+      }
+      if (provider.linkCatalog.isEmpty && !provider.isLinkCatalogLoading) {
+        provider.fetchLinkCatalog();
       }
     });
   }
@@ -934,15 +938,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(radius - 1),
-                  child: Image.network(
-                    link.logoUrl ?? "",
+                  child: LinkPlatformIcon(
+                    link: link,
+                    size: iconSize,
                     fit: BoxFit.cover,
-                    width: iconSize,
-                    height: iconSize,
-                    alignment: Alignment.center,
-                    errorBuilder: (_, __, ___) => const Center(
-                      child: Icon(Icons.link, size: 32),
-                    ),
                   ),
                 ),
               ),

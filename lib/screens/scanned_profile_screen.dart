@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
+import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/bank_widgets.dart';
 import 'package:tapni_app/widgets/loading_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -825,8 +826,6 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   }
 
   Widget _buildLinkIcon(SocialLink link, {required double size}) {
-    final isCatalog = link.isCatalogLink;
-    final logo = link.logoUrl?.trim() ?? '';
     final radius = 24.0 * (size / 130.0);
 
     return Container(
@@ -839,29 +838,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius - 1),
-        child: logo.isNotEmpty
-            ? Image.network(
-                logo,
-                fit: BoxFit.cover,
-                width: size,
-                height: size,
-                alignment: Alignment.center,
-                errorBuilder: (_, __, ___) =>
-                    _linkIconFallback(isCatalog, size: size),
-              )
-            : _linkIconFallback(isCatalog, size: size),
-      ),
-    );
-  }
-
-  Widget _linkIconFallback(bool isCatalog, {required double size}) {
-    return ColoredBox(
-      color: const Color(0xFFF5F5F5),
-      child: Center(
-        child: Icon(
-          isCatalog ? Icons.restaurant_menu : Icons.link,
-          size: isCatalog ? 56.0 * (size / 130.0) : 32,
-          color: Colors.black87,
+        child: LinkPlatformIcon(
+          link: link,
+          size: size,
+          fit: BoxFit.cover,
         ),
       ),
     );

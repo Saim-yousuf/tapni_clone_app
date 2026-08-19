@@ -3639,4 +3639,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get grantPermission => 'Allow';
+
+  @override
+  String get quickAddLinksTitle => 'أضف روابطك';
+
+  @override
+  String get quickAddLinksSubtitle =>
+      'أضف واتساب وإنستغرام وتيك توك وسناب شات ليصلك الآخرون بسرعة. يمكنك التخطي وإضافة المزيد لاحقًا.';
+
+  @override
+  String get quickAddWhatsAppHint => 'رقم واتساب';
+
+  @override
+  String get quickAddInstagramHint => 'اسم مستخدم إنستغرام';
+
+  @override
+  String get quickAddTiktokHint => 'اسم مستخدم تيك توك';
+
+  @override
+  String get quickAddSnapchatHint => 'اسم مستخدم سناب شات';
 }

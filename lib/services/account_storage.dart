@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:tapni_app/models/stored_account.dart';
+import 'package:tapni_app/utils/phone_utils.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 
 class AccountStorage {
@@ -258,8 +259,7 @@ class AccountStorage {
           a.email.trim().toLowerCase() == emailLower) {
         return a;
       }
-      if (phoneNorm.isNotEmpty &&
-          (a.phone ?? '').trim() == phoneNorm) {
+      if (phoneNorm.isNotEmpty && PhoneUtils.sameNumber(a.phone, phoneNorm)) {
         return a;
       }
     }

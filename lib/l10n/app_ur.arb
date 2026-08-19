@@ -14,7 +14,7 @@
   "socialLinksSubtitle": "انسٹاگرام، واٹس ایپ، ویب سائٹ اور بہت کچھ شامل کریں",
   "publicProfile": "عوامی پروفائل",
   "publicProfileOn": "کوئی بھی آپ کی پروفائل تلاش اور دیکھ سکتا ہے",
-  "publicProfileOff": "تلاش سے پوشیدہ — دوسرے آپ کو دریافت نہیں کر سکتے",
+  "publicProfileOff": "تلاش سے پوشیدہ — آپ کا QR اور پروفائل لنک پھر بھی کام کرے گا",
   "shareQr": "میرا QR کوڈ شیئر کریں",
   "shareQrSubtitle": "دوسروں کو آپ کا ڈیجیٹل کاروباری کارڈ اسکین کرنے دیں",
   "shoppingRewards": "خریداری اور انعامات",
@@ -845,5 +845,11 @@
   "callerIdScreeningRole": "کالر آئی ڈی / سپیم ایپ کے طور پر سیٹ کریں",
   "callerIdPermissionNeeded": "آنے والی کالز کی شناخت کے لیے ضروری",
   "callerIdAndroidOnly": "آنے والی کال پر نام Android پر دستیاب ہے۔ iOS فون اسکرین کے اوپر ایپس کو دکھانے کی اجازت نہیں دیتا۔",
-  "grantPermission": "اجازت دیں"
+  "grantPermission": "اجازت دیں",
+  "quickAddLinksTitle": "اپنے لنکس شامل کریں",
+  "quickAddLinksSubtitle": "WhatsApp، Instagram، TikTok اور Snapchat شامل کریں تاکہ لوگ جلدی آپ تک پہنچ سکیں۔ آپ اسے چھوڑ بھی سکتے ہیں اور بعد میں مزید لنکس شامل کر سکتے ہیں۔",
+  "quickAddWhatsAppHint": "WhatsApp نمبر",
+  "quickAddInstagramHint": "Instagram یوزرنیم",
+  "quickAddTiktokHint": "TikTok یوزرنیم",
+  "quickAddSnapchatHint": "Snapchat یوزرنیم"
 }

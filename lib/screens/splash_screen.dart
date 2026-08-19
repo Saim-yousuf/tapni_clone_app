@@ -104,6 +104,7 @@ class _SplashScreenState extends State<SplashScreen> {
       await Future.wait([
         subProvider.checkSubscriptionStatus(),
         profileProvider.fetchProfile(),
+        profileProvider.fetchLinkCatalog(),
         PushNotificationService.syncTokenWithBackend(),
       ]);
     } catch (_) {}

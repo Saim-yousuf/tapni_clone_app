@@ -149,6 +149,58 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  LinkTemplate? findCatalogTemplate({
+    String? templateId,
+    String? label,
+    String? type,
+  }) {
+    final id = templateId?.trim() ?? '';
+    if (id.isNotEmpty) {
+      for (final category in _linkCatalog) {
+        for (final template in category.templates) {
+          if (template.id == id) return template;
+        }
+      }
+    }
+
+    final name = (label ?? '').trim().toLowerCase();
+    final typeKey = (type ?? '').trim().toLowerCase();
+    LinkTemplate? byType;
+    LinkTemplate? byName;
+
+    for (final category in _linkCatalog) {
+      for (final template in category.templates) {
+        final templateLabel = template.label.toLowerCase();
+        if (name.isNotEmpty && templateLabel == name) return template;
+        if (typeKey.isNotEmpty &&
+            template.fieldType.toLowerCase() == typeKey) {
+          byType ??= template;
+        }
+        if (name.isNotEmpty &&
+            name.length >= 4 &&
+            (templateLabel.contains(name) || name.contains(templateLabel))) {
+          byName ??= template;
+        }
+      }
+    }
+    return byType ?? byName;
+  }
+
+  String? catalogLogoFor(SocialLink link) {
+    final isGenericCustom = link.platform == SocialPlatform.wave &&
+        (link.templateId == null || link.templateId!.isEmpty);
+    final template = findCatalogTemplate(
+      templateId: link.templateId,
+      label: link.customLabel ?? SocialLink.getPlatformName(link.platform),
+      type: isGenericCustom ? null : (link.fieldType ?? link.apiType),
+    );
+    final logo = template?.logo.trim() ?? '';
+    if (logo.startsWith('http://') || logo.startsWith('https://')) {
+      return logo;
+    }
+    return null;
+  }
+
   UserProfile get profile => _profile;
   int get selectedTemplateIndex => _selectedTemplateIndex;
   CardTemplate get currentTemplate => templates[_selectedTemplateIndex];

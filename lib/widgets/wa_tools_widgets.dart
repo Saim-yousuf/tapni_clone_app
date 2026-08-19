@@ -207,7 +207,7 @@ class WaForYouCard extends StatelessWidget {
 class WaBottomNavItem extends StatelessWidget {
   final IconData icon;
   final IconData? selectedIcon;
-  final String label;
+  final String? label;
   final bool selected;
   final VoidCallback onTap;
   final int? badgeCount;
@@ -217,7 +217,7 @@ class WaBottomNavItem extends StatelessWidget {
     super.key,
     required this.icon,
     this.selectedIcon,
-    required this.label,
+    this.label,
     required this.selected,
     required this.onTap,
     this.badgeCount,
@@ -226,93 +226,82 @@ class WaBottomNavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // WhatsApp-style: soft gray ripple clipped to the icon pill only.
-    const pillRadius = BorderRadius.all(Radius.circular(16));
-    final splash = const Color(0xFF667781).withValues(alpha: 0.14);
-    final highlight = const Color(0xFF667781).withValues(alpha: 0.08);
+    final splash = WaUi.navGreen.withValues(alpha: 0.14);
+    final highlight = WaUi.navGreen.withValues(alpha: 0.08);
+    final color = selected ? WaUi.navGreen : WaUi.navInactive;
+    final showLabel = label != null && label!.isNotEmpty;
 
     return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        mouseCursor: SystemMouseCursors.click,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: [
-                Material(
-                  color: selected ? WaUi.navPill : Colors.transparent,
-                  borderRadius: pillRadius,
-                  child: InkWell(
-                    onTap: onTap,
-                    mouseCursor: SystemMouseCursors.click,
-                    borderRadius: pillRadius,
-                    splashFactory: InkRipple.splashFactory,
-                    splashColor: splash,
-                    highlightColor: highlight,
-                    child: SizedBox(
-                      width: 64,
-                      height: 32,
-                      child: Icon(
-                        selected ? (selectedIcon ?? icon) : icon,
-                        size: 24,
-                        color: WaUi.primaryText,
-                      ),
-                    ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          mouseCursor: SystemMouseCursors.click,
+          splashColor: splash,
+          highlightColor: highlight,
+          overlayColor: WidgetStatePropertyAll(splash),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  Icon(
+                    selected ? (selectedIcon ?? icon) : icon,
+                    size: 26,
+                    color: color,
                   ),
-                ),
-                if (badgeCount != null && badgeCount! > 0)
-                  Positioned(
-                    right: -2,
-                    top: -4,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 1,
+                  if (badgeCount != null && badgeCount! > 0)
+                    Positioned(
+                      right: -10,
+                      top: -6,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 1,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: WaUi.accent,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        constraints: const BoxConstraints(minWidth: 18),
+                        child: Text(
+                          badgeCount! > 99 ? '99+' : '$badgeCount',
+                          textAlign: TextAlign.center,
+                          style: WaUi.label.copyWith(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                      decoration: const BoxDecoration(
-                        color: WaUi.accent,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      constraints: const BoxConstraints(minWidth: 18),
-                      child: Text(
-                        badgeCount! > 99 ? '99+' : '$badgeCount',
-                        textAlign: TextAlign.center,
-                        style: WaUi.label.copyWith(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
+                    )
+                  else if (showDot)
+                    Positioned(
+                      right: -4,
+                      top: -2,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: WaUi.accent,
+                          shape: BoxShape.circle,
                         ),
                       ),
                     ),
-                  )
-                else if (showDot)
-                  Positioned(
-                    right: 4,
-                    top: 2,
-                    child: Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: WaUi.accent,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
+                ],
+              ),
+              if (showLabel) ...[
+                const SizedBox(height: 4),
+                Text(
+                  label!,
+                  style: selected ? WaUi.navLabelActive : WaUi.navLabel,
+                ),
               ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: selected ? WaUi.navLabelActive : WaUi.navLabel,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
