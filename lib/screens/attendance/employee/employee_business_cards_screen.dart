@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/company_business_card.dart';
 import 'package:tapni_app/repository/wallet_repo.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
-import 'package:tapni_app/widgets/employee_card_template_sheet.dart';
 import 'package:tapni_app/widgets/business_card_share_sheet.dart';
+import 'package:tapni_app/widgets/employee_card_template_sheet.dart';
 
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class EmployeeBusinessCardsScreen extends StatefulWidget {
   const EmployeeBusinessCardsScreen({super.key});
 
@@ -61,56 +61,59 @@ class _EmployeeBusinessCardsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AttendanceUi.scaffoldBg,
-      appBar: AttendanceUi.appBar(context.l10n.employeeCards),
+      backgroundColor: Colors.white,
+      appBar: AttendanceUi.appBar(context.l10n.companyEmployeeCard),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(strokeWidth: 2.5))
           : RefreshIndicator(
+              color: WaUi.accent,
+              backgroundColor: Colors.white,
               onRefresh: _load,
               child: _cards.isEmpty
                   ? ListView(
-                      padding: EdgeInsets.all(20),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(24),
                       children: [
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.5,
                           child: Center(
-                            child: Container(
-                              padding: EdgeInsets.all(24),
-                              decoration: AttendanceUi.thickCard,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.business_center_outlined,
-                                    size: 48,
-                                    color: WaUi.promoIconFg,
-                                  ),
-                                  SizedBox(height: 16),
-                                  Text(
-                                    context.l10n.noEmployeeCardsYet,
-                                    style: AttendanceUi.sectionTitle,
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    context.l10n.whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe,
-                                    textAlign: TextAlign.center,
-                                    style: AttendanceUi.bodyMuted,
-                                  ),
-                                ],
-                              ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.badge_outlined,
+                                  size: 52,
+                                  color: WaUi.secondaryText
+                                      .withValues(alpha: 0.4),
+                                ),
+                                const SizedBox(height: 14),
+                                Text(
+                                  context.l10n.noEmployeeCardsYet,
+                                  style: AttendanceUi.sectionTitle,
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  context.l10n
+                                      .whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe,
+                                  textAlign: TextAlign.center,
+                                  style: AttendanceUi.bodyMuted,
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ],
                     )
                   : ListView(
-                      padding: EdgeInsets.fromLTRB(20, 8, 20, 24),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                       children: [
                         Text(
                           context.l10n.yourEmployeeCardsFromEmployers,
                           style: AttendanceUi.bodyMuted,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 14),
                         ..._cards.map(_buildCard),
                       ],
                     ),
@@ -124,9 +127,13 @@ class _EmployeeBusinessCardsScreenState
         card.employeeName.isNotEmpty ? card.employeeName : context.l10n.you;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Container(
-        decoration: AttendanceUi.thickCard,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(AttendanceUi.radius),
+          border: Border.all(color: WaUi.divider),
+        ),
         child: Column(
           children: [
             InkWell(
@@ -135,89 +142,63 @@ class _EmployeeBusinessCardsScreenState
                 card,
                 onTemplateChanged: _updateCard,
               ),
-              borderRadius: BorderRadius.circular(AttendanceUi.radius),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(AttendanceUi.radius),
+              ),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(14),
                 child: Row(
                   children: [
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        CircleAvatar(
-                          radius: 28,
-                          backgroundColor: WaUi.navPill,
-                          backgroundImage: card.employeePhoto.isNotEmpty
-                              ? NetworkImage(card.employeePhoto)
-                              : null,
-                          child: card.employeePhoto.isEmpty
-                              ? Text(
-                                  employeeLabel.isNotEmpty
-                                      ? employeeLabel[0].toUpperCase()
-                                      : '?',
-                                  style: WaUi.avatarInitial,
-                                )
-                              : null,
-                        ),
-                        Positioned(
-                          right: -4,
-                          bottom: -2,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: template.backgroundColor,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: WaUi.divider,
-                                width: 1,
-                              ),
-                            ),
-                            child: Icon(
-                              Icons.badge_outlined,
-                              size: 14,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+                    CircleAvatar(
+                      radius: 26,
+                      backgroundColor: AttendanceUi.tileBg,
+                      backgroundImage: card.employeePhoto.isNotEmpty
+                          ? NetworkImage(card.employeePhoto)
+                          : null,
+                      child: card.employeePhoto.isEmpty
+                          ? Text(
+                              employeeLabel.isNotEmpty
+                                  ? employeeLabel[0].toUpperCase()
+                                  : '?',
+                              style: WaUi.avatarInitial,
+                            )
+                          : null,
                     ),
-                    SizedBox(width: 14),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            context.l10n.employeeCard,
-                            style: AttendanceUi.bodyMuted,
+                            employeeLabel,
+                            style: AttendanceUi.cardTitle,
                           ),
-                          SizedBox(height: 2),
-                          Text(employeeLabel, style: AttendanceUi.cardTitle),
-                          const SizedBox(height: 4),
-                          if (card.employeeDisplayId.isNotEmpty)
+                          if (card.employeeDisplayId.isNotEmpty) ...[
+                            const SizedBox(height: 3),
                             Text(
                               card.employeeDisplayId,
                               style: AttendanceUi.bodyMuted,
                             ),
-                          const SizedBox(height: 2),
+                          ],
+                          const SizedBox(height: 3),
                           Text(
-                            '${card.displayName} • ${template.name}',
-                            style: AttendanceUi.bodyMuted,
+                            '${card.displayName} · ${template.name}',
+                            style: WaUi.caption.copyWith(fontSize: 12),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                     ),
                     Icon(
-                      Icons.wallet_outlined,
-                      size: 24,
-                      color: WaUi.promoIconFg,
+                      Icons.chevron_right_rounded,
+                      color: WaUi.secondaryText.withValues(alpha: 0.7),
                     ),
                   ],
                 ),
               ),
             ),
-            Divider(height: 1, color: WaUi.divider),
+            const Divider(height: 1, color: WaUi.divider),
             InkWell(
               onTap: () => _customizeCard(card),
               borderRadius: BorderRadius.vertical(
@@ -225,19 +206,19 @@ class _EmployeeBusinessCardsScreenState
               ),
               child: Padding(
                 padding:
-                    EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.palette_outlined,
-                      size: 20,
-                      color: WaUi.promoIconFg,
+                      size: 18,
+                      color: WaUi.buttonDark,
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
                       context.l10n.customizeDesign,
-                      style: WaUi.button.copyWith(color: WaUi.primaryText),
+                      style: WaUi.bodyMedium,
                     ),
                   ],
                 ),

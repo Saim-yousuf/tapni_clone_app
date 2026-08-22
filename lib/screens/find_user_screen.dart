@@ -48,7 +48,8 @@ class PublicUserResult {
 }
 
 class FindUserScreen extends StatefulWidget {
-  const FindUserScreen({super.key});
+  final bool isTab;
+  const FindUserScreen({super.key, this.isTab = false});
 
   @override
   State<FindUserScreen> createState() => _FindUserScreenState();
@@ -155,6 +156,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
       appBar: AppBar(
         backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
         elevation: 0,
+        automaticallyImplyLeading: !widget.isTab,
         iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black),
         title: Text(
           context.l10n.findUser2,
@@ -176,7 +178,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
                 ),
                 child: TextField(
                   controller: _searchController,
-                  autofocus: true,
+                  autofocus: !widget.isTab,
                   onChanged: _onSearchChanged,
                   textInputAction: TextInputAction.search,
                   onSubmitted: (value) {

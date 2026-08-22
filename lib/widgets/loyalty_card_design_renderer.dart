@@ -398,24 +398,34 @@ class _LoyaltyLayerWidget extends StatelessWidget {
           final cellH = constraints.maxHeight / rows;
           final slotSize = (cellW < cellH ? cellW : cellH) * 0.78;
 
-          return Wrap(
-            alignment: WrapAlignment.center,
-            runAlignment: WrapAlignment.center,
-            children: List.generate(stampCount, (i) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(rows, (row) {
+              final start = row * cols;
+              final end = (start + cols).clamp(0, stampCount);
               return SizedBox(
-                width: cellW,
                 height: cellH,
-                child: Center(
-                  child: RewardStampSlot(
-                    filled: i < filledStamps,
-                    size: slotSize,
-                    theme: theme,
-                    shape: shape,
-                    stampIconUrl: urlOrNull(stampIcon),
-                    unstampIconUrl: urlOrNull(unstampIcon),
-                    stampIconBase64: b64OrNull(stampIcon),
-                    unstampIconBase64: b64OrNull(unstampIcon),
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var i = start; i < end; i++)
+                      SizedBox(
+                        width: cellW,
+                        height: cellH,
+                        child: Center(
+                          child: RewardStampSlot(
+                            filled: i < filledStamps,
+                            size: slotSize,
+                            theme: theme,
+                            shape: shape,
+                            stampIconUrl: urlOrNull(stampIcon),
+                            unstampIconUrl: urlOrNull(unstampIcon),
+                            stampIconBase64: b64OrNull(stampIcon),
+                            unstampIconBase64: b64OrNull(unstampIcon),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               );
             }),

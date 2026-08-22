@@ -118,7 +118,7 @@ AR = {
     "bankDetails": "بيانات البنك",
     "bankAddBankNameHere": "البنك: أضف اسم البنك هنا",
     "barqody": "Barqody",
-    "barqodyV100": "barqody v1.0.0",
+    "barqodyV100": "Barqody",
     "bestValue": "أفضل قيمة",
     "billAmount": "مبلغ الفاتورة",
     "bio": "نبذة",

@@ -77,6 +77,15 @@ class RewardRepo {
     );
   }
 
+  Future<ApiResponse> selfEnroll(String programId) async {
+    return await ApiHandler.request(
+      api: Api.enrollment.selfEnroll,
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: {'programId': programId},
+    );
+  }
+
   Future<ApiResponse> getMyEnrollments() async {
     return await ApiHandler.request(
       api: Api.enrollment.myEnrollments,

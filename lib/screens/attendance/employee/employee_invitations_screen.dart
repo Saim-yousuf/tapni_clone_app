@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
+import 'package:tapni_app/widgets/custom_app_button.dart';
 
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class EmployeeInvitationsScreen extends StatefulWidget {
   const EmployeeInvitationsScreen({super.key});
 
@@ -51,12 +52,15 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: Text(
           res.success
               ? (accept
-                  ? context.l10n.youJoinedBusiness(invitation.business.displayName)
+                  ? context.l10n
+                      .youJoinedBusiness(invitation.business.displayName)
                   : context.l10n.invitationDeclined)
               : (res.message ?? context.l10n.somethingWentWrong),
+          style: WaUi.body,
         ),
       ),
     );
@@ -71,141 +75,166 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AttendanceUi.scaffoldBg,
+      backgroundColor: Colors.white,
       appBar: AttendanceUi.appBar(context.l10n.employeeInvitations),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(strokeWidth: 2.5))
           : RefreshIndicator(
+              color: WaUi.accent,
+              backgroundColor: Colors.white,
               onRefresh: _load,
               child: _invitations.isEmpty
                   ? ListView(
-                      padding: EdgeInsets.all(20),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(24),
                       children: [
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.45,
+                          height: MediaQuery.of(context).size.height * 0.5,
                           child: Center(
-                            child: Container(
-                              padding: EdgeInsets.all(28),
-                              decoration: AttendanceUi.thickCard,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.mail_outline,
-                                      size: 48, color: WaUi.promoIconFg),
-                                  SizedBox(height: 16),
-                                  Text(
-                                    context.l10n.noPendingInvitations,
-                                    style: AttendanceUi.sectionTitle,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    context.l10n.whenABusinessInvitesYouToTheirTeamItWillAppearHere,
-                                    textAlign: TextAlign.center,
-                                    style: AttendanceUi.bodyMuted,
-                                  ),
-                                ],
-                              ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.mail_outline_rounded,
+                                  size: 52,
+                                  color: WaUi.secondaryText
+                                      .withValues(alpha: 0.4),
+                                ),
+                                const SizedBox(height: 14),
+                                Text(
+                                  context.l10n.noPendingInvitations,
+                                  style: AttendanceUi.sectionTitle,
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  context.l10n
+                                      .whenABusinessInvitesYouToTheirTeamItWillAppearHere,
+                                  textAlign: TextAlign.center,
+                                  style: AttendanceUi.bodyMuted,
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ],
                     )
-                  : ListView.builder(
-                      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                  : ListView.separated(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                       itemCount: _invitations.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 10),
                       itemBuilder: (_, i) {
                         final invitation = _invitations[i];
                         final isResponding = _respondingId == invitation.id;
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Container(
-                            padding: const EdgeInsets.all(18),
-                            decoration: AttendanceUi.thickCard,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 26,
-                                      backgroundColor: WaUi.navPill,
-                                      backgroundImage: invitation
-                                              .business.profilePhoto.isNotEmpty
-                                          ? NetworkImage(
-                                              invitation.business.profilePhoto,
-                                            )
-                                          : null,
-                                      child: invitation
-                                              .business.profilePhoto.isEmpty
-                                          ? Text(
-                                              invitation.business.displayName
-                                                      .isNotEmpty
-                                                  ? invitation
-                                                      .business.displayName[0]
-                                                      .toUpperCase()
-                                                  : '?',
-                                              style: WaUi.avatarInitial,
-                                            )
-                                          : null,
+                        final name = invitation.business.displayName;
+                        final initial =
+                            name.isNotEmpty ? name[0].toUpperCase() : '?';
+
+                        return Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.circular(AttendanceUi.radius),
+                            border: Border.all(color: WaUi.divider),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 24,
+                                    backgroundColor: AttendanceUi.tileBg,
+                                    backgroundImage: invitation
+                                            .business.profilePhoto.isNotEmpty
+                                        ? NetworkImage(
+                                            invitation.business.profilePhoto,
+                                          )
+                                        : null,
+                                    child: invitation
+                                            .business.profilePhoto.isEmpty
+                                        ? Text(
+                                            initial,
+                                            style: WaUi.avatarInitial,
+                                          )
+                                        : null,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          name,
+                                          style: AttendanceUi.cardTitle,
+                                        ),
+                                        const SizedBox(height: 3),
+                                        Text(
+                                          context.l10n
+                                              .invitedYouToJoinAsEmployee,
+                                          style: AttendanceUi.bodyMuted,
+                                        ),
+                                        const SizedBox(height: 3),
+                                        Text(
+                                          context.l10n.shiftLabel(
+                                            invitation.shiftStart,
+                                            invitation.shiftEnd,
+                                          ),
+                                          style: WaUi.caption
+                                              .copyWith(fontSize: 12),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(width: 14),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            invitation.business.displayName,
-                                            style: AttendanceUi.cardTitle,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 14),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: WaUi.primaryButtonHeight,
+                                      child: OutlinedButton(
+                                        onPressed: isResponding
+                                            ? null
+                                            : () =>
+                                                _respond(invitation, false),
+                                        style: OutlinedButton.styleFrom(
+                                          foregroundColor: WaUi.primaryText,
+                                          side: const BorderSide(
+                                            color: WaUi.divider,
                                           ),
-                                          SizedBox(height: 4),
-                                          Text(
-                                            context.l10n.invitedYouToJoinAsEmployee,
-                                            style: AttendanceUi.bodyMuted
-                                                .copyWith(fontSize: 16),
-                                          ),
-                                          SizedBox(height: 4),
-                                          Text(
-                                            context.l10n.shiftLabel(
-                                              invitation.shiftStart,
-                                              invitation.shiftEnd,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(
+                                              WaUi.radiusMd,
                                             ),
-                                            style: AttendanceUi.bodyMuted
-                                                .copyWith(fontSize: 15),
                                           ),
-                                        ],
+                                        ),
+                                        child: Text(
+                                          context.l10n.decline,
+                                          style: WaUi.bodyMedium,
+                                        ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 18),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: AttendanceUi.secondaryButton(
-                                        label: context.l10n.decline,
-                                        icon: Icons.close,
-                                        loading: isResponding,
-                                        onPressed: isResponding
-                                            ? null
-                                            : () => _respond(invitation, false),
-                                      ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: CustomAppButton(
+                                      text: context.l10n.accept,
+                                      icon: Icons.check_rounded,
+                                      backgroundColor: WaUi.buttonDark,
+                                      isLoading: isResponding,
+                                      onTap: () =>
+                                          _respond(invitation, true),
                                     ),
-                                    SizedBox(width: 12),
-                                    Expanded(
-                                      child: AttendanceUi.primaryButton(
-                                        label: context.l10n.accept,
-                                        icon: Icons.check,
-                                        loading: isResponding,
-                                        onPressed: isResponding
-                                            ? null
-                                            : () => _respond(invitation, true),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         );
                       },

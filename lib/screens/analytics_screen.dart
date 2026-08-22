@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:tapni_app/providers/profile_provider.dart';
-import 'package:tapni_app/providers/theme_provider.dart';
-import 'package:tapni_app/utils/theme.dart';
-import 'package:tapni_app/widgets/business_card.dart';
-import 'package:tapni_app/widgets/glass_card.dart';
-import 'package:tapni_app/widgets/notification_icon_button.dart';
-import 'package:tapni_app/repository/auth_repo.dart';
-
+import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/business_card.dart';
+import 'package:tapni_app/widgets/curved_bottom_nav.dart';
+import 'package:tapni_app/widgets/notification_icon_button.dart';
+
 class AnalyticsScreen extends StatefulWidget {
-  const AnalyticsScreen({Key? key}) : super(key: key);
+  final bool showBackButton;
+  const AnalyticsScreen({super.key, this.showBackButton = false});
 
   @override
   State<AnalyticsScreen> createState() => _AnalyticsScreenState();
@@ -31,31 +31,24 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   Future<void> _fetchAnalytics() async {
     try {
-      final repo = AuthRepo();
-      final response = await repo.getAnalytics();
+      final response = await AuthRepo().getAnalytics();
+      if (!mounted) return;
       if (response.success && response.data != null) {
         final analytics = response.data['analytics'];
-        if (mounted) {
-          setState(() {
-            _totalProfileViews = analytics['totalProfileViews'] ?? 0;
-            _totalCardScans = analytics['totalCardScans'] ?? 0;
-            _profileViews = analytics['profileViews'] ?? [];
-            _isLoading = false;
-          });
-        }
+        setState(() {
+          _totalProfileViews = analytics['totalProfileViews'] ?? 0;
+          _totalCardScans = analytics['totalCardScans'] ?? 0;
+          _profileViews = analytics['profileViews'] ?? [];
+          _isLoading = false;
+        });
       } else {
-        if (mounted) {
-          setState(() => _isLoading = false);
-        }
-      }
-    } catch (e) {
-      if (mounted) {
         setState(() => _isLoading = false);
       }
+    } catch (_) {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
-  // format date
   String _formatDate(String isoString) {
     try {
       final date = DateTime.parse(isoString).toLocal();
@@ -65,141 +58,71 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     }
   }
 
-  Widget _buildViewerAvatar(dynamic viewer) {
-    if (viewer == null ||
-        viewer['profilePhoto'] == null ||
-        viewer['profilePhoto'].isEmpty) {
-      return CircleAvatar(
-        backgroundColor: Colors.grey,
-        child: Icon(Icons.person, color: Colors.white),
-      );
-    }
-    return CircleAvatar(backgroundImage: NetworkImage(viewer['profilePhoto']));
-  }
-
   @override
-
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final profile = Provider.of<ProfileProvider>(context).profile;
+    final bottomPad = CurvedBottomNav.fabOverhang() + 16;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(context.l10n.analyticsDashboard),
-        backgroundColor: theme.scaffoldBackgroundColor,
+        title: Text(
+          context.l10n.analyticsDashboard,
+          style: WaUi.toolsTitle.copyWith(fontWeight: FontWeight.w500),
+        ),
+        centerTitle: false,
+        titleSpacing: 16,
+        automaticallyImplyLeading: widget.showBackButton,
+        backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
+        foregroundColor: WaUi.buttonDark,
         actions: [NotificationIconButton()],
       ),
       body: !profile.isPro
           ? BusinessOnlyCard()
           : _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: _fetchAnalytics,
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 12.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Overview stats
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GlassCard(
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.remove_red_eye_rounded,
-                                  color: AppTheme.accentGold,
-                                  size: 28,
-                                ),
-                                SizedBox(height: 12),
-                                Text(context.l10n.profileViews,
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Text(
-                                  '$_totalProfileViews',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-                              ],
+              ? const Center(
+                  child: CircularProgressIndicator(color: WaUi.buttonDark),
+                )
+              : RefreshIndicator(
+                  color: WaUi.buttonDark,
+                  onRefresh: _fetchAnalytics,
+                  child: ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.fromLTRB(16, 8, 16, bottomPad),
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _StatCard(
+                              icon: Icons.remove_red_eye_outlined,
+                              label: context.l10n.profileViews,
+                              value: '$_totalProfileViews',
                             ),
                           ),
-                        ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: GlassCard(
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.qr_code_2,
-                                  color: Colors.blueAccent,
-                                  size: 28,
-                                ),
-                                SizedBox(height: 12),
-                                Text(context.l10n.qrScans,
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Text(
-                                  '$_totalCardScans',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-                              ],
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _StatCard(
+                              icon: Icons.qr_code_2_rounded,
+                              label: context.l10n.qrScans,
+                              value: '$_totalCardScans',
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 32),
-
-                    Text(
-                      context.l10n.profileViewers,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+                        ],
                       ),
-                    ),
-                    SizedBox(height: 16),
-
-                    if (_profileViews.isEmpty)
-                      Padding(
-                        padding: EdgeInsets.only(top: 40),
-                        child: Center(
-                          child: Text(
-                            context.l10n.noOneHasViewedYourProfileYet,
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      )
-                    else
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: _profileViews.length,
-                        separatorBuilder: (_, __) => SizedBox(height: 12),
-                        itemBuilder: (context, index) {
+                      const SizedBox(height: 28),
+                      Text(
+                        context.l10n.profileViewers,
+                        style: WaUi.sectionHeader,
+                      ),
+                      const SizedBox(height: 12),
+                      if (_profileViews.isEmpty)
+                        const _ViewersEmptyState()
+                      else
+                        ...List.generate(_profileViews.length, (index) {
                           final view = _profileViews[index];
                           final isGuest = view['isGuest'] ?? true;
                           final viewer = view['viewerId'];
@@ -207,94 +130,199 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                               ? _formatDate(view['timestamp'])
                               : '';
 
-                          String title = context.l10n.guestUser;
-                          String subtitle = timestamp;
+                          var title = context.l10n.guestUser;
+                          var subtitle = timestamp;
 
                           if (!isGuest && viewer != null) {
-                            title = viewer['name'] ?? context.l10n.unknownUser;
+                            title =
+                                viewer['name'] ?? context.l10n.unknownUser;
                             if (viewer['username'] != null) {
-                              subtitle = '@${viewer['username']} • $timestamp';
+                              subtitle =
+                                  '@${viewer['username']} • $timestamp';
                             }
                           }
 
-                          return GlassCard(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            child: Row(
-                              children: [
-                                _buildViewerAvatar(viewer),
-                                SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        title,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      SizedBox(height: 4),
-                                      Text(
-                                        subtitle,
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                if (isGuest)
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(context.l10n.guest,
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  )
-                                else
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppTheme.accentGold.withOpacity(
-                                        0.2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(context.l10n.user,
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppTheme.accentGold,
-                                      ),
-                                    ),
-                                  ),
-                              ],
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: _ViewerTile(
+                              title: title,
+                              subtitle: subtitle,
+                              isGuest: isGuest,
+                              photoUrl: viewer?['profilePhoto'] as String?,
                             ),
                           );
-                        },
-                      ),
-                  ],
+                        }),
+                    ],
+                  ),
                 ),
+    );
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+
+  const _StatCard({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+      decoration: BoxDecoration(
+        color: WaUi.searchBg,
+        borderRadius: BorderRadius.circular(WaUi.radiusLg),
+        border: Border.all(color: WaUi.divider),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: WaUi.divider),
+            ),
+            child: Icon(icon, size: 22, color: WaUi.buttonDark),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            label,
+            style: WaUi.caption.copyWith(
+              color: WaUi.secondaryText,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: WaUi.toolsTitle.copyWith(
+              fontSize: 28,
+              fontWeight: FontWeight.w700,
+              height: 1.1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ViewerTile extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final bool isGuest;
+  final String? photoUrl;
+
+  const _ViewerTile({
+    required this.title,
+    required this.subtitle,
+    required this.isGuest,
+    required this.photoUrl,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final hasPhoto = photoUrl != null && photoUrl!.isNotEmpty;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      decoration: BoxDecoration(
+        color: WaUi.searchBg,
+        borderRadius: BorderRadius.circular(WaUi.radiusMd),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 22,
+            backgroundColor: WaUi.navPill,
+            backgroundImage: hasPhoto ? NetworkImage(photoUrl!) : null,
+            child: hasPhoto
+                ? null
+                : Icon(
+                    isGuest ? Icons.person_outline_rounded : Icons.person,
+                    color: WaUi.secondaryText,
+                    size: 22,
+                  ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: WaUi.listTitle),
+                if (subtitle.isNotEmpty) ...[
+                  const SizedBox(height: 3),
+                  Text(
+                    subtitle,
+                    style: WaUi.caption.copyWith(fontSize: 12.5),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(WaUi.radiusPill),
+              border: Border.all(color: WaUi.chipBorder),
+            ),
+            child: Text(
+              isGuest ? context.l10n.guest : context.l10n.user,
+              style: WaUi.label.copyWith(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: WaUi.secondaryText,
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ViewersEmptyState extends StatelessWidget {
+  const _ViewersEmptyState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 20),
+      child: Column(
+        children: [
+          Container(
+            width: 80,
+            height: 80,
+            decoration: const BoxDecoration(
+              color: WaUi.searchBg,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.insights_outlined,
+              size: 36,
+              color: WaUi.secondaryText.withValues(alpha: 0.65),
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            context.l10n.noOneHasViewedYourProfileYet,
+            textAlign: TextAlign.center,
+            style: WaUi.body.copyWith(color: WaUi.secondaryText, height: 1.4),
+          ),
+        ],
+      ),
     );
   }
 }

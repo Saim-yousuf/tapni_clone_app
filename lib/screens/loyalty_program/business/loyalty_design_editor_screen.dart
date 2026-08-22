@@ -975,7 +975,8 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
                     child: FilledButton(
                       onPressed: _saving ? null : _saveProgram,
                       style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFFFF8A3D),
+                        backgroundColor: WaUi.buttonDark,
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: _saving

@@ -16,6 +16,7 @@ import 'package:tapni_app/widgets/catalog_product_card.dart';
 import 'package:tapni_app/widgets/document_viewer.dart';
 import 'package:tapni_app/widgets/service_booking_sheet.dart';
 import 'package:tapni_app/utils/document_file.dart';
+import 'package:tapni_app/widgets/business_completeness_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 void showMenuCatalogSheet({
@@ -28,6 +29,7 @@ void showMenuCatalogSheet({
   String? businessId,
   String? businessName,
   bool isCustomerView = false,
+  String? initialItemName,
 }) {
   showModalBottomSheet(
     context: context,
@@ -43,6 +45,7 @@ void showMenuCatalogSheet({
       businessId: businessId,
       businessName: businessName,
       isCustomerView: isCustomerView,
+      initialItemName: initialItemName,
     ),
   );
 }
@@ -56,6 +59,7 @@ class MenuCatalogSheet extends StatefulWidget {
   final String? businessId;
   final String? businessName;
   final bool isCustomerView;
+  final String? initialItemName;
 
   const MenuCatalogSheet({
     super.key,
@@ -67,6 +71,7 @@ class MenuCatalogSheet extends StatefulWidget {
     this.businessId,
     this.businessName,
     this.isCustomerView = false,
+    this.initialItemName,
   });
 
   @override
@@ -86,6 +91,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
 
   bool get _isServices => widget.catalogType == 'services';
   bool get _isDocuments => widget.catalogType == 'documents';
+  bool _didOpenInitialItem = false;
 
   @override
   void initState() {
@@ -103,6 +109,22 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     _serviceSchedule =
         widget.existingLink?.serviceSchedule ?? const ServiceSchedule();
     showLink = widget.existingLink?.isPublic ?? true;
+
+    final initialName = widget.initialItemName?.trim();
+    if (widget.isCustomerView &&
+        initialName != null &&
+        initialName.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || _didOpenInitialItem) return;
+        _didOpenInitialItem = true;
+        final index = _items.indexWhere(
+          (i) => i.isActive && i.name.trim() == initialName,
+        );
+        if (index >= 0) {
+          _onCustomerItemTap(index, _items[index]);
+        }
+      });
+    }
   }
 
   @override
@@ -619,6 +641,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       );
     }
 
+    // Flat 2-column grid so consecutive items sit side-by-side
+    // (per-category grids left single items taking a full row).
+    final flatItems = <CatalogItem>[
+      for (final entry in sections.entries) ...entry.value,
+    ];
+
     return CustomScrollView(
       controller: scrollController,
       slivers: [
@@ -642,50 +670,31 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               ),
             ),
           ),
-        ...sections.entries.expand((entry) {
-          final category = entry.key;
-          final categoryItems = entry.value;
-          return [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                child: Text(
-                  category,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          sliver: SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 0.68,
             ),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 0.72,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final item = categoryItems[index];
-                    final originalIndex = _items.indexOf(item);
-                    return CatalogProductCard(
-                      item: item,
-                      isService: _isServices,
-                      cartQty:
-                          _isServices ? null : _cartQtyForIndex(originalIndex),
-                      onTap: () => _onCustomerItemTap(originalIndex, item),
-                    );
-                  },
-                  childCount: categoryItems.length,
-                ),
-              ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final item = flatItems[index];
+                final originalIndex = _items.indexOf(item);
+                return CatalogProductCard(
+                  item: item,
+                  isService: _isServices,
+                  cartQty:
+                      _isServices ? null : _cartQtyForIndex(originalIndex),
+                  onTap: () => _onCustomerItemTap(originalIndex, item),
+                );
+              },
+              childCount: flatItems.length,
             ),
-          ];
-        }),
-        const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          ),
+        ),
       ],
     );
   }
@@ -910,6 +919,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   }
 
   Future<void> _addItem() async {
+    if (!widget.isCustomerView) {
+      final ok = await ensureBusinessProfileComplete(context);
+      if (!ok || !mounted) return;
+    }
     if (!_isDocuments && _catalogCategories.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.l10n.addAtLeastOneCategoryFirst)),
@@ -1104,6 +1117,7 @@ void openCatalogLink({
   required String? businessId,
   required String? businessName,
   String? businessCategory,
+  String? initialItemName,
 }) {
   final catalogType = link.catalogType ?? CatalogHelper.typeForCategory(businessCategory);
   final catalogLabel = link.platformName.isNotEmpty
@@ -1118,5 +1132,6 @@ void openCatalogLink({
     businessId: businessId,
     businessName: businessName,
     isCustomerView: true,
+    initialItemName: initialItemName,
   );
 }

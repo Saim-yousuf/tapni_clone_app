@@ -4,6 +4,7 @@ import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/curved_bottom_nav.dart';
 import 'package:tapni_app/widgets/custom_app_button.dart';
 import 'package:tapni_app/widgets/go_bussiness_button.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
@@ -22,6 +23,8 @@ class SocialLinksScreen extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final profileProvider = Provider.of<ProfileProvider>(context);
     final currentLinks = profileProvider.profile.socialLinks;
+    // Clear the floating center FAB when shown inside MainShell.
+    final addLinkBottom = isTab ? CurvedBottomNav.fabOverhang() + 8 : 24;
 
     return Scaffold(
       appBar: AppBar(
@@ -48,15 +51,37 @@ class SocialLinksScreen extends StatelessWidget {
             child: currentLinks.isEmpty
                 ? Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: Text(
-                        context.l10n.noLinksAddedYetNTapAddLinkToGetStarted,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: isDark ? Colors.white54 : Colors.black45,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      padding: const EdgeInsets.symmetric(horizontal: 36),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 88,
+                            height: 88,
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? const Color(0xFF222222)
+                                  : WaUi.navPill,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.link_rounded,
+                              size: 40,
+                              color: WaUi.secondaryText.withValues(alpha: 0.7),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Text(
+                            context.l10n.noLinksAddedYetNTapAddLinkToGetStarted,
+                            textAlign: TextAlign.center,
+                            style: WaUi.sectionHeader.copyWith(
+                              color: isDark
+                                  ? Colors.white70
+                                  : WaUi.secondaryText,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   )
@@ -77,7 +102,7 @@ class SocialLinksScreen extends StatelessWidget {
           Material(
             color: theme.scaffoldBackgroundColor,
             child: Padding(
-              padding: EdgeInsets.fromLTRB(16, 8, 16, isTab ? 45 : 24),
+              padding: EdgeInsets.fromLTRB(16, 8, 16, addLinkBottom.toDouble()),
               child: CustomAppButton(
                 width: double.infinity,
                 text: context.l10n.addLink2,

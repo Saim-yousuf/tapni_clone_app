@@ -9,15 +9,23 @@ class CallerIdService {
 
   static const _channel = MethodChannel('barqody/caller_id');
 
-  static bool get isSupported => Platform.isAndroid;
+  /// Temporary kill switch. Set true to bring Caller ID back.
+  static const bool isFeatureEnabled = false;
+
+  static bool get isSupported => isFeatureEnabled && Platform.isAndroid;
 
   static bool get isEnabled {
+    if (!isFeatureEnabled) return false;
     final key = SharedPrefHelper.utils.callerIdEnabled;
     if (SharedPrefHelper.haveKey(key) != true) return true;
     return SharedPrefHelper.getBool(key, defValue: true);
   }
 
   static Future<void> ensureDefaultEnabled({String lang = 'en'}) async {
+    if (!isFeatureEnabled) {
+      await _disableNative();
+      return;
+    }
     final key = SharedPrefHelper.utils.callerIdEnabled;
     if (SharedPrefHelper.haveKey(key) != true) {
       await SharedPrefHelper.putBool(key, true);
@@ -47,13 +55,17 @@ class CallerIdService {
   static Future<void> setEnabled(bool enabled, {String lang = 'en'}) async {
     await SharedPrefHelper.putBool(
       SharedPrefHelper.utils.callerIdEnabled,
-      enabled,
+      isFeatureEnabled && enabled,
     );
     await syncNative(lang: lang);
   }
 
   static Future<void> syncNative({String lang = 'en'}) async {
-    if (!isSupported) return;
+    if (!Platform.isAndroid) return;
+    if (!isFeatureEnabled) {
+      await _disableNative();
+      return;
+    }
     final token = SharedPrefHelper.getString(
       SharedPrefHelper.utils.authorizedToken,
     );
@@ -66,7 +78,11 @@ class CallerIdService {
   }
 
   static Future<void> onLogout() async {
-    if (!isSupported) return;
+    await _disableNative();
+  }
+
+  static Future<void> _disableNative() async {
+    if (!Platform.isAndroid) return;
     await _channel.invokeMethod('syncConfig', {
       'enabled': false,
       'token': '',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 class CustomAppButton extends StatelessWidget {
@@ -16,7 +17,7 @@ class CustomAppButton extends StatelessWidget {
     required this.text,
     required this.onTap,
     this.icon,
-    this.backgroundColor = Colors.black,
+    this.backgroundColor = WaUi.buttonDark,
     this.textColor = Colors.white,
     this.width,
     this.isLoading = false,

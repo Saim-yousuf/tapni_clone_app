@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
+import 'package:tapni_app/screens/explore_screen.dart';
+import 'package:tapni_app/screens/find_user_screen.dart';
 import 'package:tapni_app/screens/leads_screen.dart';
 import 'package:tapni_app/screens/profile_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/settings_screen.dart';
-import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/screens/contacts_sync_screen.dart';
-import 'package:tapni_app/screens/caller_id_setup_screen.dart';
 import 'package:tapni_app/services/contacts_sync_service.dart';
 import 'package:tapni_app/services/caller_id_service.dart';
 import 'package:tapni_app/services/device_session_guard.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/curved_bottom_nav.dart';
 
 class MainShell extends StatefulWidget {
   final String? currentPage;
@@ -27,7 +27,8 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  static const _navPages = ['Links', 'Contacts', 'Explore', 'Settings'];
+  /// Explore = marketplace home. Analytics restored on 4th nav slot (before Settings).
+  static const _navPages = ['Explore', 'Contacts', 'Analytics', 'Settings'];
 
   late String _currentPage;
   int _navIndex = 0;
@@ -38,7 +39,22 @@ class _MainShellState extends State<MainShell> {
   @override
   void initState() {
     super.initState();
-    _currentPage = widget.currentPage ?? 'My Card';
+    final requested = widget.currentPage;
+    if (requested == 'Links') {
+      _currentPage = 'Explore';
+    } else if (requested == 'Find') {
+      _currentPage = 'Explore';
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const FindUserScreen(isTab: false),
+          ),
+        );
+      });
+    } else {
+      _currentPage = requested ?? 'My Card';
+    }
     final index = _navPages.indexOf(_currentPage);
     _navIndex = index >= 0 ? index : 0;
     DeviceSessionGuard.instance.start();
@@ -46,7 +62,6 @@ class _MainShellState extends State<MainShell> {
       _loadCatalogNotifications();
       await _maybePromptContactsSync();
       await CallerIdService.ensureDefaultEnabled();
-      await _maybePromptCallerId();
     });
   }
 
@@ -62,21 +77,6 @@ class _MainShellState extends State<MainShell> {
     );
   }
 
-  Future<void> _maybePromptCallerId() async {
-    if (!mounted || !CallerIdService.isSupported) return;
-    if (!CallerIdService.isEnabled) return;
-    if (CallerIdService.wasPermissionPrompted) return;
-    if (await CallerIdService.hasAllPermissions()) {
-      await CallerIdService.syncNative();
-      return;
-    }
-    await CallerIdService.markPermissionPrompted();
-    if (!mounted) return;
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const CallerIdSetupScreen()),
-    );
-  }
-
   void _loadCatalogNotifications() {
     if (!mounted) return;
     final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
@@ -88,20 +88,18 @@ class _MainShellState extends State<MainShell> {
 
   Widget _buildCurrentScreen() {
     switch (_currentPage) {
-      case 'Links':
-        return const SocialLinksScreen(isTab: true);
-        // return const HomeDashboard();
-
+      case 'Explore':
+        return const ExploreScreen();
       case 'My Card':
         return const ProfileScreen();
       case 'Contacts':
         return const LeadsScreen();
-      case 'Explore':
+      case 'Analytics':
         return const AnalyticsScreen();
       case 'Settings':
         return const SettingsScreen();
       default:
-        return const SocialLinksScreen(isTab: true);
+        return const ExploreScreen();
     }
   }
 
@@ -134,20 +132,20 @@ class _MainShellState extends State<MainShell> {
     _goToProfile();
   }
 
-  BottomBarItem _navItem({
+  CurvedNavItem _navItem({
     required IconData icon,
     required IconData selectedIcon,
-    required String title,
+    required String label,
     required Color selectedColor,
     required Color unselectedColor,
   }) {
     final highlight = !_onProfile;
-    return BottomBarItem(
-      icon: Icon(icon),
-      selectedIcon: Icon(highlight ? selectedIcon : icon),
+    return CurvedNavItem(
+      icon: icon,
+      selectedIcon: highlight ? selectedIcon : icon,
+      label: label,
       selectedColor: highlight ? selectedColor : unselectedColor,
-      unSelectedColor: unselectedColor,
-      title: Text(title),
+      unselectedColor: unselectedColor,
     );
   }
 
@@ -158,22 +156,32 @@ class _MainShellState extends State<MainShell> {
     required String name,
     required String? photoUrl,
   }) {
+    const fabSize = 74.0;
     final hasPhoto = photoUrl != null && photoUrl.isNotEmpty;
 
     Widget child;
     if (isEditing) {
-      child = Icon(Icons.check_rounded, size: 38, color: fabFg);
+      child = Icon(
+        Icons.check_rounded,
+        key: const ValueKey('fab-edit'),
+        size: fabSize * 0.45,
+        color: fabFg,
+      );
     } else if (_onProfile) {
-      child = Icon(Icons.qr_code_scanner_rounded, size: 38, color: fabFg);
+      child = Icon(
+        Icons.qr_code_scanner_rounded,
+        key: const ValueKey('fab-scan'),
+        size: fabSize * 0.45,
+        color: fabFg,
+      );
     } else if (hasPhoto) {
       child = SizedBox.expand(
+        key: const ValueKey('fab-photo'),
         child: Image.network(
           photoUrl,
           fit: BoxFit.cover,
           alignment: Alignment.center,
-          width: 80,
-          height: 80,
-          errorBuilder: (_, __, ___) => _fabInitials(name, fabFg),
+          errorBuilder: (_, _, _) => _fabInitials(name, fabFg),
           loadingBuilder: (context, image, progress) {
             if (progress == null) return image;
             return _fabInitials(name, fabFg);
@@ -181,23 +189,18 @@ class _MainShellState extends State<MainShell> {
         ),
       );
     } else {
-      child = _fabInitials(name, fabFg);
+      child = KeyedSubtree(
+        key: const ValueKey('fab-initials'),
+        child: _fabInitials(name, fabFg),
+      );
     }
 
-    return SizedBox(
-      width: 80,
-      height: 80,
-      child: FloatingActionButton(
-        heroTag: 'tapni_main_fab',
-        onPressed: _onCenterButtonTap,
-        elevation: 6,
-        highlightElevation: 8,
-        backgroundColor: fabBg,
-        foregroundColor: fabFg,
-        shape: const CircleBorder(),
-        clipBehavior: Clip.antiAlias,
-        child: child,
-      ),
+    return CurvedNavCenterButton(
+      onPressed: _onCenterButtonTap,
+      size: fabSize,
+      backgroundColor: fabBg,
+      foregroundColor: fabFg,
+      child: child,
     );
   }
 
@@ -207,7 +210,7 @@ class _MainShellState extends State<MainShell> {
         name.isNotEmpty ? name[0].toUpperCase() : '?',
         style: TextStyle(
           color: color,
-          fontSize: 34,
+          fontSize: 26,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -220,75 +223,78 @@ class _MainShellState extends State<MainShell> {
     final isEditing = profileProvider.isEditingProfile;
     final profile = profileProvider.profile;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final l10n = context.l10n;
     final selectedColor = isDark ? Colors.white : Colors.black;
     final unselectedColor = const Color(0xFF8E8E93);
     final barColor = isDark ? Colors.black : Colors.white;
     final fabBg = isDark ? Colors.white : Colors.black;
     final fabFg = isDark ? Colors.black : Colors.white;
+    final l10n = context.l10n;
+    final navClearance = CurvedBottomNav.contentClearance(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: WaUi.toolsScaffold,
-      body: SafeArea(
-        bottom: false,
-        child: _buildCurrentScreen(),
-      ),
-      bottomNavigationBar: StylishBottomBar(
-        option: AnimatedBarOptions(
-          iconStyle: IconStyle.Default,
-          barAnimation: BarAnimation.fade,
-          opacity: 0.12,
-        ),
-        items: [
-          _navItem(
-            icon: Icons.link_outlined,
-            selectedIcon: Icons.link,
-            title: l10n.links,
-            selectedColor: selectedColor,
-            unselectedColor: unselectedColor,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Padding(
+              // Keep every tab's content above the curved bar + center button.
+              padding: EdgeInsets.only(bottom: navClearance),
+              child: SafeArea(
+                bottom: false,
+                child: _buildCurrentScreen(),
+              ),
+            ),
           ),
-          _navItem(
-            icon: Icons.people_outline,
-            selectedIcon: Icons.people,
-            title: l10n.contacts,
-            selectedColor: selectedColor,
-            unselectedColor: unselectedColor,
-          ),
-          _navItem(
-            icon: Icons.insights_outlined,
-            selectedIcon: Icons.insights,
-            title: l10n.explore,
-            selectedColor: selectedColor,
-            unselectedColor: unselectedColor,
-          ),
-          _navItem(
-            icon: Icons.storefront_outlined,
-            selectedIcon: Icons.storefront,
-            title: l10n.tools,
-            selectedColor: selectedColor,
-            unselectedColor: unselectedColor,
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: CurvedBottomNav(
+              backgroundColor: barColor,
+              currentIndex: _navIndex,
+              onTap: (index) {
+                if (index < 0 || index >= _navPages.length) return;
+                _switchTab(_navPages[index]);
+              },
+              items: [
+                _navItem(
+                  icon: Icons.travel_explore_outlined,
+                  selectedIcon: Icons.travel_explore_rounded,
+                  label: l10n.explore,
+                  selectedColor: selectedColor,
+                  unselectedColor: unselectedColor,
+                ),
+                _navItem(
+                  icon: Icons.people_outline,
+                  selectedIcon: Icons.people,
+                  label: l10n.contacts,
+                  selectedColor: selectedColor,
+                  unselectedColor: unselectedColor,
+                ),
+                _navItem(
+                  icon: Icons.insights_outlined,
+                  selectedIcon: Icons.insights,
+                  label: 'Analytics',
+                  selectedColor: selectedColor,
+                  unselectedColor: unselectedColor,
+                ),
+                _navItem(
+                  icon: Icons.storefront_outlined,
+                  selectedIcon: Icons.storefront,
+                  label: l10n.tools,
+                  selectedColor: selectedColor,
+                  unselectedColor: unselectedColor,
+                ),
+              ],
+              centerButton: _buildCenterFab(
+                isEditing: isEditing,
+                fabBg: fabBg,
+                fabFg: fabFg,
+                name: profile.name,
+                photoUrl: profile.profilePhotoUrl,
+              ),
+            ),
           ),
         ],
-        backgroundColor: barColor,
-        elevation: 8,
-        currentIndex: _navIndex,
-        hasNotch: true,
-        fabLocation: StylishBarFabLocation.center,
-        notchStyle: NotchStyle.circle,
-        onTap: (index) {
-          if (index < 0 || index >= _navPages.length) return;
-          _switchTab(_navPages[index]);
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
-      floatingActionButton: _buildCenterFab(
-        isEditing: isEditing,
-        fabBg: fabBg,
-        fabFg: fabFg,
-        name: profile.name,
-        photoUrl: profile.profilePhotoUrl,
       ),
     );
   }

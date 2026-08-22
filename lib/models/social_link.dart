@@ -191,6 +191,12 @@ class SocialLink {
 
   bool get isCatalogLink {
     if (isDocumentLink) return false;
+    if (catalogItems != null && catalogItems!.isNotEmpty) return true;
+    if (catalogType == 'menu' ||
+        catalogType == 'services' ||
+        catalogType == 'catalog') {
+      return true;
+    }
     if (actionType == 'menu_catalog') return true;
     if (actionType == 'link' || actionType == 'contact_card') return false;
     if (fieldType == 'menu_catalog') {

@@ -864,7 +864,7 @@ abstract class AppLocalizations {
   /// No description provided for @barqodyV100.
   ///
   /// In en, this message translates to:
-  /// **'barqody v1.0.0'**
+  /// **'Barqody'**
   String get barqodyV100;
 
   /// No description provided for @bestValue.

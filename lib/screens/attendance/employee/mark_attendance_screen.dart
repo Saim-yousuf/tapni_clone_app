@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
 import 'package:tapni_app/utils/location_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
+import 'package:tapni_app/widgets/custom_app_button.dart';
 import 'package:tapni_app/widgets/face_capture_sheet.dart';
 
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class MarkAttendanceScreen extends StatefulWidget {
   const MarkAttendanceScreen({super.key});
 
@@ -44,6 +45,11 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       _isLoading = false;
       if (_selectedEmployer == null && employers.isNotEmpty) {
         _selectedEmployer = employers.first;
+      } else if (_selectedEmployer != null) {
+        final stillThere = employers.any((e) => e.id == _selectedEmployer!.id);
+        if (!stillThere) {
+          _selectedEmployer = employers.isNotEmpty ? employers.first : null;
+        }
       }
     });
 
@@ -93,7 +99,11 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       setState(() => _isMarking = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.locationPermissionRequiredForAttendance),
+          behavior: SnackBarBehavior.floating,
+          content: Text(
+            context.l10n.locationPermissionRequiredForAttendance,
+            style: WaUi.body,
+          ),
         ),
       );
       return;
@@ -101,7 +111,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
     final facePhoto = await FaceCaptureSheet.show(
       context,
-      title: type == 'check_in' ? context.l10n.checkInFace : context.l10n.checkOutFace,
+      title: type == 'check_in'
+          ? context.l10n.checkInFace
+          : context.l10n.checkOutFace,
     );
 
     if (!mounted) return;
@@ -119,16 +131,17 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: Text(
           res.success
               ? (type == 'check_in'
                   ? context.l10n.checkInSuccessful
                   : context.l10n.checkOutSuccessful)
               : (res.message ?? context.l10n.attendanceFailed),
-          style: AttendanceUi.body.copyWith(color: Colors.white),
+          style: WaUi.body.copyWith(color: Colors.white),
         ),
         backgroundColor:
-            res.success ? Colors.green.shade700 : Colors.red.shade700,
+            res.success ? WaUi.navGreen : const Color(0xFFC62828),
       ),
     );
 
@@ -138,18 +151,18 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AttendanceUi.scaffoldBg,
+      backgroundColor: Colors.white,
       appBar: AttendanceUi.appBar(
-        context.l10n.markAttendance,
+        context.l10n.workplaceCheckIn,
         actions: [
           IconButton(
-            icon: Icon(Icons.wallet_outlined, size: 24),
+            icon: const Icon(Icons.badge_outlined),
             tooltip: context.l10n.companyEmployeeCard,
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => EmployeeBusinessCardsScreen(),
+                  builder: (_) => const EmployeeBusinessCardsScreen(),
                 ),
               );
             },
@@ -157,106 +170,117 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(strokeWidth: 2.5))
           : _employers.isEmpty
               ? _emptyState()
               : RefreshIndicator(
+                  color: WaUi.accent,
+                  backgroundColor: Colors.white,
                   onRefresh: _loadEmployers,
                   child: ListView(
-                    padding: EdgeInsets.fromLTRB(20, 8, 20, 24),
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                     children: [
-                      AttendanceUi.sectionHeader(context.l10n.selectCompany),
+                      Text(
+                        context.l10n.selectCompany,
+                        style: WaUi.label.copyWith(
+                          color: WaUi.secondaryText,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       ..._employers.map((employer) {
                         final selected = _selectedEmployer?.id == employer.id;
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: InkWell(
-                            onTap: () async {
-                              setState(() => _selectedEmployer = employer);
-                              await _loadTodayStatus();
-                            },
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Material(
+                            color: Colors.white,
                             borderRadius:
                                 BorderRadius.circular(AttendanceUi.radius),
-                            child: Container(
-                              padding: const EdgeInsets.all(14),
-                              decoration: selected
-                                  ? AttendanceUi.thickCardFilled()
-                                  : AttendanceUi.thickCard,
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 24,
-                                    backgroundColor: selected
-                                        ? Colors.white
-                                        : WaUi.navPill,
-                                    backgroundImage: employer
-                                            .business.profilePhoto.isNotEmpty
-                                        ? NetworkImage(
-                                            employer.business.profilePhoto,
-                                          )
-                                        : null,
-                                    child: employer.business.profilePhoto.isEmpty
-                                        ? Text(
-                                            employer.business.displayName
-                                                    .isNotEmpty
-                                                ? employer
-                                                    .business.displayName[0]
-                                                    .toUpperCase()
-                                                : '?',
-                                            style: WaUi.avatarInitial.copyWith(
-                                              color: selected
-                                                  ? WaUi.primaryText
-                                                  : WaUi.primaryText,
+                            child: InkWell(
+                              onTap: () async {
+                                setState(() => _selectedEmployer = employer);
+                                await _loadTodayStatus();
+                              },
+                              borderRadius:
+                                  BorderRadius.circular(AttendanceUi.radius),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 150),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    AttendanceUi.radius,
+                                  ),
+                                  border: Border.all(
+                                    color: selected
+                                        ? WaUi.buttonDark
+                                        : WaUi.divider,
+                                    width: selected ? 1.5 : 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 22,
+                                      backgroundColor: AttendanceUi.tileBg,
+                                      backgroundImage: employer.business
+                                              .profilePhoto.isNotEmpty
+                                          ? NetworkImage(
+                                              employer.business.profilePhoto,
+                                            )
+                                          : null,
+                                      child: employer
+                                              .business.profilePhoto.isEmpty
+                                          ? Text(
+                                              employer.business.displayName
+                                                      .isNotEmpty
+                                                  ? employer.business
+                                                      .displayName[0]
+                                                      .toUpperCase()
+                                                  : '?',
+                                              style: WaUi.avatarInitial,
+                                            )
+                                          : null,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            employer.business.displayName,
+                                            style: AttendanceUi.cardTitle,
+                                          ),
+                                          const SizedBox(height: 3),
+                                          Text(
+                                            context.l10n.shiftRange(
+                                              employer.shiftStart,
+                                              employer.shiftEnd,
                                             ),
-                                          )
-                                        : null,
-                                  ),
-                                  const SizedBox(width: 14),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          employer.business.displayName,
-                                          style:
-                                              AttendanceUi.cardTitle.copyWith(
-                                            color: selected
-                                                ? Colors.white
-                                                : WaUi.primaryText,
+                                            style: AttendanceUi.bodyMuted,
                                           ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          context.l10n.shiftRange(
-                                            employer.shiftStart,
-                                            employer.shiftEnd,
-                                          ),
-                                          style: AttendanceUi.bodyMuted.copyWith(
-                                            color: selected
-                                                ? Colors.white70
-                                                : WaUi.secondaryText,
-                                          ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  if (selected)
-                                    const Icon(
-                                      Icons.check_circle,
-                                      color: WaUi.accent,
-                                      size: 22,
-                                    ),
-                                ],
+                                    if (selected)
+                                      const Icon(
+                                        Icons.check_circle_rounded,
+                                        color: WaUi.buttonDark,
+                                        size: 22,
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         );
                       }),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 14),
                       if (_todayStatus != null) _buildTodayCard(),
-                      SizedBox(height: 12),
-                      if (_summary != null) _buildSummaryCard(),
+                      if (_summary != null) ...[
+                        const SizedBox(height: 12),
+                        _buildSummaryCard(),
+                      ],
                     ],
                   ),
                 ),
@@ -268,8 +292,12 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     final record = status.record;
 
     return Container(
-      padding: EdgeInsets.all(16),
-      decoration: AttendanceUi.thickCard,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AttendanceUi.radius),
+        border: Border.all(color: WaUi.divider),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -279,44 +307,59 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
             ),
             style: AttendanceUi.sectionTitle,
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           if (status.isWeekend)
             Text(context.l10n.todayIsYourWeekend, style: AttendanceUi.body)
           else ...[
             if (record?.checkInTime != null)
-              Text(
-                '${context.l10n.checkInColon} ${DateFormat('hh:mm a').format(record!.checkInTime!.toLocal())}',
-                style: AttendanceUi.body,
+              _timeRow(
+                context.l10n.checkInColon,
+                DateFormat('hh:mm a').format(record!.checkInTime!.toLocal()),
               ),
-            if (record?.checkOutTime != null)
-              Text(
-                '${context.l10n.checkOutColon} ${DateFormat('hh:mm a').format(record!.checkOutTime!.toLocal())}',
-                style: AttendanceUi.body,
+            if (record?.checkOutTime != null) ...[
+              const SizedBox(height: 6),
+              _timeRow(
+                context.l10n.checkOutColon,
+                DateFormat('hh:mm a').format(record!.checkOutTime!.toLocal()),
               ),
+            ],
             if (record == null || record.checkInTime == null)
               Text(
                 context.l10n.notCheckedInYet,
                 style: AttendanceUi.body.copyWith(
-                  color: Colors.red.shade700,
+                  color: const Color(0xFFC62828),
                   fontWeight: FontWeight.w500,
                 ),
               ),
           ],
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           if (!status.isWeekend && status.canCheckIn)
-            AttendanceUi.primaryButton(
-              label: context.l10n.checkIn,
-              icon: Icons.login,
-              loading: _isMarking,
-              onPressed: () => _markAttendance('check_in'),
+            CustomAppButton(
+              width: double.infinity,
+              text: context.l10n.checkIn,
+              icon: Icons.login_rounded,
+              backgroundColor: WaUi.buttonDark,
+              isLoading: _isMarking,
+              onTap: () => _markAttendance('check_in'),
             ),
           if (!status.isWeekend && status.canCheckOut) ...[
-            SizedBox(height: 10),
-            AttendanceUi.secondaryButton(
-              label: context.l10n.checkOut,
-              icon: Icons.logout,
-              loading: _isMarking,
-              onPressed: () => _markAttendance('check_out'),
+            if (status.canCheckIn) const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              height: WaUi.primaryButtonHeight,
+              child: OutlinedButton.icon(
+                onPressed:
+                    _isMarking ? null : () => _markAttendance('check_out'),
+                icon: const Icon(Icons.logout_rounded, size: 18),
+                label: Text(context.l10n.checkOut, style: WaUi.bodyMedium),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: WaUi.primaryText,
+                  side: const BorderSide(color: WaUi.divider),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
+                  ),
+                ),
+              ),
             ),
           ],
           if (!status.isWeekend &&
@@ -326,7 +369,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
             Text(
               context.l10n.attendanceCompletedForToday,
               style: AttendanceUi.body.copyWith(
-                color: Colors.green.shade700,
+                color: WaUi.navGreen,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -335,26 +378,47 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     );
   }
 
+  Widget _timeRow(String label, String value) {
+    return Row(
+      children: [
+        Text(label, style: AttendanceUi.bodyMuted),
+        const SizedBox(width: 6),
+        Text(value, style: WaUi.bodyMedium),
+      ],
+    );
+  }
+
   Widget _buildSummaryCard() {
     final summary = _summary!;
     return Container(
-      padding: EdgeInsets.all(16),
-      decoration: AttendanceUi.thickCard,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF6F7F8),
+        borderRadius: BorderRadius.circular(AttendanceUi.radius),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.thisMonth, style: AttendanceUi.sectionTitle),
-          SizedBox(height: 2),
+          const SizedBox(height: 2),
           Text(
             DateFormat(context.l10n.mmmmYyyy).format(DateTime.now()),
             style: AttendanceUi.bodyMuted,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           Row(
             children: [
-              _miniStat(context.l10n.present, summary.present, Colors.green.shade700),
-              _miniStat(context.l10n.absent, summary.absent, Colors.red.shade700),
-              _miniStat(context.l10n.partial, summary.partial, Colors.orange.shade800),
+              _miniStat(context.l10n.present, summary.present, WaUi.navGreen),
+              _miniStat(
+                context.l10n.absent,
+                summary.absent,
+                const Color(0xFFC62828),
+              ),
+              _miniStat(
+                context.l10n.partial,
+                summary.partial,
+                const Color(0xFFC46A00),
+              ),
             ],
           ),
         ],
@@ -367,7 +431,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       child: Column(
         children: [
           Text('$value', style: AttendanceUi.statNumber.copyWith(color: color)),
-          SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(label, style: AttendanceUi.statLabel),
         ],
       ),
@@ -377,28 +441,28 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   Widget _emptyState() {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(24),
-        child: Container(
-          padding: EdgeInsets.all(24),
-          decoration: AttendanceUi.thickCard,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.work_off_outlined,
-                size: 48,
-                color: WaUi.promoIconFg,
-              ),
-              SizedBox(height: 16),
-              Text(context.l10n.noEmployerFound, style: AttendanceUi.sectionTitle),
-              SizedBox(height: 8),
-              Text(
-                context.l10n.askYourBusinessToScanYourQRAndAddYouAsAnEmployee,
-                textAlign: TextAlign.center,
-                style: AttendanceUi.bodyMuted,
-              ),
-            ],
-          ),
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.work_off_outlined,
+              size: 52,
+              color: WaUi.secondaryText.withValues(alpha: 0.4),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              context.l10n.noEmployerFound,
+              style: AttendanceUi.sectionTitle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              context.l10n.askYourBusinessToScanYourQRAndAddYouAsAnEmployee,
+              textAlign: TextAlign.center,
+              style: AttendanceUi.bodyMuted,
+            ),
+          ],
         ),
       ),
     );

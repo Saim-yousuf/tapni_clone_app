@@ -3,6 +3,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
+import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/models/social_link.dart';
@@ -18,6 +19,7 @@ import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/widgets/profile_reviews_section.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 
@@ -670,6 +672,28 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+                if (profile.reviewCount > 0) ...[
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.star_rounded,
+                        size: 18,
+                        color: Color(0xFFF5A623),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${profile.avgRating.toStringAsFixed(1)} (${profile.reviewCount})',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
                 if (displayBio.isNotEmpty) ...[
                   const SizedBox(height: 8),
                   Text(
@@ -815,6 +839,16 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
               ],
             ),
           ),
+          if ((profile.businessName ?? '').trim().isNotEmpty ||
+              profile.reviewCount > 0 ||
+              !isOwn)
+            ProfileReviewsSection(
+              profile: profile,
+              isOwnProfile: isOwn,
+              catalogItems: profile.socialLinks
+                  .expand((l) => l.catalogItems ?? const <CatalogItem>[])
+                  .toList(),
+            ),
         ],
       ),
     );

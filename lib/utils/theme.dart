@@ -4,15 +4,15 @@ import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 class AppTheme {
-  // Brand Colors (UNCHANGED NAMES)
-  static const Color primaryBlack = Colors.black;
+  // Brand Colors — button black lives in [WaUi.buttonDark] (single source).
+  static const Color primaryBlack = WaUi.buttonDark;
   static const Color secondaryWhite = Color(0xFFFFFFFF);
-  static const Color accentBlack = Color(0xFF111111);
-  static const Color accentDarkGrey = Color(0xFF000000); // forced black only
+  static const Color accentBlack = WaUi.buttonDark;
+  static const Color accentDarkGrey = WaUi.buttonDark;
 
   // Accent GOLD removed visually → forced black only
-  static const Color accentGold = Color(0xFF000000);
-  static const Color accentGoldDark = Color(0xFF000000);
+  static const Color accentGold = WaUi.buttonDark;
+  static const Color accentGoldDark = WaUi.buttonDark;
 
   // Grey Tones → simplified (no visible color variation)
   static const Color greyLightBg = Color(0xFFFFFFFF);

@@ -618,6 +618,76 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  Future<ApiResponse> updateBusinessProfile({
+    required String businessName,
+    required String businessCategory,
+    required double? latitude,
+    required double? longitude,
+    required String businessAddress,
+    required String city,
+    required String area,
+    required BuildContext context,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    CustomDialog.loadingDialog(context);
+
+    final updated = _profile.copyWith(
+      businessName: businessName,
+      businessCategory: businessCategory,
+      latitude: latitude,
+      longitude: longitude,
+      businessAddress: businessAddress,
+      city: city,
+      area: area,
+    );
+
+    try {
+      final repo = AuthRepo();
+      final response = await repo.updateProfile(
+        jsonBody: {
+          'businessName': businessName,
+          'businessCategory': businessCategory,
+          'latitude': latitude,
+          'longitude': longitude,
+          'businessAddress': businessAddress,
+          'city': city,
+          'area': area,
+        },
+      );
+
+      if (response.success) {
+        if (response.data is Map<String, dynamic>) {
+          final data = response.data as Map<String, dynamic>;
+          final profileData = data['user'] is Map<String, dynamic>
+              ? data['user'] as Map<String, dynamic>
+              : data;
+          try {
+            _profile = UserProfile.fromApiJson(profileData);
+          } catch (_) {
+            _profile = updated;
+          }
+        } else {
+          _profile = updated;
+        }
+        notifyListeners();
+      }
+      Navigator.pop(context);
+      return response;
+    } catch (error) {
+      Navigator.pop(context);
+      return ApiResponse<dynamic>(
+        success: false,
+        statusCode: 0,
+        message: error.toString(),
+        data: null,
+      );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<ApiResponse> updateUsername({
     required String username,
     required BuildContext context,

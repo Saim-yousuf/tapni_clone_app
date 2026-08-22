@@ -344,7 +344,7 @@ class AppLocalizationsHa extends AppLocalizations {
   String get barqody => 'Barqody';
 
   @override
-  String get barqodyV100 => 'Barqody v1.0.0';
+  String get barqodyV100 => 'Barqody';
 
   @override
   String get bestValue => 'Mafi kyawun ƙima';

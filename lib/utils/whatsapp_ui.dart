@@ -23,7 +23,8 @@ class WaUi {
   static const Color fieldOutlineFocused = Color(0xFFBEC3C9);
   static const Color promoIconBg = Color(0xFFE7F3FF);
   static const Color promoIconFg = Color(0xFF54656F);
-  static const Color buttonDark = Color(0xFF111B21);
+  /// Primary solid button / CTA fill — change here for buttons app-wide.
+  static const Color buttonDark = Color(0xFF000000);
   static const Color readCheck = Color(0xFF53BDEB);
 
   static const double radiusSm = 10;

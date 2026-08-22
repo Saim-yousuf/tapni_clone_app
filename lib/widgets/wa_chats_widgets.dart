@@ -480,74 +480,89 @@ class WaContactEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 32),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(28, 24, 28, 100),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 88,
-              height: 88,
-              decoration: BoxDecoration(
-                color: WaUi.navPill,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                isSearching ? Icons.search_off : Icons.people_outline,
-                size: 40,
-                color: WaUi.secondaryText.withValues(alpha: 0.7),
-              ),
-            ),
-            SizedBox(height: 20),
+            _EmptyIllustration(isSearching: isSearching),
+            const SizedBox(height: 28),
             Text(
               isSearching ? context.l10n.noMatches : context.l10n.noContactsYet,
-              style: WaUi.title,
+              style: WaUi.headline.copyWith(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 10),
             Text(
               isSearching
                   ? context.l10n.tryADifferentNameEmailOrCompany
                   : context.l10n.scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork,
-              style: WaUi.caption,
+              style: WaUi.caption.copyWith(
+                height: 1.45,
+                fontSize: 14.5,
+              ),
               textAlign: TextAlign.center,
             ),
             if (!isSearching) ...[
-              SizedBox(height: 24),
+              const SizedBox(height: 28),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  FilledButton.icon(
-                    onPressed: onScan,
-                    icon: Icon(Icons.qr_code_scanner_rounded, size: 18),
-                    label: Text(
-                      context.l10n.scanQR,
-                      style: WaUi.bodyMedium.copyWith(color: Colors.white),
-                    ),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: WaUi.buttonDark,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 10,
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: onScan,
+                      icon: const Icon(Icons.qr_code_scanner_rounded, size: 18),
+                      label: Text(
+                        context.l10n.scanQR,
+                        overflow: TextOverflow.ellipsis,
+                        style: WaUi.promoButton.copyWith(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(WaUi.radiusPill),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: WaUi.buttonDark,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size.fromHeight(48),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(WaUi.radiusPill),
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 12),
-                  OutlinedButton.icon(
-                    onPressed: onAdd,
-                    icon: Icon(Icons.person_add_outlined, size: 18),
-                    label: Text(context.l10n.add, style: WaUi.bodyMedium),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: WaUi.primaryText,
-                      side: const BorderSide(color: WaUi.divider),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: onAdd,
+                      icon: const Icon(
+                        Icons.person_add_alt_1_rounded,
+                        size: 18,
+                        color: WaUi.primaryText,
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(WaUi.radiusPill),
+                      label: Text(
+                        context.l10n.add,
+                        overflow: TextOverflow.ellipsis,
+                        style: WaUi.promoButton.copyWith(
+                          color: WaUi.primaryText,
+                          fontSize: 14,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: WaUi.primaryText,
+                        side: const BorderSide(
+                          color: WaUi.chipBorder,
+                          width: 1.2,
+                        ),
+                        minimumSize: const Size.fromHeight(48),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(WaUi.radiusPill),
+                        ),
                       ),
                     ),
                   ),
@@ -561,14 +576,92 @@ class WaContactEmptyState extends StatelessWidget {
   }
 }
 
+class _EmptyIllustration extends StatelessWidget {
+  final bool isSearching;
+
+  const _EmptyIllustration({required this.isSearching});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 128,
+      height: 128,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 128,
+            height: 128,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: WaUi.searchBg,
+              border: Border.all(color: WaUi.divider, width: 1),
+            ),
+          ),
+          Container(
+            width: 96,
+            height: 96,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0x14000000),
+                  blurRadius: 16,
+                  offset: Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Icon(
+              isSearching
+                  ? Icons.search_off_rounded
+                  : Icons.people_alt_outlined,
+              size: 42,
+              color: WaUi.buttonDark.withValues(alpha: 0.78),
+            ),
+          ),
+          if (!isSearching)
+            Positioned(
+              right: 6,
+              bottom: 10,
+              child: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: WaUi.buttonDark,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 3),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x22000000),
+                      blurRadius: 8,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.qr_code_2_rounded,
+                  size: 16,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 class WaContactSpeedDial extends StatefulWidget {
   final VoidCallback onAdd;
   final VoidCallback onFind;
+  final VoidCallback? onImport;
 
   WaContactSpeedDial({
     super.key,
     required this.onAdd,
     required this.onFind,
+    this.onImport,
   });
 
   @override
@@ -598,6 +691,14 @@ class _WaContactSpeedDialState extends State<WaContactSpeedDial> {
             onTap: () => _run(widget.onFind),
           ),
           SizedBox(height: 14),
+          if (widget.onImport != null) ...[
+            _speedAction(
+              label: context.l10n.importContacts,
+              icon: Icons.file_upload_outlined,
+              onTap: () => _run(widget.onImport!),
+            ),
+            SizedBox(height: 14),
+          ],
           _speedAction(
             label: context.l10n.addContact,
             icon: Icons.person_add_outlined,

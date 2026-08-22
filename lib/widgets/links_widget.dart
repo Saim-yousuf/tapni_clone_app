@@ -14,6 +14,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/contact_card_sheet.dart' as contact_card;
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
+import 'package:tapni_app/widgets/business_completeness_sheet.dart';
 import 'package:tapni_app/screens/catalog/document_link_form_screen.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
@@ -204,7 +205,9 @@ class LinkSheet {
     LinkTemplate template,
     ProfileProvider provider, {
     SocialLink? existingLink,
-  }) {
+  }) async {
+    final ok = await ensureBusinessProfileComplete(context);
+    if (!ok || !context.mounted) return;
     showMenuCatalogSheet(
       context: context,
       catalogLabel: template.label,
@@ -1383,11 +1386,11 @@ class LinkSheet {
     );
   }
 
-  void showExistingLinkBottomSheet(
+  Future<void> showExistingLinkBottomSheet(
     BuildContext context,
     SocialLink link,
     ProfileProvider provider,
-  ) {
+  ) async {
     LinkTemplate? catalogTemplate;
     for (final category in provider.linkCatalog) {
       for (final template in category.templates) {
@@ -1437,6 +1440,8 @@ class LinkSheet {
             );
       final catalogType = link.catalogType ??
           CatalogHelper.typeForCategory(provider.profile.businessCategory);
+      final ok = await ensureBusinessProfileComplete(context);
+      if (!ok || !context.mounted) return;
       showMenuCatalogSheet(
         context: context,
         catalogLabel: label,

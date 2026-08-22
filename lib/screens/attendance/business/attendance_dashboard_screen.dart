@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/business/employee_list_screen.dart';
 import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
+import 'package:tapni_app/widgets/custom_app_button.dart';
 
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class AttendanceDashboardScreen extends StatefulWidget {
   const AttendanceDashboardScreen({super.key});
 
@@ -80,12 +81,20 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
   Color _statusColor(String statusKey) {
     switch (statusKey) {
       case 'present':
-        return Colors.green.shade700;
+        return const Color(0xFF1B8A4A);
       case 'in_office':
-        return Colors.orange.shade800;
+        return const Color(0xFFC46A00);
       default:
-        return Colors.red.shade700;
+        return const Color(0xFFC62828);
     }
+  }
+
+  Future<void> _openEmployees() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const EmployeeListScreen()),
+    );
+    _load();
   }
 
   @override
@@ -100,193 +109,252 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
         _todayRecords.where((r) => r.checkInTime != null).length;
 
     return Scaffold(
-      backgroundColor: AttendanceUi.scaffoldBg,
+      backgroundColor: Colors.white,
       appBar: AttendanceUi.appBar(
         context.l10n.attendance,
         actions: [
           IconButton(
-            icon: Icon(Icons.people_outline, size: 24),
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => EmployeeListScreen()),
-              );
-              _load();
-            },
+            tooltip: context.l10n.manageEmployees,
+            icon: const Icon(Icons.people_outline_rounded),
+            onPressed: _openEmployees,
           ),
         ],
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: _load,
-              child: ListView(
-                padding: EdgeInsets.all(20),
-                children: [
-                  Row(
-                    children: [
-                      _statCard(context.l10n.presentUpper, presentCount, Colors.green.shade700),
-                      SizedBox(width: 12),
-                      _statCard(context.l10n.inOFFICE, checkedInCount, Colors.orange.shade800),
-                      const SizedBox(width: 12),
-                      _statCard(context.l10n.absentUpper, absentCount, Colors.red.shade700),
-                    ],
-                  ),
-                  const SizedBox(height: 28),
-                  AttendanceUi.sectionHeader(context.l10n.todaysAttendance),
-                  if (_employees.isEmpty)
-                    _emptyState()
-                  else
-                    ..._employees.map((employee) {
-                      final record = _recordForEmployee(employee.id);
-                      final statusKey = _statusKey(record);
-                      final status = _statusLabel(statusKey);
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 14),
-                        child: InkWell(
-                          onTap: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => EmployeeSettingsScreen(
-                                  employee: employee,
-                                ),
-                              ),
-                            );
-                            _load();
-                          },
-                          borderRadius:
-                              BorderRadius.circular(AttendanceUi.radius),
-                          child: Container(
-                            padding: const EdgeInsets.all(18),
-                            decoration: AttendanceUi.thickCard,
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 26,
-                                  backgroundColor: WaUi.navPill,
-                                  backgroundImage: employee
-                                          .employee.profilePhoto.isNotEmpty
-                                      ? NetworkImage(
-                                          employee.employee.profilePhoto,
-                                        )
-                                      : null,
-                                  child: employee.employee.profilePhoto.isEmpty
-                                      ? Text(
-                                          employee.employee.name.isNotEmpty
-                                              ? employee.employee.name[0]
-                                                  .toUpperCase()
-                                              : '?',
-                                          style: WaUi.avatarInitial,
-                                        )
-                                      : null,
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        employee.employee.displayName,
-                                        style: AttendanceUi.cardTitle,
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Text(
-                                        '${employee.shiftStart} - ${employee.shiftEnd}',
-                                        style: AttendanceUi.bodyMuted,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      status,
-                                      style: AttendanceUi.statLabel.copyWith(
-                                        color: _statusColor(statusKey),
-                                        fontSize: 14,
+      body: Column(
+        children: [
+          Expanded(
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2.5),
+                  )
+                : RefreshIndicator(
+                    color: WaUi.accent,
+                    backgroundColor: Colors.white,
+                    onRefresh: _load,
+                    child: ListView(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                      children: [
+                        Row(
+                          children: [
+                            _StatCard(
+                              label: context.l10n.presentUpper,
+                              count: presentCount,
+                              color: const Color(0xFF1B8A4A),
+                            ),
+                            const SizedBox(width: 10),
+                            _StatCard(
+                              label: context.l10n.inOFFICE,
+                              count: checkedInCount,
+                              color: const Color(0xFFC46A00),
+                            ),
+                            const SizedBox(width: 10),
+                            _StatCard(
+                              label: context.l10n.absentUpper,
+                              count: absentCount,
+                              color: const Color(0xFFC62828),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          context.l10n.todaysAttendance,
+                          style: AttendanceUi.sectionTitle,
+                        ),
+                        const SizedBox(height: 12),
+                        if (_employees.isEmpty)
+                          _EmptyState(onManage: _openEmployees)
+                        else
+                          ..._employees.map((employee) {
+                            final record = _recordForEmployee(employee.id);
+                            final statusKey = _statusKey(record);
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: _EmployeeRow(
+                                employee: employee,
+                                statusLabel: _statusLabel(statusKey),
+                                statusColor: _statusColor(statusKey),
+                                checkInTime: record?.checkInTime,
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => EmployeeSettingsScreen(
+                                        employee: employee,
                                       ),
                                     ),
-                                    if (record?.checkInTime != null) ...[
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        DateFormat('hh:mm a').format(
-                                          record!.checkInTime!.toLocal(),
-                                        ),
-                                        style: AttendanceUi.bodyMuted.copyWith(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                  SizedBox(height: 80),
-                ],
+                                  );
+                                  _load();
+                                },
+                              ),
+                            );
+                          }),
+                      ],
+                    ),
+                  ),
+          ),
+          Material(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+              child: CustomAppButton(
+                width: double.infinity,
+                text: context.l10n.manageEmployees,
+                icon: Icons.person_add_alt_1_rounded,
+                backgroundColor: AttendanceUi.buttonDark,
+                onTap: _openEmployees,
               ),
             ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        child: SizedBox(
-          width: double.infinity,
-          child: FloatingActionButton.extended(
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => EmployeeListScreen()),
-              );
-              _load();
-            },
-            backgroundColor: WaUi.buttonDark,
-            foregroundColor: Colors.white,
-            elevation: 0,
-            extendedPadding: EdgeInsets.symmetric(horizontal: 24),
-            icon: Icon(Icons.person_add_alt_1, size: 22),
-            label: Text(context.l10n.manageEmployees, style: AttendanceUi.buttonLabel),
           ),
-        ),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+}
 
-  Widget _statCard(String label, int count, Color color) {
+class _StatCard extends StatelessWidget {
+  final String label;
+  final int count;
+  final Color color;
+
+  const _StatCard({
+    required this.label,
+    required this.count,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
         decoration: AttendanceUi.thickCard,
         child: Column(
           children: [
-            Text('$count', style: AttendanceUi.statNumber.copyWith(color: color)),
-            SizedBox(height: 8),
+            Text(
+              '$count',
+              style: AttendanceUi.statNumber.copyWith(color: color),
+            ),
+            const SizedBox(height: 6),
             Text(
               label,
               textAlign: TextAlign.center,
-              style: AttendanceUi.statLabel.copyWith(fontSize: 13),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AttendanceUi.statLabel,
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _emptyState() {
-    return Container(
-      padding: EdgeInsets.all(28),
-      decoration: AttendanceUi.thickCard,
+class _EmployeeRow extends StatelessWidget {
+  final AttendanceEmployee employee;
+  final String statusLabel;
+  final Color statusColor;
+  final DateTime? checkInTime;
+  final VoidCallback onTap;
+
+  const _EmployeeRow({
+    required this.employee,
+    required this.statusLabel,
+    required this.statusColor,
+    required this.checkInTime,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final name = employee.employee.displayName;
+    final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
+
+    return Material(
+      color: AttendanceUi.tileBg,
+      borderRadius: BorderRadius.circular(AttendanceUi.radius),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AttendanceUi.radius),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: Colors.white,
+                backgroundImage: employee.employee.profilePhoto.isNotEmpty
+                    ? NetworkImage(employee.employee.profilePhoto)
+                    : null,
+                child: employee.employee.profilePhoto.isEmpty
+                    ? Text(initial, style: WaUi.avatarInitial)
+                    : null,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: AttendanceUi.cardTitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      '${employee.shiftStart} - ${employee.shiftEnd}',
+                      style: AttendanceUi.bodyMuted,
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  AttendanceUi.statusText(
+                    label: statusLabel,
+                    color: statusColor,
+                  ),
+                  if (checkInTime != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      DateFormat('hh:mm a').format(checkInTime!.toLocal()),
+                      style: AttendanceUi.bodyMuted.copyWith(fontSize: 12),
+                    ),
+                  ],
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  final VoidCallback onManage;
+
+  const _EmptyState({required this.onManage});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
       child: Column(
         children: [
-          Icon(Icons.groups_outlined, size: 48, color: WaUi.promoIconFg),
-          SizedBox(height: 16),
-          Text(context.l10n.noEmployeesYet, style: AttendanceUi.sectionTitle),
-          SizedBox(height: 10),
+          Icon(
+            Icons.groups_outlined,
+            size: 48,
+            color: WaUi.secondaryText.withValues(alpha: 0.45),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            context.l10n.noEmployeesYet,
+            style: AttendanceUi.sectionTitle,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
           Text(
             context.l10n.scanAUserQRCodeToAddThemAsEmployee,
             textAlign: TextAlign.center,

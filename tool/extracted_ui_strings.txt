@@ -474,7 +474,7 @@ FILES=74
   Try Business Pro
   Try Business Pro.
   View and update orders from your customers
-  barqody v1.0.0
+  Barqody
 
 === screens/signup_screen.dart (11)
   Already have an account? 
@@ -806,7 +806,7 @@ Bank Details
 Bank: Add bank name here
 BarQody
 Barqody
-barqody v1.0.0
+Barqody
 Best value
 Bill Amount
 BIO

@@ -20,8 +20,8 @@ class Api {
   static void init(
     // Environment env
   ) {
-    // baseUrl = _localBaseUrl;
-    baseUrl = _liveBaseUrl;
+    baseUrl = _localBaseUrl;
+    // baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }
@@ -38,6 +38,8 @@ class Api {
   static final invitation = _InvitationApi();
   static final directory = _DirectoryApi();
   static final follow = _FollowApi();
+  static final explore = _ExploreApi();
+  static final reviews = _ReviewsApi();
 }
 
 class _AuthApi {
@@ -131,6 +133,7 @@ class _LoyaltyApi {
 
 class _EnrollmentApi {
   String get enroll => "${Api.baseUrl}/api/loyalty/enrollments";
+  String get selfEnroll => "${Api.baseUrl}/api/loyalty/enrollments/self";
   String get myEnrollments => "${Api.baseUrl}/api/loyalty/enrollments/me";
   String customerEnrollments(String customerId) =>
       "${Api.baseUrl}/api/loyalty/enrollments/customer/$customerId";
@@ -221,4 +224,16 @@ class _FollowApi {
       "${Api.baseUrl}/api/user/follow/notifications/read";
   String markRead(String followId) =>
       "${Api.baseUrl}/api/user/follow/notifications/$followId/read";
+}
+
+class _ExploreApi {
+  String get nearby => "${Api.baseUrl}/api/explore/nearby";
+}
+
+class _ReviewsApi {
+  String get create => "${Api.baseUrl}/api/reviews";
+  String forBusiness(String businessId) =>
+      "${Api.baseUrl}/api/reviews/business/$businessId";
+  String report(String reviewId) =>
+      "${Api.baseUrl}/api/reviews/$reviewId/report";
 }

@@ -331,31 +331,23 @@ class _OtpScreenState extends State<OtpScreen> {
                       style: WaUi.caption,
                     ),
                     const SizedBox(height: 24),
-                    if (authProvider.isLoading)
-                      const SizedBox(
-                        width: 28,
-                        height: 28,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.5,
-                          color: AppTheme.primaryBlack,
-                        ),
-                      )
-                    else
-                      TextButton(
-                        onPressed: _secondsLeft > 0 ? null : _handleResend,
-                        child: Text(
-                          _secondsLeft > 0
-                              ? context.l10n.resendCodeIn(
-                                  '0:${_secondsLeft.toString().padLeft(2, '0')}',
-                                )
-                              : context.l10n.resendCode,
-                          style: WaUi.bodyMedium.copyWith(
-                            color: _secondsLeft > 0
-                                ? WaUi.secondaryText
-                                : AppTheme.primaryBlack,
-                          ),
+                    TextButton(
+                      onPressed: (_secondsLeft > 0 || authProvider.isLoading)
+                          ? null
+                          : _handleResend,
+                      child: Text(
+                        _secondsLeft > 0
+                            ? context.l10n.resendCodeIn(
+                                '0:${_secondsLeft.toString().padLeft(2, '0')}',
+                              )
+                            : context.l10n.resendCode,
+                        style: WaUi.bodyMedium.copyWith(
+                          color: (_secondsLeft > 0 || authProvider.isLoading)
+                              ? WaUi.secondaryText
+                              : AppTheme.primaryBlack,
                         ),
                       ),
+                    ),
                   ],
                 ),
               ),

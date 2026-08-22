@@ -348,7 +348,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get barqody => 'Barqody';
 
   @override
-  String get barqodyV100 => 'barqody v1.0.0';
+  String get barqodyV100 => 'Barqody';
 
   @override
   String get bestValue => 'Meilleur rapport qualité-prix';

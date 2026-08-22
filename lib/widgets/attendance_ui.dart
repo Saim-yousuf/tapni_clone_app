@@ -2,68 +2,91 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
 
-/// Attendance screens — WhatsApp Business–style surfaces and typography.
+/// Attendance screens — pure white + app fonts (WaUi / AppFonts).
 class AttendanceUi {
   static String get fontFamily => WaUi.fontFamily;
 
   static const double buttonHeight = WaUi.primaryButtonHeight;
   static const double borderWidth = 1;
-  static const double radius = WaUi.radiusLg;
+  static const double radius = 14;
+  static const Color tileBg = Color(0xFFF5F5F5);
 
-  static Color get scaffoldBg => WaUi.toolsScaffold;
+  static Color get scaffoldBg => Colors.white;
   static Color get primaryText => WaUi.primaryText;
   static Color get secondaryText => WaUi.secondaryText;
   static Color get divider => WaUi.divider;
-  static Color get surface => WaUi.surface;
+  static Color get surface => Colors.white;
   static Color get buttonDark => WaUi.buttonDark;
 
-  static TextStyle get pageTitle => WaUi.headline;
+  static TextStyle get pageTitle =>
+      WaUi.toolsTitle.copyWith(fontWeight: FontWeight.w500, fontSize: 22);
 
   static TextStyle get sectionTitle => WaUi.sectionHeader;
 
-  static TextStyle get cardTitle => WaUi.chatName;
+  static TextStyle get cardTitle => WaUi.listTitle;
 
   static TextStyle get body => WaUi.body;
+
+  static TextStyle get bodyMedium => WaUi.bodyMedium;
 
   static TextStyle get bodyMuted => WaUi.listSubtitle;
 
   static TextStyle get statNumber => WaUi.toolsTitle.copyWith(
         fontSize: 28,
-        color: primaryText,
+        height: 1.15,
+        fontWeight: FontWeight.w700,
       );
 
-  static TextStyle get statLabel => WaUi.label.copyWith(color: primaryText);
+  static TextStyle get statLabel => WaUi.label.copyWith(
+        color: secondaryText,
+        fontWeight: FontWeight.w600,
+        fontSize: 12,
+      );
 
-  static TextStyle get buttonLabel => WaUi.button.copyWith(color: Colors.white);
+  static TextStyle get buttonLabel => WaUi.promoButton;
 
   static BoxDecoration get thickCard => BoxDecoration(
-        color: surface,
+        color: tileBg,
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: divider, width: borderWidth),
+      );
+
+  static BoxDecoration get outlinedCard => BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: divider),
       );
 
   static BoxDecoration thickCardFilled({Color fill = WaUi.buttonDark}) =>
       BoxDecoration(
         color: fill,
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: fill, width: borderWidth),
       );
 
   static AppBar appBar(String title, {List<Widget>? actions}) {
     return AppBar(
-      backgroundColor: scaffoldBg,
-      surfaceTintColor: scaffoldBg,
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.transparent,
+      shadowColor: Colors.transparent,
       elevation: 0,
+      scrolledUnderElevation: 0,
+      centerTitle: true,
+      foregroundColor: WaUi.primaryText,
       iconTheme: const IconThemeData(color: WaUi.primaryText, size: 24),
       title: Text(title, style: pageTitle),
       actions: actions,
     );
   }
 
-  static Widget sectionHeader(String text) {
+  static Widget sectionHeader(String text, {String? trailing}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: Text(text, style: sectionTitle),
+      child: Row(
+        children: [
+          Expanded(child: Text(text, style: sectionTitle)),
+          if (trailing != null)
+            Text(trailing, style: WaUi.caption),
+        ],
+      ),
     );
   }
 
@@ -118,13 +141,24 @@ class AttendanceUi {
             children: [
               Text(label, style: WaUi.label),
               const SizedBox(height: 8),
-              Text(
-                value,
-                style: WaUi.headline.copyWith(fontSize: 22),
-              ),
+              Text(value, style: WaUi.headline.copyWith(fontSize: 22)),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  static Widget statusText({
+    required String label,
+    required Color color,
+  }) {
+    return Text(
+      label,
+      style: WaUi.label.copyWith(
+        color: color,
+        fontWeight: FontWeight.w700,
+        fontSize: 12,
       ),
     );
   }

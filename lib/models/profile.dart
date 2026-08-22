@@ -16,6 +16,13 @@ class UserProfile {
   String? country;
   String? businessName;
   String? businessCategory;
+  double? latitude;
+  double? longitude;
+  String? businessAddress;
+  String? city;
+  String? area;
+  double avgRating;
+  int reviewCount;
   final List<SocialLink> socialLinks;
 
   final String designation;
@@ -45,6 +52,13 @@ class UserProfile {
     this.country,
     this.businessName,
     this.businessCategory,
+    this.latitude,
+    this.longitude,
+    this.businessAddress,
+    this.city,
+    this.area,
+    this.avgRating = 0,
+    this.reviewCount = 0,
     required this.socialLinks,
     this.designation = '',
     this.company = '',
@@ -66,6 +80,12 @@ class UserProfile {
         .toList();
     final printDesignJson = json['cardPrintDesign'];
 
+    double? toDouble(dynamic v) {
+      if (v == null) return null;
+      if (v is num) return v.toDouble();
+      return double.tryParse(v.toString());
+    }
+
     return UserProfile(
       id: json['id']?.toString(),
       username: json['username']?.toString(),
@@ -82,6 +102,13 @@ class UserProfile {
       country: json['country'],
       businessName: json['businessName']?.toString(),
       businessCategory: json['businessCategory']?.toString(),
+      latitude: toDouble(json['latitude']),
+      longitude: toDouble(json['longitude']),
+      businessAddress: json['businessAddress']?.toString(),
+      city: json['city']?.toString(),
+      area: json['area']?.toString(),
+      avgRating: toDouble(json['avgRating']) ?? 0,
+      reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
       socialLinks: links,
       cardTemplateId: json['cardTemplateId'] as String? ?? 't2',
       customCards: (json['customCards'] as List<dynamic>? ?? [])
@@ -105,6 +132,11 @@ class UserProfile {
       'isPublic': isPublic,
       if (businessName != null) 'businessName': businessName,
       if (businessCategory != null) 'businessCategory': businessCategory,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
+      if (businessAddress != null) 'businessAddress': businessAddress,
+      if (city != null) 'city': city,
+      if (area != null) 'area': area,
       'links': socialLinks
           .where((l) => l.isActive)
           .map((l) => l.toApiJson())
@@ -123,6 +155,13 @@ class UserProfile {
     String? country,
     String? businessName,
     String? businessCategory,
+    double? latitude,
+    double? longitude,
+    String? businessAddress,
+    String? city,
+    String? area,
+    double? avgRating,
+    int? reviewCount,
     List<SocialLink>? socialLinks,
     String? designation,
     String? company,
@@ -139,6 +178,8 @@ class UserProfile {
     bool clearCardPrintDesign = false,
     bool? canView,
     String? followStatus,
+    bool clearLatitude = false,
+    bool clearLongitude = false,
   }) {
     return UserProfile(
       id: id ?? this.id,
@@ -153,6 +194,13 @@ class UserProfile {
       country: country ?? this.country,
       businessName: businessName ?? this.businessName,
       businessCategory: businessCategory ?? this.businessCategory,
+      latitude: clearLatitude ? null : (latitude ?? this.latitude),
+      longitude: clearLongitude ? null : (longitude ?? this.longitude),
+      businessAddress: businessAddress ?? this.businessAddress,
+      city: city ?? this.city,
+      area: area ?? this.area,
+      avgRating: avgRating ?? this.avgRating,
+      reviewCount: reviewCount ?? this.reviewCount,
       socialLinks: socialLinks ?? this.socialLinks,
       designation: designation ?? this.designation,
       company: company ?? this.company,

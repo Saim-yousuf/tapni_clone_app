@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
+import 'package:tapni_app/providers/explore_cart_provider.dart';
 import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
@@ -37,6 +38,7 @@ import 'package:tapni_app/services/push_notification_service.dart';
         ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => InvitationProvider()),
+        ChangeNotifierProvider(create: (_) => ExploreCartProvider()),
       ],
       child: const TapniApp(),
     ),

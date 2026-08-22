@@ -51,7 +51,6 @@ class RewardCardStackCarousel extends StatefulWidget {
   final int initialIndex;
   final ValueChanged<int> onPageChanged;
   final ValueChanged<int>? onCardTap;
-  final VoidCallback? onAddCard;
 
   const RewardCardStackCarousel({
     super.key,
@@ -59,7 +58,6 @@ class RewardCardStackCarousel extends StatefulWidget {
     required this.initialIndex,
     required this.onPageChanged,
     this.onCardTap,
-    this.onAddCard,
   });
 
   @override
@@ -148,20 +146,6 @@ class _RewardCardStackCarouselState extends State<RewardCardStackCarousel>
   }
 
   void _notifyTopChanged() => widget.onPageChanged(_topCardIndex);
-
-  void _bringNextToFront() {
-    if (_stackOrder.length <= 1 || _isAnimating) return;
-    _runSwipeAwayAnimation(_dragOffset.dx >= 0 ? 1 : -1);
-  }
-
-  void _bringPreviousToFront() {
-    if (_stackOrder.length <= 1 || _isAnimating) return;
-    setState(() {
-      final back = _stackOrder.removeLast();
-      _stackOrder.insert(0, back);
-    });
-    _notifyTopChanged();
-  }
 
   void _onPanUpdate(DragUpdateDetails details) {
     if (_isAnimating || widget.items.length <= 1) return;
@@ -307,50 +291,7 @@ class _RewardCardStackCarouselState extends State<RewardCardStackCarousel>
                 ],
               ),
             ),
-            const SizedBox(height: 8),
-            Text(context.l10n.swipeToBrowseCards, style: WaUi.caption),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _IconCircleButton(
-                  icon: Icons.chevron_left,
-                  tooltip: context.l10n.previousCard,
-                  onTap: cards.length > 1 ? _bringPreviousToFront : () {},
-                  enabled: cards.length > 1 && !_isAnimating,
-                ),
-                const SizedBox(width: 6),
-                ...List.generate(cards.length, (i) {
-                  final active = i == topIndex;
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    width: active ? 18 : 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      color: active ? WaUi.accent : WaUi.divider,
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                  );
-                }),
-                const SizedBox(width: 6),
-                _IconCircleButton(
-                  icon: Icons.chevron_right,
-                  tooltip: context.l10n.nextCard,
-                  onTap: cards.length > 1 ? _bringNextToFront : () {},
-                  enabled: cards.length > 1 && !_isAnimating,
-                ),
-                if (widget.onAddCard != null) ...[
-                  const SizedBox(width: 8),
-                  _IconCircleButton(
-                    icon: Icons.add,
-                    tooltip: context.l10n.newReward,
-                    onTap: widget.onAddCard!,
-                  ),
-                ],
-              ],
-            ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Text(
               [
                 '${topIndex + 1} of ${cards.length}',
@@ -464,6 +405,7 @@ class _RewardCardFace extends StatelessWidget {
 
     Widget body;
     if (program.hasDesign) {
+      // Design already shows stamp progress on the card — don't duplicate below.
       body = Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -473,19 +415,14 @@ class _RewardCardFace extends StatelessWidget {
             borderRadius: 22,
             shadows: const [],
           ),
-          const SizedBox(height: 10),
-          Text(
-            context.l10n.stampsProgress(current, total),
-            style: WaUi.listTitle,
-          ),
           if (item.showCompletedBadge) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text(
               context.l10n.completed,
               style: WaUi.caption.copyWith(color: WaUi.accent),
             ),
           ] else if (!program.isActive) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text(
               context.l10n.inactive,
               style: WaUi.caption.copyWith(color: Colors.red),
@@ -582,43 +519,6 @@ class _RewardCardFace extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: DecoratedBox(decoration: decoration, child: body),
-    );
-  }
-}
-
-class _IconCircleButton extends StatelessWidget {
-  final IconData icon;
-  final String tooltip;
-  final VoidCallback onTap;
-  final bool enabled;
-
-  const _IconCircleButton({
-    required this.icon,
-    required this.tooltip,
-    required this.onTap,
-    this.enabled = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: WaUi.scaffold,
-      shape: const CircleBorder(),
-      child: InkWell(
-        onTap: enabled ? onTap : null,
-        customBorder: const CircleBorder(),
-        child: Tooltip(
-          message: tooltip,
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Icon(
-              icon,
-              size: 20,
-              color: enabled ? WaUi.primaryText : WaUi.divider,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
