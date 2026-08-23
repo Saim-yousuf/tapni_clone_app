@@ -84,6 +84,52 @@ class AppFonts {
     );
   }
 
+  /// Screen titles (Tools / Contacts / Analytics, etc.).
+  ///
+  /// Uses fonts that actually ship Light/Regular/Bold. Nastaliq only has
+  /// Regular, so weight changes on titles would otherwise look identical.
+  static TextStyle titleStyle({
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    double? height,
+    double? letterSpacing,
+    TextDecoration? decoration,
+  }) {
+    final h = height ?? defaultHeight;
+
+    if (usesArabicScript) {
+      return GoogleFonts.cairo(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+        height: h,
+        letterSpacing: letterSpacing,
+        decoration: decoration,
+      );
+    }
+
+    if (isHebrew) {
+      return GoogleFonts.rubik(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+        height: h,
+        letterSpacing: letterSpacing,
+        decoration: decoration,
+      );
+    }
+
+    return GoogleFonts.roboto(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      height: h,
+      letterSpacing: letterSpacing,
+      decoration: decoration,
+    );
+  }
+
   static TextTheme textTheme(TextTheme base) {
     if (isUrdu) {
       return GoogleFonts.notoNastaliqUrduTextTheme(base);

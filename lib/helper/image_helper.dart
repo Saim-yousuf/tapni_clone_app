@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:image/image.dart' as img;
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 
@@ -151,6 +152,33 @@ Future<String> fileToDataUri(File file, {String? mimeType}) async {
       ? mimeType
       : lookupMimeType(file.path) ?? 'application/octet-stream';
   return 'data:$mime;base64,${base64Encode(bytes)}';
+}
+
+/// Resize + JPEG-compress a photo so gallery uploads stay under the API JSON limit.
+Future<String> fileToCompressedDataUri(
+  File file, {
+  int maxSide = 1600,
+  int quality = 82,
+}) async {
+  try {
+    final bytes = await file.readAsBytes();
+    final decoded = img.decodeImage(bytes);
+    if (decoded == null) return fileToDataUri(file);
+
+    img.Image out = decoded;
+    if (decoded.width > maxSide || decoded.height > maxSide) {
+      out = img.copyResize(
+        decoded,
+        width: decoded.width >= decoded.height ? maxSide : null,
+        height: decoded.height > decoded.width ? maxSide : null,
+      );
+    }
+    final jpg = img.encodeJpg(out, quality: quality);
+    return 'data:image/jpeg;base64,${base64Encode(jpg)}';
+  } catch (e) {
+    log('Error compressing image: $e');
+    return fileToDataUri(file);
+  }
 }
 
 class FilePickerM {

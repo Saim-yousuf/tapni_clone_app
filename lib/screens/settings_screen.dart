@@ -28,7 +28,6 @@ import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/screens/set_username_screen.dart';
 import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/screens/workplace_screen.dart';
-import 'package:tapni_app/screens/contacts_sync_screen.dart';
 import 'package:tapni_app/screens/caller_id_setup_screen.dart';
 import 'package:tapni_app/services/caller_id_service.dart';
 import 'package:tapni_app/utils/business_completeness.dart';
@@ -386,19 +385,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: context.l10n.shareQr,
                     subtitle: context.l10n.shareQrSubtitle,
                     onTap: () => SharingProfileSheet.show(context),
-                  ),
-                  WaToolsListTile(
-                    icon: Icons.contacts_outlined,
-                    title: context.l10n.syncContacts,
-                    subtitle: context.l10n.syncContactsSubtitle,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              const ContactsSyncScreen(fromSettings: true),
-                        ),
-                      );
-                    },
                   ),
                   if (CallerIdService.isFeatureEnabled)
                     WaToolsListTile(

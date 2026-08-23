@@ -52,13 +52,34 @@ class WaUi {
     );
   }
 
-  /// Tools / chats screen title — large bold left header (WhatsApp-style).
-  static TextStyle get toolsTitle => _style(
-        size: 26,
-        weight: FontWeight.w700,
-        height: AppFonts.isUrdu ? 1.45 : 1.15,
-        letterSpacing: -0.2,
-      );
+  /// Tools / chats screen title — large left header (WhatsApp-style).
+  ///
+  /// Prefer [toolsTitleOf] when changing weight/size. Google Fonts embeds
+  /// weight into the family, so `copyWith(fontWeight: …)` often looks unchanged.
+  static TextStyle get toolsTitle => toolsTitleOf();
+
+  /// Rebuilds the tools title via [AppFonts.titleStyle] so weight actually applies.
+  ///
+  /// Uses `inherit: false` so AppBar/theme [DefaultTextStyle] (often w600)
+  /// cannot merge back to a heavier weight.
+  /// Do not `copyWith(fontWeight:)` after Google Fonts — that re-breaks weight.
+  static TextStyle toolsTitleOf({
+    FontWeight weight = FontWeight.w500,
+    double size = 26,
+    double? height,
+    Color color = primaryText,
+    double? letterSpacing,
+  }) {
+    final scriptAware = AppFonts.usesArabicScript || AppFonts.isHebrew;
+    final style = AppFonts.titleStyle(
+      fontSize: size,
+      fontWeight: weight,
+      color: color,
+      height: height ?? (AppFonts.isUrdu ? 1.45 : 1.15),
+      letterSpacing: scriptAware ? 0 : (letterSpacing ?? -0.2),
+    );
+    return style.copyWith(inherit: false);
+  }
 
   static TextStyle get sectionHeader => _style(
         size: 17,

@@ -69,10 +69,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
         titleSpacing: 0,
         title: Text(
           'Help Center',
-          style: WaUi.toolsTitle.copyWith(
-            fontWeight: FontWeight.w500,
-            fontSize: 22,
-          ),
+          style: WaUi.toolsTitleOf(weight: FontWeight.w500, size: 22),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -108,9 +105,9 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                 const SizedBox(height: 14),
                 Text(
                   'How can we help?',
-                  style: WaUi.toolsTitle.copyWith(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
+                  style: WaUi.toolsTitleOf(
+                    size: 24,
+                    weight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 14),

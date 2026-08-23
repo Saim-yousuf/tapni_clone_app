@@ -68,8 +68,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       appBar: AppBar(
         title: Text(
           context.l10n.analyticsDashboard,
-          style: WaUi.toolsTitle.copyWith(fontWeight: FontWeight.w500),
+          style: WaUi.toolsTitle,
         ),
+        titleTextStyle: WaUi.toolsTitle,
         centerTitle: false,
         titleSpacing: 16,
         automaticallyImplyLeading: widget.showBackButton,
@@ -203,9 +204,9 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
-            style: WaUi.toolsTitle.copyWith(
-              fontSize: 28,
-              fontWeight: FontWeight.w700,
+            style: WaUi.toolsTitleOf(
+              size: 28,
+              weight: FontWeight.w700,
               height: 1.1,
             ),
           ),

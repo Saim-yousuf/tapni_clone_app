@@ -137,6 +137,29 @@ class AuthRepo {
     );
   }
 
+  Future<ApiResponse> addGalleryItem({
+    required String image,
+    String caption = '',
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.gallery,
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: {
+        'image': image,
+        if (caption.trim().isNotEmpty) 'caption': caption.trim(),
+      },
+    );
+  }
+
+  Future<ApiResponse> deleteGalleryItem({required String itemId}) async {
+    return await ApiHandler.request(
+      api: Api.auth.galleryItem(itemId),
+      method: ApiMethod.delete,
+      authorization: true,
+    );
+  }
+
   Future<ApiResponse> linkCatalog() async {
     return await ApiHandler.request(
       api: Api.auth.linkCatalog,

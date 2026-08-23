@@ -4,6 +4,7 @@ import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/repository/review_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/profile_empty_state.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 class ProfileReviewsSection extends StatefulWidget {
@@ -22,10 +23,9 @@ class ProfileReviewsSection extends StatefulWidget {
   State<ProfileReviewsSection> createState() => _ProfileReviewsSectionState();
 }
 
-class _ProfileReviewsSectionState extends State<ProfileReviewsSection>
-    with SingleTickerProviderStateMixin {
-  late final TabController _tabController;
+class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
   final _repo = ReviewRepo();
+  int _tabIndex = 0;
 
   List<BusinessReview> _businessReviews = [];
   List<ItemReviewSummary> _itemSummaries = [];
@@ -35,14 +35,7 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
     _load();
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
   }
 
   Future<void> _load() async {
@@ -226,7 +219,7 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
           child: Row(
             children: [
               Text(
@@ -243,59 +236,149 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection>
                   style: WaUi.bodyMedium,
                 ),
               ] else
-                Text(
-                  'No ratings yet',
-                  style: WaUi.label.copyWith(color: WaUi.secondaryText),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF4F5F7),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    'No ratings yet',
+                    style: WaUi.label.copyWith(
+                      color: WaUi.secondaryText,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
             ],
           ),
         ),
-        TabBar(
-          controller: _tabController,
-          labelColor: WaUi.primaryText,
-          unselectedLabelColor: WaUi.secondaryText,
-          indicatorColor: WaUi.primaryText,
-          tabs: const [
-            Tab(text: 'Business'),
-            Tab(text: 'Items / Services'),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: _ReviewsSegmentedTabs(
+            index: _tabIndex,
+            onChanged: (i) => setState(() => _tabIndex = i),
+          ),
         ),
-        SizedBox(
-          height: 320,
-          child: _loading
-              ? const Center(child: CircularProgressIndicator(strokeWidth: 2))
-              : _error != null
-                  ? Center(
-                      child: Text(
-                        _error!,
-                        style: WaUi.body.copyWith(color: WaUi.secondaryText),
-                      ),
-                    )
-                  : TabBarView(
-                      controller: _tabController,
-                      children: [
-                        _BusinessReviewsTab(
-                          reviews: _businessReviews,
-                          isOwnProfile: widget.isOwnProfile,
-                          onWrite: _writeBusinessReview,
-                          onReport: (id) async {
-                            await _repo.reportReview(id);
-                            if (!mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Review reported')),
-                            );
-                          },
-                        ),
-                        _ItemReviewsTab(
-                          summaries: _itemSummaries,
-                          isOwnProfile: widget.isOwnProfile,
-                          onWriteSummary: _writeItemReview,
-                          onWriteNew: _writeNewItemReview,
-                        ),
-                      ],
-                    ),
-        ),
+        const SizedBox(height: 4),
+        if (_loading)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 40),
+            child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+          )
+        else if (_error != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+            child: Center(
+              child: Text(
+                _error!,
+                textAlign: TextAlign.center,
+                style: WaUi.body.copyWith(color: WaUi.secondaryText),
+              ),
+            ),
+          )
+        else if (_tabIndex == 0)
+          _BusinessReviewsTab(
+            reviews: _businessReviews,
+            isOwnProfile: widget.isOwnProfile,
+            onWrite: _writeBusinessReview,
+            onReport: (id) async {
+              await _repo.reportReview(id);
+              if (!mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Review reported')),
+              );
+            },
+          )
+        else
+          _ItemReviewsTab(
+            summaries: _itemSummaries,
+            isOwnProfile: widget.isOwnProfile,
+            onWriteSummary: _writeItemReview,
+            onWriteNew: _writeNewItemReview,
+          ),
+        const SizedBox(height: 8),
       ],
+    );
+  }
+}
+
+class _ReviewsSegmentedTabs extends StatelessWidget {
+  final int index;
+  final ValueChanged<int> onChanged;
+
+  const _ReviewsSegmentedTabs({
+    required this.index,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0F2F5),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: _ReviewSegTab(
+              selected: index == 0,
+              label: 'Business',
+              onTap: () => onChanged(0),
+            ),
+          ),
+          Expanded(
+            child: _ReviewSegTab(
+              selected: index == 1,
+              label: 'Items / Services',
+              onTap: () => onChanged(1),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ReviewSegTab extends StatelessWidget {
+  final bool selected;
+  final String label;
+  final VoidCallback onTap;
+
+  const _ReviewSegTab({
+    required this.selected,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: selected ? Colors.white : Colors.transparent,
+      borderRadius: BorderRadius.circular(11),
+      elevation: selected ? 0.5 : 0,
+      shadowColor: Colors.black26,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(11),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              color: selected
+                  ? const Color(0xFF111B21)
+                  : const Color(0xFF8A9199),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -315,6 +398,26 @@ class _BusinessReviewsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (reviews.isEmpty) {
+      return ProfileEmptyState(
+        icon: Icons.star_outline_rounded,
+        title: 'No business reviews yet',
+        subtitle: isOwnProfile
+            ? 'Customer reviews will appear here.'
+            : 'Be the first to share your experience.',
+        action: isOwnProfile
+            ? null
+            : TextButton.icon(
+                onPressed: onWrite,
+                icon: const Icon(Icons.rate_review_outlined, size: 18),
+                label: const Text('Write a review'),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                ),
+              ),
+      );
+    }
+
     return Column(
       children: [
         if (!isOwnProfile)
@@ -329,26 +432,19 @@ class _BusinessReviewsTab extends StatelessWidget {
               ),
             ),
           ),
-        Expanded(
-          child: reviews.isEmpty
-              ? Center(
-                  child: Text(
-                    'No business reviews yet',
-                    style: WaUi.body.copyWith(color: WaUi.secondaryText),
-                  ),
-                )
-              : ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  itemCount: reviews.length,
-                  separatorBuilder: (_, __) => const Divider(height: 20),
-                  itemBuilder: (context, index) {
-                    final review = reviews[index];
-                    return _ReviewTile(
-                      review: review,
-                      onReport: () => onReport(review.id),
-                    );
-                  },
-                ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          itemCount: reviews.length,
+          separatorBuilder: (_, __) => const Divider(height: 20),
+          itemBuilder: (context, index) {
+            final review = reviews[index];
+            return _ReviewTile(
+              review: review,
+              onReport: () => onReport(review.id),
+            );
+          },
         ),
       ],
     );
@@ -370,6 +466,26 @@ class _ItemReviewsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (summaries.isEmpty) {
+      return ProfileEmptyState(
+        icon: Icons.inventory_2_outlined,
+        title: 'No item reviews yet',
+        subtitle: isOwnProfile
+            ? 'Reviews for your items and services will show here.'
+            : 'Review an item or service you have used.',
+        action: isOwnProfile
+            ? null
+            : TextButton.icon(
+                onPressed: onWriteNew,
+                icon: const Icon(Icons.rate_review_outlined, size: 18),
+                label: const Text('Review an item'),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                ),
+              ),
+      );
+    }
+
     return Column(
       children: [
         if (!isOwnProfile)
@@ -384,41 +500,32 @@ class _ItemReviewsTab extends StatelessWidget {
               ),
             ),
           ),
-        Expanded(
-          child: summaries.isEmpty
-              ? Center(
-                  child: Text(
-                    'No item reviews yet',
-                    style: WaUi.body.copyWith(color: WaUi.secondaryText),
-                  ),
-                )
-              : ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  itemCount: summaries.length,
-                  separatorBuilder: (_, __) => const Divider(height: 16),
-                  itemBuilder: (context, index) {
-                    final summary = summaries[index];
-                    return ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(
-                        summary.targetLabel.isEmpty
-                            ? 'Item'
-                            : summary.targetLabel,
-                        style: WaUi.bodyMedium,
-                      ),
-                      subtitle: Text(
-                        '${summary.avgRating.toStringAsFixed(1)} · ${summary.reviewCount} reviews',
-                        style: WaUi.label.copyWith(color: WaUi.secondaryText),
-                      ),
-                      trailing: isOwnProfile
-                          ? null
-                          : IconButton(
-                              icon: const Icon(Icons.edit_outlined),
-                              onPressed: () => onWriteSummary(summary),
-                            ),
-                    );
-                  },
-                ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          itemCount: summaries.length,
+          separatorBuilder: (_, __) => const Divider(height: 16),
+          itemBuilder: (context, index) {
+            final summary = summaries[index];
+            return ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                summary.targetLabel.isEmpty ? 'Item' : summary.targetLabel,
+                style: WaUi.bodyMedium,
+              ),
+              subtitle: Text(
+                '${summary.avgRating.toStringAsFixed(1)} · ${summary.reviewCount} reviews',
+                style: WaUi.label.copyWith(color: WaUi.secondaryText),
+              ),
+              trailing: isOwnProfile
+                  ? null
+                  : IconButton(
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () => onWriteSummary(summary),
+                    ),
+            );
+          },
         ),
       ],
     );

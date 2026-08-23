@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 /// White bottom bar with a circular cut-out so the center button is never
@@ -190,13 +191,14 @@ class _NavIconButton extends StatelessWidget {
             AnimatedDefaultTextStyle(
               duration: duration,
               curve: Curves.easeOut,
-              style: WaUi.navLabel.copyWith(
-                color: item.selectedColor,
+              // Rebuild via AppFonts — copyWith(fontWeight) is a no-op with Google Fonts.
+              style: AppFonts.titleStyle(
                 fontSize: 12,
                 fontWeight:
-                    visuallySelected ? FontWeight.w700 : FontWeight.w500,
+                    visuallySelected ? FontWeight.w500 : FontWeight.w400,
+                color: item.selectedColor,
                 height: 1.1,
-              ),
+              ).copyWith(inherit: false),
               child: Text(
                 item.label,
                 maxLines: 1,

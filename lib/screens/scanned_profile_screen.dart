@@ -20,6 +20,8 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/widgets/profile_reviews_section.dart';
+import 'package:tapni_app/widgets/profile_apps_gallery_tabs.dart';
+import 'package:tapni_app/widgets/profile_empty_state.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 
@@ -834,11 +836,23 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                     ],
                   ),
                 const SizedBox(height: 20),
-                _buildLinkSection(profile, card),
-                const SizedBox(height: 24),
               ],
             ),
           ),
+          Builder(
+            builder: (context) {
+              final appsEmpty = _publicAppsEmpty(profile, card);
+              return ProfileAppsGalleryTabs(
+                appsEmpty: appsEmpty,
+                apps: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: _buildLinkSection(profile, card),
+                ),
+                gallery: profile.gallery,
+              );
+            },
+          ),
+          const SizedBox(height: 24),
           if ((profile.businessName ?? '').trim().isNotEmpty ||
               profile.reviewCount > 0 ||
               !isOwn)
@@ -852,6 +866,17 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         ],
       ),
     );
+  }
+
+  bool _publicAppsEmpty(UserProfile profile, UserCustomCard? card) {
+    var activeLinks = profile.socialLinks
+        .where((link) => link.isActive && link.isPublic)
+        .toList();
+    if (card != null && card.enabledLinkIds.isNotEmpty) {
+      final enabled = card.enabledLinkIds.toSet();
+      activeLinks = activeLinks.where((l) => enabled.contains(l.id)).toList();
+    }
+    return activeLinks.isEmpty;
   }
 
   Widget _buildProfileAvatar(
@@ -948,7 +973,11 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     }
 
     if (activeLinks.isEmpty) {
-      return const SizedBox.shrink();
+      return ProfileEmptyState(
+        icon: Icons.apps_outlined,
+        title: context.l10n.appsEmpty,
+        subtitle: context.l10n.appsEmptySubtitle,
+      );
     }
 
     return LayoutBuilder(

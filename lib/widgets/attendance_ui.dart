@@ -19,7 +19,7 @@ class AttendanceUi {
   static Color get buttonDark => WaUi.buttonDark;
 
   static TextStyle get pageTitle =>
-      WaUi.toolsTitle.copyWith(fontWeight: FontWeight.w500, fontSize: 22);
+      WaUi.toolsTitleOf(weight: FontWeight.w500, size: 22);
 
   static TextStyle get sectionTitle => WaUi.sectionHeader;
 
@@ -31,10 +31,10 @@ class AttendanceUi {
 
   static TextStyle get bodyMuted => WaUi.listSubtitle;
 
-  static TextStyle get statNumber => WaUi.toolsTitle.copyWith(
-        fontSize: 28,
+  static TextStyle get statNumber => WaUi.toolsTitleOf(
+        size: 28,
         height: 1.15,
-        fontWeight: FontWeight.w700,
+        weight: FontWeight.w700,
       );
 
   static TextStyle get statLabel => WaUi.label.copyWith(

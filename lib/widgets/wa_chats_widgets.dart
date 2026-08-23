@@ -28,7 +28,7 @@ class WaChatsHeader extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: WaUi.toolsTitle.copyWith(fontWeight: FontWeight.w500),
+                  style: WaUi.toolsTitle,
                 ),
                 if (subtitle != null) ...[
                   const SizedBox(height: 2),
@@ -655,13 +655,11 @@ class _EmptyIllustration extends StatelessWidget {
 class WaContactSpeedDial extends StatefulWidget {
   final VoidCallback onAdd;
   final VoidCallback onFind;
-  final VoidCallback? onImport;
 
   WaContactSpeedDial({
     super.key,
     required this.onAdd,
     required this.onFind,
-    this.onImport,
   });
 
   @override
@@ -691,14 +689,6 @@ class _WaContactSpeedDialState extends State<WaContactSpeedDial> {
             onTap: () => _run(widget.onFind),
           ),
           SizedBox(height: 14),
-          if (widget.onImport != null) ...[
-            _speedAction(
-              label: context.l10n.importContacts,
-              icon: Icons.file_upload_outlined,
-              onTap: () => _run(widget.onImport!),
-            ),
-            SizedBox(height: 14),
-          ],
           _speedAction(
             label: context.l10n.addContact,
             icon: Icons.person_add_outlined,

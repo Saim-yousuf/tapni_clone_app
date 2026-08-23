@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -80,8 +82,36 @@ class _ScanScreenState extends State<ScanScreen> {
 
   @override
   void dispose() {
-    _scannerController.dispose();
+    // Release the camera immediately so the OS status-bar indicator clears.
+    unawaited(_scannerController.dispose());
     super.dispose();
+  }
+
+  Future<void> _stopCamera() async {
+    try {
+      await _scannerController.stop();
+    } catch (_) {}
+    if (_flashOn && mounted) {
+      setState(() => _flashOn = false);
+    }
+  }
+
+  Future<void> _resumeCamera() async {
+    if (!mounted) return;
+    setState(() => _scanHandled = false);
+    try {
+      await _scannerController.start();
+    } catch (_) {}
+  }
+
+  Future<T?> _pushAndResumeCamera<T>(Widget page) async {
+    await _stopCamera();
+    if (!mounted) return null;
+    final result = await Navigator.of(context).push<T>(
+      MaterialPageRoute(builder: (_) => page),
+    );
+    await _resumeCamera();
+    return result;
   }
 
   void _onBarcodeDetect(BarcodeCapture capture) {
@@ -101,7 +131,7 @@ class _ScanScreenState extends State<ScanScreen> {
     if (!mounted) return;
 
     if (_selectedMode == ScanMode.eInvoice) {
-      _handleEInvoiceResult(value);
+      await _handleEInvoiceResult(value);
       return;
     }
 
@@ -109,33 +139,19 @@ class _ScanScreenState extends State<ScanScreen> {
     // otherwise show any QR content (website, Wi‑Fi, product, text…).
     final parsed = ProfileUrlValidator.parse(value);
     if (parsed != null) {
-      Navigator.of(context)
-          .push(
-            MaterialPageRoute(
-              builder: (_) => ScannedProfileScreen(
-                username: parsed.username,
-                cardId: parsed.cardId,
-              ),
-            ),
-          )
-          .then((_) {
-            if (mounted) setState(() => _scanHandled = false);
-          });
+      await _pushAndResumeCamera(
+        ScannedProfileScreen(
+          username: parsed.username,
+          cardId: parsed.cardId,
+        ),
+      );
       return;
     }
 
     // Optional: if content is a ZATCA invoice, open invoice screen.
     final invoice = ZatcaQrParser.parse(value);
     if (invoice != null && _selectedMode == ScanMode.qrCode) {
-      Navigator.of(context)
-          .push(
-            MaterialPageRoute(
-              builder: (_) => EInvoiceResultScreen(invoice: invoice),
-            ),
-          )
-          .then((_) {
-            if (mounted) setState(() => _scanHandled = false);
-          });
+      await _pushAndResumeCamera(EInvoiceResultScreen(invoice: invoice));
       return;
     }
 
@@ -144,30 +160,23 @@ class _ScanScreenState extends State<ScanScreen> {
     if (general.canLaunchExternally) {
       final uri = general.launchUri;
       if (uri != null) {
+        await _stopCamera();
         final opened = await launchUrl(
           uri,
           mode: LaunchMode.externalApplication,
         );
         if (opened) {
-          if (mounted) setState(() => _scanHandled = false);
+          await _resumeCamera();
           return;
         }
       }
     }
 
     if (!mounted) return;
-    Navigator.of(context)
-        .push(
-          MaterialPageRoute(
-            builder: (_) => GeneralQrResultScreen(rawValue: value),
-          ),
-        )
-        .then((_) {
-          if (mounted) setState(() => _scanHandled = false);
-        });
+    await _pushAndResumeCamera(GeneralQrResultScreen(rawValue: value));
   }
 
-  void _handleEInvoiceResult(String value) {
+  Future<void> _handleEInvoiceResult(String value) async {
     final invoice = ZatcaQrParser.parse(value);
     if (invoice == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -178,19 +187,11 @@ class _ScanScreenState extends State<ScanScreen> {
           behavior: SnackBarBehavior.floating,
         ),
       );
-      setState(() => _scanHandled = false);
+      if (mounted) setState(() => _scanHandled = false);
       return;
     }
 
-    Navigator.of(context)
-        .push(
-          MaterialPageRoute(
-            builder: (_) => EInvoiceResultScreen(invoice: invoice),
-          ),
-        )
-        .then((_) {
-          if (mounted) setState(() => _scanHandled = false);
-        });
+    await _pushAndResumeCamera(EInvoiceResultScreen(invoice: invoice));
   }
 
   Future<void> _pickFromGallery() async {

@@ -231,7 +231,13 @@ class _MainShellState extends State<MainShell> {
     final l10n = context.l10n;
     final navClearance = CurvedBottomNav.contentClearance(context);
 
-    return Scaffold(
+    return PopScope(
+      canPop: _onProfile,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop || _onProfile) return;
+        _goToProfile();
+      },
+      child: Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: WaUi.toolsScaffold,
       body: Stack(
@@ -296,6 +302,7 @@ class _MainShellState extends State<MainShell> {
           ),
         ],
       ),
+    ),
     );
   }
 }

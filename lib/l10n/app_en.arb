@@ -1627,5 +1627,34 @@
     }
   },
   "requestAccepted": "Request accepted",
-  "removeAccess": "Remove access"
+  "removeAccess": "Remove access",
+  "profileTabApps": "Apps",
+  "profileTabGallery": "Gallery",
+  "appsEmpty": "No apps yet",
+  "appsEmptySubtitle": "Links and apps will appear here when added.",
+  "galleryEmpty": "No photos yet",
+  "galleryEmptySubtitle": "Photos from this profile will show up here.",
+  "galleryEmptyOwner": "Add photos to show on your public profile",
+  "addToGallery": "Add photos",
+  "deletePhoto": "Delete photo",
+  "deletePhotoConfirm": "Remove this photo from your gallery?",
+  "photoAdded": "Photo added to gallery",
+  "photosAdded": "{count} photos added to gallery",
+  "@photosAdded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "couldNotAddPhotos": "Could not add photos",
+  "couldNotDeletePhoto": "Could not delete photo",
+  "galleryMaxReached": "Gallery can have up to {count} photos",
+  "@galleryMaxReached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

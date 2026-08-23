@@ -7194,6 +7194,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove access'**
   String get removeAccess;
+
+  /// No description provided for @profileTabApps.
+  ///
+  /// In en, this message translates to:
+  /// **'Apps'**
+  String get profileTabApps;
+
+  /// No description provided for @profileTabGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get profileTabGallery;
+
+  /// No description provided for @appsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No apps yet'**
+  String get appsEmpty;
+
+  /// No description provided for @appsEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Links and apps will appear here when added.'**
+  String get appsEmptySubtitle;
+
+  /// No description provided for @galleryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No photos yet'**
+  String get galleryEmpty;
+
+  /// No description provided for @galleryEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos from this profile will show up here.'**
+  String get galleryEmptySubtitle;
+
+  /// No description provided for @galleryEmptyOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photos to show on your public profile'**
+  String get galleryEmptyOwner;
+
+  /// No description provided for @addToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photos'**
+  String get addToGallery;
+
+  /// No description provided for @deletePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete photo'**
+  String get deletePhoto;
+
+  /// No description provided for @deletePhotoConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this photo from your gallery?'**
+  String get deletePhotoConfirm;
+
+  /// No description provided for @photoAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo added to gallery'**
+  String get photoAdded;
+
+  /// No description provided for @photosAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} photos added to gallery'**
+  String photosAdded(int count);
+
+  /// No description provided for @couldNotAddPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not add photos'**
+  String get couldNotAddPhotos;
+
+  /// No description provided for @couldNotDeletePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not delete photo'**
+  String get couldNotDeletePhoto;
+
+  /// No description provided for @galleryMaxReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery can have up to {count} photos'**
+  String galleryMaxReached(int count);
 }
 
 class _AppLocalizationsDelegate

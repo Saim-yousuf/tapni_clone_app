@@ -40,7 +40,11 @@ class CheckingPointsScreen extends StatelessWidget {
         "onTap": "social",
       },
       {"title": context.l10n.addIntroVoiceNote, "completed": false, "onTap": "voice"},
-      {"title": context.l10n.createGallery, "completed": false, "onTap": "gallery"},
+      {
+        "title": context.l10n.createGallery,
+        "completed": profile.gallery.isNotEmpty,
+        "onTap": "gallery",
+      },
       {
         "title": context.l10n.businessVerified,
         "completed": profile.isPro == true,
@@ -118,7 +122,14 @@ class CheckingPointsScreen extends StatelessWidget {
         break;
 
       case "gallery":
-        debugPrint("Open Gallery Creator");
+        final profileProvider = Provider.of<ProfileProvider>(
+          context,
+          listen: false,
+        );
+        profileProvider.setProfileContentTab(1);
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
+        );
         break;
 
       case "pro":

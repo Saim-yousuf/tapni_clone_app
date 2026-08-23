@@ -156,8 +156,8 @@ class _InAppDocumentScreenState extends State<InAppDocumentScreen> {
         appBar: AppBar(
           title: Text(
             widget.title,
-            style: WaUi.toolsTitle.copyWith(
-              fontWeight: FontWeight.w600,
+            style: WaUi.toolsTitleOf(
+              weight: FontWeight.w600,
               color: fg,
             ),
           ),

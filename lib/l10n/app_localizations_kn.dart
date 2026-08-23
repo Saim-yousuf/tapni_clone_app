@@ -3801,4 +3801,54 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get removeAccess => 'Remove access';
+
+  @override
+  String get profileTabApps => 'Apps';
+
+  @override
+  String get profileTabGallery => 'Gallery';
+
+  @override
+  String get appsEmpty => 'No apps yet';
+
+  @override
+  String get appsEmptySubtitle => 'Links and apps will appear here when added.';
+
+  @override
+  String get galleryEmpty => 'No photos yet';
+
+  @override
+  String get galleryEmptySubtitle =>
+      'Photos from this profile will show up here.';
+
+  @override
+  String get galleryEmptyOwner => 'Add photos to show on your public profile';
+
+  @override
+  String get addToGallery => 'Add photos';
+
+  @override
+  String get deletePhoto => 'Delete photo';
+
+  @override
+  String get deletePhotoConfirm => 'Remove this photo from your gallery?';
+
+  @override
+  String get photoAdded => 'Photo added to gallery';
+
+  @override
+  String photosAdded(int count) {
+    return '$count photos added to gallery';
+  }
+
+  @override
+  String get couldNotAddPhotos => 'Could not add photos';
+
+  @override
+  String get couldNotDeletePhoto => 'Could not delete photo';
+
+  @override
+  String galleryMaxReached(int count) {
+    return 'Gallery can have up to $count photos';
+  }
 }

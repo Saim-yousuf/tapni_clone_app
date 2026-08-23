@@ -77,6 +77,9 @@ class _AuthApi {
   }
 
   String get links => "${Api.baseUrl}/api/user/auth/profile/links";
+  String get gallery => "${Api.baseUrl}/api/user/auth/gallery";
+  String galleryItem(String id) =>
+      "${Api.baseUrl}/api/user/auth/gallery/${Uri.encodeComponent(id)}";
   String get linkCatalog => "${Api.baseUrl}/api/user/auth/link-catalog";
   String get analytics => "${Api.baseUrl}/api/user/auth/analytics";
   String get saveFcmToken => "${Api.baseUrl}/api/user/auth/fcm-token";

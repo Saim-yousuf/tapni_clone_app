@@ -1,4 +1,5 @@
 import 'package:tapni_app/models/business_card_design.dart';
+import 'package:tapni_app/models/gallery_item.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/user_custom_card.dart';
 
@@ -38,6 +39,7 @@ class UserProfile {
   final BusinessCardDesign? cardPrintDesign;
   final bool canView;
   final String followStatus;
+  final List<GalleryItem> gallery;
 
   UserProfile({
     this.id,
@@ -72,6 +74,7 @@ class UserProfile {
     this.cardPrintDesign,
     this.canView = true,
     this.followStatus = 'none',
+    this.gallery = const [],
   });
 
   factory UserProfile.fromApiJson(Map<String, dynamic> json) {
@@ -120,6 +123,7 @@ class UserProfile {
               Map<String, dynamic>.from(printDesignJson),
             )
           : null,
+      gallery: GalleryItem.listFrom(json['gallery']),
     );
   }
 
@@ -178,6 +182,7 @@ class UserProfile {
     bool clearCardPrintDesign = false,
     bool? canView,
     String? followStatus,
+    List<GalleryItem>? gallery,
     bool clearLatitude = false,
     bool clearLongitude = false,
   }) {
@@ -216,6 +221,7 @@ class UserProfile {
           : (cardPrintDesign ?? this.cardPrintDesign),
       canView: canView ?? this.canView,
       followStatus: followStatus ?? this.followStatus,
+      gallery: gallery ?? this.gallery,
     );
   }
 }

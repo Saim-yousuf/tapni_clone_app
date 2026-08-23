@@ -8,7 +8,6 @@ import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/screens/invitations/invitations_home_screen.dart';
 import 'package:tapni_app/screens/contacts_search_screen.dart';
-import 'package:tapni_app/screens/contacts_sync_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
@@ -74,15 +73,6 @@ class _LeadsScreenState extends State<LeadsScreen> {
     );
   }
 
-  Future<void> _openImportContacts() async {
-    _dismissKeyboard();
-    final synced = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(builder: (_) => const ContactsSyncScreen()),
-    );
-    if (!mounted || synced != true) return;
-    await _refreshContacts();
-  }
-
   @override
   Widget build(BuildContext context) {
     final leadsProvider = Provider.of<LeadsProvider>(context);
@@ -96,7 +86,6 @@ class _LeadsScreenState extends State<LeadsScreen> {
         child: WaContactSpeedDial(
           onAdd: () => _showAddLeadSheet(context, leadsProvider),
           onFind: _openFindUser,
-          onImport: _openImportContacts,
         ),
       ),
       body: GestureDetector(
@@ -145,11 +134,6 @@ class _LeadsScreenState extends State<LeadsScreen> {
                       PopupMenuItem(
                         value: 'categories',
                         child: Text(context.l10n.manageCategories,
-                            style: WaUi.body),
-                      ),
-                      PopupMenuItem(
-                        value: 'import',
-                        child: Text(context.l10n.importContacts,
                             style: WaUi.body),
                       ),
                     ],
@@ -268,9 +252,6 @@ class _LeadsScreenState extends State<LeadsScreen> {
         break;
       case 'categories':
         _showCategoriesSheet(context, provider);
-        break;
-      case 'import':
-        _openImportContacts();
         break;
     }
   }

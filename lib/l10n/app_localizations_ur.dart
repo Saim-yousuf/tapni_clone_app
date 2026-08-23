@@ -3785,4 +3785,55 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get removeAccess => 'رسائی ہٹائیں';
+
+  @override
+  String get profileTabApps => 'ایپس';
+
+  @override
+  String get profileTabGallery => 'گیلری';
+
+  @override
+  String get appsEmpty => 'ابھی کوئی ایپ نہیں';
+
+  @override
+  String get appsEmptySubtitle =>
+      'لنکس اور ایپس شامل ہونے پر یہاں نظر آئیں گی۔';
+
+  @override
+  String get galleryEmpty => 'ابھی کوئی تصویر نہیں';
+
+  @override
+  String get galleryEmptySubtitle => 'اس پروفائل کی تصاویر یہاں دکھائی دیں گی۔';
+
+  @override
+  String get galleryEmptyOwner =>
+      'اپنی پبلک پروفائل پر دکھانے کے لیے تصاویر شامل کریں';
+
+  @override
+  String get addToGallery => 'تصاویر شامل کریں';
+
+  @override
+  String get deletePhoto => 'تصویر حذف کریں';
+
+  @override
+  String get deletePhotoConfirm => 'کیا آپ یہ تصویر گیلری سے ہٹانا چاہتے ہیں؟';
+
+  @override
+  String get photoAdded => 'تصویر گیلری میں شامل ہو گئی';
+
+  @override
+  String photosAdded(int count) {
+    return '$count تصاویر گیلری میں شامل ہو گئیں';
+  }
+
+  @override
+  String get couldNotAddPhotos => 'تصاویر شامل نہیں ہو سکیں';
+
+  @override
+  String get couldNotDeletePhoto => 'تصویر حذف نہیں ہو سکی';
+
+  @override
+  String galleryMaxReached(int count) {
+    return 'گیلری میں زیادہ سے زیادہ $count تصاویر ہو سکتی ہیں';
+  }
 }

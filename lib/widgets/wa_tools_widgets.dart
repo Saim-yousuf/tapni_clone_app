@@ -20,7 +20,7 @@ class WaToolsHeader extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: WaUi.toolsTitle.copyWith(fontWeight: FontWeight.w500),
+              style: WaUi.toolsTitle,
             ),
           ),
           if (actions != null) ...actions!,

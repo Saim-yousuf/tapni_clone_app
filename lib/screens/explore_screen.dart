@@ -229,45 +229,38 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
+
   Widget _buildHeader() {
     final searching = _searchController.text.isNotEmpty;
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.fromLTRB(16, 8, 10, 14),
+      color: Colors.white,
+      padding: const EdgeInsets.fromLTRB(20, 6, 12, 16),
       child: Column(
         children: [
           Row(
             children: [
-              InkWell(
-                onTap: _bootstrap,
-                borderRadius: BorderRadius.circular(14),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: WaUi.chipBg,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: const Icon(
-                    Icons.location_on_rounded,
-                    color: WaUi.navGreen,
-                    size: 22,
+              Material(
+                color: const Color(0xFFE8F7EF),
+                shape: const CircleBorder(),
+                child: InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: _bootstrap,
+                  child: const SizedBox(
+                    width: 42,
+                    height: 42,
+                    child: Icon(
+                      Icons.location_on_rounded,
+                      color: WaUi.navGreen,
+                      size: 22,
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Expanded(
                 child: InkWell(
                   onTap: _bootstrap,
+                  borderRadius: BorderRadius.circular(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -277,16 +270,21 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         overflow: TextOverflow.ellipsis,
                         style: WaUi.bodyMedium.copyWith(
                           fontWeight: FontWeight.w700,
+                          fontSize: 15,
                           height: 1.25,
+                          color: WaUi.primaryText,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         'Tap to refresh location',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: WaUi.label.copyWith(
                           color: WaUi.secondaryText,
-                          fontSize: 11,
+                          fontSize: 11.5,
                           height: 1.2,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -322,7 +320,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       isLabelVisible: cart.hasItems,
                       backgroundColor: WaUi.navGreen,
                       label: Text('${cart.itemCount}'),
-                      child: const Icon(Icons.shopping_bag_outlined),
+                      child: const Icon(Icons.shopping_bag_outlined, size: 24),
                     );
                   },
                 ),
@@ -336,65 +334,70 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                   );
                 },
-                icon: const Icon(Icons.notifications_none_rounded),
+                icon: const Icon(Icons.notifications_none_rounded, size: 26),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _searchController,
-            textInputAction: TextInputAction.search,
-            onChanged: (_) => setState(() {}),
-            onSubmitted: (_) {
-              if (_lat == null) _load();
-            },
-            decoration: InputDecoration(
-              hintText: 'Search items, services, offers...',
-              hintStyle: WaUi.body.copyWith(
-                color: const Color(0xFF8B97A0),
-                fontSize: 14,
-              ),
-              prefixIcon: const Icon(
-                Icons.search_rounded,
-                color: Color(0xFF8B97A0),
-              ),
-              suffixIcon: searching
-                  ? IconButton(
-                      tooltip: 'Clear',
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() {});
-                      },
-                      icon: const Icon(
-                        Icons.close_rounded,
-                        size: 18,
-                        color: Color(0xFF8B97A0),
-                      ),
-                    )
-                  : null,
-              filled: true,
-              fillColor: const Color(0xFFF0F2F5),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 4,
-                vertical: 14,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Color(0xFFD7DCE1)),
+          const SizedBox(height: 14),
+          Material(
+            color: const Color(0xFFF3F4F6),
+            borderRadius: BorderRadius.circular(28),
+            child: TextField(
+              controller: _searchController,
+              textInputAction: TextInputAction.search,
+              onChanged: (_) => setState(() {}),
+              onSubmitted: (_) {
+                if (_lat == null) _load();
+              },
+              style: WaUi.body.copyWith(fontSize: 15, height: 1.25),
+              decoration: InputDecoration(
+                hintText: 'Search items, services, offers...',
+                hintStyle: WaUi.body.copyWith(
+                  color: const Color(0xFF9AA3AB),
+                  fontSize: 14.5,
+                ),
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.only(left: 6),
+                  child: Icon(
+                    Icons.search_rounded,
+                    color: Color(0xFF9AA3AB),
+                    size: 22,
+                  ),
+                ),
+                prefixIconConstraints: const BoxConstraints(
+                  minWidth: 44,
+                  minHeight: 48,
+                ),
+                suffixIcon: searching
+                    ? IconButton(
+                        tooltip: 'Clear',
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {});
+                        },
+                        icon: const Icon(
+                          Icons.close_rounded,
+                          size: 18,
+                          color: Color(0xFF9AA3AB),
+                        ),
+                      )
+                    : null,
+                filled: true,
+                fillColor: Colors.transparent,
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 14,
+                ),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           SizedBox(
-            height: 38,
+            height: 40,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
@@ -435,17 +438,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
     if (_error != null) {
       return ListView(
         physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           const SizedBox(height: 88),
           const Icon(Icons.wifi_off_outlined, size: 48, color: WaUi.secondaryText),
           const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
-              _error!,
-              textAlign: TextAlign.center,
-              style: WaUi.body.copyWith(color: WaUi.secondaryText),
-            ),
+          Text(
+            _error!,
+            textAlign: TextAlign.center,
+            style: WaUi.body.copyWith(color: WaUi.secondaryText),
           ),
           Center(
             child: TextButton(
@@ -471,6 +472,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     if (isEmpty) {
       return ListView(
         physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           const SizedBox(height: 88),
           Center(
@@ -478,7 +480,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               width: 72,
               height: 72,
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFFF5F6F8),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -495,13 +497,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
             style: WaUi.headline.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 36),
-            child: Text(
-              'Offers, items, services and businesses will appear when nearby PRO profiles complete their Business Profile.',
-              textAlign: TextAlign.center,
-              style: WaUi.body.copyWith(color: WaUi.secondaryText, height: 1.4),
-            ),
+          Text(
+            'Offers, items, services and businesses will appear when nearby PRO profiles complete their Business Profile.',
+            textAlign: TextAlign.center,
+            style: WaUi.body.copyWith(color: WaUi.secondaryText, height: 1.4),
           ),
           const SizedBox(height: 8),
           Center(
@@ -523,10 +522,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(bottom: 32),
+      padding: const EdgeInsets.only(bottom: 24),
       children: [
         if (offers.isNotEmpty) ...[
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           _sectionHeader(
             title: 'Reward offers',
             onViewAll: offers.length > 1
@@ -536,14 +535,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     )
                 : null,
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           SizedBox(
             height: _RewardOfferCard.listHeight,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.fromLTRB(20, 2, 20, 6),
               itemCount: offers.length.clamp(0, 8),
-              separatorBuilder: (_, _) => const SizedBox(width: 12),
+              separatorBuilder: (_, _) => const SizedBox(width: 14),
               itemBuilder: (context, index) {
                 return _RewardOfferCard(
                   offer: offers[index],
@@ -554,7 +553,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
         ],
         if (products.isNotEmpty) ...[
-          const SizedBox(height: 26),
+          const SizedBox(height: 28),
           _sectionHeader(
             title: 'Items',
             onViewAll: () => _openSeeAll(
@@ -562,14 +561,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
               items: products,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           SizedBox(
             height: _ProductCard.cardHeight,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               itemCount: products.length.clamp(0, 10),
-              separatorBuilder: (_, _) => const SizedBox(width: 12),
+              separatorBuilder: (_, _) => const SizedBox(width: 14),
               itemBuilder: (context, index) {
                 return _ProductCard(
                   item: products[index],
@@ -580,7 +579,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
         ],
         if (services.isNotEmpty) ...[
-          const SizedBox(height: 26),
+          const SizedBox(height: 28),
           _sectionHeader(
             title: 'Services',
             onViewAll: () => _openSeeAll(
@@ -588,9 +587,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
               items: services,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: services
                   .take(5)
@@ -608,7 +607,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
         ],
         if (businesses.isNotEmpty) ...[
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           _sectionHeader(
             title: 'Businesses nearby',
             onViewAll: () => _openSeeAll(
@@ -616,9 +615,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
               businesses: businesses,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: businesses
                   .take(8)
@@ -644,7 +643,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     VoidCallback? onViewAll,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
           Expanded(
@@ -652,7 +651,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
               title,
               style: WaUi.sectionHeader.copyWith(
                 fontWeight: FontWeight.w800,
-                fontSize: 18,
+                fontSize: 20,
+                height: 1.2,
+                letterSpacing: -0.3,
+                color: WaUi.primaryText,
               ),
             ),
           ),
@@ -661,7 +663,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               onPressed: onViewAll,
               style: TextButton.styleFrom(
                 foregroundColor: WaUi.navGreen,
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
@@ -670,7 +672,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 style: WaUi.label.copyWith(
                   color: WaUi.navGreen,
                   fontWeight: FontWeight.w700,
-                  fontSize: 13,
+                  fontSize: 13.5,
                 ),
               ),
             ),
@@ -697,6 +699,8 @@ class _HeaderIconButton extends StatelessWidget {
       tooltip: tooltip,
       onPressed: onPressed,
       visualDensity: VisualDensity.compact,
+      padding: const EdgeInsets.all(8),
+      constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
       icon: icon,
     );
   }
@@ -718,25 +722,29 @@ class _CategoryChip extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: Material(
-        color: selected ? Colors.black : const Color(0xFFF4F6F8),
+        color: selected ? Colors.black : const Color(0xFFF7F8FA),
         borderRadius: BorderRadius.circular(22),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(22),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(22),
               border: Border.all(
-                color: selected ? Colors.black : const Color(0xFFE6E9ED),
+                color: selected ? Colors.black : const Color(0xFFE5E8EC),
               ),
             ),
             child: Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: WaUi.label.copyWith(
                 color: selected ? Colors.white : WaUi.primaryText,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 fontSize: 13,
+                height: 1.1,
               ),
             ),
           ),
@@ -747,10 +755,10 @@ class _CategoryChip extends StatelessWidget {
 }
 
 class _RewardOfferCard extends StatelessWidget {
-  static const double cardWidth = 164;
-  static const double previewRatio = 0.65;
+  static const double cardWidth = 176;
+  static const double previewRatio = 0.68;
   static double get previewHeight => cardWidth / previewRatio;
-  static double get listHeight => previewHeight + 34;
+  static double get listHeight => previewHeight + 36;
 
   final ExploreOffer offer;
   final VoidCallback onTap;
@@ -767,7 +775,7 @@ class _RewardOfferCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(22),
         child: SizedBox(
           width: cardWidth,
           child: Column(
@@ -778,17 +786,17 @@ class _RewardOfferCard extends StatelessWidget {
                 width: cardWidth,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(22),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.10),
-                        blurRadius: 14,
-                        offset: const Offset(0, 5),
+                        color: Colors.black.withValues(alpha: 0.08),
+                        blurRadius: 16,
+                        offset: const Offset(0, 6),
                       ),
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(22),
                     child: offer.hasDesign
                         ? ColoredBox(
                             color: Colors.white,
@@ -810,15 +818,15 @@ class _RewardOfferCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               Text(
                 offer.businessName,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: WaUi.label.copyWith(
-                  color: const Color(0xFF54656F),
+                  color: const Color(0xFF667781),
                   fontWeight: FontWeight.w600,
-                  fontSize: 12,
+                  fontSize: 12.5,
                 ),
               ),
             ],
@@ -840,7 +848,7 @@ class _ClassicRewardPreview extends StatelessWidget {
     return ColoredBox(
       color: theme.cardBackgroundColor,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -852,16 +860,17 @@ class _ClassicRewardPreview extends StatelessWidget {
                 style: TextStyle(
                   color: theme.cardTextColor.withValues(alpha: 0.65),
                   fontSize: 10,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
             Text(
               program.title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: theme.cardTextColor,
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: FontWeight.w700,
                 height: 1.25,
               ),
@@ -877,7 +886,7 @@ class _ClassicRewardPreview extends StatelessWidget {
                   theme: theme,
                   stampIconUrl: program.stampIcon,
                   unstampIconUrl: program.unstampIcon,
-                  size: 22,
+                  size: 24,
                 ),
               ),
             ),
@@ -889,9 +898,9 @@ class _ClassicRewardPreview extends StatelessWidget {
 }
 
 class _ProductCard extends StatelessWidget {
-  static const double cardHeight = 242;
-  static const double cardWidth = 164;
-  static const double imageHeight = 128;
+  static const double cardHeight = 252;
+  static const double cardWidth = 168;
+  static const double imageHeight = 138;
 
   final ExploreItem item;
   final VoidCallback onTap;
@@ -902,17 +911,24 @@ class _ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
         child: Ink(
           width: cardWidth,
           height: cardHeight,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(color: const Color(0xFFE8EAED)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -926,16 +942,16 @@ class _ProductCard extends StatelessWidget {
                     _exploreImage(item.image, Icons.lunch_dining_outlined),
                     if (item.avgRating > 0)
                       Positioned(
-                        top: 8,
-                        left: 8,
+                        top: 10,
+                        left: 10,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 7,
+                            horizontal: 8,
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.95),
-                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white.withValues(alpha: 0.96),
+                            borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.08),
@@ -969,7 +985,7 @@ class _ProductCard extends StatelessWidget {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(11, 10, 11, 10),
+                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -979,8 +995,9 @@ class _ProductCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: WaUi.bodyMedium.copyWith(
                           fontWeight: FontWeight.w800,
-                          fontSize: 14,
+                          fontSize: 14.5,
                           height: 1.2,
+                          color: WaUi.primaryText,
                         ),
                       ),
                       const SizedBox(height: 3),
@@ -996,7 +1013,6 @@ class _ProductCard extends StatelessWidget {
                       ),
                       const Spacer(),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
                             child: Text(
@@ -1008,14 +1024,14 @@ class _ProductCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: WaUi.bodyMedium.copyWith(
                                 fontWeight: FontWeight.w800,
-                                fontSize: 14,
+                                fontSize: 15,
                               ),
                             ),
                           ),
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 8),
                           Container(
-                            width: 28,
-                            height: 28,
+                            width: 32,
+                            height: 32,
                             decoration: const BoxDecoration(
                               color: Colors.black,
                               shape: BoxShape.circle,
@@ -1023,7 +1039,7 @@ class _ProductCard extends StatelessWidget {
                             child: const Icon(
                               Icons.arrow_forward_rounded,
                               color: Colors.white,
-                              size: 15,
+                              size: 16,
                             ),
                           ),
                         ],
@@ -1050,34 +1066,44 @@ class _ServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
         child: Ink(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(color: const Color(0xFFE8EAED)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.03),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
                 child: SizedBox(
-                  width: 92,
-                  height: 92,
+                  width: 96,
+                  height: 96,
                   child: _exploreImage(item.image, Icons.content_cut_rounded),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                child: SizedBox(
+                  height: 96,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             child: Text(
@@ -1086,14 +1112,16 @@ class _ServiceCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: WaUi.bodyMedium.copyWith(
                                 fontWeight: FontWeight.w800,
-                                fontSize: 15,
+                                fontSize: 15.5,
+                                color: WaUi.primaryText,
                               ),
                             ),
                           ),
                           if (item.avgRating > 0) ...[
+                            const SizedBox(width: 6),
                             const Icon(
                               Icons.star_rounded,
-                              size: 14,
+                              size: 15,
                               color: Color(0xFFF5A623),
                             ),
                             const SizedBox(width: 2),
@@ -1101,29 +1129,31 @@ class _ServiceCard extends StatelessWidget {
                               item.avgRating.toStringAsFixed(1),
                               style: WaUi.label.copyWith(
                                 fontWeight: FontWeight.w700,
+                                fontSize: 12.5,
                                 color: WaUi.primaryText,
                               ),
                             ),
                           ],
                         ],
                       ),
-                      const SizedBox(height: 3),
+                      const SizedBox(height: 4),
                       Text(
                         item.businessName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: WaUi.label.copyWith(
                           color: const Color(0xFF667781),
-                          fontSize: 12,
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       if (item.businessAddress.isNotEmpty) ...[
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 4),
                         Row(
                           children: [
                             const Icon(
                               Icons.location_on_outlined,
-                              size: 13,
+                              size: 14,
                               color: Color(0xFF8B97A0),
                             ),
                             const SizedBox(width: 3),
@@ -1134,52 +1164,29 @@ class _ServiceCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: WaUi.label.copyWith(
                                   color: const Color(0xFF8B97A0),
-                                  fontSize: 11,
+                                  fontSize: 11.5,
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ],
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              _ExploreScreenState._priceLabel(
-                                item.price,
-                                fallback: 'Book',
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: WaUi.bodyMedium.copyWith(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 7,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Text(
-                              'Details',
-                              style: WaUi.label.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ],
+                      const Spacer(),
+                      Text(
+                        _ExploreScreenState._priceLabel(
+                          item.price,
+                          fallback: 'Book',
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: WaUi.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14.5,
+                        ),
                       ),
                     ],
                   ),
+                ),
               ),
             ],
           ),
@@ -1206,15 +1213,22 @@ class _BusinessCard extends StatelessWidget {
 
     return Material(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
         child: Ink(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(color: const Color(0xFFE8EAED)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.03),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1224,7 +1238,7 @@ class _BusinessCard extends StatelessWidget {
                 child: _exploreImage(photo, Icons.storefront_outlined),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1234,6 +1248,7 @@ class _BusinessCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: WaUi.bodyMedium.copyWith(
                         fontWeight: FontWeight.w800,
+                        fontSize: 15.5,
                       ),
                     ),
                     const SizedBox(height: 4),

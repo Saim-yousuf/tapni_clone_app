@@ -22,6 +22,9 @@ import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
+import 'package:tapni_app/widgets/profile_apps_gallery_tabs.dart';
+import 'package:tapni_app/widgets/profile_empty_state.dart';
+import 'package:tapni_app/models/gallery_item.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class ProfileScreen extends StatefulWidget {
@@ -210,6 +213,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Future<void> _addGalleryPhotos(ProfileProvider profileProvider) async {
+    if (profileProvider.isGalleryUploading) return;
+    if (profileProvider.profile.gallery.length >=
+        ProfileProvider.galleryMaxItems) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.l10n.galleryMaxReached(ProfileProvider.galleryMaxItems),
+          ),
+        ),
+      );
+      return;
+    }
+
+    final picked = await pickMultiFile();
+    if (picked == null || picked.files.isEmpty || !mounted) return;
+
+    final remaining =
+        ProfileProvider.galleryMaxItems - profileProvider.profile.gallery.length;
+    final files = picked.files.take(remaining).toList();
+    final res = await profileProvider.addGalleryPhotos(files);
+    if (!mounted) return;
+
+    final added = res.data is Map ? res.data['added'] as int? : null;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          res.success
+              ? (added != null && added > 1
+                    ? context.l10n.photosAdded(added)
+                    : context.l10n.photoAdded)
+              : (res.message ?? context.l10n.couldNotAddPhotos),
+        ),
+      ),
+    );
+  }
+
+  Future<bool> _deleteGalleryPhoto(
+    ProfileProvider profileProvider,
+    GalleryItem item,
+  ) async {
+    final res = await profileProvider.deleteGalleryItem(item.id);
+    return res.success;
+  }
+
   Widget _buildViewMode(ProfileProvider profileProvider, UserProfile profile) {
     final theme = Theme.of(context);
     final activeCard = profileProvider.activeCardDisplay;
@@ -225,21 +273,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
           _buildProfileAvatar(profile),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-            child: Column(
-              children: [
-            VerifiedName(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: VerifiedName(
               name: profile.name,
               verified: profile.isPro,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
-            SizedBox(height: 30),
-            _buildLinkSection(
-              profile,
-              isEditable: false,
-              profileProvider: profileProvider,
+          ),
+          const SizedBox(height: 20),
+          ProfileAppsGalleryTabs(
+            initialTab: profileProvider.profileContentTab,
+            appsEmpty: profile.socialLinks.where((l) => l.isActive).isEmpty,
+            onTabChanged: profileProvider.setProfileContentTab,
+            apps: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: _buildLinkSection(
+                profile,
+                isEditable: false,
+                profileProvider: profileProvider,
+              ),
             ),
-            SizedBox(height: 50),
+            gallery: profile.gallery,
+            isOwner: true,
+            uploading: profileProvider.isGalleryUploading,
+            onAddPhotos: () => _addGalleryPhotos(profileProvider),
+            onDeletePhoto: (item) => _deleteGalleryPhoto(profileProvider, item),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 10),
+            child: Column(
+              children: [
             SizedBox(
               width: double.infinity,
               height: 62,
@@ -764,6 +827,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         // Keep original ~130 look; only shrink if needed to fit 3 per row
         final iconSize = cellWidth > 130 ? 130.0 : cellWidth;
         final radius = 24.0 * (iconSize / 130.0);
+
+        if (activeLinks.isEmpty && !isEditable) {
+          return ProfileEmptyState(
+            icon: Icons.apps_outlined,
+            title: context.l10n.appsEmpty,
+            subtitle: context.l10n.appsEmptySubtitle,
+          );
+        }
 
         return Wrap(
           spacing: spacing,

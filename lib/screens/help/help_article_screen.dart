@@ -20,10 +20,7 @@ class HelpArticleScreen extends StatelessWidget {
         titleSpacing: 0,
         title: Text(
           'Help Center',
-          style: WaUi.toolsTitle.copyWith(
-            fontWeight: FontWeight.w500,
-            fontSize: 22,
-          ),
+          style: WaUi.toolsTitleOf(weight: FontWeight.w500, size: 22),
         ),
       ),
       body: ListView(

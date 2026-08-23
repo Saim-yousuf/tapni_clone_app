@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/models/gallery_item.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/business_card_design.dart';
 import 'package:tapni_app/models/social_link.dart';
@@ -28,9 +29,19 @@ class ProfileProvider extends ChangeNotifier {
 
   bool _isEditingProfile = false;
   bool get isEditingProfile => _isEditingProfile;
+  int _profileContentTab = 0;
+  int get profileContentTab => _profileContentTab;
+  bool _isGalleryUploading = false;
+  bool get isGalleryUploading => _isGalleryUploading;
+  static const galleryMaxItems = 50;
 
   void setEditingProfile(bool val) {
     _isEditingProfile = val;
+    notifyListeners();
+  }
+
+  void setProfileContentTab(int index) {
+    _profileContentTab = index.clamp(0, 1);
     notifyListeners();
   }
 
@@ -1036,6 +1047,92 @@ class ProfileProvider extends ChangeNotifier {
     } catch (_) {}
   }
 
+  List<GalleryItem> _galleryFromResponse(dynamic data) {
+    if (data is Map) {
+      return GalleryItem.listFrom(data['gallery']);
+    }
+    return GalleryItem.listFrom(data);
+  }
+
+  Future<ApiResponse> addGalleryPhotos(List<File> files) async {
+    if (files.isEmpty) {
+      return ApiResponse(success: false, statusCode: 0, message: 'No photos selected');
+    }
+
+    final remaining = galleryMaxItems - _profile.gallery.length;
+    if (remaining <= 0) {
+      return ApiResponse(
+        success: false,
+        statusCode: 400,
+        message: 'Gallery can have up to $galleryMaxItems photos',
+      );
+    }
+
+    _isGalleryUploading = true;
+    notifyListeners();
+
+    var added = 0;
+    String? lastError;
+    final toUpload = files.take(remaining).toList();
+
+    try {
+      final repo = AuthRepo();
+      for (final file in toUpload) {
+        final image = await fileToCompressedDataUri(file);
+        final res = await repo.addGalleryItem(image: image);
+        if (res.success) {
+          added++;
+          final gallery = _galleryFromResponse(res.data);
+          if (gallery.isNotEmpty) {
+            _profile = _profile.copyWith(gallery: gallery);
+          }
+        } else {
+          lastError = res.message;
+        }
+      }
+      profileScore();
+    } finally {
+      _isGalleryUploading = false;
+      notifyListeners();
+    }
+
+    if (added == 0) {
+      return ApiResponse(
+        success: false,
+        statusCode: 400,
+        message: lastError ?? 'Could not add photos',
+      );
+    }
+
+    return ApiResponse(
+      success: true,
+      statusCode: 201,
+      message: added == 1 ? 'Photo added' : '$added photos added',
+      data: {'added': added},
+    );
+  }
+
+  Future<ApiResponse> deleteGalleryItem(String itemId) async {
+    if (itemId.isEmpty) {
+      return ApiResponse(success: false, statusCode: 0, message: 'Photo not found');
+    }
+
+    final res = await AuthRepo().deleteGalleryItem(itemId: itemId);
+    if (res.success) {
+      final gallery = _galleryFromResponse(res.data);
+      final hasGalleryKey =
+          res.data is Map && (res.data as Map).containsKey('gallery');
+      _profile = _profile.copyWith(
+        gallery: hasGalleryKey
+            ? gallery
+            : _profile.gallery.where((item) => item.id != itemId).toList(),
+      );
+      profileScore();
+      notifyListeners();
+    }
+    return res;
+  }
+
   void incrementViews() {
     _profile = _profile.copyWith(viewsCount: _profile.viewsCount + 1);
     notifyListeners();
@@ -1048,7 +1145,7 @@ class ProfileProvider extends ChangeNotifier {
 
   double score = 0;
 
-  static const _scoreItemWeight = 100 / 6;
+  static const _scoreItemWeight = 100 / 7;
 
   void profileScore() {
     double newScore = 0;
@@ -1057,6 +1154,7 @@ class ProfileProvider extends ChangeNotifier {
     if (profile.profilePhotoUrl?.isNotEmpty ?? false) newScore += _scoreItemWeight;
     if (profile.coverPhotoUrl?.isNotEmpty ?? false) newScore += _scoreItemWeight;
     if (profile.socialLinks.length >= 3) newScore += _scoreItemWeight;
+    if (profile.gallery.isNotEmpty) newScore += _scoreItemWeight;
     if (profile.isPro == true) newScore += _scoreItemWeight;
     score = newScore.clamp(0, 100);
     notifyListeners();

@@ -890,5 +890,34 @@
     }
   },
   "requestAccepted": "درخواست قبول ہو گئی",
-  "removeAccess": "رسائی ہٹائیں"
+  "removeAccess": "رسائی ہٹائیں",
+  "profileTabApps": "ایپس",
+  "profileTabGallery": "گیلری",
+  "appsEmpty": "ابھی کوئی ایپ نہیں",
+  "appsEmptySubtitle": "لنکس اور ایپس شامل ہونے پر یہاں نظر آئیں گی۔",
+  "galleryEmpty": "ابھی کوئی تصویر نہیں",
+  "galleryEmptySubtitle": "اس پروفائل کی تصاویر یہاں دکھائی دیں گی۔",
+  "galleryEmptyOwner": "اپنی پبلک پروفائل پر دکھانے کے لیے تصاویر شامل کریں",
+  "addToGallery": "تصاویر شامل کریں",
+  "deletePhoto": "تصویر حذف کریں",
+  "deletePhotoConfirm": "کیا آپ یہ تصویر گیلری سے ہٹانا چاہتے ہیں؟",
+  "photoAdded": "تصویر گیلری میں شامل ہو گئی",
+  "photosAdded": "{count} تصاویر گیلری میں شامل ہو گئیں",
+  "@photosAdded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "couldNotAddPhotos": "تصاویر شامل نہیں ہو سکیں",
+  "couldNotDeletePhoto": "تصویر حذف نہیں ہو سکی",
+  "galleryMaxReached": "گیلری میں زیادہ سے زیادہ {count} تصاویر ہو سکتی ہیں",
+  "@galleryMaxReached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

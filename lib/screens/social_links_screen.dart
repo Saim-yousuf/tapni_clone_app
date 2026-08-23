@@ -30,8 +30,9 @@ class SocialLinksScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           context.l10n.links,
-          style: WaUi.toolsTitle.copyWith(fontWeight: FontWeight.w500),
+          style: WaUi.toolsTitle,
         ),
+        titleTextStyle: WaUi.toolsTitle,
         centerTitle: false,
         titleSpacing: 16,
         automaticallyImplyLeading: !isTab,
