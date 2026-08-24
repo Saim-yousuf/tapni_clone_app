@@ -243,3 +243,76 @@ class ExploreNearbyResult {
     required this.hasMore,
   });
 }
+
+class ExploreBanner {
+  final String id;
+  final String tag;
+  final String title;
+  final String subtitle;
+  final String buttonText;
+  final String image;
+  final String gradientStart;
+  final String gradientEnd;
+  final String actionType;
+  final String actionUrl;
+  final int sortOrder;
+
+  const ExploreBanner({
+    required this.id,
+    this.tag = '',
+    this.title = '',
+    this.subtitle = '',
+    this.buttonText = '',
+    this.image = '',
+    this.gradientStart = '#0F766E',
+    this.gradientEnd = '#EA580C',
+    this.actionType = 'none',
+    this.actionUrl = '',
+    this.sortOrder = 0,
+  });
+
+  factory ExploreBanner.fromJson(Map<String, dynamic> json) {
+    return ExploreBanner(
+      id: json['id']?.toString() ?? '',
+      tag: json['tag']?.toString() ?? '',
+      title: json['title']?.toString() ?? '',
+      subtitle: json['subtitle']?.toString() ?? '',
+      buttonText: json['buttonText']?.toString() ?? '',
+      image: json['image']?.toString() ?? '',
+      gradientStart: json['gradientStart']?.toString() ?? '#0F766E',
+      gradientEnd: json['gradientEnd']?.toString() ?? '#EA580C',
+      actionType: json['actionType']?.toString() ?? 'none',
+      actionUrl: json['actionUrl']?.toString() ?? '',
+      sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
+    );
+  }
+}
+
+class ExploreCategoryItem {
+  final String id;
+  final String name;
+  final String label;
+  final String icon;
+  final String iconUrl;
+  final int sortOrder;
+
+  const ExploreCategoryItem({
+    required this.id,
+    required this.name,
+    required this.label,
+    this.icon = 'category_rounded',
+    this.iconUrl = '',
+    this.sortOrder = 0,
+  });
+
+  factory ExploreCategoryItem.fromJson(Map<String, dynamic> json) {
+    return ExploreCategoryItem(
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      label: json['label']?.toString() ?? json['name']?.toString() ?? '',
+      icon: json['icon']?.toString() ?? 'category_rounded',
+      iconUrl: json['iconUrl']?.toString() ?? '',
+      sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
+    );
+  }
+}

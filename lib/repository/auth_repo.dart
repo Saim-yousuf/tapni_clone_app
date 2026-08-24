@@ -91,6 +91,42 @@ class AuthRepo {
     );
   }
 
+  Future<ApiResponse> checkUsernameAvailability({
+    required String username,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.checkUsername(username.trim().toLowerCase()),
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> submitUsernameClaim({
+    required String username,
+    required String reason,
+    String? businessEmail,
+  }) async {
+    return await ApiHandler.request(
+      api: Api.auth.submitUsernameClaim,
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: {
+        'username': username.trim().toLowerCase(),
+        'reason': reason.trim(),
+        if (businessEmail != null && businessEmail.trim().isNotEmpty)
+          'businessEmail': businessEmail.trim().toLowerCase(),
+      },
+    );
+  }
+
+  Future<ApiResponse> myUsernameClaims() async {
+    return await ApiHandler.request(
+      api: Api.auth.myUsernameClaims,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
   Future<ApiResponse> profileByUsername({
     required String username,
     bool isScan = false,

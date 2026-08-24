@@ -305,21 +305,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
             SizedBox(
               width: double.infinity,
-              height: 62,
+              height: 54,
               child: ElevatedButton(
                 onPressed: () => _enterEditMode(profileProvider),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xfff3f3f3),
+                  backgroundColor: const Color(0xFFF1F5F9),
                   elevation: 0,
+                  surfaceTintColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(35),
+                    borderRadius: BorderRadius.circular(28),
+                    side: BorderSide(
+                      color: Colors.black.withOpacity(0.06),
+                      width: 1,
+                    ),
                   ),
                 ),
-                child: Text(context.l10n.editProfile2,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
+                child: Text(
+                  context.l10n.editProfile2,
+                  style: const TextStyle(
+                    color: Color(0xFF0F172A),
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
+                    letterSpacing: -0.2,
                   ),
                 ),
               ),
@@ -841,6 +849,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
           runSpacing: 16,
           alignment: WrapAlignment.center,
           children: [
+            if (isEditable)
+              SizedBox(
+                width: cellWidth,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () => LinkSheet()
+                        .showAddLinkBottomSheet(context, profileProvider),
+                    child: Container(
+                      width: iconSize,
+                      height: iconSize,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(radius),
+                        border: Border.all(color: Colors.grey.shade200),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.add,
+                          size: iconSize * 0.54,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ...activeLinks.asMap().entries.map((entry) {
               final index = entry.key;
               final link = entry.value;
@@ -911,32 +945,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               );
             }),
-            if (isEditable)
-              SizedBox(
-                width: cellWidth,
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () => LinkSheet()
-                        .showAddLinkBottomSheet(context, profileProvider),
-                    child: Container(
-                      width: iconSize,
-                      height: iconSize,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(radius),
-                        border: Border.all(color: Colors.grey.shade200),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.add,
-                          size: iconSize * 0.54,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
           ],
         );
       },
@@ -975,9 +983,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(radius),
                   border: Border.all(
-                    color: Colors.grey.shade300,
+                    color: Colors.black.withOpacity(0.06),
                     width: 1,
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.06),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.02),
+                      blurRadius: 2,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(radius - 1),
@@ -995,9 +1015,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
+                  color: Color(0xFF0F172A),
+                  fontSize: 13.5,
                   fontWeight: FontWeight.w600,
+                  letterSpacing: -0.2,
                 ),
               ),
               if (isEditable) ...[

@@ -191,10 +191,12 @@ class SocialLink {
 
   bool get isCatalogLink {
     if (isDocumentLink) return false;
+    if (url?.startsWith('catalog:') == true) return true;
     if (catalogItems != null && catalogItems!.isNotEmpty) return true;
     if (catalogType == 'menu' ||
         catalogType == 'services' ||
-        catalogType == 'catalog') {
+        catalogType == 'catalog' ||
+        catalogType == 'products') {
       return true;
     }
     if (actionType == 'menu_catalog') return true;
@@ -269,7 +271,8 @@ class SocialLink {
       platform = SocialPlatform.soundcloud;
     } else if (combined.contains('spoon') ||
         combined.contains('fork') ||
-        combined.contains('menu')) {
+        combined.contains('menu') ||
+        combined.contains('product')) {
       platform = SocialPlatform.spoonFork;
     } else if (combined.contains('menu_catalog') ||
         combined.contains('catalog:') ||

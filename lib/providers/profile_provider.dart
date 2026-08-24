@@ -151,11 +151,13 @@ class ProfileProvider extends ChangeNotifier {
 
       if (response.success && response.data is Map<String, dynamic>) {
         final data = response.data as Map<String, dynamic>;
-        _linkCatalog = ensureDocumentsCatalogTemplate(
-          (data['categories'] as List<dynamic>? ?? [])
-              .map((item) => LinkCategory.fromJson(item as Map<String, dynamic>))
-              .where((category) => category.templates.isNotEmpty)
-              .toList(),
+        _linkCatalog = ensureProductCatalogTemplate(
+          ensureDocumentsCatalogTemplate(
+            (data['categories'] as List<dynamic>? ?? [])
+                .map((item) => LinkCategory.fromJson(item as Map<String, dynamic>))
+                .where((category) => category.templates.isNotEmpty)
+                .toList(),
+          ),
         );
       }
     } finally {
@@ -862,10 +864,14 @@ class ProfileProvider extends ChangeNotifier {
   }) async {
     final newLink = SocialLink(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
-      platform: SocialPlatform.wave,
+      platform: contactCard != null
+          ? SocialPlatform.contact
+          : SocialPlatform.wave,
       templateId: template.id,
       customLabel: label,
       fieldLabel: template.fieldLabel,
+      fieldType: template.fieldType,
+      actionType: template.actionType,
       logoUrl: logo.isNotEmpty ? logo : template.logo,
       value: value,
       bankDetails: bankDetails,
@@ -964,11 +970,15 @@ class ProfileProvider extends ChangeNotifier {
 
     if (existingIndex != -1) {
       updatedLinks[existingIndex] = link.copyWith(
+        platform: contactCard != null ? SocialPlatform.contact : null,
         customLabel: label,
         value: value,
         logoUrl: logo?.isNotEmpty == true ? logo : link.logoUrl,
         bankDetails: bankDetails,
         contactCard: contactCard,
+        actionType: contactCard != null
+            ? 'contact_card'
+            : link.actionType,
         isCustom: true,
         isActive: true,
         isPublic: showLink,

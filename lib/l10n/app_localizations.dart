@@ -4783,6 +4783,120 @@ abstract class AppLocalizations {
   /// **'Username updated successfully!'**
   String get usernameUpdatedSuccessfully;
 
+  /// No description provided for @usernameAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This username is available'**
+  String get usernameAvailable;
+
+  /// No description provided for @usernameUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This username is unavailable'**
+  String get usernameUnavailable;
+
+  /// No description provided for @usernameAlreadyTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'This username is already taken'**
+  String get usernameAlreadyTaken;
+
+  /// No description provided for @checkingUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking availability…'**
+  String get checkingUsername;
+
+  /// No description provided for @claimThisUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim this username'**
+  String get claimThisUsername;
+
+  /// No description provided for @claimUsernameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim username'**
+  String get claimUsernameTitle;
+
+  /// No description provided for @claimUsernameSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'If you represent a business or brand, submit a claim for review.'**
+  String get claimUsernameSubtitle;
+
+  /// No description provided for @claimReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Why should you own this username?'**
+  String get claimReasonHint;
+
+  /// No description provided for @claimReasonMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Please explain in at least 10 characters'**
+  String get claimReasonMinLength;
+
+  /// No description provided for @businessEmailOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Business email (optional)'**
+  String get businessEmailOptional;
+
+  /// No description provided for @submitClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit claim'**
+  String get submitClaim;
+
+  /// No description provided for @claimSubmittedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim submitted. We will review it shortly.'**
+  String get claimSubmittedSuccess;
+
+  /// No description provided for @myUsernameClaims.
+  ///
+  /// In en, this message translates to:
+  /// **'My username claims'**
+  String get myUsernameClaims;
+
+  /// No description provided for @noUsernameClaims.
+  ///
+  /// In en, this message translates to:
+  /// **'No username claims yet'**
+  String get noUsernameClaims;
+
+  /// No description provided for @claimStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending review'**
+  String get claimStatusPending;
+
+  /// No description provided for @claimStatusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get claimStatusApproved;
+
+  /// No description provided for @claimStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get claimStatusRejected;
+
+  /// No description provided for @viewMyClaims.
+  ///
+  /// In en, this message translates to:
+  /// **'View my claims'**
+  String get viewMyClaims;
+
+  /// No description provided for @claimUsernameIfUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserved or taken? You can request ownership for review.'**
+  String get claimUsernameIfUnavailable;
+
   /// No description provided for @waitingForThemToAccept.
   ///
   /// In en, this message translates to:
@@ -6391,6 +6505,12 @@ abstract class AppLocalizations {
   /// **'Catalog'**
   String get catalog;
 
+  /// No description provided for @products.
+  ///
+  /// In en, this message translates to:
+  /// **'Product'**
+  String get products;
+
   /// No description provided for @services.
   ///
   /// In en, this message translates to:
@@ -6414,6 +6534,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New Catalog Order'**
   String get newCatalogOrder;
+
+  /// No description provided for @newProductOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'New Product Order'**
+  String get newProductOrder;
 
   /// No description provided for @pending.
   ///

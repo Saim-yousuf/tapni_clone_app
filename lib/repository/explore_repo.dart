@@ -9,6 +9,8 @@ class ExploreRepo {
     double radiusKm = 10,
     String? industry,
     String? city,
+    String? q,
+    String? type,
     int page = 1,
     int limit = 20,
   }) {
@@ -18,6 +20,8 @@ class ExploreRepo {
       'radiusKm': radiusKm.toString(),
       if (industry != null && industry.isNotEmpty) 'industry': industry,
       if (city != null && city.isNotEmpty) 'city': city,
+      if (q != null && q.trim().isNotEmpty) 'q': q.trim(),
+      if (type != null && type.isNotEmpty) 'type': type,
       'page': page.toString(),
       'limit': limit.toString(),
     };
@@ -27,6 +31,22 @@ class ExploreRepo {
       method: ApiMethod.get,
       authorization: true,
       queryParams: query,
+    );
+  }
+
+  Future<ApiResponse> getBanners() {
+    return ApiHandler.request(
+      api: Api.explore.banners,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> getCategories() {
+    return ApiHandler.request(
+      api: Api.explore.categories,
+      method: ApiMethod.get,
+      authorization: true,
     );
   }
 
@@ -57,5 +77,29 @@ class ExploreRepo {
       total: (payload['total'] as num?)?.toInt() ?? businesses.length,
       hasMore: payload['hasMore'] as bool? ?? false,
     );
+  }
+
+  List<ExploreBanner> parseBanners(dynamic data) {
+    final root = data is Map ? data : <String, dynamic>{};
+    final list = root['banners'] as List? ??
+        (root['data'] is Map ? (root['data'] as Map)['banners'] as List? : null) ??
+        const [];
+    return list
+        .whereType<Map>()
+        .map((e) => ExploreBanner.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+  }
+
+  List<ExploreCategoryItem> parseCategories(dynamic data) {
+    final root = data is Map ? data : <String, dynamic>{};
+    final list = root['categories'] as List? ??
+        (root['data'] is Map
+            ? (root['data'] as Map)['categories'] as List?
+            : null) ??
+        const [];
+    return list
+        .whereType<Map>()
+        .map((e) => ExploreCategoryItem.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
   }
 }

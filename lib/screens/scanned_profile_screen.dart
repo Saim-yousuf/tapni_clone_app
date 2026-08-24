@@ -22,6 +22,7 @@ import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/widgets/profile_reviews_section.dart';
 import 'package:tapni_app/widgets/profile_apps_gallery_tabs.dart';
 import 'package:tapni_app/widgets/profile_empty_state.dart';
+import 'package:tapni_app/widgets/explore_detail_shimmers.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 
@@ -340,7 +341,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       ),
       body: SafeArea(
         child: _isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? const ScannedProfileShimmer()
             : _errorMessage != null
             ? _buildErrorView()
             : _buildProfileView(_profile!),
@@ -1008,9 +1009,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
+                        color: Color(0xFF0F172A),
+                        fontSize: 13.5,
                         fontWeight: FontWeight.w600,
+                        letterSpacing: -0.2,
                       ),
                     ),
                   ],
@@ -1042,7 +1044,22 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: Colors.grey.shade300, width: 1),
+        border: Border.all(
+          color: Colors.black.withOpacity(0.06),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius - 1),

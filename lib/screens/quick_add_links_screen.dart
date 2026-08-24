@@ -5,6 +5,8 @@ import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/contacts_sync_screen.dart';
+import 'package:tapni_app/screens/main_shell.dart';
+import 'package:tapni_app/services/contacts_sync_service.dart';
 import 'package:tapni_app/utils/phone_utils.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -92,6 +94,13 @@ class _QuickAddLinksScreenState extends State<QuickAddLinksScreen> {
   }
 
   void _goToContactsSync() {
+    if (!ContactsSyncService.isFeatureEnabled) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const MainShell()),
+        (_) => false,
+      );
+      return;
+    }
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => const ContactsSyncScreen(isOnboarding: true),

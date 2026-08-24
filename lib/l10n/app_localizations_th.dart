@@ -2398,6 +2398,66 @@ class AppLocalizationsTh extends AppLocalizations {
   String get usernameUpdatedSuccessfully => 'อัปเดตชื่อผู้ใช้สำเร็จแล้ว!';
 
   @override
+  String get usernameAvailable => 'This username is available';
+
+  @override
+  String get usernameUnavailable => 'This username is unavailable';
+
+  @override
+  String get usernameAlreadyTaken => 'This username is already taken';
+
+  @override
+  String get checkingUsername => 'Checking availability…';
+
+  @override
+  String get claimThisUsername => 'Claim this username';
+
+  @override
+  String get claimUsernameTitle => 'Claim username';
+
+  @override
+  String get claimUsernameSubtitle =>
+      'If you represent a business or brand, submit a claim for review.';
+
+  @override
+  String get claimReasonHint => 'Why should you own this username?';
+
+  @override
+  String get claimReasonMinLength => 'Please explain in at least 10 characters';
+
+  @override
+  String get businessEmailOptional => 'Business email (optional)';
+
+  @override
+  String get submitClaim => 'Submit claim';
+
+  @override
+  String get claimSubmittedSuccess =>
+      'Claim submitted. We will review it shortly.';
+
+  @override
+  String get myUsernameClaims => 'My username claims';
+
+  @override
+  String get noUsernameClaims => 'No username claims yet';
+
+  @override
+  String get claimStatusPending => 'Pending review';
+
+  @override
+  String get claimStatusApproved => 'Approved';
+
+  @override
+  String get claimStatusRejected => 'Rejected';
+
+  @override
+  String get viewMyClaims => 'View my claims';
+
+  @override
+  String get claimUsernameIfUnavailable =>
+      'Reserved or taken? You can request ownership for review.';
+
+  @override
   String get waitingForThemToAccept => 'รอให้พวกเขายอมรับ';
 
   @override
@@ -3303,6 +3363,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get catalog => 'Catalog';
 
   @override
+  String get products => 'Product';
+
+  @override
   String get services => 'Services';
 
   @override
@@ -3313,6 +3376,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get newCatalogOrder => 'New Catalog Order';
+
+  @override
+  String get newProductOrder => 'New Product Order';
 
   @override
   String get pending => 'Pending';

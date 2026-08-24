@@ -17,6 +17,7 @@ import 'package:tapni_app/widgets/document_viewer.dart';
 import 'package:tapni_app/widgets/service_booking_sheet.dart';
 import 'package:tapni_app/utils/document_file.dart';
 import 'package:tapni_app/widgets/business_completeness_sheet.dart';
+import 'package:tapni_app/widgets/shop_product_card.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 void showMenuCatalogSheet({
@@ -672,27 +673,39 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           ),
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-          sliver: SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 0.68,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final item = flatItems[index];
-                final originalIndex = _items.indexOf(item);
-                return CatalogProductCard(
-                  item: item,
-                  isService: _isServices,
-                  cartQty:
-                      _isServices ? null : _cartQtyForIndex(originalIndex),
-                  onTap: () => _onCustomerItemTap(originalIndex, item),
-                );
-              },
-              childCount: flatItems.length,
-            ),
+          sliver: SliverLayoutBuilder(
+            builder: (context, constraints) {
+              const crossAxisCount = 2;
+              const crossAxisSpacing = 12.0;
+              const mainAxisSpacing = 12.0;
+              final cardW =
+                  (constraints.crossAxisExtent -
+                      crossAxisSpacing * (crossAxisCount - 1)) /
+                  crossAxisCount;
+              return SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  mainAxisSpacing: mainAxisSpacing,
+                  crossAxisSpacing: crossAxisSpacing,
+                  mainAxisExtent: ShopProductCard.heightForWidth(cardW),
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final item = flatItems[index];
+                    final originalIndex = _items.indexOf(item);
+                    return CatalogProductCard(
+                      item: item,
+                      isService: _isServices,
+                      cartQty: _isServices
+                          ? null
+                          : _cartQtyForIndex(originalIndex),
+                      onTap: () => _onCustomerItemTap(originalIndex, item),
+                    );
+                  },
+                  childCount: flatItems.length,
+                ),
+              );
+            },
           ),
         ),
       ],

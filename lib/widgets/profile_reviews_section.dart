@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tapni_app/models/business_review.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/profile.dart';
@@ -316,28 +317,71 @@ class _ReviewsSegmentedTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 44,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F2F5),
-        borderRadius: BorderRadius.circular(14),
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: Colors.black.withOpacity(0.04),
+          width: 1,
+        ),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _ReviewSegTab(
-              selected: index == 0,
-              label: 'Business',
-              onTap: () => onChanged(0),
-            ),
-          ),
-          Expanded(
-            child: _ReviewSegTab(
-              selected: index == 1,
-              label: 'Items / Services',
-              onTap: () => onChanged(1),
-            ),
-          ),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final tabWidth = (constraints.maxWidth - 4) / 2;
+          return Stack(
+            children: [
+              // Animated sliding indicator pill
+              AnimatedAlign(
+                duration: const Duration(milliseconds: 240),
+                curve: Curves.easeOutCubic,
+                alignment: index == 0 ? Alignment.centerLeft : Alignment.centerRight,
+                child: SizedBox(
+                  width: tabWidth,
+                  height: double.infinity,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.07),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: _ReviewSegTab(
+                      selected: index == 0,
+                      label: 'Business',
+                      onTap: () {
+                        HapticFeedback.selectionClick();
+                        onChanged(0);
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: _ReviewSegTab(
+                      selected: index == 1,
+                      label: 'Items / Services',
+                      onTap: () {
+                        HapticFeedback.selectionClick();
+                        onChanged(1);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -356,26 +400,20 @@ class _ReviewSegTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: selected ? Colors.white : Colors.transparent,
-      borderRadius: BorderRadius.circular(11),
-      elevation: selected ? 0.5 : 0,
-      shadowColor: Colors.black26,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(11),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Center(
+        child: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 200),
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            color: selected ? const Color(0xFF0F172A) : const Color(0xFF64748B),
+          ),
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              color: selected
-                  ? const Color(0xFF111B21)
-                  : const Color(0xFF8A9199),
-            ),
           ),
         ),
       ),

@@ -172,3 +172,64 @@ List<LinkCategory> ensureDocumentsCatalogTemplate(List<LinkCategory> catalog) {
   updated[businessIndex] = business.copyWith(templates: templates);
   return updated;
 }
+
+bool _isProductTemplate(LinkTemplate template) {
+  return template.actionType == 'menu_catalog' &&
+      (template.catalogType == 'products' ||
+          template.label.trim().toLowerCase() == 'product');
+}
+
+LinkTemplate productsLinkTemplate({String categoryId = ''}) {
+  return LinkTemplate(
+    id: '',
+    categoryId: categoryId,
+    label: 'Product',
+    fieldType: 'url',
+    fieldLabel: 'Product items',
+    prefix: '',
+    logo: '',
+    isPro: true,
+    isFeatured: false,
+    isSystem: true,
+    actionType: 'menu_catalog',
+    catalogType: 'products',
+  );
+}
+
+/// Always show Product next to Menu, even if the API has not seeded it yet.
+List<LinkCategory> ensureProductCatalogTemplate(List<LinkCategory> catalog) {
+  if (catalog.any(
+    (category) => category.templates.any(_isProductTemplate),
+  )) {
+    return catalog;
+  }
+
+  final product = productsLinkTemplate();
+  final businessIndex = catalog.indexWhere(
+    (category) => category.name.trim().toLowerCase() == 'business',
+  );
+
+  if (businessIndex == -1) {
+    return [
+      ...catalog,
+      LinkCategory(id: 'business', name: 'Business', templates: [product]),
+    ];
+  }
+
+  final business = catalog[businessIndex];
+  final templates = List<LinkTemplate>.from(business.templates);
+  final menuIndex = templates.indexWhere(
+    (template) =>
+        template.catalogType == 'menu' ||
+        template.label.trim().toLowerCase() == 'menu',
+  );
+  final insertAt = menuIndex >= 0 ? menuIndex + 1 : templates.length;
+  templates.insert(
+    insertAt,
+    productsLinkTemplate(categoryId: business.id),
+  );
+
+  final updated = List<LinkCategory>.from(catalog);
+  updated[businessIndex] = business.copyWith(templates: templates);
+  return updated;
+}

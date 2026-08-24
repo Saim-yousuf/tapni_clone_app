@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/gallery_item.dart';
 import 'package:tapni_app/widgets/profile_gallery_grid.dart';
@@ -57,6 +58,7 @@ class _ProfileAppsGalleryTabsState extends State<ProfileAppsGalleryTabs> {
 
   void _selectTab(int index) {
     if (_index == index) return;
+    HapticFeedback.selectionClick();
     setState(() => _index = index);
     widget.onTabChanged?.call(index);
   }
@@ -68,7 +70,7 @@ class _ProfileAppsGalleryTabsState extends State<ProfileAppsGalleryTabs> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
           child: _SegmentedProfileTabs(
             index: _index,
             onChanged: _selectTab,
@@ -76,13 +78,32 @@ class _ProfileAppsGalleryTabsState extends State<ProfileAppsGalleryTabs> {
             galleryLabel: l10n.profileTabGallery,
           ),
         ),
-        const SizedBox(height: 8),
-        if (_index == 0) widget.apps else ProfileGalleryGrid(
-          items: widget.gallery,
-          isOwner: widget.isOwner,
-          uploading: widget.uploading,
-          onAddPhotos: widget.onAddPhotos,
-          onDeletePhoto: widget.onDeletePhoto,
+        const SizedBox(height: 12),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          transitionBuilder: (child, animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.98, end: 1.0).animate(animation),
+                child: child,
+              ),
+            );
+          },
+          child: KeyedSubtree(
+            key: ValueKey<int>(_index),
+            child: _index == 0
+                ? widget.apps
+                : ProfileGalleryGrid(
+                    items: widget.gallery,
+                    isOwner: widget.isOwner,
+                    uploading: widget.uploading,
+                    onAddPhotos: widget.onAddPhotos,
+                    onDeletePhoto: widget.onDeletePhoto,
+                  ),
+          ),
         ),
       ],
     );
@@ -105,30 +126,73 @@ class _SegmentedProfileTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 46,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F2F5),
-        borderRadius: BorderRadius.circular(14),
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: Colors.black.withOpacity(0.04),
+          width: 1,
+        ),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _SegTab(
-              selected: index == 0,
-              icon: Icons.apps_rounded,
-              label: appsLabel,
-              onTap: () => onChanged(0),
-            ),
-          ),
-          Expanded(
-            child: _SegTab(
-              selected: index == 1,
-              icon: Icons.grid_view_rounded,
-              label: galleryLabel,
-              onTap: () => onChanged(1),
-            ),
-          ),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final tabWidth = (constraints.maxWidth - 4) / 2;
+          return Stack(
+            children: [
+              // Animated sliding indicator pill
+              AnimatedAlign(
+                duration: const Duration(milliseconds: 240),
+                curve: Curves.easeOutCubic,
+                alignment: index == 0 ? Alignment.centerLeft : Alignment.centerRight,
+                child: SizedBox(
+                  width: tabWidth,
+                  height: double.infinity,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.02),
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              // Interactive Tab Labels Row
+              Row(
+                children: [
+                  Expanded(
+                    child: _SegTab(
+                      selected: index == 0,
+                      icon: Icons.apps_rounded,
+                      label: appsLabel,
+                      onTap: () => onChanged(0),
+                    ),
+                  ),
+                  Expanded(
+                    child: _SegTab(
+                      selected: index == 1,
+                      icon: Icons.grid_view_rounded,
+                      label: galleryLabel,
+                      onTap: () => onChanged(1),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -149,37 +213,34 @@ class _SegTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: selected ? Colors.white : Colors.transparent,
-      borderRadius: BorderRadius.circular(11),
-      elevation: selected ? 0.5 : 0,
-      shadowColor: Colors.black26,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(11),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Center(
+        child: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 200),
+          style: TextStyle(
+            fontSize: 13.5,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            color: selected ? const Color(0xFF0F172A) : const Color(0xFF64748B),
+            letterSpacing: selected ? -0.2 : 0,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                size: 18,
-                color: selected
-                    ? const Color(0xFF111B21)
-                    : const Color(0xFF8A9199),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 13.5,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  icon,
+                  key: ValueKey<bool>(selected),
+                  size: 17,
                   color: selected
-                      ? const Color(0xFF111B21)
-                      : const Color(0xFF8A9199),
+                      ? const Color(0xFF0F172A)
+                      : const Color(0xFF94A3B8),
                 ),
               ),
+              const SizedBox(width: 7),
+              Text(label),
             ],
           ),
         ),
@@ -187,3 +248,4 @@ class _SegTab extends StatelessWidget {
     );
   }
 }
+

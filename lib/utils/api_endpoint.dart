@@ -98,6 +98,13 @@ class _AuthApi {
       "${Api.baseUrl}/api/user/auth/device/sessions/$sessionId";
   String get registerDeviceSession =>
       "${Api.baseUrl}/api/user/auth/device/sessions/register";
+
+  String checkUsername(String username) =>
+      "${Api.baseUrl}/api/user/auth/username/check?username=${Uri.encodeQueryComponent(username)}";
+  String get submitUsernameClaim =>
+      "${Api.baseUrl}/api/user/auth/username/claim";
+  String get myUsernameClaims =>
+      "${Api.baseUrl}/api/user/auth/username/claims";
 }
 
 class _SubscriptionApi {
@@ -231,6 +238,8 @@ class _FollowApi {
 
 class _ExploreApi {
   String get nearby => "${Api.baseUrl}/api/explore/nearby";
+  String get banners => "${Api.baseUrl}/api/explore/banners";
+  String get categories => "${Api.baseUrl}/api/explore/categories";
 }
 
 class _ReviewsApi {

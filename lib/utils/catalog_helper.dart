@@ -21,6 +21,8 @@ class CatalogHelper {
         return l10n.newMenuOrder;
       case 'services':
         return l10n.newServiceOrder;
+      case 'products':
+        return l10n.newProductOrder;
       default:
         return l10n.newCatalogOrder;
     }
@@ -34,6 +36,8 @@ class CatalogHelper {
         return l10n.services;
       case 'documents':
         return l10n.documents;
+      case 'products':
+        return l10n.products;
       default:
         return l10n.catalog;
     }

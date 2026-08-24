@@ -19,6 +19,9 @@ class ContactsSyncResult {
 class ContactsSyncService {
   ContactsSyncService._();
 
+  /// Temporary kill switch. Set true to bring contacts sync back.
+  static const bool isFeatureEnabled = false;
+
   static const int chunkSize = 500;
   static final DirectoryRepo _repo = DirectoryRepo();
 
@@ -75,6 +78,9 @@ class ContactsSyncService {
   static Future<ContactsSyncResult> syncAll({
     void Function(int done, int total)? onProgress,
   }) async {
+    if (!isFeatureEnabled) {
+      return const ContactsSyncResult(success: true, uploaded: 0);
+    }
     final contacts = await readDeviceContacts();
     if (contacts.isEmpty) {
       return const ContactsSyncResult(success: true, uploaded: 0);

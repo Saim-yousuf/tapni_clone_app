@@ -79,12 +79,12 @@ class ProfileGalleryGrid extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
       itemCount: count,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        crossAxisSpacing: 1.2,
-        mainAxisSpacing: 1.2,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
       ),
       itemBuilder: (context, index) {
         if (showAdd && index == 0) {
@@ -99,18 +99,29 @@ class ProfileGalleryGrid extends StatelessWidget {
           onTap: () => _openViewer(context, photoIndex),
           child: Hero(
             tag: 'gallery-${item.id}',
-            child: ColoredBox(
-              color: const Color(0xFFF0F0F0),
-              child: Image.network(
-                item.url,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return const ColoredBox(color: Color(0xFFF0F0F0));
-                },
-                errorBuilder: (_, __, ___) => const ColoredBox(
-                  color: Color(0xFFF0F0F0),
-                  child: Icon(Icons.broken_image_outlined, color: Colors.black26),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                color: const Color(0xFFF1F5F9),
+                child: Image.network(
+                  item.url,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, progress) {
+                    if (progress == null) return child;
+                    return const Center(
+                      child: SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Color(0xFF94A3B8),
+                        ),
+                      ),
+                    );
+                  },
+                  errorBuilder: (_, __, ___) => const Center(
+                    child: Icon(Icons.broken_image_outlined, color: Colors.black26),
+                  ),
                 ),
               ),
             ),
@@ -131,16 +142,42 @@ class _AddTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: uploading ? null : onTap,
-      child: ColoredBox(
-        color: const Color(0xFFF5F5F5),
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFFF8FAFC),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: const Color(0xFFCBD5E1),
+            width: 1.5,
+          ),
+        ),
         child: Center(
           child: uploading
               ? const SizedBox(
                   width: 22,
                   height: 22,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.black87,
+                  ),
                 )
-              : const Icon(Icons.add, size: 36, color: Colors.black87),
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFE2E8F0),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.add_a_photo_outlined,
+                        size: 20,
+                        color: Color(0xFF334155),
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );

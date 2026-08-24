@@ -2412,6 +2412,66 @@ class AppLocalizationsUr extends AppLocalizations {
       'صارف نام کامیابی کے ساتھ اپ ڈیٹ ہو گیا!';
 
   @override
+  String get usernameAvailable => 'یہ صارف نام دستیاب ہے';
+
+  @override
+  String get usernameUnavailable => 'یہ صارف نام دستیاب نہیں';
+
+  @override
+  String get usernameAlreadyTaken => 'یہ صارف نام پہلے سے لیا گیا ہے';
+
+  @override
+  String get checkingUsername => 'دستیابی چیک ہو رہی ہے…';
+
+  @override
+  String get claimThisUsername => 'یہ صارف نام claim کریں';
+
+  @override
+  String get claimUsernameTitle => 'صارف نام claim';
+
+  @override
+  String get claimUsernameSubtitle =>
+      'اگر آپ کسی business یا brand کی طرف سے ہیں تو review کے لیے claim بھیجیں۔';
+
+  @override
+  String get claimReasonHint => 'آپ کو یہ username کیوں ملنا چاہیے؟';
+
+  @override
+  String get claimReasonMinLength => 'کم از کم 10 حروف میں وضاحت لکھیں';
+
+  @override
+  String get businessEmailOptional => 'Business email (اختیاری)';
+
+  @override
+  String get submitClaim => 'Claim بھیجیں';
+
+  @override
+  String get claimSubmittedSuccess =>
+      'Claim جمع ہو گئی۔ ہم جلد review کریں گے۔';
+
+  @override
+  String get myUsernameClaims => 'میرے username claims';
+
+  @override
+  String get noUsernameClaims => 'ابھی کوئی claim نہیں';
+
+  @override
+  String get claimStatusPending => 'Review زیر التوا';
+
+  @override
+  String get claimStatusApproved => 'منظور';
+
+  @override
+  String get claimStatusRejected => 'مسترد';
+
+  @override
+  String get viewMyClaims => 'میری claims دیکھیں';
+
+  @override
+  String get claimUsernameIfUnavailable =>
+      'Reserved یا taken ہے؟ Ownership کے لیے request کریں۔';
+
+  @override
   String get waitingForThemToAccept => 'ان کے قبول ہونے کا انتظار ہے۔';
 
   @override
@@ -3317,6 +3377,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get catalog => 'Catalog';
 
   @override
+  String get products => 'Product';
+
+  @override
   String get services => 'Services';
 
   @override
@@ -3327,6 +3390,9 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get newCatalogOrder => 'New Catalog Order';
+
+  @override
+  String get newProductOrder => 'New Product Order';
 
   @override
   String get pending => 'Pending';

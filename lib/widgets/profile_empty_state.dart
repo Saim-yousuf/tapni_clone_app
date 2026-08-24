@@ -18,7 +18,7 @@ class ProfileEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(28, 28, 28, 32),
+      padding: const EdgeInsets.fromLTRB(28, 32, 28, 36),
       child: SizedBox(
         width: double.infinity,
         child: Column(
@@ -26,23 +26,39 @@ class ProfileEmptyState extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 72,
-              height: 72,
+              width: 76,
+              height: 76,
+              padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: const Color(0xFFF4F5F7),
+                color: const Color(0xFFF1F5F9),
                 shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFFE8EAED)),
+                border: Border.all(color: Colors.black.withOpacity(0.04)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-              child: Icon(icon, size: 32, color: const Color(0xFF8A9199)),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                ),
+                child: Icon(icon, size: 30, color: const Color(0xFF64748B)),
+              ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             Text(
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1A1A),
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF0F172A),
+                letterSpacing: -0.2,
                 height: 1.25,
               ),
             ),
@@ -53,13 +69,13 @@ class ProfileEmptyState extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 13.5,
-                  color: Color(0xFF8A9199),
-                  height: 1.35,
+                  color: Color(0xFF64748B),
+                  height: 1.4,
                 ),
               ),
             ],
             if (action != null) ...[
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
               action!,
             ],
           ],

@@ -66,6 +66,7 @@ class _MainShellState extends State<MainShell> {
   }
 
   Future<void> _maybePromptContactsSync() async {
+    if (!ContactsSyncService.isFeatureEnabled) return;
     if (!mounted || _contactsPromptShown) return;
     final userId =
         Provider.of<AuthProvider>(context, listen: false).activeAccount?.userId ??

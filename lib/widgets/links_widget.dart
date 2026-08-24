@@ -122,10 +122,12 @@ class LinkSheet {
                             final query = searchController.text
                                 .trim()
                                 .toLowerCase();
-                            final countryFiltered = ensureDocumentsCatalogTemplate(
-                              filterCatalogByUserCountry(
-                                watchedProvider.linkCatalog,
-                                _userCountry(watchedProvider),
+                            final countryFiltered = ensureProductCatalogTemplate(
+                              ensureDocumentsCatalogTemplate(
+                                filterCatalogByUserCountry(
+                                  watchedProvider.linkCatalog,
+                                  _userCountry(watchedProvider),
+                                ),
                               ),
                             );
                             final catalog = query.isEmpty
@@ -208,13 +210,127 @@ class LinkSheet {
   }) async {
     final ok = await ensureBusinessProfileComplete(context);
     if (!ok || !context.mounted) return;
+
+    final catalogType = _resolveCatalogType(existingLink, template, provider);
+    final catalogLabel = existingLink != null &&
+            existingLink.platformName.isNotEmpty
+        ? existingLink.platformName
+        : template.label;
+    final resolvedTemplate =
+        _catalogTemplateMatchesType(template, catalogType)
+            ? template
+            : (_findCatalogTemplateByType(catalogType, provider) ?? template);
+
     showMenuCatalogSheet(
       context: context,
-      catalogLabel: template.label,
-      catalogType: template.catalogType ?? 'catalog',
+      catalogLabel: catalogLabel,
+      catalogType: catalogType,
       provider: provider,
       existingLink: existingLink,
-      template: template,
+      template: resolvedTemplate,
+    );
+  }
+
+  LinkTemplate? _findLinkTemplate(SocialLink link, ProfileProvider provider) {
+    LinkTemplate? byId;
+    if (link.templateId != null && link.templateId!.isNotEmpty) {
+      for (final category in provider.linkCatalog) {
+        for (final template in category.templates) {
+          if (template.id == link.templateId) {
+            byId = template;
+            break;
+          }
+        }
+        if (byId != null) break;
+      }
+    }
+
+    final linkType = link.catalogType?.trim();
+    if (linkType == null || linkType.isEmpty) return byId;
+
+    LinkTemplate? byType;
+    for (final category in provider.linkCatalog) {
+      for (final template in category.templates) {
+        if (linkType == 'documents' && isDocumentsLinkTemplate(template)) {
+          return template;
+        }
+        if (template.actionType == 'menu_catalog' &&
+            template.catalogType == linkType) {
+          byType = template;
+          break;
+        }
+      }
+      if (byType != null) break;
+    }
+
+    return byType ?? byId;
+  }
+
+  LinkTemplate? _findCatalogTemplateByType(
+    String catalogType,
+    ProfileProvider provider,
+  ) {
+    for (final category in provider.linkCatalog) {
+      for (final template in category.templates) {
+        if (template.actionType == 'menu_catalog' &&
+            template.catalogType == catalogType) {
+          return template;
+        }
+      }
+    }
+    return null;
+  }
+
+  bool _catalogTemplateMatchesType(LinkTemplate template, String catalogType) {
+    if (template.actionType != 'menu_catalog') return false;
+    final type = template.catalogType?.trim();
+    if (type == null || type.isEmpty) return catalogType == 'catalog';
+    return type == catalogType;
+  }
+
+  String _resolveCatalogType(
+    SocialLink? link,
+    LinkTemplate? template,
+    ProfileProvider provider,
+  ) {
+    final fromLink = link?.catalogType?.trim();
+    if (fromLink != null && fromLink.isNotEmpty) return fromLink;
+
+    final fromTemplate = template?.catalogType?.trim();
+    if (fromTemplate != null && fromTemplate.isNotEmpty) return fromTemplate;
+
+    return CatalogHelper.typeForCategory(provider.profile.businessCategory);
+  }
+
+  Future<void> _openCatalogLinkEditor(
+    BuildContext context,
+    SocialLink link,
+    ProfileProvider provider, {
+    LinkTemplate? template,
+  }) async {
+    final ok = await ensureBusinessProfileComplete(context);
+    if (!ok || !context.mounted) return;
+
+    final catalogType = _resolveCatalogType(link, template, provider);
+    final catalogLabel = link.platformName.isNotEmpty
+        ? link.platformName
+        : (template?.label ??
+            CatalogHelper.labelForCategory(
+              provider.profile.businessCategory,
+              context.l10n,
+            ));
+    final resolvedTemplate = template != null &&
+            _catalogTemplateMatchesType(template, catalogType)
+        ? template
+        : _findCatalogTemplateByType(catalogType, provider);
+
+    showMenuCatalogSheet(
+      context: context,
+      catalogLabel: catalogLabel,
+      catalogType: catalogType,
+      provider: provider,
+      existingLink: link,
+      template: resolvedTemplate,
     );
   }
 
@@ -860,6 +976,11 @@ class LinkSheet {
     final innerRadius = (radius - 1).clamp(0.0, radius);
     final isDocuments = template?.catalogType == 'documents' ||
         template?.label.trim().toLowerCase() == 'documents';
+    final isCustom = template != null && _isCustomTemplate(template);
+    final isContactCard = template?.actionType == 'contact_card' ||
+        (template?.label.toLowerCase().contains('contact') ?? false);
+    final fit = isCustom ? BoxFit.contain : BoxFit.cover;
+    final logoPadding = isCustom ? size * 0.1 : 0.0;
 
     Widget logoImage({required Widget errorWidget}) {
       return Container(
@@ -877,13 +998,16 @@ class LinkSheet {
           borderRadius: BorderRadius.circular(innerRadius),
           child: logo.isEmpty
               ? errorWidget
-              : Image.network(
-                  logo.replaceAll(" ", ""),
-                  width: size,
-                  height: size,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.center,
-                  errorBuilder: (_, __, ___) => errorWidget,
+              : Padding(
+                  padding: EdgeInsets.all(logoPadding),
+                  child: Image.network(
+                    logo.replaceAll(" ", ""),
+                    width: size,
+                    height: size,
+                    fit: fit,
+                    alignment: Alignment.center,
+                    errorBuilder: (_, __, ___) => errorWidget,
+                  ),
                 ),
         ),
       );
@@ -900,10 +1024,35 @@ class LinkSheet {
               ),
             ),
           )
-        : ColoredBox(
-            color: Colors.grey.shade200,
-            child: Center(child: Icon(Icons.link)),
-          );
+        : isContactCard
+            ? Image.asset(
+                SocialLink.getAssetPath(SocialPlatform.contact),
+                width: size,
+                height: size,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => ColoredBox(
+                  color: Colors.grey.shade200,
+                  child: Center(
+                    child: Icon(Icons.person, size: size * 0.42),
+                  ),
+                ),
+              )
+        : isCustom &&
+                (template?.label.toLowerCase().contains('bank') ?? false)
+            ? ColoredBox(
+                color: Colors.white,
+                child: Center(
+                  child: Icon(
+                    Icons.account_balance_rounded,
+                    color: Colors.black87,
+                    size: size * 0.42,
+                  ),
+                ),
+              )
+            : ColoredBox(
+                color: Colors.grey.shade200,
+                child: Center(child: Icon(Icons.link)),
+              );
 
     final image = logoImage(errorWidget: placeholder);
 
@@ -1391,18 +1540,11 @@ class LinkSheet {
     SocialLink link,
     ProfileProvider provider,
   ) async {
-    LinkTemplate? catalogTemplate;
-    for (final category in provider.linkCatalog) {
-      for (final template in category.templates) {
-        if (template.id == link.templateId) {
-          catalogTemplate = template;
-          break;
-        }
-      }
-      if (catalogTemplate != null) break;
-    }
+    final catalogTemplate = _findLinkTemplate(link, provider);
 
-    final isMenuCatalog = link.isCatalogLink;
+    final isCatalog = link.isCatalogLink ||
+        catalogTemplate?.actionType == 'menu_catalog' ||
+        link.url?.startsWith('catalog:') == true;
 
     if (link.isDocumentLink ||
         (catalogTemplate != null &&
@@ -1412,8 +1554,7 @@ class LinkSheet {
         MaterialPageRoute(
           builder: (_) => DocumentLinkFormScreen(
             provider: provider,
-            template: catalogTemplate ??
-                documentsLinkTemplate(),
+            template: catalogTemplate ?? documentsLinkTemplate(),
             existingLink: link,
           ),
         ),
@@ -1421,33 +1562,12 @@ class LinkSheet {
       return;
     }
 
-    if (isMenuCatalog) {
-      if (catalogTemplate?.actionType == 'menu_catalog') {
-        _openMenuCatalogFromTemplate(
-          context,
-          catalogTemplate!,
-          provider,
-          existingLink: link,
-        );
-        return;
-      }
-
-      final label = link.platformName.isNotEmpty
-          ? link.platformName
-          : CatalogHelper.labelForCategory(
-              provider.profile.businessCategory,
-              context.l10n,
-            );
-      final catalogType = link.catalogType ??
-          CatalogHelper.typeForCategory(provider.profile.businessCategory);
-      final ok = await ensureBusinessProfileComplete(context);
-      if (!ok || !context.mounted) return;
-      showMenuCatalogSheet(
-        context: context,
-        catalogLabel: label,
-        catalogType: catalogType,
-        provider: provider,
-        existingLink: link,
+    if (isCatalog) {
+      await _openCatalogLinkEditor(
+        context,
+        link,
+        provider,
+        template: catalogTemplate,
       );
       return;
     }

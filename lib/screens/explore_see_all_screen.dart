@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/explore_business.dart';
-import 'package:tapni_app/screens/scanned_profile_screen.dart';
-import 'package:tapni_app/utils/business_categories.dart';
+import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/utils/explore_actions.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
@@ -23,262 +22,308 @@ class ExploreSeeAllScreen extends StatelessWidget {
     this.businesses = const [],
   });
 
-  String get _title {
-    switch (kind) {
-      case ExploreSeeAllKind.offers:
-        return 'Reward offers';
-      case ExploreSeeAllKind.items:
-        return 'Items';
-      case ExploreSeeAllKind.services:
-        return 'Services';
-      case ExploreSeeAllKind.businesses:
-        return 'Businesses';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scaffold = isDark ? const Color(0xFF111111) : Colors.white;
+    final primaryText =
+        isDark ? Colors.white : WaUi.primaryText;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: scaffold,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: scaffold,
         surfaceTintColor: Colors.transparent,
-        foregroundColor: WaUi.primaryText,
+        foregroundColor: primaryText,
         title: Text(
-          _title,
-          style: WaUi.headline.copyWith(fontWeight: FontWeight.w700),
+          'Reward Offers',
+          style: WaUi.headline.copyWith(
+            fontWeight: FontWeight.w700,
+            color: primaryText,
+          ),
         ),
       ),
-      body: kind == ExploreSeeAllKind.offers
-          ? _offersGrid(context)
-          : ListView.separated(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-              itemCount: _count,
-              separatorBuilder: (_, _) => const SizedBox(height: 10),
-              itemBuilder: (context, index) => _tile(context, index),
-            ),
-    );
-  }
-
-  Widget _offersGrid(BuildContext context) {
-    return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 14,
-        crossAxisSpacing: 12,
-        childAspectRatio: 0.68,
-      ),
-      itemCount: offers.length,
-      itemBuilder: (context, index) {
-        final offer = offers[index];
-        final program = offer.toRewardProgram();
-        return InkWell(
-          onTap: () => ExploreActions.openOffer(context, offer),
-          borderRadius: BorderRadius.circular(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: offer.hasDesign
-                      ? LoyaltyCardDesignRenderer(
-                          design: offer.design!,
-                          borderRadius: 16,
-                          shadows: const [],
-                        )
-                      : ColoredBox(
-                          color: program.theme.cardBackgroundColor,
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  program.title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: program.theme.cardTextColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                const Spacer(),
-                                Wrap(
-                                  spacing: 5,
-                                  runSpacing: 5,
-                                  children: List.generate(
-                                    program.stamps.clamp(1, 8),
-                                    (_) => RewardStampSlot(
-                                      filled: false,
-                                      theme: program.theme,
-                                      stampIconUrl: program.stampIcon,
-                                      unstampIconUrl: program.unstampIcon,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                offer.businessName,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: WaUi.label.copyWith(color: WaUi.secondaryText),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  int get _count {
-    switch (kind) {
-      case ExploreSeeAllKind.offers:
-        return offers.length;
-      case ExploreSeeAllKind.items:
-      case ExploreSeeAllKind.services:
-        return items.length;
-      case ExploreSeeAllKind.businesses:
-        return businesses.length;
-    }
-  }
-
-  Widget _tile(BuildContext context, int index) {
-    switch (kind) {
-      case ExploreSeeAllKind.offers:
-        return const SizedBox.shrink();
-      case ExploreSeeAllKind.items:
-      case ExploreSeeAllKind.services:
-        final item = items[index];
-        return _card(
-          onTap: () => ExploreActions.openCatalogItem(context, item),
-          leading: _image(
-            item.image,
-            item.isService ? Icons.handyman_outlined : Icons.fastfood_outlined,
-          ),
-          title: item.name,
-          subtitle: item.businessName,
-          trailing: item.price > 0
-              ? 'Rs ${item.price.toStringAsFixed(0)}'
-              : null,
-        );
-      case ExploreSeeAllKind.businesses:
-        final biz = businesses[index];
-        final category = biz.businessCategory.isEmpty
-            ? ''
-            : businessCategoryLabel(context, biz.businessCategory);
-        return _card(
-          onTap: () {
-            if (biz.username.isEmpty) return;
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ScannedProfileScreen(username: biz.username),
-              ),
-            );
-          },
-          leading: _image(biz.profilePhoto, Icons.storefront_outlined),
-          title: biz.displayName,
-          subtitle: [
-            if (category.isNotEmpty) category,
-            if (biz.locationLabel.isNotEmpty) biz.locationLabel,
-          ].join(' · '),
-          trailing: biz.avgRating > 0
-              ? biz.avgRating.toStringAsFixed(1)
-              : null,
-        );
-    }
-  }
-
-  Widget _card({
-    required VoidCallback onTap,
-    required Widget leading,
-    required String title,
-    String? subtitle,
-    String? trailing,
-  }) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: WaUi.divider),
-          ),
-          child: Row(
-            children: [
-              leading,
-              const SizedBox(width: 12),
-              Expanded(
+      body: offers.isEmpty
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(28),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: WaUi.bodyMedium.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                    Icon(
+                      Icons.card_giftcard_outlined,
+                      size: 42,
+                      color: WaUi.secondaryText.withValues(alpha: 0.6),
                     ),
-                    if (subtitle != null && subtitle.isNotEmpty) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        subtitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: WaUi.label.copyWith(color: WaUi.secondaryText),
-                      ),
-                    ],
+                    const SizedBox(height: 12),
+                    Text(
+                      'No reward offers nearby',
+                      style: WaUi.title.copyWith(color: primaryText),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Loyalty offers from nearby businesses will appear here.',
+                      style: WaUi.caption.copyWith(color: WaUi.secondaryText),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               ),
-              if (trailing != null) ...[
-                const SizedBox(width: 8),
-                Text(
-                  trailing,
-                  style: WaUi.label.copyWith(fontWeight: FontWeight.w700),
+            )
+          : LayoutBuilder(
+              builder: (context, constraints) {
+                const spacing = 12.0;
+                const pad = 16.0;
+                final cardW = (constraints.maxWidth - pad * 2 - spacing) / 2;
+                final cardH = _RewardSeeAllCard.heightForWidth(cardW);
+                return GridView.builder(
+                  padding: const EdgeInsets.fromLTRB(pad, 8, pad, 28),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: spacing,
+                    mainAxisSpacing: spacing,
+                    mainAxisExtent: cardH,
+                  ),
+                  itemCount: offers.length,
+                  itemBuilder: (context, index) {
+                    final offer = offers[index];
+                    return _RewardSeeAllCard(
+                      offer: offer,
+                      isDark: isDark,
+                      onTap: () => ExploreActions.openOffer(context, offer),
+                    );
+                  },
+                );
+              },
+            ),
+    );
+  }
+}
+
+class _RewardSeeAllCard extends StatelessWidget {
+  static const double previewRatio = 0.72;
+  static const double footerHeight = 110;
+
+  static double heightForWidth(double width) {
+    return (width / previewRatio) + footerHeight;
+  }
+
+  final ExploreOffer offer;
+  final bool isDark;
+  final VoidCallback onTap;
+
+  const _RewardSeeAllCard({
+    required this.offer,
+    required this.isDark,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final program = offer.toRewardProgram();
+    final surface = isDark ? const Color(0xFF1A1A1A) : Colors.white;
+    final border = isDark ? const Color(0xFF3A3B3C) : const Color(0xFFE2E8F0);
+    final primaryText = isDark ? Colors.white : const Color(0xFF111827);
+    final secondaryText =
+        isDark ? const Color(0xFFB0B3B8) : WaUi.secondaryText;
+
+    return Material(
+      color: surface,
+      borderRadius: BorderRadius.circular(20),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border.withValues(alpha: 0.9)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    offer.hasDesign
+                        ? ColoredBox(
+                            color: surface,
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                return FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: SizedBox(
+                                    width: constraints.maxWidth,
+                                    height: constraints.maxWidth /
+                                        offer.design!.aspectRatio
+                                            .clamp(0.55, 0.85),
+                                    child: LoyaltyCardDesignRenderer(
+                                      design: offer.design!,
+                                      borderRadius: 0,
+                                      shadows: const [],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        : _ClassicPreview(program: program),
+                    Positioned(
+                      top: 10,
+                      left: 10,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 9,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF111827), Color(0xFF374151)],
+                          ),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.card_giftcard_rounded,
+                              size: 12,
+                              color: Color(0xFF10A375),
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              'REWARD',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
+              SizedBox(
+                height: footerHeight,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        offer.title.isNotEmpty
+                            ? offer.title
+                            : 'Special Reward Offer',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.2,
+                          color: primaryText,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        offer.businessName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          color: secondaryText,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF10A375),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'View Offer',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget _image(String? url, IconData fallback) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: SizedBox(
-        width: 52,
-        height: 52,
-        child: url != null && url.isNotEmpty
-            ? Image.network(
-                url,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => ColoredBox(
-                  color: WaUi.searchBg,
-                  child: Icon(fallback, color: WaUi.secondaryText),
+class _ClassicPreview extends StatelessWidget {
+  final RewardProgram program;
+
+  const _ClassicPreview({required this.program});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = program.theme;
+    return ColoredBox(
+      color: theme.cardBackgroundColor,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (program.label.isNotEmpty)
+              Text(
+                program.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: theme.cardTextColor.withValues(alpha: 0.65),
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
                 ),
-              )
-            : ColoredBox(
-                color: WaUi.searchBg,
-                child: Icon(fallback, color: WaUi.secondaryText),
               ),
+            const SizedBox(height: 6),
+            Text(
+              program.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: theme.cardTextColor,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                height: 1.25,
+              ),
+            ),
+            const Spacer(),
+            Wrap(
+              spacing: 5,
+              runSpacing: 5,
+              children: List.generate(
+                program.stamps.clamp(1, 8),
+                (_) => RewardStampSlot(
+                  filled: false,
+                  theme: theme,
+                  stampIconUrl: program.stampIcon,
+                  unstampIconUrl: program.unstampIcon,
+                  size: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

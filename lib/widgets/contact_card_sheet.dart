@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -48,6 +52,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
   bool personalAddressExpanded = false;
   bool businessAddressExpanded = false;
   bool showLink = true;
+  String _logo = '';
 
   late final TextEditingController _labelCtrl;
   late final TextEditingController _firstNameCtrl;
@@ -85,6 +90,9 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     final details = widget.existingLink?.contactCard ?? {};
     isPersonal = (details['cardType'] ?? 'personal') != 'business';
     showLink = widget.existingLink?.isPublic ?? true;
+    _logo = (widget.existingLink?.logoUrl?.trim().isNotEmpty == true
+            ? widget.existingLink!.logoUrl!
+            : widget.template.logo.trim());
 
     _labelCtrl = TextEditingController(
       text:
@@ -259,45 +267,39 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
   Widget _buildAvatarRow() => Row(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Stack(
-        children: [
-          Container(
-            width: 72,
-            height: 72,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(Icons.person, size: 48, color: Colors.grey[500]),
-                  Container(
-                    height: 12,
-                    color: Colors.green,
-                    width: double.infinity,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: 4,
-            right: 4,
-            child: Container(
-              width: 22,
-              height: 22,
+      GestureDetector(
+        onTap: _pickLogo,
+        child: Stack(
+          children: [
+            Container(
+              width: 72,
+              height: 72,
               decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.grey[300]!, width: 0.5),
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade300),
               ),
-              child: Icon(Icons.edit, size: 12, color: Colors.black),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: _buildLogoPreview(),
+              ),
             ),
-          ),
-        ],
+            Positioned(
+              top: 4,
+              right: 4,
+              child: Container(
+                width: 22,
+                height: 22,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.grey[300]!, width: 0.5),
+                ),
+                child: Icon(Icons.edit, size: 12, color: Colors.black),
+              ),
+            ),
+          ],
+        ),
       ),
       SizedBox(width: 12),
       Expanded(
@@ -315,6 +317,53 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
       ),
     ],
   );
+
+  Widget _buildLogoPreview() {
+    if (_logo.isNotEmpty) {
+      if (_logo.startsWith('http://') || _logo.startsWith('https://')) {
+        return Image.network(
+          _logo,
+          width: 72,
+          height: 72,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => _defaultContactIcon(),
+        );
+      }
+      try {
+        return Image.memory(
+          base64Decode(_logo),
+          width: 72,
+          height: 72,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => _defaultContactIcon(),
+        );
+      } catch (_) {
+        return _defaultContactIcon();
+      }
+    }
+    return _defaultContactIcon();
+  }
+
+  Widget _defaultContactIcon() {
+    return Image.asset(
+      SocialLink.getAssetPath(SocialPlatform.contact),
+      width: 72,
+      height: 72,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => ColoredBox(
+        color: Colors.grey.shade200,
+        child: Icon(Icons.person, size: 40, color: Colors.grey[500]),
+      ),
+    );
+  }
+
+  Future<void> _pickLogo() async {
+    final file = await pickFile();
+    if (file?.file == null) return;
+    final encoded = await fileToBase64(File(file!.file!.path));
+    if (encoded.isEmpty || !mounted) return;
+    setState(() => _logo = encoded);
+  }
 
   Widget _buildToggle() => Container(
     height: 48,
@@ -665,7 +714,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
         value: value,
         showLink: showLink,
         context: context,
-        logo: widget.template.logo,
+        logo: _logo,
         contactCard: details,
       );
     } else {
@@ -675,7 +724,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
         value: value,
         showLink: showLink,
         context: context,
-        logo: widget.template.logo,
+        logo: _logo.isNotEmpty ? _logo : existingLink.logoUrl,
         contactCard: details,
       );
     }
