@@ -16,6 +16,7 @@ import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:tapni_app/widgets/business_completeness_sheet.dart';
 import 'package:tapni_app/screens/catalog/document_link_form_screen.dart';
+import 'package:tapni_app/screens/gallery_link_screen.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 
@@ -23,13 +24,14 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LinkSheet {
   void showAddLinkBottomSheet(BuildContext context, ProfileProvider provider) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final parentContext = context;
     if (provider.linkCatalog.isEmpty && !provider.isLinkCatalogLoading) {
       provider.fetchLinkCatalog();
     }
 
     bool isSearching = false;
     showModalBottomSheet(
-      context: context,
+      context: parentContext,
       isScrollControlled: true,
       backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
       shape: const RoundedRectangleBorder(
@@ -122,17 +124,41 @@ class LinkSheet {
                             final query = searchController.text
                                 .trim()
                                 .toLowerCase();
-                            final countryFiltered = ensureProductCatalogTemplate(
-                              ensureDocumentsCatalogTemplate(
-                                filterCatalogByUserCountry(
-                                  watchedProvider.linkCatalog,
-                                  _userCountry(watchedProvider),
+                            final countryFiltered = ensureGalleryLinkTemplate(
+                              ensureProductCatalogTemplate(
+                                ensureDocumentsCatalogTemplate(
+                                  filterCatalogByUserCountry(
+                                    watchedProvider.linkCatalog,
+                                    _userCountry(watchedProvider),
+                                  ),
                                 ),
                               ),
                             );
-                            final catalog = query.isEmpty
+                            final hasGallery = watchedProvider.profile.socialLinks
+                                .any((link) => link.isGalleryLink);
+                            final withoutDuplicateGallery = hasGallery
                                 ? countryFiltered
-                                : countryFiltered
+                                    .map(
+                                      (category) => category.copyWith(
+                                        templates: category.templates
+                                            .where(
+                                              (template) =>
+                                                  !isGalleryLinkTemplate(
+                                                    template,
+                                                  ),
+                                            )
+                                            .toList(),
+                                      ),
+                                    )
+                                    .where(
+                                      (category) =>
+                                          category.templates.isNotEmpty,
+                                    )
+                                    .toList()
+                                : countryFiltered;
+                            final catalog = query.isEmpty
+                                ? withoutDuplicateGallery
+                                : withoutDuplicateGallery
                                       .map((category) {
                                         final templates = category.templates
                                             .where(
@@ -168,7 +194,7 @@ class LinkSheet {
                                   ...catalog
                                     .map(
                                       (category) => _buildTemplateCategory(
-                                        context,
+                                        parentContext,
                                         ctx,
                                         category,
                                         provider,
@@ -358,7 +384,7 @@ class LinkSheet {
                 return Padding(
                   padding: const EdgeInsets.only(right: 12),
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       Navigator.pop(sheetContext);
                       final isProUser = Provider.of<ProfileProvider>(
                         context,
@@ -385,6 +411,34 @@ class LinkSheet {
                             ),
                           ),
                         );
+                      } else if (isGalleryLinkTemplate(template) ||
+                          template.actionType == 'gallery') {
+                        if (provider.profile.socialLinks
+                            .any((link) => link.isGalleryLink)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                context.l10n.profileTabGallery,
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+                        await provider.addGalleryLink(
+                          template: template,
+                          context: context,
+                        );
+                        if (context.mounted) {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => GalleryLinkScreen(
+                                items: provider.profile.gallery,
+                                isOwner: true,
+                              ),
+                            ),
+                          );
+                        }
                       } else if (template.actionType == 'menu_catalog') {
                         _openMenuCatalogFromTemplate(
                           context,
@@ -976,6 +1030,8 @@ class LinkSheet {
     final innerRadius = (radius - 1).clamp(0.0, radius);
     final isDocuments = template?.catalogType == 'documents' ||
         template?.label.trim().toLowerCase() == 'documents';
+    final isGallery =
+        template != null && isGalleryLinkTemplate(template);
     final isCustom = template != null && _isCustomTemplate(template);
     final isContactCard = template?.actionType == 'contact_card' ||
         (template?.label.toLowerCase().contains('contact') ?? false);
@@ -1013,7 +1069,18 @@ class LinkSheet {
       );
     }
 
-    final placeholder = isDocuments
+    final placeholder = isGallery
+        ? ColoredBox(
+            color: const Color(0xFFF1F5F9),
+            child: Center(
+              child: Icon(
+                Icons.photo_library_rounded,
+                color: const Color(0xFF0F172A),
+                size: size * 0.42,
+              ),
+            ),
+          )
+        : isDocuments
         ? ColoredBox(
             color: const Color(0xFF1B4F72),
             child: Center(
@@ -1535,12 +1602,190 @@ class LinkSheet {
     );
   }
 
+  void _showGalleryLinkBottomSheet(
+    BuildContext context,
+    SocialLink link,
+    ProfileProvider provider,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    bool showLink = link.isPublic;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(ctx).viewInsets.bottom,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF111111) : Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(24),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF1F5F9),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: const Icon(
+                            Icons.photo_library_rounded,
+                            color: Color(0xFF0F172A),
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Text(
+                            context.l10n.profileTabGallery,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => GalleryLinkScreen(
+                                items: provider.profile.gallery,
+                                isOwner: true,
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.primaryBlack,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                        ),
+                        child: Text(
+                          context.l10n.profileTabGallery,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(context.l10n.showLink),
+                      value: showLink,
+                      onChanged: (value) {
+                        setState(() => showLink = value);
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        _deleteCircleButton(() async {
+                          await provider.deleteSocialLink(link.id, context);
+                          if (ctx.mounted) Navigator.pop(ctx);
+                        }),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: SizedBox(
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final updated = link.copyWith(
+                                  isPublic: showLink,
+                                  isActive: true,
+                                );
+                                final links = List<SocialLink>.from(
+                                  provider.profile.socialLinks,
+                                );
+                                final index = links.indexWhere(
+                                  (item) => item.id == link.id,
+                                );
+                                if (index != -1) {
+                                  links[index] = updated;
+                                  await provider.updateLinks(
+                                    links: links,
+                                    context: context,
+                                  );
+                                }
+                                if (ctx.mounted) Navigator.pop(ctx);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppTheme.primaryBlack,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                              ),
+                              child: Text(
+                                context.l10n.save,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<void> showExistingLinkBottomSheet(
     BuildContext context,
     SocialLink link,
     ProfileProvider provider,
   ) async {
     final catalogTemplate = _findLinkTemplate(link, provider);
+
+    if (link.isGalleryLink ||
+        (catalogTemplate != null && isGalleryLinkTemplate(catalogTemplate))) {
+      _showGalleryLinkBottomSheet(context, link, provider);
+      return;
+    }
 
     final isCatalog = link.isCatalogLink ||
         catalogTemplate?.actionType == 'menu_catalog' ||

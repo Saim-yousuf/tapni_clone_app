@@ -6,6 +6,7 @@ import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/models/explore_cart.dart';
 import 'package:tapni_app/providers/explore_cart_provider.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
@@ -94,7 +95,10 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
                         ),
                         subtitle: Text(
                           item.price > 0
-                              ? 'Rs ${item.price.toStringAsFixed(0)}'
+                              ? formatMoney(
+                                  item.price,
+                                  currency: vendor.currency,
+                                )
                               : 'Free',
                         ),
                         onTap: () => Navigator.pop(ctx, item),
@@ -114,6 +118,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
     final detail = await showCatalogItemDetailSheet(
       context: context,
       item: selected,
+      currency: vendor.currency,
     );
     if (detail == null || !mounted || detail.quantity <= 0) return;
 
@@ -122,6 +127,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
       businessLinkId: vendor.businessLinkId,
       businessName: vendor.businessName,
       catalogType: vendor.catalogType,
+      currency: vendor.currency,
       catalogItems: vendor.catalogItems,
       line: ExploreCartLine(
         item: selected,
@@ -239,7 +245,10 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
                             ),
                           ),
                           Text(
-                            'Rs ${vendor.total.toStringAsFixed(0)}',
+                            formatMoney(
+                              vendor.total,
+                              currency: vendor.currency,
+                            ),
                             style: WaUi.label.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
@@ -252,6 +261,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
                         final line = entry.value;
                         return _CartTile(
                           line: line,
+                          currency: vendor.currency,
                           onRemove: () => cart.removeLine(
                             businessLinkId: vendor.businessLinkId,
                             lineIndex: index,
@@ -280,38 +290,26 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
           : SafeArea(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            context.l10n.total,
-                            style: WaUi.label.copyWith(
-                              color: WaUi.secondaryText,
-                            ),
-                          ),
-                          Text(
-                            'Rs ${cart.total.toStringAsFixed(0)}',
-                            style: WaUi.title.copyWith(
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: WaPrimaryButton(
-                        label: cart.vendorCount > 1
-                            ? 'Place all orders'
-                            : context.l10n.placeOrder,
-                        loading: _placing,
-                        onPressed: _placing ? null : _placeOrders,
-                      ),
-                    ),
-                  ],
+                child: Builder(
+                  builder: (context) {
+                    final currencies =
+                        cart.vendors.map((v) => v.currency).toSet();
+                    final money = currencies.length == 1
+                        ? formatMoney(
+                            cart.total,
+                            currency: currencies.first,
+                          )
+                        : null;
+                    final base = cart.vendorCount > 1
+                        ? 'Place all orders'
+                        : context.l10n.placeOrder;
+                    final label = money != null ? '$base ($money)' : base;
+                    return WaPrimaryButton(
+                      label: label,
+                      loading: _placing,
+                      onPressed: _placing ? null : _placeOrders,
+                    );
+                  },
                 ),
               ),
             ),
@@ -321,11 +319,13 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
 
 class _CartTile extends StatelessWidget {
   final ExploreCartLine line;
+  final String currency;
   final VoidCallback onRemove;
   final ValueChanged<int> onQtyChanged;
 
   const _CartTile({
     required this.line,
+    required this.currency,
     required this.onRemove,
     required this.onQtyChanged,
   });
@@ -375,7 +375,7 @@ class _CartTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Rs ${line.lineTotal.toStringAsFixed(0)}',
+                  formatMoney(line.lineTotal, currency: currency),
                   style: WaUi.label.copyWith(fontWeight: FontWeight.w700),
                 ),
                 if (line.notes.isNotEmpty) ...[

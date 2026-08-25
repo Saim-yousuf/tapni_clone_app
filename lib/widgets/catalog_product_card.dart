@@ -7,6 +7,7 @@ class CatalogProductCard extends StatelessWidget {
   final VoidCallback onTap;
   final int? cartQty;
   final bool isService;
+  final String? currency;
 
   const CatalogProductCard({
     super.key,
@@ -14,6 +15,7 @@ class CatalogProductCard extends StatelessWidget {
     required this.onTap,
     this.cartQty,
     this.isService = false,
+    this.currency,
   });
 
   @override
@@ -29,6 +31,7 @@ class CatalogProductCard extends StatelessWidget {
             imageUrl: item.imageUrl,
             category: item.category,
             price: item.price,
+            currency: currency ?? 'PKR',
             badgeLabel: isService ? 'Service' : 'Shop Product',
             onTap: onTap,
             isDark: isDark,

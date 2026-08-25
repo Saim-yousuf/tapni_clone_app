@@ -13,8 +13,10 @@ import 'package:tapni_app/screens/notifications_screen.dart';
 import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/business_categories.dart';
+import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/explore_actions.dart';
 import 'package:tapni_app/utils/location_helper.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/models/reward.dart';
@@ -458,12 +460,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
     }
   }
 
-  static String _priceLabel(double price, {required String fallback}) {
+  static String _priceLabel(
+    double price, {
+    required String fallback,
+    String? currency,
+  }) {
     if (price <= 0) return fallback;
-    final whole = price == price.roundToDouble();
-    return whole
-        ? 'Rs ${price.toStringAsFixed(0)}'
-        : 'Rs ${price.toStringAsFixed(2)}';
+    return formatMoney(price, currency: currency);
   }
 
   @override
@@ -2164,6 +2167,7 @@ class _ProductCard extends StatelessWidget {
       category: item.category,
       sellerName: item.businessName,
       price: item.price,
+      currency: item.currency,
       avgRating: item.avgRating,
       badgeLabel: item.isService ? 'Service' : 'Shop Product',
       onTap: onTap,
@@ -2289,6 +2293,7 @@ class _ServiceCard extends StatelessWidget {
                             _ExploreScreenState._priceLabel(
                               item.price,
                               fallback: '',
+                              currency: item.currency,
                             ),
                             style: const TextStyle(
                               fontWeight: FontWeight.w800,
@@ -2329,7 +2334,7 @@ class _ServiceCard extends StatelessWidget {
                       ],
                     ),
                     // Rating
-                    if (item.avgRating > 0) ...[
+                    if (Constants.reviewsEnabled && item.avgRating > 0) ...[
                       const SizedBox(height: 4),
                       Row(
                         children: [
@@ -2472,7 +2477,8 @@ class _BusinessCard extends StatelessWidget {
                     Row(
                       children: [
                         // Stars
-                        if (business.reviewCount > 0) ...[
+                        if (Constants.reviewsEnabled &&
+                            business.reviewCount > 0) ...[
                           const Icon(
                             Icons.star_rounded,
                             size: 13,
@@ -2487,7 +2493,9 @@ class _BusinessCard extends StatelessWidget {
                               color: Color(0xFF18181B),
                             ),
                           ),
-                        ] else
+                        ] else if (!Constants.reviewsEnabled)
+                          const SizedBox.shrink()
+                        else
                           Text(
                             'New Store',
                             style: TextStyle(

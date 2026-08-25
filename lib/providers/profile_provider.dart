@@ -16,6 +16,7 @@ import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/services/account_storage.dart';
 
@@ -29,19 +30,12 @@ class ProfileProvider extends ChangeNotifier {
 
   bool _isEditingProfile = false;
   bool get isEditingProfile => _isEditingProfile;
-  int _profileContentTab = 0;
-  int get profileContentTab => _profileContentTab;
   bool _isGalleryUploading = false;
   bool get isGalleryUploading => _isGalleryUploading;
   static const galleryMaxItems = 50;
 
   void setEditingProfile(bool val) {
     _isEditingProfile = val;
-    notifyListeners();
-  }
-
-  void setProfileContentTab(int index) {
-    _profileContentTab = index.clamp(0, 1);
     notifyListeners();
   }
 
@@ -151,12 +145,14 @@ class ProfileProvider extends ChangeNotifier {
 
       if (response.success && response.data is Map<String, dynamic>) {
         final data = response.data as Map<String, dynamic>;
-        _linkCatalog = ensureProductCatalogTemplate(
-          ensureDocumentsCatalogTemplate(
-            (data['categories'] as List<dynamic>? ?? [])
-                .map((item) => LinkCategory.fromJson(item as Map<String, dynamic>))
-                .where((category) => category.templates.isNotEmpty)
-                .toList(),
+        _linkCatalog = ensureGalleryLinkTemplate(
+          ensureProductCatalogTemplate(
+            ensureDocumentsCatalogTemplate(
+              (data['categories'] as List<dynamic>? ?? [])
+                  .map((item) => LinkCategory.fromJson(item as Map<String, dynamic>))
+                  .where((category) => category.templates.isNotEmpty)
+                  .toList(),
+            ),
           ),
         );
       }
@@ -506,6 +502,7 @@ class ProfileProvider extends ChangeNotifier {
     required String email,
     required String website,
     String? country,
+    String? currency,
     String? businessName,
     String? businessCategory,
     required List<SocialLink> links,
@@ -517,6 +514,10 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
     CustomDialog.loadingDialog(context);
 
+    final resolvedCurrency = country != null
+        ? resolveCurrency(country: country)
+        : _profile.currency;
+
     final updatedProfile = _profile.copyWith(
       name: name,
       designation: designation,
@@ -527,6 +528,7 @@ class ProfileProvider extends ChangeNotifier {
       website: website,
       socialLinks: links,
       country: country,
+      currency: resolvedCurrency,
       businessName: businessName,
       businessCategory: businessCategory,
     );
@@ -784,12 +786,16 @@ class ProfileProvider extends ChangeNotifier {
         }
         notifyListeners();
         profileScore();
-        Navigator.pop(context);
+        if (context.mounted) {
+          Navigator.of(context, rootNavigator: true).pop();
+        }
       }
 
       return response;
     } catch (error) {
-      Navigator.pop(context);
+      if (context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
       return ApiResponse<dynamic>(
         success: false,
         statusCode: 0,
@@ -849,6 +855,34 @@ class ProfileProvider extends ChangeNotifier {
       listen: false,
     );
     await profileProvider.updateLinks(links: updatedLinks, context: context);
+    notifyListeners();
+  }
+
+  Future<void> addGalleryLink({
+    required LinkTemplate template,
+    required BuildContext context,
+  }) async {
+    final alreadyHas = _profile.socialLinks.any((link) => link.isGalleryLink);
+    if (alreadyHas) return;
+
+    final newLink = SocialLink(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      platform: SocialPlatform.wave,
+      templateId: template.id.isNotEmpty ? template.id : null,
+      customLabel: template.label.isNotEmpty ? template.label : 'Gallery',
+      fieldLabel: template.fieldLabel,
+      fieldType: 'gallery',
+      actionType: 'gallery',
+      logoUrl: template.logo,
+      url: 'gallery:',
+      value: 'gallery',
+      isCustom: true,
+      isActive: true,
+      isPublic: true,
+    );
+    final updatedLinks = List<SocialLink>.from(_profile.socialLinks)
+      ..add(newLink);
+    await updateLinks(links: updatedLinks, context: context);
     notifyListeners();
   }
 

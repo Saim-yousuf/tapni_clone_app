@@ -233,3 +233,53 @@ List<LinkCategory> ensureProductCatalogTemplate(List<LinkCategory> catalog) {
   updated[businessIndex] = business.copyWith(templates: templates);
   return updated;
 }
+
+bool isGalleryLinkTemplate(LinkTemplate template) {
+  return template.actionType == 'gallery' ||
+      template.label.trim().toLowerCase() == 'gallery';
+}
+
+LinkTemplate galleryLinkTemplate({String categoryId = ''}) {
+  return LinkTemplate(
+    id: '',
+    categoryId: categoryId,
+    label: 'Gallery',
+    fieldType: 'url',
+    fieldLabel: 'Gallery',
+    prefix: '',
+    logo: '',
+    isPro: false,
+    isFeatured: true,
+    isSystem: true,
+    actionType: 'gallery',
+  );
+}
+
+/// Always show Gallery in Featured, even if the API has not seeded it yet.
+List<LinkCategory> ensureGalleryLinkTemplate(List<LinkCategory> catalog) {
+  if (catalog.any(
+    (category) => category.templates.any(isGalleryLinkTemplate),
+  )) {
+    return catalog;
+  }
+
+  final gallery = galleryLinkTemplate();
+  final featuredIndex = catalog.indexWhere(
+    (category) => category.name.trim().toLowerCase() == 'featured',
+  );
+
+  if (featuredIndex == -1) {
+    return [
+      LinkCategory(id: 'featured', name: 'Featured', templates: [gallery]),
+      ...catalog,
+    ];
+  }
+
+  final featured = catalog[featuredIndex];
+  final templates = List<LinkTemplate>.from(featured.templates)
+    ..add(galleryLinkTemplate(categoryId: featured.id));
+
+  final updated = List<LinkCategory>.from(catalog);
+  updated[featuredIndex] = featured.copyWith(templates: templates);
+  return updated;
+}

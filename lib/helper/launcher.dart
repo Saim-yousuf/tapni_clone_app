@@ -1,6 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/log_helper.dart';
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/gallery_item.dart';
 import 'package:tapni_app/models/social_link.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/screens/gallery_link_screen.dart';
 import 'package:tapni_app/widgets/bank_widgets.dart';
 import 'package:tapni_app/widgets/document_viewer.dart';
 import 'package:tapni_app/widgets/loading_widget.dart';
@@ -14,8 +19,28 @@ class Launcher {
     String? businessId,
     String? businessName,
     String? businessCategory,
+    String? currency,
+    List<GalleryItem>? galleryItems,
+    bool isGalleryOwner = false,
   }) async {
     PrintLog.logMessage("model.fieldType: ${model.fieldType}");
+    if (model.isGalleryLink) {
+      final items = galleryItems ??
+          (isGalleryOwner
+              ? Provider.of<ProfileProvider>(context, listen: false)
+                    .profile
+                    .gallery
+              : const <GalleryItem>[]);
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => GalleryLinkScreen(
+            items: items,
+            isOwner: isGalleryOwner,
+          ),
+        ),
+      );
+      return;
+    }
     if (model.isDocumentLink) {
       await openCatalogDocument(
         context,
@@ -34,6 +59,7 @@ class Launcher {
         businessId: businessId,
         businessName: businessName,
         businessCategory: businessCategory,
+        currency: currency,
       );
       return;
     }

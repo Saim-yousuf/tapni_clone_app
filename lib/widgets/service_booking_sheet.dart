@@ -4,6 +4,7 @@ import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/models/service_schedule.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
@@ -14,6 +15,7 @@ Future<bool?> showServiceBookingSheet({
   required String businessId,
   required String businessLinkId,
   required String businessName,
+  String? currency,
 }) {
   return showModalBottomSheet<bool>(
     context: context,
@@ -25,6 +27,7 @@ Future<bool?> showServiceBookingSheet({
       businessId: businessId,
       businessLinkId: businessLinkId,
       businessName: businessName,
+      currency: currency,
     ),
   );
 }
@@ -34,6 +37,7 @@ class ServiceBookingSheet extends StatefulWidget {
   final String businessId;
   final String businessLinkId;
   final String businessName;
+  final String? currency;
 
   const ServiceBookingSheet({
     super.key,
@@ -41,6 +45,7 @@ class ServiceBookingSheet extends StatefulWidget {
     required this.businessId,
     required this.businessLinkId,
     required this.businessName,
+    this.currency,
   });
 
   @override
@@ -204,8 +209,9 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                     children: [
                       Text(
                         widget.item.price > 0
-                            ? context.l10n.rsAmount(
-                                widget.item.price.toStringAsFixed(0),
+                            ? formatMoney(
+                                widget.item.price,
+                                currency: widget.currency,
                               )
                             : context.l10n.free,
                         style: TextStyle(

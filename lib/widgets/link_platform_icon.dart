@@ -43,6 +43,14 @@ class LinkPlatformIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (link.isGalleryLink) {
+      return Icon(
+        Icons.photo_library_rounded,
+        size: size * 0.42,
+        color: const Color(0xFF0F172A),
+      );
+    }
+
     if (link.isDocumentLink) {
       return DocumentKindIcon(
         fileUrl: link.fullUrl,

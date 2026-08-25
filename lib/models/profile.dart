@@ -15,6 +15,8 @@ class UserProfile {
   final String email;
   final String bio;
   String? country;
+  /// ISO 4217 business currency (e.g. PKR, AED). Source of truth for catalog prices.
+  String? currency;
   String? businessName;
   String? businessCategory;
   double? latitude;
@@ -52,6 +54,7 @@ class UserProfile {
     required this.email,
     required this.bio,
     this.country,
+    this.currency,
     this.businessName,
     this.businessCategory,
     this.latitude,
@@ -103,6 +106,7 @@ class UserProfile {
       phone: json['phone']?.toString() ?? '',
       bio: json['bio']?.toString() ?? '',
       country: json['country'],
+      currency: json['currency']?.toString(),
       businessName: json['businessName']?.toString(),
       businessCategory: json['businessCategory']?.toString(),
       latitude: toDouble(json['latitude']),
@@ -133,6 +137,7 @@ class UserProfile {
       if (email.trim().isNotEmpty) 'email': email,
       'bio': bio,
       'country': country,
+      if (currency != null && currency!.trim().isNotEmpty) 'currency': currency,
       'isPublic': isPublic,
       if (businessName != null) 'businessName': businessName,
       if (businessCategory != null) 'businessCategory': businessCategory,
@@ -157,6 +162,7 @@ class UserProfile {
     String? email,
     String? bio,
     String? country,
+    String? currency,
     String? businessName,
     String? businessCategory,
     double? latitude,
@@ -197,6 +203,7 @@ class UserProfile {
       email: email ?? this.email,
       bio: bio ?? this.bio,
       country: country ?? this.country,
+      currency: currency ?? this.currency,
       businessName: businessName ?? this.businessName,
       businessCategory: businessCategory ?? this.businessCategory,
       latitude: clearLatitude ? null : (latitude ?? this.latitude),

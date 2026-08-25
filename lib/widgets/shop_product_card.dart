@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/widgets/cached_app_image.dart';
 
 /// Marketplace-style product card: image, badge, title, category, seller,
@@ -23,6 +25,7 @@ class ShopProductCard extends StatelessWidget {
   final String category;
   final String sellerName;
   final double price;
+  final String currency;
   final double avgRating;
   final String badgeLabel;
   final VoidCallback onTap;
@@ -35,6 +38,7 @@ class ShopProductCard extends StatelessWidget {
     this.category = '',
     this.sellerName = '',
     this.price = 0,
+    this.currency = 'PKR',
     this.avgRating = 0,
     this.badgeLabel = 'Shop Product',
     required this.onTap,
@@ -50,16 +54,12 @@ class ShopProductCard extends StatelessWidget {
     return imageH + contentH;
   }
 
-  static String formatPrice(double price, {String freeLabel = 'Free'}) {
-    if (price <= 0) return freeLabel;
-    final parts = price.toStringAsFixed(2).split('.');
-    final whole = parts[0];
-    final buf = StringBuffer();
-    for (var i = 0; i < whole.length; i++) {
-      if (i > 0 && (whole.length - i) % 3 == 0) buf.write(',');
-      buf.write(whole[i]);
-    }
-    return 'Rs ${buf.toString()}.${parts[1]}';
+  static String formatPrice(
+    double price, {
+    String? currency,
+    String freeLabel = 'Free',
+  }) {
+    return formatMoney(price, currency: currency, freeLabel: freeLabel);
   }
 
   static String titleCase(String text) {
@@ -231,12 +231,14 @@ class ShopProductCard extends StatelessWidget {
                       ),
                     ],
                     const SizedBox(height: 4),
-                    _StarRow(rating: avgRating),
-                    const SizedBox(height: 8),
+                    if (Constants.reviewsEnabled) ...[
+                      _StarRow(rating: avgRating),
+                      const SizedBox(height: 8),
+                    ],
                     Divider(height: 1, thickness: 1, color: dividerColor),
                     const SizedBox(height: 6),
                     Text(
-                      formatPrice(price),
+                      formatPrice(price, currency: currency),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(

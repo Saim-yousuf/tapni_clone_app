@@ -126,7 +126,7 @@ class CheckingPointsScreen extends StatelessWidget {
           context,
           listen: false,
         );
-        profileProvider.setProfileContentTab(1);
+        profileProvider.setEditingProfile(true);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
         );

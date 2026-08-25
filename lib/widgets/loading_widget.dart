@@ -28,6 +28,7 @@ class CustomDialog {
     showDialog(
       barrierDismissible: false,
       context: context,
+      useRootNavigator: true,
       builder: (BuildContext context) => WillPopScope(
         onWillPop: () async => true,
         child: const ProgressDialog(),

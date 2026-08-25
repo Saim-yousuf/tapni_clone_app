@@ -14,6 +14,7 @@ class CatalogOrder {
   final String catalogType;
   final List<CatalogOrderLineItem> items;
   final double totalAmount;
+  final String currency;
   final String? bookingDate;
   final String? bookingTime;
   final OrderStatus status;
@@ -36,6 +37,7 @@ class CatalogOrder {
     this.catalogType = 'catalog',
     required this.items,
     this.totalAmount = 0,
+    this.currency = 'PKR',
     this.bookingDate,
     this.bookingTime,
     this.status = OrderStatus.pending,
@@ -64,6 +66,9 @@ class CatalogOrder {
       totalAmount: (json['totalAmount'] is num)
           ? (json['totalAmount'] as num).toDouble()
           : 0,
+      currency: (json['currency']?.toString().trim().isNotEmpty ?? false)
+          ? json['currency'].toString().toUpperCase()
+          : 'PKR',
       bookingDate: json['bookingDate']?.toString(),
       bookingTime: json['bookingTime']?.toString(),
       status: _parseStatus(json['status']?.toString()),

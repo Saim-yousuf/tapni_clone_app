@@ -157,12 +157,14 @@ class SocialLink {
         'templateId': templateId,
       'label': platformName,
       'title': platformName,
-      'type': isDocumentLink
+      'type': isGalleryLink
+          ? 'gallery'
+          : isDocumentLink
           ? 'document'
           : (catalogItems != null && catalogItems!.isNotEmpty
                 ? 'menu_catalog'
                 : (fieldType ?? apiType)),
-      'value': value,
+      'value': isGalleryLink ? 'gallery' : value,
       if (logoUrl != null && logoUrl!.isNotEmpty) 'logo': logoUrl,
       if (bankDetails != null) 'bankDetails': bankDetails,
       if (contactCard != null) 'contactCard': contactCard,
@@ -172,35 +174,44 @@ class SocialLink {
           catalogCategories != null &&
           catalogCategories!.isNotEmpty)
         'catalogCategories': catalogCategories,
-      if (catalogType != null) 'catalogType': catalogType,
+      if (isCatalogLink && catalogType != null) 'catalogType': catalogType,
+      if (isDocumentLink && catalogType != null) 'catalogType': catalogType,
       if (isDocumentLink && (fileExt?.trim().isNotEmpty ?? false))
         'fileExt': fileExt!.trim().toLowerCase(),
       if (serviceSchedule != null) 'serviceSchedule': serviceSchedule!.toJson(),
       'isCustom': isCustom,
-      'url': fullUrl,
+      'url': isGalleryLink ? 'gallery:' : fullUrl,
       'isActive': isActive,
       'isPublic': isPublic,
     };
   }
 
+  bool get isGalleryLink {
+    if (actionType == 'gallery' || fieldType == 'gallery') return true;
+    if (url?.startsWith('gallery:') == true) return true;
+    return false;
+  }
+
   bool get isDocumentLink {
+    if (isGalleryLink) return false;
     if (fieldType == 'document' || actionType == 'document') return true;
     if (catalogType == 'documents') return true;
     return false;
   }
 
   bool get isCatalogLink {
-    if (isDocumentLink) return false;
-    if (url?.startsWith('catalog:') == true) return true;
-    if (catalogItems != null && catalogItems!.isNotEmpty) return true;
-    if (catalogType == 'menu' ||
-        catalogType == 'services' ||
-        catalogType == 'catalog' ||
-        catalogType == 'products') {
-      return true;
+    if (isDocumentLink || isGalleryLink) return false;
+    if (actionType == 'link' ||
+        actionType == 'contact_card' ||
+        actionType == 'gallery') {
+      return false;
     }
+    // Real catalogs are tagged by actionType / items / catalog: url.
+    // Do NOT trust catalogType alone — User.links.catalogType defaults to
+    // "catalog" in Mongo for every link, which falsely opened the menu sheet.
     if (actionType == 'menu_catalog') return true;
-    if (actionType == 'link' || actionType == 'contact_card') return false;
+    if (catalogItems != null && catalogItems!.isNotEmpty) return true;
+    if (url?.startsWith('catalog:') == true) return true;
     if (fieldType == 'menu_catalog') {
       return url?.startsWith('catalog:') == true ||
           (catalogItems != null && catalogItems!.isNotEmpty);
@@ -229,8 +240,14 @@ class SocialLink {
         type == 'document' ||
         actionType == 'document' ||
         json['catalogType']?.toString() == 'documents';
+    final isGalleryType =
+        type == 'gallery' ||
+        actionType == 'gallery' ||
+        url.startsWith('gallery:');
 
-    if (isDocumentType) {
+    if (isGalleryType) {
+      platform = SocialPlatform.wave;
+    } else if (isDocumentType) {
       platform = SocialPlatform.wave;
     } else if (combined.contains('whatsapp')) {
       platform = SocialPlatform.whatsApp;
@@ -307,10 +324,20 @@ class SocialLink {
               : DateTime.now().millisecondsSinceEpoch.toString()),
       platform: platform,
       templateId: templateId,
-      customLabel: title.isNotEmpty ? title : null,
+      customLabel: title.isNotEmpty
+          ? title
+          : (isGalleryType ? 'Gallery' : null),
       fieldLabel: fieldLabel,
-      fieldType: isDocumentType ? 'document' : type,
-      actionType: isDocumentType ? 'document' : actionType,
+      fieldType: isGalleryType
+          ? 'gallery'
+          : isDocumentType
+          ? 'document'
+          : type,
+      actionType: isGalleryType
+          ? 'gallery'
+          : isDocumentType
+          ? 'document'
+          : actionType,
       isCustom: json['isCustom'] as bool? ?? false,
       logoUrl: logo,
       url: url,
@@ -327,7 +354,18 @@ class SocialLink {
               .map((e) => CatalogItem.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,
-      catalogType: json['catalogType']?.toString(),
+      catalogType: () {
+        final raw = json['catalogType']?.toString().trim();
+        if (raw == null || raw.isEmpty) return null;
+        if (isDocumentType) return 'documents';
+        if (isGalleryType) return null;
+        final isMenu =
+            actionType == 'menu_catalog' ||
+            type == 'menu_catalog' ||
+            url.startsWith('catalog:') ||
+            (catalogItemsJson != null && catalogItemsJson.isNotEmpty);
+        return isMenu ? raw : null;
+      }(),
       fileExt: json['fileExt']?.toString(),
       catalogCategories: (json['catalogCategories'] as List<dynamic>?)
           ?.map((e) => e.toString().trim())
@@ -566,6 +604,9 @@ class SocialLink {
   }
 
   String get fullUrl {
+    if (isGalleryLink) {
+      return url?.isNotEmpty == true ? url! : 'gallery:';
+    }
     if (isDocumentLink) {
       if (url != null &&
           url!.isNotEmpty &&

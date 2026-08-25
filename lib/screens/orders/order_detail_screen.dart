@@ -3,6 +3,7 @@ import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/theme.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -188,7 +189,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               ],
                             ),
                           ),
-                          Text(context.l10n.rsAmount(item.lineTotal.toStringAsFixed(0))),
+                          Text(formatMoney(
+                            item.lineTotal,
+                            currency: _order!.currency,
+                          )),
                         ],
                       ),
                     ),
@@ -201,7 +205,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        context.l10n.rsAmount(_order!.totalAmount.toStringAsFixed(0)),
+                        formatMoney(
+                          _order!.totalAmount,
+                          currency: _order!.currency,
+                        ),
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -213,28 +220,41 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     SizedBox(height: 28),
                     _SectionTitle(context.l10n.updateStatus),
                     SizedBox(height: 12),
-                    _StatusButton(
-                      label: context.l10n.markCompleted,
-                      icon: Icons.check_circle_outline,
-                      color: Colors.green,
-                      isLoading: _isUpdating,
-                      onPressed: () => _updateStatus(OrderStatus.completed),
-                    ),
-                    SizedBox(height: 10),
-                    _StatusButton(
-                      label: context.l10n.cancelOrder,
-                      icon: Icons.cancel_outlined,
-                      color: Colors.red,
-                      isLoading: _isUpdating,
-                      onPressed: () => _updateStatus(OrderStatus.cancelled),
-                    ),
-                    SizedBox(height: 10),
-                    _StatusButton(
-                      label: context.l10n.customerNoShow,
-                      icon: Icons.person_off_outlined,
-                      color: Colors.grey.shade700,
-                      isLoading: _isUpdating,
-                      onPressed: () => _updateStatus(OrderStatus.noShow),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _StatusButton(
+                            label: context.l10n.markCompleted,
+                            icon: Icons.check_circle_outline,
+                            color: Colors.green,
+                            isLoading: _isUpdating,
+                            onPressed: () =>
+                                _updateStatus(OrderStatus.completed),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _StatusButton(
+                            label: context.l10n.cancelOrder,
+                            icon: Icons.cancel_outlined,
+                            color: Colors.red,
+                            isLoading: _isUpdating,
+                            onPressed: () =>
+                                _updateStatus(OrderStatus.cancelled),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _StatusButton(
+                            label: context.l10n.customerNoShow,
+                            icon: Icons.person_off_outlined,
+                            color: Colors.grey.shade700,
+                            isLoading: _isUpdating,
+                            onPressed: () =>
+                                _updateStatus(OrderStatus.noShow),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ],
@@ -442,22 +462,44 @@ class _StatusButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: OutlinedButton.icon(
+      height: 72,
+      child: OutlinedButton(
         onPressed: isLoading ? null : onPressed,
-        icon: isLoading
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: color.withValues(alpha: 0.5)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+        ),
+        child: isLoading
             ? SizedBox(
                 width: 18,
                 height: 18,
-                child: CircularProgressIndicator(strokeWidth: 2, color: color),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: color,
+                ),
               )
-            : Icon(icon, color: color),
-        label: Text(label, style: TextStyle(color: color, fontWeight: FontWeight.w600)),
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(color: color.withOpacity(0.5)),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, color: color, size: 22),
+                  const SizedBox(height: 4),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: color,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 11.5,
+                      height: 1.15,
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }

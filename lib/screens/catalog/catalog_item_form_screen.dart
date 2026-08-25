@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/utils/document_file.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/theme.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:provider/provider.dart';
+
 class CatalogItemFormScreen extends StatefulWidget {
   final String catalogLabel;
   final CatalogItem? existingItem;
@@ -210,7 +214,9 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
                         decoration: WaUi.fieldDecoration(
-                          labelText: context.l10n.priceRs,
+                          labelText: priceFieldLabel(
+                            context.read<ProfileProvider>().profile.currency,
+                          ),
                         ),
                       ),
                       SizedBox(height: 16),

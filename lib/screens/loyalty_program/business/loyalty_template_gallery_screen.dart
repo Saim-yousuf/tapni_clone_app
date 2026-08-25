@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/loyalty_template_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
+import 'package:tapni_app/widgets/official_community_tabs.dart';
 import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 
 /// Browse loyalty stamp-card templates (curated + community).
@@ -132,27 +133,17 @@ class _LoyaltyTemplateGalleryScreenState
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SegmentedButton<int>(
-              segments: [
-                ButtonSegment(
-                  value: 0,
-                  label: Text(context.l10n.official),
-                  icon: const Icon(Icons.star_outline, size: 16),
-                ),
-                ButtonSegment(
-                  value: 1,
-                  label: Text(context.l10n.community),
-                  icon: const Icon(Icons.people_outline, size: 16),
-                ),
-              ],
-              selected: {_segment},
-              onSelectionChanged: (s) {
-                setState(() => _segment = s.first);
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+            child: OfficialCommunityTabs(
+              index: _segment,
+              onChanged: (index) {
+                if (_segment == index) return;
+                setState(() => _segment = index);
                 if (_segment == 1) _loadCommunity();
               },
+              officialLabel: context.l10n.official,
+              communityLabel: context.l10n.community,
             ),
           ),
           const SizedBox(height: 12),
@@ -165,6 +156,7 @@ class _LoyaltyTemplateGalleryScreenState
                 WaPillFilterChip(
                   label: context.l10n.all,
                   selected: _category == null,
+                  selectedColor: WaUi.chipBg,
                   onTap: () {
                     _category = null;
                     _onFilterChanged();
@@ -174,6 +166,7 @@ class _LoyaltyTemplateGalleryScreenState
                   return WaPillFilterChip(
                     label: preferAr ? (c['nameAr'] ?? c['name']!) : c['name']!,
                     selected: _category == c['id'],
+                    selectedColor: WaUi.chipBg,
                     onTap: () {
                       _category = c['id'];
                       _onFilterChanged();
@@ -185,9 +178,27 @@ class _LoyaltyTemplateGalleryScreenState
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: _segment == 0
-                ? _buildCurated(templates, preferAr)
-                : _buildCommunity(),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 0.98, end: 1.0)
+                        .animate(animation),
+                    child: child,
+                  ),
+                );
+              },
+              child: KeyedSubtree(
+                key: ValueKey<int>(_segment),
+                child: _segment == 0
+                    ? _buildCurated(templates, preferAr)
+                    : _buildCommunity(),
+              ),
+            ),
           ),
         ],
       ),

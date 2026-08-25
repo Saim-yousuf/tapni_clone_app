@@ -6,6 +6,7 @@ import 'package:tapni_app/screens/loyalty_program/customer/customer_program_deta
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/reward_card_stack_carousel.dart';
+import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 class CustomerLoyaltyHomeScreen extends StatefulWidget {
   const CustomerLoyaltyHomeScreen({super.key});
@@ -79,11 +80,18 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
     );
   }
 
+  bool get _canOpenProfile {
+    final id = _current?.program?.businessId;
+    return id != null && id.isNotEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     final activeCount = _enrollments.where((e) => !e.isCompleted).length;
     final completedCount = _enrollments.where((e) => e.isCompleted).length;
     final current = _current;
+    final showBottomCta =
+        !_isLoading && _errorMessage == null && current != null;
 
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
@@ -175,43 +183,29 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: OutlinedButton.icon(
-                                        onPressed: () =>
-                                            _openDetails(current),
-                                        icon: const Icon(
-                                          Icons.visibility_outlined,
-                                        ),
-                                        label: Text(context.l10n.details),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: FilledButton.icon(
-                                        onPressed: current.program
-                                                        ?.businessId !=
-                                                    null &&
-                                                current.program!.businessId!
-                                                    .isNotEmpty
-                                            ? _openBusinessProfile
-                                            : null,
-                                        style: FilledButton.styleFrom(
-                                          backgroundColor: WaUi.buttonDark,
-                                        ),
-                                        icon: const Icon(
-                                          Icons.storefront_outlined,
-                                        ),
-                                        label: Text(context.l10n.viewProfile),
-                                      ),
-                                    ),
-                                  ],
+                                child: WaPrimaryButton(
+                                  label: context.l10n.details,
+                                  outlined: true,
+                                  icon: Icons.visibility_outlined,
+                                  onPressed: () => _openDetails(current),
                                 ),
                               ),
                           ],
                         ),
                 ),
+      bottomNavigationBar: showBottomCta
+          ? SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                child: WaPrimaryButton(
+                  label: context.l10n.viewProfile,
+                  icon: Icons.storefront_outlined,
+                  onPressed: _canOpenProfile ? _openBusinessProfile : null,
+                ),
+              ),
+            )
+          : null,
     );
   }
 

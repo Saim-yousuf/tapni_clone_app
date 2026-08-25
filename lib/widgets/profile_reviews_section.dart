@@ -4,6 +4,7 @@ import 'package:tapni_app/models/business_review.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/repository/review_repo.dart';
+import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/profile_empty_state.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
@@ -36,7 +37,7 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
   @override
   void initState() {
     super.initState();
-    _load();
+    if (Constants.reviewsEnabled) _load();
   }
 
   Future<void> _load() async {
@@ -213,6 +214,8 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
 
   @override
   Widget build(BuildContext context) {
+    if (!Constants.reviewsEnabled) return const SizedBox.shrink();
+
     final avg = widget.profile.avgRating;
     final count = widget.profile.reviewCount;
 

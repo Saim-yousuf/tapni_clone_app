@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/catalog_item.dart';
-import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 Future<({int quantity, String notes})?> showCatalogItemDetailSheet({
   required BuildContext context,
   required CatalogItem item,
+  String? currency,
   int initialQty = 0,
   String initialNotes = '',
 }) {
@@ -17,6 +19,7 @@ Future<({int quantity, String notes})?> showCatalogItemDetailSheet({
     backgroundColor: Colors.transparent,
     builder: (ctx) => _CatalogItemDetailSheet(
       item: item,
+      currency: currency,
       initialQty: initialQty,
       initialNotes: initialNotes,
     ),
@@ -25,11 +28,13 @@ Future<({int quantity, String notes})?> showCatalogItemDetailSheet({
 
 class _CatalogItemDetailSheet extends StatefulWidget {
   final CatalogItem item;
+  final String? currency;
   final int initialQty;
   final String initialNotes;
 
   const _CatalogItemDetailSheet({
     required this.item,
+    this.currency,
     required this.initialQty,
     required this.initialNotes,
   });
@@ -103,7 +108,10 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
                       SizedBox(height: 6),
                       Text(
                         widget.item.price > 0
-                            ? 'Rs ${widget.item.price.toStringAsFixed(0)}'
+                            ? formatMoney(
+                                widget.item.price,
+                                currency: widget.currency,
+                              )
                             : 'Free',
                         style: TextStyle(
                           fontSize: 18,
@@ -169,29 +177,23 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(20, 8, 20, 16),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(
-                      context,
-                      (quantity: _qty, notes: _notesCtrl.text.trim()),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryBlack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
+                child: Builder(
+                  builder: (context) {
+                    final lineTotal = widget.item.price * _qty;
+                    final base = widget.initialQty > 0
+                        ? context.l10n.updateCart
+                        : context.l10n.addToCart;
+                    final label = widget.item.price > 0
+                        ? '$base (${formatMoney(lineTotal, currency: widget.currency)})'
+                        : base;
+                    return WaPrimaryButton(
+                      label: label,
+                      onPressed: () => Navigator.pop(
+                        context,
+                        (quantity: _qty, notes: _notesCtrl.text.trim()),
                       ),
-                    ),
-                    child: Text(
-                      widget.initialQty > 0 ? context.l10n.updateCart : context.l10n.addToCart,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ],

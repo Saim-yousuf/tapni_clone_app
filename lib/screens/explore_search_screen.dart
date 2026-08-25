@@ -5,6 +5,7 @@ import 'package:tapni_app/models/explore_business.dart';
 import 'package:tapni_app/repository/explore_repo.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/business_categories.dart';
+import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/explore_actions.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -1265,7 +1266,8 @@ class _BusinessList extends StatelessWidget {
                           const SizedBox(height: 8),
                           Row(
                             children: [
-                              if (biz.reviewCount > 0) ...[
+                              if (Constants.reviewsEnabled &&
+                                  biz.reviewCount > 0) ...[
                                 const Icon(
                                   Icons.star_rounded,
                                   size: 13,

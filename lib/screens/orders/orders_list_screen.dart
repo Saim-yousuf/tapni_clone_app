@@ -3,6 +3,7 @@ import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/theme.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -266,7 +267,10 @@ class _OrderTile extends StatelessWidget {
                     const SizedBox(height: 8),
                   ],
                   Text(
-                    context.l10n.rsAmount(order.totalAmount.toStringAsFixed(0)),
+                    formatMoney(
+                      order.totalAmount,
+                      currency: order.currency,
+                    ),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),

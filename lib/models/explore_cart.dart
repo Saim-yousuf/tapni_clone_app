@@ -28,6 +28,7 @@ class ExploreCartVendor {
   final String businessLinkId;
   final String businessName;
   final String catalogType;
+  final String currency;
   final List<CatalogItem> catalogItems;
   final List<ExploreCartLine> lines;
 
@@ -36,6 +37,7 @@ class ExploreCartVendor {
     required this.businessLinkId,
     required this.businessName,
     required this.catalogType,
+    this.currency = 'PKR',
     required this.catalogItems,
     required this.lines,
   });
@@ -51,12 +53,14 @@ class ExploreCartVendor {
     List<ExploreCartLine>? lines,
     String? businessName,
     String? catalogType,
+    String? currency,
   }) {
     return ExploreCartVendor(
       businessId: businessId,
       businessLinkId: businessLinkId,
       businessName: businessName ?? this.businessName,
       catalogType: catalogType ?? this.catalogType,
+      currency: currency ?? this.currency,
       catalogItems: catalogItems ?? this.catalogItems,
       lines: lines ?? this.lines,
     );

@@ -11,6 +11,8 @@ import 'package:tapni_app/providers/explore_cart_provider.dart';
 import 'package:tapni_app/repository/review_repo.dart';
 import 'package:tapni_app/screens/explore_cart_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
+import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/profile_reviews_section.dart';
 import 'package:tapni_app/widgets/service_booking_sheet.dart';
@@ -63,8 +65,18 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
     return _explore.businessAddress.trim();
   }
 
+  String get _currency =>
+      resolveCurrency(
+        currency: widget.exploreItem.currency.isNotEmpty
+            ? widget.exploreItem.currency
+            : widget.profile.currency,
+        country: widget.profile.country,
+      );
+
   String get _priceLabel {
-    if (_item.price > 0) return 'Rs ${_item.price.toStringAsFixed(0)}';
+    if (_item.price > 0) {
+      return formatMoney(_item.price, currency: _currency);
+    }
     return _isService ? 'Contact for price' : 'Free';
   }
 
@@ -169,6 +181,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
         businessId: businessId,
         businessLinkId: widget.catalogLink.id,
         businessName: _businessName,
+        currency: _currency,
       );
       return;
     }
@@ -180,6 +193,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
       businessName: _businessName,
       catalogType:
           widget.catalogType.isNotEmpty ? widget.catalogType : 'catalog',
+      currency: _currency,
       catalogItems: widget.catalogLink.catalogItems ?? const [],
       line: ExploreCartLine(
         item: _item,
@@ -371,7 +385,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
                           ),
                         ],
                         const SizedBox(height: 28),
-                        _reviewsSection(),
+                        if (Constants.reviewsEnabled) _reviewsSection(),
                       ],
                     ),
                   ),
@@ -442,30 +456,31 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
                       style: WaUi.label.copyWith(color: WaUi.secondaryText),
                     ),
                   const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      if (avg > 0) ...[
-                        const Icon(
-                          Icons.star_rounded,
-                          size: 15,
-                          color: Color(0xFFF5A623),
-                        ),
-                        const SizedBox(width: 3),
-                        Text(
-                          '${avg.toStringAsFixed(1)}${count > 0 ? ' ($count)' : ''}',
-                          style: WaUi.label.copyWith(
-                            fontWeight: FontWeight.w600,
+                  if (Constants.reviewsEnabled)
+                    Row(
+                      children: [
+                        if (avg > 0) ...[
+                          const Icon(
+                            Icons.star_rounded,
+                            size: 15,
+                            color: Color(0xFFF5A623),
                           ),
-                        ),
-                      ] else
-                        Text(
-                          'No ratings yet',
-                          style: WaUi.label.copyWith(
-                            color: WaUi.secondaryText,
+                          const SizedBox(width: 3),
+                          Text(
+                            '${avg.toStringAsFixed(1)}${count > 0 ? ' ($count)' : ''}',
+                            style: WaUi.label.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                    ],
-                  ),
+                        ] else
+                          Text(
+                            'No ratings yet',
+                            style: WaUi.label.copyWith(
+                              color: WaUi.secondaryText,
+                            ),
+                          ),
+                      ],
+                    ),
                   if (_address.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(
@@ -489,7 +504,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
     final chips = <Widget>[];
     final itemRating = _explore.avgRating;
     final itemCount = _explore.reviewCount;
-    if (itemRating > 0) {
+    if (Constants.reviewsEnabled && itemRating > 0) {
       chips.add(
         _chip(
           itemCount > 0
@@ -627,9 +642,15 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
 
   Widget _bottomBar() {
     final total = _item.price * (_isService ? 1 : _qty);
-    final totalLabel = _item.price > 0
-        ? 'Rs ${total.toStringAsFixed(0)}'
-        : _priceLabel;
+    final hasPrice = _item.price > 0;
+    final money = hasPrice
+        ? formatMoney(total, currency: _currency)
+        : null;
+    final action = _isService
+        ? (hasPrice ? 'Book now ($money)' : 'Book now')
+        : (hasPrice
+            ? '${context.l10n.addToCart} ($money)'
+            : context.l10n.addToCart);
 
     return SafeArea(
       top: false,
@@ -639,31 +660,9 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
           color: Colors.white,
           border: Border(top: BorderSide(color: Color(0xFFEEF0F2))),
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _isService ? 'Service' : context.l10n.total,
-                    style: WaUi.label.copyWith(color: WaUi.secondaryText),
-                  ),
-                  Text(
-                    totalLabel,
-                    style: WaUi.title.copyWith(fontWeight: FontWeight.w800),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: WaPrimaryButton(
-                label: _isService ? 'Book now' : context.l10n.addToCart,
-                onPressed: _onPrimaryAction,
-              ),
-            ),
-          ],
+        child: WaPrimaryButton(
+          label: action,
+          onPressed: _onPrimaryAction,
         ),
       ),
     );

@@ -9,6 +9,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/screens/catalog/catalog_item_form_screen.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
+import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
@@ -18,6 +19,7 @@ import 'package:tapni_app/widgets/service_booking_sheet.dart';
 import 'package:tapni_app/utils/document_file.dart';
 import 'package:tapni_app/widgets/business_completeness_sheet.dart';
 import 'package:tapni_app/widgets/shop_product_card.dart';
+import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 void showMenuCatalogSheet({
@@ -29,6 +31,7 @@ void showMenuCatalogSheet({
   LinkTemplate? template,
   String? businessId,
   String? businessName,
+  String? currency,
   bool isCustomerView = false,
   String? initialItemName,
 }) {
@@ -45,6 +48,7 @@ void showMenuCatalogSheet({
       template: template,
       businessId: businessId,
       businessName: businessName,
+      currency: currency,
       isCustomerView: isCustomerView,
       initialItemName: initialItemName,
     ),
@@ -59,6 +63,7 @@ class MenuCatalogSheet extends StatefulWidget {
   final LinkTemplate? template;
   final String? businessId;
   final String? businessName;
+  final String? currency;
   final bool isCustomerView;
   final String? initialItemName;
 
@@ -71,6 +76,7 @@ class MenuCatalogSheet extends StatefulWidget {
     this.template,
     this.businessId,
     this.businessName,
+    this.currency,
     this.isCustomerView = false,
     this.initialItemName,
   });
@@ -93,6 +99,11 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   bool get _isServices => widget.catalogType == 'services';
   bool get _isDocuments => widget.catalogType == 'documents';
   bool _didOpenInitialItem = false;
+
+  String get _currency => resolveCurrency(
+        currency: widget.currency ?? widget.provider?.profile.currency,
+        country: widget.provider?.profile.country,
+      );
 
   @override
   void initState() {
@@ -578,7 +589,9 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 if (!_isDocuments) ...[
                   const SizedBox(height: 4),
                   Text(
-                    item.price > 0 ? 'Rs ${item.price.toStringAsFixed(0)}' : 'Free',
+                    item.price > 0
+                        ? formatMoney(item.price, currency: _currency)
+                        : 'Free',
                     style: TextStyle(fontWeight: FontWeight.w500),
                   ),
                 ],
@@ -696,6 +709,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                     return CatalogProductCard(
                       item: item,
                       isService: _isServices,
+                      currency: _currency,
                       cartQty: _isServices
                           ? null
                           : _cartQtyForIndex(originalIndex),
@@ -769,6 +783,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         businessId: widget.businessId!,
         businessLinkId: widget.existingLink!.id,
         businessName: widget.businessName ?? 'business',
+        currency: _currency,
       );
       return;
     }
@@ -779,6 +794,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     final result = await showCatalogItemDetailSheet(
       context: context,
       item: item,
+      currency: _currency,
       initialQty: existingLine?.quantity ?? 0,
       initialNotes: existingLine?.notes ?? '',
     );
@@ -815,38 +831,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         color: isDark ? Color(0xFF111111) : Colors.white,
         border: Border(top: BorderSide(color: Colors.grey.shade200)),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(context.l10n.itemCount(itemCount)),
-                Text(
-                  context.l10n.totalRs(total.toStringAsFixed(0)),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 48,
-            child: ElevatedButton(
-              onPressed: itemCount == 0 || _isOrdering ? null : _placeOrder,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryBlack,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-              ),
-              child: _isOrdering
-                  ? SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                    )
-                  : Text(context.l10n.placeOrder, style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        ],
+      child: WaPrimaryButton(
+        label: itemCount == 0
+            ? context.l10n.placeOrder
+            : '${context.l10n.placeOrder} (${formatMoney(total, currency: _currency)})',
+        loading: _isOrdering,
+        onPressed: itemCount == 0 || _isOrdering ? null : _placeOrder,
       ),
     );
   }
@@ -1130,6 +1120,7 @@ void openCatalogLink({
   required String? businessId,
   required String? businessName,
   String? businessCategory,
+  String? currency,
   String? initialItemName,
 }) {
   final catalogType = link.catalogType ?? CatalogHelper.typeForCategory(businessCategory);
@@ -1144,6 +1135,7 @@ void openCatalogLink({
     existingLink: link,
     businessId: businessId,
     businessName: businessName,
+    currency: currency,
     isCustomerView: true,
     initialItemName: initialItemName,
   );

@@ -18,6 +18,7 @@ class ExploreBusiness {
   final double avgRating;
   final int reviewCount;
   final double? distanceKm;
+  final String currency;
 
   const ExploreBusiness({
     required this.id,
@@ -36,6 +37,7 @@ class ExploreBusiness {
     this.avgRating = 0,
     this.reviewCount = 0,
     this.distanceKm,
+    this.currency = 'PKR',
   });
 
   factory ExploreBusiness.fromJson(Map<String, dynamic> json) {
@@ -62,6 +64,9 @@ class ExploreBusiness {
       avgRating: toDouble(json['avgRating']) ?? 0,
       reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
       distanceKm: toDouble(json['distanceKm']),
+      currency: (json['currency']?.toString().trim().isNotEmpty ?? false)
+          ? json['currency'].toString().toUpperCase()
+          : 'PKR',
     );
   }
 
@@ -186,6 +191,7 @@ class ExploreItem {
   final double avgRating;
   final int reviewCount;
   final double? distanceKm;
+  final String currency;
 
   const ExploreItem({
     required this.id,
@@ -202,6 +208,7 @@ class ExploreItem {
     this.avgRating = 0,
     this.reviewCount = 0,
     this.distanceKm,
+    this.currency = 'PKR',
   });
 
   factory ExploreItem.fromJson(Map<String, dynamic> json) {
@@ -220,6 +227,9 @@ class ExploreItem {
       avgRating: (json['avgRating'] as num?)?.toDouble() ?? 0,
       reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
       distanceKm: (json['distanceKm'] as num?)?.toDouble(),
+      currency: (json['currency']?.toString().trim().isNotEmpty ?? false)
+          ? json['currency'].toString().toUpperCase()
+          : 'PKR',
     );
   }
 

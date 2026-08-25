@@ -24,6 +24,7 @@ class ExploreCartProvider extends ChangeNotifier {
     required String businessLinkId,
     required String businessName,
     required String catalogType,
+    String currency = 'PKR',
     required List<CatalogItem> catalogItems,
     required ExploreCartLine line,
   }) {
@@ -39,6 +40,7 @@ class ExploreCartProvider extends ChangeNotifier {
           businessLinkId: businessLinkId,
           businessName: businessName,
           catalogType: catalogType,
+          currency: currency,
           catalogItems: List<CatalogItem>.from(catalogItems),
           lines: [line],
         ),
@@ -63,6 +65,7 @@ class ExploreCartProvider extends ChangeNotifier {
     _vendors[idx] = vendor.copyWith(
       businessName: businessName,
       catalogType: catalogType,
+      currency: currency,
       catalogItems: List<CatalogItem>.from(catalogItems),
       lines: lines,
     );
