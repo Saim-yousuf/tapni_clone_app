@@ -13,6 +13,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/custom_card_editor_sheet.dart';
 import 'package:tapni_app/widgets/qr_card_stack_carousel.dart';
+import 'package:tapni_app/widgets/wa_primary_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -191,8 +192,6 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
     final card = _currentCard(provider);
     final activeIndex = cards.indexWhere((c) => c.id == provider.activeCardId);
     final stackIndex = activeIndex >= 0 ? activeIndex : _currentIndex;
-    final bottomPadding = MediaQuery.paddingOf(context).bottom;
-
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.94,
@@ -203,214 +202,85 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
         return Container(
           width: double.infinity,
           decoration: WaUi.sheetDecoration,
-          child: ListView(
-            controller: scrollController,
-            padding: EdgeInsets.fromLTRB(16, 10, 16, 16 + bottomPadding),
-            children: [
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: WaUi.divider,
-                    borderRadius: BorderRadius.circular(2),
+          child: SafeArea(
+            top: false,
+            child: ListView(
+              controller: scrollController,
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+              children: [
+                Center(
+                  child: Container(
+                    width: 56,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: WaUi.divider,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(4, 16, 4, 4),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(context.l10n.shareCard, style: WaUi.headline),
-                          const SizedBox(height: 2),
-                          Text(
-                            card != null
-                                ? '${card.template.name} · Swipe for more cards'
-                                : context.l10n.createACardToShareYourProfile,
-                            style: WaUi.caption,
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close, color: WaUi.secondaryText),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-              QrCardStackCarousel(
-                key: ValueKey(cards.length),
-                cards: cards,
-                initialIndex: stackIndex.clamp(
-                  0,
-                  cards.isEmpty ? 0 : cards.length - 1,
-                ),
-                cardKey: _cardKey,
-                onPageChanged: (i) => _onPageChanged(i, provider),
-                onAddCard: () => _openEditor(),
-                onEditCard: card != null && !card.isPrimary
-                    ? () {
-                        final custom = provider.customCardById(card.id);
-                        if (custom != null) _openEditor(existing: custom);
-                      }
-                    : null,
-                onDeleteCard:
-                    card != null && !card.isPrimary && cards.length > 1
-                        ? _deleteCurrentCard
-                        : null,
-              ),
-              const SizedBox(height: 28),
-              Container(
-                decoration: BoxDecoration(
-                  color: WaUi.scaffold,
-                  borderRadius: BorderRadius.circular(WaUi.radiusLg),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 18, horizontal: 6),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _ExportAction(
-                        label: context.l10n.download,
-                        icon: Icons.download_rounded,
-                        onTap: _openDownloadSheet,
-                      ),
-                    ),
-                    _ExportDivider(),
-                    Expanded(
-                      child: _ExportAction(
-                        label: context.l10n.share,
-                        icon: Icons.ios_share_rounded,
-                        onTap: _shareCard,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 14),
-              Material(
-                color: WaUi.buttonDark,
-                borderRadius: BorderRadius.circular(WaUi.radiusLg),
-                child: InkWell(
-                  onTap: _walletLoading ? null : _addToGoogleWallet,
-                  borderRadius: BorderRadius.circular(WaUi.radiusLg),
-                  child: SizedBox(
-                    height: 54,
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (_walletLoading)
-                          const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(context.l10n.shareCard, style: WaUi.headline),
+                            const SizedBox(height: 2),
+                            Text(
+                              card != null
+                                  ? '${card.template.name} · Swipe for more cards'
+                                  : context.l10n.createACardToShareYourProfile,
+                              style: WaUi.caption,
                             ),
-                          )
-                        else
-                          const Icon(
-                            Icons.account_balance_wallet_outlined,
-                            size: 20,
-                            color: Colors.white,
-                          ),
-                        const SizedBox(width: 10),
-                        Text(
-                          context.l10n.addToGoogleWallet,
-                          style: WaUi.button.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.1,
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close, color: WaUi.secondaryText),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                QrCardStackCarousel(
+                  key: ValueKey(cards.length),
+                  cards: cards,
+                  initialIndex: stackIndex.clamp(
+                    0,
+                    cards.isEmpty ? 0 : cards.length - 1,
+                  ),
+                  cardKey: _cardKey,
+                  onPageChanged: (i) => _onPageChanged(i, provider),
+                  onAddCard: () => _openEditor(),
+                  onEditCard: card != null && !card.isPrimary
+                      ? () {
+                          final custom = provider.customCardById(card.id);
+                          if (custom != null) _openEditor(existing: custom);
+                        }
+                      : null,
+                  onDeleteCard:
+                      card != null && !card.isPrimary && cards.length > 1
+                          ? _deleteCurrentCard
+                          : null,
+                  onDownload: card != null ? _openDownloadSheet : null,
+                  onShare: card != null ? _shareCard : null,
+                ),
+                const SizedBox(height: 20),
+                WaPrimaryButton(
+                  label: context.l10n.addToGoogleWallet,
+                  icon: Icons.account_balance_wallet_outlined,
+                  loading: _walletLoading,
+                  onPressed: _walletLoading ? null : _addToGoogleWallet,
+                ),
+              ],
+            ),
           ),
         );
       },
-    );
-  }
-}
-
-class _ExportDivider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 1,
-      height: 36,
-      color: WaUi.divider,
-    );
-  }
-}
-
-class _ExportAction extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final VoidCallback onTap;
-  final bool loading;
-
-  const _ExportAction({
-    required this.label,
-    required this.icon,
-    required this.onTap,
-    this.loading = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: loading ? null : onTap,
-      borderRadius: BorderRadius.circular(WaUi.radiusMd),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 44,
-              height: 44,
-              child: DecoratedBox(
-                decoration: const BoxDecoration(
-                  color: WaUi.surface,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: loading
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: WaUi.secondaryText,
-                          ),
-                        )
-                      : Icon(icon, size: 20, color: WaUi.primaryText),
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: WaUi.label.copyWith(
-                color: WaUi.primaryText,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.3,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

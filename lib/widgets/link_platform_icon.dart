@@ -44,11 +44,20 @@ class LinkPlatformIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (link.isGalleryLink) {
-      return Icon(
-        Icons.photo_library_rounded,
-        size: size * 0.42,
-        color: const Color(0xFF0F172A),
-      );
+      final provider = Provider.of<ProfileProvider>(context);
+      final logo = _networkLogo(link.logoUrl) ??
+          _networkLogo(provider.catalogLogoFor(link));
+      if (logo != null) {
+        return Image.network(
+          logo,
+          width: size,
+          height: size,
+          fit: fit,
+          alignment: Alignment.center,
+          errorBuilder: (_, __, ___) => _galleryFallback(),
+        );
+      }
+      return _galleryFallback();
     }
 
     if (link.isDocumentLink) {
@@ -75,6 +84,19 @@ class LinkPlatformIcon extends StatelessWidget {
       fit: fit,
       alignment: Alignment.center,
       errorBuilder: (_, __, ___) => _assetFallback(),
+    );
+  }
+
+  Widget _galleryFallback() {
+    return ColoredBox(
+      color: const Color(0xFFF1F5F9),
+      child: Center(
+        child: Icon(
+          Icons.photo_library_rounded,
+          size: size * 0.42,
+          color: const Color(0xFF0F172A),
+        ),
+      ),
     );
   }
 }

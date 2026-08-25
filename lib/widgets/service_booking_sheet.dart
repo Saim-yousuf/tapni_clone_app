@@ -21,6 +21,7 @@ Future<bool?> showServiceBookingSheet({
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
+    useRootNavigator: true,
     backgroundColor: Colors.transparent,
     builder: (ctx) => ServiceBookingSheet(
       item: item,
@@ -116,37 +117,46 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
 
     setState(() => _isBooking = true);
 
-    final res = await _repo.placeOrder(
-      businessId: widget.businessId,
-      businessLinkId: widget.businessLinkId,
-      catalogType: 'services',
-      bookingDate: _dateStr,
-      bookingTime: _selectedTime,
-      items: [
-        {
-          'name': widget.item.name,
-          'price': widget.item.price,
-          'quantity': 1,
-          'notes': _notesCtrl.text.trim(),
-        },
-      ],
-    );
+    try {
+      final res = await _repo.placeOrder(
+        businessId: widget.businessId,
+        businessLinkId: widget.businessLinkId,
+        catalogType: 'services',
+        bookingDate: _dateStr,
+        bookingTime: _selectedTime,
+        items: [
+          {
+            'name': widget.item.name,
+            'price': widget.item.price,
+            'quantity': 1,
+            'notes': _notesCtrl.text.trim(),
+          },
+        ],
+      );
 
-    if (!mounted) return;
-    setState(() => _isBooking = false);
+      if (!mounted) return;
 
-    if (res.success) {
-      final token = CatalogOrder.tokenFromApi(res.data);
-      final message = token > 0
-          ? 'Token #$token — ${context.l10n.bookedWith(widget.item.name, widget.businessName)}'
-          : context.l10n.bookedWith(widget.item.name, widget.businessName);
-      final messenger = ScaffoldMessenger.of(context);
-      Navigator.pop(context, true);
-      messenger.showSnackBar(SnackBar(content: Text(message)));
-    } else {
+      if (res.success) {
+        final token = CatalogOrder.tokenFromApi(res.data);
+        final message = token > 0
+            ? 'Token #$token — ${context.l10n.bookedWith(widget.item.name, widget.businessName)}'
+            : context.l10n.bookedWith(widget.item.name, widget.businessName);
+        final messenger = ScaffoldMessenger.of(context);
+        Navigator.of(context, rootNavigator: true).pop(true);
+        messenger.showSnackBar(SnackBar(content: Text(message)));
+        return;
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(res.message ?? context.l10n.bookingFailed)),
       );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.bookingFailed)),
+      );
+    } finally {
+      if (mounted) setState(() => _isBooking = false);
     }
   }
 
@@ -185,7 +195,8 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.close),
-                      onPressed: () => Navigator.pop(context),
+                    onPressed: () =>
+                        Navigator.of(context, rootNavigator: true).pop(),
                     ),
                     Expanded(
                       child: Text(

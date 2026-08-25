@@ -527,21 +527,19 @@ class _ExploreScreenState extends State<ExploreScreen> {
       ),
       body: SafeArea(
         bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 50),
-          child: Column(
-            children: [
-              _buildHeader(colors),
-              Expanded(
-                child: RefreshIndicator(
-                  color: colors.accent,
-                  onRefresh: _load,
-                  
-                  child: _buildBody(colors),
-                ),
+        child: Column(
+          children: [
+            _buildHeader(colors),
+            Expanded(
+              child: RefreshIndicator(
+                color: colors.accent,
+                onRefresh: _load,
+                
+                child: _buildBody(colors),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 70),
+          ],
         ),
       ),
     );

@@ -200,6 +200,18 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   String? catalogLogoFor(SocialLink link) {
+    if (link.isGalleryLink) {
+      for (final category in _linkCatalog) {
+        for (final template in category.templates) {
+          if (!isGalleryLinkTemplate(template)) continue;
+          final logo = template.logo.trim();
+          if (logo.startsWith('http://') || logo.startsWith('https://')) {
+            return logo;
+          }
+        }
+      }
+    }
+
     final isGenericCustom = link.platform == SocialPlatform.wave &&
         (link.templateId == null || link.templateId!.isEmpty);
     final template = findCatalogTemplate(

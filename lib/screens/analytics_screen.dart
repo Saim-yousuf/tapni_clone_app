@@ -170,94 +170,89 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 50),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              WaChatsHeader(
-                title: context.l10n.analyticsDashboard,
-                actions: [NotificationIconButton()],
-              ),
-              Expanded(
-                child: !isPro
-                    ? _LockedAnalyticsPreview(bottomPad: bottomPad)
-                    : _isLoading
-                    ? _AnalyticsShimmer(bottomPad: bottomPad)
-                    : RefreshIndicator(
-                        color: WaUi.buttonDark,
-                        onRefresh: _fetchAnalytics,
-                        child: ListView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          padding: EdgeInsets.fromLTRB(16, 4, 16, bottomPad),
-                          children: [
-                            _RangeChips(
-                              selected: _range,
-                              onSelected: _setRange,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            WaChatsHeader(
+              title: context.l10n.analyticsDashboard,
+              actions: [NotificationIconButton()],
+            ),
+            Expanded(
+              child: !isPro
+                  ? _LockedAnalyticsPreview(bottomPad: bottomPad)
+                  : _isLoading
+                  ? _AnalyticsShimmer(bottomPad: bottomPad)
+                  : RefreshIndicator(
+                      color: WaUi.buttonDark,
+                      onRefresh: _fetchAnalytics,
+                      child: ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: EdgeInsets.fromLTRB(16, 4, 16, bottomPad),
+                        children: [
+                          _RangeChips(selected: _range, onSelected: _setRange),
+                          const SizedBox(height: 18),
+                          if (_insights.isNotEmpty) ...[
+                            _InsightStrip(
+                              insights: _insights,
+                              compareLabel: _range.compareLabel,
                             ),
-                            const SizedBox(height: 18),
-                            if (_insights.isNotEmpty) ...[
-                              _InsightStrip(
-                                insights: _insights,
-                                compareLabel: _range.compareLabel,
-                              ),
-                              const SizedBox(height: 20),
-                            ],
-                            _MetricsGrid(
-                              profileViews: _profileViews,
-                              cardScans: _cardScans,
-                              uniqueViewers: _uniqueViewers,
-                              guestViews: _guestViews,
-                              userViews: _userViews,
-                              viewsChangePct: _viewsChangePct,
-                              scansChangePct: _scansChangePct,
-                            ),
-                            const SizedBox(height: 28),
-                            Row(
-                              children: [
-                                Text('Activity', style: WaUi.sectionHeader),
-                                const Spacer(),
-                                _LegendDot(
-                                  color: WaUi.primaryText,
-                                  label: 'Views',
-                                ),
-                                const SizedBox(width: 12),
-                                _LegendDot(
-                                  color: const Color(0xFF10A375),
-                                  label: 'Scans',
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            _TrendChart(points: _trend),
-                            const SizedBox(height: 28),
-                            _ListTabs(
-                              selected: _selectedListTab,
-                              viewersCount: _profileViewers.length,
-                              scannersCount: _scanners.length,
-                              onChanged: (i) =>
-                                  setState(() => _selectedListTab = i),
-                            ),
-                            const SizedBox(height: 8),
-                            if (_selectedListTab == 0)
-                              ..._buildPeopleList(
-                                items: _profileViewers,
-                                emptyLabel:
-                                    context.l10n.noOneHasViewedYourProfileYet,
-                                isScan: false,
-                              )
-                            else
-                              ..._buildPeopleList(
-                                items: _scanners,
-                                emptyLabel: 'No QR scans in this period yet.',
-                                isScan: true,
-                              ),
+                            const SizedBox(height: 20),
                           ],
-                        ),
+                          _MetricsGrid(
+                            profileViews: _profileViews,
+                            cardScans: _cardScans,
+                            uniqueViewers: _uniqueViewers,
+                            guestViews: _guestViews,
+                            userViews: _userViews,
+                            viewsChangePct: _viewsChangePct,
+                            scansChangePct: _scansChangePct,
+                          ),
+                          const SizedBox(height: 28),
+                          Row(
+                            children: [
+                              Text('Activity', style: WaUi.sectionHeader),
+                              const Spacer(),
+                              _LegendDot(
+                                color: WaUi.primaryText,
+                                label: 'Views',
+                              ),
+                              const SizedBox(width: 12),
+                              _LegendDot(
+                                color: const Color(0xFF10A375),
+                                label: 'Scans',
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          _TrendChart(points: _trend),
+                          const SizedBox(height: 28),
+                          _ListTabs(
+                            selected: _selectedListTab,
+                            viewersCount: _profileViewers.length,
+                            scannersCount: _scanners.length,
+                            onChanged: (i) =>
+                                setState(() => _selectedListTab = i),
+                          ),
+                          const SizedBox(height: 8),
+                          if (_selectedListTab == 0)
+                            ..._buildPeopleList(
+                              items: _profileViewers,
+                              emptyLabel:
+                                  context.l10n.noOneHasViewedYourProfileYet,
+                              isScan: false,
+                            )
+                          else
+                            ..._buildPeopleList(
+                              items: _scanners,
+                              emptyLabel: 'No QR scans in this period yet.',
+                              isScan: true,
+                            ),
+                        ],
                       ),
-              ),
-            ],
-          ),
+                    ),
+            ),
+            const SizedBox(height: 70),
+          ],
         ),
       ),
     );

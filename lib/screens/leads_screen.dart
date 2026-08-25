@@ -15,6 +15,7 @@ import 'package:tapni_app/widgets/filter_contacts_sheet.dart';
 import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+
 class LeadsScreen extends StatefulWidget {
   const LeadsScreen({Key? key}) : super(key: key);
 
@@ -44,10 +45,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
 
   Future<void> _refreshContacts() {
     final provider = context.read<LeadsProvider>();
-    return Future.wait([
-      provider.fetchLeads(),
-      provider.fetchCategories(),
-    ]);
+    return Future.wait([provider.fetchLeads(), provider.fetchCategories()]);
   }
 
   void _dismissKeyboard() {
@@ -57,9 +55,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
 
   Future<void> _openScan() async {
     _dismissKeyboard();
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => ScanScreen()),
-    );
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => ScanScreen()));
     if (!mounted) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _dismissKeyboard();
@@ -68,9 +66,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
 
   void _openFindUser() {
     _dismissKeyboard();
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => FindUserScreen()),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => FindUserScreen()));
   }
 
   @override
@@ -82,10 +80,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       floatingActionButton: Padding(
-       padding: const EdgeInsets.only(
-    bottom: 88,
-    right: 20,
-  ),
+        padding: const EdgeInsets.only(bottom: 88, right: 20),
         child: WaContactSpeedDial(
           onAdd: () => _showAddLeadSheet(context, leadsProvider),
           onFind: _openFindUser,
@@ -95,136 +90,143 @@ class _LeadsScreenState extends State<LeadsScreen> {
         onTap: _dismissKeyboard,
         behavior: HitTestBehavior.translucent,
         child: SafeArea(
-          child: Padding(
-             padding: const EdgeInsets.only(bottom: 50),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                WaChatsHeader(
-                  title: context.l10n.contacts,
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.photo_camera_outlined, size: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              WaChatsHeader(
+                title: context.l10n.contacts,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.photo_camera_outlined, size: 24),
+                    color: WaUi.primaryText,
+                    tooltip: context.l10n.scan,
+                    onPressed: _openScan,
+                  ),
+                  PopupMenuButton<String>(
+                    icon: const Icon(
+                      Icons.more_vert,
+                      size: 24,
                       color: WaUi.primaryText,
-                      tooltip: context.l10n.scan,
-                      onPressed: _openScan,
                     ),
-                    PopupMenuButton<String>(
-                      icon: const Icon(
-                        Icons.more_vert,
-                        size: 24,
-                        color: WaUi.primaryText,
-                      ),
-                      color: WaUi.surface,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                      ),
-                      onSelected: (value) =>
-                          _onMenuAction(context, value, leadsProvider),
-                      itemBuilder: (_) => [
-                        PopupMenuItem(
-                          value: 'invitations',
-                          child: Text(context.l10n.invitations, style: WaUi.body),
-                        ),
-                        PopupMenuItem(
-                          value: 'find',
-                          child:
-                              Text(context.l10n.findUsername, style: WaUi.body),
-                        ),
-                        PopupMenuItem(
-                          value: 'filter',
-                          child: Text(context.l10n.filterContacts,
-                              style: WaUi.body),
-                        ),
-                        PopupMenuItem(
-                          value: 'categories',
-                          child: Text(context.l10n.manageCategories,
-                              style: WaUi.body),
-                        ),
-                      ],
+                    color: WaUi.surface,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(WaUi.radiusMd),
                     ),
-                  ],
-                ),
-                Expanded(
-                  child: leadsProvider.isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : RefreshIndicator(
-                          color: WaUi.accent,
-                          onRefresh: _refreshContacts,
-                          child: CustomScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            slivers: [
-                              SliverToBoxAdapter(
-                                child: WaChatSearchBar(
-                                  controller: _searchController,
-                                  focusNode: _searchFocus,
-                                  hintText: context.l10n.searchEllipsis,
-                                  readOnly: true,
-                                  onTap: () {
-                                    _dismissKeyboard();
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) =>
-                                            const ContactsSearchScreen(),
-                                      ),
-                                    );
-                                  },
+                    onSelected: (value) =>
+                        _onMenuAction(context, value, leadsProvider),
+                    itemBuilder: (_) => [
+                      PopupMenuItem(
+                        value: 'invitations',
+                        child: Text(
+                          context.l10n.invitations,
+                          style: WaUi.body,
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'find',
+                        child: Text(
+                          context.l10n.findUsername,
+                          style: WaUi.body,
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'filter',
+                        child: Text(
+                          context.l10n.filterContacts,
+                          style: WaUi.body,
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'categories',
+                        child: Text(
+                          context.l10n.manageCategories,
+                          style: WaUi.body,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Expanded(
+                child: leadsProvider.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : RefreshIndicator(
+                        color: WaUi.accent,
+                        onRefresh: _refreshContacts,
+                        child: CustomScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: WaChatSearchBar(
+                                controller: _searchController,
+                                focusNode: _searchFocus,
+                                hintText: context.l10n.searchEllipsis,
+                                readOnly: true,
+                                onTap: () {
+                                  _dismissKeyboard();
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const ContactsSearchScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: WaContactFilterChips(
+                                key: ValueKey(
+                                  leadsProvider.categories
+                                      .map((c) => c.id)
+                                      .join(','),
+                                ),
+                                categories: List.of(leadsProvider.categories),
+                                activeCategoryId:
+                                    leadsProvider.activeCategoryId,
+                                onAllTap: () =>
+                                    leadsProvider.setActiveCategory(null),
+                                onCategoryTap: (id) =>
+                                    leadsProvider.setActiveCategory(id),
+                                onAddCategory: () => _showAddCategoryDialog(
+                                  context,
+                                  leadsProvider,
                                 ),
                               ),
-                              SliverToBoxAdapter(
-                                child: WaContactFilterChips(
-                                  key: ValueKey(
-                                    leadsProvider.categories
-                                        .map((c) => c.id)
-                                        .join(','),
-                                  ),
-                                  categories: List.of(leadsProvider.categories),
-                                  activeCategoryId:
-                                      leadsProvider.activeCategoryId,
-                                  onAllTap: () =>
-                                      leadsProvider.setActiveCategory(null),
-                                  onCategoryTap: (id) =>
-                                      leadsProvider.setActiveCategory(id),
-                                  onAddCategory: () => _showAddCategoryDialog(
+                            ),
+                            if (leadsList.isEmpty)
+                              SliverFillRemaining(
+                                hasScrollBody: false,
+                                child: WaContactEmptyState(
+                                  isSearching: isFiltering,
+                                  onScan: _openScan,
+                                  onAdd: () => _showAddLeadSheet(
                                     context,
                                     leadsProvider,
                                   ),
                                 ),
-                              ),
-                              if (leadsList.isEmpty)
-                                SliverFillRemaining(
-                                  hasScrollBody: false,
-                                  child: WaContactEmptyState(
-                                    isSearching: isFiltering,
-                                    onScan: _openScan,
-                                    onAdd: () => _showAddLeadSheet(
+                              )
+                            else
+                              SliverPadding(
+                                padding: const EdgeInsets.only(bottom: 120),
+                                sliver: SliverList(
+                                  delegate: SliverChildBuilderDelegate((
+                                    context,
+                                    index,
+                                  ) {
+                                    return _buildContactRow(
                                       context,
+                                      leadsList[index],
                                       leadsProvider,
-                                    ),
-                                  ),
-                                )
-                              else
-                                SliverPadding(
-                                  padding: const EdgeInsets.only(bottom: 120),
-                                  sliver: SliverList(
-                                    delegate: SliverChildBuilderDelegate(
-                                      (context, index) {
-                                        return _buildContactRow(
-                                          context,
-                                          leadsList[index],
-                                          leadsProvider,
-                                        );
-                                      },
-                                      childCount: leadsList.length,
-                                    ),
-                                  ),
+                                    );
+                                  }, childCount: leadsList.length),
                                 ),
-                            ],
-                          ),
+                              ),
+                          ],
                         ),
-                ),
-              ],
-            ),
+                      ),
+              ),
+            const SizedBox(height: 70),
+            ],
           ),
         ),
       ),
@@ -240,9 +242,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
       case 'invitations':
         _dismissKeyboard();
         Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => const InvitationsHomeScreen(),
-          ),
+          MaterialPageRoute(builder: (_) => const InvitationsHomeScreen()),
         );
         break;
       case 'find':
@@ -267,7 +267,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
       context: context,
       backgroundColor: WaUi.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(WaUi.radiusLg)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(WaUi.radiusLg),
+        ),
       ),
       builder: (ctx) {
         return SafeArea(
@@ -321,7 +323,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
                           showDialog(
                             context: context,
                             builder: (dialogCtx) => AlertDialog(
-                              title: Text(context.l10n.deleteCategory, style: WaUi.title),
+                              title: Text(
+                                context.l10n.deleteCategory,
+                                style: WaUi.title,
+                              ),
                               content: Text(
                                 context.l10n.deleteCategoryNamed(category.name),
                                 style: WaUi.body,
@@ -329,7 +334,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(dialogCtx),
-                                  child: Text(context.l10n.cancel, style: WaUi.bodyMedium),
+                                  child: Text(
+                                    context.l10n.cancel,
+                                    style: WaUi.bodyMedium,
+                                  ),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -398,7 +406,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController();
     final emailController = TextEditingController();
-    final phoneController = TextEditingController();  
+    final phoneController = TextEditingController();
     final companyController = TextEditingController();
     final jobTitleController = TextEditingController();
     final websiteController = TextEditingController();
@@ -421,9 +429,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
           child: Container(
             decoration: BoxDecoration(
               color: isDark ? AppTheme.cardDarkBg : Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(24),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               border: Border.all(
                 color: isDark
                     ? AppTheme.greyBorderDark
@@ -450,14 +456,16 @@ class _LeadsScreenState extends State<LeadsScreen> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    Text(ctx.l10n.captureNewContact,
+                    Text(
+                      ctx.l10n.captureNewContact,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(height: 4),
-                    Text(ctx.l10n.enterNetworkingContactDetailsBelow,
+                    Text(
+                      ctx.l10n.enterNetworkingContactDetailsBelow,
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     SizedBox(height: 24),
@@ -471,8 +479,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
                         prefixIcon: Icon(Icons.person_outline),
                         hintText: ctx.l10n.janeDoe,
                       ),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? ctx.l10n.nameIsRequired : null,
+                      validator: (v) => v == null || v.isEmpty
+                          ? ctx.l10n.nameIsRequired
+                          : null,
                     ),
                     SizedBox(height: 16),
 
@@ -485,8 +494,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
                         hintText: ctx.l10n.janeCompanyCom,
                       ),
                       validator: (v) {
-                        if (v == null || v.isEmpty) return context.l10n.emailIsRequired;
-                        if (!v.contains('@')) return context.l10n.enterAValidEmail;
+                        if (v == null || v.isEmpty)
+                          return context.l10n.emailIsRequired;
+                        if (!v.contains('@'))
+                          return context.l10n.enterAValidEmail;
                         return null;
                       },
                     ),
@@ -500,8 +511,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
                         prefixIcon: Icon(Icons.phone_outlined),
                         hintText: '+1 (555) 123-4567',
                       ),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? context.l10n.phoneIsRequired : null,
+                      validator: (v) => v == null || v.isEmpty
+                          ? context.l10n.phoneIsRequired
+                          : null,
                     ),
                     SizedBox(height: 16),
 
@@ -669,7 +681,8 @@ class _LeadsScreenState extends State<LeadsScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(ctx.l10n.manageContact,
+                          Text(
+                            ctx.l10n.manageContact,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -933,7 +946,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                             context,
                                           ).showSnackBar(
                                             SnackBar(
-                                              content: Text(context.l10n.nameIsRequired),
+                                              content: Text(
+                                                context.l10n.nameIsRequired,
+                                              ),
                                               behavior:
                                                   SnackBarBehavior.floating,
                                             ),
@@ -974,7 +989,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                             ).showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                  context.l10n.contactUpdatedSuccessfully,
+                                                  context
+                                                      .l10n
+                                                      .contactUpdatedSuccessfully,
                                                 ),
                                                 behavior:
                                                     SnackBarBehavior.floating,
@@ -988,7 +1005,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                             ).showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                  context.l10n.failedToUpdateContact,
+                                                  context
+                                                      .l10n
+                                                      .failedToUpdateContact,
                                                 ),
                                                 behavior:
                                                     SnackBarBehavior.floating,
@@ -1128,10 +1147,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
               SizedBox(height: 16),
               Text(
                 context.l10n.optionsForName(lead.name),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),
               ListTile(
@@ -1144,7 +1160,8 @@ class _LeadsScreenState extends State<LeadsScreen> {
               ),
               ListTile(
                 leading: Icon(Icons.delete_outline, color: Colors.red),
-                title: Text(context.l10n.deleteContact,
+                title: Text(
+                  context.l10n.deleteContact,
                   style: TextStyle(color: Colors.red),
                 ),
                 onTap: () {
@@ -1188,7 +1205,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
                 );
               }
             },
-            child: Text(context.l10n.delete, style: TextStyle(color: Colors.red)),
+            child: Text(
+              context.l10n.delete,
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
@@ -1286,11 +1306,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                           backgroundColor: _parseColor(colorStr),
                           radius: 16,
                           child: selectedColor == colorStr
-                              ? Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                  size: 16,
-                                )
+                              ? Icon(Icons.check, color: Colors.white, size: 16)
                               : null,
                         ),
                       );
@@ -1349,7 +1365,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
     if (company.isNotEmpty) return company;
     if (lead.displayEmail.trim().isNotEmpty) return lead.displayEmail.trim();
     if (lead.displayPhone.trim().isNotEmpty) return lead.displayPhone.trim();
-    return lead.isScannedContact ? context.l10n.scannedViaQR : context.l10n.noDetailsYet;
+    return lead.isScannedContact
+        ? context.l10n.scannedViaQR
+        : context.l10n.noDetailsYet;
   }
 
   Widget? _previewIcon(Lead lead) {
@@ -1374,8 +1392,9 @@ class _LeadsScreenState extends State<LeadsScreen> {
       imageUrl: photoUrl,
       initial: displayName,
       avatarColor: waAvatarColorFor(displayName),
-      categoryColor:
-          lead.category != null ? _parseColor(lead.category!.color) : null,
+      categoryColor: lead.category != null
+          ? _parseColor(lead.category!.color)
+          : null,
       highlightDate: false,
       previewIcon: _previewIcon(lead),
       showDivider: false,

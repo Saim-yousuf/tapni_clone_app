@@ -777,7 +777,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     }
     if (_isServices) {
       if (widget.businessId == null || widget.existingLink == null) return;
-      await showServiceBookingSheet(
+      final booked = await showServiceBookingSheet(
         context: context,
         item: item,
         businessId: widget.businessId!,
@@ -785,6 +785,9 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         businessName: widget.businessName ?? 'business',
         currency: _currency,
       );
+      if (booked == true && mounted) {
+        Navigator.pop(context);
+      }
       return;
     }
 
