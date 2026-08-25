@@ -8,18 +8,16 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 /// covered by the bar — same cradle as a docked FAB.
 class CurvedBottomNav extends StatelessWidget {
   const CurvedBottomNav({
-    super.key,
-    required this.items,
-    required this.currentIndex,
-    required this.onTap,
-    required this.centerButton,
-    this.backgroundColor = Colors.white,
-    this.height = 72,
-    this.fabSize = 74,
-
-    /// Gap between the FAB edge and the white cut-out.
-    this.notchMargin = 8,
-  });
+  super.key,
+  required this.items,
+  required this.currentIndex,
+  required this.onTap,
+  required this.centerButton,
+  this.backgroundColor = Colors.white,
+  this.height = 72,
+  this.fabSize = 74,
+  this.notchMargin = 8, // 8 → 22
+});
 
   final List<CurvedNavItem> items;
   final int currentIndex;

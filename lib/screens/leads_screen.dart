@@ -82,7 +82,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 8, right: 4),
+       padding: const EdgeInsets.only(
+    bottom: 88,
+    right: 20,
+  ),
         child: WaContactSpeedDial(
           onAdd: () => _showAddLeadSheet(context, leadsProvider),
           onFind: _openFindUser,
@@ -92,133 +95,136 @@ class _LeadsScreenState extends State<LeadsScreen> {
         onTap: _dismissKeyboard,
         behavior: HitTestBehavior.translucent,
         child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              WaChatsHeader(
-                title: context.l10n.contacts,
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.photo_camera_outlined, size: 24),
-                    color: WaUi.primaryText,
-                    tooltip: context.l10n.scan,
-                    onPressed: _openScan,
-                  ),
-                  PopupMenuButton<String>(
-                    icon: const Icon(
-                      Icons.more_vert,
-                      size: 24,
+          child: Padding(
+             padding: const EdgeInsets.only(bottom: 50),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                WaChatsHeader(
+                  title: context.l10n.contacts,
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.photo_camera_outlined, size: 24),
                       color: WaUi.primaryText,
+                      tooltip: context.l10n.scan,
+                      onPressed: _openScan,
                     ),
-                    color: WaUi.surface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(WaUi.radiusMd),
+                    PopupMenuButton<String>(
+                      icon: const Icon(
+                        Icons.more_vert,
+                        size: 24,
+                        color: WaUi.primaryText,
+                      ),
+                      color: WaUi.surface,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(WaUi.radiusMd),
+                      ),
+                      onSelected: (value) =>
+                          _onMenuAction(context, value, leadsProvider),
+                      itemBuilder: (_) => [
+                        PopupMenuItem(
+                          value: 'invitations',
+                          child: Text(context.l10n.invitations, style: WaUi.body),
+                        ),
+                        PopupMenuItem(
+                          value: 'find',
+                          child:
+                              Text(context.l10n.findUsername, style: WaUi.body),
+                        ),
+                        PopupMenuItem(
+                          value: 'filter',
+                          child: Text(context.l10n.filterContacts,
+                              style: WaUi.body),
+                        ),
+                        PopupMenuItem(
+                          value: 'categories',
+                          child: Text(context.l10n.manageCategories,
+                              style: WaUi.body),
+                        ),
+                      ],
                     ),
-                    onSelected: (value) =>
-                        _onMenuAction(context, value, leadsProvider),
-                    itemBuilder: (_) => [
-                      PopupMenuItem(
-                        value: 'invitations',
-                        child: Text(context.l10n.invitations, style: WaUi.body),
-                      ),
-                      PopupMenuItem(
-                        value: 'find',
-                        child:
-                            Text(context.l10n.findUsername, style: WaUi.body),
-                      ),
-                      PopupMenuItem(
-                        value: 'filter',
-                        child: Text(context.l10n.filterContacts,
-                            style: WaUi.body),
-                      ),
-                      PopupMenuItem(
-                        value: 'categories',
-                        child: Text(context.l10n.manageCategories,
-                            style: WaUi.body),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Expanded(
-                child: leadsProvider.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : RefreshIndicator(
-                        color: WaUi.accent,
-                        onRefresh: _refreshContacts,
-                        child: CustomScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          slivers: [
-                            SliverToBoxAdapter(
-                              child: WaChatSearchBar(
-                                controller: _searchController,
-                                focusNode: _searchFocus,
-                                hintText: context.l10n.searchEllipsis,
-                                readOnly: true,
-                                onTap: () {
-                                  _dismissKeyboard();
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          const ContactsSearchScreen(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                            SliverToBoxAdapter(
-                              child: WaContactFilterChips(
-                                key: ValueKey(
-                                  leadsProvider.categories
-                                      .map((c) => c.id)
-                                      .join(','),
-                                ),
-                                categories: List.of(leadsProvider.categories),
-                                activeCategoryId:
-                                    leadsProvider.activeCategoryId,
-                                onAllTap: () =>
-                                    leadsProvider.setActiveCategory(null),
-                                onCategoryTap: (id) =>
-                                    leadsProvider.setActiveCategory(id),
-                                onAddCategory: () => _showAddCategoryDialog(
-                                  context,
-                                  leadsProvider,
+                  ],
+                ),
+                Expanded(
+                  child: leadsProvider.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : RefreshIndicator(
+                          color: WaUi.accent,
+                          onRefresh: _refreshContacts,
+                          child: CustomScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            slivers: [
+                              SliverToBoxAdapter(
+                                child: WaChatSearchBar(
+                                  controller: _searchController,
+                                  focusNode: _searchFocus,
+                                  hintText: context.l10n.searchEllipsis,
+                                  readOnly: true,
+                                  onTap: () {
+                                    _dismissKeyboard();
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            const ContactsSearchScreen(),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
-                            ),
-                            if (leadsList.isEmpty)
-                              SliverFillRemaining(
-                                hasScrollBody: false,
-                                child: WaContactEmptyState(
-                                  isSearching: isFiltering,
-                                  onScan: _openScan,
-                                  onAdd: () => _showAddLeadSheet(
+                              SliverToBoxAdapter(
+                                child: WaContactFilterChips(
+                                  key: ValueKey(
+                                    leadsProvider.categories
+                                        .map((c) => c.id)
+                                        .join(','),
+                                  ),
+                                  categories: List.of(leadsProvider.categories),
+                                  activeCategoryId:
+                                      leadsProvider.activeCategoryId,
+                                  onAllTap: () =>
+                                      leadsProvider.setActiveCategory(null),
+                                  onCategoryTap: (id) =>
+                                      leadsProvider.setActiveCategory(id),
+                                  onAddCategory: () => _showAddCategoryDialog(
                                     context,
                                     leadsProvider,
                                   ),
                                 ),
-                              )
-                            else
-                              SliverPadding(
-                                padding: const EdgeInsets.only(bottom: 120),
-                                sliver: SliverList(
-                                  delegate: SliverChildBuilderDelegate(
-                                    (context, index) {
-                                      return _buildContactRow(
-                                        context,
-                                        leadsList[index],
-                                        leadsProvider,
-                                      );
-                                    },
-                                    childCount: leadsList.length,
+                              ),
+                              if (leadsList.isEmpty)
+                                SliverFillRemaining(
+                                  hasScrollBody: false,
+                                  child: WaContactEmptyState(
+                                    isSearching: isFiltering,
+                                    onScan: _openScan,
+                                    onAdd: () => _showAddLeadSheet(
+                                      context,
+                                      leadsProvider,
+                                    ),
+                                  ),
+                                )
+                              else
+                                SliverPadding(
+                                  padding: const EdgeInsets.only(bottom: 120),
+                                  sliver: SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                        return _buildContactRow(
+                                          context,
+                                          leadsList[index],
+                                          leadsProvider,
+                                        );
+                                      },
+                                      childCount: leadsList.length,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -524,17 +524,21 @@ class _ExploreScreenState extends State<ExploreScreen> {
       ),
       body: SafeArea(
         bottom: false,
-        child: Column(
-          children: [
-            _buildHeader(colors),
-            Expanded(
-              child: RefreshIndicator(
-                color: colors.accent,
-                onRefresh: _load,
-                child: _buildBody(colors),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 50),
+          child: Column(
+            children: [
+              _buildHeader(colors),
+              Expanded(
+                child: RefreshIndicator(
+                  color: colors.accent,
+                  onRefresh: _load,
+                  
+                  child: _buildBody(colors),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -568,72 +572,65 @@ class _ExploreScreenState extends State<ExploreScreen> {
         children: [
           SizedBox(
             height: 64,
-            child: Stack(
-              alignment: Alignment.center,
+            child: Row(
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: IconButton(
-                      tooltip: 'Menu',
-                      onPressed: () =>
-                          _scaffoldKey.currentState?.openDrawer(),
-                      icon: Icon(
-                        Icons.menu_rounded,
+                IconButton(
+                  tooltip: 'Menu',
+                  onPressed: () =>
+                      _scaffoldKey.currentState?.openDrawer(),
+                  icon: Icon(
+                    Icons.menu_rounded,
+                    color: colors.primaryText,
+                    size: 26,
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Marketplace',
+                      style: WaUi.toolsTitleOf(
                         color: colors.primaryText,
-                        size: 26,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
-                Image.asset(
-                  'assets/images/png/barqody_name.png',
-                  height: 72,
-                  fit: BoxFit.contain,
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        tooltip: 'Cart',
-                        onPressed: _openCart,
-                        icon: Consumer<ExploreCartProvider>(
-                          builder: (context, cart, _) {
-                            return Badge(
-                              isLabelVisible: cart.hasItems,
-                              backgroundColor: colors.accent,
-                              label: Text(
-                                '${cart.itemCount}',
-                                style: TextStyle(color: colors.onAccent),
-                              ),
-                              child: Icon(
-                                Icons.shopping_bag_outlined,
-                                size: 24,
-                                color: colors.primaryText,
-                              ),
-                            );
-                          },
+                IconButton(
+                  tooltip: 'Cart',
+                  onPressed: _openCart,
+                  icon: Consumer<ExploreCartProvider>(
+                    builder: (context, cart, _) {
+                      return Badge(
+                        isLabelVisible: cart.hasItems,
+                        backgroundColor: colors.accent,
+                        label: Text(
+                          '${cart.itemCount}',
+                          style: TextStyle(color: colors.onAccent),
                         ),
-                      ),
-                      IconButton(
-                        tooltip: context.l10n.notifications,
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const NotificationsScreen(),
-                            ),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.notifications_none_rounded,
-                          size: 26,
+                        child: Icon(
+                          Icons.shopping_bag_outlined,
+                          size: 24,
                           color: colors.primaryText,
                         ),
+                      );
+                    },
+                  ),
+                ),
+                IconButton(
+                  tooltip: context.l10n.notifications,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const NotificationsScreen(),
                       ),
-                    ],
+                    );
+                  },
+                  icon: Icon(
+                    Icons.notifications_none_rounded,
+                    size: 26,
+                    color: colors.primaryText,
                   ),
                 ),
               ],

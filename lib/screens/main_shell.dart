@@ -47,9 +47,7 @@ class _MainShellState extends State<MainShell> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => const FindUserScreen(isTab: false),
-          ),
+          MaterialPageRoute(builder: (_) => const FindUserScreen(isTab: false)),
         );
       });
     } else {
@@ -69,18 +67,24 @@ class _MainShellState extends State<MainShell> {
     if (!ContactsSyncService.isFeatureEnabled) return;
     if (!mounted || _contactsPromptShown) return;
     final userId =
-        Provider.of<AuthProvider>(context, listen: false).activeAccount?.userId ??
-            '';
+        Provider.of<AuthProvider>(
+          context,
+          listen: false,
+        ).activeAccount?.userId ??
+        '';
     if (userId.isEmpty || ContactsSyncService.wasPrompted(userId)) return;
     _contactsPromptShown = true;
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ContactsSyncScreen()),
-    );
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const ContactsSyncScreen()));
   }
 
   void _loadCatalogNotifications() {
     if (!mounted) return;
-    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
     final leadsProvider = Provider.of<LeadsProvider>(context, listen: false);
     leadsProvider.refreshNotifications(
       isBusinessUser: profileProvider.isProUser,
@@ -110,24 +114,33 @@ class _MainShellState extends State<MainShell> {
       final index = _navPages.indexOf(page);
       if (index >= 0) _navIndex = index;
     });
-    Provider.of<ProfileProvider>(context, listen: false).setEditingProfile(false);
+    Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).setEditingProfile(false);
   }
 
   void _goToProfile() {
     setState(() => _currentPage = 'My Card');
-    Provider.of<ProfileProvider>(context, listen: false).setEditingProfile(false);
+    Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).setEditingProfile(false);
   }
 
   void _onCenterButtonTap() {
-    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
     if (profileProvider.isEditingProfile) {
       profileProvider.triggerSave();
       return;
     }
     if (_onProfile) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const ScanScreen()),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const ScanScreen()));
       return;
     }
     _goToProfile();
@@ -239,71 +252,64 @@ class _MainShellState extends State<MainShell> {
         _goToProfile();
       },
       child: Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: WaUi.toolsScaffold,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Padding(
-              // Keep every tab's content above the curved bar + center button.
-              padding: EdgeInsets.only(bottom: navClearance),
-              child: SafeArea(
-                bottom: false,
-                child: _buildCurrentScreen(),
+        resizeToAvoidBottomInset: false,
+        backgroundColor: WaUi.toolsScaffold,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: SafeArea(bottom: false, child: _buildCurrentScreen()),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: CurvedBottomNav(
+                backgroundColor: barColor,
+                currentIndex: _navIndex,
+                onTap: (index) {
+                  if (index < 0 || index >= _navPages.length) return;
+                  _switchTab(_navPages[index]);
+                },
+                items: [
+                  _navItem(
+                    icon: Icons.travel_explore_outlined,
+                    selectedIcon: Icons.travel_explore_rounded,
+                    label: l10n.explore,
+                    selectedColor: selectedColor,
+                    unselectedColor: unselectedColor,
+                  ),
+                  _navItem(
+                    icon: Icons.people_outline,
+                    selectedIcon: Icons.people,
+                    label: l10n.contacts,
+                    selectedColor: selectedColor,
+                    unselectedColor: unselectedColor,
+                  ),
+                  _navItem(
+                    icon: Icons.insights_outlined,
+                    selectedIcon: Icons.insights,
+                    label: 'Analytics',
+                    selectedColor: selectedColor,
+                    unselectedColor: unselectedColor,
+                  ),
+                  _navItem(
+                    icon: Icons.storefront_outlined,
+                    selectedIcon: Icons.storefront,
+                    label: l10n.tools,
+                    selectedColor: selectedColor,
+                    unselectedColor: unselectedColor,
+                  ),
+                ],
+                centerButton: _buildCenterFab(
+                  isEditing: isEditing,
+                  fabBg: fabBg,
+                  fabFg: fabFg,
+                  name: profile.name,
+                  photoUrl: profile.profilePhotoUrl,
+                ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: CurvedBottomNav(
-              backgroundColor: barColor,
-              currentIndex: _navIndex,
-              onTap: (index) {
-                if (index < 0 || index >= _navPages.length) return;
-                _switchTab(_navPages[index]);
-              },
-              items: [
-                _navItem(
-                  icon: Icons.travel_explore_outlined,
-                  selectedIcon: Icons.travel_explore_rounded,
-                  label: l10n.explore,
-                  selectedColor: selectedColor,
-                  unselectedColor: unselectedColor,
-                ),
-                _navItem(
-                  icon: Icons.people_outline,
-                  selectedIcon: Icons.people,
-                  label: l10n.contacts,
-                  selectedColor: selectedColor,
-                  unselectedColor: unselectedColor,
-                ),
-                _navItem(
-                  icon: Icons.insights_outlined,
-                  selectedIcon: Icons.insights,
-                  label: 'Analytics',
-                  selectedColor: selectedColor,
-                  unselectedColor: unselectedColor,
-                ),
-                _navItem(
-                  icon: Icons.storefront_outlined,
-                  selectedIcon: Icons.storefront,
-                  label: l10n.tools,
-                  selectedColor: selectedColor,
-                  unselectedColor: unselectedColor,
-                ),
-              ],
-              centerButton: _buildCenterFab(
-                isEditing: isEditing,
-                fabBg: fabBg,
-                fabFg: fabFg,
-                name: profile.name,
-                photoUrl: profile.profilePhotoUrl,
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
     );
   }
 }

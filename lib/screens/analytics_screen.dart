@@ -92,8 +92,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   Future<void> _fetchAnalytics() async {
     setState(() => _isLoading = true);
     try {
-      final response =
-          await AuthRepo().getAnalytics(range: _range.apiValue);
+      final response = await AuthRepo().getAnalytics(range: _range.apiValue);
       if (!mounted) return;
       if (response.success && response.data != null) {
         final root = response.data;
@@ -171,92 +170,94 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            WaChatsHeader(
-              title: context.l10n.analyticsDashboard,
-              actions: [NotificationIconButton()],
-            ),
-            Expanded(
-              child: !isPro
-                  ? _LockedAnalyticsPreview(bottomPad: bottomPad)
-                  : _isLoading
-                      ? _AnalyticsShimmer(bottomPad: bottomPad)
-                      : RefreshIndicator(
-                          color: WaUi.buttonDark,
-                          onRefresh: _fetchAnalytics,
-                          child: ListView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            padding:
-                                EdgeInsets.fromLTRB(16, 4, 16, bottomPad),
-                            children: [
-                              _RangeChips(
-                                selected: _range,
-                                onSelected: _setRange,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 50),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              WaChatsHeader(
+                title: context.l10n.analyticsDashboard,
+                actions: [NotificationIconButton()],
+              ),
+              Expanded(
+                child: !isPro
+                    ? _LockedAnalyticsPreview(bottomPad: bottomPad)
+                    : _isLoading
+                    ? _AnalyticsShimmer(bottomPad: bottomPad)
+                    : RefreshIndicator(
+                        color: WaUi.buttonDark,
+                        onRefresh: _fetchAnalytics,
+                        child: ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.fromLTRB(16, 4, 16, bottomPad),
+                          children: [
+                            _RangeChips(
+                              selected: _range,
+                              onSelected: _setRange,
+                            ),
+                            const SizedBox(height: 18),
+                            if (_insights.isNotEmpty) ...[
+                              _InsightStrip(
+                                insights: _insights,
+                                compareLabel: _range.compareLabel,
                               ),
-                              const SizedBox(height: 18),
-                              if (_insights.isNotEmpty) ...[
-                                _InsightStrip(
-                                  insights: _insights,
-                                  compareLabel: _range.compareLabel,
-                                ),
-                                const SizedBox(height: 20),
-                              ],
-                              _MetricsGrid(
-                                profileViews: _profileViews,
-                                cardScans: _cardScans,
-                                uniqueViewers: _uniqueViewers,
-                                guestViews: _guestViews,
-                                userViews: _userViews,
-                                viewsChangePct: _viewsChangePct,
-                                scansChangePct: _scansChangePct,
-                              ),
-                              const SizedBox(height: 28),
-                              Row(
-                                children: [
-                                  Text('Activity', style: WaUi.sectionHeader),
-                                  const Spacer(),
-                                  _LegendDot(
-                                    color: WaUi.primaryText,
-                                    label: 'Views',
-                                  ),
-                                  const SizedBox(width: 12),
-                                  _LegendDot(
-                                    color: const Color(0xFF10A375),
-                                    label: 'Scans',
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              _TrendChart(points: _trend),
-                              const SizedBox(height: 28),
-                              _ListTabs(
-                                selected: _selectedListTab,
-                                viewersCount: _profileViewers.length,
-                                scannersCount: _scanners.length,
-                                onChanged: (i) =>
-                                    setState(() => _selectedListTab = i),
-                              ),
-                              const SizedBox(height: 8),
-                              if (_selectedListTab == 0)
-                                ..._buildPeopleList(
-                                  items: _profileViewers,
-                                  emptyLabel:
-                                      context.l10n.noOneHasViewedYourProfileYet,
-                                  isScan: false,
-                                )
-                              else
-                                ..._buildPeopleList(
-                                  items: _scanners,
-                                  emptyLabel: 'No QR scans in this period yet.',
-                                  isScan: true,
-                                ),
+                              const SizedBox(height: 20),
                             ],
-                          ),
+                            _MetricsGrid(
+                              profileViews: _profileViews,
+                              cardScans: _cardScans,
+                              uniqueViewers: _uniqueViewers,
+                              guestViews: _guestViews,
+                              userViews: _userViews,
+                              viewsChangePct: _viewsChangePct,
+                              scansChangePct: _scansChangePct,
+                            ),
+                            const SizedBox(height: 28),
+                            Row(
+                              children: [
+                                Text('Activity', style: WaUi.sectionHeader),
+                                const Spacer(),
+                                _LegendDot(
+                                  color: WaUi.primaryText,
+                                  label: 'Views',
+                                ),
+                                const SizedBox(width: 12),
+                                _LegendDot(
+                                  color: const Color(0xFF10A375),
+                                  label: 'Scans',
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            _TrendChart(points: _trend),
+                            const SizedBox(height: 28),
+                            _ListTabs(
+                              selected: _selectedListTab,
+                              viewersCount: _profileViewers.length,
+                              scannersCount: _scanners.length,
+                              onChanged: (i) =>
+                                  setState(() => _selectedListTab = i),
+                            ),
+                            const SizedBox(height: 8),
+                            if (_selectedListTab == 0)
+                              ..._buildPeopleList(
+                                items: _profileViewers,
+                                emptyLabel:
+                                    context.l10n.noOneHasViewedYourProfileYet,
+                                isScan: false,
+                              )
+                            else
+                              ..._buildPeopleList(
+                                items: _scanners,
+                                emptyLabel: 'No QR scans in this period yet.',
+                                isScan: true,
+                              ),
+                          ],
                         ),
-            ),
-          ],
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -277,8 +278,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       final person = isScan
           ? (item['scannerId'] ?? item['viewerId'])
           : item['viewerId'];
-      final timestamp =
-          item['timestamp'] != null ? _formatDate('${item['timestamp']}') : '';
+      final timestamp = item['timestamp'] != null
+          ? _formatDate('${item['timestamp']}')
+          : '';
 
       var title = context.l10n.guestUser;
       var subtitle = timestamp;
@@ -299,7 +301,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         title = context.l10n.user;
       }
 
-      final canOpen = !isGuest &&
+      final canOpen =
+          !isGuest &&
           ((username != null && username.isNotEmpty) ||
               (userId != null && userId.isNotEmpty));
 
@@ -353,10 +356,7 @@ class _InsightStrip extends StatelessWidget {
   final List<Map<String, dynamic>> insights;
   final String compareLabel;
 
-  const _InsightStrip({
-    required this.insights,
-    required this.compareLabel,
-  });
+  const _InsightStrip({required this.insights, required this.compareLabel});
 
   String _text(Map<String, dynamic> insight) {
     final metric = insight['metric']?.toString() ?? '';
@@ -505,9 +505,7 @@ class _MetricsGrid extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      audienceTotal == 0
-                          ? '—'
-                          : '$guestViews · $userViews',
+                      audienceTotal == 0 ? '—' : '$guestViews · $userViews',
                       style: WaUi.toolsTitleOf(
                         size: 24,
                         weight: FontWeight.w700,
@@ -548,11 +546,7 @@ class _MetricCell extends StatelessWidget {
   final String value;
   final int? deltaPct;
 
-  const _MetricCell({
-    required this.label,
-    required this.value,
-    this.deltaPct,
-  });
+  const _MetricCell({required this.label, required this.value, this.deltaPct});
 
   @override
   Widget build(BuildContext context) {
@@ -587,9 +581,7 @@ class _MetricCell extends StatelessWidget {
               style: WaUi.label.copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: up
-                    ? const Color(0xFF0B7A56)
-                    : const Color(0xFFD14343),
+                color: up ? const Color(0xFF0B7A56) : const Color(0xFFD14343),
               ),
             ),
           ],
@@ -633,18 +625,15 @@ class _TrendChart extends StatelessWidget {
           height: 180,
           width: double.infinity,
           child: CustomPaint(
-            painter: _TrendLinePainter(
-              views: views,
-              scans: scans,
-              maxY: maxY,
-            ),
+            painter: _TrendLinePainter(views: views, scans: scans, maxY: maxY),
           ),
         ),
         const SizedBox(height: 10),
         Row(
           children: List.generate(points.length, (i) {
             final date = points[i]['date']?.toString() ?? '';
-            final show = points.length <= 7 ||
+            final show =
+                points.length <= 7 ||
                 i == 0 ||
                 i == points.length - 1 ||
                 i % ((points.length / 4).ceil().clamp(1, 99)) == 0;
@@ -789,10 +778,7 @@ class _LegendDot extends StatelessWidget {
         const SizedBox(width: 5),
         Text(
           label,
-          style: WaUi.caption.copyWith(
-            fontSize: 12,
-            color: WaUi.secondaryText,
-          ),
+          style: WaUi.caption.copyWith(fontSize: 12, color: WaUi.secondaryText),
         ),
       ],
     );
@@ -826,10 +812,7 @@ class _ListTabs extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFF1F5F9),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: Colors.black.withOpacity(0.04),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.black.withOpacity(0.04), width: 1),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -917,9 +900,7 @@ class _AnalyticsSegTab extends StatelessWidget {
           style: TextStyle(
             fontSize: 13.5,
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-            color: selected
-                ? const Color(0xFF0F172A)
-                : const Color(0xFF64748B),
+            color: selected ? const Color(0xFF0F172A) : const Color(0xFF64748B),
             letterSpacing: selected ? -0.2 : 0,
           ),
           child: Row(
