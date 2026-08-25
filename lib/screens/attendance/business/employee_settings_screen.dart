@@ -311,16 +311,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        foregroundColor: WaUi.primaryText,
-        title: Text(
-          title,
-          style: WaUi.headline.copyWith(fontWeight: FontWeight.w600),
-        ),
+        title: Text(title),
       ),
       body: Column(
         children: [

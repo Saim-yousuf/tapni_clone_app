@@ -17,14 +17,16 @@ Future<CountryDialCode?> showCountryPickerSheet(
           searchText: '${country.code} ${country.iso}',
         ),
     ],
-    selectedId: selectedIso,
+    selectedId: selectedIso?.toUpperCase(),
     searchHint: context.l10n.searchCountry,
     helperText: context.l10n.selectCountryHelper,
     emptyText: context.l10n.noCountriesFound,
+    closeOnSelect: true,
+    sheetColor: Colors.white,
   );
   if (selectedId == null) return null;
   for (final country in kCountryDialCodes) {
-    if (country.iso == selectedId) return country;
+    if (country.iso.toUpperCase() == selectedId.toUpperCase()) return country;
   }
   return null;
 }

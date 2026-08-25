@@ -204,11 +204,12 @@ class AuthRepo {
     );
   }
 
-  Future<ApiResponse> getAnalytics() async {
+  Future<ApiResponse> getAnalytics({String range = '7d'}) async {
     return await ApiHandler.request(
       api: Api.auth.analytics,
       method: ApiMethod.get,
       authorization: true,
+      queryParams: {'range': range},
     );
   }
 

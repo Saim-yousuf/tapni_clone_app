@@ -641,33 +641,38 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
           const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
             child: GestureDetector(
               onTap: _openSearch,
               child: Container(
-                height: 46,
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                height: 48,
+                padding: const EdgeInsets.only(left: 14, right: 14),
                 decoration: BoxDecoration(
                   color: Theme.of(context).brightness == Brightness.dark
-                      ? colors.chipUnselected
-                      : const Color(0xFFF3F4F6),
-                  borderRadius: BorderRadius.circular(12),
+                      ? const Color(0xFF3A3B3C)
+                      : WaUi.searchBg,
+                  borderRadius: BorderRadius.circular(24),
                 ),
                 child: Row(
                   children: [
                     Icon(
-                      Icons.search_rounded,
-                      color: colors.secondaryText,
-                      size: 20,
+                      Icons.search,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? const Color(0xFF8A8D91)
+                          : const Color(0xFF667781),
+                      size: 22,
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         'Search',
                         style: TextStyle(
-                          color: colors.secondaryText.withValues(alpha: 0.8),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? const Color(0xFF8A8D91)
+                              : const Color(0xFF667781),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          height: 1.2,
                         ),
                       ),
                     ),
@@ -2054,7 +2059,7 @@ class _RewardOfferCard extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF10A375),
+                        color: Colors.black,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       alignment: Alignment.center,

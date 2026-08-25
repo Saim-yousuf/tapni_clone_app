@@ -204,13 +204,7 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'Business Profile',
-          style: WaUi.headline.copyWith(fontWeight: FontWeight.w600),
-        ),
+        title: Text('Business Profile'),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),

@@ -122,7 +122,6 @@ class _ExploreOfferLoaderScreenState extends State<ExploreOfferLoaderScreen> {
         appBar: AppBar(
           backgroundColor:
               isDark ? AppTheme.primaryBlack : WaUi.toolsScaffold,
-          surfaceTintColor: Colors.transparent,
           foregroundColor: isDark ? Colors.white : WaUi.primaryText,
         ),
         body: Center(

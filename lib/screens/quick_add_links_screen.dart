@@ -253,13 +253,7 @@ class _QuickAddLinksScreenState extends State<QuickAddLinksScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
-        shadowColor: Colors.transparent,
         automaticallyImplyLeading: false,
-        foregroundColor: WaUi.primaryText,
       ),
       body: SafeArea(
         child: Column(

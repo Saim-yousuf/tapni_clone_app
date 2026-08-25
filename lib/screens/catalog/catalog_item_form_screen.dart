@@ -159,13 +159,10 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        elevation: 0,
         title: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
+          style: TextStyle(fontWeight: FontWeight.w700)),
       ),
       body: SafeArea(
         child: Column(

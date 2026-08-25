@@ -80,8 +80,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         title: Text(context.l10n.notifications),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+          onPressed: () => Navigator.of(context).pop()),
         actions: [
           if (notificationsList.isNotEmpty)
             TextButton(
@@ -90,14 +89,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(context.l10n.allNotificationsMarkedAsRead),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+                    behavior: SnackBarBehavior.floating));
               },
               child: Text(context.l10n.readAll,
-                style: TextStyle(color: AppTheme.accentGold, fontWeight: FontWeight.bold),
-              ),
-            ),
+                style: TextStyle(color: AppTheme.accentGold, fontWeight: FontWeight.bold))),
         ],
       ),
       body: SafeArea(

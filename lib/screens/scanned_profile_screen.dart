@@ -325,15 +325,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
         foregroundColor: Colors.black,
         title: Text(
           widget.username ?? context.l10n.profile,
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
+          style: TextStyle(fontWeight: FontWeight.w600)),
         actions: [
           _buildShareButton(),
           _buildAppBarMenu(),

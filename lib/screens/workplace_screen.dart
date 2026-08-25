@@ -41,10 +41,7 @@ class _WorkplaceScreenState extends State<WorkplaceScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        foregroundColor: WaUi.primaryText,
-        title: Text(context.l10n.workplace, style: WaUi.title),
+        title: Text(context.l10n.workplace),
       ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 24),

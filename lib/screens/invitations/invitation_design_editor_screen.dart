@@ -691,10 +691,7 @@ class _InvitationDesignEditorScreenState
     return Scaffold(
       backgroundColor: const Color(0xFFE8EAED),
       appBar: AppBar(
-        backgroundColor: WaUi.surface,
-        elevation: 0,
-        foregroundColor: WaUi.primaryText,
-        title: Text(context.l10n.designInvitation, style: WaUi.sectionHeader),
+        title: Text(context.l10n.designInvitation),
         actions: [
           IconButton(
             tooltip: context.l10n.publishForOthers,
@@ -703,20 +700,16 @@ class _InvitationDesignEditorScreenState
                 ? const SizedBox(
                     width: 20,
                     height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.public),
-          ),
+                    child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.public)),
           IconButton(
             tooltip: context.l10n.undo,
             onPressed: _undo.isEmpty ? null : _doUndo,
-            icon: const Icon(Icons.undo),
-          ),
+            icon: const Icon(Icons.undo)),
           IconButton(
             tooltip: context.l10n.redo,
             onPressed: _redo.isEmpty ? null : _doRedo,
-            icon: const Icon(Icons.redo),
-          ),
+            icon: const Icon(Icons.redo)),
           IconButton(
             tooltip: context.l10n.download,
             onPressed: _downloading ? null : _download,
@@ -724,10 +717,8 @@ class _InvitationDesignEditorScreenState
                 ? const SizedBox(
                     width: 20,
                     height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.download_rounded),
-          ),
+                    child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.download_rounded)),
         ],
       ),
       body: Column(

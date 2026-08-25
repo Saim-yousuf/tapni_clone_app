@@ -61,16 +61,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        foregroundColor: WaUi.buttonDark,
-        titleSpacing: 0,
-        title: Text(
-          'Help Center',
-          style: WaUi.toolsTitleOf(weight: FontWeight.w500, size: 22),
-        ),
+        title: Text('Help Center'),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _contactUs,

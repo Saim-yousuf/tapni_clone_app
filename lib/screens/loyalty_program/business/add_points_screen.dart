@@ -28,11 +28,8 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(context.l10n.addPoints,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         surfaceTintColor: Colors.white,
-        elevation: 0,
       ),
       body: Padding(
         padding: EdgeInsets.all(16),

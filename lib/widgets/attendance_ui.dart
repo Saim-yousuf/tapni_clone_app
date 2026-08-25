@@ -64,15 +64,7 @@ class AttendanceUi {
 
   static AppBar appBar(String title, {List<Widget>? actions}) {
     return AppBar(
-      backgroundColor: Colors.white,
-      surfaceTintColor: Colors.transparent,
-      shadowColor: Colors.transparent,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      centerTitle: true,
-      foregroundColor: WaUi.primaryText,
-      iconTheme: const IconThemeData(color: WaUi.primaryText, size: 24),
-      title: Text(title, style: pageTitle),
+      title: Text(title),
       actions: actions,
     );
   }

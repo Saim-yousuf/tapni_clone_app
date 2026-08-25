@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/utils/app_fonts.dart';
+import 'package:tapni_app/utils/app_ui.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 class AppTheme {
@@ -109,87 +110,100 @@ class AppTheme {
       ),
       textTheme: AppFonts.textTheme(baseText).copyWith(
         displayLarge: AppFonts.textStyle(
-          fontSize: 40,
+          fontSize: AppUi.fontDisplay,
           fontWeight: FontWeight.w700,
           color: primaryBlack,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
           height: height,
         ),
         displayMedium: AppFonts.textStyle(
-          fontSize: 34,
+          fontSize: AppUi.fontDisplayMd,
           fontWeight: FontWeight.w700,
           color: primaryBlack,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
           height: height,
         ),
         headlineLarge: AppFonts.textStyle(
-          fontSize: 28,
+          fontSize: AppUi.fontHeadlineLg,
           fontWeight: FontWeight.w700,
           color: primaryBlack,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
           height: height,
         ),
         headlineMedium: AppFonts.textStyle(
-          fontSize: 24,
+          fontSize: AppUi.fontHeadlineMd,
           fontWeight: FontWeight.w600,
           color: primaryBlack,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
           height: height,
         ),
         titleLarge: AppFonts.textStyle(
-          fontSize: 20,
+          fontSize: AppUi.fontHeadline,
           fontWeight: FontWeight.w600,
           color: primaryBlack,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
           height: height,
         ),
         titleMedium: AppFonts.textStyle(
-          fontSize: 17,
+          fontSize: AppUi.fontTitle,
           fontWeight: FontWeight.w500,
           color: primaryBlack,
           height: height,
         ),
         bodyLarge: AppFonts.textStyle(
-          fontSize: 16,
+          fontSize: AppUi.fontBodyLg,
           fontWeight: FontWeight.w400,
           color: primaryBlack,
           height: height,
         ),
         bodyMedium: AppFonts.textStyle(
-          fontSize: 15,
+          fontSize: AppUi.fontBody,
           fontWeight: FontWeight.w400,
           color: primaryBlack,
           height: height,
         ),
         bodySmall: AppFonts.textStyle(
-          fontSize: 14,
+          fontSize: AppUi.fontCaption,
           fontWeight: FontWeight.w400,
           color: primaryBlack,
           height: height,
         ),
         labelLarge: AppFonts.textStyle(
-          fontSize: 15,
+          fontSize: AppUi.fontBody,
           fontWeight: FontWeight.w500,
           color: primaryBlack,
           height: height,
         ),
       ),
+      iconTheme: const IconThemeData(
+        color: AppUi.appBarFg,
+        size: AppUi.iconSize,
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
+          foregroundColor: AppUi.appBarFg,
+          iconSize: AppUi.iconSize,
+          padding: AppUi.iconButtonPadding,
+        ),
+      ),
       appBarTheme: AppBarTheme(
-        backgroundColor: secondaryWhite,
-        elevation: 0,
+        backgroundColor: AppUi.appBarBg,
+        foregroundColor: AppUi.appBarFg,
+        elevation: AppUi.appBarElevation,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
         systemOverlayStyle: systemUiFor(Brightness.light),
-        iconTheme: const IconThemeData(color: primaryBlack),
-        centerTitle: true,
-        titleTextStyle: AppFonts.textStyle(
-          color: primaryBlack,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
-          height: height,
+        iconTheme: const IconThemeData(
+          color: AppUi.appBarFg,
+          size: AppUi.appBarIconSize,
         ),
+        actionsIconTheme: const IconThemeData(
+          color: AppUi.appBarFg,
+          size: AppUi.appBarIconSize,
+        ),
+        centerTitle: AppUi.appBarCenterTitle,
+        titleTextStyle: AppUi.appBarTitleStyle(),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
@@ -205,7 +219,7 @@ class AppTheme {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
-            fontSize: 16,
+            fontSize: AppUi.fontBodyLg,
             fontWeight: FontWeight.w600,
             height: 1.0,
           ),
@@ -222,7 +236,7 @@ class AppTheme {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
-            fontSize: 16,
+            fontSize: AppUi.fontBodyLg,
             fontWeight: FontWeight.w600,
             height: 1.0,
           ),
@@ -240,7 +254,7 @@ class AppTheme {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
-            fontSize: 16,
+            fontSize: AppUi.fontBodyLg,
             fontWeight: FontWeight.w600,
             height: 1.0,
           ),
@@ -251,7 +265,7 @@ class AppTheme {
         fillColor: WaUi.fieldFill,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         hintStyle: AppFonts.textStyle(
-          fontSize: 15,
+          fontSize: AppUi.fontBody,
           fontWeight: FontWeight.w400,
           color: WaUi.secondaryText,
           height: height,
@@ -295,87 +309,100 @@ class AppTheme {
       ),
       textTheme: AppFonts.textTheme(baseText).copyWith(
         displayLarge: AppFonts.textStyle(
-          fontSize: 40,
+          fontSize: AppUi.fontDisplay,
           fontWeight: FontWeight.w700,
           color: secondaryWhite,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
           height: height,
         ),
         displayMedium: AppFonts.textStyle(
-          fontSize: 34,
+          fontSize: AppUi.fontDisplayMd,
           fontWeight: FontWeight.w700,
           color: secondaryWhite,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
           height: height,
         ),
         headlineLarge: AppFonts.textStyle(
-          fontSize: 28,
+          fontSize: AppUi.fontHeadlineLg,
           fontWeight: FontWeight.w700,
           color: secondaryWhite,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.3,
           height: height,
         ),
         headlineMedium: AppFonts.textStyle(
-          fontSize: 24,
+          fontSize: AppUi.fontHeadlineMd,
           fontWeight: FontWeight.w600,
           color: secondaryWhite,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
           height: height,
         ),
         titleLarge: AppFonts.textStyle(
-          fontSize: 20,
+          fontSize: AppUi.fontHeadline,
           fontWeight: FontWeight.w600,
           color: secondaryWhite,
           letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
           height: height,
         ),
         titleMedium: AppFonts.textStyle(
-          fontSize: 17,
+          fontSize: AppUi.fontTitle,
           fontWeight: FontWeight.w500,
           color: secondaryWhite,
           height: height,
         ),
         bodyLarge: AppFonts.textStyle(
-          fontSize: 16,
+          fontSize: AppUi.fontBodyLg,
           fontWeight: FontWeight.w400,
           color: secondaryWhite,
           height: height,
         ),
         bodyMedium: AppFonts.textStyle(
-          fontSize: 15,
+          fontSize: AppUi.fontBody,
           fontWeight: FontWeight.w400,
           color: secondaryWhite,
           height: height,
         ),
         bodySmall: AppFonts.textStyle(
-          fontSize: 14,
+          fontSize: AppUi.fontCaption,
           fontWeight: FontWeight.w400,
           color: secondaryWhite,
           height: height,
         ),
         labelLarge: AppFonts.textStyle(
-          fontSize: 15,
+          fontSize: AppUi.fontBody,
           fontWeight: FontWeight.w500,
           color: secondaryWhite,
           height: height,
         ),
       ),
+      iconTheme: const IconThemeData(
+        color: AppUi.appBarFgDark,
+        size: AppUi.iconSize,
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
+          foregroundColor: AppUi.appBarFgDark,
+          iconSize: AppUi.iconSize,
+          padding: AppUi.iconButtonPadding,
+        ),
+      ),
       appBarTheme: AppBarTheme(
-        backgroundColor: primaryBlack,
-        elevation: 0,
+        backgroundColor: AppUi.appBarBgDark,
+        foregroundColor: AppUi.appBarFgDark,
+        elevation: AppUi.appBarElevation,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
         systemOverlayStyle: systemUiFor(Brightness.dark),
-        iconTheme: const IconThemeData(color: secondaryWhite),
-        centerTitle: true,
-        titleTextStyle: AppFonts.textStyle(
-          color: secondaryWhite,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          letterSpacing: AppFonts.usesArabicScript ? 0 : -0.2,
-          height: height,
+        iconTheme: const IconThemeData(
+          color: AppUi.appBarFgDark,
+          size: AppUi.appBarIconSize,
         ),
+        actionsIconTheme: const IconThemeData(
+          color: AppUi.appBarFgDark,
+          size: AppUi.appBarIconSize,
+        ),
+        centerTitle: AppUi.appBarCenterTitle,
+        titleTextStyle: AppUi.appBarTitleStyle(dark: true),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
@@ -391,7 +418,7 @@ class AppTheme {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
-            fontSize: 16,
+            fontSize: AppUi.fontBodyLg,
             fontWeight: FontWeight.w600,
             height: 1.0,
           ),
@@ -408,7 +435,7 @@ class AppTheme {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
-            fontSize: 16,
+            fontSize: AppUi.fontBodyLg,
             fontWeight: FontWeight.w600,
             height: 1.0,
           ),
@@ -426,7 +453,7 @@ class AppTheme {
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
-            fontSize: 16,
+            fontSize: AppUi.fontBodyLg,
             fontWeight: FontWeight.w600,
             height: 1.0,
           ),
@@ -437,7 +464,7 @@ class AppTheme {
         fillColor: const Color(0xFF3A3B3C),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         hintStyle: AppFonts.textStyle(
-          fontSize: 15,
+          fontSize: AppUi.fontBody,
           fontWeight: FontWeight.w400,
           color: const Color(0xFFB0B3B8),
           height: height,

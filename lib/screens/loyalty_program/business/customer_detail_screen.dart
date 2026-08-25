@@ -12,12 +12,9 @@ class CustomerDetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        elevation: 0,
         title: Text(context.l10n.customerDetails,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),

@@ -18,13 +18,7 @@ class ExploreOfferDetailScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        foregroundColor: WaUi.primaryText,
-        title: Text(
-          'Reward offer',
-          style: WaUi.headline.copyWith(fontWeight: FontWeight.w700),
-        ),
+        title: Text('Reward offer'),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),

@@ -137,13 +137,10 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        elevation: 0,
         title: Text(
           isEdit ? context.l10n.editReward : context.l10n.createReward,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
       ),
       body: Form(
         key: _formKey,

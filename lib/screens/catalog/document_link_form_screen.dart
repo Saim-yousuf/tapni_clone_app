@@ -216,13 +216,10 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        elevation: 0,
         title: Text(
           _isEditing ? context.l10n.editItem : context.l10n.addDocument,
-          style: const TextStyle(fontWeight: FontWeight.w700),
-        ),
+          style: const TextStyle(fontWeight: FontWeight.w700)),
       ),
       body: SafeArea(
         child: Column(

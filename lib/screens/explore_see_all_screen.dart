@@ -33,15 +33,8 @@ class ExploreSeeAllScreen extends StatelessWidget {
       backgroundColor: scaffold,
       appBar: AppBar(
         backgroundColor: scaffold,
-        surfaceTintColor: Colors.transparent,
         foregroundColor: primaryText,
-        title: Text(
-          'Reward Offers',
-          style: WaUi.headline.copyWith(
-            fontWeight: FontWeight.w700,
-            color: primaryText,
-          ),
-        ),
+        title: Text('Reward Offers'),
       ),
       body: offers.isEmpty
           ? Center(
@@ -244,7 +237,7 @@ class _RewardSeeAllCard extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF10A375),
+                          color: Colors.black,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         alignment: Alignment.center,

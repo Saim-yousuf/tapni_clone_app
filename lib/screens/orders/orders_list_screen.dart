@@ -44,8 +44,7 @@ class _OrdersListScreenState extends State<OrdersListScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.isBusinessView ? context.l10n.orders : context.l10n.myOrders,
-        ),
+          widget.isBusinessView ? context.l10n.orders : context.l10n.myOrders),
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
@@ -55,8 +54,7 @@ class _OrdersListScreenState extends State<OrdersListScreen>
           indicatorColor: AppTheme.primaryBlack,
           tabs: _tabs
               .map((s) => Tab(text: CatalogHelper.statusLabel(s, context.l10n)))
-              .toList(),
-        ),
+              .toList()),
       ),
       body: TabBarView(
         controller: _tabController,

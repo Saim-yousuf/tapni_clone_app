@@ -643,9 +643,6 @@ class _BusinessCardDesignEditorScreenState
     return Scaffold(
       backgroundColor: WaUi.scaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.scaffold,
-        foregroundColor: WaUi.primaryText,
-        elevation: 0,
         title: Text(widget.createNewCard ? 'Customize card' : 'Edit card design'),
         actions: [
           if (!widget.createNewCard &&
@@ -654,33 +651,27 @@ class _BusinessCardDesignEditorScreenState
             IconButton(
               tooltip: context.l10n.deleteCard,
               onPressed: _deleteCard,
-              icon: const Icon(Icons.delete_outline, color: Colors.red),
-            ),
+              icon: const Icon(Icons.delete_outline, color: Colors.red)),
           IconButton(
             tooltip: 'Undo',
             onPressed: _undo.isEmpty ? null : _doUndo,
-            icon: const Icon(Icons.undo),
-          ),
+            icon: const Icon(Icons.undo)),
           IconButton(
             tooltip: 'Redo',
             onPressed: _redo.isEmpty ? null : _doRedo,
-            icon: const Icon(Icons.redo),
-          ),
+            icon: const Icon(Icons.redo)),
           IconButton(
             tooltip: context.l10n.download,
             onPressed: _download,
-            icon: const Icon(Icons.download_rounded),
-          ),
+            icon: const Icon(Icons.download_rounded)),
           TextButton(
             onPressed: _saving ? null : _save,
             child: _saving
                 ? const SizedBox(
                     width: 16,
                     height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : Text(context.l10n.save),
-          ),
+                    child: CircularProgressIndicator(strokeWidth: 2))
+                : Text(context.l10n.save)),
         ],
       ),
       body: Column(

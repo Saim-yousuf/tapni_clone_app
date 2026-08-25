@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 import 'package:tapni_app/models/published_invitation_template.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/screens/invitations/invitation_design_editor_screen.dart';
+import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/invitation_template_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/country_picker_sheet.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
 import 'package:tapni_app/widgets/wa_chats_widgets.dart';
@@ -70,23 +73,8 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
     final design = InvitationDesign.blank(
       countryCode: _country ?? 'US',
       category: _category ?? 'other',
-      locale: (_country == 'SA' ||
-              _country == 'AE' ||
-              _country == 'KW' ||
-              _country == 'QA' ||
-              _country == 'BH' ||
-              _country == 'OM' ||
-              _country == 'EG')
-          ? 'ar'
-          : (_country == 'PK' ? 'ur' : 'en'),
-      rtl: _country == 'SA' ||
-          _country == 'AE' ||
-          _country == 'KW' ||
-          _country == 'QA' ||
-          _country == 'BH' ||
-          _country == 'OM' ||
-          _country == 'EG' ||
-          _country == 'PK',
+      locale: InvitationTemplateCatalog.defaultLocaleForCountry(_country),
+      rtl: InvitationTemplateCatalog.isRtlCountry(_country),
     );
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -100,50 +88,66 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
     if (_segment == 1) _loadCommunity();
   }
 
+  Future<void> _pickCountry() async {
+    final selected = await showCountryPickerSheet(
+      context,
+      selectedIso: _country,
+    );
+    if (!mounted || selected == null) return;
+    _country = selected.iso.toUpperCase();
+    _onFilterChanged();
+  }
+
+  Map<String, String>? _countryInfo(String code) {
+    final upper = code.toUpperCase();
+    for (final c in InvitationTemplateCatalog.countries) {
+      if (c['code'] == upper) return c;
+    }
+    for (final dial in kCountryDialCodes) {
+      if (dial.iso.toUpperCase() == upper) {
+        return {
+          'code': dial.iso.toUpperCase(),
+          'name': dial.name,
+          'flag': dial.flagEmoji,
+        };
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final templates = _filtered;
     final provider = context.watch<InvitationProvider>();
     final community = provider.communityTemplates;
+    final featured = InvitationTemplateCatalog.featuredCountryCodes;
+    final selectedInfo = _country == null ? null : _countryInfo(_country!);
 
     return Scaffold(
-      backgroundColor: WaUi.scaffold,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: WaUi.surface,
-        elevation: 0,
-        foregroundColor: WaUi.primaryText,
-        title: Text(context.l10n.chooseATemplate, style: WaUi.sectionHeader),
+        title: Text(context.l10n.chooseATemplate),
         actions: [
           TextButton(
             onPressed: _startBlank,
-            child: Text(context.l10n.blank),
-          ),
+            child: Text(context.l10n.blank)),
         ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SegmentedButton<int>(
-              segments: [
-                ButtonSegment(
-                  value: 0,
-                  label: Text(context.l10n.official),
-                  icon: const Icon(Icons.star_outline, size: 16),
-                ),
-                ButtonSegment(
-                  value: 1,
-                  label: Text(context.l10n.community),
-                  icon: const Icon(Icons.people_outline, size: 16),
-                ),
-              ],
-              selected: {_segment},
-              onSelectionChanged: (s) {
-                setState(() => _segment = s.first);
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+            child: _OfficialCommunityTabs(
+              index: _segment,
+              onChanged: (index) {
+                if (_segment == index) return;
+                HapticFeedback.selectionClick();
+                setState(() => _segment = index);
                 if (_segment == 1) _loadCommunity();
               },
+              officialLabel: context.l10n.official,
+              communityLabel: context.l10n.community,
             ),
           ),
           const SizedBox(height: 12),
@@ -167,21 +171,46 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
                     _onFilterChanged();
                   },
                 ),
-                ...InvitationTemplateCatalog.countries.map((c) {
+                if (selectedInfo != null &&
+                    !featured.contains(_country))
+                  WaPillFilterChip(
+                    label: selectedInfo['name']!,
+                    selected: true,
+                    selectedColor: WaUi.chipBg,
+                    leading: Text(
+                      selectedInfo['flag']!,
+                      style: const TextStyle(fontSize: 14, height: 1),
+                    ),
+                    onTap: _pickCountry,
+                  ),
+                ...featured.map((code) {
+                  final c = _countryInfo(code);
+                  if (c == null) return const SizedBox.shrink();
                   return WaPillFilterChip(
                     label: c['name']!,
-                    selected: _country == c['code'],
+                    selected: _country == code,
                     selectedColor: WaUi.chipBg,
                     leading: Text(
                       c['flag']!,
                       style: const TextStyle(fontSize: 14, height: 1),
                     ),
                     onTap: () {
-                      _country = c['code'];
+                      _country = code;
                       _onFilterChanged();
                     },
                   );
                 }),
+                WaPillFilterChip(
+                  label: context.l10n.seeAll,
+                  selected: false,
+                  selectedColor: WaUi.chipBg,
+                  leading: const Icon(
+                    Icons.search_rounded,
+                    size: 16,
+                    color: WaUi.secondaryText,
+                  ),
+                  onTap: _pickCountry,
+                ),
               ],
             ),
           ),
@@ -232,20 +261,176 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
           ),
           const SizedBox(height: 8),
           Expanded(
-            child: _segment == 0
-                ? _OfficialGrid(
-                    templates: templates,
-                    onOpen: _openTemplate,
-                    onBlank: _startBlank,
-                  )
-                : _CommunityGrid(
-                    templates: community,
-                    loading: provider.loadingCommunity,
-                    onOpen: _openCommunity,
-                    onRefresh: _loadCommunity,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 0.98, end: 1.0)
+                        .animate(animation),
+                    child: child,
                   ),
+                );
+              },
+              child: KeyedSubtree(
+                key: ValueKey<int>(_segment),
+                child: _segment == 0
+                    ? _OfficialGrid(
+                        templates: templates,
+                        onOpen: _openTemplate,
+                        onBlank: _startBlank,
+                      )
+                    : _CommunityGrid(
+                        templates: community,
+                        loading: provider.loadingCommunity,
+                        onOpen: _openCommunity,
+                        onRefresh: _loadCommunity,
+                      ),
+              ),
+            ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _OfficialCommunityTabs extends StatelessWidget {
+  final int index;
+  final ValueChanged<int> onChanged;
+  final String officialLabel;
+  final String communityLabel;
+
+  const _OfficialCommunityTabs({
+    required this.index,
+    required this.onChanged,
+    required this.officialLabel,
+    required this.communityLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 46,
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: Colors.black.withOpacity(0.04),
+          width: 1,
+        ),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final tabWidth = (constraints.maxWidth - 4) / 2;
+          return Stack(
+            children: [
+              AnimatedAlign(
+                duration: const Duration(milliseconds: 240),
+                curve: Curves.easeOutCubic,
+                alignment:
+                    index == 0 ? Alignment.centerLeft : Alignment.centerRight,
+                child: SizedBox(
+                  width: tabWidth,
+                  height: double.infinity,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.02),
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: _SegTab(
+                      selected: index == 0,
+                      icon: Icons.star_rounded,
+                      label: officialLabel,
+                      onTap: () => onChanged(0),
+                    ),
+                  ),
+                  Expanded(
+                    child: _SegTab(
+                      selected: index == 1,
+                      icon: Icons.people_alt_rounded,
+                      label: communityLabel,
+                      onTap: () => onChanged(1),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _SegTab extends StatelessWidget {
+  final bool selected;
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _SegTab({
+    required this.selected,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Center(
+        child: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 200),
+          style: TextStyle(
+            fontSize: 13.5,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            color: selected ? const Color(0xFF0F172A) : const Color(0xFF64748B),
+            letterSpacing: selected ? -0.2 : 0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  icon,
+                  key: ValueKey<bool>(selected),
+                  size: 17,
+                  color: selected
+                      ? const Color(0xFF0F172A)
+                      : const Color(0xFF94A3B8),
+                ),
+              ),
+              const SizedBox(width: 7),
+              Text(label),
+            ],
+          ),
+        ),
       ),
     );
   }

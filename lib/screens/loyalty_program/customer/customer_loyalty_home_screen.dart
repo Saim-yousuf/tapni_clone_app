@@ -88,11 +88,8 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
         surfaceTintColor: WaUi.toolsScaffold,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: WaUi.primaryText),
-        title: Text(context.l10n.myRewards, style: WaUi.headline),
+        title: Text(context.l10n.myRewards),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())

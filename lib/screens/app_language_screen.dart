@@ -74,12 +74,7 @@ class _AppLanguageScreenState extends State<AppLanguageScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
-        foregroundColor: WaUi.primaryText,
-        title: Text(context.l10n.appLanguage, style: WaUi.title),
+        title: Text(context.l10n.appLanguage),
       ),
       body: Column(
         children: [

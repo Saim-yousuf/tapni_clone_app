@@ -96,16 +96,12 @@ class _ContactsSyncScreenState extends State<ContactsSyncScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        foregroundColor: WaUi.primaryText,
         automaticallyImplyLeading: !widget.isOnboarding,
         leading: widget.isOnboarding
             ? null
             : IconButton(
                 icon: const Icon(Icons.close, size: 22),
-                onPressed: _syncing ? null : () => _finish(),
-              ),
+                onPressed: _syncing ? null : () => _finish()),
       ),
       body: SafeArea(
         child: Padding(

@@ -128,18 +128,11 @@ class EInvoiceResultScreen extends StatelessWidget {
           l10n.eInvoiceVerification,
           style: _style(
             size: 16,
-            weight: FontWeight.w500,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
+            weight: FontWeight.w500)),
         foregroundColor: Colors.black87,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.close_rounded),
-          onPressed: () => Navigator.of(context).maybePop(),
-        ),
+          onPressed: () => Navigator.of(context).maybePop()),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),

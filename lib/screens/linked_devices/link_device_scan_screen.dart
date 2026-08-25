@@ -191,8 +191,7 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
           IconButton(
             icon: Icon(Icons.keyboard_alt_outlined),
             onPressed: _showManualEntry,
-            tooltip: context.l10n.enterCode,
-          ),
+            tooltip: context.l10n.enterCode),
         ],
       ),
       body: Stack(

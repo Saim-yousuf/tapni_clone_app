@@ -29,18 +29,9 @@ class SocialLinksScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          context.l10n.links,
-          style: WaUi.toolsTitle,
+          context.l10n.links
         ),
-        titleTextStyle: WaUi.toolsTitle,
-        centerTitle: false,
-        titleSpacing: 16,
         automaticallyImplyLeading: !isTab,
-        backgroundColor: theme.scaffoldBackgroundColor,
-        surfaceTintColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
         actions: [
           NotificationIconButton(),
           GoBussinessButton(),

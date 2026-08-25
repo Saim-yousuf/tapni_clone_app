@@ -7,6 +7,7 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class PublicUserResult {
@@ -57,6 +58,7 @@ class FindUserScreen extends StatefulWidget {
 
 class _FindUserScreenState extends State<FindUserScreen> {
   final _searchController = TextEditingController();
+  final _searchFocus = FocusNode();
   final _authRepo = AuthRepo();
   Timer? _debounce;
   List<PublicUserResult> _results = [];
@@ -68,6 +70,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
   void dispose() {
     _debounce?.cancel();
     _searchController.dispose();
+    _searchFocus.dispose();
     super.dispose();
   }
 
@@ -155,29 +158,21 @@ class _FindUserScreenState extends State<FindUserScreen> {
       backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
       appBar: AppBar(
         backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
-        elevation: 0,
         automaticallyImplyLeading: !widget.isTab,
-        iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black),
         title: Text(
           context.l10n.findUser2,
-          style: TextStyle(color: isDark ? Colors.white : Colors.black),
-        ),
+          style: TextStyle(color: isDark ? Colors.white : Colors.black)),
       ),
       body: SafeArea(
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(16, 8, 16, 12),
-              child: Container(
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+              child: SizedBox(
                 height: 48,
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.white.withOpacity(0.07)
-                      : Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(24),
-                ),
                 child: TextField(
                   controller: _searchController,
+                  focusNode: _searchFocus,
                   autofocus: !widget.isTab,
                   onChanged: _onSearchChanged,
                   textInputAction: TextInputAction.search,
@@ -185,29 +180,71 @@ class _FindUserScreenState extends State<FindUserScreen> {
                     final q = value.trim().replaceFirst(RegExp(r'^@'), '');
                     if (q.length >= 2) _searchUsers(q);
                   },
+                  style: WaUi.body.copyWith(
+                    fontSize: 16,
+                    height: 1.2,
+                    color: isDark ? Colors.white : WaUi.primaryText,
+                  ),
+                  cursorColor: isDark ? Colors.white : WaUi.accent,
                   decoration: InputDecoration(
+                    filled: true,
+                    fillColor: isDark
+                        ? const Color(0xFF3A3B3C)
+                        : WaUi.searchBg,
                     hintText: context.l10n.searchByUsername,
                     hintStyle: TextStyle(
-                      color: isDark ? Colors.white38 : Colors.grey.shade500,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: isDark
+                          ? const Color(0xFF8A8D91)
+                          : const Color(0xFF667781),
+                      height: 1.2,
                     ),
-                    prefixIcon: Icon(
-                      Icons.alternate_email_rounded,
-                      size: 20,
-                      color: isDark ? Colors.white38 : Colors.grey.shade500,
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.only(left: 14, right: 8),
+                      child: Icon(
+                        Icons.search,
+                        size: 22,
+                        color: isDark
+                            ? const Color(0xFF8A8D91)
+                            : const Color(0xFF667781),
+                      ),
+                    ),
+                    prefixIconConstraints: const BoxConstraints(
+                      minWidth: 44,
+                      minHeight: 48,
                     ),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
-                            icon: Icon(Icons.clear_rounded, size: 18),
+                            icon: const Icon(Icons.close, size: 18),
+                            color: isDark
+                                ? const Color(0xFF8A8D91)
+                                : const Color(0xFF667781),
                             onPressed: () {
                               _searchController.clear();
                               _onSearchChanged('');
+                              _searchFocus.requestFocus();
                             },
                           )
                         : null,
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 12),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 14,
+                    ),
+                    isDense: true,
                   ),
-                  style: TextStyle(color: isDark ? Colors.white : Colors.black),
                 ),
               ),
             ),

@@ -9,6 +9,15 @@ class CountryDialCode {
     required this.code,
     required this.iso,
   });
+
+  /// ISO 3166-1 alpha-2 → regional-indicator flag emoji (e.g. PK → 🇵🇰).
+  String get flagEmoji {
+    final code = iso.toUpperCase();
+    if (code.length != 2) return '';
+    final a = 0x1F1E6 - 0x41 + code.codeUnitAt(0);
+    final b = 0x1F1E6 - 0x41 + code.codeUnitAt(1);
+    return String.fromCharCodes([a, b]);
+  }
 }
 
 const List<CountryDialCode> kCountryDialCodes = [
@@ -300,5 +309,36 @@ String? regionKeyFromPhone(
     if (option == key) return option;
   }
   return null;
+}
+
+/// Map profile [userCountry] (Constants.countries key or ISO) → ISO 3166-1 alpha-2.
+String? isoCodeFromUserCountry(String? userCountry) {
+  if (userCountry == null) return null;
+  final raw = userCountry.trim();
+  if (raw.isEmpty) return null;
+  if (raw.length == 2 && RegExp(r'^[A-Za-z]{2}$').hasMatch(raw)) {
+    return raw.toUpperCase();
+  }
+  final key = raw.toLowerCase();
+  for (final c in kCountryDialCodes) {
+    final regionKey = regionKeyForDialCountry(c)?.toLowerCase();
+    if (regionKey == key || c.name.toLowerCase() == key) {
+      return c.iso.toUpperCase();
+    }
+  }
+  return null;
+}
+
+/// Best-effort country for publishing community templates.
+String resolveUserPublishCountryCode({
+  String? profileCountry,
+  String? phone,
+  String? fallback,
+}) {
+  return isoCodeFromUserCountry(profileCountry) ??
+      findCountryByPhone(phone)?.iso.toUpperCase() ??
+      (fallback != null && fallback.trim().isNotEmpty
+          ? fallback.trim().toUpperCase()
+          : 'SA');
 }
 

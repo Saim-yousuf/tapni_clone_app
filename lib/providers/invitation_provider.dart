@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/l10n_lookup.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 import 'package:tapni_app/models/published_invitation_template.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/invitation_repo.dart';
+import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/widgets/alert.dart';
 
 class InvitationProvider extends ChangeNotifier {
@@ -364,16 +367,31 @@ class InvitationProvider extends ChangeNotifier {
     _isPublishing = true;
     notifyListeners();
     try {
+      // Community templates publish under the user's country, not the starter template's.
+      var countryCode = design.countryCode;
+      if (context != null && context.mounted) {
+        try {
+          final profile =
+              Provider.of<ProfileProvider>(context, listen: false).profile;
+          countryCode = resolveUserPublishCountryCode(
+            profileCountry: profile.country,
+            phone: profile.phone,
+            fallback: design.countryCode,
+          );
+        } catch (_) {}
+      }
+
+      final publishDesign = design.copy()..countryCode = countryCode;
       final body = <String, dynamic>{
         'name': name,
         'description': description,
-        'countryCode': design.countryCode,
-        'category': design.category,
-        'locale': design.locale,
-        'rtl': design.rtl,
-        'previewColor': design.backgroundColor,
+        'countryCode': countryCode,
+        'category': publishDesign.category,
+        'locale': publishDesign.locale,
+        'rtl': publishDesign.rtl,
+        'previewColor': publishDesign.backgroundColor,
         'accentColor': '#D4AF37',
-        'design': design.toJson(),
+        'design': publishDesign.toJson(),
       };
       final response = await _repo.publishTemplate(body);
       if (response.success && response.data != null) {

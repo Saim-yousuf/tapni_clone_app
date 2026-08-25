@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -96,14 +97,7 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        surfaceTintColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        foregroundColor: WaUi.primaryText,
-        centerTitle: true,
-        title: Text(context.l10n.invitations, style: WaUi.headline),
+        title: Text(context.l10n.invitations),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _openGallery,
@@ -128,13 +122,17 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-            child: _PillTabs(
-              selectedIndex: _tabController.index,
+            child: _ReceivedSentTabs(
+              index: _tabController.index,
               receivedLabel: context.l10n.received,
               sentLabel: context.l10n.sent,
               receivedCount: receivedCount,
               sentCount: sentCount,
-              onChanged: (i) => _tabController.animateTo(i),
+              onChanged: (i) {
+                if (_tabController.index == i) return;
+                HapticFeedback.selectionClick();
+                _tabController.animateTo(i);
+              },
             ),
           ),
           Expanded(
@@ -258,16 +256,16 @@ class _MyCardsSection extends StatelessWidget {
   }
 }
 
-class _PillTabs extends StatelessWidget {
-  final int selectedIndex;
+class _ReceivedSentTabs extends StatelessWidget {
+  final int index;
   final String receivedLabel;
   final String sentLabel;
   final int receivedCount;
   final int sentCount;
   final ValueChanged<int> onChanged;
 
-  const _PillTabs({
-    required this.selectedIndex,
+  const _ReceivedSentTabs({
+    required this.index,
     required this.receivedLabel,
     required this.sentLabel,
     required this.receivedCount,
@@ -278,102 +276,146 @@ class _PillTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 46,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: WaUi.navPill,
-        borderRadius: BorderRadius.circular(14),
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: Colors.black.withOpacity(0.04),
+          width: 1,
+        ),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _PillTab(
-              label: receivedLabel,
-              count: receivedCount,
-              selected: selectedIndex == 0,
-              onTap: () => onChanged(0),
-            ),
-          ),
-          Expanded(
-            child: _PillTab(
-              label: sentLabel,
-              count: sentCount,
-              selected: selectedIndex == 1,
-              onTap: () => onChanged(1),
-            ),
-          ),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final tabWidth = (constraints.maxWidth - 4) / 2;
+          return Stack(
+            children: [
+              AnimatedAlign(
+                duration: const Duration(milliseconds: 240),
+                curve: Curves.easeOutCubic,
+                alignment:
+                    index == 0 ? Alignment.centerLeft : Alignment.centerRight,
+                child: SizedBox(
+                  width: tabWidth,
+                  height: double.infinity,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.02),
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: _SegTab(
+                      selected: index == 0,
+                      icon: Icons.inbox_rounded,
+                      label: receivedLabel,
+                      count: receivedCount,
+                      onTap: () => onChanged(0),
+                    ),
+                  ),
+                  Expanded(
+                    child: _SegTab(
+                      selected: index == 1,
+                      icon: Icons.send_rounded,
+                      label: sentLabel,
+                      count: sentCount,
+                      onTap: () => onChanged(1),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 }
 
-class _PillTab extends StatelessWidget {
+class _SegTab extends StatelessWidget {
+  final bool selected;
+  final IconData icon;
   final String label;
   final int count;
-  final bool selected;
   final VoidCallback onTap;
 
-  const _PillTab({
+  const _SegTab({
+    required this.selected,
+    required this.icon,
     required this.label,
     required this.count,
-    required this.selected,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        curve: Curves.easeOut,
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: selected ? WaUi.toolsScaffold : Colors.transparent,
-          borderRadius: BorderRadius.circular(11),
-          boxShadow: selected
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.06),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : null,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              label,
-              style: WaUi.bodyMedium.copyWith(
-                color: selected ? WaUi.primaryText : WaUi.secondaryText,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-              ),
-            ),
-            if (count > 0) ...[
-              const SizedBox(width: 6),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                decoration: BoxDecoration(
+      onTap: onTap,
+      child: Center(
+        child: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 200),
+          style: TextStyle(
+            fontSize: 13.5,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            color: selected ? const Color(0xFF0F172A) : const Color(0xFF64748B),
+            letterSpacing: selected ? -0.2 : 0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  icon,
+                  key: ValueKey<bool>(selected),
+                  size: 17,
                   color: selected
-                      ? WaUi.chipBg
-                      : WaUi.toolsScaffold.withValues(alpha: 0.7),
-                  borderRadius: BorderRadius.circular(WaUi.radiusPill),
-                ),
-                child: Text(
-                  '$count',
-                  style: WaUi.label.copyWith(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: selected ? WaUi.navGreen : WaUi.secondaryText,
-                    height: 1.2,
-                  ),
+                      ? const Color(0xFF0F172A)
+                      : const Color(0xFF94A3B8),
                 ),
               ),
+              const SizedBox(width: 7),
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              if (count > 0) ...[
+                const SizedBox(width: 6),
+                Text(
+                  '$count',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+                    color: selected
+                        ? const Color(0xFF0F172A)
+                        : const Color(0xFF94A3B8),
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

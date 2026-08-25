@@ -37,25 +37,20 @@ class DigitalCardScreen extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
-                builder: (context) => const TemplatesSheet(),
-              );
-            },
-          ),
+                builder: (context) => const TemplatesSheet());
+            }),
           IconButton(
             icon: const Icon(Icons.download_rounded),
             tooltip: context.l10n.download,
             onPressed: () {
               BusinessCardShareSheet.showMyCard(context);
-            },
-          ),
+            }),
           IconButton(
             icon: const Icon(Icons.qr_code_2_rounded),
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const QrCodeScreen()),
-              );
-            },
-          ),
+                MaterialPageRoute(builder: (_) => const QrCodeScreen()));
+            }),
         ],
       ),
       body: SingleChildScrollView(

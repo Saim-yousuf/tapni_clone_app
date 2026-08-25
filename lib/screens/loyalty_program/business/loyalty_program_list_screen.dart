@@ -70,22 +70,12 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        foregroundColor: WaUi.primaryText,
-        title: Text(
-          context.l10n.loyaltyPrograms,
-          style: WaUi.headline.copyWith(fontWeight: FontWeight.w600),
-        ),
+        title: Text(context.l10n.loyaltyPrograms),
         actions: [
           IconButton(
             tooltip: context.l10n.createProgram,
             icon: const Icon(Icons.add_rounded),
-            onPressed: _openCreate,
-          ),
+            onPressed: _openCreate),
         ],
       ),
       body: _isLoading

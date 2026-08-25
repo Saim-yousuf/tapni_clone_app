@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/app_fonts.dart';
+import 'package:tapni_app/utils/app_ui.dart';
 
 /// WhatsApp Business–inspired typography, colors, and surfaces.
+///
+/// Font sizes come from [AppUi] — change them there for app-wide control.
 class WaUi {
   static const Color scaffold = Color(0xFFF0F2F5);
   static const Color toolsScaffold = Color(0xFFFFFFFF);
@@ -65,14 +68,14 @@ class WaUi {
   /// Do not `copyWith(fontWeight:)` after Google Fonts — that re-breaks weight.
   static TextStyle toolsTitleOf({
     FontWeight weight = FontWeight.w500,
-    double size = 26,
+    double? size,
     double? height,
     Color color = primaryText,
     double? letterSpacing,
   }) {
     final scriptAware = AppFonts.usesArabicScript || AppFonts.isHebrew;
     final style = AppFonts.titleStyle(
-      fontSize: size,
+      fontSize: size ?? AppUi.fontToolsTitle,
       fontWeight: weight,
       color: color,
       height: height ?? (AppFonts.isUrdu ? 1.45 : 1.15),
@@ -82,89 +85,93 @@ class WaUi {
   }
 
   static TextStyle get sectionHeader => _style(
-        size: 17,
+        size: AppUi.fontSection,
         weight: FontWeight.w600,
         height: AppFonts.isUrdu ? 1.45 : 1.2,
       );
 
   static TextStyle get headline => _style(
-        size: 20,
+        size: AppUi.fontHeadline,
         weight: FontWeight.w600,
         height: AppFonts.isUrdu ? 1.45 : 1.2,
         letterSpacing: -0.2,
       );
 
+  /// AppBar title — WhatsApp-style (same as [headline]).
+  /// Prefer omitting [Text.style] so [ThemeData.appBarTheme] applies, or use this.
+  static TextStyle get appBarTitle => headline;
+
   static TextStyle get title => _style(
-        size: 17,
+        size: AppUi.fontTitle,
         weight: FontWeight.w500,
       );
 
   static TextStyle get listTitle => _style(
-        size: 16,
+        size: AppUi.fontListTitle,
         weight: FontWeight.w500,
       );
 
   static TextStyle get body => _style(
-        size: 15,
+        size: AppUi.fontBody,
         weight: FontWeight.w400,
       );
 
   static TextStyle get bodyMedium => _style(
-        size: 15,
+        size: AppUi.fontBody,
         weight: FontWeight.w500,
       );
 
   static TextStyle get caption => _style(
-        size: 14,
+        size: AppUi.fontCaption,
         weight: FontWeight.w400,
         color: secondaryText,
       );
 
   static TextStyle get listSubtitle => _style(
-        size: 14,
+        size: AppUi.fontCaption,
         weight: FontWeight.w400,
         color: secondaryText,
       );
 
   static TextStyle get label => _style(
-        size: 12,
+        size: AppUi.fontLabel,
         weight: FontWeight.w500,
         color: secondaryText,
         letterSpacing: 0.1,
       );
 
   static TextStyle get navLabel => _style(
-        size: 12,
+        size: AppUi.fontLabel,
         weight: FontWeight.w500,
         height: AppFonts.isUrdu ? 1.35 : 1.1,
       );
 
   static TextStyle get navLabelActive => _style(
-        size: 12,
+        size: AppUi.fontLabel,
         weight: FontWeight.w600,
         height: AppFonts.isUrdu ? 1.35 : 1.1,
       );
 
   static TextStyle get button => _style(
-        size: 16,
+        size: AppUi.fontBodyLg,
         weight: FontWeight.w600,
         height: 1.0,
       );
 
   static TextStyle get promoTitle => _style(
-        size: 16,
+        size: AppUi.fontBodyLg,
         weight: FontWeight.w600,
       );
 
   static TextStyle get promoBody => _style(
-        size: 14,
+        size: AppUi.fontCaption,
         weight: FontWeight.w400,
         color: secondaryText,
         height: AppFonts.isUrdu ? 1.55 : 1.4,
       );
 
   static TextStyle get promoButton => _style(
-        size: 16,
+        size: AppUi.fontBodyLg,
         weight: FontWeight.w600,
         color: Colors.white,
         height: 1.0,
@@ -172,33 +179,33 @@ class WaUi {
 
   /// Chats / contacts list row.
   static TextStyle get chatName => _style(
-        size: 16.5,
+        size: AppUi.fontChatName,
         weight: FontWeight.w600,
         height: AppFonts.isUrdu ? 1.45 : 1.2,
       );
 
   static TextStyle get chatPreview => _style(
-        size: 14,
+        size: AppUi.fontCaption,
         weight: FontWeight.w400,
         color: secondaryText,
       );
 
   static TextStyle get chatDate => _style(
-        size: 12,
+        size: AppUi.fontLabel,
         weight: FontWeight.w400,
         color: secondaryText,
         height: AppFonts.isUrdu ? 1.35 : 1.1,
       );
 
   static TextStyle get chatDateHighlight => _style(
-        size: 12,
+        size: AppUi.fontLabel,
         weight: FontWeight.w500,
         color: accent,
         height: AppFonts.isUrdu ? 1.35 : 1.1,
       );
 
   static TextStyle get avatarInitial => _style(
-        size: 20,
+        size: AppUi.fontAvatarInitial,
         weight: FontWeight.w500,
         color: primaryText,
       );
@@ -283,7 +290,7 @@ class WaUi {
       suffixIcon: suffixIcon,
       filled: true,
       fillColor: fieldFill,
-      hintStyle: _style(size: 15, color: secondaryText),
+      hintStyle: _style(size: AppUi.fontBody, color: secondaryText),
       contentPadding: contentPadding ??
           const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: fieldBorder(radius: radius),

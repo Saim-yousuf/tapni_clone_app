@@ -154,36 +154,21 @@ class _InAppDocumentScreenState extends State<InAppDocumentScreen> {
       child: Scaffold(
         backgroundColor: bg,
         appBar: AppBar(
-          title: Text(
-            widget.title,
-            style: WaUi.toolsTitleOf(
-              weight: FontWeight.w600,
-              color: fg,
-            ),
-          ),
-          centerTitle: false,
-          titleSpacing: 0,
+          title: Text(widget.title),
           automaticallyImplyLeading: true,
           backgroundColor: bar,
           foregroundColor: fg,
-          surfaceTintColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 0,
           actions: [
             if (_bytes != null)
               IconButton(
                 onPressed: _share,
-                icon: const Icon(Icons.ios_share_rounded),
-              ),
+                icon: const Icon(Icons.ios_share_rounded)),
           ],
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1),
             child: Container(
               height: 1,
-              color: isDark ? Colors.white10 : WaUi.divider,
-            ),
-          ),
+              color: isDark ? Colors.white10 : WaUi.divider)),
         ),
         body: Stack(
           children: [

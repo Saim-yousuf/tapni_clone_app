@@ -81,10 +81,7 @@ class GeneralQrResultScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(context.l10n.scannedQr),
-        backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),

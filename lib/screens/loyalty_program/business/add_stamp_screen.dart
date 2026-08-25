@@ -54,16 +54,12 @@ class _AddStampScreenState extends State<AddStampScreen> {
       backgroundColor: theme.screenBackgroundColor,
       appBar: AppBar(
         backgroundColor: theme.screenBackgroundColor,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: theme.screenTextColor),
-          onPressed: () => Navigator.pop(context, true),
-        ),
+          onPressed: () => Navigator.pop(context, true)),
         title: Text(
           program?.label.isNotEmpty == true ? program!.label : context.l10n.stampCard,
-          style: TextStyle(color: theme.screenTextColor, fontWeight: FontWeight.bold, fontSize: 18),
-        ),
+          style: TextStyle(color: theme.screenTextColor, fontWeight: FontWeight.bold, fontSize: 18)),
       ),
       body: SafeArea(
         child: Padding(

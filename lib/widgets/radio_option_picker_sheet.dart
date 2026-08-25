@@ -23,6 +23,8 @@ Future<String?> showRadioOptionPickerSheet({
   required String searchHint,
   String? helperText,
   String? emptyText,
+  bool closeOnSelect = false,
+  Color? sheetColor,
 }) {
   return showModalBottomSheet<String>(
     context: context,
@@ -35,6 +37,8 @@ Future<String?> showRadioOptionPickerSheet({
       searchHint: searchHint,
       helperText: helperText,
       emptyText: emptyText,
+      closeOnSelect: closeOnSelect,
+      sheetColor: sheetColor,
     ),
   );
 }
@@ -88,6 +92,8 @@ class RadioOptionPickerSheet extends StatefulWidget {
     required this.searchHint,
     this.helperText,
     this.emptyText,
+    this.closeOnSelect = false,
+    this.sheetColor,
   });
 
   final List<RadioPickerOption> options;
@@ -95,6 +101,8 @@ class RadioOptionPickerSheet extends StatefulWidget {
   final String searchHint;
   final String? helperText;
   final String? emptyText;
+  final bool closeOnSelect;
+  final Color? sheetColor;
 
   @override
   State<RadioOptionPickerSheet> createState() => _RadioOptionPickerSheetState();
@@ -131,12 +139,23 @@ class _RadioOptionPickerSheetState extends State<RadioOptionPickerSheet> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final sheetColor = isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF2F2F2);
-    final searchFill = isDark ? const Color(0xFF2A2A2A) : const Color(0xFFE6E6E6);
+    final sheetColor = widget.sheetColor ??
+        (isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF2F2F2));
+    final searchFill = isDark && widget.sheetColor == null
+        ? const Color(0xFF2A2A2A)
+        : const Color(0xFFF1F5F9);
     final options = _filtered;
     final media = MediaQuery.of(context);
     final bottomInset = media.padding.bottom;
     final sheetHeight = media.size.height * 0.8;
+
+    void selectOption(String id) {
+      if (widget.closeOnSelect) {
+        Navigator.pop(context, id);
+        return;
+      }
+      setState(() => _selectedId = id);
+    }
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -155,7 +174,9 @@ class _RadioOptionPickerSheetState extends State<RadioOptionPickerSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: isDark ? Colors.white24 : const Color(0xFFD0D0D0),
+                color: isDark && widget.sheetColor == null
+                    ? Colors.white24
+                    : const Color(0xFFD0D0D0),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -205,7 +226,9 @@ class _RadioOptionPickerSheetState extends State<RadioOptionPickerSheet> {
                       child: Text(
                         widget.helperText!,
                         style: WaUi.caption.copyWith(
-                          color: isDark ? Colors.white70 : const Color(0xFF3A3A3A),
+                          color: isDark && widget.sheetColor == null
+                              ? Colors.white70
+                              : const Color(0xFF3A3A3A),
                           fontSize: 13,
                           height: 1.35,
                         ),
@@ -217,7 +240,9 @@ class _RadioOptionPickerSheetState extends State<RadioOptionPickerSheet> {
                       icon: Icon(
                         _gridView ? Icons.view_list_outlined : Icons.grid_view,
                         size: 22,
-                        color: isDark ? Colors.white70 : const Color(0xFF222222),
+                        color: isDark && widget.sheetColor == null
+                            ? Colors.white70
+                            : const Color(0xFF222222),
                       ),
                     ),
                   ],
@@ -231,7 +256,9 @@ class _RadioOptionPickerSheetState extends State<RadioOptionPickerSheet> {
                   icon: Icon(
                     _gridView ? Icons.view_list_outlined : Icons.grid_view,
                     size: 22,
-                    color: isDark ? Colors.white70 : const Color(0xFF222222),
+                    color: isDark && widget.sheetColor == null
+                        ? Colors.white70
+                        : const Color(0xFF222222),
                   ),
                 ),
               ),
@@ -244,41 +271,44 @@ class _RadioOptionPickerSheetState extends State<RadioOptionPickerSheet> {
                       ),
                     )
                   : _gridView
-                      ? _buildGrid(options, isDark)
-                      : _buildList(options, isDark),
+                      ? _buildGrid(options, isDark, selectOption)
+                      : _buildList(options, isDark, selectOption),
             ),
-            Container(
-              color: sheetColor,
-              padding: EdgeInsets.fromLTRB(16, 8, 16, 12 + bottomInset),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF2A2A2A) : Colors.white,
-                        borderRadius: BorderRadius.circular(100),
+            if (!widget.closeOnSelect)
+              Container(
+                color: sheetColor,
+                padding: EdgeInsets.fromLTRB(16, 8, 16, 12 + bottomInset),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: isDark ? const Color(0xFF2A2A2A) : Colors.white,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: WaPrimaryButton(
+                          label: context.l10n.cancel,
+                          outlined: true,
+                          foregroundColor: const Color(0xFF1B5E3B),
+                          onPressed: () => Navigator.pop(context),
+                        ),
                       ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
                       child: WaPrimaryButton(
-                        label: context.l10n.cancel,
-                        outlined: true,
-                        foregroundColor: const Color(0xFF1B5E3B),
-                        onPressed: () => Navigator.pop(context),
+                        label: context.l10n.save,
+                        backgroundColor: Colors.black,
+                        onPressed: _selectedId == null
+                            ? null
+                            : () => Navigator.pop(context, _selectedId),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: WaPrimaryButton(
-                      label: context.l10n.save,
-                      backgroundColor: Colors.black,
-                      onPressed: _selectedId == null
-                          ? null
-                          : () => Navigator.pop(context, _selectedId),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                  ],
+                ),
+              )
+            else
+              SizedBox(height: 8 + bottomInset),
           ],
         ),
         ),
@@ -286,7 +316,11 @@ class _RadioOptionPickerSheetState extends State<RadioOptionPickerSheet> {
     );
   }
 
-  Widget _buildList(List<RadioPickerOption> options, bool isDark) {
+  Widget _buildList(
+    List<RadioPickerOption> options,
+    bool isDark,
+    ValueChanged<String> onSelect,
+  ) {
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
       itemCount: options.length,
@@ -295,14 +329,18 @@ class _RadioOptionPickerSheetState extends State<RadioOptionPickerSheet> {
         return _OptionRadioRow(
           label: option.label,
           selected: option.id == _selectedId,
-          isDark: isDark,
-          onTap: () => setState(() => _selectedId = option.id),
+          isDark: isDark && widget.sheetColor == null,
+          onTap: () => onSelect(option.id),
         );
       },
     );
   }
 
-  Widget _buildGrid(List<RadioPickerOption> options, bool isDark) {
+  Widget _buildGrid(
+    List<RadioPickerOption> options,
+    bool isDark,
+    ValueChanged<String> onSelect,
+  ) {
     return GridView.builder(
       padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -317,9 +355,9 @@ class _RadioOptionPickerSheetState extends State<RadioOptionPickerSheet> {
         return _OptionRadioRow(
           label: option.label,
           selected: option.id == _selectedId,
-          isDark: isDark,
+          isDark: isDark && widget.sheetColor == null,
           compact: true,
-          onTap: () => setState(() => _selectedId = option.id),
+          onTap: () => onSelect(option.id),
         );
       },
     );

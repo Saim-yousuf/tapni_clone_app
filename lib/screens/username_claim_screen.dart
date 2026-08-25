@@ -80,15 +80,11 @@ class _UsernameClaimScreenState extends State<UsernameClaimScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           color: WaUi.primaryText,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(context.l10n.claimUsernameTitle, style: WaUi.headline),
+          onPressed: () => Navigator.of(context).pop()),
+        title: Text(context.l10n.claimUsernameTitle),
       ),
       body: SafeArea(
         child: Form(

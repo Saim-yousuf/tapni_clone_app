@@ -14,17 +14,23 @@ class WaToolsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 10, 4, 2),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: WaUi.toolsTitle,
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+      child: SizedBox(
+        height: 64,
+        child: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text(
+                  title,
+                  style: WaUi.toolsTitle,
+                ),
+              ),
             ),
-          ),
-          if (actions != null) ...actions!,
-        ],
+            if (actions != null) ...actions!,
+          ],
+        ),
       ),
     );
   }

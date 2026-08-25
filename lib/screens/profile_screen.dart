@@ -187,17 +187,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         centerTitle: false,
         titleSpacing: 16,
+        toolbarHeight: 64,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Image.asset(
-            'assets/images/png/barqody_name.png',
-            height: 80,
-            fit: BoxFit.contain,
-          ),
+        actionsPadding: const EdgeInsets.only(right: 8),
+        title: Image.asset(
+          'assets/images/png/barqody_name.png',
+          height: 72,
+          fit: BoxFit.contain,
         ),
         actions: [
           NotificationIconButton(),

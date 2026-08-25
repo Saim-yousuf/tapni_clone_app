@@ -193,16 +193,11 @@ class CustomerProgramDetailShimmer extends StatelessWidget {
       backgroundColor: bg,
       appBar: AppBar(
         backgroundColor: bg,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: text),
-          onPressed: () => Navigator.maybePop(context),
-        ),
+          onPressed: () => Navigator.maybePop(context)),
         title: AppShimmer(
-          child: ShimmerBox(width: 120, height: 18, borderRadius: 6),
-        ),
+          child: ShimmerBox(width: 120, height: 18, borderRadius: 6)),
       ),
       body: AppShimmer(
         child: SingleChildScrollView(

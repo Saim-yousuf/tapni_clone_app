@@ -155,10 +155,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        foregroundColor: WaUi.primaryText,
-        title: Text(context.l10n.linkedDevices, style: WaUi.headline),
+        title: Text(context.l10n.linkedDevices),
       ),
       body: _loading
           ? Center(

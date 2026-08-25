@@ -276,16 +276,11 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
     return Scaffold(
       backgroundColor: WaUi.scaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.surface,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        foregroundColor: WaUi.primaryText,
         title: Text(
           isEdit
               ? context.l10n.editInvitation
               : context.l10n.customizeCardTitle,
-          style: WaUi.sectionHeader,
-        ),
+          style: WaUi.sectionHeader),
         actions: [
           IconButton(
             tooltip: context.l10n.download,
@@ -294,10 +289,8 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
                 ? const SizedBox(
                     width: 20,
                     height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.download_rounded),
-          ),
+                    child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.download_rounded)),
         ],
       ),
       body: SafeArea(

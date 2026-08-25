@@ -20,7 +20,6 @@ class CustomerRewardScreen extends StatelessWidget {
         // backgroundColor: Colors.white,
         // surfaceTintColor: Colors.white,
         // elevation: 0,
-        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Column(
         children: [

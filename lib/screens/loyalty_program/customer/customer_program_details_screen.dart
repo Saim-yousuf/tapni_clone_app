@@ -32,22 +32,13 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
       backgroundColor: theme.screenBackgroundColor,
       appBar: AppBar(
         backgroundColor: theme.screenBackgroundColor,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: text),
-          onPressed: () => Navigator.pop(context),
-        ),
+          onPressed: () => Navigator.pop(context)),
         title: Text(
           program?.label.isNotEmpty == true
               ? program!.label
-              : context.l10n.rewardProgram,
-          style: WaUi.headline.copyWith(
-            color: text,
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-          ),
+              : context.l10n.rewardProgram
         ),
       ),
       body: SafeArea(

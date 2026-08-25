@@ -16,12 +16,9 @@ class _RewardRedemptionScreenState extends State<RewardRedemptionScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        elevation: 0,
         title: Text(context.l10n.redeemReward,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),

@@ -396,8 +396,6 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: surface,
-        elevation: 0,
-        scrolledUnderElevation: 0,
         foregroundColor: onSurface,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,16 +403,12 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
             Text(
               context.l10n.selectContact,
               style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+                fontWeight: FontWeight.w600)),
             if (selectedCount > 0)
               Text(
                 '$selectedCount selected',
-                style: theme.textTheme.bodySmall?.copyWith(color: muted),
-              ),
-          ],
-        ),
+                style: theme.textTheme.bodySmall?.copyWith(color: muted)),
+          ]),
         actions: [
           if (!_loading && !widget.addMoreMode)
             TextButton(
@@ -422,9 +416,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                   provider.isSending ? null : () => _send(saveAsDraft: true),
               child: Text(
                 context.l10n.draft,
-                style: theme.textTheme.bodyMedium?.copyWith(color: muted),
-              ),
-            ),
+                style: theme.textTheme.bodyMedium?.copyWith(color: muted))),
         ],
       ),
       body: Column(

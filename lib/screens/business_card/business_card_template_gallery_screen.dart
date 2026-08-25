@@ -66,11 +66,7 @@ class BusinessCardTemplateGalleryScreen extends StatelessWidget {
       backgroundColor: WaUi.scaffold,
       appBar: AppBar(
         title: Text(
-          createNewCard ? 'Choose a starting design' : 'Card designs',
-        ),
-        backgroundColor: WaUi.scaffold,
-        foregroundColor: WaUi.primaryText,
-        elevation: 0,
+          createNewCard ? 'Choose a starting design' : 'Card designs'),
         actions: [
           if (existingDesign != null && existingDesign!.hasLayers)
             TextButton(
@@ -80,27 +76,21 @@ class BusinessCardTemplateGalleryScreen extends StatelessWidget {
                     builder: (_) => BusinessCardDesignEditorScreen(
                       design: existingDesign!.copy(),
                       cardId: cardId,
-                      createNewCard: createNewCard,
-                    ),
-                  ),
-                ).then((saved) {
+                      createNewCard: createNewCard))).then((saved) {
                   if (saved == true && context.mounted) {
                     Navigator.of(context).pop(true);
                   }
                 });
               },
-              child: const Text('Edit current'),
-            ),
+              child: const Text('Edit current')),
           TextButton(
             onPressed: () {
               // Blank canvas with profile-seeded defaults
               _openEditor(
                 context,
-                BusinessCardDesignCatalog.byId('bc_navy'),
-              );
+                BusinessCardDesignCatalog.byId('bc_navy'));
             },
-            child: const Text('Blank'),
-          ),
+            child: const Text('Blank')),
         ],
       ),
       body: Column(

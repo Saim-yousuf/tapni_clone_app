@@ -115,9 +115,6 @@ class _CallerIdSetupScreenState extends State<CallerIdSetupScreen>
       return Scaffold(
         backgroundColor: WaUi.toolsScaffold,
         appBar: AppBar(
-          backgroundColor: WaUi.toolsScaffold,
-          elevation: 0,
-          foregroundColor: WaUi.primaryText,
         ),
         body: Padding(
           padding: const EdgeInsets.all(28),
@@ -133,10 +130,7 @@ class _CallerIdSetupScreenState extends State<CallerIdSetupScreen>
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        foregroundColor: WaUi.primaryText,
-        title: Text(context.l10n.callerIdTitle, style: WaUi.title),
+        title: Text(context.l10n.callerIdTitle),
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())

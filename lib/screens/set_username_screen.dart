@@ -290,30 +290,21 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           color: WaUi.primaryText,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(context.l10n.username, style: WaUi.headline),
-        centerTitle: false,
+          onPressed: () => Navigator.of(context).pop()),
+        title: Text(context.l10n.username),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => const MyUsernameClaimsScreen(),
-                ),
-              );
+                  builder: (_) => const MyUsernameClaimsScreen()));
             },
             child: Text(
               context.l10n.viewMyClaims,
-              style: WaUi.bodyMedium.copyWith(color: WaUi.accent),
-            ),
-          ),
+              style: WaUi.bodyMedium.copyWith(color: WaUi.accent))),
         ],
       ),
       body: SafeArea(

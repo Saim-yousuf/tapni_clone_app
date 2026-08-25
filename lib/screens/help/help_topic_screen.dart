@@ -13,16 +13,8 @@ class HelpTopicScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        foregroundColor: WaUi.buttonDark,
-        titleSpacing: 0,
         title: Text(
-          'Help Center',
-          style: WaUi.toolsTitleOf(weight: FontWeight.w500, size: 22),
-        ),
+          'Help Center'),
       ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 28),

@@ -163,12 +163,8 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        foregroundColor: WaUi.primaryText,
         title: Text(
-          widget.addAccount ? context.l10n.addAccount : context.l10n.logInWithQR,
-          style: WaUi.headline,
+          widget.addAccount ? context.l10n.addAccount : context.l10n.logInWithQR
         ),
       ),
       body: SafeArea(

@@ -147,7 +147,6 @@ class _ExploreItemDetailLoaderScreenState
         appBar: AppBar(
           backgroundColor:
               isDark ? AppTheme.primaryBlack : WaUi.toolsScaffold,
-          surfaceTintColor: Colors.transparent,
           foregroundColor: isDark ? Colors.white : WaUi.primaryText,
         ),
         body: Center(

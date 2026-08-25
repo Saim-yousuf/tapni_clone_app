@@ -119,20 +119,14 @@ class _LoyaltyTemplateGalleryScreenState
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        scrolledUnderElevation: 0,
-        elevation: 0,
-        foregroundColor: WaUi.primaryText,
         title: Text(
-          context.l10n.chooseATemplate,
-          style: WaUi.sectionHeader,
+          context.l10n.chooseATemplate
         ),
         actions: [
           TextButton(
             onPressed: _startBlank,
-            child: Text(context.l10n.blank),
-          ),
+            child: Text(context.l10n.blank)),
         ],
       ),
       body: Column(

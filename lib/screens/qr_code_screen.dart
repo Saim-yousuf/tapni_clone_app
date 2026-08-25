@@ -67,8 +67,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
         title: Text(context.l10n.shareProfile),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+          onPressed: () => Navigator.of(context).pop()),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

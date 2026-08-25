@@ -199,16 +199,9 @@ class _OtpScreenState extends State<OtpScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        foregroundColor: WaUi.primaryText,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, size: 22),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+          onPressed: () => Navigator.of(context).pop()),
       ),
       body: SafeArea(
         child: Column(

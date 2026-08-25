@@ -82,11 +82,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       backgroundColor: isDark ? Colors.black : Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+          onPressed: () => Navigator.of(context).pop()),
         title: Text(context.l10n.editProfile),
       ),
       body: SafeArea(

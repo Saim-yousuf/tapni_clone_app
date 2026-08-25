@@ -182,28 +182,17 @@ class _LoyaltyProgramDetailsScreenState
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        foregroundColor: WaUi.primaryText,
-        title: Text(
-          context.l10n.programDetails,
-          style: WaUi.headline.copyWith(fontWeight: FontWeight.w600),
-        ),
+        title: Text(context.l10n.programDetails),
         actions: [
           if (_program != null) ...[
             IconButton(
               tooltip: context.l10n.editReward,
               icon: const Icon(Icons.edit_outlined),
-              onPressed: _edit,
-            ),
+              onPressed: _edit),
             IconButton(
               tooltip: context.l10n.delete,
               icon: const Icon(Icons.delete_outline, color: Color(0xFFC62828)),
-              onPressed: _delete,
-            ),
+              onPressed: _delete),
           ],
         ],
       ),

@@ -163,8 +163,6 @@ class CheckingPointsScreen extends StatelessWidget {
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Text(context.l10n.profileCheck),
-        backgroundColor: Colors.white,
-        elevation: 0,
         foregroundColor: Colors.black,
       ),
 

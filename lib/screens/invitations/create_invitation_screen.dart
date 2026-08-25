@@ -90,11 +90,7 @@ class _CreateInvitationScreenState extends State<CreateInvitationScreen> {
     return Scaffold(
       backgroundColor: WaUi.scaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.surface,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        foregroundColor: WaUi.primaryText,
-        title: Text(context.l10n.newInvitation, style: WaUi.sectionHeader),
+        title: Text(context.l10n.newInvitation),
       ),
       body: Form(
         key: _formKey,

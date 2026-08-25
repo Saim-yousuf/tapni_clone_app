@@ -1,23 +1,87 @@
 import 'package:tapni_app/models/invitation_design.dart';
+import 'package:tapni_app/utils/country_dial_codes.dart';
 
 /// Country / category invitation template catalog.
 class InvitationTemplateCatalog {
   InvitationTemplateCatalog._();
 
-  static const countries = <Map<String, String>>[
-    {'code': 'SA', 'name': 'Saudi Arabia', 'nameAr': 'السعودية', 'flag': '🇸🇦'},
-    {'code': 'AE', 'name': 'UAE', 'nameAr': 'الإمارات', 'flag': '🇦🇪'},
-    {'code': 'KW', 'name': 'Kuwait', 'nameAr': 'الكويت', 'flag': '🇰🇼'},
-    {'code': 'QA', 'name': 'Qatar', 'nameAr': 'قطر', 'flag': '🇶🇦'},
-    {'code': 'BH', 'name': 'Bahrain', 'nameAr': 'البحرين', 'flag': '🇧🇭'},
-    {'code': 'OM', 'name': 'Oman', 'nameAr': 'عُمان', 'flag': '🇴🇲'},
-    {'code': 'PK', 'name': 'Pakistan', 'nameAr': 'پاکستان', 'flag': '🇵🇰'},
-    {'code': 'IN', 'name': 'India', 'nameAr': 'الهند', 'flag': '🇮🇳'},
-    {'code': 'TR', 'name': 'Turkey', 'nameAr': 'تركيا', 'flag': '🇹🇷'},
-    {'code': 'EG', 'name': 'Egypt', 'nameAr': 'مصر', 'flag': '🇪🇬'},
-    {'code': 'US', 'name': 'United States', 'nameAr': 'أمريكا', 'flag': '🇺🇸'},
-    {'code': 'GB', 'name': 'United Kingdom', 'nameAr': 'بريطانيا', 'flag': '🇬🇧'},
+  /// Markets with curated official templates — shown first in the country list.
+  static const featuredCountryCodes = <String>[
+    'SA',
+    'AE',
+    'KW',
+    'QA',
+    'BH',
+    'OM',
+    'PK',
+    'IN',
+    'TR',
+    'EG',
+    'US',
+    'GB',
   ];
+
+  /// All countries (from [kCountryDialCodes]), featured markets first.
+  static List<Map<String, String>> get countries {
+    final byIso = <String, CountryDialCode>{
+      for (final c in kCountryDialCodes) c.iso.toUpperCase(): c,
+    };
+    final ordered = <CountryDialCode>[];
+    final seen = <String>{};
+
+    for (final code in featuredCountryCodes) {
+      final c = byIso[code];
+      if (c != null && seen.add(c.iso.toUpperCase())) ordered.add(c);
+    }
+    for (final c in kCountryDialCodes) {
+      if (seen.add(c.iso.toUpperCase())) ordered.add(c);
+    }
+
+    return [
+      for (final c in ordered)
+        {
+          'code': c.iso.toUpperCase(),
+          'name': c.name,
+          'flag': c.flagEmoji,
+        },
+    ];
+  }
+
+  /// Arabic / RTL locales for blank invitation defaults.
+  static const rtlCountryCodes = <String>{
+    'SA',
+    'AE',
+    'KW',
+    'QA',
+    'BH',
+    'OM',
+    'EG',
+    'IQ',
+    'JO',
+    'LB',
+    'SY',
+    'YE',
+    'LY',
+    'TN',
+    'DZ',
+    'MA',
+    'SD',
+    'PS',
+    'MR',
+    'PK',
+  };
+
+  static bool isRtlCountry(String? code) {
+    if (code == null || code.isEmpty) return false;
+    return rtlCountryCodes.contains(code.toUpperCase());
+  }
+
+  static String defaultLocaleForCountry(String? code) {
+    final upper = code?.toUpperCase();
+    if (upper == 'PK') return 'ur';
+    if (isRtlCountry(upper) && upper != 'PK') return 'ar';
+    return 'en';
+  }
 
   static const categories = <Map<String, String>>[
     {'id': 'wedding', 'name': 'Wedding', 'nameAr': 'زفاف', 'icon': 'favorite'},

@@ -206,13 +206,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        foregroundColor: WaUi.primaryText,
-        title: Text(
-          'Cart',
-          style: WaUi.headline.copyWith(fontWeight: FontWeight.w700),
-        ),
+        title: Text('Cart'),
       ),
       body: cart.isEmpty
           ? Center(

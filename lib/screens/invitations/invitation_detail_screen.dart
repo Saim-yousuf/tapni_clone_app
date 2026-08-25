@@ -181,21 +181,13 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        backgroundColor: WaUi.toolsScaffold,
-        surfaceTintColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        foregroundColor: WaUi.primaryText,
-        centerTitle: true,
-        title: Text(context.l10n.invitation, style: WaUi.headline),
+        title: Text(context.l10n.invitation),
         actions: [
           if (canInviteMore)
             IconButton(
               tooltip: context.l10n.inviteMorePeople,
               onPressed: _inviteMore,
-              icon: const Icon(Icons.person_add_alt_1_rounded),
-            ),
+              icon: const Icon(Icons.person_add_alt_1_rounded)),
           if (inv != null)
             IconButton(
               tooltip: context.l10n.downloadCard,
@@ -204,10 +196,8 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
                   ? const SizedBox(
                       width: 20,
                       height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.download_rounded),
-            ),
+                      child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Icon(Icons.download_rounded)),
         ],
       ),
       body: _loading && inv == null
