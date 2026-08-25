@@ -102,34 +102,63 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                   ),
                 ),
                 const SizedBox(height: 14),
-                TextField(
-                  controller: _searchController,
-                  style: WaUi.body,
-                  onChanged: (v) => setState(() => _query = v),
-                  decoration: InputDecoration(
-                    hintText: 'Search Help Center',
-                    hintStyle: WaUi.body.copyWith(color: WaUi.secondaryText),
-                    prefixIcon: const Icon(
-                      Icons.search_rounded,
-                      color: WaUi.secondaryText,
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(28),
-                      borderSide: BorderSide.none,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(28),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(28),
-                      borderSide: const BorderSide(color: WaUi.divider),
+                SizedBox(
+                  height: 48,
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: (v) => setState(() => _query = v),
+                    style: WaUi.body.copyWith(fontSize: 16, height: 1.2),
+                    cursorColor: WaUi.accent,
+                    textInputAction: TextInputAction.search,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Search Help Center',
+                      hintStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF667781),
+                        height: 1.2,
+                      ),
+                      prefixIcon: const Padding(
+                        padding: EdgeInsets.only(left: 14, right: 8),
+                        child: Icon(
+                          Icons.search,
+                          size: 22,
+                          color: Color(0xFF667781),
+                        ),
+                      ),
+                      prefixIconConstraints: const BoxConstraints(
+                        minWidth: 44,
+                        minHeight: 48,
+                      ),
+                      suffixIcon: _searchController.text.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(Icons.close, size: 18),
+                              color: const Color(0xFF667781),
+                              onPressed: () {
+                                _searchController.clear();
+                                setState(() => _query = '');
+                              },
+                            )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 14,
+                      ),
+                      isDense: true,
                     ),
                   ),
                 ),
