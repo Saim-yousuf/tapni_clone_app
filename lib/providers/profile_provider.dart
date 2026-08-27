@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/helper/link_entries_cache.dart';
 import 'package:tapni_app/models/gallery_item.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/business_card_design.dart';
@@ -115,6 +116,12 @@ class ProfileProvider extends ChangeNotifier {
                 CardTemplateCatalog.indexById(_profile.cardTemplateId);
             _ensureActiveCardExists();
           }
+          _profile = _profile.copyWith(
+            socialLinks: await LinkEntriesCache.apply(
+              _linkEntriesCacheKey(_profile),
+              _profile.socialLinks,
+            ),
+          );
           await AccountStorage.updateActiveProfileMeta(
             userId: _profile.id,
             name: _profile.name,
@@ -764,6 +771,73 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  /// Keep local link payloads (incl. entries) and adopt remote Mongo ids / CDN logos.
+  List<SocialLink> _syncLinksPreferLocal({
+    required List<SocialLink> localLinks,
+    required List<SocialLink> remoteLinks,
+  }) {
+    SocialLink? matchRemote(SocialLink local) {
+      for (final remote in remoteLinks) {
+        if (remote.id == local.id) return remote;
+      }
+      for (final remote in remoteLinks) {
+        if (local.templateId != null &&
+            local.templateId!.isNotEmpty &&
+            local.templateId == remote.templateId) {
+          return remote;
+        }
+      }
+      for (final remote in remoteLinks) {
+        if (local.platformName.trim().toLowerCase() ==
+            remote.platformName.trim().toLowerCase()) {
+          return remote;
+        }
+      }
+      return null;
+    }
+
+    return localLinks.map((local) {
+      final remote = matchRemote(local);
+      if (remote == null) return local;
+
+      final remoteLogo = remote.logoUrl;
+      final localLogo = local.logoUrl;
+      final preferRemoteLogo = remoteLogo != null &&
+          remoteLogo.startsWith('http') &&
+          (localLogo == null ||
+              localLogo.isEmpty ||
+              !localLogo.startsWith('http'));
+
+      // Prefer remote entries only when they actually contain multi/named data.
+      final remoteEntries = remote.entries;
+      final localEntries = local.entries;
+      final remoteUseful = remoteEntries != null &&
+          (remoteEntries.length > 1 ||
+              remoteEntries.any((e) => e.name.trim().isNotEmpty));
+      final entries = remoteUseful ? remoteEntries : localEntries;
+
+      return local.copyWith(
+        id: RegExp(r'^[a-fA-F0-9]{24}$').hasMatch(remote.id)
+            ? remote.id
+            : local.id,
+        logoUrl: preferRemoteLogo ? remoteLogo : localLogo,
+        entries: entries,
+        value: (entries != null && entries.isNotEmpty)
+            ? entries.first.value
+            : local.value,
+      );
+    }).toList();
+  }
+
+  String _linkEntriesCacheKey([UserProfile? profile]) {
+    final p = profile ?? _profile;
+    if (p.id != null && p.id!.trim().isNotEmpty) return p.id!.trim();
+    if (p.username != null && p.username!.trim().isNotEmpty) {
+      return 'user:${p.username!.trim()}';
+    }
+    return 'local_profile';
+  }
+
   Future<ApiResponse> updateLinks({
     required List<SocialLink> links,
     required BuildContext context,
@@ -772,35 +846,61 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
     CustomDialog.loadingDialog(context);
 
-    final updatedProfile = _profile.copyWith(socialLinks: links);
+    // Always treat the just-edited list as source of truth (keeps entries).
+    final savedLinks = List<SocialLink>.from(links);
 
     try {
       final repo = AuthRepo();
       final response = await repo.updateProfile(
-        jsonBody: links.isEmpty
+        jsonBody: savedLinks.isEmpty
             ? {"links": []}
-            : {"links": links.map((link) => link.toApiJson()).toList()},
+            : {"links": savedLinks.map((link) => link.toApiJson()).toList()},
       );
 
       if (response.success) {
+        var nextLinks = savedLinks;
         if (response.data is Map<String, dynamic>) {
           final data = response.data as Map<String, dynamic>;
           final profileData = data['user'] is Map<String, dynamic>
               ? data['user'] as Map<String, dynamic>
               : data;
           try {
-            _profile = UserProfile.fromApiJson(profileData);
+            final remote = UserProfile.fromApiJson(profileData);
+            nextLinks = _syncLinksPreferLocal(
+              localLinks: savedLinks,
+              remoteLinks: remote.socialLinks,
+            );
+            _profile = remote.copyWith(
+              id: (remote.id != null && remote.id!.isNotEmpty)
+                  ? remote.id
+                  : _profile.id,
+              socialLinks: nextLinks,
+            );
           } catch (_) {
-            _profile = updatedProfile;
+            _profile = _profile.copyWith(socialLinks: nextLinks);
           }
         } else {
-          _profile = updatedProfile;
+          _profile = _profile.copyWith(socialLinks: nextLinks);
         }
+
+        final cacheKey = _linkEntriesCacheKey();
+        await LinkEntriesCache.save(cacheKey, nextLinks);
+        nextLinks = await LinkEntriesCache.apply(cacheKey, nextLinks);
+        // Re-apply saved entries in case cache key was empty on an older build.
+        nextLinks = _syncLinksPreferLocal(
+          localLinks: savedLinks,
+          remoteLinks: nextLinks,
+        );
+        _profile = _profile.copyWith(socialLinks: nextLinks);
+        await LinkEntriesCache.save(_linkEntriesCacheKey(), nextLinks);
+
         notifyListeners();
         profileScore();
         if (context.mounted) {
           Navigator.of(context, rootNavigator: true).pop();
         }
+      } else if (context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
       }
 
       return response;
@@ -847,16 +947,27 @@ class ProfileProvider extends ChangeNotifier {
     LinkTemplate template,
     String value,
     bool showLink,
-    context,
-  ) async {
+    context, {
+    List<LinkEntry>? entries,
+  }) async {
+    final primaryValue =
+        (entries != null && entries.isNotEmpty) ? entries.first.value : value;
+    final primaryLogo = (entries != null &&
+            entries.isNotEmpty &&
+            (entries.first.logo?.isNotEmpty ?? false))
+        ? entries.first.logo
+        : template.logo;
     final newLink = SocialLink(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       platform: SocialPlatform.wave,
       templateId: template.id,
       customLabel: template.label,
       fieldLabel: template.fieldLabel,
-      logoUrl: template.logo,
-      value: value,
+      fieldType: template.fieldType,
+      actionType: template.actionType,
+      logoUrl: primaryLogo,
+      value: primaryValue,
+      entries: entries,
       isActive: true,
       isPublic: showLink,
     );
@@ -907,7 +1018,15 @@ class ProfileProvider extends ChangeNotifier {
     String logo = '',
     Map<String, String>? bankDetails,
     Map<String, String>? contactCard,
+    List<LinkEntry>? entries,
   }) async {
+    final primaryValue =
+        (entries != null && entries.isNotEmpty) ? entries.first.value : value;
+    final entryLogo = (entries != null &&
+            entries.isNotEmpty &&
+            (entries.first.logo?.isNotEmpty ?? false))
+        ? entries.first.logo!
+        : '';
     final newLink = SocialLink(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       platform: contactCard != null
@@ -918,10 +1037,13 @@ class ProfileProvider extends ChangeNotifier {
       fieldLabel: template.fieldLabel,
       fieldType: template.fieldType,
       actionType: template.actionType,
-      logoUrl: logo.isNotEmpty ? logo : template.logo,
-      value: value,
+      logoUrl: logo.isNotEmpty
+          ? logo
+          : (entryLogo.isNotEmpty ? entryLogo : template.logo),
+      value: primaryValue,
       bankDetails: bankDetails,
       contactCard: contactCard,
+      entries: entries,
       isCustom: true,
       isActive: true,
       isPublic: showLink,
@@ -979,25 +1101,52 @@ class ProfileProvider extends ChangeNotifier {
     SocialLink link,
     String value,
     bool showLink,
-    context,
-  ) async {
-    final profileProvider = Provider.of<ProfileProvider>(
-      context,
-      listen: false,
-    );
-
+    context, {
+    List<LinkEntry>? entries,
+  }) async {
     final updatedLinks = List<SocialLink>.from(_profile.socialLinks);
     final existingIndex = updatedLinks.indexWhere((item) => item.id == link.id);
 
     if (existingIndex != -1) {
+      final primaryValue =
+          (entries != null && entries.isNotEmpty) ? entries.first.value : value;
+      final primaryLogo = (entries != null &&
+              entries.isNotEmpty &&
+              (entries.first.logo?.isNotEmpty ?? false))
+          ? entries.first.logo
+          : link.logoUrl;
       updatedLinks[existingIndex] = link.copyWith(
-        value: value,
+        value: primaryValue,
+        logoUrl: primaryLogo,
+        entries: entries ?? link.entries,
+        url: '',
         isActive: true,
         isPublic: showLink,
       );
+    } else if (entries != null && entries.isNotEmpty) {
+      // ID mismatch after sync — match by templateId / label and still save.
+      final fallbackIndex = updatedLinks.indexWhere(
+        (item) =>
+            (link.templateId != null &&
+                link.templateId!.isNotEmpty &&
+                item.templateId == link.templateId) ||
+            item.platformName.toLowerCase() == link.platformName.toLowerCase(),
+      );
+      if (fallbackIndex != -1) {
+        updatedLinks[fallbackIndex] = updatedLinks[fallbackIndex].copyWith(
+          value: entries.first.value,
+          logoUrl: (entries.first.logo?.isNotEmpty ?? false)
+              ? entries.first.logo
+              : updatedLinks[fallbackIndex].logoUrl,
+          entries: entries,
+          url: '',
+          isActive: true,
+          isPublic: showLink,
+        );
+      }
     }
 
-    await profileProvider.updateLinks(links: updatedLinks, context: context);
+    await updateLinks(links: updatedLinks, context: context);
     notifyListeners();
   }
 
@@ -1010,18 +1159,22 @@ class ProfileProvider extends ChangeNotifier {
     String? logo,
     Map<String, String>? bankDetails,
     Map<String, String>? contactCard,
+    List<LinkEntry>? entries,
   }) async {
     final updatedLinks = List<SocialLink>.from(_profile.socialLinks);
     final existingIndex = updatedLinks.indexWhere((item) => item.id == link.id);
 
     if (existingIndex != -1) {
+      final primaryValue =
+          (entries != null && entries.isNotEmpty) ? entries.first.value : value;
       updatedLinks[existingIndex] = link.copyWith(
         platform: contactCard != null ? SocialPlatform.contact : null,
         customLabel: label,
-        value: value,
+        value: primaryValue,
         logoUrl: logo?.isNotEmpty == true ? logo : link.logoUrl,
         bankDetails: bankDetails,
         contactCard: contactCard,
+        entries: entries ?? link.entries,
         actionType: contactCard != null
             ? 'contact_card'
             : link.actionType,

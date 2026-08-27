@@ -31,6 +31,61 @@ enum SocialPlatform {
   zillow,
 }
 
+/// One selectable child under a profile link (e.g. a WhatsApp number).
+class LinkEntry {
+  final String id;
+  final String name;
+  final String value;
+  final String? logo;
+
+  const LinkEntry({
+    required this.id,
+    required this.name,
+    required this.value,
+    this.logo,
+  });
+
+  LinkEntry copyWith({
+    String? id,
+    String? name,
+    String? value,
+    String? logo,
+  }) {
+    return LinkEntry(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      value: value ?? this.value,
+      logo: logo ?? this.logo,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      if (RegExp(r'^[a-fA-F0-9]{24}$').hasMatch(id)) '_id': id,
+      'name': name,
+      'value': value,
+      if (logo != null && logo!.isNotEmpty) 'logo': logo,
+    };
+  }
+
+  factory LinkEntry.fromJson(Map<String, dynamic> json) {
+    final name = json['name']?.toString() ??
+        json['label']?.toString() ??
+        json['title']?.toString() ??
+        '';
+    return LinkEntry(
+      id:
+          json['_id']?.toString() ??
+          json['id']?.toString() ??
+          DateTime.now().millisecondsSinceEpoch.toString(),
+      name: name,
+      value: json['value']?.toString() ?? '',
+      logo: json['logo']?.toString(),
+    );
+  }
+}
+
 class SocialLink {
   final String id;
   final SocialPlatform platform;
@@ -48,6 +103,7 @@ class SocialLink {
   final String? catalogType;
   final String? fileExt;
   final ServiceSchedule? serviceSchedule;
+  final List<LinkEntry>? entries;
   final bool isCustom;
   final String value; // username, phone number, or URL
   final bool isActive;
@@ -70,6 +126,7 @@ class SocialLink {
     this.catalogType,
     this.fileExt,
     this.serviceSchedule,
+    this.entries,
     this.isCustom = false,
     required this.value,
     this.isActive = true,
@@ -93,6 +150,7 @@ class SocialLink {
     String? catalogType,
     String? fileExt,
     ServiceSchedule? serviceSchedule,
+    List<LinkEntry>? entries,
     bool? isCustom,
     String? value,
     bool? isActive,
@@ -115,11 +173,32 @@ class SocialLink {
       catalogType: catalogType ?? this.catalogType,
       fileExt: fileExt ?? this.fileExt,
       serviceSchedule: serviceSchedule ?? this.serviceSchedule,
+      entries: entries ?? this.entries,
       isCustom: isCustom ?? this.isCustom,
       value: value ?? this.value,
       isActive: isActive ?? this.isActive,
       isPublic: isPublic ?? this.isPublic,
     );
+  }
+
+  bool get hasMultipleEntries =>
+      entries != null && entries!.where((e) => e.value.trim().isNotEmpty).length > 1;
+
+  /// Entries for picker / launch; falls back to primary value when none stored.
+  List<LinkEntry> get effectiveEntries {
+    final stored = entries
+        ?.where((e) => e.value.trim().isNotEmpty)
+        .toList();
+    if (stored != null && stored.isNotEmpty) return stored;
+    if (value.trim().isEmpty) return const [];
+    return [
+      LinkEntry(
+        id: id,
+        name: platformName,
+        value: value,
+        logo: logoUrl,
+      ),
+    ];
   }
 
   // ─── API mapping ─────────────────────────────────────────────────────────────
@@ -170,6 +249,8 @@ class SocialLink {
       if (contactCard != null) 'contactCard': contactCard,
       if (catalogItems != null && catalogItems!.isNotEmpty)
         'catalogItems': catalogItems!.map((e) => e.toJson()).toList(),
+      if (entries != null && entries!.isNotEmpty)
+        'entries': entries!.map((e) => e.toJson()).toList(),
       if (!isDocumentLink &&
           catalogCategories != null &&
           catalogCategories!.isNotEmpty)
@@ -229,6 +310,7 @@ class SocialLink {
     final bankDetailsJson = json['bankDetails'] as Map<String, dynamic>?;
     final contactCardJson = json['contactCard'] as Map<String, dynamic>?;
     final catalogItemsJson = json['catalogItems'] as List<dynamic>?;
+    final entriesJson = json['entries'] as List<dynamic>?;
     final templateId = json['templateId']?.toString();
     final fieldLabel = json['fieldLabel']?.toString();
     final actionType = json['actionType'] as String?;
@@ -352,6 +434,12 @@ class SocialLink {
               catalogItemsJson.isNotEmpty
           ? catalogItemsJson
               .map((e) => CatalogItem.fromJson(e as Map<String, dynamic>))
+              .toList()
+          : null,
+      entries: entriesJson != null && entriesJson.isNotEmpty
+          ? entriesJson
+              .whereType<Map>()
+              .map((e) => LinkEntry.fromJson(Map<String, dynamic>.from(e)))
               .toList()
           : null,
       catalogType: () {
@@ -603,6 +691,50 @@ class SocialLink {
     }
   }
 
+  bool get _looksLikeWhatsApp {
+    if (platform == SocialPlatform.whatsApp) return true;
+    final label = platformName.toLowerCase();
+    final type = (fieldType ?? '').toLowerCase();
+    return label.contains('whatsapp') || type.contains('whatsapp');
+  }
+
+  bool get _looksLikeEmail {
+    if (platform == SocialPlatform.email) return true;
+    final type = (fieldType ?? '').toLowerCase();
+    return type == 'email';
+  }
+
+  /// Launch URL for [entryValue], using this link's platform / fieldType rules.
+  String urlForValue(String entryValue) {
+    final v = entryValue.trim();
+    if (v.isEmpty) return '';
+    if (v.startsWith('http://') ||
+        v.startsWith('https://') ||
+        v.startsWith('mailto:') ||
+        v.startsWith('tel:')) {
+      return v;
+    }
+    if (_looksLikeEmail) {
+      return v.startsWith('mailto:') ? v : 'mailto:$v';
+    }
+    if (_looksLikeWhatsApp ||
+        (fieldType == 'phone' && platform == SocialPlatform.whatsApp)) {
+      final cleanPhone = v.replaceAll(RegExp(r'[+\s\-\(\)]'), '');
+      return 'https://wa.me/$cleanPhone';
+    }
+    if (fieldType == 'phone') {
+      final cleanPhone = v.replaceAll(RegExp(r'[+\s\-\(\)]'), '');
+      return 'tel:$cleanPhone';
+    }
+    if (baseUrlPrefix.isNotEmpty) {
+      return '$baseUrlPrefix$v';
+    }
+    if (!v.startsWith('http://') && !v.startsWith('https://')) {
+      return 'https://$v';
+    }
+    return v;
+  }
+
   String get fullUrl {
     if (isGalleryLink) {
       return url?.isNotEmpty == true ? url! : 'gallery:';
@@ -615,13 +747,14 @@ class SocialLink {
       }
       return value;
     }
-    if (bankDetails != null) {
+    if (fieldType == 'bank' && bankDetails != null) {
       final identifier = bankDetails!['iban']?.isNotEmpty == true
           ? bankDetails!['iban']!
           : bankDetails!['accountNumber'] ?? '';
       return identifier.isEmpty ? value : 'bank:$identifier';
     }
-    if (contactCard != null) {
+    if ((actionType == 'contact_card' || platform == SocialPlatform.contact) &&
+        contactCard != null) {
       final identifier = contactCard!['email']?.isNotEmpty == true
           ? contactCard!['email']!
           : contactCard!['phone'] ?? value;
@@ -630,25 +763,18 @@ class SocialLink {
     if (catalogItems != null && catalogItems!.isNotEmpty) {
       return 'catalog:$id';
     }
-    if (url?.isNotEmpty == true) return url!;
-    if (baseUrlPrefix.isEmpty) {
-      if (platform == SocialPlatform.email && !value.startsWith('mailto:')) {
-        return 'mailto:$value';
-      }
-      if (!value.startsWith('http://') &&
-          !value.startsWith('https://') &&
-          platform != SocialPlatform.email) {
-        return 'https://$value';
-      }
-      return value;
+    // Prefer computed launch URL from value so WhatsApp / phone stay correct
+    // even when a stale absolute `url` was stored for a different entry.
+    if (hasMultipleEntries || url == null || url!.isEmpty) {
+      return urlForValue(value);
     }
-    if (value.startsWith('http://') || value.startsWith('https://')) {
-      return value;
+    // Single-entry: keep stored url when it already looks absolute.
+    if (url!.startsWith('http://') ||
+        url!.startsWith('https://') ||
+        url!.startsWith('mailto:') ||
+        url!.startsWith('tel:')) {
+      return url!;
     }
-    if (platform == SocialPlatform.whatsApp) {
-      final cleanPhone = value.replaceAll(RegExp(r'[+\s\-\(\)]'), '');
-      return '$baseUrlPrefix$cleanPhone';
-    }
-    return '$baseUrlPrefix$value';
+    return urlForValue(value);
   }
 }

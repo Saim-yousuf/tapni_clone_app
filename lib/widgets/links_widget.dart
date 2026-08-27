@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/helper/link_entries_cache.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -21,6 +22,37 @@ import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+
+class _LinkEntryDraft {
+  _LinkEntryDraft({
+    String? id,
+    String name = '',
+    String value = '',
+    this.logo = '',
+  }) : id = id ?? DateTime.now().microsecondsSinceEpoch.toString(),
+       nameController = TextEditingController(text: name),
+       valueController = TextEditingController(text: value);
+
+  final String id;
+  final TextEditingController nameController;
+  final TextEditingController valueController;
+  String logo;
+
+  void dispose() {
+    nameController.dispose();
+    valueController.dispose();
+  }
+
+  LinkEntry toEntry() {
+    return LinkEntry(
+      id: id,
+      name: nameController.text.trim(),
+      value: valueController.text.trim(),
+      logo: logo.isNotEmpty ? logo : null,
+    );
+  }
+}
+
 class LinkSheet {
   void showAddLinkBottomSheet(BuildContext context, ProfileProvider provider) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -446,11 +478,23 @@ class LinkSheet {
                           provider,
                         );
                       } else if (template.actionType == 'contact_card') {
-                        contact_card.showContactCardBottomSheet(
-                          context,
-                          template,
+                        final existing = _findExistingLinkForTemplate(
                           provider,
+                          template,
                         );
+                        if (existing != null) {
+                          await showExistingLinkBottomSheet(
+                            context,
+                            existing,
+                            provider,
+                          );
+                        } else {
+                          contact_card.showContactCardBottomSheet(
+                            context,
+                            template,
+                            provider,
+                          );
+                        }
                       } else if (_isCustomTemplate(template)) {
                         _showCustomTemplateBottomSheet(
                           context,
@@ -458,17 +502,41 @@ class LinkSheet {
                           provider,
                         );
                       } else if (template.fieldType == 'bank') {
-                        _showBankTemplateBottomSheet(
-                          context,
-                          template,
+                        final existing = _findExistingLinkForTemplate(
                           provider,
+                          template,
                         );
+                        if (existing != null) {
+                          await showExistingLinkBottomSheet(
+                            context,
+                            existing,
+                            provider,
+                          );
+                        } else {
+                          _showBankTemplateBottomSheet(
+                            context,
+                            template,
+                            provider,
+                          );
+                        }
                       } else {
-                        _showNewTemplateLinkBottomSheet(
-                          context,
-                          template,
+                        final existing = _findExistingLinkForTemplate(
                           provider,
+                          template,
                         );
+                        if (existing != null) {
+                          await showExistingLinkBottomSheet(
+                            context,
+                            existing,
+                            provider,
+                          );
+                        } else {
+                          _showNewTemplateLinkBottomSheet(
+                            context,
+                            template,
+                            provider,
+                          );
+                        }
                       }
                     },
                     child: Column(
@@ -521,6 +589,47 @@ class LinkSheet {
         (label.contains('custom link') || label.contains('custom bank'));
   }
 
+  /// Find an already-added link for this catalog template (e.g. WhatsApp).
+  /// Custom links are excluded so users can add multiple custom URLs.
+  SocialLink? _findExistingLinkForTemplate(
+    ProfileProvider provider,
+    LinkTemplate template,
+  ) {
+    if (_isCustomTemplate(template)) return null;
+    if (template.actionType == 'menu_catalog' ||
+        template.actionType == 'gallery' ||
+        template.actionType == 'document' ||
+        isGalleryLinkTemplate(template) ||
+        isDocumentsLinkTemplate(template)) {
+      return null;
+    }
+
+    final links = provider.profile.socialLinks;
+    final templateId = template.id.trim();
+    if (templateId.isNotEmpty) {
+      for (final link in links) {
+        if (link.templateId == templateId) return link;
+      }
+    }
+
+    final label = template.label.trim().toLowerCase();
+    if (label.isEmpty) return null;
+
+    for (final link in links) {
+      if (link.isGalleryLink || link.isDocumentLink || link.isCatalogLink) {
+        continue;
+      }
+      final linkLabel = link.platformName.trim().toLowerCase();
+      if (linkLabel == label) return link;
+      if (label.contains('whatsapp') &&
+          (link.platform == SocialPlatform.whatsApp ||
+              linkLabel.contains('whatsapp'))) {
+        return link;
+      }
+    }
+    return null;
+  }
+
   Future<String> _pickLogoBase64() async {
     final file = await pickFile();
     if (file?.file == null) return '';
@@ -548,9 +657,7 @@ class LinkSheet {
     final labelController = TextEditingController(
       text: existingLink?.platformName ?? '',
     );
-    final valueController = TextEditingController(
-      text: existingLink?.value ?? '',
-    );
+    final drafts = _draftsFromLink(existingLink);
     String logo = existingLink?.logoUrl ?? '';
     bool showLink = existingLink?.isPublic ?? true;
 
@@ -566,6 +673,9 @@ class LinkSheet {
                 bottom: MediaQuery.of(ctx).viewInsets.bottom,
               ),
               child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(ctx).size.height * 0.9,
+                ),
                 decoration: BoxDecoration(
                   color: isDark ? Color(0xFF111111) : Colors.white,
                   borderRadius: BorderRadius.vertical(
@@ -576,102 +686,116 @@ class LinkSheet {
                   horizontal: 20,
                   vertical: 14,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 4, bottom: 14),
-                      width: 36,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    Text(ctx.l10n.customLink,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            final pickedLogo = await _pickLogoBase64();
-                            if (pickedLogo.isNotEmpty) {
-                              setState(() => logo = pickedLogo);
-                            }
-                          },
-                          child: _selectedLogoTile(logo),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 4, bottom: 14),
+                        width: 36,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(2),
                         ),
-                        SizedBox(width: 14),
-                        Expanded(
-                          child: _sheetTextField(
-                            labelController,
-                            context.l10n.label,
-                            TextInputType.text,
-                          ),
+                      ),
+                      Text(
+                        ctx.l10n.customLink,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 14),
-                    _sheetTextField(valueController, context.l10n.link, TextInputType.url),
-                    const SizedBox(height: 14),
-                    _showPublicToggle(
-                      context: context,
-                      isDark: isDark,
-                      value: showLink,
-                      onChanged: (value) => setState(() => showLink = value),
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        if (existingLink != null) ...[
-                          _deleteCircleButton(() async {
-                            await provider.deleteSocialLink(
-                              existingLink.id,
-                              context,
-                            );
-                            Navigator.pop(ctx);
-                          }),
-                          const SizedBox(width: 12),
-                        ],
-                        Expanded(
-                          child: _saveButton(
-                            context: context,
-                            onPressed: () async {
-                              final label = labelController.text.trim();
-                              final value = valueController.text.trim();
-                              if (label.isEmpty || value.isEmpty) return;
-                              if (existingLink == null) {
-                                await provider.addCustomTemplateLink(
-                                  template: template,
-                                  label: label,
-                                  value: value,
-                                  showLink: showLink,
-                                  context: context,
-                                  logo: logo,
-                                );
-                              } else {
-                                await provider.updateCustomTemplateLink(
-                                  link: existingLink,
-                                  label: label,
-                                  value: value,
-                                  showLink: showLink,
-                                  context: context,
-                                  logo: logo,
-                                );
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              final pickedLogo = await _pickLogoBase64();
+                              if (pickedLogo.isNotEmpty) {
+                                setState(() => logo = pickedLogo);
                               }
-                              Navigator.pop(ctx);
                             },
+                            child: _selectedLogoTile(logo),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                  ],
+                          SizedBox(width: 14),
+                          Expanded(
+                            child: _sheetTextField(
+                              labelController,
+                              context.l10n.label,
+                              TextInputType.text,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 14),
+                      _buildMultiEntryEditors(
+                        context: context,
+                        drafts: drafts,
+                        valueHint: context.l10n.link,
+                        keyboardType: TextInputType.url,
+                        fallbackLogo:
+                            logo.isNotEmpty ? logo : template.logo,
+                        onChanged: () => setState(() {}),
+                      ),
+                      const SizedBox(height: 14),
+                      _showPublicToggle(
+                        context: context,
+                        isDark: isDark,
+                        value: showLink,
+                        onChanged: (value) =>
+                            setState(() => showLink = value),
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          if (existingLink != null) ...[
+                            _deleteCircleButton(() async {
+                              await provider.deleteSocialLink(
+                                existingLink.id,
+                                context,
+                              );
+                              Navigator.pop(ctx);
+                            }),
+                            const SizedBox(width: 12),
+                          ],
+                          Expanded(
+                            child: _saveButton(
+                              context: context,
+                              onPressed: () async {
+                                final label = labelController.text.trim();
+                                final entries = _entriesFromDrafts(drafts);
+                                if (label.isEmpty || entries.isEmpty) return;
+                                if (existingLink == null) {
+                                  await provider.addCustomTemplateLink(
+                                    template: template,
+                                    label: label,
+                                    value: entries.first.value,
+                                    showLink: showLink,
+                                    context: context,
+                                    logo: logo,
+                                    entries: entries,
+                                  );
+                                } else {
+                                  await provider.updateCustomTemplateLink(
+                                    link: existingLink,
+                                    label: label,
+                                    value: entries.first.value,
+                                    showLink: showLink,
+                                    context: context,
+                                    logo: logo,
+                                    entries: entries,
+                                  );
+                                }
+                                Navigator.pop(ctx);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -682,9 +806,10 @@ class LinkSheet {
   }
 
   Widget _selectedLogoTile(String logo) {
+    Widget image;
     if (logo.isNotEmpty) {
       if (logo.startsWith('http://') || logo.startsWith('https://')) {
-        return ClipRRect(
+        image = ClipRRect(
           borderRadius: BorderRadius.circular(14),
           child: Image.network(
             logo,
@@ -694,25 +819,54 @@ class LinkSheet {
             errorBuilder: (_, __, ___) => _logoPlaceholder(true),
           ),
         );
+      } else {
+        try {
+          image = ClipRRect(
+            borderRadius: BorderRadius.circular(14),
+            child: Image.memory(
+              base64Decode(logo),
+              width: 60,
+              height: 60,
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) => _logoPlaceholder(true),
+            ),
+          );
+        } catch (_) {
+          image = _logoPlaceholder(true);
+        }
       }
-
-      try {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(14),
-          child: Image.memory(
-            base64Decode(logo),
-            width: 60,
-            height: 60,
-            fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => _logoPlaceholder(true),
-          ),
-        );
-      } catch (_) {
-        return _logoPlaceholder(true);
-      }
+    } else {
+      image = _logoPlaceholder(false);
     }
 
-    return _logoPlaceholder(false);
+    return SizedBox(
+      width: 60,
+      height: 60,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          image,
+          Positioned(
+            right: -4,
+            bottom: -4,
+            child: Container(
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 1.5),
+              ),
+              child: const Icon(
+                Icons.edit_rounded,
+                size: 12,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _logoPlaceholder(bool selected) {
@@ -1146,13 +1300,172 @@ class LinkSheet {
     return image;
   }
 
+  List<_LinkEntryDraft> _draftsFromLink(SocialLink? link) {
+    if (link == null) {
+      return [_LinkEntryDraft()];
+    }
+    final existing = link.entries
+        ?.where((e) => e.value.trim().isNotEmpty)
+        .toList();
+    if (existing != null && existing.isNotEmpty) {
+      return existing
+          .map(
+            (e) => _LinkEntryDraft(
+              id: e.id,
+              name: e.name,
+              value: e.value,
+              logo: e.logo ?? '',
+            ),
+          )
+          .toList();
+    }
+    return [
+      _LinkEntryDraft(
+        id: link.id,
+        name: '',
+        value: link.value,
+        logo: '',
+      ),
+    ];
+  }
+
+  List<LinkEntry> _entriesFromDrafts(List<_LinkEntryDraft> drafts) {
+    return drafts
+        .map((d) => d.toEntry())
+        .where((e) => e.value.isNotEmpty)
+        .map(
+          (e) => LinkEntry(
+            id: e.id,
+            name: e.name.isNotEmpty ? e.name : e.value,
+            value: e.value,
+            logo: e.logo,
+          ),
+        )
+        .toList();
+  }
+
+  Widget _buildMultiEntryEditors({
+    required BuildContext context,
+    required List<_LinkEntryDraft> drafts,
+    required String valueHint,
+    required TextInputType keyboardType,
+    required VoidCallback onChanged,
+    String? fallbackLogo,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < drafts.length; i++) ...[
+          if (i > 0) const SizedBox(height: 12),
+          _buildEntryEditorRow(
+            context: context,
+            draft: drafts[i],
+            index: i,
+            valueHint: valueHint,
+            keyboardType: keyboardType,
+            canRemove: drafts.length > 1,
+            fallbackLogo: fallbackLogo,
+            onRemove: () {
+              drafts[i].dispose();
+              drafts.removeAt(i);
+              onChanged();
+            },
+            onChanged: onChanged,
+          ),
+        ],
+        const SizedBox(height: 10),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton.icon(
+            onPressed: () {
+              drafts.add(_LinkEntryDraft());
+              onChanged();
+            },
+            icon: const Icon(Icons.add_circle_outline, size: 20),
+            label: Text(context.l10n.add),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.grey.shade800,
+              padding: EdgeInsets.zero,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEntryEditorRow({
+    required BuildContext context,
+    required _LinkEntryDraft draft,
+    required int index,
+    required String valueHint,
+    required TextInputType keyboardType,
+    required bool canRemove,
+    required VoidCallback onRemove,
+    required VoidCallback onChanged,
+    String? fallbackLogo,
+  }) {
+    final displayLogo =
+        draft.logo.isNotEmpty ? draft.logo : (fallbackLogo ?? '');
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200, width: 0.8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  final picked = await _pickLogoBase64();
+                  if (picked.isNotEmpty) {
+                    draft.logo = picked;
+                    onChanged();
+                  }
+                },
+                child: _selectedLogoTile(displayLogo),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  children: [
+                    _sheetTextField(
+                      draft.nameController,
+                      context.l10n.name,
+                      TextInputType.text,
+                    ),
+                    const SizedBox(height: 8),
+                    _sheetTextField(
+                      draft.valueController,
+                      valueHint,
+                      keyboardType,
+                    ),
+                  ],
+                ),
+              ),
+              if (canRemove)
+                IconButton(
+                  onPressed: onRemove,
+                  icon: Icon(Icons.close, color: Colors.grey.shade600),
+                  visualDensity: VisualDensity.compact,
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showNewTemplateLinkBottomSheet(
     BuildContext context,
     LinkTemplate template,
     ProfileProvider provider,
   ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final valueController = TextEditingController();
+    final drafts = <_LinkEntryDraft>[_LinkEntryDraft()];
     bool showLink = true;
 
     showModalBottomSheet(
@@ -1167,6 +1480,9 @@ class LinkSheet {
                 bottom: MediaQuery.of(ctx).viewInsets.bottom,
               ),
               child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(ctx).size.height * 0.9,
+                ),
                 decoration: BoxDecoration(
                   color: isDark ? Color(0xFF111111) : Colors.white,
                   borderRadius: BorderRadius.vertical(
@@ -1177,160 +1493,155 @@ class LinkSheet {
                   horizontal: 20,
                   vertical: 14,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 4, bottom: 14),
-                      width: 36,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    Text(ctx.l10n.createNewLink,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildTemplateLogo(
-                          template.logo,
-                          size: 60,
-
-                          isPro: template.isPro,
-                          context: context,
-                        ),
-                        SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextFormField(
-                                readOnly: true,
-                                initialValue: template.label,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                decoration: WaUi.fieldDecoration(
-                                  hintText: ctx.l10n.label,
-                                  radius: 10,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                ctx.l10n.setTextUnderTheLinkIcon,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey.shade800,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
-                    TextField(
-                      controller: valueController,
-                      autofocus: true,
-                      keyboardType: _keyboardTypeFor(template.fieldType),
-                      style: TextStyle(fontSize: 15),
-                      decoration: WaUi.fieldDecoration(
-                        hintText: template.fieldLabel,
-                        radius: 10,
-                      ),
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                      template.fieldLabel,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade800,
-                      ),
-                    ),
-                    SizedBox(height: 14),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? Color(0xFF1E1E1E)
-                            : Color(0xFFF5F5F5),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Colors.grey.shade200,
-                          width: 0.5,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 4, bottom: 14),
+                        width: 36,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(2),
                         ),
                       ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
+                      Text(
+                        ctx.l10n.createNewLink,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      SizedBox(height: 20),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(ctx.l10n.showLink,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          _buildTemplateLogo(
+                            template.logo,
+                            size: 60,
+                            isPro: template.isPro,
+                            context: context,
                           ),
-                          Switch(
-                            value: showLink,
-                            activeColor: Colors.white,
-                            activeTrackColor: const Color(0xFF1E2022),
-                            onChanged: (val) => setState(() => showLink = val),
+                          SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFormField(
+                                  readOnly: true,
+                                  initialValue: template.label,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  decoration: WaUi.fieldDecoration(
+                                    hintText: ctx.l10n.label,
+                                    radius: 10,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  ctx.l10n.setTextUnderTheLinkIcon,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 80),
-                    Row(
-                      children: [
-                        const SizedBox(width: 60),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: SizedBox(
-                            height: 60,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                final value = valueController.text.trim();
-                                if (value.isNotEmpty) {
+                      const SizedBox(height: 14),
+                      _buildMultiEntryEditors(
+                        context: context,
+                        drafts: drafts,
+                        valueHint: template.fieldLabel,
+                        keyboardType: _keyboardTypeFor(template.fieldType),
+                        fallbackLogo: template.logo,
+                        onChanged: () => setState(() {}),
+                      ),
+                      SizedBox(height: 14),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? Color(0xFF1E1E1E)
+                              : Color(0xFFF5F5F5),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.grey.shade200,
+                            width: 0.5,
+                          ),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              ctx.l10n.showLink,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Switch(
+                              value: showLink,
+                              activeColor: Colors.white,
+                              activeTrackColor: const Color(0xFF1E2022),
+                              onChanged: (val) =>
+                                  setState(() => showLink = val),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          const SizedBox(width: 60),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: SizedBox(
+                              height: 60,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  final entries = _entriesFromDrafts(drafts);
+                                  if (entries.isEmpty) return;
                                   await provider.addTemplateLink(
                                     template,
-                                    value,
+                                    entries.first.value,
                                     showLink,
                                     context,
+                                    entries: entries,
                                   );
                                   Navigator.pop(ctx);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppTheme.primaryBlack,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24),
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.primaryBlack,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  elevation: 0,
                                 ),
-                                elevation: 0,
-                              ),
-                              child: Text(context.l10n.save,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                                child: Text(
+                                  context.l10n.save,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                  ],
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -1779,6 +2090,21 @@ class LinkSheet {
     SocialLink link,
     ProfileProvider provider,
   ) async {
+    // Prefer latest provider copy + cached multi-entries.
+    for (final item in provider.profile.socialLinks) {
+      if (item.id == link.id ||
+          (link.templateId != null &&
+              link.templateId!.isNotEmpty &&
+              item.templateId == link.templateId)) {
+        link = item;
+        break;
+      }
+    }
+    link = await LinkEntriesCache.resolve(
+      link,
+      userId: provider.profile.id ?? '',
+    );
+
     final catalogTemplate = _findLinkTemplate(link, provider);
 
     if (link.isGalleryLink ||
@@ -1876,7 +2202,7 @@ class LinkSheet {
     }
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final valueController = TextEditingController(text: link.value);
+    final drafts = _draftsFromLink(link);
     bool showLink = link.isPublic;
 
     showModalBottomSheet(
@@ -1891,6 +2217,9 @@ class LinkSheet {
                 bottom: MediaQuery.of(ctx).viewInsets.bottom,
               ),
               child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(ctx).size.height * 0.9,
+                ),
                 decoration: BoxDecoration(
                   color: isDark ? Color(0xFF111111) : Colors.white,
                   borderRadius: BorderRadius.vertical(
@@ -1901,225 +2230,221 @@ class LinkSheet {
                   horizontal: 20,
                   vertical: 14,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Drag handle
-                    Container(
-                      margin: EdgeInsets.only(top: 4, bottom: 14),
-                      width: 36,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-
-                    // Title
-                    Text(ctx.l10n.linkSettings,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Icon + Label row
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 60,
-                          height: 60,
-
-                          child: LinkPlatformIcon(
-                            link: link,
-                            size: 60,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 14),
-
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextFormField(
-                                readOnly: true,
-
-                                controller: TextEditingController(
-                                  text: link.platformName,
-                                ),
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                decoration: WaUi.fieldDecoration(
-                                  hintText: ctx.l10n.label,
-                                  radius: 10,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                ctx.l10n.setTextUnderTheLinkIcon,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey.shade800,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
-
-                    // Username field
-                    TextField(
-                      controller: valueController,
-                      autofocus: true,
-                      style: TextStyle(fontSize: 15),
-
-                      decoration: WaUi.fieldDecoration(
-                        hintText:
-                            link.fieldLabel ??
-                            '${SocialLink.getPlatformName(link.platform)} username',
-                        radius: 10,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      link.fieldLabel ??
-                          context.l10n.enterYourPlatformUsername(
-                            SocialLink.getPlatformName(link.platform),
-                          ),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade800,
-                      ),
-                    ),
-                    SizedBox(height: 14),
-
-                    // Show link toggle
-                    Container(
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? Color(0xFF1E1E1E)
-                            : Color(0xFFF5F5F5),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Colors.grey.shade200,
-                          width: 0.5,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 4, bottom: 14),
+                        width: 36,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(2),
                         ),
                       ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
+                      Text(
+                        ctx.l10n.linkSettings,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      const SizedBox(height: 20),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(ctx.l10n.showLink,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
+                          SizedBox(
+                            width: 60,
+                            height: 60,
+                            child: LinkPlatformIcon(
+                              link: link,
+                              size: 60,
+                              fit: BoxFit.contain,
                             ),
                           ),
-                          Switch(
-                            value: showLink,
-                            activeColor: Colors.white,
-                            activeTrackColor: Color(0xFF1E2022),
-                            onChanged: (val) => setState(() => showLink = val),
+                          SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFormField(
+                                  readOnly: true,
+                                  controller: TextEditingController(
+                                    text: link.platformName,
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  decoration: WaUi.fieldDecoration(
+                                    hintText: ctx.l10n.label,
+                                    radius: 10,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  ctx.l10n.setTextUnderTheLinkIcon,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                      ctx.l10n.whenTurnedOffThisLinkWontBeShownOnYourProfile,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade800,
+                      const SizedBox(height: 14),
+                      _buildMultiEntryEditors(
+                        context: context,
+                        drafts: drafts,
+                        valueHint: link.fieldLabel ??
+                            '${SocialLink.getPlatformName(link.platform)} username',
+                        keyboardType: _keyboardTypeFor(
+                          link.fieldType ?? 'text',
+                        ),
+                        fallbackLogo: link.logoUrl,
+                        onChanged: () => setState(() {}),
                       ),
-                    ),
-                    const SizedBox(height: 80),
-
-                    // Bottom row: delete + save
-                    Row(
-                      children: [
-                        // Delete button
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: isDark
-                                ? const Color(0xFF1E1E1E)
-                                : const Color(0xFFF5F5F5),
-                            border: Border.all(
-                              color: Colors.grey.shade200,
-                              width: 0.5,
-                            ),
-                          ),
-                          child: IconButton(
-                            icon: Icon(Icons.delete_forever_outlined, size: 24),
-                            color: Colors.grey.shade600,
-                            onPressed: () async {
-                              await provider.deleteSocialLink(link.id, context);
-                              Navigator.pop(ctx);
-                            },
+                      SizedBox(height: 14),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? Color(0xFF1E1E1E)
+                              : Color(0xFFF5F5F5),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.grey.shade200,
+                            width: 0.5,
                           ),
                         ),
-                        const SizedBox(width: 12),
-
-                        // Save button
-                        Expanded(
-                          child: SizedBox(
-                            height: 60,
-                            child: ElevatedButton(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              ctx.l10n.showLink,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Switch(
+                              value: showLink,
+                              activeColor: Colors.white,
+                              activeTrackColor: Color(0xFF1E2022),
+                              onChanged: (val) =>
+                                  setState(() => showLink = val),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      Text(
+                        ctx.l10n
+                            .whenTurnedOffThisLinkWontBeShownOnYourProfile,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade800,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isDark
+                                  ? const Color(0xFF1E1E1E)
+                                  : const Color(0xFFF5F5F5),
+                              border: Border.all(
+                                color: Colors.grey.shade200,
+                                width: 0.5,
+                              ),
+                            ),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.delete_forever_outlined,
+                                size: 24,
+                              ),
+                              color: Colors.grey.shade600,
                               onPressed: () async {
-                                final value = valueController.text.trim();
-                                if (value.isNotEmpty) {
+                                await provider.deleteSocialLink(
+                                  link.id,
+                                  context,
+                                );
+                                Navigator.pop(ctx);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: SizedBox(
+                              height: 60,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  final entries = _entriesFromDrafts(drafts);
+                                  if (entries.isEmpty) return;
                                   if (link.templateId?.isNotEmpty == true) {
                                     await provider.updateTemplateLink(
                                       link,
-                                      value,
+                                      entries.first.value,
                                       showLink,
                                       context,
+                                      entries: entries,
                                     );
                                   } else {
-                                    await provider.updateSocialLink(
-                                      link.platform,
-                                      value,
-                                      showLink,
-                                      context,
+                                    final updated = List<SocialLink>.from(
+                                      provider.profile.socialLinks,
                                     );
+                                    final idx = updated.indexWhere(
+                                      (item) => item.id == link.id,
+                                    );
+                                    if (idx != -1) {
+                                      updated[idx] = link.copyWith(
+                                        value: entries.first.value,
+                                        entries: entries,
+                                        isPublic: showLink,
+                                        isActive: true,
+                                      );
+                                      await provider.updateLinks(
+                                        links: updated,
+                                        context: context,
+                                      );
+                                    }
                                   }
                                   Navigator.pop(ctx);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppTheme.primaryBlack,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24),
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.primaryBlack,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  elevation: 0,
                                 ),
-                                elevation: 0,
-                              ),
-                              child: Text(context.l10n.save,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                                child: Text(
+                                  context.l10n.save,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                  ],
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
                 ),
               ),
             );

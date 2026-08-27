@@ -19,10 +19,8 @@ void showContactCardBottomSheet(
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: AppTheme.secondaryWhite,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
+    useSafeArea: false,
+    backgroundColor: Colors.transparent,
     builder: (context) => ContactCardBottomSheet(
       template: template,
       provider: provider,
@@ -53,6 +51,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
   bool businessAddressExpanded = false;
   bool showLink = true;
   String _logo = '';
+  final _scrollController = ScrollController();
 
   late final TextEditingController _labelCtrl;
   late final TextEditingController _firstNameCtrl;
@@ -98,7 +97,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
       text:
           details['label'] ??
           widget.existingLink?.platformName ??
-          context.l10n.saveContact2,
+          widget.template.label,
     );
     _firstNameCtrl = TextEditingController(text: details['firstName'] ?? '');
     _lastNameCtrl = TextEditingController(text: details['lastName'] ?? '');
@@ -161,6 +160,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
 
   @override
   void dispose() {
+    _scrollController.dispose();
     for (final controller in [
       _labelCtrl,
       _firstNameCtrl,
@@ -193,56 +193,76 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     super.dispose();
   }
 
+  void _ensureFieldVisible(BuildContext fieldContext) {
+    // Wait for keyboard animation, then bring the focused field into view.
+    Future<void>.delayed(const Duration(milliseconds: 300), () {
+      if (!mounted || !fieldContext.mounted) return;
+      Scrollable.ensureVisible(
+        fieldContext,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        alignment: 0.15,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.92,
-      minChildSize: 0.5,
-      maxChildSize: 0.95,
-      expand: false,
-      builder: (context, scrollCtrl) {
-        return Column(
-          children: [
-            _buildHandle(),
-            _buildTitle(),
-            Expanded(
-              child: SingleChildScrollView(
-                controller: scrollCtrl,
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
+    final media = MediaQuery.of(context);
+    final keyboardInset = media.viewInsets.bottom;
+    final sheetHeight = (media.size.height * 0.80)
+        .clamp(0.0, media.size.height - keyboardInset);
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: keyboardInset),
+      child: SizedBox(
+        height: sheetHeight,
+        child: Material(
+          color: AppTheme.secondaryWhite,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: [
+              _buildHandle(),
+              _buildTitle(),
+              Expanded(
+                child: ListView(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   children: [
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     _buildAvatarRow(),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     _buildTextField(_firstNameCtrl, context.l10n.firstName),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _buildTextField(_lastNameCtrl, context.l10n.lastName),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _buildTextField(
                       _bioCtrl,
                       context.l10n.enterBioForTheContactCard,
                       maxLines: 3,
                     ),
-                    SizedBox(height: 14),
+                    const SizedBox(height: 14),
                     _buildToggle(),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     if (isPersonal)
                       ..._buildPersonalFields()
                     else
                       ..._buildBusinessFields(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _buildAddressSection(),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildShowLinkToggle(),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 16),
+                    _buildBottomBar(),
+                    const SizedBox(height: 12),
                   ],
                 ),
               ),
-            ),
-            _buildBottomBar(),
-          ],
-        );
-      },
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -444,9 +464,16 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
           child: Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: controllers[index],
-                  decoration: _inputDecoration(hint),
+                child: Builder(
+                  builder: (fieldContext) {
+                    return TextField(
+                      controller: controllers[index],
+                      scrollPadding:
+                          const EdgeInsets.fromLTRB(20, 80, 20, 120),
+                      onTap: () => _ensureFieldVisible(fieldContext),
+                      decoration: _inputDecoration(hint),
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 8),
@@ -509,10 +536,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
         Row(
           children: [
             Expanded(
-              child: TextField(
-                controller: addressCtrl,
-                decoration: _inputDecoration(hint),
-              ),
+              child: _buildTextField(addressCtrl, hint),
             ),
             const SizedBox(width: 8),
             GestureDetector(
@@ -763,9 +787,17 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
     TextEditingController ctrl,
     String hint, {
     int maxLines = 1,
-  }) => TextField(
-    controller: ctrl,
-    maxLines: maxLines,
-    decoration: _inputDecoration(hint),
-  );
+  }) {
+    return Builder(
+      builder: (fieldContext) {
+        return TextField(
+          controller: ctrl,
+          maxLines: maxLines,
+          scrollPadding: const EdgeInsets.fromLTRB(20, 80, 20, 120),
+          onTap: () => _ensureFieldVisible(fieldContext),
+          decoration: _inputDecoration(hint),
+        );
+      },
+    );
+  }
 }

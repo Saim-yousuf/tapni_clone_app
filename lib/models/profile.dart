@@ -93,7 +93,7 @@ class UserProfile {
     }
 
     return UserProfile(
-      id: json['id']?.toString(),
+      id: json['_id']?.toString() ?? json['id']?.toString(),
       username: json['username']?.toString(),
       profilePhotoUrl: json['profilePhoto']?.toString(),
       coverPhotoUrl: json['coverPhoto']?.toString(),
