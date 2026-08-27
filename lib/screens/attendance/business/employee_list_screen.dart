@@ -186,14 +186,18 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
           ),
           Material(
             color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
-              child: CustomAppButton(
-                width: double.infinity,
-                text: context.l10n.scanToInvite,
-                icon: Icons.qr_code_scanner_rounded,
-                backgroundColor: AttendanceUi.buttonDark,
-                onTap: _scanToInvite,
+            child: SafeArea(
+              top: false,
+              maintainBottomViewPadding: true,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                child: CustomAppButton(
+                  width: double.infinity,
+                  text: context.l10n.scanToInvite,
+                  icon: Icons.qr_code_scanner_rounded,
+                  backgroundColor: AttendanceUi.buttonDark,
+                  onTap: _scanToInvite,
+                ),
               ),
             ),
           ),

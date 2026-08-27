@@ -82,7 +82,7 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                margin: const EdgeInsets.only(top: 12, bottom: 8),
+                margin: const EdgeInsets.only(top: 16, bottom: 14),
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
@@ -92,7 +92,7 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
               ),
               Flexible(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

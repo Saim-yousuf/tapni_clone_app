@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -51,6 +52,8 @@ class RewardCardStackCarousel extends StatefulWidget {
   final int initialIndex;
   final ValueChanged<int> onPageChanged;
   final ValueChanged<int>? onCardTap;
+  final VoidCallback? onSwiped;
+  final bool showPageIndicator;
 
   const RewardCardStackCarousel({
     super.key,
@@ -58,6 +61,8 @@ class RewardCardStackCarousel extends StatefulWidget {
     required this.initialIndex,
     required this.onPageChanged,
     this.onCardTap,
+    this.onSwiped,
+    this.showPageIndicator = true,
   });
 
   @override
@@ -68,7 +73,8 @@ class RewardCardStackCarousel extends StatefulWidget {
 class _RewardCardStackCarouselState extends State<RewardCardStackCarousel>
     with SingleTickerProviderStateMixin {
   static const _cardWidth = 340.0;
-  static const _stackHeight = 520.0;
+  static const _maxStackHeight = 480.0;
+  static const _minStackHeight = 300.0;
   static const _swipeThreshold = 72.0;
   static const _velocityThreshold = 700.0;
   static const _maxVisibleDepth = 3;
@@ -82,6 +88,7 @@ class _RewardCardStackCarouselState extends State<RewardCardStackCarousel>
   Offset _dragOffset = Offset.zero;
   bool _isAnimating = false;
   bool _isSwipeAway = false;
+  double _stackHeight = _maxStackHeight;
 
   int get _topCardIndex => _stackOrder.isEmpty ? 0 : _stackOrder.first;
 
@@ -209,6 +216,7 @@ class _RewardCardStackCarouselState extends State<RewardCardStackCarousel>
   void _onSwipeAwayComplete() {
     _animController.reset();
     if (!mounted) return;
+    HapticFeedback.selectionClick();
     setState(() {
       if (_stackOrder.length > 1) {
         final top = _stackOrder.removeAt(0);
@@ -219,6 +227,7 @@ class _RewardCardStackCarouselState extends State<RewardCardStackCarousel>
       _isSwipeAway = false;
     });
     _notifyTopChanged();
+    widget.onSwiped?.call();
   }
 
   double _dragRotation(double dx) => (dx / _cardWidth).clamp(-0.28, 0.28);
@@ -270,6 +279,11 @@ class _RewardCardStackCarouselState extends State<RewardCardStackCarousel>
           _cardWidth,
           constraints.maxWidth - _peekInset * 2,
         );
+        final screenH = MediaQuery.sizeOf(context).height;
+        _stackHeight = (screenH * 0.42)
+            .clamp(_minStackHeight, _maxStackHeight)
+            .toDouble();
+        _stackHeight = math.min(_stackHeight, cardWidth * 1.42);
 
         return Column(
           children: [
@@ -291,20 +305,43 @@ class _RewardCardStackCarouselState extends State<RewardCardStackCarousel>
                 ],
               ),
             ),
-            const SizedBox(height: 12),
-            Text(
-              [
-                '${topIndex + 1} of ${cards.length}',
-                title,
-                if (business.isNotEmpty &&
-                    business != 'Business' &&
-                    business != title)
-                  business,
-                if (status != null) status,
-              ].join(' · '),
-              textAlign: TextAlign.center,
-              style: WaUi.caption,
-            ),
+            if (widget.showPageIndicator) ...[
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Center(
+                  child: Text(
+                    '${topIndex + 1} of ${cards.length}',
+                    textAlign: TextAlign.center,
+                    style: WaUi.caption,
+                  ),
+                ),
+              ),
+              if (title.isNotEmpty ||
+                  (business.isNotEmpty &&
+                      business != 'Business' &&
+                      business != title) ||
+                  status != null) ...[
+                const SizedBox(height: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Center(
+                    child: Text(
+                      [
+                        if (title.isNotEmpty) title,
+                        if (business.isNotEmpty &&
+                            business != 'Business' &&
+                            business != title)
+                          business,
+                        if (status != null) status,
+                      ].join(' · '),
+                      textAlign: TextAlign.center,
+                      style: WaUi.caption,
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ],
         );
       },

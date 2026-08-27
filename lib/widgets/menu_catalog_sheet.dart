@@ -184,12 +184,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               color: isDark ? const Color(0xFF111111) : Colors.white,
               borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             ),
-            child: SafeArea(
-              top: false,
-              child: Column(
+            child: Column(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(top: 12, bottom: 8),
+                    margin: const EdgeInsets.only(top: 16, bottom: 14),
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
@@ -211,7 +209,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                                 ? widget.businessName ?? _catalogLabel
                                 : _catalogLabel,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
                             ),
@@ -221,17 +219,24 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 12),
                   Expanded(
                     child: widget.isCustomerView
                         ? _buildCustomerView(scrollController, isDark)
                         : _buildBusinessView(scrollController, isDark),
                   ),
                   if (widget.isCustomerView && !_isServices && !_isDocuments)
-                    _buildOrderBar(isDark),
-                  if (!widget.isCustomerView) _buildBusinessActions(isDark),
+                    SafeArea(
+                      top: false,
+                      child: _buildOrderBar(isDark),
+                    ),
+                  if (!widget.isCustomerView)
+                    SafeArea(
+                      top: false,
+                      child: _buildBusinessActions(isDark),
+                    ),
                 ],
               ),
-            ),
           );
         },
       ),
@@ -670,7 +675,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               height: 44,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 children: [
                   _categoryChip(context.l10n.all, _selectedCategory == null, () {
                     setState(() => _selectedCategory = null);
@@ -685,7 +690,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             ),
           ),
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          padding: EdgeInsets.fromLTRB(
+            16,
+            _categories.length > 1 ? 12 : 4,
+            16,
+            16,
+          ),
           sliver: SliverLayoutBuilder(
             builder: (context, constraints) {
               const crossAxisCount = 2;
@@ -824,14 +834,9 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     final itemCount = _cart.fold<int>(0, (sum, line) => sum + line.quantity);
 
     return Container(
-      padding: EdgeInsets.fromLTRB(
-        20,
-        12,
-        20,
-        12 + MediaQuery.of(context).padding.bottom,
-      ),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
       decoration: BoxDecoration(
-        color: isDark ? Color(0xFF111111) : Colors.white,
+        color: isDark ? const Color(0xFF111111) : Colors.white,
         border: Border(top: BorderSide(color: Colors.grey.shade200)),
       ),
       child: WaPrimaryButton(
@@ -846,17 +851,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
 
   Widget _buildBusinessActions(bool isDark) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(
-        20,
-        8,
-        20,
-        12 + MediaQuery.of(context).padding.bottom,
-      ),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
       child: Row(
         children: [
           if (widget.existingLink != null) ...[
             _deleteButton(),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
           ],
           Expanded(
             child: SizedBox(
@@ -865,15 +865,23 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 onPressed: _isSaving ? null : _saveCatalogLink,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryBlack,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
                 ),
                 child: _isSaving
-                    ? SizedBox(
+                    ? const SizedBox(
                         width: 20,
                         height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
                       )
-                    : Text(context.l10n.save, style: TextStyle(color: Colors.white)),
+                    : Text(
+                        context.l10n.save,
+                        style: const TextStyle(color: Colors.white),
+                      ),
               ),
             ),
           ),

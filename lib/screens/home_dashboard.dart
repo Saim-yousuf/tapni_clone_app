@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/notifications_screen.dart';
 import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/models/activity.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/stat_card.dart';
@@ -432,29 +433,35 @@ class HomeDashboard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _QuickOrderCard(
-                      icon: Icons.receipt_long_outlined,
+                      icon: Icons.receipt_long_rounded,
                       title: context.l10n.myOrders,
                       subtitle: context.l10n.trackYourOrders,
+                      iconBg: const Color(0xFFCBE7F5),
+                      iconColor: const Color(0xFF3B82A0),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => OrdersListScreen(isBusinessView: false),
+                            builder: (_) =>
+                                OrdersListScreen(isBusinessView: false),
                           ),
                         );
                       },
                     ),
                   ),
                   if (profileProvider.isProUser) ...[
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: _QuickOrderCard(
-                        icon: Icons.storefront_outlined,
-                        title: context.l10n.orders,
+                        icon: Icons.storefront_rounded,
+                        title: context.l10n.customerOrders,
                         subtitle: context.l10n.incomingOrders,
+                        iconBg: const Color(0xFFD8F0CB),
+                        iconColor: const Color(0xFF4A7C3F),
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => OrdersListScreen(isBusinessView: true),
+                              builder: (_) =>
+                                  OrdersListScreen(isBusinessView: true),
                             ),
                           );
                         },
@@ -652,30 +659,65 @@ class _QuickOrderCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
+  final Color iconBg;
+  final Color iconColor;
   final VoidCallback onTap;
 
   const _QuickOrderCard({
     required this.icon,
     required this.title,
     required this.subtitle,
+    required this.iconBg,
+    required this.iconColor,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: GlassCard(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, size: 28),
-            const SizedBox(height: 10),
-            Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-            const SizedBox(height: 4),
-            Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
-          ],
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: GlassCard(
+          padding: const EdgeInsets.all(16),
+          borderRadius: 20,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: isDark ? iconColor.withValues(alpha: 0.18) : iconBg,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(icon, size: 22, color: iconColor),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: WaUi.listTitle.copyWith(
+                  color: isDark ? Colors.white : WaUi.primaryText,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: WaUi.caption.copyWith(
+                  color: isDark ? Colors.white60 : WaUi.secondaryText,
+                  height: 1.35,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

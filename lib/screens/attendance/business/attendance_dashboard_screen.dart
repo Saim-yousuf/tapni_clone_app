@@ -194,14 +194,18 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
           ),
           Material(
             color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
-              child: CustomAppButton(
-                width: double.infinity,
-                text: context.l10n.manageEmployees,
-                icon: Icons.person_add_alt_1_rounded,
-                backgroundColor: AttendanceUi.buttonDark,
-                onTap: _openEmployees,
+            child: SafeArea(
+              top: false,
+              maintainBottomViewPadding: true,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                child: CustomAppButton(
+                  width: double.infinity,
+                  text: context.l10n.manageEmployees,
+                  icon: Icons.person_add_alt_1_rounded,
+                  backgroundColor: AttendanceUi.buttonDark,
+                  onTap: _openEmployees,
+                ),
               ),
             ),
           ),

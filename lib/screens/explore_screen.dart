@@ -2375,163 +2375,194 @@ class _BusinessCard extends StatelessWidget {
     required this.onTap,
   });
 
+  Color _avatarColor(String seed) {
+    if (seed.isEmpty) return WaUi.avatarPalette.last;
+    return WaUi.avatarPalette[seed.hashCode.abs() % WaUi.avatarPalette.length];
+  }
+
+  String _initials(String name) {
+    final parts = name
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .toList();
+    if (parts.isEmpty) return '?';
+    if (parts.length == 1) {
+      final w = parts.first;
+      return w.length >= 2 ? w.substring(0, 2).toUpperCase() : w.toUpperCase();
+    }
+    return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final photo = business.coverPhoto?.isNotEmpty == true
-        ? business.coverPhoto
-        : business.profilePhoto;
+    final photo = business.profilePhoto?.isNotEmpty == true
+        ? business.profilePhoto
+        : business.coverPhoto;
+    final hasPhoto = photo != null && photo.isNotEmpty;
     final categoryLabel = business.businessCategory.isEmpty
         ? ''
         : businessCategoryLabel(context, business.businessCategory);
+    final displayName = business.displayName;
+    final username = business.username.trim();
+    final avatarBg = _avatarColor(displayName);
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: colors.surface,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: colors.border.withValues(alpha: 0.85)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(18),
         clipBehavior: Clip.antiAlias,
-        child: Row(
-          children: [
-            // Square image
-            SizedBox(
-              width: 90,
-              height: 90,
-              child: Container(
-                color: const Color(0xFFF4F4F5),
-                child: _exploreImage(
-                  photo,
-                  Icons.storefront_outlined,
-                  colors,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            business.displayName,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 14.5,
-                              color: Color(0xFF18181B),
-                            ),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(18),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 34,
+                  backgroundColor: avatarBg,
+                  backgroundImage: hasPhoto ? NetworkImage(photo) : null,
+                  child: hasPhoto
+                      ? null
+                      : Text(
+                          _initials(displayName),
+                          style: WaUi.avatarInitial.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 17,
                           ),
                         ),
-                        if (business.distanceKm != null) ...[
-                          const SizedBox(width: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 7,
-                              vertical: 3,
-                            ),
-                            decoration: BoxDecoration(
-                              color: colors.accent.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              '${business.distanceKm!.toStringAsFixed(1)} km',
-                              style: TextStyle(
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.w700,
-                                color: colors.accent,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: displayName,
+                                    style: WaUi.listTitle.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: colors.primaryText,
+                                    ),
+                                  ),
+                                  if (username.isNotEmpty)
+                                    TextSpan(
+                                      text: ' (@$username)',
+                                      style: WaUi.listSubtitle.copyWith(
+                                        color: colors.secondaryText,
+                                      ),
+                                    ),
+                                ],
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.chevron_right_rounded,
+                            size: 20,
+                            color: colors.mutedText,
                           ),
                         ],
-                      ],
-                    ),
-                    if (categoryLabel.isNotEmpty) ...[
-                      const SizedBox(height: 3),
-                      Text(
-                        categoryLabel,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF71717A),
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w500,
-                        ),
                       ),
-                    ],
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        // Stars
-                        if (Constants.reviewsEnabled &&
-                            business.reviewCount > 0) ...[
-                          const Icon(
-                            Icons.star_rounded,
-                            size: 13,
-                            color: Color(0xFFF59E0B),
+                      if (categoryLabel.isNotEmpty ||
+                          business.distanceKm != null) ...[
+                        const SizedBox(height: 3),
+                        Text(
+                          [
+                            if (categoryLabel.isNotEmpty) categoryLabel,
+                            if (business.distanceKm != null)
+                              '${business.distanceKm!.toStringAsFixed(1)} km',
+                          ].join(' · '),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: WaUi.caption.copyWith(
+                            color: colors.secondaryText,
                           ),
-                          const SizedBox(width: 3),
-                          Text(
-                            '${business.avgRating.toStringAsFixed(1)} (${business.reviewCount})',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 11.5,
-                              color: Color(0xFF18181B),
-                            ),
+                        ),
+                      ],
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Constants.reviewsEnabled
+                                ? (business.reviewCount > 0
+                                    ? Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.star_rounded,
+                                            size: 15,
+                                            color: Color(0xFFF5A623),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Flexible(
+                                            child: Text(
+                                              '${business.avgRating.toStringAsFixed(1)} (${business.reviewCount})',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: WaUi.caption.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                                color: colors.primaryText,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Text(
+                                        'New Store',
+                                        style: WaUi.caption.copyWith(
+                                          color: colors.secondaryText,
+                                        ),
+                                      ))
+                                : const SizedBox.shrink(),
                           ),
-                        ] else if (!Constants.reviewsEnabled)
-                          const SizedBox.shrink()
-                        else
-                          Text(
-                            'New Store',
-                            style: TextStyle(
-                              fontSize: 11.5,
-                              fontWeight: FontWeight.w500,
-                              color: colors.secondaryText,
-                            ),
-                          ),
-                        const Spacer(),
-                        // Visit button
-                        GestureDetector(
-                          onTap: onTap,
-                          child: Container(
+                          const SizedBox(width: 8),
+                          Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 14,
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF18181B),
-                              borderRadius: BorderRadius.circular(24),
+                              color: colors.primaryText,
+                              borderRadius: BorderRadius.circular(100),
                             ),
-                            child: const Text(
+                            child: Text(
                               'Visit',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
+                              style: WaUi.label.copyWith(
                                 fontWeight: FontWeight.w700,
+                                color: colors.surface,
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -2888,50 +2919,47 @@ class _SkeletonBusinessCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: borderColor.withValues(alpha: 0.6)),
       ),
-      clipBehavior: Clip.antiAlias,
       child: const Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ShimmerBox(width: 90, height: 90, borderRadius: 0),
+          ShimmerBox(width: 68, height: 68, borderRadius: 34),
+          SizedBox(width: 12),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(14, 12, 14, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: ShimmerBox(
-                            width: 120,
-                            height: 14,
-                            borderRadius: 6,
-                          ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: ShimmerBox(
+                          width: 140,
+                          height: 14,
+                          borderRadius: 6,
                         ),
                       ),
-                      ShimmerBox(width: 44, height: 18, borderRadius: 10),
-                    ],
-                  ),
-                  SizedBox(height: 6),
-                  ShimmerBox(width: 88, height: 11, borderRadius: 6),
-                  SizedBox(height: 6),
-                  ShimmerBox(width: 140, height: 11, borderRadius: 6),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      ShimmerBox(width: 56, height: 12, borderRadius: 6),
-                      Spacer(),
-                      ShimmerBox(width: 58, height: 28, borderRadius: 24),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    ShimmerBox(width: 18, height: 18, borderRadius: 6),
+                  ],
+                ),
+                SizedBox(height: 6),
+                ShimmerBox(width: 100, height: 11, borderRadius: 6),
+                SizedBox(height: 12),
+                Row(
+                  children: [
+                    ShimmerBox(width: 72, height: 12, borderRadius: 6),
+                    Spacer(),
+                    ShimmerBox(width: 58, height: 28, borderRadius: 24),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

@@ -593,7 +593,7 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
                           child: ElevatedButton(
                             onPressed: () => Navigator.pop(ctx, true),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF10A375),
+                              backgroundColor: Colors.black,
                               foregroundColor: Colors.white,
                               elevation: 0,
                               shape: RoundedRectangleBorder(

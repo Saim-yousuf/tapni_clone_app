@@ -5,6 +5,8 @@ import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class OrderDetailScreen extends StatefulWidget {
@@ -197,24 +199,29 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(context.l10n.total,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    height: WaPrimaryButton.height,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: WaUi.buttonDark,
+                        borderRadius: BorderRadius.circular(WaUi.radiusPill),
                       ),
-                      Text(
-                        formatMoney(
-                          _order!.totalAmount,
-                          currency: _order!.currency,
-                        ),
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      child: Center(
+                        child: Text(
+                          '${context.l10n.total} (${formatMoney(
+                            _order!.totalAmount,
+                            currency: _order!.currency,
+                          )})',
+                          textAlign: TextAlign.center,
+                          style: WaUi.button.copyWith(
+                            color: Colors.white,
+                            height: 1.0,
+                          ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
                   if (widget.isBusinessView && _order!.status == OrderStatus.pending) ...[
                     SizedBox(height: 28),
