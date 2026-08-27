@@ -130,7 +130,7 @@ class CurvedNavItem {
   final Color unselectedColor;
 }
 
-class _NavIconButton extends StatelessWidget {
+class _NavIconButton extends StatefulWidget {
   const _NavIconButton({
     required this.item,
     required this.selected,
@@ -142,52 +142,156 @@ class _NavIconButton extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    const duration = Duration(milliseconds: 220);
-    final visuallySelected =
-        selected &&
+  State<_NavIconButton> createState() => _NavIconButtonState();
+}
+
+/// WhatsApp Business–style tab select: pill pops in, icon bounces once.
+class _NavIconButtonState extends State<_NavIconButton>
+    with SingleTickerProviderStateMixin {
+  static const _duration = Duration(milliseconds: 280);
+
+  late final AnimationController _controller;
+  late final Animation<double> _pillScale;
+  late final Animation<double> _iconScale;
+
+  bool get _visuallySelected {
+    final item = widget.item;
+    return widget.selected &&
         (item.selectedIcon != item.icon ||
             item.selectedColor != item.unselectedColor);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: _duration);
+    _pillScale = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween(begin: 0.55, end: 1.08)
+            .chain(CurveTween(curve: Curves.easeOutCubic)),
+        weight: 65,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 1.08, end: 1.0)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 35,
+      ),
+    ]).animate(_controller);
+    _iconScale = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween(begin: 0.88, end: 1.14)
+            .chain(CurveTween(curve: Curves.easeOutCubic)),
+        weight: 55,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 1.14, end: 1.0)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 45,
+      ),
+    ]).animate(_controller);
+
+    if (_visuallySelected) {
+      _controller.value = 1.0;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _NavIconButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final wasSelected =
+        oldWidget.selected &&
+        (oldWidget.item.selectedIcon != oldWidget.item.icon ||
+            oldWidget.item.selectedColor != oldWidget.item.unselectedColor);
+    final isSelected = _visuallySelected;
+    if (isSelected && !wasSelected) {
+      _controller.forward(from: 0);
+    } else if (!isSelected && wasSelected) {
+      _controller.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final item = widget.item;
+    final visuallySelected = _visuallySelected;
     final icon = visuallySelected ? item.selectedIcon : item.icon;
+    final pillColor = Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF3A3A3C)
+        : WaUi.navPill;
 
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AnimatedContainer(
-              duration: duration,
-              curve: Curves.easeOutCubic,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-              decoration: BoxDecoration(
-                color: visuallySelected
-                    ? (Theme.of(context).brightness == Brightness.dark
-                        ? const Color(0xFF3A3A3C)
-                        : WaUi.navPill)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: AnimatedSwitcher(
-                duration: duration,
-                switchInCurve: Curves.easeOut,
-                switchOutCurve: Curves.easeIn,
-                transitionBuilder: (child, animation) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-                child: Icon(
-                  icon,
-                  key: ValueKey(icon),
-                  size: 24,
-                  color: item.selectedColor,
-                ),
-              ),
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) {
+                final animatingIn =
+                    visuallySelected && !_controller.isDismissed;
+                final pillScale =
+                    animatingIn ? _pillScale.value.clamp(0.0, 1.2) : 1.0;
+                final iconScale = animatingIn ? _iconScale.value : 1.0;
+                final showPill = visuallySelected;
+
+                return Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 5,
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Pill scales independently so icon bounce isn't compounded.
+                      if (showPill)
+                        Transform.scale(
+                          scale: pillScale,
+                          child: Container(
+                            width: 56,
+                            height: 32,
+                            decoration: BoxDecoration(
+                              color: pillColor,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      Transform.scale(
+                        scale: iconScale,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 180),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
+                          transitionBuilder: (child, animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          child: Icon(
+                            icon,
+                            key: ValueKey(icon),
+                            size: 24,
+                            color: item.selectedColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 4),
             AnimatedDefaultTextStyle(
-              duration: duration,
+              duration: _duration,
               curve: Curves.easeOut,
               // Rebuild via AppFonts — copyWith(fontWeight) is a no-op with Google Fonts.
               style: AppFonts.titleStyle(
