@@ -317,15 +317,22 @@ class LeadsProvider extends ChangeNotifier {
 
   // ── Delete contact ───────────────────────────────────────────────────────────
   Future<bool> deleteLead(String id) async {
+    final index = _leads.indexWhere((l) => l.id == id);
+    final Lead? removed = index >= 0 ? _leads.removeAt(index) : null;
+    if (removed != null) notifyListeners();
+
     try {
       final res = await _authRepo.deleteContact(id);
-      if (res.success) {
-        _leads.removeWhere((l) => l.id == id);
-        notifyListeners();
-        return true;
-      }
+      if (res.success) return true;
     } catch (e) {
       debugPrint("Error deleting lead: $e");
+    }
+
+    // API failed — put the contact back.
+    if (removed != null) {
+      final insertAt = index.clamp(0, _leads.length);
+      _leads.insert(insertAt, removed);
+      notifyListeners();
     }
     return false;
   }

@@ -1119,92 +1119,19 @@ class _LeadsScreenState extends State<LeadsScreen> {
     );
   }
 
-  // ── Lead Options (Assign Category / Delete) ──────────────────────────────
-  void _showLeadOptions(
-    BuildContext context,
-    Lead lead,
-    LeadsProvider provider,
-  ) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 12),
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              SizedBox(height: 16),
-              Text(
-                context.l10n.optionsForName(lead.name),
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16),
-              ListTile(
-                leading: Icon(Icons.label_outline),
-                title: Text(ctx.l10n.assignCategory),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _showAssignCategoryDialog(context, lead, provider);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.delete_outline, color: Colors.red),
-                title: Text(
-                  context.l10n.deleteContact,
-                  style: TextStyle(color: Colors.red),
-                ),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _confirmDeleteLead(context, lead, provider);
-                },
-              ),
-              SizedBox(height: 16),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _confirmDeleteLead(
-    BuildContext context,
-    Lead lead,
-    LeadsProvider provider,
-  ) {
-    showDialog(
+  Future<bool> _confirmDeleteLead(BuildContext context, Lead lead) async {
+    final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(context.l10n.deleteContact),
         content: Text(context.l10n.removeFromContacts(lead.name)),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
+            onPressed: () => Navigator.of(ctx).pop(false),
             child: Text(context.l10n.cancel),
           ),
           TextButton(
-            onPressed: () async {
-              Navigator.of(ctx).pop();
-              bool success = await provider.deleteLead(lead.id);
-              if (success && mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(context.l10n.contactRemoved(lead.name)),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              }
-            },
+            onPressed: () => Navigator.of(ctx).pop(true),
             child: Text(
               context.l10n.delete,
               style: TextStyle(color: Colors.red),
@@ -1213,6 +1140,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
         ],
       ),
     );
+    return confirmed == true;
   }
 
   void _showAssignCategoryDialog(
@@ -1384,32 +1312,109 @@ class _LeadsScreenState extends State<LeadsScreen> {
   ) {
     final displayName = lead.displayName;
     final photoUrl = lead.displayProfilePhoto;
+    final l10n = context.l10n;
 
-    return WaChatListTile(
-      name: displayName,
-      preview: _contactPreview(lead),
-      date: waFormatContactDate(lead.timestamp, context),
-      imageUrl: photoUrl,
-      initial: displayName,
-      avatarColor: waAvatarColorFor(displayName),
-      categoryColor: lead.category != null
-          ? _parseColor(lead.category!.color)
-          : null,
-      highlightDate: false,
-      previewIcon: _previewIcon(lead),
-      showDivider: false,
-      onTap: () {
-        if (lead.contactUser != null) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => ScannedProfileScreen(user: lead.contactUser),
-            ),
-          );
-        } else {
-          _showManageContactSheet(context, lead, provider);
+    return Dismissible(
+      key: ValueKey('contact_${lead.id}'),
+      direction: DismissDirection.horizontal,
+      // Swipe right → assign (left action); swipe left → delete (right action).
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.startToEnd) {
+          _showAssignCategoryDialog(context, lead, provider);
+          return false;
         }
+        return _confirmDeleteLead(context, lead);
       },
-      onLongPress: () => _showLeadOptions(context, lead, provider),
+      onDismissed: (_) async {
+        final success = await provider.deleteLead(lead.id);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              success
+                  ? l10n.contactRemoved(lead.name)
+                  : l10n.somethingWentWrong,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      },
+      background: _swipeActionBackground(
+        alignment: Alignment.centerLeft,
+        color: WaUi.buttonDark,
+        icon: Icons.label_outline,
+        label: l10n.assignCategory,
+      ),
+      secondaryBackground: _swipeActionBackground(
+        alignment: Alignment.centerRight,
+        color: Colors.red,
+        icon: Icons.delete_outline,
+        label: l10n.deleteContact,
+      ),
+      child: WaChatListTile(
+        name: displayName,
+        preview: _contactPreview(lead),
+        date: waFormatContactDate(lead.timestamp, context),
+        imageUrl: photoUrl,
+        initial: displayName,
+        avatarColor: waAvatarColorFor(displayName),
+        categoryColor: lead.category != null
+            ? _parseColor(lead.category!.color)
+            : null,
+        highlightDate: false,
+        previewIcon: _previewIcon(lead),
+        showDivider: false,
+        onTap: () {
+          if (lead.contactUser != null) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ScannedProfileScreen(user: lead.contactUser),
+              ),
+            );
+          } else {
+            _showManageContactSheet(context, lead, provider);
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _swipeActionBackground({
+    required Alignment alignment,
+    required Color color,
+    required IconData icon,
+    required String label,
+  }) {
+    return Container(
+      color: color,
+      alignment: alignment,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: alignment == Alignment.centerLeft
+            ? [
+                Icon(icon, color: Colors.white),
+                const SizedBox(width: 8),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ]
+            : [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(icon, color: Colors.white),
+              ],
+      ),
     );
   }
 }
