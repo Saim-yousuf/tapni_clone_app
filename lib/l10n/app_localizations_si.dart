@@ -3913,6 +3913,54 @@ class AppLocalizationsSi extends AppLocalizations {
   @override
   String get pleaseCheckYourConnection =>
       'කරුණාකර ඔබගේ සම්බන්ධතාවය පරීක්ෂා කරන්න';
+
+  @override
+  String get attendanceReport => 'Attendance Report';
+
+  @override
+  String get attendanceReportSubtitle =>
+      'Days present, hours worked & off days';
+
+  @override
+  String get viewFullReport => 'View full report';
+
+  @override
+  String get totalHours => 'Total Hours';
+
+  @override
+  String get workingDays => 'Working Days';
+
+  @override
+  String get offDays => 'Off Days';
+
+  @override
+  String get dailyBreakdown => 'Attendance Calendar';
+
+  @override
+  String get avgHoursPerDay => 'Avg. hours/day';
+
+  @override
+  String get statusWeekend => 'Off';
+
+  @override
+  String get statusUpcoming => 'Upcoming';
+
+  @override
+  String get noCheckOutYet => 'No check-out yet';
+
+  @override
+  String get noAttendanceDataForMonth => 'No attendance data for this month';
+
+  @override
+  String get scheduledOffDay => 'Scheduled off day';
+
+  @override
+  String get attendanceRate => 'Rate';
+
+  @override
+  String hoursMinutesFormat(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
 }
 
 /// The translations for Sinhala Sinhalese, as used in Sri Lanka (`si_LK`).

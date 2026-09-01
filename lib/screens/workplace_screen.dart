@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
+import 'package:tapni_app/screens/attendance/attendance_report_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/mark_attendance_screen.dart';
@@ -68,6 +69,18 @@ class _WorkplaceScreenState extends State<WorkplaceScreen> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => const MarkAttendanceScreen(),
+                ),
+              );
+            },
+          ),
+          WaToolsListTile(
+            icon: Icons.assessment_outlined,
+            title: context.l10n.attendanceReport,
+            subtitle: context.l10n.attendanceReportSubtitle,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const AttendanceReportScreen(),
                 ),
               );
             },

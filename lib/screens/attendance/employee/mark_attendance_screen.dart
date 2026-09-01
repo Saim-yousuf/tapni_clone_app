@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
+import 'package:tapni_app/screens/attendance/attendance_report_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
 import 'package:tapni_app/utils/location_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -390,50 +391,88 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
   Widget _buildSummaryCard() {
     final summary = _summary!;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF6F7F8),
-        borderRadius: BorderRadius.circular(AttendanceUi.radius),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(context.l10n.thisMonth, style: AttendanceUi.sectionTitle),
-          const SizedBox(height: 2),
-          Text(
-            DateFormat(context.l10n.mmmmYyyy).format(DateTime.now()),
-            style: AttendanceUi.bodyMuted,
-          ),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              _miniStat(context.l10n.present, summary.present, WaUi.navGreen),
-              _miniStat(
-                context.l10n.absent,
-                summary.absent,
-                const Color(0xFFC62828),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AttendanceReportScreen(
+                employee: _selectedEmployer,
               ),
-              _miniStat(
-                context.l10n.partial,
-                summary.partial,
-                const Color(0xFFC46A00),
+            ),
+          );
+        },
+        borderRadius: BorderRadius.circular(WaUi.radiusLg),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: AttendanceUi.softCard,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  AttendanceUi.softIconBox(
+                    icon: Icons.assessment_outlined,
+                    bg: WaUi.chipBg,
+                    fg: WaUi.navGreen,
+                    size: 40,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          context.l10n.thisMonth,
+                          style: WaUi.listTitle,
+                        ),
+                        Text(
+                          DateFormat(context.l10n.mmmmYyyy)
+                              .format(DateTime.now()),
+                          style: WaUi.caption,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    context.l10n.viewFullReport,
+                    style: WaUi.caption.copyWith(
+                      color: WaUi.navGreen,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    size: 18,
+                    color: WaUi.navGreen,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  AttendanceUi.softStatTile(
+                    label: context.l10n.present,
+                    value: '${summary.present}',
+                    tint: WaUi.navGreen,
+                  ),
+                  AttendanceUi.softStatTile(
+                    label: context.l10n.absent,
+                    value: '${summary.absent}',
+                    tint: const Color(0xFFE57373),
+                  ),
+                  AttendanceUi.softStatTile(
+                    label: context.l10n.partial,
+                    value: '${summary.partial}',
+                    tint: const Color(0xFFFFB74D),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _miniStat(String label, int value, Color color) {
-    return Expanded(
-      child: Column(
-        children: [
-          Text('$value', style: AttendanceUi.statNumber.copyWith(color: color)),
-          const SizedBox(height: 4),
-          Text(label, style: AttendanceUi.statLabel),
-        ],
+        ),
       ),
     );
   }

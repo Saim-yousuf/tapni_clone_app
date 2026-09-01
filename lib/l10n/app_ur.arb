@@ -940,5 +940,20 @@
     }
   },
   "noInternetConnection": "انٹرنیٹ کنکشن نہیں ہے۔",
-  "pleaseCheckYourConnection": "براہ کرم اپنا کنکشن چیک کریں۔"
+  "pleaseCheckYourConnection": "براہ کرم اپنا کنکشن چیک کریں۔",
+  "attendanceReport": "حاضری رپورٹ",
+  "attendanceReportSubtitle": "حاضر دن، کام کے گھنٹے اور چھٹی کے دن",
+  "viewFullReport": "مکمل رپورٹ دیکھیں",
+  "totalHours": "کل گھنٹے",
+  "workingDays": "کام کے دن",
+  "offDays": "چھٹی کے دن",
+  "dailyBreakdown": "حاضری کیلنڈر",
+  "avgHoursPerDay": "اوسط گھنٹے/دن",
+  "statusWeekend": "چھٹی",
+  "statusUpcoming": "آنے والا",
+  "noCheckOutYet": "ابھی چیک آؤٹ نہیں ہوا",
+  "noAttendanceDataForMonth": "اس مہینے کے لیے کوئی حاضری ڈیٹا نہیں",
+  "scheduledOffDay": "طے شدہ چھٹی",
+  "attendanceRate": "شرح",
+  "hoursMinutesFormat": "{hours} گھنٹے {minutes} منٹ"
 }

@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
+import 'package:tapni_app/screens/attendance/attendance_report_screen.dart';
 import 'package:tapni_app/screens/attendance/business/employee_list_screen.dart';
-import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/custom_app_button.dart';
@@ -97,6 +97,72 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
     _load();
   }
 
+  Future<void> _openEmployeeReport(AttendanceEmployee employee) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AttendanceReportScreen(
+          employee: employee,
+          isBusinessView: true,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showEmployeeReportPicker() async {
+    if (_employees.length == 1) {
+      await _openEmployeeReport(_employees.first);
+      return;
+    }
+
+    final picked = await showModalBottomSheet<AttendanceEmployee>(
+      context: context,
+      builder: (ctx) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: Text(
+                  context.l10n.attendanceReport,
+                  style: AttendanceUi.sectionTitle,
+                ),
+              ),
+              ..._employees.map(
+                (employee) => ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: employee.employee.profilePhoto.isNotEmpty
+                        ? NetworkImage(employee.employee.profilePhoto)
+                        : null,
+                    child: employee.employee.profilePhoto.isEmpty
+                        ? Text(
+                            employee.employee.displayName.isNotEmpty
+                                ? employee.employee.displayName[0]
+                                    .toUpperCase()
+                                : '?',
+                          )
+                        : null,
+                  ),
+                  title: Text(employee.employee.displayName),
+                  subtitle: Text(
+                    '${employee.shiftStart} - ${employee.shiftEnd}',
+                  ),
+                  onTap: () => Navigator.pop(ctx, employee),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (picked != null && mounted) {
+      await _openEmployeeReport(picked);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final presentCount = _todayRecords
@@ -113,6 +179,13 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
       appBar: AttendanceUi.appBar(
         context.l10n.attendance,
         actions: [
+          IconButton(
+            tooltip: context.l10n.attendanceReport,
+            icon: const Icon(Icons.assessment_outlined),
+            onPressed: _employees.isEmpty
+                ? null
+                : () => _showEmployeeReportPicker(),
+          ),
           IconButton(
             tooltip: context.l10n.manageEmployees,
             icon: const Icon(Icons.people_outline_rounded),
@@ -174,17 +247,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                                 statusLabel: _statusLabel(statusKey),
                                 statusColor: _statusColor(statusKey),
                                 checkInTime: record?.checkInTime,
-                                onTap: () async {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => EmployeeSettingsScreen(
-                                        employee: employee,
-                                      ),
-                                    ),
-                                  );
-                                  _load();
-                                },
+                                onTap: () => _openEmployeeReport(employee),
                               ),
                             );
                           }),

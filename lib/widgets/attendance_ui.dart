@@ -154,4 +154,110 @@ class AttendanceUi {
       ),
     );
   }
+
+  /// Soft elevated card — white on grey scaffold, no harsh borders.
+  static BoxDecoration get softCard => BoxDecoration(
+        color: WaUi.surface,
+        borderRadius: BorderRadius.circular(WaUi.radiusLg),
+        boxShadow: [
+          BoxShadow(
+            color: WaUi.primaryText.withValues(alpha: 0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      );
+
+  /// Gentle tinted surface for stat tiles.
+  static BoxDecoration softTintBox(Color tint) => BoxDecoration(
+        color: tint.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(WaUi.radiusMd),
+      );
+
+  /// Rounded status chip with soft background tint.
+  static Widget statusPill({
+    required String label,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(WaUi.radiusPill),
+      ),
+      child: Text(
+        label,
+        style: WaUi.label.copyWith(
+          color: color,
+          fontWeight: FontWeight.w600,
+          fontSize: 11,
+        ),
+      ),
+    );
+  }
+
+  /// Compact stat tile for report grids.
+  static Widget softStatTile({
+    required String label,
+    required String value,
+    required Color tint,
+    IconData? icon,
+  }) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 6),
+        decoration: softTintBox(tint),
+        child: Column(
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 18, color: tint),
+              const SizedBox(height: 6),
+            ],
+            Text(
+              value,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: WaUi.toolsTitleOf(
+                size: 20,
+                weight: FontWeight.w600,
+                color: tint,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: statLabel.copyWith(fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Icon in soft rounded square (tools / promo style).
+  static Widget softIconBox({
+    required IconData icon,
+    Color? bg,
+    Color? fg,
+    double size = 44,
+  }) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: bg ?? WaUi.promoIconBg,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(
+        icon,
+        color: fg ?? WaUi.promoIconFg,
+        size: size * 0.52,
+      ),
+    );
+  }
 }

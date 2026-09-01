@@ -7422,6 +7422,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please check your connection'**
   String get pleaseCheckYourConnection;
+
+  /// No description provided for @attendanceReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Report'**
+  String get attendanceReport;
+
+  /// No description provided for @attendanceReportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Days present, hours worked & off days'**
+  String get attendanceReportSubtitle;
+
+  /// No description provided for @viewFullReport.
+  ///
+  /// In en, this message translates to:
+  /// **'View full report'**
+  String get viewFullReport;
+
+  /// No description provided for @totalHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Hours'**
+  String get totalHours;
+
+  /// No description provided for @workingDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Working Days'**
+  String get workingDays;
+
+  /// No description provided for @offDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Off Days'**
+  String get offDays;
+
+  /// No description provided for @dailyBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Calendar'**
+  String get dailyBreakdown;
+
+  /// No description provided for @avgHoursPerDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg. hours/day'**
+  String get avgHoursPerDay;
+
+  /// No description provided for @statusWeekend.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get statusWeekend;
+
+  /// No description provided for @statusUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get statusUpcoming;
+
+  /// No description provided for @noCheckOutYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No check-out yet'**
+  String get noCheckOutYet;
+
+  /// No description provided for @noAttendanceDataForMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'No attendance data for this month'**
+  String get noAttendanceDataForMonth;
+
+  /// No description provided for @scheduledOffDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled off day'**
+  String get scheduledOffDay;
+
+  /// No description provided for @attendanceRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate'**
+  String get attendanceRate;
+
+  /// No description provided for @hoursMinutesFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m'**
+  String hoursMinutesFormat(int hours, int minutes);
 }
 
 class _AppLocalizationsDelegate

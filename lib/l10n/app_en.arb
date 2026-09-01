@@ -1679,5 +1679,30 @@
     }
   },
   "noInternetConnection": "No internet connection",
-  "pleaseCheckYourConnection": "Please check your connection"
+  "pleaseCheckYourConnection": "Please check your connection",
+  "attendanceReport": "Attendance Report",
+  "attendanceReportSubtitle": "Days present, hours worked & off days",
+  "viewFullReport": "View full report",
+  "totalHours": "Total Hours",
+  "workingDays": "Working Days",
+  "offDays": "Off Days",
+  "dailyBreakdown": "Attendance Calendar",
+  "avgHoursPerDay": "Avg. hours/day",
+  "statusWeekend": "Off",
+  "statusUpcoming": "Upcoming",
+  "noCheckOutYet": "No check-out yet",
+  "noAttendanceDataForMonth": "No attendance data for this month",
+  "scheduledOffDay": "Scheduled off day",
+  "attendanceRate": "Rate",
+  "hoursMinutesFormat": "{hours}h {minutes}m",
+  "@hoursMinutesFormat": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

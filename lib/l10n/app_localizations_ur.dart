@@ -3908,4 +3908,51 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get pleaseCheckYourConnection => 'براہ کرم اپنا کنکشن چیک کریں۔';
+
+  @override
+  String get attendanceReport => 'حاضری رپورٹ';
+
+  @override
+  String get attendanceReportSubtitle => 'حاضر دن، کام کے گھنٹے اور چھٹی کے دن';
+
+  @override
+  String get viewFullReport => 'مکمل رپورٹ دیکھیں';
+
+  @override
+  String get totalHours => 'کل گھنٹے';
+
+  @override
+  String get workingDays => 'کام کے دن';
+
+  @override
+  String get offDays => 'چھٹی کے دن';
+
+  @override
+  String get dailyBreakdown => 'حاضری کیلنڈر';
+
+  @override
+  String get avgHoursPerDay => 'اوسط گھنٹے/دن';
+
+  @override
+  String get statusWeekend => 'چھٹی';
+
+  @override
+  String get statusUpcoming => 'آنے والا';
+
+  @override
+  String get noCheckOutYet => 'ابھی چیک آؤٹ نہیں ہوا';
+
+  @override
+  String get noAttendanceDataForMonth => 'اس مہینے کے لیے کوئی حاضری ڈیٹا نہیں';
+
+  @override
+  String get scheduledOffDay => 'طے شدہ چھٹی';
+
+  @override
+  String get attendanceRate => 'شرح';
+
+  @override
+  String hoursMinutesFormat(int hours, int minutes) {
+    return '$hours گھنٹے $minutes منٹ';
+  }
 }
