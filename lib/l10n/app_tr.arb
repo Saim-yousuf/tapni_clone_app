@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "İnternet bağlantısı yok",
+  "pleaseCheckYourConnection": "Lütfen bağlantınızı kontrol edin"
 }

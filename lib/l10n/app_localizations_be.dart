@@ -3911,6 +3911,12 @@ class AppLocalizationsBe extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Няма падключэння да інтэрнэту';
+
+  @override
+  String get pleaseCheckYourConnection => 'Праверце падключэнне';
 }
 
 /// The translations for Belarusian, as used in Belarus (`be_BY`).
@@ -6367,4 +6373,10 @@ class AppLocalizationsBeBy extends AppLocalizationsBe {
   String codeWithValue(String code) {
     return 'Код: $code';
   }
+
+  @override
+  String get noInternetConnection => 'Няма падключэння да інтэрнэту';
+
+  @override
+  String get pleaseCheckYourConnection => 'Праверце падключэнне';
 }

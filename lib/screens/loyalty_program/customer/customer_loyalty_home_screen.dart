@@ -5,8 +5,10 @@ import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_program_details_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
+import 'package:tapni_app/utils/api_error_messages.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/connection_error_state.dart';
 import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 import 'package:tapni_app/widgets/reward_card_stack_carousel.dart';
 import 'package:tapni_app/widgets/wa_chats_widgets.dart';
@@ -64,7 +66,10 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
 
     setState(() {
       _isLoading = false;
-      _errorMessage = res.message ?? context.l10n.failedToLoadPrograms;
+      _errorMessage = ApiErrorMessages.sanitize(
+        res.message,
+        fallback: context.l10n.failedToLoadPrograms,
+      );
     });
   }
 
@@ -364,35 +369,9 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen> {
 
   Widget _buildErrorView() {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              _errorMessage!,
-              textAlign: TextAlign.center,
-              style: WaUi.body,
-            ),
-            const SizedBox(height: 16),
-            TextButton(
-              onPressed: _loadEnrollments,
-              style: TextButton.styleFrom(
-                backgroundColor: WaUi.buttonDark,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(WaUi.radiusPill),
-                ),
-                elevation: 0,
-              ),
-              child: Text(context.l10n.tryAgain, style: WaUi.promoButton),
-            ),
-          ],
-        ),
+      child: ConnectionErrorState(
+        message: _errorMessage!,
+        onRetry: _loadEnrollments,
       ),
     );
   }

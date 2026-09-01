@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "ইন্টারনেট সংযোগ নেই",
+  "pleaseCheckYourConnection": "আপনার সংযোগ পরীক্ষা করুন"
 }

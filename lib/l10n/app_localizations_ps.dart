@@ -3893,6 +3893,12 @@ class AppLocalizationsPs extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'د انټرنیټ پیوستون نشته';
+
+  @override
+  String get pleaseCheckYourConnection => 'مهرباني وکړئ خپل پیوستون وګورئ';
 }
 
 /// The translations for Pushto Pashto, as used in Afghanistan (`ps_AF`).
@@ -6331,4 +6337,10 @@ class AppLocalizationsPsAf extends AppLocalizationsPs {
   String codeWithValue(String code) {
     return 'کوډ: $code';
   }
+
+  @override
+  String get noInternetConnection => 'د انټرنیټ پیوستون نشته';
+
+  @override
+  String get pleaseCheckYourConnection => 'مهرباني وکړئ خپل پیوستون وګورئ';
 }

@@ -3905,4 +3905,10 @@ class AppLocalizationsSw extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Hakuna muunganisho wa intaneti';
+
+  @override
+  String get pleaseCheckYourConnection => 'Tafadhali angalia muunganisho wako';
 }

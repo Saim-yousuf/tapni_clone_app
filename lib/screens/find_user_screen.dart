@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:tapni_app/utils/api_error_messages.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -108,7 +109,10 @@ class _FindUserScreenState extends State<FindUserScreen> {
       setState(() {
         _isSearching = false;
         _results = [];
-        _errorMessage = res.message ?? context.l10n.searchFailedTryAgain;
+        _errorMessage = ApiErrorMessages.sanitize(
+          res.message,
+          fallback: context.l10n.searchFailedTryAgain,
+        );
       });
       return;
     }

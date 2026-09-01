@@ -3919,4 +3919,11 @@ class AppLocalizationsMl extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'ഇൻ്റർനെറ്റ് കണക്ഷനില്ല';
+
+  @override
+  String get pleaseCheckYourConnection =>
+      'ദയവായി നിങ്ങളുടെ കണക്ഷൻ പരിശോധിക്കുക';
 }

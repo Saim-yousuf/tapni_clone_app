@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕವಿಲ್ಲ",
+  "pleaseCheckYourConnection": "ದಯವಿಟ್ಟು ನಿಮ್ಮ ಸಂಪರ್ಕವನ್ನು ಪರಿಶೀಲಿಸಿ"
 }

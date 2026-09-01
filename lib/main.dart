@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
+import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/providers/explore_cart_provider.dart';
 import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -19,8 +20,9 @@ import 'package:tapni_app/utils/api_endpoint.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/services/push_notification_service.dart';
+import 'package:tapni_app/widgets/offline_banner.dart';
 
- void main() async {
+void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // Hold native splash until first frame / route is ready (no white flash).
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -39,9 +41,9 @@ import 'package:tapni_app/services/push_notification_service.dart';
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => InvitationProvider()),
         ChangeNotifierProvider(create: (_) => ExploreCartProvider()),
+        ChangeNotifierProvider(create: (_) => ConnectivityProvider()),
       ],
-      child: const TapniApp(),
-    ),
+      child: const TapniApp(),    ),
   );
   // FCM setup must not block cold start / splash.
   unawaited(PushNotificationService.initialize());
@@ -74,8 +76,8 @@ class TapniApp extends StatelessWidget {
         title: 'BarQody - Digital Business Card',
         debugShowCheckedModeBanner: false,
         navigatorKey: PushNotificationService.navigatorKey,
-        themeMode: themeProvider.themeMode,
-        theme: AppTheme.lightThemeFor(fontLocale),
+        navigatorObservers: [offlineBannerNavigatorObserver],
+        themeMode: themeProvider.themeMode,        theme: AppTheme.lightThemeFor(fontLocale),
         darkTheme: AppTheme.darkThemeFor(fontLocale),
         locale: localeProvider.locale,
         supportedLocales: AppLocalizationSetup.supportedLocales,
@@ -84,20 +86,22 @@ class TapniApp extends StatelessWidget {
         home: const SplashScreen(),
         builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
           value: AppTheme.systemUiFor(Theme.of(context).brightness),
-          child: ResponsiveWrapper.builder(
-            BouncingScrollWrapper.builder(context, child!),
-            maxWidth: double.infinity,
-            minWidth: 450,
-            defaultScale: true,
-            breakpoints: [
-              const ResponsiveBreakpoint.resize(450, name: MOBILE),
-              const ResponsiveBreakpoint.resize(800, name: TABLET),
-              const ResponsiveBreakpoint.resize(1000, name: TABLET),
-              const ResponsiveBreakpoint.autoScale(
-                double.infinity,
-                name: DESKTOP,
-              ),
-            ],
+          child: OfflineBannerHost(
+            child: ResponsiveWrapper.builder(
+              BouncingScrollWrapper.builder(context, child!),
+              maxWidth: double.infinity,
+              minWidth: 450,
+              defaultScale: true,
+              breakpoints: [
+                const ResponsiveBreakpoint.resize(450, name: MOBILE),
+                const ResponsiveBreakpoint.resize(800, name: TABLET),
+                const ResponsiveBreakpoint.resize(1000, name: TABLET),
+                const ResponsiveBreakpoint.autoScale(
+                  double.infinity,
+                  name: DESKTOP,
+                ),
+              ],
+            ),
           ),
         ),
       ),

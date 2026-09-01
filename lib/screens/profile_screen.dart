@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
+import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/progress_score_card.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
@@ -20,6 +22,7 @@ import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
+import 'package:tapni_app/widgets/connection_error_state.dart';
 import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
 import 'package:tapni_app/widgets/profile_empty_state.dart';
@@ -44,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _showProfileStrengthCard = false;
   bool _didResolveStrengthCard = false;
   bool _isReorderingLink = false;
+  int _lastReconnectTick = 0;
 
   @override
   void initState() {
@@ -60,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final provider = Provider.of<ProfileProvider>(context, listen: false);
-      if (!provider.hasFetchedProfile && !provider.isLoading) {
+      if (!provider.hasLoadedProfile && !provider.isLoading) {
         provider.fetchProfile();
       }
       if (provider.linkCatalog.isEmpty && !provider.isLinkCatalogLoading) {
@@ -112,6 +116,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (_bioController.text != profile.bio) {
       _bioController.text = profile.bio;
     }
+  }
+
+  void _exitEditMode(ProfileProvider profileProvider) {
+    final profile = profileProvider.profile;
+    _nameController.text = profile.name;
+    _bioController.text = profile.bio;
+    profileImageFile = null;
+    coverImageFile = null;
+    profileProvider.setEditingProfile(false);
+    profileProvider.onSaveTriggered = null;
   }
 
   void _enterEditMode(ProfileProvider profileProvider) {
@@ -166,11 +180,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final connectivity = context.watch<ConnectivityProvider>();
     final profile = profileProvider.profile;
     final isEditing = profileProvider.isEditingProfile;
-    final showShimmer = !profileProvider.hasFetchedProfile;
+    final showShimmer = !profileProvider.hasLoadedProfile &&
+        profileProvider.isLoading &&
+        connectivity.isOnline;
+    final showLoadError = !profileProvider.isLoading &&
+        !profileProvider.hasLoadedProfile &&
+        ((connectivity.initialized && connectivity.isOffline) ||
+            profileProvider.hasFetchedProfile);
 
-    if (!showShimmer) {
+    if (connectivity.reconnectTick != _lastReconnectTick) {
+      _lastReconnectTick = connectivity.reconnectTick;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final provider = Provider.of<ProfileProvider>(context, listen: false);
+        provider.fetchProfile();
+        provider.fetchLinkCatalog();
+      });
+    }
+
+    if (!showShimmer && !showLoadError) {
       _syncControllersFromProfile(profile);
       _maybeResolveStrengthCard(profileProvider);
     }
@@ -180,7 +211,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       profileProvider.onSaveTriggered = () => _saveProfile(profileProvider);
     }
 
-    return Scaffold(
+    return PopScope(
+      canPop: !isEditing,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop || !isEditing) return;
+        _exitEditMode(profileProvider);
+      },
+      child: Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: false,
@@ -203,10 +240,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SafeArea(
         child: showShimmer
             ? const ProfileScreenShimmer()
-            : isEditing
-                ? _buildEditMode(profileProvider, profile)
-                : _buildViewMode(profileProvider, profile),
+            : showLoadError
+                ? Center(
+                    child: ConnectionErrorState(
+                      message: context.l10n.noInternetConnection,
+                      onRetry: () {
+                        profileProvider.fetchProfile();
+                        profileProvider.fetchLinkCatalog();
+                      },
+                    ),
+                  )
+                : isEditing
+                    ? _buildEditMode(profileProvider, profile)
+                    : _buildViewMode(profileProvider, profile),
       ),
+    ),
     );
   }
 
@@ -678,6 +726,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _avatarInitials(UserProfile profile, bool compact) {
+    final name = profile.name.trim();
+    if (name.isEmpty) {
+      return Center(
+        child: Icon(
+          Icons.person_rounded,
+          size: compact ? 44 : 52,
+          color: Colors.white,
+        ),
+      );
+    }
+    return Center(
+      child: Text(
+        name[0].toUpperCase(),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: compact ? 36 : 40,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
   Widget _buildProfileAvatar(UserProfile profile) {
     final isCover =
         (profile.coverPhotoUrl != null &&
@@ -703,22 +774,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: ClipOval(
         child: profile.profilePhotoUrl != null &&
                 profile.profilePhotoUrl!.trim().isNotEmpty
-            ? Image.network(
-                profile.profilePhotoUrl!,
+            ? CachedNetworkImage(
+                imageUrl: profile.profilePhotoUrl!.trim(),
                 fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+                errorWidget: (_, _, _) => _avatarInitials(profile, isCover),
+                placeholder: (_, _) => _avatarInitials(profile, isCover),
               )
-            : Center(
-                child: Text(
-                  profile.name.isNotEmpty
-                      ? profile.name[0].toUpperCase()
-                      : '?',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: isCover ? 36 : 40,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+            : _avatarInitials(profile, isCover),
       ),
     );
 
@@ -741,11 +805,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               width: double.infinity,
               child: ColoredBox(
                 color: const Color(0xFFF5F5F5),
-                child: Image.network(
-                  profile.coverPhotoUrl!,
+                child: CachedNetworkImage(
+                  imageUrl: profile.coverPhotoUrl!.trim(),
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: 200,
+                  errorWidget: (_, _, _) => const ColoredBox(
+                    color: Color(0xFFF5F5F5),
+                  ),
+                  placeholder: (_, _) => const ColoredBox(
+                    color: Color(0xFFF5F5F5),
+                  ),
                 ),
               ),
             ),

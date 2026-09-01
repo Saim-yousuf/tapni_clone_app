@@ -938,5 +938,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "noInternetConnection": "انٹرنیٹ کنکشن نہیں ہے۔",
+  "pleaseCheckYourConnection": "براہ کرم اپنا کنکشن چیک کریں۔"
 }

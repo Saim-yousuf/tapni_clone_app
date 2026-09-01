@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Alukho uxhumano lwe-inthanethi",
+  "pleaseCheckYourConnection": "Sicela uhlole ukuxhumana kwakho"
 }

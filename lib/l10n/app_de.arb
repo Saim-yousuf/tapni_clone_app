@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Keine Internetverbindung",
+  "pleaseCheckYourConnection": "Bitte überprüfen Sie Ihre Verbindung"
 }

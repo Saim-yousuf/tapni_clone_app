@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:tapni_app/helper/log_helper.dart';
 import 'package:tapni_app/services/device_session_guard.dart';
+import 'package:tapni_app/utils/api_error_messages.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 
 enum ApiMethod { get, post, put, delete, multipartPost, multipartPut }
@@ -128,7 +129,7 @@ class ApiHandler {
       return ApiResponse<dynamic>(
         success: false,
         statusCode: 0,
-        message: 'Request failed: $e',
+        message: ApiErrorMessages.forException(e),
       );
     }
   }

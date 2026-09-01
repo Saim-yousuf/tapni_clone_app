@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Nav interneta savienojuma",
+  "pleaseCheckYourConnection": "Lūdzu, pārbaudiet savienojumu"
 }

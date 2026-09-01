@@ -3899,4 +3899,10 @@ class AppLocalizationsHr extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Nema internetske veze';
+
+  @override
+  String get pleaseCheckYourConnection => 'Provjerite vezu';
 }

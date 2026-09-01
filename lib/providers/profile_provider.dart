@@ -19,6 +19,7 @@ import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
+import 'package:tapni_app/models/stored_account.dart';
 import 'package:tapni_app/services/account_storage.dart';
 
 import '../widgets/loading_widget.dart';
@@ -53,23 +54,95 @@ class ProfileProvider extends ChangeNotifier {
   bool _isProUser = false;
   bool _isLoading = false;
   bool _hasFetchedProfile = false;
+  bool _profileLoaded = false;
   bool _isLinkCatalogLoading = false;
   List<LinkCategory> _linkCatalog = [];
 
   bool get isLoading => _isLoading;
   /// False until the first [fetchProfile] attempt finishes (success or failure).
   bool get hasFetchedProfile => _hasFetchedProfile;
+  /// True when profile data is available (network or local cache).
+  bool get hasLoadedProfile => _profileLoaded;
   bool get isLinkCatalogLoading => _isLinkCatalogLoading;
   List<LinkCategory> get linkCatalog => _linkCatalog;
 
+  static String _profileCacheKey(String userId) => 'profile_cache_v1_$userId';
+
   ProfileProvider() {
     _profile = MockDataService.getInitialProfile();
+    _restoreCachedProfile();
+  }
+
+  void _restoreCachedProfile() {
+    final account = AccountStorage.getActiveAccount();
+    if (account == null) return;
+
+    if (account.userId != 'legacy') {
+      final raw = SharedPrefHelper.getObject(_profileCacheKey(account.userId));
+      if (raw is Map) {
+        try {
+          final map = Map<String, dynamic>.from(raw);
+          final user = map.containsKey('user')
+              ? Map<String, dynamic>.from(map['user'] as Map)
+              : map;
+          _profile = UserProfile.fromApiJson(user);
+          _isProUser = _profile.isPro;
+          _selectedTemplateIndex =
+              CardTemplateCatalog.indexById(_profile.cardTemplateId);
+          _profileLoaded = true;
+          _hasFetchedProfile = true;
+          return;
+        } catch (_) {}
+      }
+    }
+
+    _hydrateFromAccount(account);
+  }
+
+  void _hydrateFromAccount(StoredAccount? account) {
+    if (account == null) return;
+    _profile = _profile.copyWith(
+      id: account.userId != 'legacy' ? account.userId : _profile.id,
+      name: account.name.isNotEmpty ? account.name : _profile.name,
+      email: account.email.isNotEmpty ? account.email : _profile.email,
+      phone: account.phone ?? _profile.phone,
+      username: account.username ?? _profile.username,
+      profilePhotoUrl: account.profilePhoto ?? _profile.profilePhotoUrl,
+    );
+    // Account meta alone is not a full profile — only API / JSON cache counts.
+  }
+
+  void refreshLocalProfile() {
+    final previousName = _profile.name;
+    final previousPhoto = _profile.profilePhotoUrl;
+    if (!_profileLoaded) {
+      _restoreCachedProfile();
+    } else if (_profile.name.isEmpty ||
+        (_profile.profilePhotoUrl?.isEmpty ?? true)) {
+      _hydrateFromAccount(AccountStorage.getActiveAccount());
+    }
+    if (_profile.name != previousName ||
+        _profile.profilePhotoUrl != previousPhoto) {
+      notifyListeners();
+    }
+  }
+
+  Future<void> _saveProfileCache(Map<String, dynamic> userJson) async {
+    final userId =
+        userJson['_id']?.toString() ?? userJson['id']?.toString() ?? _profile.id;
+    if (userId == null || userId.isEmpty) return;
+    await SharedPrefHelper.putObject(_profileCacheKey(userId), userJson);
   }
 
   void clearData() {
+    final userId = _profile.id ?? AccountStorage.getActiveAccount()?.userId;
+    if (userId != null && userId.isNotEmpty) {
+      SharedPrefHelper.remove(_profileCacheKey(userId));
+    }
     _profile = MockDataService.getInitialProfile();
     _isProUser = false;
     _hasFetchedProfile = false;
+    _profileLoaded = false;
     _isEditingProfile = false;
     _linkCatalog.clear();
     _selectedTemplateIndex = 1;
@@ -101,20 +174,26 @@ class ProfileProvider extends ChangeNotifier {
       if (response.success && response.data != null) {
         final data = response.data;
         try {
+          Map<String, dynamic>? userJson;
           if (data is Map<String, dynamic> && data.containsKey('user')) {
-            _profile = UserProfile.fromApiJson(
+            userJson = Map<String, dynamic>.from(
               data['user'] as Map<String, dynamic>,
             );
+            _profile = UserProfile.fromApiJson(userJson);
             _isProUser = _profile.isPro;
             _selectedTemplateIndex =
                 CardTemplateCatalog.indexById(_profile.cardTemplateId);
             _ensureActiveCardExists();
           } else if (data is Map<String, dynamic>) {
+            userJson = data;
             _profile = UserProfile.fromApiJson(data);
             _isProUser = _profile.isPro;
             _selectedTemplateIndex =
                 CardTemplateCatalog.indexById(_profile.cardTemplateId);
             _ensureActiveCardExists();
+          }
+          if (userJson != null) {
+            await _saveProfileCache(userJson);
           }
           _profile = _profile.copyWith(
             socialLinks: await LinkEntriesCache.apply(
@@ -130,9 +209,12 @@ class ProfileProvider extends ChangeNotifier {
             username: _profile.username,
             profilePhoto: _profile.profilePhotoUrl,
           );
+          _profileLoaded = true;
         } catch (e) {
-          // Fallback to mock data if there's an issue mapping
+          // Keep cached profile if mapping fails.
         }
+      } else if (!_profileLoaded) {
+        _hydrateFromAccount(AccountStorage.getActiveAccount());
       }
       profileScore();
     } finally {

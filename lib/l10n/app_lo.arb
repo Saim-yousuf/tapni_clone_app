@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "ບໍ່ມີການເຊື່ອມຕໍ່ອິນເຕີເນັດ",
+  "pleaseCheckYourConnection": "ກະລຸນາກວດເບິ່ງການເຊື່ອມຕໍ່ຂອງທ່ານ"
 }

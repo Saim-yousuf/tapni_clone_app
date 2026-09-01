@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Δεν υπάρχει σύνδεση στο διαδίκτυο",
+  "pleaseCheckYourConnection": "Ελέγξτε τη σύνδεσή σας"
 }

@@ -3901,6 +3901,12 @@ class AppLocalizationsRw extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Nta murongo wa interineti';
+
+  @override
+  String get pleaseCheckYourConnection => 'Nyamuneka reba isano yawe';
 }
 
 /// The translations for Kinyarwanda, as used in Rwanda (`rw_RW`).
@@ -6347,4 +6353,10 @@ class AppLocalizationsRwRw extends AppLocalizationsRw {
   String codeWithValue(String code) {
     return 'Kode: $code';
   }
+
+  @override
+  String get noInternetConnection => 'Nta murongo wa interineti';
+
+  @override
+  String get pleaseCheckYourConnection => 'Nyamuneka reba isano yawe';
 }

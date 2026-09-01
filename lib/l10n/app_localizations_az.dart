@@ -3898,4 +3898,10 @@ class AppLocalizationsAz extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'İnternet bağlantısı yoxdur';
+
+  @override
+  String get pleaseCheckYourConnection => 'Bağlantınızı yoxlayın';
 }

@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Nincs internet kapcsolat",
+  "pleaseCheckYourConnection": "Kérjük, ellenőrizze a kapcsolatot"
 }

@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Nta murongo wa interineti",
+  "pleaseCheckYourConnection": "Nyamuneka reba isano yawe"
 }

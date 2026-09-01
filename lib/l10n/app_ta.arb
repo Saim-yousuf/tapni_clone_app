@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "இணைய இணைப்பு இல்லை",
+  "pleaseCheckYourConnection": "உங்கள் இணைப்பைச் சரிபார்க்கவும்"
 }

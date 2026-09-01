@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/explore_business.dart';
 import 'package:tapni_app/providers/explore_cart_provider.dart';
+import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/explore_repo.dart';
 import 'package:tapni_app/screens/explore_cart_screen.dart';
@@ -12,6 +13,7 @@ import 'package:tapni_app/screens/explore_see_all_screen.dart';
 import 'package:tapni_app/screens/notifications_screen.dart';
 import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
+import 'package:tapni_app/utils/api_error_messages.dart';
 import 'package:tapni_app/utils/business_categories.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/explore_actions.dart';
@@ -21,6 +23,7 @@ import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/widgets/cached_app_image.dart';
+import 'package:tapni_app/widgets/connection_error_state.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
@@ -163,6 +166,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   final _bannerController = PageController();
   int _bannerPage = 0;
   Timer? _bannerTimer;
+  int _lastReconnectTick = 0;
 
   @override
   void initState() {
@@ -245,7 +249,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
     if (!res.success) {
       setState(() {
         _loading = false;
-        _error = res.message ?? 'Could not load explore feed';
+        _error = ApiErrorMessages.sanitize(
+          res.message,
+          fallback: context.l10n.somethingWentWrong,
+        );
         _businesses = [];
         _offers = [];
         _items = [];
@@ -471,6 +478,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final reconnectTick = context.watch<ConnectivityProvider>().reconnectTick;
+    if (reconnectTick != _lastReconnectTick) {
+      _lastReconnectTick = reconnectTick;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) unawaited(_load());
+      });
+    }
+
     final colors = _ExploreTheme.of(context);
     return Scaffold(
       key: _scaffoldKey,
@@ -694,20 +709,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
-          const SizedBox(height: 88),
-          Icon(Icons.wifi_off_outlined, size: 48, color: colors.secondaryText),
-          const SizedBox(height: 12),
-          Text(
-            _error!,
-            textAlign: TextAlign.center,
-            style: WaUi.body.copyWith(color: colors.secondaryText),
-          ),
-          Center(
-            child: TextButton(
-              onPressed: _load,
-              style: TextButton.styleFrom(foregroundColor: colors.accent),
-              child: const Text('Try again'),
-            ),
+          const SizedBox(height: 72),
+          ConnectionErrorState(
+            message: _error!,
+            onRetry: _load,
           ),
         ],
       );

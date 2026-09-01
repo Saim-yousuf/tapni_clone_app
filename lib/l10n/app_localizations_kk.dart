@@ -3908,4 +3908,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Интернет байланысы жоқ';
+
+  @override
+  String get pleaseCheckYourConnection => 'Байланысты тексеріңіз';
 }

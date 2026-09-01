@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Žiadne internetové pripojenie",
+  "pleaseCheckYourConnection": "Skontrolujte svoje pripojenie"
 }

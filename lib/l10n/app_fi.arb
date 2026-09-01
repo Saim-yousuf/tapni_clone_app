@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Ei internetyhteyttä",
+  "pleaseCheckYourConnection": "Tarkista yhteys"
 }

@@ -3926,4 +3926,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Sense connexió a Internet';
+
+  @override
+  String get pleaseCheckYourConnection => 'Comproveu la vostra connexió';
 }

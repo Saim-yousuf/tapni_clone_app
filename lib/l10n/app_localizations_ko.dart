@@ -3838,4 +3838,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => '인터넷에 연결되어 있지 않음';
+
+  @override
+  String get pleaseCheckYourConnection => '연결을 확인해주세요';
 }

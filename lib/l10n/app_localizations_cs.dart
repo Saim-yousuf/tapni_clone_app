@@ -3908,4 +3908,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Žádné připojení k internetu';
+
+  @override
+  String get pleaseCheckYourConnection => 'Zkontrolujte prosím své připojení';
 }

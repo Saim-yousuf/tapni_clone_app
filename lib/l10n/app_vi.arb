@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Không có kết nối internet",
+  "pleaseCheckYourConnection": "Vui lòng kiểm tra kết nối của bạn"
 }

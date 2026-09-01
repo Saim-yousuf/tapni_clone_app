@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Gan nasc idirlín",
+  "pleaseCheckYourConnection": "Seiceáil do cheangal"
 }

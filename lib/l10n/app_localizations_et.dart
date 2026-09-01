@@ -3899,4 +3899,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Interneti-ühendus puudub';
+
+  @override
+  String get pleaseCheckYourConnection => 'Palun kontrollige oma ühendust';
 }

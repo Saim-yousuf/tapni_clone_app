@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "ఇంటర్నెట్ కనెక్షన్ లేదు",
+  "pleaseCheckYourConnection": "దయచేసి మీ కనెక్షన్‌ని తనిఖీ చేయండి"
 }

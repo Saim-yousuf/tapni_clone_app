@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Fără conexiune la internet",
+  "pleaseCheckYourConnection": "Vă rugăm să vă verificați conexiunea"
 }

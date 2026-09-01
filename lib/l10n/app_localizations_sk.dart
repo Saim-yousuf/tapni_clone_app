@@ -3911,4 +3911,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Žiadne internetové pripojenie';
+
+  @override
+  String get pleaseCheckYourConnection => 'Skontrolujte svoje pripojenie';
 }

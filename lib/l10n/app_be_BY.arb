@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Няма падключэння да інтэрнэту",
+  "pleaseCheckYourConnection": "Праверце падключэнне"
 }

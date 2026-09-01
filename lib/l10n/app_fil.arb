@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Walang koneksyon sa internet",
+  "pleaseCheckYourConnection": "Pakisuri ang iyong koneksyon"
 }

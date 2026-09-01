@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Tiada sambungan internet",
+  "pleaseCheckYourConnection": "Sila semak sambungan anda"
 }

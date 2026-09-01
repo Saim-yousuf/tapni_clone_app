@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "بدون اتصال به اینترنت",
+  "pleaseCheckYourConnection": "لطفا اتصال خود را بررسی کنید"
 }

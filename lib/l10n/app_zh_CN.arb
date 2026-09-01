@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "没有互联网连接",
+  "pleaseCheckYourConnection": "请检查您的连接"
 }

@@ -3908,4 +3908,10 @@ class AppLocalizationsKa extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'ინტერნეტთან კავშირი არ არის';
+
+  @override
+  String get pleaseCheckYourConnection => 'გთხოვთ, შეამოწმოთ თქვენი კავშირი';
 }

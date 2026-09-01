@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "인터넷에 연결되어 있지 않음",
+  "pleaseCheckYourConnection": "연결을 확인해주세요"
 }

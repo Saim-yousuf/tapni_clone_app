@@ -3806,6 +3806,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => '没有互联网连接';
+
+  @override
+  String get pleaseCheckYourConnection => '请检查您的连接';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -6157,6 +6163,12 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String codeWithValue(String code) {
     return '代码：$code';
   }
+
+  @override
+  String get noInternetConnection => '没有互联网连接';
+
+  @override
+  String get pleaseCheckYourConnection => '请检查您的连接';
 }
 
 /// The translations for Chinese, as used in Hong Kong (`zh_HK`).
@@ -8511,6 +8523,12 @@ class AppLocalizationsZhHk extends AppLocalizationsZh {
   String codeWithValue(String code) {
     return '代碼：$code';
   }
+
+  @override
+  String get noInternetConnection => '沒有網路連線';
+
+  @override
+  String get pleaseCheckYourConnection => '請檢查您的連接';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -10865,4 +10883,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String codeWithValue(String code) {
     return '代碼：$code';
   }
+
+  @override
+  String get noInternetConnection => '沒有網路連線';
+
+  @override
+  String get pleaseCheckYourConnection => '請檢查您的連接';
 }

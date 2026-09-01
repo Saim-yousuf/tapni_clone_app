@@ -3914,4 +3914,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Nincs internet kapcsolat';
+
+  @override
+  String get pleaseCheckYourConnection => 'Kérjük, ellenőrizze a kapcsolatot';
 }

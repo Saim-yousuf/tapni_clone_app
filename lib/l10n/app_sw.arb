@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Hakuna muunganisho wa intaneti",
+  "pleaseCheckYourConnection": "Tafadhali angalia muunganisho wako"
 }

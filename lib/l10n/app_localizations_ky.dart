@@ -3910,6 +3910,12 @@ class AppLocalizationsKy extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Интернет байланышы жок';
+
+  @override
+  String get pleaseCheckYourConnection => 'Сураныч, байланышыңызды текшериңиз';
 }
 
 /// The translations for Kirghiz Kyrgyz, as used in Kyrgyzstan (`ky_KG`).
@@ -6365,4 +6371,10 @@ class AppLocalizationsKyKg extends AppLocalizationsKy {
   String codeWithValue(String code) {
     return 'Код: $code';
   }
+
+  @override
+  String get noInternetConnection => 'Интернет байланышы жок';
+
+  @override
+  String get pleaseCheckYourConnection => 'Сураныч, байланышыңызды текшериңиз';
 }

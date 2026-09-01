@@ -3908,4 +3908,10 @@ class AppLocalizationsHa extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Babu haɗin intanet';
+
+  @override
+  String get pleaseCheckYourConnection => 'Da fatan za a duba haɗin ku';
 }

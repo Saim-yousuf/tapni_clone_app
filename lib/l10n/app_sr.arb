@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Нема интернет везе",
+  "pleaseCheckYourConnection": "Проверите своју везу"
 }

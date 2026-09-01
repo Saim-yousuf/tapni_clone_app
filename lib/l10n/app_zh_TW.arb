@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "沒有網路連線",
+  "pleaseCheckYourConnection": "請檢查您的連接"
 }

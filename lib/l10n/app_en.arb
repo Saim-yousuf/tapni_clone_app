@@ -1677,5 +1677,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "noInternetConnection": "No internet connection",
+  "pleaseCheckYourConnection": "Please check your connection"
 }

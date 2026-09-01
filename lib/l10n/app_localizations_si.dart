@@ -3906,6 +3906,13 @@ class AppLocalizationsSi extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'අන්තර්ජාල සම්බන්ධතාවයක් නොමැත';
+
+  @override
+  String get pleaseCheckYourConnection =>
+      'කරුණාකර ඔබගේ සම්බන්ධතාවය පරීක්ෂා කරන්න';
 }
 
 /// The translations for Sinhala Sinhalese, as used in Sri Lanka (`si_LK`).
@@ -6357,4 +6364,11 @@ class AppLocalizationsSiLk extends AppLocalizationsSi {
   String codeWithValue(String code) {
     return 'කේතය: $code';
   }
+
+  @override
+  String get noInternetConnection => 'අන්තර්ජාල සම්බන්ධතාවයක් නොමැත';
+
+  @override
+  String get pleaseCheckYourConnection =>
+      'කරුණාකර ඔබගේ සම්බන්ධතාවය පරීක්ෂා කරන්න';
 }

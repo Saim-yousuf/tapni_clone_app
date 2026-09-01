@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
@@ -82,6 +83,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   List<Map<String, dynamic>> _trend = [];
   List<dynamic> _profileViewers = [];
   List<dynamic> _scanners = [];
+  int _lastReconnectTick = 0;
 
   @override
   void initState() {
@@ -163,6 +165,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final reconnectTick = context.watch<ConnectivityProvider>().reconnectTick;
+    if (reconnectTick != _lastReconnectTick) {
+      _lastReconnectTick = reconnectTick;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _fetchAnalytics();
+      });
+    }
+
     final profile = Provider.of<ProfileProvider>(context).profile;
     final bottomPad = CurvedBottomNav.fabOverhang() + 16;
     final isPro = profile.isPro;

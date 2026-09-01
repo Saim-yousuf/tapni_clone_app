@@ -3914,6 +3914,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Sem conexão com a internet';
+
+  @override
+  String get pleaseCheckYourConnection => 'Verifique sua conexão';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -6373,6 +6379,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String codeWithValue(String code) {
     return 'Código: $code';
   }
+
+  @override
+  String get noInternetConnection => 'Sem conexão com a internet';
+
+  @override
+  String get pleaseCheckYourConnection => 'Verifique sua conexão';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -8832,4 +8844,10 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String codeWithValue(String code) {
     return 'Código: $code';
   }
+
+  @override
+  String get noInternetConnection => 'Sem conexão com a internet';
+
+  @override
+  String get pleaseCheckYourConnection => 'Verifique sua conexão';
 }

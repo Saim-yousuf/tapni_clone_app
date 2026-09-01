@@ -1,8 +1,14 @@
+import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/models/stored_account.dart';
+import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
+import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
 import 'package:tapni_app/screens/explore_screen.dart';
 import 'package:tapni_app/screens/find_user_screen.dart';
@@ -33,6 +39,7 @@ class _MainShellState extends State<MainShell> {
   late String _currentPage;
   int _navIndex = 0;
   bool _contactsPromptShown = false;
+  int _lastReconnectTick = 0;
 
   bool get _onProfile => _currentPage == 'My Card';
 
@@ -57,6 +64,15 @@ class _MainShellState extends State<MainShell> {
     _navIndex = index >= 0 ? index : 0;
     DeviceSessionGuard.instance.start();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      final profileProvider = Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      );
+      profileProvider.refreshLocalProfile();
+      if (!profileProvider.hasLoadedProfile && !profileProvider.isLoading) {
+        unawaited(profileProvider.fetchProfile());
+      }
       _loadCatalogNotifications();
       await _maybePromptContactsSync();
       await CallerIdService.ensureDefaultEnabled();
@@ -109,6 +125,10 @@ class _MainShellState extends State<MainShell> {
   }
 
   void _switchTab(String page) {
+    Provider.of<ConnectivityProvider>(
+      context,
+      listen: false,
+    ).resetBannerForRoute();
     setState(() {
       _currentPage = page;
       final index = _navPages.indexOf(page);
@@ -121,6 +141,10 @@ class _MainShellState extends State<MainShell> {
   }
 
   void _goToProfile() {
+    Provider.of<ConnectivityProvider>(
+      context,
+      listen: false,
+    ).resetBannerForRoute();
     setState(() => _currentPage = 'My Card');
     Provider.of<ProfileProvider>(
       context,
@@ -190,16 +214,14 @@ class _MainShellState extends State<MainShell> {
       );
     } else if (hasPhoto) {
       child = SizedBox.expand(
-        key: const ValueKey('fab-photo'),
-        child: Image.network(
-          photoUrl,
+        key: ValueKey('fab-photo-$photoUrl'),
+        child: CachedNetworkImage(
+          imageUrl: photoUrl,
           fit: BoxFit.cover,
           alignment: Alignment.center,
-          errorBuilder: (_, _, _) => _fabInitials(name, fabFg),
-          loadingBuilder: (context, image, progress) {
-            if (progress == null) return image;
-            return _fabInitials(name, fabFg);
-          },
+          fadeInDuration: const Duration(milliseconds: 200),
+          errorWidget: (_, _, _) => _fabInitials(name, fabFg),
+          placeholder: (_, _) => _fabInitials(name, fabFg),
         ),
       );
     } else {
@@ -219,9 +241,19 @@ class _MainShellState extends State<MainShell> {
   }
 
   Widget _fabInitials(String name, Color color) {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) {
+      return Center(
+        child: Icon(
+          Icons.person_rounded,
+          size: 34,
+          color: color,
+        ),
+      );
+    }
     return Center(
       child: Text(
-        name.isNotEmpty ? name[0].toUpperCase() : '?',
+        trimmed[0].toUpperCase(),
         style: TextStyle(
           color: color,
           fontSize: 26,
@@ -231,11 +263,65 @@ class _MainShellState extends State<MainShell> {
     );
   }
 
+  String _fabDisplayName(UserProfile profile, StoredAccount? account) {
+    for (final candidate in [
+      profile.name,
+      account?.name ?? '',
+      profile.username ?? '',
+      account?.username ?? '',
+    ]) {
+      final trimmed = candidate.trim();
+      if (trimmed.isNotEmpty) return trimmed;
+    }
+    final email = profile.email.trim().isNotEmpty
+        ? profile.email.trim()
+        : (account?.email.trim() ?? '');
+    if (email.isNotEmpty) return email.split('@').first;
+    return '';
+  }
+
+  String? _fabPhotoUrl(UserProfile profile, StoredAccount? account) {
+    final fromProfile = profile.profilePhotoUrl?.trim() ?? '';
+    if (fromProfile.isNotEmpty) return fromProfile;
+    final fromAccount = account?.profilePhoto?.trim() ?? '';
+    return fromAccount.isNotEmpty ? fromAccount : null;
+  }
+
+  Future<void> _refreshAfterReconnect() async {
+    if (!mounted) return;
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
+    final leadsProvider = Provider.of<LeadsProvider>(
+      context,
+      listen: false,
+    );
+    await Future.wait([
+      profileProvider.fetchProfile(),
+      profileProvider.fetchLinkCatalog(),
+      leadsProvider.fetchLeads(),
+      leadsProvider.fetchCategories(),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final connectivity = context.watch<ConnectivityProvider>();
+    if (connectivity.reconnectTick != _lastReconnectTick) {
+      _lastReconnectTick = connectivity.reconnectTick;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_refreshAfterReconnect());
+      });
+    }
+
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
     final isEditing = profileProvider.isEditingProfile;
     final profile = profileProvider.profile;
+    final account = authProvider.activeAccount;
+    final fabName = _fabDisplayName(profile, account);
+    final fabPhoto = _fabPhotoUrl(profile, account);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final selectedColor = isDark ? Colors.white : Colors.black;
     final unselectedColor = const Color(0xFF8E8E93);
@@ -246,9 +332,15 @@ class _MainShellState extends State<MainShell> {
     final navClearance = CurvedBottomNav.contentClearance(context);
 
     return PopScope(
-      canPop: _onProfile,
+      canPop: _onProfile && !isEditing,
       onPopInvokedWithResult: (didPop, _) {
-        if (didPop || _onProfile) return;
+        if (didPop) return;
+        if (isEditing) {
+          profileProvider.setEditingProfile(false);
+          profileProvider.onSaveTriggered = null;
+          return;
+        }
+        if (_onProfile) return;
         _goToProfile();
       },
       child: Scaffold(
@@ -302,8 +394,8 @@ class _MainShellState extends State<MainShell> {
                   isEditing: isEditing,
                   fabBg: fabBg,
                   fabFg: fabFg,
-                  name: profile.name,
-                  photoUrl: profile.profilePhotoUrl,
+                  name: fabName,
+                  photoUrl: fabPhoto,
                 ),
               ),
             ),

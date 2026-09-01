@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Nėra interneto ryšio",
+  "pleaseCheckYourConnection": "Patikrinkite ryšį"
 }

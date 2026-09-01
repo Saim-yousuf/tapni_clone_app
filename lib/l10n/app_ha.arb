@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Babu haɗin intanet",
+  "pleaseCheckYourConnection": "Da fatan za a duba haɗin ku"
 }

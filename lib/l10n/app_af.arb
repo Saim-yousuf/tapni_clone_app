@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Geen internet konneksie nie",
+  "pleaseCheckYourConnection": "Gaan asseblief jou verbinding na"
 }

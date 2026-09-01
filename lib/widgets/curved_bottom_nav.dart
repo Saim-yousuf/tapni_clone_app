@@ -1,12 +1,11 @@
 import 'dart:math' as math;
-import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
-/// Soft scooped bottom bar — organic cradle around the center button.
+/// White bottom bar with a circular cut-out so the center button is never
+/// covered by the bar — same cradle as a docked FAB.
 class CurvedBottomNav extends StatelessWidget {
   const CurvedBottomNav({
     super.key,
@@ -17,7 +16,7 @@ class CurvedBottomNav extends StatelessWidget {
     this.backgroundColor = Colors.white,
     this.height = 72,
     this.fabSize = 74,
-    this.notchMargin = 12,
+    this.notchMargin = 8,
   });
 
   final List<CurvedNavItem> items;
@@ -33,6 +32,8 @@ class CurvedBottomNav extends StatelessWidget {
   static double fabOverhang([double fabSize = 74]) => fabSize * 0.5;
 
   /// Space the shell must keep clear so tab content sits above the white bar.
+  /// FAB overhang is not included — the center button is meant to float over content.
+  /// Sticky bottom CTAs should add [fabOverhang] themselves so they stay tappable.
   static double contentClearance(
     BuildContext context, {
     double height = 72,
@@ -46,12 +47,9 @@ class CurvedBottomNav extends StatelessWidget {
     assert(items.length == 4, 'CurvedBottomNav expects exactly 4 side items.');
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     final notchRadius = fabSize / 2 + notchMargin;
-    const lip = _ScoopGeometry.lip;
+    const lip = _ScoopedBarPainter.lip;
     final fabOverhang = CurvedBottomNav.fabOverhang(fabSize);
     final totalHeight = height + bottomInset + fabOverhang;
-    final barHeight = height + bottomInset;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final fill = backgroundColor;
 
     return SizedBox(
       height: totalHeight,
@@ -63,69 +61,48 @@ class CurvedBottomNav extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 0,
-            height: barHeight,
             child: CustomPaint(
-              painter: _ScoopedBarShadowPainter(notchRadius: notchRadius),
-              child: ClipPath(
-                clipper: _ScoopedBarClipper(notchRadius: notchRadius),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-                  child: ColoredBox(
-                    color: fill,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: bottomInset),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: _NavIconButton(
-                              item: items[0],
-                              selected: currentIndex == 0,
-                              onTap: () => onTap(0),
-                            ),
-                          ),
-                          Expanded(
-                            child: _NavIconButton(
-                              item: items[1],
-                              selected: currentIndex == 1,
-                              onTap: () => onTap(1),
-                            ),
-                          ),
-                          SizedBox(width: (notchRadius + lip) * 2),
-                          Expanded(
-                            child: _NavIconButton(
-                              item: items[2],
-                              selected: currentIndex == 2,
-                              onTap: () => onTap(2),
-                            ),
-                          ),
-                          Expanded(
-                            child: _NavIconButton(
-                              item: items[3],
-                              selected: currentIndex == 3,
-                              onTap: () => onTap(3),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              painter: _ScoopedBarPainter(
+                color: backgroundColor,
+                notchRadius: notchRadius,
               ),
-            ),
-          ),
-          // Soft hairline along the scooped top edge.
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: barHeight,
-            child: IgnorePointer(
-              child: CustomPaint(
-                painter: _ScoopedBarStrokePainter(
-                  notchRadius: notchRadius,
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.12)
-                      : const Color(0xFFD8D8DC),
+              child: SizedBox(
+                height: height + bottomInset,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: bottomInset),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _NavIconButton(
+                          item: items[0],
+                          selected: currentIndex == 0,
+                          onTap: () => onTap(0),
+                        ),
+                      ),
+                      Expanded(
+                        child: _NavIconButton(
+                          item: items[1],
+                          selected: currentIndex == 1,
+                          onTap: () => onTap(1),
+                        ),
+                      ),
+                      SizedBox(width: (notchRadius + lip) * 2),
+                      Expanded(
+                        child: _NavIconButton(
+                          item: items[2],
+                          selected: currentIndex == 2,
+                          onTap: () => onTap(2),
+                        ),
+                      ),
+                      Expanded(
+                        child: _NavIconButton(
+                          item: items[3],
+                          selected: currentIndex == 3,
+                          onTap: () => onTap(3),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -168,14 +145,13 @@ class _NavIconButton extends StatefulWidget {
   State<_NavIconButton> createState() => _NavIconButtonState();
 }
 
-/// Soft & sweet tab select — gentle spring pill + icon.
+/// WhatsApp Business–style tab select: pill pops in, icon bounces once.
 class _NavIconButtonState extends State<_NavIconButton>
     with SingleTickerProviderStateMixin {
-  static const _duration = Duration(milliseconds: 420);
+  static const _duration = Duration(milliseconds: 280);
 
   late final AnimationController _controller;
   late final Animation<double> _pillScale;
-  late final Animation<double> _pillOpacity;
   late final Animation<double> _iconScale;
 
   bool get _visuallySelected {
@@ -189,31 +165,28 @@ class _NavIconButtonState extends State<_NavIconButton>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: _duration);
-
-    // Creamy ease-out-back: soft overshoot, then settle.
-    final spring = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutBack,
-      reverseCurve: Curves.easeInCubic,
-    );
-
-    _pillScale = Tween<double>(begin: 0.62, end: 1.0).animate(spring);
-    _pillOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.55, curve: Curves.easeOut),
+    _pillScale = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween(begin: 0.55, end: 1.08)
+            .chain(CurveTween(curve: Curves.easeOutCubic)),
+        weight: 65,
       ),
-    );
+      TweenSequenceItem(
+        tween: Tween(begin: 1.08, end: 1.0)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 35,
+      ),
+    ]).animate(_controller);
     _iconScale = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween(begin: 0.92, end: 1.10)
+        tween: Tween(begin: 0.88, end: 1.14)
             .chain(CurveTween(curve: Curves.easeOutCubic)),
-        weight: 50,
+        weight: 55,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 1.10, end: 1.0)
+        tween: Tween(begin: 1.14, end: 1.0)
             .chain(CurveTween(curve: Curves.easeOut)),
-        weight: 50,
+        weight: 45,
       ),
     ]).animate(_controller);
 
@@ -231,10 +204,9 @@ class _NavIconButtonState extends State<_NavIconButton>
             oldWidget.item.selectedColor != oldWidget.item.unselectedColor);
     final isSelected = _visuallySelected;
     if (isSelected && !wasSelected) {
-      HapticFeedback.selectionClick();
       _controller.forward(from: 0);
     } else if (!isSelected && wasSelected) {
-      _controller.reverse();
+      _controller.value = 0;
     }
   }
 
@@ -249,14 +221,14 @@ class _NavIconButtonState extends State<_NavIconButton>
     final item = widget.item;
     final visuallySelected = _visuallySelected;
     final icon = visuallySelected ? item.selectedIcon : item.icon;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final pillColor = isDark
+    final pillColor = Theme.of(context).brightness == Brightness.dark
         ? const Color(0xFF3A3A3C)
         : WaUi.navPill;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return InkWell(
       onTap: widget.onTap,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -264,52 +236,44 @@ class _NavIconButtonState extends State<_NavIconButton>
             AnimatedBuilder(
               animation: _controller,
               builder: (context, _) {
-                final showPill =
-                    visuallySelected || _controller.isAnimating;
-                final pillScale = showPill ? _pillScale.value : 0.62;
-                final pillOpacity = showPill ? _pillOpacity.value : 0.0;
-                final iconScale = visuallySelected || _controller.isAnimating
-                    ? (_controller.status == AnimationStatus.reverse
-                        ? 1.0
-                        : _iconScale.value)
-                    : 1.0;
+                final animatingIn =
+                    visuallySelected && !_controller.isDismissed;
+                final pillScale =
+                    animatingIn ? _pillScale.value.clamp(0.0, 1.2) : 1.0;
+                final iconScale = animatingIn ? _iconScale.value : 1.0;
+                final showPill = visuallySelected;
 
-                return SizedBox(
-                  height: 34,
+                return Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 5,
+                  ),
                   child: Stack(
                     alignment: Alignment.center,
-                    clipBehavior: Clip.none,
                     children: [
-                      Opacity(
-                        opacity: pillOpacity.clamp(0.0, 1.0),
-                        child: Transform.scale(
-                          scale: pillScale.clamp(0.5, 1.15),
+                      // Pill scales independently so icon bounce isn't compounded.
+                      if (showPill)
+                        Transform.scale(
+                          scale: pillScale,
                           child: Container(
-                            width: 58,
-                            height: 30,
+                            width: 56,
+                            height: 32,
                             decoration: BoxDecoration(
                               color: pillColor,
-                              borderRadius: BorderRadius.circular(18),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
                         ),
-                      ),
                       Transform.scale(
                         scale: iconScale,
                         child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 220),
-                          switchInCurve: Curves.easeOutCubic,
-                          switchOutCurve: Curves.easeInCubic,
+                          duration: const Duration(milliseconds: 180),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
                           transitionBuilder: (child, animation) {
                             return FadeTransition(
                               opacity: animation,
-                              child: ScaleTransition(
-                                scale: Tween<double>(
-                                  begin: 0.88,
-                                  end: 1,
-                                ).animate(animation),
-                                child: child,
-                              ),
+                              child: child,
                             );
                           },
                           child: Icon(
@@ -325,10 +289,11 @@ class _NavIconButtonState extends State<_NavIconButton>
                 );
               },
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 4),
             AnimatedDefaultTextStyle(
               duration: _duration,
-              curve: Curves.easeOutCubic,
+              curve: Curves.easeOut,
+              // Rebuild via AppFonts — copyWith(fontWeight) is a no-op with Google Fonts.
               style: AppFonts.titleStyle(
                 fontSize: 12,
                 fontWeight:
@@ -350,132 +315,95 @@ class _NavIconButtonState extends State<_NavIconButton>
   }
 }
 
-/// Soft Material-style cradle: wide rounded lips + round circular well.
-/// Clearly softer than a V tip, softer than a hard half-circle hole.
-class _ScoopGeometry {
-  /// Wide flare so shoulders are obviously soft and start further out.
-  static const double lip = 48.0;
+/// Circular cut-out around the FAB so the bar never draws behind the button.
+/// Rounded lips join the flat top to the arc (Material [CircularNotchedRectangle]).
+class _ScoopedBarPainter extends CustomPainter {
+  _ScoopedBarPainter({required this.color, required this.notchRadius});
 
-  static Path topEdge(Size size, double notchRadius) {
-    final cx = size.width / 2;
-    final r = notchRadius;
-    const flare = lip;
+  final Color color;
+  final double notchRadius;
 
-    // Meet the circle higher up → long soft lips, round belly (no V tip).
-    const alpha = 0.32;
-    final ax = r * math.cos(alpha);
-    final ay = r * math.sin(alpha);
-    final half = r + flare;
+  /// Outward rounded corner where the flat top meets the circular well.
+  static const double lip = 16.0;
 
-    return Path()
-      ..moveTo(0, 0)
-      ..lineTo(cx - half, 0)
-      // Left lip — long, creamy S-curve into the well.
-      ..cubicTo(
-        cx - half + flare * 0.38,
-        0,
-        cx - ax - flare * 0.18,
-        ay * 0.12,
-        cx - ax,
-        ay,
-      )
-      // Round U under FAB (circular arc = no pointed tip).
-      ..arcToPoint(
-        Offset(cx + ax, ay),
-        radius: Radius.circular(r),
-        clockwise: false,
-      )
-      // Right lip.
-      ..cubicTo(
-        cx + ax + flare * 0.18,
-        ay * 0.12,
-        cx + half - flare * 0.38,
-        0,
-        cx + half,
-        0,
-      )
-      ..lineTo(size.width, 0);
-  }
+  /// Top-left / top-right outer corners of the bar.
+  static const double cornerRadius = 16.0;
 
-  static Path fill(Size size, double notchRadius) {
-    return Path()
-      ..addPath(topEdge(size, notchRadius), Offset.zero)
+  @override
+  void paint(Canvas canvas, Size size) {
+    final topEdge = _topEdgePath(size);
+    final fillPath = Path()
+      ..addPath(topEdge, Offset.zero)
       ..lineTo(size.width, size.height)
       ..lineTo(0, size.height)
       ..close();
-  }
-}
 
-class _ScoopedBarClipper extends CustomClipper<Path> {
-  _ScoopedBarClipper({required this.notchRadius});
+    final shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.10)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+    canvas.drawPath(fillPath.shift(const Offset(0, -1)), shadowPaint);
+    canvas.drawPath(fillPath, Paint()..color = color);
 
-  final double notchRadius;
-
-  @override
-  Path getClip(Size size) => _ScoopGeometry.fill(size, notchRadius);
-
-  @override
-  bool shouldReclip(covariant _ScoopedBarClipper oldClipper) {
-    return oldClipper.notchRadius != notchRadius;
-  }
-}
-
-class _ScoopedBarShadowPainter extends CustomPainter {
-  _ScoopedBarShadowPainter({required this.notchRadius});
-
-  final double notchRadius;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final path = _ScoopGeometry.fill(size, notchRadius);
-
-    // Layered soft shadows — diffused, not harsh.
     canvas.drawPath(
-      path.shift(const Offset(0, -2)),
+      topEdge.shift(const Offset(0, 0.5)),
       Paint()
-        ..color = Colors.black.withValues(alpha: 0.04)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 16),
-    );
-    canvas.drawPath(
-      path.shift(const Offset(0, -1)),
-      Paint()
-        ..color = Colors.black.withValues(alpha: 0.06)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8),
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _ScoopedBarShadowPainter oldDelegate) {
-    return oldDelegate.notchRadius != notchRadius;
-  }
-}
-
-class _ScoopedBarStrokePainter extends CustomPainter {
-  _ScoopedBarStrokePainter({
-    required this.notchRadius,
-    required this.color,
-  });
-
-  final double notchRadius;
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawPath(
-      _ScoopGeometry.topEdge(size, notchRadius),
-      Paint()
-        ..color = color
+        ..color = const Color(0xFFD8D8DC)
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 0.8
+        ..strokeWidth = 1
         ..strokeCap = StrokeCap.round
         ..isAntiAlias = true,
     );
   }
 
+  Path _topEdgePath(Size size) {
+    final host = Offset.zero & size;
+    final guest = Rect.fromCircle(
+      center: Offset(size.width / 2, 0),
+      radius: notchRadius,
+    );
+
+    final r = notchRadius;
+    const s1 = lip;
+    const s2 = 1.0;
+
+    final a = -r - s2;
+    final b = host.top - guest.center.dy;
+    final denom = a * a + b * b;
+    final n2 = math.sqrt(b * b * r * r * (denom - r * r));
+    final p2xA = ((a * r * r) - n2) / denom;
+    final p2xB = ((a * r * r) + n2) / denom;
+    final p2yA = math.sqrt(r * r - p2xA * p2xA);
+    final p2yB = math.sqrt(r * r - p2xB * p2xB);
+
+    final p = List<Offset>.filled(6, Offset.zero);
+    p[0] = Offset(a - s1, b);
+    p[1] = Offset(a, b);
+    final cmp = b < 0 ? -1.0 : 1.0;
+    p[2] = cmp * p2yA > cmp * p2yB ? Offset(p2xA, p2yA) : Offset(p2xB, p2yB);
+    p[3] = Offset(-p[2].dx, p[2].dy);
+    p[4] = Offset(-p[1].dx, p[1].dy);
+    p[5] = Offset(-p[0].dx, p[0].dy);
+
+    for (var i = 0; i < p.length; i++) {
+      p[i] += guest.center;
+    }
+
+    const cr = cornerRadius;
+
+    return Path()
+      ..moveTo(host.left, cr)
+      ..quadraticBezierTo(host.left, host.top, host.left + cr, host.top)
+      ..lineTo(p[0].dx, p[0].dy)
+      ..quadraticBezierTo(p[1].dx, p[1].dy, p[2].dx, p[2].dy)
+      ..arcToPoint(p[3], radius: Radius.circular(r), clockwise: false)
+      ..quadraticBezierTo(p[4].dx, p[4].dy, p[5].dx, p[5].dy)
+      ..lineTo(host.right - cr, host.top)
+      ..quadraticBezierTo(host.right, host.top, host.right, cr);
+  }
+
   @override
-  bool shouldRepaint(covariant _ScoopedBarStrokePainter oldDelegate) {
-    return oldDelegate.notchRadius != notchRadius ||
-        oldDelegate.color != color;
+  bool shouldRepaint(covariant _ScoopedBarPainter oldDelegate) {
+    return oldDelegate.color != color || oldDelegate.notchRadius != notchRadius;
   }
 }
 
@@ -500,12 +428,9 @@ class CurvedNavCenterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      elevation: 0,
       child: InkWell(
         onTap: onPressed,
         customBorder: const CircleBorder(),
-        splashColor: Colors.white24,
-        highlightColor: Colors.transparent,
         child: Ink(
           width: size,
           height: size,
@@ -514,14 +439,9 @@ class CurvedNavCenterButton extends StatelessWidget {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-              ),
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 4,
-                offset: const Offset(0, 1),
+                color: Colors.black.withValues(alpha: 0.14),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -531,15 +451,15 @@ class CurvedNavCenterButton extends StatelessWidget {
               child: DefaultTextStyle.merge(
                 style: TextStyle(color: foregroundColor),
                 child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 280),
-                  switchInCurve: Curves.easeOutBack,
-                  switchOutCurve: Curves.easeInCubic,
+                  duration: const Duration(milliseconds: 240),
+                  switchInCurve: Curves.easeOutCubic,
+                  switchOutCurve: Curves.easeIn,
                   transitionBuilder: (child, animation) {
                     return FadeTransition(
                       opacity: animation,
                       child: ScaleTransition(
                         scale: Tween<double>(
-                          begin: 0.82,
+                          begin: 0.86,
                           end: 1,
                         ).animate(animation),
                         child: child,

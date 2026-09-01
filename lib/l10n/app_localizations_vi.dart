@@ -3900,4 +3900,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String galleryMaxReached(int count) {
     return 'Gallery can have up to $count photos';
   }
+
+  @override
+  String get noInternetConnection => 'Không có kết nối internet';
+
+  @override
+  String get pleaseCheckYourConnection => 'Vui lòng kiểm tra kết nối của bạn';
 }

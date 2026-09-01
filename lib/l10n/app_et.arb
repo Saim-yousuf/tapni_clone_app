@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "Interneti-ühendus puudub",
+  "pleaseCheckYourConnection": "Palun kontrollige oma ühendust"
 }

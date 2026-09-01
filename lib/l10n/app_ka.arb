@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "ინტერნეტთან კავშირი არ არის",
+  "pleaseCheckYourConnection": "გთხოვთ, შეამოწმოთ თქვენი კავშირი"
 }

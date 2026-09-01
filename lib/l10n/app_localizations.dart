@@ -7410,6 +7410,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Gallery can have up to {count} photos'**
   String galleryMaxReached(int count);
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternetConnection;
+
+  /// No description provided for @pleaseCheckYourConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your connection'**
+  String get pleaseCheckYourConnection;
 }
 
 class _AppLocalizationsDelegate

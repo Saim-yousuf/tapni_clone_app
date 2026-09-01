@@ -815,5 +815,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noInternetConnection": "इंटरनेट कनेक्शन नाही",
+  "pleaseCheckYourConnection": "कृपया तुमचे कनेक्शन तपासा"
 }
