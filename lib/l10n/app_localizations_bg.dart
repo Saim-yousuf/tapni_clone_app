@@ -260,6 +260,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get addToGoogleWallet => 'Добавете към Google Wallet';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Адрес';
 
   @override
@@ -1870,6 +1873,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Google Wallet не можа да се отвори';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign =>
       'Дизайнът на картата не можа да бъде запазен';
 
@@ -2029,8 +2035,15 @@ class AppLocalizationsBg extends AppLocalizations {
   String get googleWalletSetupPending => 'Предстои настройка на Google Wallet.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Предстои настройка на Google Wallet. Връзката към профила е копирана.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Развийте бизнеса си';

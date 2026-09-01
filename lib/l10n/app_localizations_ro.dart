@@ -264,6 +264,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get addToGoogleWallet => 'Adăugați în Google Wallet';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Adresa';
 
   @override
@@ -1884,6 +1887,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Google Wallet nu a putut fi deschis';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Nu s-a putut salva designul cardului';
 
   @override
@@ -2044,8 +2050,15 @@ class AppLocalizationsRo extends AppLocalizations {
       'Configurarea Google Wallet este în așteptare.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Configurarea Google Wallet este în așteptare. Linkul profilului a fost copiat.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Dezvoltă-ți afacerea';

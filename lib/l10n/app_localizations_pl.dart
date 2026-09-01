@@ -260,6 +260,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get addToGoogleWallet => 'Dodaj do Portfela Google';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Adres';
 
   @override
@@ -1873,6 +1876,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Nie można otworzyć Portfela Google';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Nie można zapisać projektu karty';
 
   @override
@@ -2031,8 +2037,15 @@ class AppLocalizationsPl extends AppLocalizations {
       'Oczekiwanie na konfigurację Portfela Google.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Oczekiwanie na konfigurację Portfela Google. Link do profilu skopiowany.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Rozwijaj swój biznes';

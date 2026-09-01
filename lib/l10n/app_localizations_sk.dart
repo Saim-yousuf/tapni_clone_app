@@ -263,6 +263,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get addToGoogleWallet => 'Pridať do Peňaženky Google';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Adresa';
 
   @override
@@ -1879,6 +1882,9 @@ class AppLocalizationsSk extends AppLocalizations {
       'Peňaženku Google sa nepodarilo otvoriť';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Návrh karty sa nepodarilo uložiť';
 
   @override
@@ -2036,8 +2042,15 @@ class AppLocalizationsSk extends AppLocalizations {
       'Čaká sa na nastavenie služby Peňaženka Google.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Čaká sa na nastavenie služby Peňaženka Google. Odkaz na profil bol skopírovaný.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Rozšírte svoje podnikanie';

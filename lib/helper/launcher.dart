@@ -47,6 +47,8 @@ class Launcher {
     String? currency,
     List<GalleryItem>? galleryItems,
     bool isGalleryOwner = false,
+    /// When set (e.g. custom card scan), only these multi-entry values appear.
+    Set<String>? allowedEntryIds,
   }) async {
     PrintLog.logMessage("model.fieldType: ${model.fieldType}");
     if (model.isGalleryLink) {
@@ -111,6 +113,19 @@ class Launcher {
           Provider.of<ProfileProvider>(context, listen: false).profile.id ?? '';
       link = await LinkEntriesCache.resolve(link, userId: userId);
     } catch (_) {}
+
+    if (allowedEntryIds != null &&
+        allowedEntryIds.isNotEmpty &&
+        link.effectiveEntries.isNotEmpty) {
+      final filtered = link.effectiveEntries
+          .where((e) => allowedEntryIds.contains(e.id))
+          .toList();
+      if (filtered.isEmpty) return;
+      link = link.copyWith(
+        entries: filtered,
+        value: filtered.first.value,
+      );
+    }
 
     PrintLog.logMessage(
       "link.entries=${link.entries?.length ?? 0} multi=${link.hasMultipleEntries}",

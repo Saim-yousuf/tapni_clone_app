@@ -266,6 +266,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get addToGoogleWallet => 'Προσθήκη στο Πορτοφόλι Google';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Διεύθυνση';
 
   @override
@@ -1888,6 +1891,9 @@ class AppLocalizationsEl extends AppLocalizations {
       'Δεν ήταν δυνατό το άνοιγμα του Πορτοφολιού Google';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign =>
       'Δεν ήταν δυνατή η αποθήκευση του σχεδίου της κάρτας';
 
@@ -2051,8 +2057,15 @@ class AppLocalizationsEl extends AppLocalizations {
       'Εκκρεμεί η ρύθμιση του Πορτοφολιού Google.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Εκκρεμεί η ρύθμιση του Πορτοφολιού Google. Ο σύνδεσμος προφίλ αντιγράφηκε.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Αναπτύξτε την επιχείρησή σας';

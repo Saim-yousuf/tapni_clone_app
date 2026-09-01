@@ -27,6 +27,7 @@ class _LoyaltyTemplateGalleryScreenState
     extends State<LoyaltyTemplateGalleryScreen> {
   String? _category;
   int _segment = 0; // 0 curated, 1 community
+  late final PageController _pageController;
   List<PublishedLoyaltyTemplate> _community = [];
   bool _loadingCommunity = false;
 
@@ -36,6 +37,27 @@ class _LoyaltyTemplateGalleryScreenState
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _selectSegment(int index) {
+    final current = _pageController.hasClients
+        ? (_pageController.page ?? _segment.toDouble())
+        : _segment.toDouble();
+    if ((current - index).abs() < 0.01) return;
+    setState(() => _segment = index);
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+    );
+    if (index == 1) _loadCommunity();
   }
 
   Future<void> _loadCommunity() async {
@@ -135,15 +157,19 @@ class _LoyaltyTemplateGalleryScreenState
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
-            child: OfficialCommunityTabs(
-              index: _segment,
-              onChanged: (index) {
-                if (_segment == index) return;
-                setState(() => _segment = index);
-                if (_segment == 1) _loadCommunity();
+            child: AnimatedBuilder(
+              animation: _pageController,
+              builder: (context, _) {
+                final page = _pageController.hasClients
+                    ? (_pageController.page ?? _segment.toDouble())
+                    : _segment.toDouble();
+                return OfficialCommunityTabs(
+                  position: page.clamp(0.0, 1.0),
+                  onChanged: _selectSegment,
+                  officialLabel: context.l10n.official,
+                  communityLabel: context.l10n.community,
+                );
               },
-              officialLabel: context.l10n.official,
-              communityLabel: context.l10n.community,
             ),
           ),
           const SizedBox(height: 12),
@@ -178,26 +204,17 @@ class _LoyaltyTemplateGalleryScreenState
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 250),
-              switchInCurve: Curves.easeOutCubic,
-              switchOutCurve: Curves.easeInCubic,
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: ScaleTransition(
-                    scale: Tween<double>(begin: 0.98, end: 1.0)
-                        .animate(animation),
-                    child: child,
-                  ),
-                );
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                if (_segment == index) return;
+                setState(() => _segment = index);
+                if (index == 1) _loadCommunity();
               },
-              child: KeyedSubtree(
-                key: ValueKey<int>(_segment),
-                child: _segment == 0
-                    ? _buildCurated(templates, preferAr)
-                    : _buildCommunity(),
-              ),
+              children: [
+                _buildCurated(templates, preferAr),
+                _buildCommunity(),
+              ],
             ),
           ),
         ],

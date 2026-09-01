@@ -499,6 +499,10 @@ class ProfileProvider extends ChangeNotifier {
               .where((l) => l.isActive)
               .map((l) => l.id)
               .toList(),
+          enabledEntryIds: _profile.socialLinks
+              .where((l) => l.isActive && l.hasMultipleEntries)
+              .expand((l) => l.effectiveEntries.map((e) => e.id))
+              .toList(),
         );
         return addCustomCard(card);
       }
@@ -556,7 +560,14 @@ class ProfileProvider extends ChangeNotifier {
       return activeLinks;
     }
     final enabled = card.enabledLinkIds.toSet();
-    return activeLinks.where((l) => enabled.contains(l.id)).toList();
+    return activeLinks
+        .where((l) => enabled.contains(l.id))
+        .map(card.filterLinkEntries)
+        .where((l) {
+          if (l.hasMultipleEntries) return l.effectiveEntries.isNotEmpty;
+          return l.value.trim().isNotEmpty || l.effectiveEntries.isNotEmpty;
+        })
+        .toList();
   }
 
   void upgradeToPro() {

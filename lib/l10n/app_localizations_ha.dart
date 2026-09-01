@@ -262,6 +262,9 @@ class AppLocalizationsHa extends AppLocalizations {
   String get addToGoogleWallet => 'Ƙara zuwa Google Wallet';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Adireshi';
 
   @override
@@ -1876,6 +1879,9 @@ class AppLocalizationsHa extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'An kasa buɗe Google Wallet';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'An kasa ajiye ƙirar katin';
 
   @override
@@ -2031,8 +2037,15 @@ class AppLocalizationsHa extends AppLocalizations {
   String get googleWalletSetupPending => 'Saitin Google Wallet yana jiran.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Saitin Google Wallet yana jiran. An kwafi hanyar haɗin yanar gizo.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Haɓaka kasuwancin ku';

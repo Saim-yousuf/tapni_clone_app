@@ -264,6 +264,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get addToGoogleWallet => 'Hozzáadás a Google Wallethoz';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Cím';
 
   @override
@@ -1881,6 +1884,9 @@ class AppLocalizationsHu extends AppLocalizations {
       'Nem sikerült megnyitni a Google Walletot';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Nem sikerült menteni a kártyatervet';
 
   @override
@@ -2038,8 +2044,15 @@ class AppLocalizationsHu extends AppLocalizations {
   String get googleWalletSetupPending => 'A Google Wallet beállítása függőben.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'A Google Wallet beállítása függőben. A profil linkje kimásolva.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Növelje vállalkozását';

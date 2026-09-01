@@ -67,7 +67,7 @@ class WaUi {
   /// cannot merge back to a heavier weight.
   /// Do not `copyWith(fontWeight:)` after Google Fonts — that re-breaks weight.
   static TextStyle toolsTitleOf({
-    FontWeight weight = FontWeight.w500,
+    FontWeight weight = FontWeight.w400,
     double? size,
     double? height,
     Color color = primaryText,

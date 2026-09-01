@@ -263,6 +263,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get addToGoogleWallet => 'Google Wallet қолданбасына қосыңыз';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Мекенжай';
 
   @override
@@ -1873,6 +1876,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Google Wallet ашылмады';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Карта дизайнын сақтау мүмкін болмады';
 
   @override
@@ -2030,8 +2036,15 @@ class AppLocalizationsKk extends AppLocalizations {
   String get googleWalletSetupPending => 'Google Wallet орнату күтілуде.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Google Wallet орнату күтілуде. Профиль сілтемесі көшірілді.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Бизнесіңізді дамытыңыз';

@@ -20,6 +20,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
   final String? bio;
   final bool verified;
   final double width;
+  final double? height;
 
   const TemplateBusinessCardPreview({
     super.key,
@@ -33,6 +34,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
     this.bio,
     this.verified = false,
     this.width = 340,
+    this.height,
   });
 
   @override
@@ -42,6 +44,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
 
     return Container(
       width: width,
+      height: height,
       decoration: BoxDecoration(
         color: cover == null || cover.isEmpty ? template.backgroundColor : null,
         borderRadius: BorderRadius.circular(24),
@@ -64,7 +67,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
       ),
       padding: EdgeInsets.all(22),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: height == null ? MainAxisSize.min : MainAxisSize.max,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,7 +136,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
               ),
             ),
           ],
-          const SizedBox(height: 18),
+          if (height != null) const Spacer() else const SizedBox(height: 18),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(

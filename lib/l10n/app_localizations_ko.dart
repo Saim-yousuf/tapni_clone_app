@@ -249,6 +249,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get addToGoogleWallet => 'Google 지갑에 추가';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => '주소';
 
   @override
@@ -1826,6 +1829,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Google 지갑을 열 수 없습니다.';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => '카드 디자인을 저장할 수 없습니다.';
 
   @override
@@ -1977,8 +1983,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get googleWalletSetupPending => 'Google 지갑 설정이 보류 중입니다.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Google 지갑 설정이 보류 중입니다. 프로필 링크가 복사되었습니다.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => '비즈니스를 성장시키세요';

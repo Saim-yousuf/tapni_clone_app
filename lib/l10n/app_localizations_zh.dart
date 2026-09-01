@@ -248,6 +248,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addToGoogleWallet => '添加到 Google 钱包';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => '地址';
 
   @override
@@ -1802,6 +1805,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get couldNotOpenGoogleWallet => '无法打开 Google 电子钱包';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => '无法保存卡片设计';
 
   @override
@@ -1953,8 +1959,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get googleWalletSetupPending => 'Google 电子钱包设置待处理。';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Google 电子钱包设置待处理。个人资料链接已复制。';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => '拓展您的业务';

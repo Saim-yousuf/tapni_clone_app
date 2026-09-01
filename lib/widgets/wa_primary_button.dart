@@ -11,6 +11,8 @@ class WaPrimaryButton extends StatelessWidget {
   final bool expand;
   final bool outlined;
   final IconData? icon;
+  /// Prefer over [icon] when a branded image (e.g. Google Wallet) is needed.
+  final Widget? iconWidget;
   final Color? backgroundColor;
   final Color? foregroundColor;
 
@@ -22,6 +24,7 @@ class WaPrimaryButton extends StatelessWidget {
     this.expand = true,
     this.outlined = false,
     this.icon,
+    this.iconWidget,
     this.backgroundColor,
     this.foregroundColor,
   });
@@ -58,7 +61,10 @@ class WaPrimaryButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (icon != null) ...[
+              if (iconWidget != null) ...[
+                iconWidget!,
+                const SizedBox(width: 8),
+              ] else if (icon != null) ...[
                 Icon(icon, size: 20, color: fg),
                 const SizedBox(width: 8),
               ],

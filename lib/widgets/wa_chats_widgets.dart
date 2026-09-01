@@ -33,7 +33,7 @@ class WaChatsHeader extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: WaUi.toolsTitle,
+                      style: WaUi.toolsTitleOf(weight: FontWeight.w400),
                     ),
                     if (subtitle != null) ...[
                       const SizedBox(height: 2),

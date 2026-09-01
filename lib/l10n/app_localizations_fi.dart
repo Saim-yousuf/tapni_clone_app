@@ -258,6 +258,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get addToGoogleWallet => 'Lisää Google Walletiin';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Osoite';
 
   @override
@@ -1866,6 +1869,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Google Walletia ei voitu avata';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Kortin suunnittelua ei voitu tallentaa';
 
   @override
@@ -2022,8 +2028,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get googleWalletSetupPending => 'Google Wallet -määritys odottaa.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Google Wallet -määritys odottaa. Profiililinkki kopioitu.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Kasvata liiketoimintaasi';

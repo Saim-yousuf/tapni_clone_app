@@ -265,6 +265,9 @@ class AppLocalizationsFil extends AppLocalizations {
   String get addToGoogleWallet => 'Idagdag sa Google Wallet';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Address';
 
   @override
@@ -1887,6 +1890,9 @@ class AppLocalizationsFil extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Hindi mabuksan ang Google Wallet';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Hindi ma-save ang disenyo ng card';
 
   @override
@@ -2044,8 +2050,15 @@ class AppLocalizationsFil extends AppLocalizations {
       'Nakabinbin ang pag-setup ng Google Wallet.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Nakabinbin ang pag-setup ng Google Wallet. Nakopya ang link ng profile.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Palakihin ang iyong negosyo';

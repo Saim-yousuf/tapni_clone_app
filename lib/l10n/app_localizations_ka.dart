@@ -261,6 +261,9 @@ class AppLocalizationsKa extends AppLocalizations {
   String get addToGoogleWallet => 'Google Wallet-ში დამატება';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'მისამართი';
 
   @override
@@ -1872,6 +1875,9 @@ class AppLocalizationsKa extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Google Wallet-ის გახსნა ვერ მოხერხდა';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'ბარათის დიზაინის შენახვა ვერ მოხერხდა';
 
   @override
@@ -2030,8 +2036,15 @@ class AppLocalizationsKa extends AppLocalizations {
       'Google Wallet-ის დაყენება მოლოდინშია.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Google Wallet-ის დაყენება მოლოდინშია. პროფილის ბმული კოპირებულია.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'გაზარდეთ თქვენი ბიზნესი';

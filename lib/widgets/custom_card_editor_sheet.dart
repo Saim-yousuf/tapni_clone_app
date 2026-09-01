@@ -3,12 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/helper/link_entries_cache.dart';
+import 'package:tapni_app/models/invitation_design.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/screens/business_card/business_card_design_editor_screen.dart';
 import 'package:tapni_app/screens/business_card/business_card_template_gallery_screen.dart';
+import 'package:tapni_app/widgets/business_card_design_renderer.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/template_business_card_preview.dart';
@@ -46,8 +50,12 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
   String? _profilePhotoPath;
   String? _coverPhotoPath;
   late Set<String> _enabledLinkIds;
+  late Set<String> _enabledEntryIds;
+  /// Active links with multi-entries restored from local cache when API omits them.
+  List<SocialLink> _resolvedLinks = const [];
   bool _saving = false;
   bool _didSeedTitle = false;
+  bool _didHydrateEntries = false;
 
   static const _colorPresets = [
     '#1E2022',
@@ -61,6 +69,9 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
   ];
 
   bool get _isEditing => widget.existing != null;
+
+  bool get _hasPrintDesign =>
+      widget.existing?.design != null && widget.existing!.design!.hasLayers;
 
   @override
   void initState() {
@@ -80,14 +91,21 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     _profilePhotoPath = existing?.profilePhotoUrl;
     _coverPhotoPath = existing?.coverPhotoUrl;
 
-    final allLinkIds = profile.socialLinks
-        .where((l) => l.isActive)
-        .map((l) => l.id)
-        .toSet();
+    final activeLinks = profile.socialLinks.where((l) => l.isActive).toList();
+    _resolvedLinks = activeLinks;
+    final allLinkIds = activeLinks.map((l) => l.id).toSet();
+    final allEntryIds = _entryIdsFrom(activeLinks);
+
     if (existing != null && existing.enabledLinkIds.isNotEmpty) {
       _enabledLinkIds = existing.enabledLinkIds.toSet();
     } else {
       _enabledLinkIds = allLinkIds;
+    }
+
+    if (existing != null && existing.enabledEntryIds.isNotEmpty) {
+      _enabledEntryIds = existing.enabledEntryIds.toSet();
+    } else {
+      _enabledEntryIds = allEntryIds;
     }
 
     if (_isEditing) {
@@ -98,6 +116,43 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     } else {
       _step = _CardSetupMode.pick;
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => _hydrateLinkEntries());
+  }
+
+  Set<String> _entryIdsFrom(List<SocialLink> links) {
+    return links
+        .where((l) => l.effectiveEntries.length > 1)
+        .expand((l) => l.effectiveEntries.map((e) => e.id))
+        .toSet();
+  }
+
+  Future<void> _hydrateLinkEntries() async {
+    if (_didHydrateEntries || !mounted) return;
+    _didHydrateEntries = true;
+    final provider = Provider.of<ProfileProvider>(context, listen: false);
+    final userId = provider.profile.id ?? '';
+    final active = provider.profile.socialLinks.where((l) => l.isActive).toList();
+    // Prefer cache when it has more numbers than the API payload.
+    final resolved = await LinkEntriesCache.applyPreferRicher(userId, active);
+    if (!mounted) return;
+
+    setState(() {
+      _resolvedLinks = resolved;
+      final discovered = _entryIdsFrom(resolved);
+      if (widget.existing == null ||
+          (widget.existing!.enabledEntryIds.isEmpty)) {
+        for (final id in discovered) {
+          final link = resolved.firstWhere(
+            (l) => l.effectiveEntries.any((e) => e.id == id),
+            orElse: () => resolved.first,
+          );
+          if (_enabledLinkIds.contains(link.id)) {
+            _enabledEntryIds.add(id);
+          }
+        }
+      }
+    });
   }
 
   @override
@@ -110,6 +165,20 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     }
   }
 
+  void _ensureEntriesTracked(List<LinkEntry> entries) {
+    final tracked = entries.any((e) => _enabledEntryIds.contains(e.id));
+    if (tracked) return;
+    for (final e in entries) {
+      _enabledEntryIds.add(e.id);
+    }
+  }
+
+  bool _isEntryEnabled(List<LinkEntry> entries, LinkEntry entry) {
+    final tracked = entries.any((e) => _enabledEntryIds.contains(e.id));
+    if (!tracked) return true;
+    return _enabledEntryIds.contains(entry.id);
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -120,6 +189,8 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
   }
 
   UserCustomCard _buildCard(String id) {
+    final existing = widget.existing;
+    final keepPrint = existing?.design != null && existing!.design!.hasLayers;
     return UserCustomCard(
       id: id,
       title: _titleController.text.trim().isEmpty
@@ -133,10 +204,16 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
           : _subtitleController.text.trim(),
       bio: _bioController.text.trim().isEmpty ? null : _bioController.text.trim(),
       cardTemplateId: _templateId,
-      backgroundColorHex: _step == _CardSetupMode.template ? null : _backgroundColorHex,
+      backgroundColorHex: keepPrint
+          ? existing.backgroundColorHex
+          : (_step == _CardSetupMode.template ? null : _backgroundColorHex),
       profilePhotoUrl: _profilePhotoPath,
-      coverPhotoUrl: _step == _CardSetupMode.template ? null : _coverPhotoPath,
+      coverPhotoUrl: keepPrint
+          ? existing.coverPhotoUrl
+          : (_step == _CardSetupMode.template ? null : _coverPhotoPath),
       enabledLinkIds: _enabledLinkIds.toList(),
+      enabledEntryIds: _enabledEntryIds.toList(),
+      design: existing?.design,
     );
   }
 
@@ -148,16 +225,19 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     final id = widget.existing?.id ??
         DateTime.now().millisecondsSinceEpoch.toString();
     final card = _buildCard(id);
+    final keepPrint = _hasPrintDesign;
 
     String? profilePhoto = _profilePhotoPath;
-    String? coverPhoto = _step == _CardSetupMode.customize ? _coverPhotoPath : null;
+    String? coverPhoto =
+        keepPrint ? widget.existing?.coverPhotoUrl : (_step == _CardSetupMode.customize ? _coverPhotoPath : null);
 
     if (_profilePhotoPath != null &&
         !_profilePhotoPath!.startsWith('http') &&
         !_profilePhotoPath!.startsWith('data:')) {
       profilePhoto = await fileToBase64(File(_profilePhotoPath!));
     }
-    if (coverPhoto != null &&
+    if (!keepPrint &&
+        coverPhoto != null &&
         !coverPhoto.startsWith('http') &&
         !coverPhoto.startsWith('data:')) {
       coverPhoto = await fileToBase64(File(coverPhoto));
@@ -166,8 +246,9 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     final savedCard = card.copyWith(
       profilePhotoUrl: profilePhoto,
       coverPhotoUrl: coverPhoto,
-      clearCoverPhoto: _step == _CardSetupMode.template,
-      clearBackgroundColor: _step == _CardSetupMode.template,
+      clearCoverPhoto: !keepPrint && _step == _CardSetupMode.template,
+      clearBackgroundColor: !keepPrint && _step == _CardSetupMode.template,
+      design: widget.existing?.design,
     );
 
     final ok = _isEditing
@@ -190,6 +271,40 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
       ),
     );
     if (ok || !_isEditing) Navigator.pop(context);
+  }
+
+  Future<void> _openPrintDesignEditor() async {
+    final existing = widget.existing;
+    if (existing == null) return;
+    final navigator = Navigator.of(context);
+    final provider = Provider.of<ProfileProvider>(context, listen: false);
+    final design = existing.design;
+
+    if (design == null || !design.hasLayers) {
+      await navigator.push<String>(
+        MaterialPageRoute(
+          builder: (_) => BusinessCardTemplateGalleryScreen(
+            cardId: existing.id,
+            existingDesign: design,
+          ),
+        ),
+      );
+    } else {
+      await navigator.push<String>(
+        MaterialPageRoute(
+          builder: (_) => BusinessCardDesignEditorScreen(
+            design: design.copy(),
+            cardId: existing.id,
+          ),
+        ),
+      );
+    }
+    if (!mounted) return;
+    final fresh = provider.customCardById(existing.id);
+    if (fresh == null) return;
+    // Reload sheet so updated design + links stay in sync.
+    Navigator.pop(context);
+    await CustomCardEditorSheet.show(navigator.context, existing: fresh);
   }
 
   Future<void> _delete() async {
@@ -319,16 +434,23 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
           icon: Icons.tune_rounded,
           title: context.l10n.customizeYourself,
           subtitle: 'Full editor — text, logo, QR, colors like invitation cards',
-          onTap: () {
+          onTap: () async {
             final navigator = Navigator.of(context);
+            final provider =
+                Provider.of<ProfileProvider>(context, listen: false);
             Navigator.pop(context); // close New Card sheet
-            navigator.push(
+            final cardId = await navigator.push<String>(
               MaterialPageRoute(
                 builder: (_) => const BusinessCardTemplateGalleryScreen(
                   createNewCard: true,
                 ),
               ),
             );
+            if (cardId == null || cardId.isEmpty) return;
+            final card = provider.customCardById(cardId);
+            if (card == null) return;
+            // Next step: set which links (and numbers) show on this card.
+            await CustomCardEditorSheet.show(navigator.context, existing: card);
           },
         ),
       ],
@@ -349,6 +471,30 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     final previewCard = _buildCard(widget.existing?.id ?? 'preview');
     final previewUrl = previewCard.profileUrl(username);
     final isCustomize = _step == _CardSetupMode.customize;
+    final printDesign = widget.existing?.design;
+
+    if (printDesign != null && printDesign.hasLayers) {
+      var design = printDesign;
+      final needsQrSync = design.layers.any(
+        (l) =>
+            (l.type == DesignLayerType.qr || l.fieldKey == 'qr') &&
+            l.qrData != previewUrl,
+      );
+      if (needsQrSync) {
+        design = design.copy();
+        design.setQrData(previewUrl);
+      }
+      return Center(
+        child: SizedBox(
+          width: 280,
+          child: BusinessCardDesignRenderer(
+            design: design,
+            interactive: false,
+            borderRadius: 20,
+          ),
+        ),
+      );
+    }
 
     return Center(
       child: TemplateBusinessCardPreview(
@@ -452,8 +598,13 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
   }
 
   Widget _buildLinksSection() {
-    final provider = Provider.of<ProfileProvider>(context);
-    final links = provider.profile.socialLinks.where((l) => l.isActive).toList();
+    final links = _resolvedLinks.isNotEmpty
+        ? _resolvedLinks
+        : Provider.of<ProfileProvider>(context)
+            .profile
+            .socialLinks
+            .where((l) => l.isActive)
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,18 +632,68 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
         else
           ...links.map((link) {
             final enabled = _enabledLinkIds.contains(link.id);
-            return _LinkToggleRow(
-              link: link,
-              enabled: enabled,
-              onChanged: (val) {
-                setState(() {
-                  if (val) {
-                    _enabledLinkIds.add(link.id);
-                  } else {
-                    _enabledLinkIds.remove(link.id);
-                  }
-                });
-              },
+            final entries = link.effectiveEntries.length > 1
+                ? link.effectiveEntries
+                : const <LinkEntry>[];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _LinkToggleRow(
+                  link: link,
+                  enabled: enabled,
+                  onChanged: (val) {
+                    setState(() {
+                      if (val) {
+                        _enabledLinkIds.add(link.id);
+                        for (final e in entries) {
+                          _enabledEntryIds.add(e.id);
+                        }
+                      } else {
+                        _enabledLinkIds.remove(link.id);
+                        for (final e in entries) {
+                          _enabledEntryIds.remove(e.id);
+                        }
+                      }
+                    });
+                  },
+                ),
+                if (enabled && entries.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, top: 2, bottom: 8),
+                    child: Column(
+                      children: entries.map((entry) {
+                        final entryOn = _isEntryEnabled(entries, entry);
+                        final title = entry.name.trim().isNotEmpty
+                            ? entry.name.trim()
+                            : entry.value;
+                        return _EntryToggleRow(
+                          title: title,
+                          subtitle: entry.name.trim().isNotEmpty &&
+                                  entry.name.trim() != entry.value
+                              ? entry.value
+                              : null,
+                          enabled: entryOn,
+                          onChanged: (val) {
+                            setState(() {
+                              _ensureEntriesTracked(entries);
+                              if (val) {
+                                _enabledEntryIds.add(entry.id);
+                                _enabledLinkIds.add(link.id);
+                              } else {
+                                _enabledEntryIds.remove(entry.id);
+                                final anyLeft = entries
+                                    .any((e) => _enabledEntryIds.contains(e.id));
+                                if (!anyLeft) {
+                                  _enabledLinkIds.remove(link.id);
+                                }
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+              ],
             );
           }),
       ],
@@ -534,9 +735,15 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildPreview(),
+        if (_hasPrintDesign) ...[
+          const SizedBox(height: 12),
+          _buildEditDesignButton(),
+        ],
         const SizedBox(height: 20),
-        _buildTemplatePicker(),
-        const SizedBox(height: 16),
+        if (!_hasPrintDesign) ...[
+          _buildTemplatePicker(),
+          const SizedBox(height: 16),
+        ],
         _buildBasicFields(),
         const SizedBox(height: 16),
         _buildLinksSection(),
@@ -552,51 +759,76 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildPreview(),
+        if (_hasPrintDesign) ...[
+          const SizedBox(height: 12),
+          _buildEditDesignButton(),
+        ],
         const SizedBox(height: 20),
         _buildBasicFields(),
-        const SizedBox(height: 16),
-        Text(context.l10n.photos, style: WaUi.bodyMedium),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            _photoPicker(
-              label: context.l10n.profile,
-              path: _profilePhotoPath,
-              onPick: () async {
-                final file = await pickFile();
-                if (file?.file != null) {
-                  setState(() => _profilePhotoPath = file!.file!.path);
-                }
-              },
-            ),
-            const SizedBox(width: 12),
-            _photoPicker(
-              label: context.l10n.background,
-              path: _coverPhotoPath,
-              onPick: () async {
-                final file = await pickFile();
-                if (file?.file != null) {
-                  setState(() => _coverPhotoPath = file!.file!.path);
-                }
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Text(context.l10n.backgroundColor, style: WaUi.bodyMedium),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: [
-            ..._colorPresets.map(_colorDot),
-          ],
-        ),
+        if (!_hasPrintDesign) ...[
+          const SizedBox(height: 16),
+          Text(context.l10n.photos, style: WaUi.bodyMedium),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              _photoPicker(
+                label: context.l10n.profile,
+                path: _profilePhotoPath,
+                onPick: () async {
+                  final file = await pickFile();
+                  if (file?.file != null) {
+                    setState(() => _profilePhotoPath = file!.file!.path);
+                  }
+                },
+              ),
+              const SizedBox(width: 12),
+              _photoPicker(
+                label: context.l10n.background,
+                path: _coverPhotoPath,
+                onPick: () async {
+                  final file = await pickFile();
+                  if (file?.file != null) {
+                    setState(() => _coverPhotoPath = file!.file!.path);
+                  }
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(context.l10n.backgroundColor, style: WaUi.bodyMedium),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              ..._colorPresets.map(_colorDot),
+            ],
+          ),
+        ],
         const SizedBox(height: 16),
         _buildLinksSection(),
         const SizedBox(height: 20),
         _buildSaveButton(),
       ],
+    );
+  }
+
+  Widget _buildEditDesignButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: _openPrintDesignEditor,
+        icon: const Icon(Icons.design_services_outlined, size: 20),
+        label: Text(context.l10n.customizeCardDesign),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: WaUi.primaryText,
+          side: BorderSide(color: WaUi.divider),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(WaUi.radiusMd),
+          ),
+        ),
+      ),
     );
   }
 
@@ -747,6 +979,53 @@ class _LinkToggleRow extends StatelessWidget {
                 children: [
                   Text(link.platformName, style: WaUi.bodyMedium),
                   Text(context.l10n.showOnThisCard, style: WaUi.caption),
+                ],
+              ),
+            ),
+            Switch(
+              value: enabled,
+              onChanged: onChanged,
+              activeTrackColor: WaUi.accent.withValues(alpha: 0.35),
+              activeThumbColor: WaUi.accent,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EntryToggleRow extends StatelessWidget {
+  final String title;
+  final String? subtitle;
+  final bool enabled;
+  final ValueChanged<bool> onChanged;
+
+  const _EntryToggleRow({
+    required this.title,
+    required this.enabled,
+    required this.onChanged,
+    this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: WaUi.scaffold,
+      borderRadius: BorderRadius.circular(WaUi.radiusMd),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+        child: Row(
+          children: [
+            Icon(Icons.phone_iphone_outlined, size: 18, color: WaUi.secondaryText),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: WaUi.body.copyWith(fontSize: 14)),
+                  if (subtitle != null)
+                    Text(subtitle!, style: WaUi.caption),
                 ],
               ),
             ),

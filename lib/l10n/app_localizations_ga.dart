@@ -261,6 +261,9 @@ class AppLocalizationsGa extends AppLocalizations {
   String get addToGoogleWallet => 'Cuir le Google Wallet é';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Seoladh';
 
   @override
@@ -1875,6 +1878,9 @@ class AppLocalizationsGa extends AppLocalizations {
       'Níorbh fhéidir Google Wallet a oscailt';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign =>
       'Níorbh fhéidir dearadh an chárta a shábháil';
 
@@ -2033,8 +2039,15 @@ class AppLocalizationsGa extends AppLocalizations {
   String get googleWalletSetupPending => 'Socrú Google Wallet ar feitheamh.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Socrú Google Wallet ar feitheamh. Cóipeáladh nasc próifíle.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Fás do ghnó';

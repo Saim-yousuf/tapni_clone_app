@@ -259,6 +259,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get addToGoogleWallet => 'Tambahkan ke Google Dompet';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Alamat';
 
   @override
@@ -1872,6 +1875,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Tidak dapat membuka Google Wallet';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Tidak dapat menyimpan desain kartu';
 
   @override
@@ -2026,8 +2032,15 @@ class AppLocalizationsId extends AppLocalizations {
   String get googleWalletSetupPending => 'Penyiapan Google Wallet tertunda.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Penyiapan Google Wallet tertunda. Tautan profil disalin.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Kembangkan bisnis Anda';

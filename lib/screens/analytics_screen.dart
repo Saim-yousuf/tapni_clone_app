@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -71,6 +72,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   bool _isLoading = true;
   _AnalyticsRange _range = _AnalyticsRange.d7;
   int _selectedListTab = 0; // 0 viewers, 1 scanners
+  late final PageController _listPageController;
 
   int _profileViews = 0;
   int _cardScans = 0;
@@ -85,10 +87,43 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   List<dynamic> _scanners = [];
   int _lastReconnectTick = 0;
 
+  static const double _viewerTileHeight = 68;
+  static const double _emptyListHeight = 148;
+
   @override
   void initState() {
     super.initState();
+    _listPageController = PageController();
     _fetchAnalytics();
+  }
+
+  @override
+  void dispose() {
+    _listPageController.dispose();
+    super.dispose();
+  }
+
+  void _selectListTab(int index) {
+    final current = _listPageController.hasClients
+        ? (_listPageController.page ?? _selectedListTab.toDouble())
+        : _selectedListTab.toDouble();
+    if ((current - index).abs() < 0.01) return;
+    setState(() => _selectedListTab = index);
+    _listPageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  double _listPageHeight() {
+    final viewersH = _profileViewers.isEmpty
+        ? _emptyListHeight
+        : _profileViewers.length * _viewerTileHeight;
+    final scannersH = _scanners.isEmpty
+        ? _emptyListHeight
+        : _scanners.length * _viewerTileHeight;
+    return math.max(viewersH, scannersH);
   }
 
   Future<void> _fetchAnalytics() async {
@@ -236,27 +271,47 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                           const SizedBox(height: 16),
                           _TrendChart(points: _trend),
                           const SizedBox(height: 28),
-                          _ListTabs(
-                            selected: _selectedListTab,
-                            viewersCount: _profileViewers.length,
-                            scannersCount: _scanners.length,
-                            onChanged: (i) =>
-                                setState(() => _selectedListTab = i),
+                          AnimatedBuilder(
+                            animation: _listPageController,
+                            builder: (context, _) {
+                              final page = _listPageController.hasClients
+                                  ? (_listPageController.page ??
+                                      _selectedListTab.toDouble())
+                                  : _selectedListTab.toDouble();
+                              return _ListTabs(
+                                position: page.clamp(0.0, 1.0),
+                                viewersCount: _profileViewers.length,
+                                scannersCount: _scanners.length,
+                                onChanged: _selectListTab,
+                              );
+                            },
                           ),
                           const SizedBox(height: 8),
-                          if (_selectedListTab == 0)
-                            ..._buildPeopleList(
-                              items: _profileViewers,
-                              emptyLabel:
-                                  context.l10n.noOneHasViewedYourProfileYet,
-                              isScan: false,
-                            )
-                          else
-                            ..._buildPeopleList(
-                              items: _scanners,
-                              emptyLabel: 'No QR scans in this period yet.',
-                              isScan: true,
+                          SizedBox(
+                            height: _listPageHeight(),
+                            child: PageView(
+                              controller: _listPageController,
+                              onPageChanged: (i) {
+                                if (_selectedListTab == i) return;
+                                setState(() => _selectedListTab = i);
+                              },
+                              children: [
+                                _buildPeoplePage(
+                                  items: _profileViewers,
+                                  emptyLabel: context
+                                      .l10n
+                                      .noOneHasViewedYourProfileYet,
+                                  isScan: false,
+                                ),
+                                _buildPeoplePage(
+                                  items: _scanners,
+                                  emptyLabel:
+                                      'No QR scans in this period yet.',
+                                  isScan: true,
+                                ),
+                              ],
                             ),
+                          ),
                         ],
                       ),
                     ),
@@ -265,6 +320,23 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPeoplePage({
+    required List<dynamic> items,
+    required String emptyLabel,
+    required bool isScan,
+  }) {
+    final children = _buildPeopleList(
+      items: items,
+      emptyLabel: emptyLabel,
+      isScan: isScan,
+    );
+    return ListView(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      children: children,
     );
   }
 
@@ -791,26 +863,28 @@ class _LegendDot extends StatelessWidget {
 }
 
 class _ListTabs extends StatelessWidget {
-  final int selected;
+  final double position;
   final int viewersCount;
   final int scannersCount;
   final ValueChanged<int> onChanged;
 
   const _ListTabs({
-    required this.selected,
+    required this.position,
     required this.viewersCount,
     required this.scannersCount,
     required this.onChanged,
   });
 
   void _select(int index) {
-    if (selected == index) return;
     HapticFeedback.selectionClick();
     onChanged(index);
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = position.clamp(0.0, 1.0);
+    final selected = t < 0.5 ? 0 : 1;
+
     return Container(
       height: 46,
       padding: const EdgeInsets.all(4),
@@ -824,12 +898,12 @@ class _ListTabs extends StatelessWidget {
           final tabWidth = (constraints.maxWidth - 4) / 2;
           return Stack(
             children: [
-              AnimatedAlign(
-                duration: const Duration(milliseconds: 240),
-                curve: Curves.easeOutCubic,
-                alignment: selected == 0
-                    ? Alignment.centerLeft
-                    : Alignment.centerRight,
+              Align(
+                alignment: Alignment.lerp(
+                  Alignment.centerLeft,
+                  Alignment.centerRight,
+                  t,
+                )!,
                 child: SizedBox(
                   width: tabWidth,
                   height: double.infinity,
@@ -900,8 +974,7 @@ class _AnalyticsSegTab extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Center(
-        child: AnimatedDefaultTextStyle(
-          duration: const Duration(milliseconds: 200),
+        child: DefaultTextStyle(
           style: TextStyle(
             fontSize: 13.5,
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
@@ -911,16 +984,12 @@ class _AnalyticsSegTab extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: Icon(
-                  icon,
-                  key: ValueKey<bool>(selected),
-                  size: 17,
-                  color: selected
-                      ? const Color(0xFF0F172A)
-                      : const Color(0xFF94A3B8),
-                ),
+              Icon(
+                icon,
+                size: 17,
+                color: selected
+                    ? const Color(0xFF0F172A)
+                    : const Color(0xFF94A3B8),
               ),
               const SizedBox(width: 7),
               Flexible(

@@ -604,8 +604,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Marketplace',
+                      'Barqody Partner',
                       style: WaUi.toolsTitleOf(
+                        weight: FontWeight.w400,
                         color: colors.primaryText,
                       ),
                       maxLines: 1,

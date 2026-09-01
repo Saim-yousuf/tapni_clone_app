@@ -42,7 +42,8 @@ class QrCardStackCarousel extends StatefulWidget {
 class _QrCardStackCarouselState extends State<QrCardStackCarousel>
     with SingleTickerProviderStateMixin {
   static const _cardWidth = 340.0;
-  static const _stackHeight = 480.0;
+  static const _cardHeight = 440.0;
+  static const _stackHeight = 460.0;
   static const _swipeThreshold = 72.0;
   static const _velocityThreshold = 700.0;
   static const _maxVisibleDepth = 3;
@@ -234,17 +235,12 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
     }
     if (depth == 0) return _dragOffset;
 
-    final yPeek = depth * 12.0;
+    final yPeek = depth * 14.0;
     final parallax = _dragOffset.dx * 0.1 * depth;
 
-    // One card behind: keep centered but wider than front so both edges peek.
-    if (widget.cards.length == 2 && depth == 1) {
-      return Offset(parallax, yPeek);
-    }
-
-    // Multiple back cards: fan out left/right.
+    // Fan back cards slightly so edges peek behind the front card.
     final side = depth.isOdd ? -1.0 : 1.0;
-    final xPeek = side * (12.0 + (depth - 1) * 6.0);
+    final xPeek = side * (10.0 + (depth - 1) * 6.0);
 
     return Offset(xPeek + parallax, yPeek);
   }
@@ -254,20 +250,15 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
       return _rotationAnim.value;
     }
     if (depth == 0) return _dragRotation(_dragOffset.dx);
-    if (widget.cards.length == 2 && depth == 1) return 0;
 
     final side = depth.isOdd ? -1.0 : 1.0;
-    return side * 0.045;
+    return side * 0.04;
   }
 
   double _cardScaleForDepth(int depth) {
-    if (depth == 0) {
-      return widget.cards.length > 1 ? 0.96 : 1.0;
-    }
-    if (widget.cards.length == 2 && depth == 1) {
-      return 1.0;
-    }
-    return 0.96 - depth * 0.035;
+    // Front card is always largest; back cards shrink so they peek behind.
+    if (depth == 0) return 1.0;
+    return 1.0 - depth * 0.045;
   }
 
   double _cardOpacityForDepth(int depth) => depth == 0 ? 1.0 : 1 - depth * 0.08;
@@ -310,43 +301,46 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
               ),
             ),
             SizedBox(height: 8),
-            Text(context.l10n.swipeToBrowseCards, style: WaUi.caption),
-            SizedBox(height: 10),
+            if (cards.length > 1) ...[
+              Text(context.l10n.swipeToBrowseCards, style: WaUi.caption),
+              SizedBox(height: 10),
+            ] else
+              SizedBox(height: 10),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _IconCircleButton(
-                    icon: Icons.chevron_left,
-                    tooltip: context.l10n.previousCard,
-                    onTap: cards.length > 1
-                        ? () => _bringPreviousToFront()
-                        : () {},
-                    enabled: cards.length > 1 && !_isAnimating,
-                  ),
-                  SizedBox(width: 6),
-                  ...List.generate(cards.length, (i) {
-                    final active = i == topIndex;
-                    return AnimatedContainer(
-                      duration: Duration(milliseconds: 200),
-                      margin: EdgeInsets.symmetric(horizontal: 3),
-                      width: active ? 18 : 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color: active ? WaUi.accent : WaUi.divider,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                    );
-                  }),
-                  SizedBox(width: 6),
-                  _IconCircleButton(
-                    icon: Icons.chevron_right,
-                    tooltip: context.l10n.nextCard,
-                    onTap: cards.length > 1 ? () => _bringNextToFront() : () {},
-                    enabled: cards.length > 1 && !_isAnimating,
-                  ),
-                  SizedBox(width: 8),
+                  if (cards.length > 1) ...[
+                    _IconCircleButton(
+                      icon: Icons.chevron_left,
+                      tooltip: context.l10n.previousCard,
+                      onTap: () => _bringPreviousToFront(),
+                      enabled: !_isAnimating,
+                    ),
+                    SizedBox(width: 6),
+                    ...List.generate(cards.length, (i) {
+                      final active = i == topIndex;
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        margin: EdgeInsets.symmetric(horizontal: 3),
+                        width: active ? 18 : 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: active ? WaUi.accent : WaUi.divider,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                      );
+                    }),
+                    SizedBox(width: 6),
+                    _IconCircleButton(
+                      icon: Icons.chevron_right,
+                      tooltip: context.l10n.nextCard,
+                      onTap: () => _bringNextToFront(),
+                      enabled: !_isAnimating,
+                    ),
+                    SizedBox(width: 8),
+                  ],
                   _IconCircleButton(
                     icon: Icons.add,
                     tooltip: context.l10n.newCard2,
@@ -393,7 +387,9 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
             ),
             const SizedBox(height: 6),
             Text(
-              '${topIndex + 1} of ${cards.length} · ${cards[topIndex].title}',
+              cards.length > 1
+                  ? '${topIndex + 1} of ${cards.length} · ${cards[topIndex].title}'
+                  : cards[topIndex].title,
               style: WaUi.caption,
             ),
           ],
@@ -412,23 +408,16 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
     final offset = _cardOffsetForDepth(depth);
     final rotation = _cardRotationForDepth(depth);
     final scale = _cardScaleForDepth(depth);
-    final opacity = _cardOpacityForDepth(depth);
 
     Widget card = SizedBox(
       width: cardWidth,
-      height: _stackHeight,
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        alignment: Alignment.topCenter,
-        child: SizedBox(
-          width: cardWidth,
-          child: _buildCard(
-            cards[cardIndex],
-            cardWidth: cardWidth,
-            isActive: isTop,
-            showExportKey: isTop,
-          ),
-        ),
+      height: _cardHeight,
+      child: _buildCard(
+        cards[cardIndex],
+        cardWidth: cardWidth,
+        cardHeight: _cardHeight,
+        isActive: isTop,
+        showExportKey: isTop,
       ),
     );
 
@@ -439,7 +428,10 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
         child: Transform.scale(
           scale: scale,
           alignment: Alignment.topCenter,
-          child: Opacity(opacity: opacity.clamp(0.0, 1.0), child: card),
+          child: Opacity(
+            opacity: _cardOpacityForDepth(depth).clamp(0.0, 1.0),
+            child: card,
+          ),
         ),
       ),
     );
@@ -464,6 +456,7 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
   Widget _buildCard(
     CardDisplayData card, {
     required double cardWidth,
+    required double cardHeight,
     required bool isActive,
     required bool showExportKey,
   }) {
@@ -488,11 +481,18 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
       }
       preview = SizedBox(
         width: cardWidth,
-        child: BusinessCardDesignRenderer(
-          key: ValueKey('design_${card.id}'),
-          design: design,
-          interactive: false,
-          borderRadius: 24,
+        height: cardHeight,
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: SizedBox(
+            width: cardWidth,
+            child: BusinessCardDesignRenderer(
+              key: ValueKey('design_${card.id}'),
+              design: design,
+              interactive: false,
+              borderRadius: 24,
+            ),
+          ),
         ),
       );
     } else {
@@ -508,6 +508,7 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
         bio: card.bio,
         verified: Provider.of<ProfileProvider>(context, listen: false).isProUser,
         width: cardWidth,
+        height: cardHeight,
       );
     }
 

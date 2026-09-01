@@ -262,6 +262,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get addToGoogleWallet => 'Shto në Google Wallet';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Adresa';
 
   @override
@@ -1876,6 +1879,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Nuk mund të hapej Google Wallet';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Dizajni i kartës nuk mund të ruhej';
 
   @override
@@ -2033,8 +2039,15 @@ class AppLocalizationsSq extends AppLocalizations {
       'Konfigurimi i \"Portofolit të Google\" në pritje.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Konfigurimi i \"Portofolit të Google\" në pritje. Lidhja e profilit u kopjua.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Rriteni biznesin tuaj';

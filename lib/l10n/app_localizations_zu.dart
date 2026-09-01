@@ -263,6 +263,9 @@ class AppLocalizationsZu extends AppLocalizations {
   String get addToGoogleWallet => 'Engeza ku-Google Wallet';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Ikheli';
 
   @override
@@ -1883,6 +1886,9 @@ class AppLocalizationsZu extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Ayikwazanga ukuvula i-Google Wallet';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign =>
       'Ayikwazanga ukulondoloza umklamo wekhadi';
 
@@ -2044,8 +2050,15 @@ class AppLocalizationsZu extends AppLocalizations {
       'Ukusethwa kwe-Google Wallet kulindile.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Ukusethwa kwe-Google Wallet kulindile. Isixhumanisi sephrofayela sikopishiwe.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Khulisa ibhizinisi lakho';

@@ -584,7 +584,7 @@ class _BusinessCardDesignEditorScreenState
     if (confirmed != true || !mounted) return;
     final ok = await provider.deleteCustomCard(id);
     if (!mounted) return;
-    if (ok) Navigator.of(context).pop(true);
+    if (ok) Navigator.of(context).pop();
   }
 
   Future<void> _save() async {
@@ -616,7 +616,9 @@ class _BusinessCardDesignEditorScreenState
       ),
     );
     if (ok) {
-      if (mounted) Navigator.of(context).pop(true);
+      if (!mounted) return;
+      // Return card id so callers can open links settings next.
+      Navigator.of(context).pop(targetId);
     }
   }
 

@@ -248,6 +248,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get addToGoogleWallet => 'Google ウォレットに追加';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => '住所';
 
   @override
@@ -1823,6 +1826,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Google ウォレットを開けませんでした';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'カードのデザインを保存できませんでした';
 
   @override
@@ -1974,8 +1980,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get googleWalletSetupPending => 'Google ウォレットの設定が保留中です。';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Google ウォレットの設定が保留中です。プロフィールリンクがコピーされました。';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'ビジネスを成長させる';

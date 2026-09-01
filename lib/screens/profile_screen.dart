@@ -218,43 +218,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _exitEditMode(profileProvider);
       },
       child: Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: false,
-        titleSpacing: 16,
-        toolbarHeight: 64,
         backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        actionsPadding: const EdgeInsets.only(right: 8),
-        title: Image.asset(
-          'assets/images/png/barqody_name.png',
-          height: 72,
-          fit: BoxFit.contain,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+                child: SizedBox(
+                  height: 64,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'BARQODY',
+                                style: WaUi.toolsTitleOf(
+                                  weight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      NotificationIconButton(),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: showShimmer
+                    ? const ProfileScreenShimmer()
+                    : showLoadError
+                        ? Center(
+                            child: ConnectionErrorState(
+                              message: context.l10n.noInternetConnection,
+                              onRetry: () {
+                                profileProvider.fetchProfile();
+                                profileProvider.fetchLinkCatalog();
+                              },
+                            ),
+                          )
+                        : isEditing
+                            ? _buildEditMode(profileProvider, profile)
+                            : _buildViewMode(profileProvider, profile),
+              ),
+            ],
+          ),
         ),
-        actions: [
-          NotificationIconButton(),
-        ],
       ),
-      body: SafeArea(
-        child: showShimmer
-            ? const ProfileScreenShimmer()
-            : showLoadError
-                ? Center(
-                    child: ConnectionErrorState(
-                      message: context.l10n.noInternetConnection,
-                      onRetry: () {
-                        profileProvider.fetchProfile();
-                        profileProvider.fetchLinkCatalog();
-                      },
-                    ),
-                  )
-                : isEditing
-                    ? _buildEditMode(profileProvider, profile)
-                    : _buildViewMode(profileProvider, profile),
-      ),
-    ),
     );
   }
 

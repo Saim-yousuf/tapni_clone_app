@@ -33,9 +33,7 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
       length: 2,
       vsync: this,
       initialIndex: widget.initialTab.clamp(0, 1),
-    )..addListener(() {
-        if (!_tabController.indexIsChanging) setState(() {});
-      });
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<InvitationProvider>().fetchAll();
     });
@@ -122,16 +120,24 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-            child: _ReceivedSentTabs(
-              index: _tabController.index,
-              receivedLabel: context.l10n.received,
-              sentLabel: context.l10n.sent,
-              receivedCount: receivedCount,
-              sentCount: sentCount,
-              onChanged: (i) {
-                if (_tabController.index == i) return;
-                HapticFeedback.selectionClick();
-                _tabController.animateTo(i);
+            child: AnimatedBuilder(
+              animation: _tabController.animation!,
+              builder: (context, _) {
+                return _ReceivedSentTabs(
+                  position: _tabController.animation!.value,
+                  receivedLabel: context.l10n.received,
+                  sentLabel: context.l10n.sent,
+                  receivedCount: receivedCount,
+                  sentCount: sentCount,
+                  onChanged: (i) {
+                    if (_tabController.index == i &&
+                        !_tabController.indexIsChanging) {
+                      return;
+                    }
+                    HapticFeedback.selectionClick();
+                    _tabController.animateTo(i);
+                  },
+                );
               },
             ),
           ),
@@ -257,7 +263,7 @@ class _MyCardsSection extends StatelessWidget {
 }
 
 class _ReceivedSentTabs extends StatelessWidget {
-  final int index;
+  final double position;
   final String receivedLabel;
   final String sentLabel;
   final int receivedCount;
@@ -265,7 +271,7 @@ class _ReceivedSentTabs extends StatelessWidget {
   final ValueChanged<int> onChanged;
 
   const _ReceivedSentTabs({
-    required this.index,
+    required this.position,
     required this.receivedLabel,
     required this.sentLabel,
     required this.receivedCount,
@@ -275,6 +281,9 @@ class _ReceivedSentTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = position.clamp(0.0, 1.0);
+    final selected = t < 0.5 ? 0 : 1;
+
     return Container(
       height: 46,
       padding: const EdgeInsets.all(4),
@@ -291,11 +300,12 @@ class _ReceivedSentTabs extends StatelessWidget {
           final tabWidth = (constraints.maxWidth - 4) / 2;
           return Stack(
             children: [
-              AnimatedAlign(
-                duration: const Duration(milliseconds: 240),
-                curve: Curves.easeOutCubic,
-                alignment:
-                    index == 0 ? Alignment.centerLeft : Alignment.centerRight,
+              Align(
+                alignment: Alignment.lerp(
+                  Alignment.centerLeft,
+                  Alignment.centerRight,
+                  t,
+                )!,
                 child: SizedBox(
                   width: tabWidth,
                   height: double.infinity,
@@ -323,7 +333,7 @@ class _ReceivedSentTabs extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _SegTab(
-                      selected: index == 0,
+                      selected: selected == 0,
                       icon: Icons.inbox_rounded,
                       label: receivedLabel,
                       count: receivedCount,
@@ -332,7 +342,7 @@ class _ReceivedSentTabs extends StatelessWidget {
                   ),
                   Expanded(
                     child: _SegTab(
-                      selected: index == 1,
+                      selected: selected == 1,
                       icon: Icons.send_rounded,
                       label: sentLabel,
                       count: sentCount,
@@ -370,8 +380,7 @@ class _SegTab extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Center(
-        child: AnimatedDefaultTextStyle(
-          duration: const Duration(milliseconds: 200),
+        child: DefaultTextStyle(
           style: TextStyle(
             fontSize: 13.5,
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
@@ -382,16 +391,12 @@ class _SegTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: Icon(
-                  icon,
-                  key: ValueKey<bool>(selected),
-                  size: 17,
-                  color: selected
-                      ? const Color(0xFF0F172A)
-                      : const Color(0xFF94A3B8),
-                ),
+              Icon(
+                icon,
+                size: 17,
+                color: selected
+                    ? const Color(0xFF0F172A)
+                    : const Color(0xFF94A3B8),
               ),
               const SizedBox(width: 7),
               Flexible(

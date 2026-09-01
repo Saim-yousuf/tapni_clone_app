@@ -258,6 +258,9 @@ class AppLocalizationsPs extends AppLocalizations {
   String get addToGoogleWallet => 'په ګوګل والټ کې اضافه کړئ';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'پته';
 
   @override
@@ -1863,6 +1866,9 @@ class AppLocalizationsPs extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'ګوګل والټ نشي خلاصولی';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'د کارت ډیزاین خوندي نه شو';
 
   @override
@@ -2017,8 +2023,15 @@ class AppLocalizationsPs extends AppLocalizations {
   String get googleWalletSetupPending => 'د ګوګل والټ ترتیب پاتې دی.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'د ګوګل والټ ترتیب پاتې دی. د پروفایل لینک کاپي شوی.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'خپل کاروبار ته وده ورکړئ';

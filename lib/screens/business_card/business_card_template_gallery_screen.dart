@@ -43,7 +43,7 @@ class BusinessCardTemplateGalleryScreen extends StatelessWidget {
         ? DateTime.now().millisecondsSinceEpoch.toString()
         : cardId;
 
-    Navigator.of(context).push(
+    Navigator.of(context).push<String>(
       MaterialPageRoute(
         builder: (_) => BusinessCardDesignEditorScreen(
           design: seeded,
@@ -51,9 +51,9 @@ class BusinessCardTemplateGalleryScreen extends StatelessWidget {
           createNewCard: createNewCard,
         ),
       ),
-    ).then((saved) {
-      if (saved == true && context.mounted) {
-        Navigator.of(context).pop(true);
+    ).then((cardId) {
+      if (cardId != null && cardId.isNotEmpty && context.mounted) {
+        Navigator.of(context).pop(cardId);
       }
     });
   }
@@ -71,14 +71,17 @@ class BusinessCardTemplateGalleryScreen extends StatelessWidget {
           if (existingDesign != null && existingDesign!.hasLayers)
             TextButton(
               onPressed: () {
-                Navigator.of(context).push(
+                Navigator.of(context).push<String>(
                   MaterialPageRoute(
                     builder: (_) => BusinessCardDesignEditorScreen(
                       design: existingDesign!.copy(),
                       cardId: cardId,
-                      createNewCard: createNewCard))).then((saved) {
-                  if (saved == true && context.mounted) {
-                    Navigator.of(context).pop(true);
+                      createNewCard: createNewCard,
+                    ),
+                  ),
+                ).then((id) {
+                  if (id != null && id.isNotEmpty && context.mounted) {
+                    Navigator.of(context).pop(id);
                   }
                 });
               },

@@ -704,6 +704,12 @@ abstract class AppLocalizations {
   /// **'Add to Google Wallet'**
   String get addToGoogleWallet;
 
+  /// No description provided for @addToAppleWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Apple Wallet'**
+  String get addToAppleWallet;
+
   /// No description provided for @address.
   ///
   /// In en, this message translates to:
@@ -3762,6 +3768,12 @@ abstract class AppLocalizations {
   /// **'Could not open Google Wallet'**
   String get couldNotOpenGoogleWallet;
 
+  /// No description provided for @couldNotOpenAppleWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open Apple Wallet'**
+  String get couldNotOpenAppleWallet;
+
   /// No description provided for @couldNotSaveCardDesign.
   ///
   /// In en, this message translates to:
@@ -4062,11 +4074,23 @@ abstract class AppLocalizations {
   /// **'Google Wallet setup pending.'**
   String get googleWalletSetupPending;
 
+  /// No description provided for @appleWalletSetupPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Apple Wallet setup pending.'**
+  String get appleWalletSetupPending;
+
   /// No description provided for @googleWalletSetupPendingProfileLinkCopied.
   ///
   /// In en, this message translates to:
   /// **'Google Wallet setup pending. Profile link copied.'**
   String get googleWalletSetupPendingProfileLinkCopied;
+
+  /// No description provided for @appleWalletSetupPendingProfileLinkCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Apple Wallet setup pending. Profile link copied.'**
+  String get appleWalletSetupPendingProfileLinkCopied;
 
   /// No description provided for @growYourBusiness.
   ///

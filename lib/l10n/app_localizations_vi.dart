@@ -261,6 +261,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get addToGoogleWallet => 'Thêm vào Ví Google';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Địa chỉ';
 
   @override
@@ -1868,6 +1871,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Không thể mở Google Wallet';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Không thể lưu thiết kế thẻ';
 
   @override
@@ -2025,8 +2031,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String get googleWalletSetupPending => 'Đang chờ thiết lập Google Wallet.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Đang chờ thiết lập Google Wallet. Đã sao chép liên kết hồ sơ.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Phát triển doanh nghiệp của bạn';

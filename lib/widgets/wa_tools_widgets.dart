@@ -24,7 +24,7 @@ class WaToolsHeader extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 8),
                 child: Text(
                   title,
-                  style: WaUi.toolsTitle,
+                  style: WaUi.toolsTitleOf(weight: FontWeight.w400),
                 ),
               ),
             ),

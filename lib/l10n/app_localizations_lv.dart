@@ -263,6 +263,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get addToGoogleWallet => 'Pievienot pakalpojumam Google maks';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Adrese';
 
   @override
@@ -1874,6 +1877,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Nevarēja atvērt Google maku';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Nevarēja saglabāt kartes dizainu';
 
   @override
@@ -2033,8 +2039,15 @@ class AppLocalizationsLv extends AppLocalizations {
   String get googleWalletSetupPending => 'Gaida Google maka iestatīšanu.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Gaida Google maka iestatīšanu. Profila saite ir nokopēta.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Attīstiet savu biznesu';

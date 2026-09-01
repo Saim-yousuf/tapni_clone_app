@@ -261,6 +261,9 @@ class AppLocalizationsSw extends AppLocalizations {
   String get addToGoogleWallet => 'Ongeza kwenye Google Wallet';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Anwani';
 
   @override
@@ -1871,6 +1874,9 @@ class AppLocalizationsSw extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Haikuweza kufungua Google Wallet';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Haikuweza kuhifadhi muundo wa kadi';
 
   @override
@@ -2028,8 +2034,15 @@ class AppLocalizationsSw extends AppLocalizations {
   String get googleWalletSetupPending => 'Usanidi wa Google Wallet unasubiri.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Usanidi wa Google Wallet unasubiri. Kiungo cha wasifu kimenakiliwa.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Kuza biashara yako';

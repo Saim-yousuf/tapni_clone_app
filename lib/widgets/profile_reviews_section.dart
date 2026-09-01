@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/models/business_review.dart';
@@ -28,17 +30,58 @@ class ProfileReviewsSection extends StatefulWidget {
 class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
   final _repo = ReviewRepo();
   int _tabIndex = 0;
+  late final PageController _pageController;
 
   List<BusinessReview> _businessReviews = [];
   List<ItemReviewSummary> _itemSummaries = [];
   bool _loading = true;
   String? _error;
 
+  static const double _emptyHeight = 220;
+  static const double _reviewTileHeight = 120;
+  static const double _itemTileHeight = 72;
+  static const double _writeButtonHeight = 48;
+
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     if (Constants.reviewsEnabled) _load();
   }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _selectTab(int index) {
+    final current = _pageController.hasClients
+        ? (_pageController.page ?? _tabIndex.toDouble())
+        : _tabIndex.toDouble();
+    if ((current - index).abs() < 0.01) return;
+    setState(() => _tabIndex = index);
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  double _tabContentHeight(int tab) {
+    final writeBtn = widget.isOwnProfile ? 0.0 : _writeButtonHeight;
+    if (tab == 0) {
+      if (_businessReviews.isEmpty) return _emptyHeight;
+      return writeBtn +
+          _businessReviews.length * _reviewTileHeight +
+          16;
+    }
+    if (_itemSummaries.isEmpty) return _emptyHeight;
+    return writeBtn + _itemSummaries.length * _itemTileHeight + 16;
+  }
+
+  double _pageHeight() =>
+      math.max(_tabContentHeight(0), _tabContentHeight(1));
 
   Future<void> _load() async {
     final businessId = widget.profile.id;
@@ -260,9 +303,17 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: _ReviewsSegmentedTabs(
-            index: _tabIndex,
-            onChanged: (i) => setState(() => _tabIndex = i),
+          child: AnimatedBuilder(
+            animation: _pageController,
+            builder: (context, _) {
+              final page = _pageController.hasClients
+                  ? (_pageController.page ?? _tabIndex.toDouble())
+                  : _tabIndex.toDouble();
+              return _ReviewsSegmentedTabs(
+                position: page.clamp(0.0, 1.0),
+                onChanged: _selectTab,
+              );
+            },
           ),
         ),
         const SizedBox(height: 4),
@@ -282,25 +333,42 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
               ),
             ),
           )
-        else if (_tabIndex == 0)
-          _BusinessReviewsTab(
-            reviews: _businessReviews,
-            isOwnProfile: widget.isOwnProfile,
-            onWrite: _writeBusinessReview,
-            onReport: (id) async {
-              await _repo.reportReview(id);
-              if (!mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Review reported')),
-              );
-            },
-          )
         else
-          _ItemReviewsTab(
-            summaries: _itemSummaries,
-            isOwnProfile: widget.isOwnProfile,
-            onWriteSummary: _writeItemReview,
-            onWriteNew: _writeNewItemReview,
+          SizedBox(
+            height: _pageHeight(),
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (i) {
+                if (_tabIndex == i) return;
+                setState(() => _tabIndex = i);
+              },
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: _BusinessReviewsTab(
+                    reviews: _businessReviews,
+                    isOwnProfile: widget.isOwnProfile,
+                    onWrite: _writeBusinessReview,
+                    onReport: (id) async {
+                      await _repo.reportReview(id);
+                      if (!mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Review reported')),
+                      );
+                    },
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: _ItemReviewsTab(
+                    summaries: _itemSummaries,
+                    isOwnProfile: widget.isOwnProfile,
+                    onWriteSummary: _writeItemReview,
+                    onWriteNew: _writeNewItemReview,
+                  ),
+                ),
+              ],
+            ),
           ),
         const SizedBox(height: 8),
       ],
@@ -309,16 +377,19 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
 }
 
 class _ReviewsSegmentedTabs extends StatelessWidget {
-  final int index;
+  final double position;
   final ValueChanged<int> onChanged;
 
   const _ReviewsSegmentedTabs({
-    required this.index,
+    required this.position,
     required this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
+    final t = position.clamp(0.0, 1.0);
+    final selected = t < 0.5 ? 0 : 1;
+
     return Container(
       height: 44,
       padding: const EdgeInsets.all(4),
@@ -335,11 +406,12 @@ class _ReviewsSegmentedTabs extends StatelessWidget {
           final tabWidth = (constraints.maxWidth - 4) / 2;
           return Stack(
             children: [
-              // Animated sliding indicator pill
-              AnimatedAlign(
-                duration: const Duration(milliseconds: 240),
-                curve: Curves.easeOutCubic,
-                alignment: index == 0 ? Alignment.centerLeft : Alignment.centerRight,
+              Align(
+                alignment: Alignment.lerp(
+                  Alignment.centerLeft,
+                  Alignment.centerRight,
+                  t,
+                )!,
                 child: SizedBox(
                   width: tabWidth,
                   height: double.infinity,
@@ -362,7 +434,7 @@ class _ReviewsSegmentedTabs extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _ReviewSegTab(
-                      selected: index == 0,
+                      selected: selected == 0,
                       label: 'Business',
                       onTap: () {
                         HapticFeedback.selectionClick();
@@ -372,7 +444,7 @@ class _ReviewsSegmentedTabs extends StatelessWidget {
                   ),
                   Expanded(
                     child: _ReviewSegTab(
-                      selected: index == 1,
+                      selected: selected == 1,
                       label: 'Items / Services',
                       onTap: () {
                         HapticFeedback.selectionClick();
@@ -407,8 +479,7 @@ class _ReviewSegTab extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Center(
-        child: AnimatedDefaultTextStyle(
-          duration: const Duration(milliseconds: 200),
+        child: DefaultTextStyle(
           style: TextStyle(
             fontSize: 13,
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,

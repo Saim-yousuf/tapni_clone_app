@@ -263,6 +263,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get addToGoogleWallet => 'Pridėti prie „Google“ piniginės';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Adresas';
 
   @override
@@ -1872,6 +1875,9 @@ class AppLocalizationsLt extends AppLocalizations {
       'Nepavyko atidaryti „Google“ piniginės';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Nepavyko išsaugoti kortelės dizaino';
 
   @override
@@ -2031,8 +2037,15 @@ class AppLocalizationsLt extends AppLocalizations {
       'Laukiama „Google“ piniginės sąrankos.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Laukiama „Google“ piniginės sąrankos. Profilio nuoroda nukopijuota.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Plėskite savo verslą';

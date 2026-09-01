@@ -7,13 +7,12 @@ import 'package:tapni_app/models/company_business_card.dart';
 import 'package:tapni_app/models/business_card_design.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/wallet_repo.dart';
-import 'package:tapni_app/screens/business_card/business_card_design_editor_screen.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/custom_card_editor_sheet.dart';
 import 'package:tapni_app/widgets/qr_card_stack_carousel.dart';
-import 'package:tapni_app/widgets/wa_primary_button.dart';
+import 'package:tapni_app/widgets/wallet_brand_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -38,7 +37,8 @@ class MyCardsShareSheet extends StatefulWidget {
 class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   final GlobalKey _cardKey = GlobalKey();
   int _currentIndex = 0;
-  bool _walletLoading = false;
+  bool _googleWalletLoading = false;
+  bool _appleWalletLoading = false;
 
   @override
   void initState() {
@@ -90,10 +90,10 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   }
 
   Future<void> _addToGoogleWallet() async {
-    setState(() => _walletLoading = true);
+    setState(() => _googleWalletLoading = true);
     final res = await WalletRepo().getMyGoogleWalletLink();
     if (!mounted) return;
-    setState(() => _walletLoading = false);
+    setState(() => _googleWalletLoading = false);
 
     if (!res.success) {
       _snack(res.message ?? context.l10n.couldNotOpenGoogleWallet, color: Colors.red);
@@ -121,6 +121,19 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
     }
   }
 
+  Future<void> _addToAppleWallet() async {
+    setState(() => _appleWalletLoading = true);
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    if (!mounted) return;
+    setState(() => _appleWalletLoading = false);
+
+    final card = _currentCard(Provider.of<ProfileProvider>(context, listen: false));
+    _snack(context.l10n.appleWalletSetupPending);
+    if (card != null) {
+      await Clipboard.setData(ClipboardData(text: card.profileUrl));
+    }
+  }
+
   void _onPageChanged(int index, ProfileProvider provider) async {
     setState(() => _currentIndex = index);
     final cards = provider.allCardDisplays;
@@ -130,17 +143,8 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   }
 
   void _openEditor({UserCustomCard? existing}) {
-    if (existing?.design != null && existing!.design!.hasLayers) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => BusinessCardDesignEditorScreen(
-            design: existing.design!.copy(),
-            cardId: existing.id,
-          ),
-        ),
-      );
-      return;
-    }
+    // Always open the card editor (links, title, photos). Design canvas is
+    // available from inside that sheet when the card has a print design.
     CustomCardEditorSheet.show(context, existing: existing);
   }
 
@@ -231,7 +235,9 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
                             const SizedBox(height: 2),
                             Text(
                               card != null
-                                  ? '${card.template.name} · Swipe for more cards'
+                                  ? cards.length > 1
+                                      ? '${card.template.name} · Swipe for more cards'
+                                      : card.template.name
                                   : context.l10n.createACardToShareYourProfile,
                               style: WaUi.caption,
                             ),
@@ -270,11 +276,18 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
                   onShare: card != null ? _shareCard : null,
                 ),
                 const SizedBox(height: 20),
-                WaPrimaryButton(
-                  label: context.l10n.addToGoogleWallet,
-                  icon: Icons.account_balance_wallet_outlined,
-                  loading: _walletLoading,
-                  onPressed: _walletLoading ? null : _addToGoogleWallet,
+                WalletBrandButton.apple(
+                  loading: _appleWalletLoading,
+                  onPressed: (_googleWalletLoading || _appleWalletLoading)
+                      ? null
+                      : _addToAppleWallet,
+                ),
+                const SizedBox(height: 10),
+                WalletBrandButton.google(
+                  loading: _googleWalletLoading,
+                  onPressed: (_googleWalletLoading || _appleWalletLoading)
+                      ? null
+                      : _addToGoogleWallet,
                 ),
               ],
             ),

@@ -945,7 +945,16 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
 
     if (card != null && card.enabledLinkIds.isNotEmpty) {
       final enabled = card.enabledLinkIds.toSet();
-      activeLinks = activeLinks.where((l) => enabled.contains(l.id)).toList();
+      activeLinks = activeLinks
+          .where((l) => enabled.contains(l.id))
+          .map(card.filterLinkEntries)
+          .where((l) {
+            if (l.value.trim().isEmpty && l.effectiveEntries.isEmpty) {
+              return false;
+            }
+            return true;
+          })
+          .toList();
     }
 
     if (activeLinks.isEmpty) {
@@ -1001,6 +1010,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   }
 
   Future<void> _openScannedLink(SocialLink link, UserProfile profile) async {
+    final allowedEntryIds = link.hasMultipleEntries ||
+            (link.entries != null && link.entries!.isNotEmpty)
+        ? link.effectiveEntries.map((e) => e.id).toSet()
+        : null;
     await Launcher.openLink(
       link,
       context,
@@ -1009,6 +1022,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       businessCategory: profile.businessCategory,
       currency: profile.currency,
       galleryItems: profile.gallery,
+      allowedEntryIds: allowedEntryIds,
     );
   }
 

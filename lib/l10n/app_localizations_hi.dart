@@ -259,6 +259,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get addToGoogleWallet => 'Google वॉलेट में जोड़ें';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'पता';
 
   @override
@@ -1868,6 +1871,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Google वॉलेट नहीं खुल सका';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'कार्ड डिज़ाइन सहेजा नहीं जा सका';
 
   @override
@@ -2023,8 +2029,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get googleWalletSetupPending => 'Google वॉलेट सेटअप लंबित है.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Google वॉलेट सेटअप लंबित है. प्रोफ़ाइल लिंक कॉपी किया गया.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'अपना व्यवसाय बढ़ाएं';

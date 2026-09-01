@@ -263,6 +263,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get addToGoogleWallet => 'Додајте у Гоогле новчаник';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Адреса';
 
   @override
@@ -1869,6 +1872,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Није могуће отворити Гоогле новчаник';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Није могуће сачувати дизајн картице';
 
   @override
@@ -2026,8 +2032,15 @@ class AppLocalizationsSr extends AppLocalizations {
       'Подешавање Гоогле новчаника је на чекању.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Подешавање Гоогле новчаника је на чекању. Линк профила је копиран.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Развијте свој посао';

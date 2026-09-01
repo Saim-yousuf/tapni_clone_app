@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/business_card_design.dart';
 import 'package:tapni_app/models/card_template.dart';
+import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
 
@@ -21,6 +22,9 @@ class UserCustomCard {
   final String? profilePhotoUrl;
   final String? coverPhotoUrl;
   final List<String> enabledLinkIds;
+  /// Which multi-value entries (e.g. WhatsApp numbers) appear on this card.
+  /// Empty means all entries of enabled links (backward compatible).
+  final List<String> enabledEntryIds;
   /// Optional Canva-style print design for sized exports.
   final BusinessCardDesign? design;
 
@@ -38,6 +42,7 @@ class UserCustomCard {
     this.profilePhotoUrl,
     this.coverPhotoUrl,
     this.enabledLinkIds = const [],
+    this.enabledEntryIds = const [],
     this.design,
   });
 
@@ -62,6 +67,9 @@ class UserCustomCard {
       enabledLinkIds: (json['enabledLinkIds'] as List<dynamic>? ?? [])
           .map((e) => e.toString())
           .toList(),
+      enabledEntryIds: (json['enabledEntryIds'] as List<dynamic>? ?? [])
+          .map((e) => e.toString())
+          .toList(),
       design: designJson is Map
           ? BusinessCardDesign.fromJson(Map<String, dynamic>.from(designJson))
           : null,
@@ -82,6 +90,7 @@ class UserCustomCard {
         if (profilePhotoUrl != null) 'profilePhotoUrl': profilePhotoUrl,
         if (coverPhotoUrl != null) 'coverPhotoUrl': coverPhotoUrl,
         'enabledLinkIds': enabledLinkIds,
+        'enabledEntryIds': enabledEntryIds,
         if (design != null && design!.hasLayers) 'design': design!.toJson(),
       };
 
@@ -99,6 +108,7 @@ class UserCustomCard {
     String? profilePhotoUrl,
     String? coverPhotoUrl,
     List<String>? enabledLinkIds,
+    List<String>? enabledEntryIds,
     BusinessCardDesign? design,
     bool clearSubtitle = false,
     bool clearBio = false,
@@ -122,7 +132,38 @@ class UserCustomCard {
       coverPhotoUrl:
           clearCoverPhoto ? null : (coverPhotoUrl ?? this.coverPhotoUrl),
       enabledLinkIds: enabledLinkIds ?? this.enabledLinkIds,
+      enabledEntryIds: enabledEntryIds ?? this.enabledEntryIds,
       design: clearDesign ? null : (design ?? this.design),
+    );
+  }
+
+  /// Entries of [link] that should appear when this card is scanned.
+  List<LinkEntry> visibleEntriesFor(SocialLink link) {
+    final all = link.effectiveEntries;
+    if (all.isEmpty) return const [];
+    if (!link.hasMultipleEntries) return all;
+
+    if (enabledEntryIds.isEmpty) return all;
+
+    final enabled = enabledEntryIds.toSet();
+    final linkEntryIds = all.map((e) => e.id).toSet();
+    // Legacy cards saved before per-entry control — show all.
+    if (!linkEntryIds.any(enabled.contains)) return all;
+
+    return all.where((e) => enabled.contains(e.id)).toList();
+  }
+
+  /// Returns [link] with only card-visible entries (for picker / launch).
+  SocialLink filterLinkEntries(SocialLink link) {
+    if (!link.hasMultipleEntries) return link;
+    final visible = visibleEntriesFor(link);
+    if (visible.isEmpty) {
+      return link.copyWith(entries: const [], value: '');
+    }
+    if (visible.length == link.effectiveEntries.length) return link;
+    return link.copyWith(
+      entries: visible,
+      value: visible.first.value,
     );
   }
 

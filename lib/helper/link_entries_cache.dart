@@ -90,6 +90,55 @@ class LinkEntriesCache {
     }).toList();
   }
 
+  /// Like [apply], but if local cache has more entries than the API, use cache.
+  /// Fixes card-editor missing WhatsApp numbers when API returns only one entry.
+  static Future<List<SocialLink>> applyPreferRicher(
+    String userId,
+    List<SocialLink> links,
+  ) async {
+    if (links.isEmpty) return links;
+    await SharedPrefHelper.getInstance();
+    final raw = userId.trim().isEmpty
+        ? null
+        : SharedPrefHelper.getObject(_prefsKey(userId));
+
+    return links.map((link) {
+      final remoteEntries = link.entries
+          ?.where((e) => e.value.trim().isNotEmpty)
+          .toList();
+      final remoteCount = remoteEntries?.length ?? 0;
+
+      List<LinkEntry>? restored = _readItem(cacheKeyFor(link)) ??
+          _readItem('label:${link.platformName.trim().toLowerCase()}');
+
+      if (restored == null && raw != null) {
+        final cached = raw[cacheKeyFor(link)] ??
+            raw['label:${link.platformName.trim().toLowerCase()}'];
+        if (cached is List && cached.isNotEmpty) {
+          restored = cached
+              .whereType<Map>()
+              .map((e) => LinkEntry.fromJson(Map<String, dynamic>.from(e)))
+              .where((e) => e.value.trim().isNotEmpty)
+              .toList();
+          if (restored!.isEmpty) restored = null;
+        }
+      }
+
+      final cacheCount = restored?.length ?? 0;
+      if (cacheCount > remoteCount && restored != null) {
+        return link.copyWith(entries: restored, value: restored.first.value);
+      }
+
+      final hasRemoteMulti = remoteCount > 1;
+      final hasRemoteNamed = remoteEntries != null &&
+          remoteEntries.any((e) => e.name.trim().isNotEmpty);
+      if (hasRemoteMulti || hasRemoteNamed) return link;
+
+      if (restored == null || restored.isEmpty) return link;
+      return link.copyWith(entries: restored, value: restored.first.value);
+    }).toList();
+  }
+
   /// Resolve one link's entries for open/edit.
   static Future<SocialLink> resolve(SocialLink link, {String userId = ''}) async {
     final list = await apply(userId, [link]);

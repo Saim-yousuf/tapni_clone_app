@@ -255,6 +255,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get addToGoogleWallet => 'เพิ่มลงใน Google Wallet';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'ที่อยู่';
 
   @override
@@ -1856,6 +1859,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'ไม่สามารถเปิด Google Wallet';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'ไม่สามารถบันทึกการออกแบบการ์ดได้';
 
   @override
@@ -2012,8 +2018,15 @@ class AppLocalizationsTh extends AppLocalizations {
       'การตั้งค่า Google Wallet อยู่ระหว่างดำเนินการ';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'การตั้งค่า Google Wallet อยู่ระหว่างดำเนินการ คัดลอกลิงก์โปรไฟล์แล้ว';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'ขยายธุรกิจของคุณ';

@@ -260,6 +260,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get addToGoogleWallet => 'Adicionar à Carteira do Google';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Endereço';
 
   @override
@@ -1877,6 +1880,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Não foi possível abrir a Carteira virtual do Google';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign =>
       'Não foi possível salvar o design do cartão';
 
@@ -2037,8 +2043,15 @@ class AppLocalizationsPt extends AppLocalizations {
       'Configuração da Carteira virtual do Google pendente.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Configuração da Carteira virtual do Google pendente. Link do perfil copiado.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Expanda o seu negócio';

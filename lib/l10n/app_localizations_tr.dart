@@ -262,6 +262,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get addToGoogleWallet => 'Google Cüzdan\'a ekle';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Adres';
 
   @override
@@ -1866,6 +1869,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get couldNotOpenGoogleWallet => 'Google Cüzdan açılamadı';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign => 'Kart tasarımı kaydedilemedi';
 
   @override
@@ -2020,8 +2026,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get googleWalletSetupPending => 'Google Cüzdan kurulumu bekleniyor.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Google Cüzdan kurulumu bekleniyor. Profil bağlantısı kopyalandı.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'İşletmenizi büyütün';

@@ -264,6 +264,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get addToGoogleWallet => 'Zu Google Wallet hinzufügen';
 
   @override
+  String get addToAppleWallet => 'Add to Apple Wallet';
+
+  @override
   String get address => 'Adresse';
 
   @override
@@ -1886,6 +1889,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Google Wallet konnte nicht geöffnet werden';
 
   @override
+  String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
+
+  @override
   String get couldNotSaveCardDesign =>
       'Kartendesign konnte nicht gespeichert werden';
 
@@ -2046,8 +2052,15 @@ class AppLocalizationsDe extends AppLocalizations {
       'Die Einrichtung von Google Wallet steht noch aus.';
 
   @override
+  String get appleWalletSetupPending => 'Apple Wallet setup pending.';
+
+  @override
   String get googleWalletSetupPendingProfileLinkCopied =>
       'Die Einrichtung von Google Wallet steht noch aus. Profillink kopiert.';
+
+  @override
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Erweitern Sie Ihr Geschäft';

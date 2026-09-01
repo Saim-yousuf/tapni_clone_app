@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// Pill segmented control used on invitation / loyalty template galleries.
+///
+/// [position] should track the page/tab animation (0 = first, 1 = second)
+/// so the indicator stays in sync while swiping.
 class OfficialCommunityTabs extends StatelessWidget {
-  final int index;
+  final double position;
   final ValueChanged<int> onChanged;
   final String officialLabel;
   final String communityLabel;
 
   const OfficialCommunityTabs({
     super.key,
-    required this.index,
+    required this.position,
     required this.onChanged,
     required this.officialLabel,
     required this.communityLabel,
@@ -18,6 +21,9 @@ class OfficialCommunityTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = position.clamp(0.0, 1.0);
+    final selected = t < 0.5 ? 0 : 1;
+
     return Container(
       height: 46,
       padding: const EdgeInsets.all(4),
@@ -34,11 +40,12 @@ class OfficialCommunityTabs extends StatelessWidget {
           final tabWidth = (constraints.maxWidth - 4) / 2;
           return Stack(
             children: [
-              AnimatedAlign(
-                duration: const Duration(milliseconds: 240),
-                curve: Curves.easeOutCubic,
-                alignment:
-                    index == 0 ? Alignment.centerLeft : Alignment.centerRight,
+              Align(
+                alignment: Alignment.lerp(
+                  Alignment.centerLeft,
+                  Alignment.centerRight,
+                  t,
+                )!,
                 child: SizedBox(
                   width: tabWidth,
                   height: double.infinity,
@@ -66,11 +73,11 @@ class OfficialCommunityTabs extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _SegTab(
-                      selected: index == 0,
+                      selected: selected == 0,
                       icon: Icons.star_rounded,
                       label: officialLabel,
                       onTap: () {
-                        if (index == 0) return;
+                        if (selected == 0 && t < 0.05) return;
                         HapticFeedback.selectionClick();
                         onChanged(0);
                       },
@@ -78,11 +85,11 @@ class OfficialCommunityTabs extends StatelessWidget {
                   ),
                   Expanded(
                     child: _SegTab(
-                      selected: index == 1,
+                      selected: selected == 1,
                       icon: Icons.people_alt_rounded,
                       label: communityLabel,
                       onTap: () {
-                        if (index == 1) return;
+                        if (selected == 1 && t > 0.95) return;
                         HapticFeedback.selectionClick();
                         onChanged(1);
                       },
@@ -117,8 +124,7 @@ class _SegTab extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Center(
-        child: AnimatedDefaultTextStyle(
-          duration: const Duration(milliseconds: 200),
+        child: DefaultTextStyle(
           style: TextStyle(
             fontSize: 13.5,
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
@@ -128,16 +134,12 @@ class _SegTab extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: Icon(
-                  icon,
-                  key: ValueKey<bool>(selected),
-                  size: 17,
-                  color: selected
-                      ? const Color(0xFF0F172A)
-                      : const Color(0xFF94A3B8),
-                ),
+              Icon(
+                icon,
+                size: 17,
+                color: selected
+                    ? const Color(0xFF0F172A)
+                    : const Color(0xFF94A3B8),
               ),
               const SizedBox(width: 7),
               Text(label),
