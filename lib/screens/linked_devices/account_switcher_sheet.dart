@@ -8,17 +8,17 @@ import 'package:tapni_app/screens/splash_screen.dart';
 import 'package:tapni_app/services/push_notification_service.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+
 class AccountSwitcherSheet {
   static Future<void> show(BuildContext context) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: WaUi.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.45),
       builder: (_) => _AccountSwitcherBody(hostContext: context),
     );
   }
@@ -36,69 +36,63 @@ class _AccountSwitcherBody extends StatelessWidget {
     final accounts = auth.accounts;
     final activeId = auth.activeAccount?.userId;
 
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(8, 12, 8, 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: WaUi.divider,
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-            SizedBox(height: 16),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(context.l10n.accounts, style: WaUi.headline),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Flexible(
-              child: ListView(
-                shrinkWrap: true,
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(BarqodyChrome.sheetRadius),
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SheetDragHandle(),
+              const SizedBox(height: 16),
+              Row(
                 children: [
-                  ...accounts.map((account) {
-                    final selected = account.userId == activeId;
-                    return ListTile(
-                      leading: _Avatar(account: account),
-                      title: Text(account.displayName, style: WaUi.listTitle),
-                      subtitle: Text(
-                        account.username != null && account.username!.isNotEmpty
-                            ? '@${account.username}'
-                            : account.email,
-                        style: WaUi.listSubtitle,
+                  CircleBackButton(onTap: () => Navigator.pop(context)),
+                  Expanded(
+                    child: Text(
+                      context.l10n.accounts,
+                      textAlign: TextAlign.center,
+                      style: WaUi.toolsTitleOf(
+                        size: 18,
+                        weight: FontWeight.w700,
+                        color: Colors.black,
                       ),
-                      trailing: selected
-                          ? Icon(Icons.check_circle, color: WaUi.accent)
-                          : null,
-                      onTap: selected
-                          ? () => Navigator.pop(context)
-                          : () => _switch(context, account),
-                    );
-                  }),
-                  Divider(),
-                  ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: WaUi.navPill,
-                      child: Icon(Icons.add, color: WaUi.promoIconFg),
                     ),
-                    title: Text(context.l10n.addAccount, style: WaUi.listTitle),
-                    subtitle: Text(
-                      context.l10n.emailLoginOrScanQR,
-                      style: WaUi.listSubtitle,
-                    ),
-                    onTap: () => _addAccount(context),
                   ),
+                  const SizedBox(width: 40),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    ...accounts.map((account) {
+                      final selected = account.userId == activeId;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _AccountCard(
+                          account: account,
+                          selected: selected,
+                          onTap: selected
+                              ? () => Navigator.pop(context)
+                              : () => _switch(context, account),
+                        ),
+                      );
+                    }),
+                    _AddAccountCard(onTap: () => _addAccount(context)),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -144,45 +138,300 @@ class _AccountSwitcherBody extends StatelessWidget {
 
     showModalBottomSheet(
       context: hostContext,
-      backgroundColor: WaUi.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.45),
+      builder: (ctx) => _AddAccountOptionsSheet(hostContext: hostContext),
+    );
+  }
+}
+
+class _AddAccountOptionsSheet extends StatelessWidget {
+  final BuildContext hostContext;
+
+  const _AddAccountOptionsSheet({required this.hostContext});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(BarqodyChrome.sheetRadius),
+        ),
       ),
-      builder: (ctx) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Icon(Icons.qr_code_2, color: WaUi.promoIconFg),
-              title: Text(hostContext.l10n.scanQRShowQR, style: WaUi.listTitle),
-              subtitle: Text(
-                hostContext.l10n.linkByQROnAnotherPhone,
-                style: WaUi.listSubtitle,
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SheetDragHandle(),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  CircleBackButton(onTap: () => Navigator.pop(context)),
+                  Expanded(
+                    child: Text(
+                      hostContext.l10n.accounts,
+                      textAlign: TextAlign.center,
+                      style: WaUi.toolsTitleOf(
+                        size: 18,
+                        weight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 40),
+                ],
               ),
-              onTap: () {
-                Navigator.pop(ctx);
-                if (!hostContext.mounted) return;
-                Navigator.of(hostContext).push(
-                  MaterialPageRoute(
-                    builder: (_) => QrLoginScreen(addAccount: true),
+              const SizedBox(height: 8),
+              _SheetOptionTile(
+                asset: 'assets/images/png/qr-code-icon.png',
+                title: hostContext.l10n.scanQRShowQR,
+                subtitle: hostContext.l10n.linkByQROnAnotherPhone,
+                onTap: () {
+                  Navigator.pop(context);
+                  if (!hostContext.mounted) return;
+                  Navigator.of(hostContext).push(
+                    MaterialPageRoute(
+                      builder: (_) => QrLoginScreen(addAccount: true),
+                    ),
+                  );
+                },
+              ),
+              _SheetOptionTile(
+                asset: 'assets/images/png/phone-icon.png',
+                title: hostContext.l10n.phoneNumber2,
+                onTap: () {
+                  Navigator.pop(context);
+                  if (!hostContext.mounted) return;
+                  Navigator.of(hostContext).push(
+                    MaterialPageRoute(
+                      builder: (_) => const PhoneAuthScreen(addAccount: true),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AccountCard extends StatelessWidget {
+  final StoredAccount account;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _AccountCard({
+    required this.account,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final subtitle = account.username != null && account.username!.isNotEmpty
+        ? '@${account.username}'
+        : account.email;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: Colors.black, width: 1.2),
+          ),
+          child: Row(
+            children: [
+              _Avatar(account: account),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      account.displayName,
+                      style: WaUi.body.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                    if (subtitle.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: WaUi.caption.copyWith(
+                          color: BarqodyChrome.secondaryText,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              if (selected)
+                Container(
+                  width: 26,
+                  height: 26,
+                  decoration: const BoxDecoration(
+                    color: Colors.black,
+                    shape: BoxShape.circle,
                   ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.phone_outlined, color: WaUi.promoIconFg),
-              title: Text(hostContext.l10n.phoneNumber2, style: WaUi.listTitle),
-              onTap: () {
-                Navigator.pop(ctx);
-                if (!hostContext.mounted) return;
-                Navigator.of(hostContext).push(
-                  MaterialPageRoute(
-                    builder: (_) => const PhoneAuthScreen(addAccount: true),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/images/png/check-icon.png',
+                    width: 12,
+                    height: 12,
+                    color: Colors.white,
+                    errorBuilder: (_, __, ___) => const Icon(
+                      Icons.check,
+                      size: 14,
+                      color: Colors.white,
+                    ),
                   ),
-                );
-              },
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AddAccountCard extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _AddAccountCard({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: Colors.black, width: 1.2),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: const BoxDecoration(
+                  color: Colors.black,
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/images/png/plus-icon.png',
+                  width: 16,
+                  height: 16,
+                  color: Colors.white,
+                  errorBuilder: (_, __, ___) => const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 22,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.addAccount,
+                      style: WaUi.body.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      context.l10n.emailLoginOrScanQR,
+                      style: WaUi.caption.copyWith(
+                        color: BarqodyChrome.secondaryText,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SheetOptionTile extends StatelessWidget {
+  final String asset;
+  final String title;
+  final String? subtitle;
+  final VoidCallback onTap;
+
+  const _SheetOptionTile({
+    required this.asset,
+    required this.title,
+    this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        child: Row(
+          children: [
+            AssetIcon(asset, size: 26, color: Colors.black),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: WaUi.body.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle!,
+                      style: WaUi.caption.copyWith(
+                        color: BarqodyChrome.secondaryText,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-            const SizedBox(height: 8),
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: BarqodyChrome.secondaryText,
+              size: 22,
+            ),
           ],
         ),
       ),
@@ -199,13 +448,18 @@ class _Avatar extends StatelessWidget {
     final photo = account.profilePhoto;
     if (photo != null && photo.isNotEmpty) {
       return CircleAvatar(
+        radius: 22,
         backgroundImage: NetworkImage(photo),
-        backgroundColor: WaUi.navPill,
+        backgroundColor: BarqodyChrome.circleBtn,
       );
     }
     return CircleAvatar(
-      backgroundColor: WaUi.navPill,
-      child: Text(account.initials, style: WaUi.avatarInitial),
+      radius: 22,
+      backgroundColor: BarqodyChrome.circleBtn,
+      child: Text(
+        account.initials,
+        style: WaUi.avatarInitial.copyWith(fontWeight: FontWeight.w700),
+      ),
     );
   }
 }

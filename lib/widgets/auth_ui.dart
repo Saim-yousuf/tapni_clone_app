@@ -92,8 +92,7 @@ class AuthBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8),
+    return Center(
       child: Material(
         color: AuthUi.backBtnBg,
         shape: const CircleBorder(),

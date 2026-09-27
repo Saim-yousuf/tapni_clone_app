@@ -73,6 +73,7 @@ dependencies:
   archive: ^4.0.9
   cached_network_image: ^3.4.1
   connectivity_plus: ^7.3.1
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

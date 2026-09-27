@@ -33,6 +33,8 @@ import 'package:tapni_app/services/caller_id_service.dart';
 import 'package:tapni_app/utils/business_completeness.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/business_completeness_sheet.dart';
+import 'package:tapni_app/widgets/feedback_dialog.dart';
+import 'package:tapni_app/widgets/logout_confirm_dialog.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/settings_widget.dart';
 import 'package:tapni_app/widgets/wa_tools_widgets.dart';
@@ -71,51 +73,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final hasOthers = authProvider.hasMultipleAccounts;
 
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(WaUi.radiusLg),
-          ),
-          title: Text(ctx.l10n.logOut, style: WaUi.title),
-          content: Text(
-            hasOthers
-                ? context
-                      .l10n
-                      .logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone
-                : context.l10n.areYouSureYouWantToLogOutOfBarqody,
-            style: WaUi.body,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: Text(ctx.l10n.cancel, style: WaUi.bodyMedium),
-            ),
-            if (hasOthers)
-              TextButton(
-                onPressed: () async {
-                  Navigator.of(ctx).pop();
-                  await _performLogout(context, logoutAll: true);
-                },
-                child: Text(
-                  context.l10n.logOutAll,
-                  style: WaUi.bodyMedium.copyWith(color: Colors.redAccent),
-                ),
-              ),
-            TextButton(
-              onPressed: () async {
-                Navigator.of(ctx).pop();
-                await _performLogout(context, logoutAll: false);
-              },
-              child: Text(
-                hasOthers ? context.l10n.thisAccount : context.l10n.logOut,
-                style: WaUi.bodyMedium.copyWith(color: Colors.redAccent),
-              ),
-            ),
-          ],
-        );
-      },
+    await LogoutConfirmDialog.show(
+      context,
+      hasOtherAccounts: hasOthers,
+      onLogoutThis: () => _performLogout(context, logoutAll: false),
+      onLogoutAll: hasOthers
+          ? () => _performLogout(context, logoutAll: true)
+          : null,
     );
   }
 
@@ -378,7 +342,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             )
                           : Switch.adaptive(
                               value: profile.isPublic,
-                              activeColor: WaUi.accent,
+                              activeTrackColor: WaUi.buttonDark,
+                              activeThumbColor: Colors.white,
                               onChanged: _toggleProfileVisibility,
                             ),
                     ),
@@ -573,15 +538,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: context.l10n.sendFeedback,
                       subtitle: context.l10n.sendFeedbackSubtitle,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              context.l10n.thankYouFeedbackSubmissionsAreMockOnly,
-                              style: WaUi.body.copyWith(color: Colors.white),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: WaUi.primaryText,
-                          ),
+                        FeedbackDialog.show(
+                          context,
+                          onSubmitted: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  context.l10n
+                                      .thankYouFeedbackSubmissionsAreMockOnly,
+                                  style: WaUi.body.copyWith(color: Colors.white),
+                                ),
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: WaUi.primaryText,
+                              ),
+                            );
+                          },
                         );
                       },
                     ),

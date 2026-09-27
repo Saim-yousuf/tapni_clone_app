@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tapni_app/screens/help/help_article_screen.dart';
 import 'package:tapni_app/screens/help/help_topic_screen.dart';
+import 'package:tapni_app/screens/help/help_ui.dart';
 import 'package:tapni_app/utils/help_center_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,12 +14,28 @@ class HelpCenterScreen extends StatefulWidget {
 
 class _HelpCenterScreenState extends State<HelpCenterScreen> {
   final _searchController = TextEditingController();
+  final _searchFocus = FocusNode();
   String _query = '';
+  bool _searchUi = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchFocus.addListener(_onSearchFocusChange);
+  }
 
   @override
   void dispose() {
+    _searchFocus.removeListener(_onSearchFocusChange);
     _searchController.dispose();
+    _searchFocus.dispose();
     super.dispose();
+  }
+
+  void _onSearchFocusChange() {
+    if (!_searchFocus.hasFocus && _query.trim().isEmpty && _searchUi) {
+      setState(() => _searchUi = false);
+    }
   }
 
   Future<void> _contactUs() async {
@@ -52,229 +68,163 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
     );
   }
 
+  void _openSearchUi() {
+    setState(() => _searchUi = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _searchFocus.requestFocus();
+    });
+  }
+
+  void _clearSearch() {
+    _searchController.clear();
+    setState(() {
+      _query = '';
+      _searchUi = false;
+    });
+    _searchFocus.unfocus();
+  }
+
+  void _onBack() {
+    if (_searchUi || _query.trim().isNotEmpty) {
+      _clearSearch();
+      return;
+    }
+    Navigator.of(context).maybePop();
+  }
+
+  Widget _homeContent({required List<HelpTopic> topics}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'How We Can Help You?',
+          style: WaUi.toolsTitleOf(
+            size: 26,
+            weight: FontWeight.w700,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          'Let us know what category or artist you were searching for. Your suggestion help us bring in more relevant talent.',
+          style: WaUi.body.copyWith(
+            fontSize: 14,
+            color: HelpUi.secondaryText,
+            height: 1.45,
+          ),
+        ),
+        const SizedBox(height: 28),
+        const HelpSectionTitle('Help Topics', fontSize: 18),
+        const SizedBox(height: 12),
+        HelpTopicListCard(
+          topics: topics,
+          onTap: (topic) => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HelpTopicScreen(topic: topic),
+            ),
+          ),
+        ),
+        const SizedBox(height: 28),
+        const HelpSectionTitle('Popular articles', fontSize: 18),
+        const SizedBox(height: 12),
+        HelpArticleAccordion(
+          articles: HelpCenterCatalog.popularArticles,
+          expandFirst: true,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final topics = HelpCenterCatalog.search(_query);
     final articleHits = HelpCenterCatalog.searchArticles(_query);
     final searching = _query.trim().isNotEmpty;
+    final noResults = searching && articleHits.isEmpty && topics.isEmpty;
+    final showSearchHeader = _searchUi || searching;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text('Help Center'),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _contactUs,
-        backgroundColor: WaUi.buttonDark,
-        foregroundColor: Colors.white,
-        elevation: 2,
-        icon: const Icon(Icons.chat_bubble_outline_rounded, size: 20),
-        label: Text('Contact us', style: WaUi.promoButton),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: 100),
-        children: [
-          Container(
-            width: double.infinity,
-            color: const Color(0xFFF0F2F5),
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-            child: Column(
-              children: [
-                Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: WaUi.buttonDark,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: const Icon(
-                    Icons.help_outline_rounded,
-                    color: Colors.white,
-                    size: 34,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Text(
-                  'How can we help?',
-                  style: WaUi.toolsTitleOf(
-                    size: 24,
-                    weight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                SizedBox(
-                  height: 48,
-                  child: TextField(
-                    controller: _searchController,
-                    onChanged: (v) => setState(() => _query = v),
-                    style: WaUi.body.copyWith(fontSize: 16, height: 1.2),
-                    cursorColor: WaUi.accent,
-                    textInputAction: TextInputAction.search,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Search Help Center',
-                      hintStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF667781),
-                        height: 1.2,
-                      ),
-                      prefixIcon: const Padding(
-                        padding: EdgeInsets.only(left: 14, right: 8),
-                        child: Icon(
-                          Icons.search,
-                          size: 22,
-                          color: Color(0xFF667781),
-                        ),
-                      ),
-                      prefixIconConstraints: const BoxConstraints(
-                        minWidth: 44,
-                        minHeight: 48,
-                      ),
-                      suffixIcon: _searchController.text.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.close, size: 18),
-                              color: const Color(0xFF667781),
-                              onPressed: () {
-                                _searchController.clear();
-                                setState(() => _query = '');
-                              },
-                            )
-                          : null,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                        vertical: 14,
-                      ),
-                      isDense: true,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (searching && articleHits.isNotEmpty) ...[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 18, 20, 6),
-              child: Text(
-                'Search results',
-                style: WaUi.label.copyWith(
-                  color: WaUi.secondaryText,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            ...articleHits.map(
-              (a) => _ArticleTile(
-                title: a.title,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => HelpArticleScreen(article: a),
-                  ),
-                ),
-              ),
-            ),
-          ] else if (searching && topics.isEmpty) ...[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(32, 40, 32, 0),
-              child: Text(
-                'No results found',
-                textAlign: TextAlign.center,
-                style: WaUi.bodyMedium,
-              ),
-            ),
-          ] else ...[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
-              child: Text(
-                'Help topics',
-                style: WaUi.label.copyWith(
-                  color: WaUi.secondaryText,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            ...topics.map(
-              (topic) => _TopicTile(
-                icon: topic.icon,
-                title: topic.title,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => HelpTopicScreen(topic: topic),
-                  ),
-                ),
-              ),
-            ),
-            if (!searching) ...[
-              const SizedBox(height: 8),
-              Container(height: 8, color: const Color(0xFFF0F2F5)),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
-                child: Text(
-                  'Popular articles',
-                  style: WaUi.label.copyWith(
-                    color: WaUi.secondaryText,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              ...HelpCenterCatalog.popularArticles.map(
-                (a) => _ArticleTile(
-                  title: a.title,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => HelpArticleScreen(article: a),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _TopicTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
-
-  const _TopicTile({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        child: Row(
+      backgroundColor: HelpUi.scaffold,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
           children: [
-            Icon(icon, size: 24, color: WaUi.buttonDark),
-            const SizedBox(width: 18),
-            Expanded(
-              child: Text(title, style: WaUi.listTitle),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: showSearchHeader
+                  ? Row(
+                      children: [
+                        HelpCircleBackButton(onTap: _onBack),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: HelpSearchField(
+                            controller: _searchController,
+                            focusNode: _searchFocus,
+                            autofocus: true,
+                            onChanged: (v) => setState(() => _query = v),
+                            onClear: _clearSearch,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        HelpCircleBackButton(onTap: _onBack),
+                        Expanded(
+                          child: Text(
+                            'Help Center',
+                            textAlign: TextAlign.center,
+                            style: WaUi.toolsTitleOf(
+                              size: 18,
+                              weight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 40),
+                      ],
+                    ),
             ),
+            Expanded(
+              child: noResults
+                  ? const HelpEmptySearch()
+                  : ListView(
+                      padding: EdgeInsets.fromLTRB(
+                        HelpUi.sidePad,
+                        showSearchHeader ? 20 : 16,
+                        HelpUi.sidePad,
+                        showSearchHeader ? 28 : 12,
+                      ),
+                      children: [
+                        if (!showSearchHeader) ...[
+                          _SearchBarTapTarget(onTap: _openSearchUi),
+                          const SizedBox(height: 28),
+                          _homeContent(topics: topics),
+                        ] else if (!searching) ...[
+                          _homeContent(topics: topics),
+                        ] else if (articleHits.isNotEmpty) ...[
+                          HelpArticleAccordion(
+                            articles: articleHits,
+                            expandFirst: true,
+                          ),
+                        ] else ...[
+                          const HelpSectionTitle('Help Topics', fontSize: 18),
+                          const SizedBox(height: 12),
+                          HelpTopicListCard(
+                            topics: topics,
+                            onTap: (topic) => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => HelpTopicScreen(topic: topic),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+            ),
+            if (!showSearchHeader) HelpContactUsBar(onPressed: _contactUs),
           ],
         ),
       ),
@@ -282,28 +232,35 @@ class _TopicTile extends StatelessWidget {
   }
 }
 
-class _ArticleTile extends StatelessWidget {
-  final String title;
+/// Decorative search bar on the home layout; opens the real search field.
+class _SearchBarTapTarget extends StatelessWidget {
   final VoidCallback onTap;
 
-  const _ArticleTile({required this.title, required this.onTap});
+  const _SearchBarTapTarget({required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-        child: Row(
+      child: Container(
+        height: 44,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          color: HelpUi.searchBg,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: const Row(
           children: [
-            Icon(
-              Icons.article_outlined,
-              size: 22,
-              color: WaUi.secondaryText.withValues(alpha: 0.75),
-            ),
-            const SizedBox(width: 18),
-            Expanded(
-              child: Text(title, style: WaUi.body),
+            Icon(Icons.search, size: 20, color: HelpUi.secondaryText),
+            SizedBox(width: 8),
+            Text(
+              'Search Help Center',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                color: HelpUi.secondaryText,
+                height: 1.2,
+              ),
             ),
           ],
         ),

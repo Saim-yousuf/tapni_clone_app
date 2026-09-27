@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/screens/help/help_ui.dart';
 import 'package:tapni_app/utils/help_center_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
@@ -10,31 +11,61 @@ class HelpArticleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          'Help Center'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-        children: [
-          Text(
-            article.title,
-            style: WaUi.headline.copyWith(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
+      backgroundColor: HelpUi.scaffold,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Row(
+                children: [
+                  const HelpCircleBackButton(),
+                  Expanded(
+                    child: Text(
+                      'Help Center',
+                      textAlign: TextAlign.center,
+                      style: WaUi.toolsTitleOf(
+                        size: 18,
+                        weight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 40),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            article.body,
-            style: WaUi.body.copyWith(
-              height: 1.5,
-              fontSize: 15,
-              color: WaUi.primaryText,
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(
+                  HelpUi.sidePad,
+                  24,
+                  HelpUi.sidePad,
+                  32,
+                ),
+                children: [
+                  Text(
+                    article.title,
+                    style: WaUi.toolsTitleOf(
+                      size: 22,
+                      weight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    article.body,
+                    style: WaUi.body.copyWith(
+                      height: 1.5,
+                      fontSize: 15,
+                      color: HelpUi.bodyText,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

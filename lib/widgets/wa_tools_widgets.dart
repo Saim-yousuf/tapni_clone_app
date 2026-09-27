@@ -14,9 +14,9 @@ class WaToolsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: SizedBox(
-        height: 64,
+        height: 56,
         child: Row(
           children: [
             Expanded(
@@ -24,7 +24,10 @@ class WaToolsHeader extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 8),
                 child: Text(
                   title,
-                  style: WaUi.toolsTitleOf(weight: FontWeight.w400),
+                  style: WaUi.toolsTitleOf(
+                    weight: FontWeight.w700,
+                    size: 28,
+                  ),
                 ),
               ),
             ),
@@ -44,8 +47,15 @@ class WaSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-      child: Text(title, style: WaUi.sectionHeader),
+      padding: const EdgeInsets.fromLTRB(20, 22, 20, 6),
+      child: Text(
+        title,
+        style: WaUi.sectionHeader.copyWith(
+          fontWeight: FontWeight.w700,
+          fontSize: 15,
+          color: WaUi.primaryText,
+        ),
+      ),
     );
   }
 }
@@ -72,37 +82,47 @@ class WaToolsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final showChevron = onTap != null && trailing == null;
+
     final content = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: Icon(icon, size: 24, color: WaUi.promoIconFg),
-          ),
-          const SizedBox(width: 20),
+          Icon(icon, size: 30, color: const Color(0xFF3C3C43)),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: WaUi.listTitle.copyWith(color: titleColor),
+                  style: WaUi.listTitle.copyWith(
+                    color: titleColor ?? WaUi.primaryText,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
                 ),
-                const SizedBox(height: 2),
-                Text(subtitle, style: WaUi.listSubtitle),
+                const SizedBox(height: 3),
+                Text(
+                  subtitle,
+                  style: WaUi.listSubtitle.copyWith(
+                    color: const Color(0xFF8E8E93),
+                    fontSize: 13,
+                    height: 1.3,
+                  ),
+                ),
               ],
             ),
           ),
           if (showBadge)
             Padding(
-              padding: const EdgeInsets.only(top: 6, left: 8),
+              padding: const EdgeInsets.only(left: 8),
               child: Container(
                 width: 10,
                 height: 10,
                 decoration: const BoxDecoration(
-                  color: WaUi.accent,
+                  color: WaUi.buttonDark,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -111,6 +131,15 @@ class WaToolsListTile extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 8),
               child: trailing!,
+            )
+          else if (showChevron)
+            const Padding(
+              padding: EdgeInsets.only(left: 4),
+              child: Icon(
+                Icons.chevron_right_rounded,
+                size: 22,
+                color: Color(0xFFC7C7CC),
+              ),
             ),
         ],
       ),
@@ -146,7 +175,11 @@ class WaForYouCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
-        decoration: WaUi.promoCardDecoration,
+        decoration: BoxDecoration(
+          color: WaUi.surface,
+          borderRadius: BorderRadius.circular(WaUi.radiusLg),
+          border: Border.all(color: const Color(0xFFE5E5EA)),
+        ),
         padding: const EdgeInsets.fromLTRB(16, 16, 12, 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,12 +191,12 @@ class WaForYouCard extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: WaUi.promoIconBg,
+                    color: const Color(0xFFF2F2F7),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.campaign_outlined,
-                    color: WaUi.promoIconFg,
+                    color: WaUi.primaryText,
                     size: 24,
                   ),
                 ),
@@ -176,7 +209,7 @@ class WaForYouCard extends StatelessWidget {
                       child: Icon(
                         Icons.close,
                         size: 20,
-                        color: WaUi.secondaryText,
+                        color: Color(0xFF8E8E93),
                       ),
                     ),
                   ),
@@ -185,7 +218,10 @@ class WaForYouCard extends StatelessWidget {
             const SizedBox(height: 14),
             Text(title, style: WaUi.promoTitle),
             const SizedBox(height: 6),
-            Text(description, style: WaUi.promoBody),
+            Text(
+              description,
+              style: WaUi.promoBody.copyWith(color: const Color(0xFF8E8E93)),
+            ),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,

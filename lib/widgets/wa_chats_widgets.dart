@@ -33,7 +33,7 @@ class WaChatsHeader extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: WaUi.toolsTitleOf(weight: FontWeight.w400),
+                      style: WaUi.toolsTitleOf(weight: FontWeight.w700, size: 28),
                     ),
                     if (subtitle != null) ...[
                       const SizedBox(height: 2),
@@ -60,6 +60,8 @@ class WaChatSearchBar extends StatelessWidget {
   final String? hintText;
   final bool readOnly;
   final VoidCallback? onTap;
+  final Widget? trailing;
+  final EdgeInsetsGeometry padding;
 
   WaChatSearchBar({
     super.key,
@@ -71,75 +73,87 @@ class WaChatSearchBar extends StatelessWidget {
     this.hintText,
     this.readOnly = false,
     this.onTap,
+    this.trailing,
+    this.padding = const EdgeInsets.fromLTRB(16, 6, 16, 10),
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
-      child: SizedBox(
-        height: 48,
-        child: TextField(
-          controller: controller,
-          focusNode: focusNode,
-          autofocus: autofocus,
-          readOnly: readOnly,
-          onTap: onTap,
-          showCursor: !readOnly,
-          enableInteractiveSelection: !readOnly,
-          onChanged: onChanged,
-          style: WaUi.body.copyWith(fontSize: 16, height: 1.2),
-          cursorColor: WaUi.accent,
-          textInputAction: TextInputAction.search,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: WaUi.searchBg,
-            hintText: hintText ?? context.l10n.searchEllipsis,
-            hintStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: Color(0xFF667781),
-              height: 1.2,
-            ),
-            prefixIcon: const Padding(
-              padding: EdgeInsets.only(left: 14, right: 8),
-              child: Icon(
-                Icons.search,
-                size: 22,
-                color: Color(0xFF667781),
-              ),
-            ),
-            prefixIconConstraints: const BoxConstraints(
-              minWidth: 44,
-              minHeight: 48,
-            ),
-            suffixIcon: !readOnly && controller.text.isNotEmpty
-                ? IconButton(
-                    icon: const Icon(Icons.close, size: 18),
-                    color: const Color(0xFF667781),
-                    onPressed: onClear,
-                  )
-                : null,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide.none,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 4,
-              vertical: 14,
-            ),
-            isDense: true,
+    final field = SizedBox(
+      height: 48,
+      child: TextField(
+        controller: controller,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        readOnly: readOnly,
+        onTap: onTap,
+        showCursor: !readOnly,
+        enableInteractiveSelection: !readOnly,
+        onChanged: onChanged,
+        style: WaUi.body.copyWith(fontSize: 16, height: 1.2),
+        cursorColor: WaUi.buttonDark,
+        textInputAction: TextInputAction.search,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: const Color(0xFFF2F2F7),
+          hintText: hintText ?? context.l10n.searchEllipsis,
+          hintStyle: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFF8E8E93),
+            height: 1.2,
           ),
+          prefixIcon: const Padding(
+            padding: EdgeInsets.only(left: 14, right: 8),
+            child: Icon(
+              Icons.search,
+              size: 20,
+              color: Color(0xFF8E8E93),
+            ),
+          ),
+          prefixIconConstraints: const BoxConstraints(
+            minWidth: 44,
+            minHeight: 48,
+          ),
+          suffixIcon: !readOnly && controller.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(Icons.close, size: 18),
+                  color: const Color(0xFF8E8E93),
+                  onPressed: onClear,
+                )
+              : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 4,
+            vertical: 14,
+          ),
+          isDense: true,
         ),
       ),
+    );
+
+    return Padding(
+      padding: padding,
+      child: trailing == null
+          ? field
+          : Row(
+              children: [
+                Expanded(child: field),
+                const SizedBox(width: 10),
+                trailing!,
+              ],
+            ),
     );
   }
 }
@@ -167,11 +181,12 @@ class WaPillFilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fill = selected
-        ? (selectedColor ?? WaUi.chipSelected)
-        : Colors.transparent;
+        ? (selectedColor ?? WaUi.buttonDark)
+        : Colors.white;
     final outline = selected
-        ? (selectedBorderColor ?? selectedColor ?? WaUi.chipSelected)
-        : (borderColor ?? WaUi.chipBorder);
+        ? (selectedBorderColor ?? selectedColor ?? WaUi.buttonDark)
+        : (borderColor ?? const Color(0xFFE5E5EA));
+    final textColor = selected ? Colors.white : WaUi.primaryText;
 
     return Padding(
       padding: const EdgeInsets.only(right: 8),
@@ -199,8 +214,8 @@ class WaPillFilterChip extends StatelessWidget {
                   label,
                   style: WaUi.body.copyWith(
                     fontSize: 14,
-                    fontWeight: selected ? FontWeight.w500 : FontWeight.w400,
-                    color: WaUi.primaryText,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                    color: textColor,
                   ),
                 ),
               ],
@@ -334,7 +349,7 @@ class WaChatListTile extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+              padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -351,10 +366,12 @@ class WaChatListTile extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Expanded(
+                            Flexible(
                               child: Text(
                                 name,
-                                style: WaUi.chatName,
+                                style: WaUi.chatName.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -381,7 +398,9 @@ class WaChatListTile extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 preview,
-                                style: WaUi.chatPreview,
+                                style: WaUi.chatPreview.copyWith(
+                                  color: const Color(0xFF8E8E93),
+                                ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -416,14 +435,17 @@ class WaChatListTile extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(width: 4),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    size: 22,
+                    color: Color(0xFFC7C7CC),
+                  ),
                 ],
               ),
             ),
             if (showDivider)
-              const Padding(
-                padding: EdgeInsets.only(left: 81),
-                child: Divider(height: 1, thickness: 0.4, color: WaUi.divider),
-              ),
+              const Divider(height: 1, thickness: 0.5, color: Color(0xFFE5E5EA)),
           ],
         ),
       ),

@@ -455,13 +455,6 @@ class _InsightStrip extends StatelessWidget {
     return '$label steady $compareLabel';
   }
 
-  Color _tint(Map<String, dynamic> insight) {
-    final kind = insight['kind']?.toString() ?? 'info';
-    if (kind == 'up') return const Color(0xFF0B7A56);
-    if (kind == 'down') return const Color(0xFFD14343);
-    return WaUi.secondaryText;
-  }
-
   IconData _icon(Map<String, dynamic> insight) {
     final kind = insight['kind']?.toString() ?? 'info';
     if (kind == 'up') return Icons.arrow_upward_rounded;
@@ -479,24 +472,23 @@ class _InsightStrip extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           final insight = insights[index];
-          final tint = _tint(insight);
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: tint.withValues(alpha: 0.08),
+              color: WaUi.buttonDark,
               borderRadius: BorderRadius.circular(99),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(_icon(insight), size: 16, color: tint),
+                Icon(_icon(insight), size: 16, color: Colors.white),
                 const SizedBox(width: 6),
                 Text(
                   _text(insight),
                   style: WaUi.bodyMedium.copyWith(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: tint,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -889,9 +881,8 @@ class _ListTabs extends StatelessWidget {
       height: 46,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
+        color: const Color(0xFFF2F2F7),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.black.withOpacity(0.04), width: 1),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -909,20 +900,8 @@ class _ListTabs extends StatelessWidget {
                   height: double.infinity,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: WaUi.buttonDark,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
-                        ),
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.02),
-                          blurRadius: 2,
-                          offset: const Offset(0, 1),
-                        ),
-                      ],
                     ),
                   ),
                 ),
@@ -978,7 +957,7 @@ class _AnalyticsSegTab extends StatelessWidget {
           style: TextStyle(
             fontSize: 13.5,
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-            color: selected ? const Color(0xFF0F172A) : const Color(0xFF64748B),
+            color: selected ? Colors.white : const Color(0xFF8E8E93),
             letterSpacing: selected ? -0.2 : 0,
           ),
           child: Row(
@@ -987,9 +966,7 @@ class _AnalyticsSegTab extends StatelessWidget {
               Icon(
                 icon,
                 size: 17,
-                color: selected
-                    ? const Color(0xFF0F172A)
-                    : const Color(0xFF94A3B8),
+                color: selected ? Colors.white : const Color(0xFF8E8E93),
               ),
               const SizedBox(width: 7),
               Flexible(

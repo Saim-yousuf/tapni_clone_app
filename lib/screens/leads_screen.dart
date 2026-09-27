@@ -160,7 +160,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                               child: WaChatSearchBar(
                                 controller: _searchController,
                                 focusNode: _searchFocus,
-                                hintText: context.l10n.searchEllipsis,
+                                hintText: 'Search contact',
                                 readOnly: true,
                                 onTap: () {
                                   _dismissKeyboard();
@@ -171,6 +171,24 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                     ),
                                   );
                                 },
+                                trailing: Material(
+                                  color: WaUi.buttonDark,
+                                  shape: const CircleBorder(),
+                                  child: InkWell(
+                                    customBorder: const CircleBorder(),
+                                    onTap: () =>
+                                        _showAddLeadSheet(context, leadsProvider),
+                                    child: const SizedBox(
+                                      width: 44,
+                                      height: 44,
+                                      child: Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                        size: 22,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                             SliverToBoxAdapter(

@@ -540,22 +540,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
           _openSeeAll(kind: ExploreSeeAllKind.offers, offers: _offers);
         },
       ),
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            _buildHeader(colors),
-            Expanded(
-              child: RefreshIndicator(
-                color: colors.accent,
-                onRefresh: _load,
-                
-                child: _buildBody(colors),
-              ),
-            ),
-            const SizedBox(height: 70),
-          ],
-        ),
+      body: RefreshIndicator(
+        color: colors.accent,
+        onRefresh: _load,
+        edgeOffset: MediaQuery.paddingOf(context).top + 40,
+        child: _buildBody(colors),
       ),
     );
   }
@@ -580,118 +569,148 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  Widget _buildHeader(_ExploreTheme colors) {
-    return Container(
-      color: colors.scaffold,
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-      child: Column(
+  Widget _heroTopBar(_ExploreTheme colors) {
+    final top = MediaQuery.paddingOf(context).top;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16, top + 6, 12, 0),
+      child: Row(
         children: [
-          SizedBox(
-            height: 64,
+          GestureDetector(
+            onTap: () => _scaffoldKey.currentState?.openDrawer(),
             child: Row(
               children: [
-                IconButton(
-                  tooltip: 'Menu',
-                  onPressed: () =>
-                      _scaffoldKey.currentState?.openDrawer(),
-                  icon: Icon(
-                    Icons.menu_rounded,
-                    color: colors.primaryText,
-                    size: 26,
+                Image.asset(
+                  'assets/images/png/app_icon.png',
+                  width: 26,
+                  height: 26,
+                  errorBuilder: (_, _, _) => const Icon(
+                    Icons.auto_awesome,
+                    color: Colors.white,
+                    size: 22,
                   ),
                 ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Barqody Partner',
-                      style: WaUi.toolsTitleOf(
-                        weight: FontWeight.w400,
-                        color: colors.primaryText,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  tooltip: 'Cart',
-                  onPressed: _openCart,
-                  icon: Consumer<ExploreCartProvider>(
-                    builder: (context, cart, _) {
-                      return Badge(
-                        isLabelVisible: cart.hasItems,
-                        backgroundColor: colors.accent,
-                        label: Text(
-                          '${cart.itemCount}',
-                          style: TextStyle(color: colors.onAccent),
-                        ),
-                        child: Icon(
-                          Icons.shopping_bag_outlined,
-                          size: 24,
-                          color: colors.primaryText,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                IconButton(
-                  tooltip: context.l10n.notifications,
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const NotificationsScreen(),
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.notifications_none_rounded,
-                    size: 26,
-                    color: colors.primaryText,
+                const SizedBox(width: 8),
+                const Text(
+                  'BARQODY',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.8,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+          const Spacer(),
+          Material(
+            color: Colors.white,
+            shape: const CircleBorder(),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: _openCart,
+              child: SizedBox(
+                width: 38,
+                height: 38,
+                child: Consumer<ExploreCartProvider>(
+                  builder: (context, cart, _) {
+                    return Badge(
+                      isLabelVisible: cart.hasItems,
+                      backgroundColor: Colors.black,
+                      label: Text(
+                        '${cart.itemCount}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 18,
+                        color: Colors.black,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Material(
+            color: Colors.white,
+            shape: const CircleBorder(),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const NotificationsScreen(),
+                  ),
+                );
+              },
+              child: const SizedBox(
+                width: 38,
+                height: 38,
+                child: Icon(
+                  Icons.notifications_none_rounded,
+                  size: 20,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _searchRow(_ExploreTheme colors) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+      child: Row(
+        children: [
+          Expanded(
             child: GestureDetector(
-              onTap: _openSearch,
+              onTap: () => _openSearch(autofocus: true),
               child: Container(
                 height: 48,
                 padding: const EdgeInsets.only(left: 14, right: 14),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? const Color(0xFF3A3B3C)
-                      : WaUi.searchBg,
+                  color: const Color(0xFFF2F2F7),
                   borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: const Color(0xFFE8E8ED)),
                 ),
-                child: Row(
+                child: const Row(
                   children: [
-                    Icon(
-                      Icons.search,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? const Color(0xFF8A8D91)
-                          : const Color(0xFF667781),
-                      size: 22,
-                    ),
-                    const SizedBox(width: 8),
+                    Icon(Icons.search, color: Color(0xFF8E8E93), size: 20),
+                    SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Search',
+                        'Search offers',
                         style: TextStyle(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? const Color(0xFF8A8D91)
-                              : const Color(0xFF667781),
-                          fontSize: 16,
+                          color: Color(0xFF8E8E93),
+                          fontSize: 15,
                           fontWeight: FontWeight.w400,
-                          height: 1.2,
                         ),
                       ),
                     ),
                   ],
                 ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Material(
+            color: Colors.black,
+            shape: const CircleBorder(),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () => _scaffoldKey.currentState?.openDrawer(),
+              child: const SizedBox(
+                width: 44,
+                height: 44,
+                child: Icon(Icons.tune_rounded, color: Colors.white, size: 20),
               ),
             ),
           ),
@@ -710,7 +729,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
-          const SizedBox(height: 72),
+          SizedBox(height: MediaQuery.paddingOf(context).top + 80),
           ConnectionErrorState(
             message: _error!,
             onRetry: _load,
@@ -724,6 +743,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
     final services = _serviceItems;
     final businesses = _businesses;
     final isPro = context.watch<ProfileProvider>().profile.isPro;
+    final bestOffers = offers;
+    final showProductOffers = bestOffers.isEmpty && products.isNotEmpty;
 
     final isEmpty = offers.isEmpty &&
         products.isEmpty &&
@@ -732,228 +753,315 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(bottom: 32),
+      padding: EdgeInsets.zero,
       children: [
-        const SizedBox(height: 8),
-
-        // 1. Banner slider
-        _ExploreBannerCarousel(
-          controller: _bannerController,
-          currentPage: _bannerPage,
-          banners: _banners,
-          onPageChanged: (index) => setState(() => _bannerPage = index),
-          colors: colors,
-          onBannerTap: _handleBannerTap,
-          onBecomeBusiness: () => SubcriptionSheet.show(context),
-          onExploreOffers: () {
-            if (offers.isNotEmpty) {
-              _openSeeAll(kind: ExploreSeeAllKind.offers, offers: offers);
-            }
-          },
+        Stack(
+          children: [
+            _ExploreBannerCarousel(
+              controller: _bannerController,
+              currentPage: _bannerPage,
+              banners: _banners,
+              onPageChanged: (index) => setState(() => _bannerPage = index),
+              colors: colors,
+              onBannerTap: _handleBannerTap,
+              onBecomeBusiness: () => SubcriptionSheet.show(context),
+              onExploreOffers: () {
+                if (offers.isNotEmpty) {
+                  _openSeeAll(kind: ExploreSeeAllKind.offers, offers: offers);
+                }
+              },
+              fullBleed: true,
+            ),
+            _heroTopBar(colors),
+          ],
         ),
-
-        const SizedBox(height: 20),
-
-        // 2. Categories with icons
-        _ExploreCategoryIconGrid(
-          categories: _categories,
-          selectedCategory: null,
-          colors: colors,
-          onSelect: (category) {
-            if (category == null || category.isEmpty) return;
-            _openSearch(
-              industry: category,
-              initialTab: ExploreSearchTab.business,
-              autofocus: false,
-            );
-          },
-        ),
-
-        if (isEmpty) ...[
-          const SizedBox(height: 40),
-          Center(
-            child: Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                color: colors.emptyIconBg,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.explore_outlined,
-                size: 36,
-                color: colors.secondaryText,
+        Transform.translate(
+          offset: const Offset(0, -22),
+          child: Container(
+            decoration: BoxDecoration(
+              color: colors.scaffold,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(28),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Nothing nearby yet',
-            textAlign: TextAlign.center,
-            style: WaUi.headline.copyWith(
-              fontWeight: FontWeight.w700,
-              color: colors.primaryText,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28),
-            child: Text(
-              'Offers, items, services and businesses will appear when nearby PRO profiles complete their Business Profile.',
-              textAlign: TextAlign.center,
-              style: WaUi.body.copyWith(
-                color: colors.secondaryText,
-                height: 1.4,
-              ),
-            ),
-          ),
-        ] else ...[
-          const SizedBox(height: 24),
-
-          // 3. Products nearby
-          if (products.isNotEmpty) ...[
-            _sectionHeader(
-              title: 'Products nearby',
-              icon: Icons.storefront_rounded,
-              colors: colors,
-              onViewAll: () => _openSeeAll(
-                kind: ExploreSeeAllKind.items,
-                items: products,
-              ),
-            ),
-            const SizedBox(height: 14),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  const spacing = 12.0;
-                  final cardW = (constraints.maxWidth - spacing) / 2;
-                  return Wrap(
-                    spacing: spacing,
-                    runSpacing: spacing,
-                    children: products.take(6).map((item) {
-                      return SizedBox(
-                        width: cardW,
-                        child: _ProductCard(
-                          item: item,
-                          onTap: () => _openItem(item),
-                        ),
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
-            ),
-          ],
-          if (!isPro && !_businessPromoDismissed)
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: _ExplorePromoBanner(
-                colors: colors,
-                onTap: () => SubcriptionSheet.show(context),
-                onDismiss: () =>
-                    setState(() => _businessPromoDismissed = true),
-              ),
-            ),
-          if (offers.isNotEmpty) ...[
-            const SizedBox(height: 24),
-            _sectionHeader(
-              title: 'Reward Offers',
-              icon: Icons.card_giftcard_rounded,
-              colors: colors,
-              onViewAll: offers.length > 1
-                  ? () => _openSeeAll(
-                        kind: ExploreSeeAllKind.offers,
-                        offers: offers,
-                      )
-                  : null,
-            ),
-            const SizedBox(height: 14),
-            SizedBox(
-              height: _RewardOfferCard.listHeight,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.fromLTRB(16, 2, 16, 8),
-                itemCount: offers.length.clamp(0, 8),
-                separatorBuilder: (_, _) => const SizedBox(width: 12),
-                itemBuilder: (context, index) {
-                  return _RewardOfferCard(
-                    offer: offers[index],
-                    colors: colors,
-                    onTap: () => _openOffer(offers[index]),
-                  );
-                },
-              ),
-            ),
-          ],
-          if (services.isNotEmpty) ...[
-            const SizedBox(height: 24),
-            _sectionHeader(
-              title: 'Services',
-              icon: Icons.design_services_rounded,
-              colors: colors,
-              onViewAll: () => _openSeeAll(
-                kind: ExploreSeeAllKind.services,
-                items: services,
-              ),
-            ),
-            const SizedBox(height: 14),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  const spacing = 12.0;
-                  final cardW = (constraints.maxWidth - spacing) / 2;
-                  return Wrap(
-                    spacing: spacing,
-                    runSpacing: spacing,
-                    children: services.take(6).map((item) {
-                      return SizedBox(
-                        width: cardW,
-                        child: _ProductCard(
-                          item: item,
-                          onTap: () => _openItem(item),
-                        ),
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
-            ),
-          ],
-          if (businesses.isNotEmpty) ...[
-            const SizedBox(height: 20),
-            _sectionHeader(
-              title: 'Businesses nearby',
-              icon: Icons.storefront_rounded,
-              colors: colors,
-              onViewAll: () => _openSeeAll(
-                kind: ExploreSeeAllKind.businesses,
-                businesses: businesses,
-              ),
-            ),
-            const SizedBox(height: 14),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: businesses
-                    .take(8)
-                    .map(
-                      (biz) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: _BusinessCard(
-                          business: biz,
-                          colors: colors,
-                          onTap: () => _openBusiness(biz),
-                        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 18),
+                _searchRow(colors),
+                const SizedBox(height: 22),
+                if (isEmpty) ...[
+                  const SizedBox(height: 24),
+                  Center(
+                    child: Container(
+                      width: 72,
+                      height: 72,
+                      decoration: BoxDecoration(
+                        color: colors.emptyIconBg,
+                        shape: BoxShape.circle,
                       ),
-                    )
-                    .toList(),
-              ),
+                      child: Icon(
+                        Icons.explore_outlined,
+                        size: 36,
+                        color: colors.secondaryText,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Nothing nearby yet',
+                    textAlign: TextAlign.center,
+                    style: WaUi.headline.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: colors.primaryText,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 28),
+                    child: Text(
+                      'Offers, items, services and businesses will appear when nearby PRO profiles complete their Business Profile.',
+                      textAlign: TextAlign.center,
+                      style: WaUi.body.copyWith(
+                        color: colors.secondaryText,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ] else ...[
+                  if (bestOffers.isNotEmpty || showProductOffers) ...[
+                    _figmaSectionTitle('Find the best offer for you'),
+                    const SizedBox(height: 14),
+                    SizedBox(
+                      height: _FigmaOfferCard.listHeight,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+                        itemCount: bestOffers.isNotEmpty
+                            ? bestOffers.length.clamp(0, 8)
+                            : products.take(8).length,
+                        separatorBuilder: (_, _) => const SizedBox(width: 12),
+                        itemBuilder: (context, index) {
+                          if (bestOffers.isNotEmpty) {
+                            final offer = bestOffers[index];
+                            return _FigmaOfferCard(
+                              title: offer.title.isNotEmpty
+                                  ? offer.title
+                                  : 'Get 1 Free',
+                              brand: offer.businessName,
+                              imageUrl: offer.businessPhoto ?? offer.logo,
+                              onTap: () => _openOffer(offer),
+                              onAdd: () => _openOffer(offer),
+                            );
+                          }
+                          final item = products[index];
+                          return _FigmaOfferCard(
+                            title: item.name,
+                            brand: item.businessName,
+                            imageUrl: item.image,
+                            onTap: () => _openItem(item),
+                            onAdd: () => _openItem(item),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                  ],
+                  _ExploreCategoryIconGrid(
+                    categories: _categories,
+                    selectedCategory: null,
+                    colors: colors,
+                    onSelect: (category) {
+                      if (category == null || category.isEmpty) return;
+                      _openSearch(
+                        industry: category,
+                        initialTab: ExploreSearchTab.business,
+                        autofocus: false,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 22),
+                  if (offers.isNotEmpty || businesses.isNotEmpty) ...[
+                    _figmaSectionTitle('Limited Offers'),
+                    const SizedBox(height: 12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: [
+                          if (offers.isNotEmpty)
+                            ...offers.take(6).map(
+                                  (offer) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: _LimitedOfferCoupon(
+                                      name: offer.businessName.isNotEmpty
+                                          ? offer.businessName
+                                          : offer.title,
+                                      tagline: offer.description.isNotEmpty
+                                          ? offer.description
+                                          : (offer.title.isNotEmpty
+                                              ? offer.title
+                                              : 'Big Deals, Bigger Bites!'),
+                                      pointsLabel:
+                                          '${offer.stamps > 0 ? offer.stamps : 10} Points',
+                                      logoUrl:
+                                          offer.businessPhoto ?? offer.logo,
+                                      onTap: () => _openOffer(offer),
+                                    ),
+                                  ),
+                                )
+                          else
+                            ...businesses.take(6).map(
+                                  (biz) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: _LimitedOfferCoupon(
+                                      name: biz.name,
+                                      tagline: biz.businessCategory.isNotEmpty
+                                          ? biz.businessCategory
+                                          : 'Special offers nearby',
+                                      pointsLabel: '10 Points',
+                                      logoUrl: biz.profilePhoto,
+                                      onTap: () => _openBusiness(biz),
+                                    ),
+                                  ),
+                                ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (!isPro && !_businessPromoDismissed)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: _ExplorePromoBanner(
+                        colors: colors,
+                        onTap: () => SubcriptionSheet.show(context),
+                        onDismiss: () =>
+                            setState(() => _businessPromoDismissed = true),
+                      ),
+                    ),
+                  if (products.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    _sectionHeader(
+                      title: 'Products nearby',
+                      icon: Icons.storefront_rounded,
+                      colors: colors,
+                      onViewAll: () => _openSeeAll(
+                        kind: ExploreSeeAllKind.items,
+                        items: products,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          const spacing = 12.0;
+                          final cardW = (constraints.maxWidth - spacing) / 2;
+                          return Wrap(
+                            spacing: spacing,
+                            runSpacing: spacing,
+                            children: products.take(6).map((item) {
+                              return SizedBox(
+                                width: cardW,
+                                child: _ProductCard(
+                                  item: item,
+                                  onTap: () => _openItem(item),
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                  if (services.isNotEmpty) ...[
+                    const SizedBox(height: 24),
+                    _sectionHeader(
+                      title: 'Services',
+                      icon: Icons.design_services_rounded,
+                      colors: colors,
+                      onViewAll: () => _openSeeAll(
+                        kind: ExploreSeeAllKind.services,
+                        items: services,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          const spacing = 12.0;
+                          final cardW = (constraints.maxWidth - spacing) / 2;
+                          return Wrap(
+                            spacing: spacing,
+                            runSpacing: spacing,
+                            children: services.take(6).map((item) {
+                              return SizedBox(
+                                width: cardW,
+                                child: _ProductCard(
+                                  item: item,
+                                  onTap: () => _openItem(item),
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                  if (businesses.isNotEmpty) ...[
+                    const SizedBox(height: 20),
+                    _sectionHeader(
+                      title: 'Businesses nearby',
+                      icon: Icons.storefront_rounded,
+                      colors: colors,
+                      onViewAll: () => _openSeeAll(
+                        kind: ExploreSeeAllKind.businesses,
+                        businesses: businesses,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: businesses
+                            .take(8)
+                            .map(
+                              (biz) => Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: _BusinessCard(
+                                  business: biz,
+                                  colors: colors,
+                                  onTap: () => _openBusiness(biz),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ],
+                ],
+                const SizedBox(height: 100),
+              ],
             ),
-          ],
-        ],
+          ),
+        ),
       ],
+    );
+  }
+
+  Widget _figmaSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w700,
+          fontSize: 17,
+          color: Colors.black,
+          letterSpacing: -0.2,
+        ),
+      ),
     );
   }
 
@@ -1316,6 +1424,7 @@ class _ExploreBannerCarousel extends StatelessWidget {
   final ValueChanged<ExploreBanner> onBannerTap;
   final VoidCallback onBecomeBusiness;
   final VoidCallback onExploreOffers;
+  final bool fullBleed;
 
   const _ExploreBannerCarousel({
     required this.controller,
@@ -1326,6 +1435,7 @@ class _ExploreBannerCarousel extends StatelessWidget {
     required this.onBannerTap,
     required this.onBecomeBusiness,
     required this.onExploreOffers,
+    this.fullBleed = false,
   });
 
   List<ExploreBanner> get _slides {
@@ -1333,30 +1443,30 @@ class _ExploreBannerCarousel extends StatelessWidget {
     return const [
       ExploreBanner(
         id: 'fallback-1',
-        tag: 'BUSINESS',
-        title: 'BECOME A\nBUSINESS',
-        subtitle: 'List products, offers & get nearby customers',
-        buttonText: 'GET STARTED',
-        gradientStart: '#0F766E',
-        gradientEnd: '#EA580C',
-        actionType: 'become_business',
+        tag: 'STYLE',
+        title: 'Fresh Looks,\nFresh Confidence',
+        subtitle: 'Discover beauty & grooming near you',
+        buttonText: 'EXPLORE',
+        gradientStart: '#1F2937',
+        gradientEnd: '#6B7280',
+        actionType: 'offers',
       ),
       ExploreBanner(
         id: 'fallback-2',
         tag: 'NEAR YOU',
-        title: 'EXPLORE\nLOCAL DEALS',
-        subtitle: 'Discover offers & shops around you',
+        title: 'Local Deals\nAround You',
+        subtitle: 'Offers, shops & rewards nearby',
         buttonText: 'EXPLORE NOW',
-        gradientStart: '#14532D',
-        gradientEnd: '#CA8A04',
+        gradientStart: '#0F766E',
+        gradientEnd: '#EA580C',
         actionType: 'offers',
       ),
       ExploreBanner(
         id: 'fallback-3',
-        tag: 'PRO',
-        title: 'GROW YOUR\nVISIBILITY',
-        subtitle: 'Orders, loyalty & attendance tools',
-        buttonText: 'TRY BUSINESS PRO',
+        tag: 'BUSINESS',
+        title: 'Become a\nBusiness',
+        subtitle: 'List products, offers & get customers',
+        buttonText: 'GET STARTED',
         gradientStart: '#18181B',
         gradientEnd: '#3F3F46',
         actionType: 'become_business',
@@ -1389,175 +1499,177 @@ class _ExploreBannerCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final slides = _slides;
-    return Column(
-      children: [
-        SizedBox(
-          height: 200,
-          child: PageView.builder(
-            controller: controller,
-            onPageChanged: onPageChanged,
-            itemCount: slides.length,
-            itemBuilder: (context, index) {
-              final b = slides[index];
-              final start = _hex(b.gradientStart, const Color(0xFF0F766E));
-              final end = _hex(b.gradientEnd, const Color(0xFFEA580C));
-              final hasOverlayText = b.tag.isNotEmpty ||
-                  b.title.isNotEmpty ||
-                  b.subtitle.isNotEmpty ||
-                  b.buttonText.isNotEmpty;
-              final imageOnly = b.image.isNotEmpty && !hasOverlayText;
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: GestureDetector(
-                  onTap: _tapFor(b),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.12),
-                          blurRadius: 12,
-                          offset: const Offset(0, 5),
+    final topPad = fullBleed ? MediaQuery.paddingOf(context).top : 0.0;
+    final height = fullBleed ? (topPad + 268) : 200.0;
+
+    return SizedBox(
+      height: height,
+      child: PageView.builder(
+        controller: controller,
+        onPageChanged: onPageChanged,
+        itemCount: slides.length,
+        itemBuilder: (context, index) {
+          final b = slides[index];
+          final start = _hex(b.gradientStart, const Color(0xFF1F2937));
+          final end = _hex(b.gradientEnd, const Color(0xFF6B7280));
+          final hasOverlayText = b.tag.isNotEmpty ||
+              b.title.isNotEmpty ||
+              b.subtitle.isNotEmpty ||
+              b.buttonText.isNotEmpty;
+          final imageOnly = b.image.isNotEmpty && !hasOverlayText;
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: fullBleed ? 0 : 16),
+            child: GestureDetector(
+              onTap: _tapFor(b),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius:
+                      fullBleed ? BorderRadius.zero : BorderRadius.circular(18),
+                  boxShadow: fullBleed
+                      ? null
+                      : [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.12),
+                            blurRadius: 12,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    if (b.image.isNotEmpty)
+                      CachedAppImage(
+                        url: b.image,
+                        fit: BoxFit.cover,
+                        placeholder: const ImageShimmerPlaceholder(),
+                        error: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [start, end],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
                         ),
-                      ],
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        if (b.image.isNotEmpty)
-                          CachedAppImage(
-                            url: b.image,
-                            fit: BoxFit.cover,
-                            placeholder: const ImageShimmerPlaceholder(),
-                            error: DecoratedBox(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [start, end],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
+                      )
+                    else
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [start, end],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                      ),
+                    // Soft scrim so white top bar stays readable
+                    if (fullBleed)
+                      const DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.center,
+                            colors: [
+                              Color(0x99000000),
+                              Color(0x00000000),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (!imageOnly && b.image.isNotEmpty && !fullBleed)
+                      ColoredBox(
+                        color: Colors.black.withValues(alpha: 0.35),
+                      ),
+                    if (!imageOnly)
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          20,
+                          fullBleed ? topPad + 56 : 16,
+                          20,
+                          fullBleed ? 36 : 16,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (!fullBleed && b.tag.isNotEmpty)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFEA580C),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  b.tag,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 0.6,
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        else
-                          DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [start, end],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
+                            const Spacer(),
+                            if (b.title.isNotEmpty)
+                              Text(
+                                b.title,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: fullBleed ? 28 : 22,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.1,
+                                  letterSpacing: -0.5,
+                                  fontFamily: 'Poppins',
+                                ),
                               ),
-                            ),
-                          ),
-                        if (!imageOnly && b.image.isNotEmpty)
-                          ColoredBox(
-                            color: Colors.black.withValues(alpha: 0.35),
-                          ),
-                        if (!imageOnly)
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (b.tag.isNotEmpty)
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 3,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFEA580C),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      b.tag,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w800,
-                                        letterSpacing: 0.6,
-                                      ),
-                                    ),
+                            if (b.subtitle.isNotEmpty) ...[
+                              const SizedBox(height: 6),
+                              Text(
+                                b.subtitle,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.92),
+                                  fontSize: fullBleed ? 13 : 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                            if (!fullBleed && b.buttonText.isNotEmpty) ...[
+                              const SizedBox(height: 10),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 7,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  b.buttonText,
+                                  style: const TextStyle(
+                                    color: Color(0xFF0F766E),
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w800,
                                   ),
-                                const Spacer(),
-                                if (b.title.isNotEmpty)
-                                  Text(
-                                    b.title,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w900,
-                                      height: 1.05,
-                                      letterSpacing: -0.4,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                  ),
-                                if (b.subtitle.isNotEmpty) ...[
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    b.subtitle,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colors.white.withValues(alpha: 0.9),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                                if (b.buttonText.isNotEmpty) ...[
-                                  const SizedBox(height: 10),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 14,
-                                      vertical: 7,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Text(
-                                      b.buttonText,
-                                      style: const TextStyle(
-                                        color: Color(0xFF0F766E),
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                  ],
                 ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(slides.length, (index) {
-            final active = index == currentPage;
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 280),
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              width: active ? 16 : 6,
-              height: 6,
-              decoration: BoxDecoration(
-                color: active
-                    ? const Color(0xFF10A375)
-                    : colors.secondaryText.withValues(alpha: 0.28),
-                borderRadius: BorderRadius.circular(4),
               ),
-            );
-          }),
-        ),
-      ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -1634,7 +1746,7 @@ class _ExploreCategoryIconGrid extends StatelessWidget {
               Text(
                 'Categories',
                 style: TextStyle(
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   fontSize: 17,
                   color: colors.primaryText,
                 ),
@@ -1656,12 +1768,12 @@ class _ExploreCategoryIconGrid extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: 98,
+          height: 44,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: items.length,
-            separatorBuilder: (_, _) => const SizedBox(width: 16),
+            separatorBuilder: (_, _) => const SizedBox(width: 10),
             itemBuilder: (context, index) {
               final cat = items[index];
               final label = cat.label.isNotEmpty
@@ -1672,55 +1784,55 @@ class _ExploreCategoryIconGrid extends StatelessWidget {
 
               return GestureDetector(
                 onTap: () => onSelect(cat.name),
-                child: SizedBox(
-                  width: 72,
-                  child: Column(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  decoration: BoxDecoration(
+                    color: isSelected ? Colors.black : Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(
+                      color: isSelected
+                          ? Colors.black
+                          : const Color(0xFFE5E5EA),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        width: 58,
-                        height: 58,
-                        decoration: BoxDecoration(
+                      // Keep existing Flutter / API category icons — layout only.
+                      if (cat.iconUrl.isNotEmpty)
+                        SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CachedAppImage(
+                            url: cat.iconUrl,
+                            fit: BoxFit.contain,
+                            placeholder: const SizedBox.shrink(),
+                            error: Icon(
+                              icon,
+                              size: 18,
+                              color: isSelected
+                                  ? Colors.white
+                                  : colors.primaryText,
+                            ),
+                          ),
+                        )
+                      else
+                        Icon(
+                          icon,
+                          size: 18,
                           color: isSelected
-                              ? colors.accent.withValues(alpha: 0.12)
-                              : colors.surface,
-                          borderRadius: BorderRadius.circular(18),
+                              ? Colors.white
+                              : colors.primaryText,
                         ),
-                        clipBehavior: Clip.antiAlias,
-                        child: cat.iconUrl.isNotEmpty
-                            ? CachedAppImage(
-                                url: cat.iconUrl,
-                                fit: BoxFit.cover,
-                                placeholder: const ImageShimmerPlaceholder(),
-                                error: Icon(
-                                  icon,
-                                  size: 26,
-                                  color: isSelected
-                                      ? colors.accent
-                                      : colors.secondaryText,
-                                ),
-                              )
-                            : Icon(
-                                icon,
-                                size: 26,
-                                color: isSelected
-                                    ? colors.accent
-                                    : colors.secondaryText,
-                              ),
-                      ),
-                      const SizedBox(height: 6),
+                      const SizedBox(width: 8),
                       Text(
                         label,
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 11,
-                          fontWeight:
-                              isSelected ? FontWeight.w800 : FontWeight.w600,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                           color: isSelected
-                              ? colors.accent
+                              ? Colors.white
                               : colors.primaryText,
-                          height: 1.1,
                         ),
                       ),
                     ],
@@ -1920,6 +2032,318 @@ class _ExplorePromoBanner extends StatelessWidget {
       ),
     );
   }
+}
+
+class _FigmaOfferCard extends StatelessWidget {
+  static const double cardWidth = 168;
+  static const double listHeight = 204;
+
+  final String title;
+  final String brand;
+  final String? imageUrl;
+  final VoidCallback onTap;
+  final VoidCallback onAdd;
+
+  const _FigmaOfferCard({
+    required this.title,
+    required this.brand,
+    this.imageUrl,
+    required this.onTap,
+    required this.onAdd,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: cardWidth,
+        height: listHeight,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: const Color(0xFFECECEF)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: SizedBox(
+                width: double.infinity,
+                child: imageUrl != null && imageUrl!.isNotEmpty
+                    ? CachedAppImage(
+                        url: imageUrl!,
+                        fit: BoxFit.cover,
+                        placeholder: const ImageShimmerPlaceholder(),
+                        error: Container(
+                          color: const Color(0xFFF3F4F6),
+                          child: const Icon(
+                            Icons.local_offer_outlined,
+                            color: Color(0xFF9CA3AF),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        color: const Color(0xFFF3F4F6),
+                        child: const Icon(
+                          Icons.local_offer_outlined,
+                          color: Color(0xFF9CA3AF),
+                          size: 32,
+                        ),
+                      ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      height: 1.2,
+                      color: Colors.black,
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                brand.isNotEmpty ? brand : 'Partner',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  height: 1.2,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF6B7280),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            const Icon(
+                              Icons.verified,
+                              size: 14,
+                              color: Color(0xFFFBBF24),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Material(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                        child: InkWell(
+                          onTap: onAdd,
+                          borderRadius: BorderRadius.circular(10),
+                          child: const SizedBox(
+                            width: 32,
+                            height: 32,
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LimitedOfferCoupon extends StatelessWidget {
+  final String name;
+  final String tagline;
+  final String pointsLabel;
+  final String? logoUrl;
+  final VoidCallback onTap;
+
+  const _LimitedOfferCoupon({
+    required this.name,
+    required this.tagline,
+    required this.pointsLabel,
+    this.logoUrl,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 88,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE8E8ED)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Row(
+          children: [
+            // Dashed logo panel
+            SizedBox(
+              width: 88,
+              child: CustomPaint(
+                painter: _DashedBorderPainter(
+                  color: const Color(0xFFD1D5DB),
+                  radius: 12,
+                ),
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  alignment: Alignment.center,
+                  child: logoUrl != null && logoUrl!.isNotEmpty
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CachedAppImage(
+                            url: logoUrl!,
+                            width: 52,
+                            height: 52,
+                            fit: BoxFit.cover,
+                            placeholder: const ImageShimmerPlaceholder(),
+                            error: const Icon(
+                              Icons.storefront_rounded,
+                              color: Color(0xFF9CA3AF),
+                            ),
+                          ),
+                        )
+                      : const Icon(
+                          Icons.storefront_rounded,
+                          color: Color(0xFF9CA3AF),
+                          size: 28,
+                        ),
+                ),
+              ),
+            ),
+            // Black info bar
+            Expanded(
+              child: Container(
+                color: Colors.black,
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      tagline,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.7),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      pointsLabel,
+                      style: const TextStyle(
+                        color: Color(0xFFFBBF24),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DashedBorderPainter extends CustomPainter {
+  final Color color;
+  final double radius;
+
+  _DashedBorderPainter({required this.color, this.radius = 8});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.4;
+
+    final rrect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(6, 6, size.width - 12, size.height - 12),
+      Radius.circular(radius),
+    );
+
+    final path = Path()..addRRect(rrect);
+    final dashed = _dashPath(path, dashLength: 5, gapLength: 4);
+    canvas.drawPath(dashed, paint);
+  }
+
+  Path _dashPath(Path source, {required double dashLength, required double gapLength}) {
+    final dest = Path();
+    for (final metric in source.computeMetrics()) {
+      var distance = 0.0;
+      var draw = true;
+      while (distance < metric.length) {
+        final len = draw ? dashLength : gapLength;
+        if (draw) {
+          dest.addPath(
+            metric.extractPath(distance, distance + len),
+            Offset.zero,
+          );
+        }
+        distance += len;
+        draw = !draw;
+      }
+    }
+    return dest;
+  }
+
+  @override
+  bool shouldRepaint(covariant _DashedBorderPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.radius != radius;
 }
 
 class _RewardOfferCard extends StatelessWidget {
@@ -2148,12 +2572,6 @@ class _ClassicRewardPreview extends StatelessWidget {
 }
 
 class _ProductCard extends StatelessWidget {
-  // Used only for skeleton dimensions:
-  static const double cardWidth = 170;
-  static double get cardHeight => ShopProductCard.heightForWidth(cardWidth);
-  static double get imageHeight =>
-      cardWidth / ShopProductCard.imageAspectRatio;
-
   final ExploreItem item;
   final VoidCallback onTap;
 
@@ -2176,196 +2594,6 @@ class _ProductCard extends StatelessWidget {
       badgeLabel: item.isService ? 'Service' : 'Shop Product',
       onTap: onTap,
       isDark: isDark,
-    );
-  }
-}
-
-class _ServiceCard extends StatelessWidget {
-  final ExploreItem item;
-  final _ExploreTheme colors;
-  final VoidCallback onTap;
-
-  const _ServiceCard({
-    required this.item,
-    required this.colors,
-    required this.onTap,
-  });
-
-  static String _formatTitle(String text) {
-    if (text.isEmpty) return text;
-    return text
-        .split(' ')
-        .map((w) => w.isEmpty
-            ? w
-            : w[0].toUpperCase() + w.substring(1).toLowerCase())
-        .join(' ');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: colors.surface,
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Row(
-          children: [
-            // Tall image on the left
-            SizedBox(
-              width: 110,
-              height: 110,
-              child: Container(
-                color: const Color(0xFFF4F4F5),
-                child: _exploreImage(
-                  item.image,
-                  Icons.content_cut_rounded,
-                  colors,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Category or business
-                    Text(
-                      item.businessName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: colors.secondaryText,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    // Title
-                    Text(
-                      _formatTitle(item.name),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
-                        color: Color(0xFF18181B),
-                      ),
-                    ),
-                    // Address
-                    if (item.businessAddress.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.location_on_outlined,
-                            size: 12,
-                            color: Color(0xFF71717A),
-                          ),
-                          const SizedBox(width: 3),
-                          Expanded(
-                            child: Text(
-                              item.businessAddress,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Color(0xFF71717A),
-                                fontSize: 11,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        // Price
-                        Expanded(
-                          child: Text(
-                            _ExploreScreenState._priceLabel(
-                              item.price,
-                              fallback: '',
-                              currency: item.currency,
-                            ),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 15,
-                              color: Color(0xFF18181B),
-                            ),
-                          ),
-                        ),
-                        // Book button
-                        GestureDetector(
-                          onTap: onTap,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 7,
-                            ),
-                            decoration: BoxDecoration(
-                              color: colors.accent,
-                              borderRadius: BorderRadius.circular(24),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: colors.accent.withValues(alpha: 0.3),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: const Text(
-                              'Book',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Rating
-                    if (Constants.reviewsEnabled && item.avgRating > 0) ...[
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.star_rounded,
-                            size: 13,
-                            color: Color(0xFFF59E0B),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            item.avgRating.toStringAsFixed(1),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12,
-                              color: Color(0xFF18181B),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -2582,10 +2810,11 @@ class _ExploreSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final top = MediaQuery.paddingOf(context).top;
     return AppShimmer(
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(bottom: 32),
+        padding: EdgeInsets.only(bottom: 32, top: top),
         children: [
           const SizedBox(height: 8),
 
@@ -2742,12 +2971,10 @@ class _ExploreSkeleton extends StatelessWidget {
 
 class _SkeletonSectionHeader extends StatelessWidget {
   final double titleWidth;
-  final bool showViewAll;
   final Color borderColor;
 
   const _SkeletonSectionHeader({
     required this.titleWidth,
-    this.showViewAll = true,
     required this.borderColor,
   });
 
@@ -2759,8 +2986,7 @@ class _SkeletonSectionHeader extends StatelessWidget {
         children: [
           ShimmerBox(width: titleWidth, height: 18, borderRadius: 6),
           const Spacer(),
-          if (showViewAll)
-            const ShimmerBox(width: 56, height: 14, borderRadius: 6),
+          const ShimmerBox(width: 56, height: 14, borderRadius: 6),
         ],
       ),
     );

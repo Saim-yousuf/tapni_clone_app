@@ -36,28 +36,33 @@ class AppLocalizationsPt extends AppLocalizations {
   String get username => 'Nome de usuário';
 
   @override
-  String get setUsernameSubtitle => 'Defina seu nome de usuário de perfil exclusivo';
+  String get setUsernameSubtitle =>
+      'Defina seu nome de usuário de perfil exclusivo';
 
   @override
   String get socialLinks => 'Links Sociais';
 
   @override
-  String get socialLinksSubtitle => 'Adicione Instagram, WhatsApp, site e muito mais';
+  String get socialLinksSubtitle =>
+      'Adicione Instagram, WhatsApp, site e muito mais';
 
   @override
   String get publicProfile => 'Perfil público';
 
   @override
-  String get publicProfileOn => 'Qualquer pessoa pode encontrar e visualizar seu perfil';
+  String get publicProfileOn =>
+      'Qualquer pessoa pode encontrar e visualizar seu perfil';
 
   @override
-  String get publicProfileOff => 'Oculto da pesquisa – outras pessoas não conseguem descobrir você';
+  String get publicProfileOff =>
+      'Oculto da pesquisa – outras pessoas não conseguem descobrir você';
 
   @override
   String get shareQr => 'Compartilhe meu código QR';
 
   @override
-  String get shareQrSubtitle => 'Deixe que outras pessoas digitalizem seu cartão de visita digital';
+  String get shareQrSubtitle =>
+      'Deixe que outras pessoas digitalizem seu cartão de visita digital';
 
   @override
   String get shoppingRewards => 'Compras e recompensas';
@@ -72,7 +77,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get myRewardCards => 'Meus cartões de recompensa';
 
   @override
-  String get myRewardCardsSubtitle => 'Veja selos e pontos de programas de fidelidade';
+  String get myRewardCardsSubtitle =>
+      'Veja selos e pontos de programas de fidelidade';
 
   @override
   String get workplace => 'Local de trabalho';
@@ -81,13 +87,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get employeeInvitations => 'Convites de funcionários';
 
   @override
-  String get employeeInvitationsSubtitle => 'Aceite ou recuse convites de equipes de empresas';
+  String get employeeInvitationsSubtitle =>
+      'Aceite ou recuse convites de equipes de empresas';
 
   @override
   String get workplaceCheckIn => 'Check-in no local de trabalho';
 
   @override
-  String get workplaceCheckInSubtitle => 'Ponto de entrada e saída do seu trabalho com localização';
+  String get workplaceCheckInSubtitle =>
+      'Ponto de entrada e saída do seu trabalho com localização';
 
   @override
   String get accountsAndDevices => 'Contas e dispositivos';
@@ -173,7 +181,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get n2DaysAgo => '2 dias atrás';
 
   @override
-  String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly => '3–30 caracteres. Somente letras, números, sublinhados e hífens.';
+  String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
+      '3–30 caracteres. Somente letras, números, sublinhados e hífens.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
@@ -185,7 +194,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get accessRESTRICTED => 'ACESSO RESTRITO';
 
   @override
-  String get accountIBANAddAccountNumberHere => 'Conta/IBAN: Adicione o número da conta aqui';
+  String get accountIBANAddAccountNumberHere =>
+      'Conta/IBAN: Adicione o número da conta aqui';
 
   @override
   String get accountTitleTapni => 'Título da conta: Tapni';
@@ -209,13 +219,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get addAccount => 'Adicionar conta';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Adicione pelo menos uma categoria primeiro';
+  String get addAtLeastOneCategoryFirst =>
+      'Adicione pelo menos uma categoria primeiro';
 
   @override
-  String get addCategoriesInDisplayOrderEGFastFoodThenDesi => 'Adicione categorias na ordem de exibição (por exemplo, Fast Food e Desi)';
+  String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
+      'Adicione categorias na ordem de exibição (por exemplo, Fast Food e Desi)';
 
   @override
-  String get addCategoriesInYourCatalogSettingsFirst => 'Adicione categorias nas configurações do seu catálogo primeiro.';
+  String get addCategoriesInYourCatalogSettingsFirst =>
+      'Adicione categorias nas configurações do seu catálogo primeiro.';
 
   @override
   String get addContact => 'Adicionar contato';
@@ -224,10 +237,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get addLink => 'Adicionar link';
 
   @override
-  String get addLinksToYourProfileBelow => 'Adicione links ao seu perfil abaixo';
+  String get addLinksToYourProfileBelow =>
+      'Adicione links ao seu perfil abaixo';
 
   @override
-  String get addLinksToYourProfileFirstThenEnableThemHere => 'Adicione links ao seu perfil primeiro e depois ative-os aqui.';
+  String get addLinksToYourProfileFirstThenEnableThemHere =>
+      'Adicione links ao seu perfil primeiro e depois ative-os aqui.';
 
   @override
   String get addLogo => 'Adicionar logotipo';
@@ -260,13 +275,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get allCaughtUp => 'Todos apanhados!';
 
   @override
-  String get allNotificationsMarkedAsRead => 'Todas as notificações marcadas como lidas!';
+  String get allNotificationsMarkedAsRead =>
+      'Todas as notificações marcadas como lidas!';
 
   @override
   String get allowCamera => 'Permitir câmera';
 
   @override
-  String get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices => 'Permitir que este dispositivo acesse sua conta Barqody? Você pode removê-lo a qualquer momento dos dispositivos vinculados.';
+  String
+  get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
+      'Permitir que este dispositivo acesse sua conta Barqody? Você pode removê-lo a qualquer momento dos dispositivos vinculados.';
 
   @override
   String get alreadyHaveAnAccount => 'Já tem uma conta?';
@@ -290,7 +308,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get ascending => 'Ascendente';
 
   @override
-  String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee => 'Peça à sua empresa para digitalizar seu QR e adicionar você como funcionário';
+  String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
+      'Peça à sua empresa para digitalizar seu QR e adicionar você como funcionário';
 
   @override
   String get assignCategory => 'Atribuir categoria';
@@ -374,13 +393,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get businessUsersOnly => 'Somente usuários empresariais';
 
   @override
-  String get bySigningUpYouAgreeToOurTermsAndConditions => 'Ao se inscrever, você concorda com nossos Termos e Condições.';
+  String get bySigningUpYouAgreeToOurTermsAndConditions =>
+      'Ao se inscrever, você concorda com nossos Termos e Condições.';
 
   @override
   String get call => 'Chamar';
 
   @override
-  String get cameraPermissionIsRequiredToScan => 'É necessária permissão da câmera para digitalizar.';
+  String get cameraPermissionIsRequiredToScan =>
+      'É necessária permissão da câmera para digitalizar.';
 
   @override
   String get cancelAnytime => 'Cancele a qualquer momento.';
@@ -410,7 +431,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get checkOut => 'Confira';
 
   @override
-  String get chooseAUniqueUsernameForYourProfileLink => 'Escolha um nome de usuário exclusivo para o link do seu perfil.';
+  String get chooseAUniqueUsernameForYourProfileLink =>
+      'Escolha um nome de usuário exclusivo para o link do seu perfil.';
 
   @override
   String get choosePlan => 'Escolha o plano';
@@ -482,7 +504,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get copyCode => 'Copiar código';
 
   @override
-  String get couldNotGetLocationPleaseEnableGPSPermission => 'Não foi possível obter a localização. Ative a permissão do GPS.';
+  String get couldNotGetLocationPleaseEnableGPSPermission =>
+      'Não foi possível obter a localização. Ative a permissão do GPS.';
 
   @override
   String get couldNotSwitchAccount => 'Não foi possível mudar de conta';
@@ -506,19 +529,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get createReward => 'Criar recompensa';
 
   @override
-  String get createStampOrPointsRewardsForCustomers => 'Crie recompensas de selos ou pontos para clientes';
+  String get createStampOrPointsRewardsForCustomers =>
+      'Crie recompensas de selos ou pontos para clientes';
 
   @override
   String get createYourFirstCard => 'Crie seu primeiro cartão';
 
   @override
-  String get createYourFirstRewardCardForCustomers => 'Crie seu primeiro cartão de recompensa para clientes';
+  String get createYourFirstRewardCardForCustomers =>
+      'Crie seu primeiro cartão de recompensa para clientes';
 
   @override
   String get creationDate => 'Data de criação';
 
   @override
-  String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet => 'Imagens personalizadas para slots carimbados e não carimbados. Os padrões serão usados ​​se não forem definidos.';
+  String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
+      'Imagens personalizadas para slots carimbados e não carimbados. Os padrões serão usados ​​se não forem definidos.';
 
   @override
   String get customLink => 'Link personalizado';
@@ -545,7 +571,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get customizeDesign => 'Personalizar design';
 
   @override
-  String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads => 'Personalize seu perfil, desbloqueie modelos PRO e obtenha leads ilimitados.';
+  String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
+      'Personalize seu perfil, desbloqueie modelos PRO e obtenha leads ilimitados.';
 
   @override
   String get customizeYourself => 'Personalize você mesmo';
@@ -677,7 +704,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get enterCodeInstead => 'Insira o código';
 
   @override
-  String get enterNetworkingContactDetailsBelow => 'Insira os detalhes de contato de rede abaixo.';
+  String get enterNetworkingContactDetailsBelow =>
+      'Insira os detalhes de contato de rede abaixo.';
 
   @override
   String get enterYourName => 'Digite seu nome';
@@ -746,22 +774,26 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hello => 'Olá,';
 
   @override
-  String get helpCenterIsDisabledInThisUIDemo => 'A Central de Ajuda está desativada nesta demonstração da IU.';
+  String get helpCenterIsDisabledInThisUIDemo =>
+      'A Central de Ajuda está desativada nesta demonstração da IU.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
-  String get holdTheQRCodeInsideTheFrameItScansAutomatically => 'Segure o código QR dentro da moldura – ele digitaliza automaticamente.';
+  String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
+      'Segure o código QR dentro da moldura – ele digitaliza automaticamente.';
 
   @override
-  String get howDoYouWantToDesignThisCard => 'Como você deseja projetar este cartão?';
+  String get howDoYouWantToDesignThisCard =>
+      'Como você deseja projetar este cartão?';
 
   @override
   String get importContacts => 'Importar contatos';
 
   @override
-  String get importContactsIsNotAvailableYet => 'A importação de contatos ainda não está disponível.';
+  String get importContactsIsNotAvailableYet =>
+      'A importação de contatos ainda não está disponível.';
 
   @override
   String get inLabel => 'em';
@@ -770,16 +802,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get incomingOrders => 'Pedidos recebidos';
 
   @override
-  String get invalidProfileURLScanAValidBarQodyCardOrQRCode => 'URL de perfil inválido. Digitalize um cartão BarQody válido ou código QR.';
+  String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
+      'URL de perfil inválido. Digitalize um cartão BarQody válido ou código QR.';
 
   @override
-  String get invalidQRCodeUseABarqodyLinkQR => 'Código QR inválido. Use um QR do link Barqody.';
+  String get invalidQRCodeUseABarqodyLinkQR =>
+      'Código QR inválido. Use um QR do link Barqody.';
 
   @override
-  String get inviteEmployeesSetShiftsAndTrackPresence => 'Convide funcionários, defina turnos e monitore a presença';
+  String get inviteEmployeesSetShiftsAndTrackPresence =>
+      'Convide funcionários, defina turnos e monitore a presença';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Convidei você para ingressar como funcionário';
+  String get invitedYouToJoinAsEmployee =>
+      'Convidei você para ingressar como funcionário';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -806,7 +842,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get jpg => 'JPG';
 
   @override
-  String get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust => 'Mantenha sua conta segura. Leia códigos QR apenas quando quiser vincular um dispositivo em que você confia.';
+  String
+  get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
+      'Mantenha sua conta segura. Leia códigos QR apenas quando quiser vincular um dispositivo em que você confia.';
 
   @override
   String get label => 'Rótulo';
@@ -815,7 +853,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get lat => 'Lat.';
 
   @override
-  String get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile => 'Deixe que outras pessoas apontem a câmera do telefone para este código QR para visualizar instantaneamente o seu perfil de rede.';
+  String
+  get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
+      'Deixe que outras pessoas apontem a câmera do telefone para este código QR para visualizar instantaneamente o seu perfil de rede.';
 
   @override
   String get link => 'Link';
@@ -827,7 +867,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get linkByQROnAnotherPhone => 'Link por QR em outro telefone';
 
   @override
-  String get linkCopiedToClipboard => 'Link copiado para a área de transferência';
+  String get linkCopiedToClipboard =>
+      'Link copiado para a área de transferência';
 
   @override
   String get linkSettings => 'Configurações de link';
@@ -848,16 +889,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get locationNotSetYet => 'Local ainda não definido';
 
   @override
-  String get locationPermissionRequired => 'Permissão de localização necessária';
+  String get locationPermissionRequired =>
+      'Permissão de localização necessária';
 
   @override
-  String get locationPermissionRequiredForAttendance => 'Permissão de localização necessária para participação';
+  String get locationPermissionRequiredForAttendance =>
+      'Permissão de localização necessária para participação';
 
   @override
   String get logIn => 'Conecte-se';
 
   @override
-  String get logInToManageYourDigitalCardAndNetwork => 'Faça login para gerenciar seu cartão digital e rede.';
+  String get logInToManageYourDigitalCardAndNetwork =>
+      'Faça login para gerenciar seu cartão digital e rede.';
 
   @override
   String get logInWithQRCode => 'Faça login com código QR';
@@ -884,7 +928,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get manageEmployees => 'Gerenciar funcionários';
 
   @override
-  String get manageYourPersonalDetailsOtherPreferences => 'Gerencie seus dados pessoais e outras preferências';
+  String get manageYourPersonalDetailsOtherPreferences =>
+      'Gerencie seus dados pessoais e outras preferências';
 
   @override
   String get markCompleted => 'Marcar como concluído';
@@ -935,7 +980,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noActiveLinksConnectedYet => 'Nenhum link ativo conectado ainda';
 
   @override
-  String get noActiveRewardProgramsAvailable => 'Nenhum programa de recompensa ativo disponível.';
+  String get noActiveRewardProgramsAvailable =>
+      'Nenhum programa de recompensa ativo disponível.';
 
   @override
   String get noEmployeeCardsYet => 'Ainda não há cartões de funcionários';
@@ -956,7 +1002,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noLinkTemplatesAvailable => 'Nenhum modelo de link disponível';
 
   @override
-  String get noNewNotificationsAtThisTime => 'Nenhuma notificação nova neste momento.';
+  String get noNewNotificationsAtThisTime =>
+      'Nenhuma notificação nova neste momento.';
 
   @override
   String get noOneHasViewedYourProfileYet => 'Ninguém viu seu perfil ainda.';
@@ -965,10 +1012,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noPendingInvitations => 'Nenhum convite pendente';
 
   @override
-  String get noProgramsAssignedYetAddProgramsBelow => 'Nenhum programa atribuído ainda. Adicione programas abaixo.';
+  String get noProgramsAssignedYetAddProgramsBelow =>
+      'Nenhum programa atribuído ainda. Adicione programas abaixo.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'Nenhum código QR encontrado nesta imagem.';
+  String get noQRCodeFoundInThisImage =>
+      'Nenhum código QR encontrado nesta imagem.';
 
   @override
   String get noRewardProgramsYet => 'Ainda não há programas de recompensa';
@@ -983,7 +1032,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get none => 'Nenhum';
 
   @override
-  String get notAvailableOnYourCurrentPlan => 'Não disponível no seu plano atual';
+  String get notAvailableOnYourCurrentPlan =>
+      'Não disponível no seu plano atual';
 
   @override
   String get notCheckedInYet => 'Ainda não fiz check-in';
@@ -998,16 +1048,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get notificationCleared => 'Notificação apagada';
 
   @override
-  String get onlyCoverProfilePhotoNameAndBioAreEditableHere => 'Apenas capa, foto de perfil, nome e biografia são editáveis ​​aqui.';
+  String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
+      'Apenas capa, foto de perfil, nome e biografia são editáveis ​​aqui.';
 
   @override
-  String get onlyEnabledLinksShowWhenSomeoneScansThisCard => 'Somente links habilitados são exibidos quando alguém escaneia este cartão.';
+  String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
+      'Somente links habilitados são exibidos quando alguém escaneia este cartão.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Apenas perfis públicos são mostrados';
+  String get onlyPublicProfilesAreShown =>
+      'Apenas perfis públicos são mostrados';
 
   @override
-  String get onlyThisPhoneIsUsingYourAccountRightNow => 'Somente este telefone está usando sua conta no momento.';
+  String get onlyThisPhoneIsUsingYourAccountRightNow =>
+      'Somente este telefone está usando sua conta no momento.';
 
   @override
   String get orCONTINUEWITH => 'OU CONTINUAR COM';
@@ -1052,7 +1106,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get photos => 'Fotos';
 
   @override
-  String get pickAReadyMadeColorThemeQuickAndClean => 'Escolha um tema de cores pronto. Rápido e limpo.';
+  String get pickAReadyMadeColorThemeQuickAndClean =>
+      'Escolha um tema de cores pronto. Rápido e limpo.';
 
   @override
   String get pickColor => 'Escolha a cor';
@@ -1067,13 +1122,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get planExpired => 'Plano expirado';
 
   @override
-  String get pleaseEnterBusinessDetailsToContinue => 'Insira os detalhes da empresa para continuar';
+  String get pleaseEnterBusinessDetailsToContinue =>
+      'Insira os detalhes da empresa para continuar';
 
   @override
   String get pleaseEnterItemName => 'Por favor insira o nome do item';
 
   @override
-  String get pleaseProvideYourBusinessDetailsBeforeUpgrading => 'Forneça os detalhes da sua empresa antes de atualizar.';
+  String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
+      'Forneça os detalhes da sua empresa antes de atualizar.';
 
   @override
   String get pleaseSelectACategory => 'Selecione uma categoria';
@@ -1082,13 +1139,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get pleaseSelectATimeSlot => 'Selecione um horário';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Defina primeiro o local de trabalho';
+  String get pleaseSetWorkLocationFirst =>
+      'Defina primeiro o local de trabalho';
 
   @override
   String get png => 'PNG';
 
   @override
-  String get pointYourCameraAtTheQRCodeOnTheOtherDevice => 'Aponte sua câmera para o código QR no outro dispositivo';
+  String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
+      'Aponte sua câmera para o código QR no outro dispositivo';
 
   @override
   String get points => 'Pontos';
@@ -1202,7 +1261,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get reset => 'Reiniciar';
 
   @override
-  String get rewardCompletedShowThisCardToRedeem => 'Recompensa concluída! Mostre este cartão para resgatar.';
+  String get rewardCompletedShowThisCardToRedeem =>
+      'Recompensa concluída! Mostre este cartão para resgatar.';
 
   @override
   String get rewardCompleted => 'Recompensa concluída! 🎉';
@@ -1238,19 +1298,23 @@ class AppLocalizationsPt extends AppLocalizations {
   String get save2 => 'SALVAR';
 
   @override
-  String get saveYourWorkIDCardToPhoneOrWallet => 'Salve seu cartão de identificação de trabalho no telefone ou na carteira';
+  String get saveYourWorkIDCardToPhoneOrWallet =>
+      'Salve seu cartão de identificação de trabalho no telefone ou na carteira';
 
   @override
   String get scan => 'Digitalizar';
 
   @override
-  String get scanAUserQRCodeToAddThemAsEmployee => 'Digitalize o código QR de um usuário para adicioná-lo como funcionário';
+  String get scanAUserQRCodeToAddThemAsEmployee =>
+      'Digitalize o código QR de um usuário para adicioná-lo como funcionário';
 
   @override
-  String get scanAnyUserOrBusinessQRToAddEmployee => 'Digitalize qualquer QR de usuário ou empresa para adicionar funcionário';
+  String get scanAnyUserOrBusinessQRToAddEmployee =>
+      'Digitalize qualquer QR de usuário ou empresa para adicionar funcionário';
 
   @override
-  String get scanBusinessQRToRedeem => 'Digitalize o QR comercial para resgatar';
+  String get scanBusinessQRToRedeem =>
+      'Digitalize o QR comercial para resgatar';
 
   @override
   String get scanCustomerQRCode => 'Digitalize o código QR do cliente';
@@ -1268,7 +1332,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get scanQRCode => 'Digitalize o código QR';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Digitalize o QR mostrado no outro dispositivo';
+  String get scanQRShownOnTheOtherDevice =>
+      'Digitalize o QR mostrado no outro dispositivo';
 
   @override
   String get scanToInvite => 'Digitalizar para convidar';
@@ -1286,7 +1351,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get seeAll => 'Ver tudo';
 
   @override
-  String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded => 'Veja que todas as atividades são ridicularizadas. Novas atividades aparecerão à medida que leads forem adicionados.';
+  String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
+      'Veja que todas as atividades são ridicularizadas. Novas atividades aparecerão à medida que leads forem adicionados.';
 
   @override
   String get selectDate => 'Selecione a data';
@@ -1298,10 +1364,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get selectRegion => 'Selecione a região';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Defina o texto abaixo do ícone do link';
+  String get setTextUnderTheLinkIcon =>
+      'Defina o texto abaixo do ícone do link';
 
   @override
-  String get setYourOwnColorsPhotosAndBackground => 'Defina suas próprias cores, fotos e plano de fundo.';
+  String get setYourOwnColorsPhotosAndBackground =>
+      'Defina suas próprias cores, fotos e plano de fundo.';
 
   @override
   String get share => 'Compartilhar';
@@ -1310,7 +1378,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get shareCard => 'Compartilhar cartão';
 
   @override
-  String get shareDifferentLinksOnEachCard => 'Compartilhe links diferentes em cada cartão';
+  String get shareDifferentLinksOnEachCard =>
+      'Compartilhe links diferentes em cada cartão';
 
   @override
   String get shareProfile => 'Compartilhar perfil';
@@ -1367,7 +1436,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get startHour => 'Hora de início';
 
   @override
-  String get startNetworkingSmarterWithBarqody => 'Comece a fazer networking de maneira mais inteligente com o Barqody.';
+  String get startNetworkingSmarterWithBarqody =>
+      'Comece a fazer networking de maneira mais inteligente com o Barqody.';
 
   @override
   String get stats => 'Estatísticas';
@@ -1379,22 +1449,27 @@ class AppLocalizationsPt extends AppLocalizations {
   String get subscription => 'Subscrição';
 
   @override
-  String get subscriptionRequestSubmitted => 'Solicitação de assinatura enviada';
+  String get subscriptionRequestSubmitted =>
+      'Solicitação de assinatura enviada';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Solicitação de assinatura enviada.';
+  String get subscriptionRequestSubmitted2 =>
+      'Solicitação de assinatura enviada.';
 
   @override
   String get swipeToBrowseCards => 'Deslize para navegar pelos cartões';
 
   @override
-  String get takeAQuickSelfieForAttendanceVerification => 'Tire uma selfie rápida para verificação de presença';
+  String get takeAQuickSelfieForAttendanceVerification =>
+      'Tire uma selfie rápida para verificação de presença';
 
   @override
-  String get tapSocialLinksAboveToAddAndActivateProfiles => 'Toque em “Links Sociais” acima para adicionar e ativar perfis.';
+  String get tapSocialLinksAboveToAddAndActivateProfiles =>
+      'Toque em “Links Sociais” acima para adicionar e ativar perfis.';
 
   @override
-  String get tapOnTheMapOrUseYourCurrentLocation => 'Toque no mapa ou use sua localização atual';
+  String get tapOnTheMapOrUseYourCurrentLocation =>
+      'Toque no mapa ou use sua localização atual';
 
   @override
   String get tapToAddPhoto => 'Toque para adicionar foto';
@@ -1415,13 +1490,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get templates => 'Modelos';
 
   @override
-  String get thankYouFeedbackSubmissionsAreMockOnly => 'Obrigado! Os envios de feedback são apenas simulados.';
+  String get thankYouFeedbackSubmissionsAreMockOnly =>
+      'Obrigado! Os envios de feedback são apenas simulados.';
 
   @override
-  String get thisCardAndItsQRCodeWillBeRemoved => 'Este cartão e seu código QR serão removidos.';
+  String get thisCardAndItsQRCodeWillBeRemoved =>
+      'Este cartão e seu código QR serão removidos.';
 
   @override
-  String get thisFeatureIsExclusivelyAvailableToBusinessUsers => 'Este recurso está disponível exclusivamente para usuários empresariais.';
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
+      'Este recurso está disponível exclusivamente para usuários empresariais.';
 
   @override
   String get thisIsAlreadyYourUsername => 'Este já é o seu nome de usuário.';
@@ -1430,7 +1508,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thisMonth => 'Este mês';
 
   @override
-  String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments => 'Isso excluirá permanentemente este programa de recompensas e todas as suas inscrições.';
+  String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
+      'Isso excluirá permanentemente este programa de recompensas e todas as suas inscrições.';
 
   @override
   String get todayIsYourWeekend => 'Hoje é seu fim de semana';
@@ -1445,10 +1524,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get trackYourOrders => 'Acompanhe seus pedidos';
 
   @override
-  String get transactionReferenceOptional => 'Referência de transação (opcional)';
+  String get transactionReferenceOptional =>
+      'Referência de transação (opcional)';
 
   @override
-  String get transactionReferenceNumberOptional => 'Número de referência da transação (opcional)';
+  String get transactionReferenceNumberOptional =>
+      'Número de referência da transação (opcional)';
 
   @override
   String get tryAgain => 'Tente novamente';
@@ -1466,7 +1547,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get upgradeYourBusiness => 'Upgrade your business';
 
   @override
-  String get businessProIntroBody => 'Do more with BarQody for Business, build trust with a verified badge, and access other premium benefits all in one subscription.';
+  String get businessProIntroBody =>
+      'Do more with BarQody for Business, build trust with a verified badge, and access other premium benefits all in one subscription.';
 
   @override
   String get byContinuingYouAgreeTo => 'By continuing, you agree to the';
@@ -1484,13 +1566,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get type => 'Tipo';
 
   @override
-  String get typeAtLeast2CharactersOfAUsernameToSearch => 'Digite pelo menos 2 caracteres de um nome de usuário para pesquisar.';
+  String get typeAtLeast2CharactersOfAUsernameToSearch =>
+      'Digite pelo menos 2 caracteres de um nome de usuário para pesquisar.';
 
   @override
-  String get typeThe8CharacterCodeShownUnderTheQR => 'Digite o código de 8 caracteres mostrado abaixo do QR.';
+  String get typeThe8CharacterCodeShownUnderTheQR =>
+      'Digite o código de 8 caracteres mostrado abaixo do QR.';
 
   @override
-  String get underDevelopmentLoginViaEmailPasswordInstead => 'Em Desenvolvimento - Faça login por e-mail/senha.';
+  String get underDevelopmentLoginViaEmailPasswordInstead =>
+      'Em Desenvolvimento - Faça login por e-mail/senha.';
 
   @override
   String get unstampIcon => 'Ícone de desmarcação';
@@ -1508,10 +1593,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get useATemplate => 'Use um modelo';
 
   @override
-  String get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime => 'Use o Barqody em outros telefones ou tablets. Você permanece no controle – desconecte-se de qualquer dispositivo a qualquer momento.';
+  String
+  get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
+      'Use o Barqody em outros telefones ou tablets. Você permanece no controle – desconecte-se de qualquer dispositivo a qualquer momento.';
 
   @override
-  String get useBarqodyOnYourPhoneToScanThisCode => 'Use o Barqody no seu telefone para escanear este código';
+  String get useBarqodyOnYourPhoneToScanThisCode =>
+      'Use o Barqody no seu telefone para escanear este código';
 
   @override
   String get useDefaultIcon => 'Usar ícone padrão';
@@ -1526,7 +1614,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get version101 => 'Versão: 1.0.1';
 
   @override
-  String get viewAndUpdateOrdersFromYourCustomers => 'Visualize e atualize pedidos de seus clientes';
+  String get viewAndUpdateOrdersFromYourCustomers =>
+      'Visualize e atualize pedidos de seus clientes';
 
   @override
   String get viewProfile => 'Ver perfil';
@@ -1544,19 +1633,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get welcomeToAccountCenter => 'Bem-vindo à Central de Contas';
 
   @override
-  String get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe => 'Quando uma empresa adiciona você como funcionário, seu cartão de funcionário aparecerá aqui. Você pode personalizar seu design a qualquer momento.';
+  String
+  get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
+      'Quando uma empresa adiciona você como funcionário, seu cartão de funcionário aparecerá aqui. Você pode personalizar seu design a qualquer momento.';
 
   @override
-  String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere => 'Quando uma empresa inscreve você em seu programa de recompensas, isso aparecerá aqui.';
+  String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
+      'Quando uma empresa inscreve você em seu programa de recompensas, isso aparecerá aqui.';
 
   @override
-  String get whenABusinessInvitesYouToTheirTeamItWillAppearHere => 'Quando uma empresa convida você para sua equipe, isso aparecerá aqui.';
+  String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
+      'Quando uma empresa convida você para sua equipe, isso aparecerá aqui.';
 
   @override
-  String get whenTurnedOffThisLinkWontBeShownOnYourProfile => 'Quando desativado, este link não será mostrado no seu perfil';
+  String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
+      'Quando desativado, este link não será mostrado no seu perfil';
 
   @override
-  String get writeSomethingAboutYouOrYourBrand => 'Escreva algo sobre você ou sua marca';
+  String get writeSomethingAboutYouOrYourBrand =>
+      'Escreva algo sobre você ou sua marca';
 
   @override
   String get yearly => 'Anual';
@@ -1568,16 +1663,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get yourCategories => 'Suas categorias';
 
   @override
-  String get yourEmployeeCardsFromEmployers => 'Seus cartões de funcionário dos empregadores';
+  String get yourEmployeeCardsFromEmployers =>
+      'Seus cartões de funcionário dos empregadores';
 
   @override
-  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed => 'Seu Café Grátis foi resgatado com sucesso.';
+  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
+      'Seu Café Grátis foi resgatado com sucesso.';
 
   @override
   String get yourRewards => 'Suas recompensas';
 
   @override
-  String get yourSubscriptionHasEndedTapTheInfoIconForDetails => 'Sua assinatura terminou. Toque no ícone de informações para obter detalhes.';
+  String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
+      'Sua assinatura terminou. Toque no ícone de informações para obter detalhes.';
 
   @override
   String get yourname => 'seunome';
@@ -1625,7 +1723,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get addLink2 => 'Adicionar link';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Adicione links ao seu perfil abaixo';
+  String get addLinksToYourProfileBelow2 =>
+      'Adicione links ao seu perfil abaixo';
 
   @override
   String get holdAndDragToReorderLinks => 'Hold and drag to reorder';
@@ -1658,7 +1757,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get alwaysUpToDate => 'Sempre atualizado';
 
   @override
-  String get areYouSureYouWantToLogOutOfBarqody => 'Tem certeza de que deseja sair do Barqody?';
+  String get areYouSureYouWantToLogOutOfBarqody =>
+      'Tem certeza de que deseja sair do Barqody?';
 
   @override
   String get attendanceFailed => 'Falha no comparecimento';
@@ -1670,7 +1770,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get bookingFailed => 'Falha na reserva';
 
   @override
-  String get brieflyDescribeThisReward => 'Descreva resumidamente esta recompensa...';
+  String get brieflyDescribeThisReward =>
+      'Descreva resumidamente esta recompensa...';
 
   @override
   String get businessVerified => 'Empresa verificada';
@@ -1742,7 +1843,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get chooseTemplate2 => 'Escolha o modelo';
 
   @override
-  String get contactCardBusinessAddress => 'Endereço comercial do cartão de contato';
+  String get contactCardBusinessAddress =>
+      'Endereço comercial do cartão de contato';
 
   @override
   String get contactCardCompanyName => 'Nome da empresa do cartão de contato';
@@ -1751,7 +1853,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get contactCardEmail => 'E-mail do cartão de contato';
 
   @override
-  String get contactCardHomeAddress => 'Endereço residencial do cartão de contato';
+  String get contactCardHomeAddress =>
+      'Endereço residencial do cartão de contato';
 
   @override
   String get contactCardPhone => 'Telefone do cartão de contato';
@@ -1769,25 +1872,30 @@ class AppLocalizationsPt extends AppLocalizations {
   String get couldNotLinkDevice => 'Não foi possível vincular o dispositivo';
 
   @override
-  String get couldNotLogOutDevice => 'Não foi possível desconectar o dispositivo';
+  String get couldNotLogOutDevice =>
+      'Não foi possível desconectar o dispositivo';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Não foi possível abrir a Carteira virtual do Google';
+  String get couldNotOpenGoogleWallet =>
+      'Não foi possível abrir a Carteira virtual do Google';
 
   @override
   String get couldNotOpenAppleWallet => 'Could not open Apple Wallet';
 
   @override
-  String get couldNotSaveCardDesign => 'Não foi possível salvar o design do cartão';
+  String get couldNotSaveCardDesign =>
+      'Não foi possível salvar o design do cartão';
 
   @override
-  String get couldNotUpdateProfileVisibility => 'Não foi possível atualizar a visibilidade do perfil';
+  String get couldNotUpdateProfileVisibility =>
+      'Não foi possível atualizar a visibilidade do perfil';
 
   @override
   String get createGallery => 'Criar galeria';
 
   @override
-  String get createACardToShareYourProfile => 'Crie um cartão para compartilhar seu perfil';
+  String get createACardToShareYourProfile =>
+      'Crie um cartão para compartilhar seu perfil';
 
   @override
   String get createCard => 'Criar cartão';
@@ -1796,13 +1904,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get customBank => 'Banco personalizado';
 
   @override
-  String get customersCanBeEnrolledAndStamped => 'Os clientes podem ser cadastrados e carimbados';
+  String get customersCanBeEnrolledAndStamped =>
+      'Os clientes podem ser cadastrados e carimbados';
 
   @override
   String get customizeCard => 'Personalizar cartão';
 
   @override
-  String get describeYourLoyaltyProgram => 'Descreva seu programa de fidelidade';
+  String get describeYourLoyaltyProgram =>
+      'Descreva seu programa de fidelidade';
 
   @override
   String get displayName => 'Nome de exibição';
@@ -1841,7 +1951,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get enterAValidEmail => 'Insira um e-mail válido';
 
   @override
-  String get enterBioForTheContactCard => 'Insira a biografia para o cartão de contato';
+  String get enterBioForTheContactCard =>
+      'Insira a biografia para o cartão de contato';
 
   @override
   String get enterProgramName => 'Digite o nome do programa';
@@ -1898,7 +2009,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get failedToSaveQRCode => 'Falha ao salvar o código QR.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Falha ao salvar detalhes da empresa';
+  String get failedToSaveBusinessDetails =>
+      'Falha ao salvar detalhes da empresa';
 
   @override
   String get failedToUpdateStatus => 'Falha ao atualizar o status';
@@ -1913,7 +2025,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get freeDessert => 'Sobremesa grátis';
 
   @override
-  String get galleryPermissionRequiredPleaseEnableItInSettings => 'É necessária permissão da galeria. Por favor, habilite-o em Configurações.';
+  String get galleryPermissionRequiredPleaseEnableItInSettings =>
+      'É necessária permissão da galeria. Por favor, habilite-o em Configurações.';
 
   @override
   String get getStarted => 'Comece';
@@ -1922,19 +2035,23 @@ class AppLocalizationsPt extends AppLocalizations {
   String get go2 => 'Ir';
 
   @override
-  String get goToToolsLinkedDevices => 'Vá para Ferramentas → Dispositivos vinculados';
+  String get goToToolsLinkedDevices =>
+      'Vá para Ferramentas → Dispositivos vinculados';
 
   @override
-  String get googleWalletSetupPending => 'Configuração da Carteira virtual do Google pendente.';
+  String get googleWalletSetupPending =>
+      'Configuração da Carteira virtual do Google pendente.';
 
   @override
   String get appleWalletSetupPending => 'Apple Wallet setup pending.';
 
   @override
-  String get googleWalletSetupPendingProfileLinkCopied => 'Configuração da Carteira virtual do Google pendente. Link do perfil copiado.';
+  String get googleWalletSetupPendingProfileLinkCopied =>
+      'Configuração da Carteira virtual do Google pendente. Link do perfil copiado.';
 
   @override
-  String get appleWalletSetupPendingProfileLinkCopied => 'Apple Wallet setup pending. Profile link copied.';
+  String get appleWalletSetupPendingProfileLinkCopied =>
+      'Apple Wallet setup pending. Profile link copied.';
 
   @override
   String get growYourBusiness => 'Expanda o seu negócio';
@@ -1955,7 +2072,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get invitationDeclined => 'Convite recusado';
 
   @override
-  String get invitationSentEmployeeWillBeAddedAfterTheyAccept => 'Convite enviado. O funcionário será adicionado após aceitar.';
+  String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
+      'Convite enviado. O funcionário será adicionado após aceitar.';
 
   @override
   String get inviteEmployee => 'Convidar funcionário';
@@ -1973,10 +2091,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get logInWithQR => 'Faça login com QR';
 
   @override
-  String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone => 'Sair apenas desta conta? Outras contas permanecerão neste telefone.';
+  String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
+      'Sair apenas desta conta? Outras contas permanecerão neste telefone.';
 
   @override
-  String get loggedInWithGoogleDemoAccountSaimY => 'Conectado com Google (conta demo: Saim Y)';
+  String get loggedInWithGoogleDemoAccountSaimY =>
+      'Conectado com Google (conta demo: Saim Y)';
 
   @override
   String get loggingYouIn => 'Fazendo login…';
@@ -2012,7 +2132,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noDetailsYet => 'Ainda não há detalhes';
 
   @override
-  String get noLinksAddedYetNTapAddLinkToGetStarted => 'Nenhum link adicionado ainda.\nToque em \"Adicionar link\" para começar.';
+  String get noLinksAddedYetNTapAddLinkToGetStarted =>
+      'Nenhum link adicionado ainda.\nToque em \"Adicionar link\" para começar.';
 
   @override
   String get noMatches => 'Nenhuma correspondência';
@@ -2030,7 +2151,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get oneTapToShare => 'Um toque para compartilhar';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Abra o Barqody no seu outro telefone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Abra o Barqody no seu outro telefone';
 
   @override
   String get openCamera => 'Abrir câmera';
@@ -2042,10 +2164,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get paperCard2 => 'Cartão de papel';
 
   @override
-  String get passwordMustBeAtLeast4Characters => 'A senha deve ter pelo menos 4 caracteres';
+  String get passwordMustBeAtLeast4Characters =>
+      'A senha deve ter pelo menos 4 caracteres';
 
   @override
-  String get passwordMustBeAtLeast6Characters => 'A senha deve ter pelo menos 6 caracteres';
+  String get passwordMustBeAtLeast6Characters =>
+      'A senha deve ter pelo menos 6 caracteres';
 
   @override
   String get phoneNumber => 'Número de telefone';
@@ -2066,10 +2190,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get pleaseEnterAUsername => 'Por favor insira um nome de usuário';
 
   @override
-  String get pleaseEnterAValidEmailAddress => 'Por favor insira um endereço de e-mail válido';
+  String get pleaseEnterAValidEmailAddress =>
+      'Por favor insira um endereço de e-mail válido';
 
   @override
-  String get pleaseEnterAValidNumberOfStamps => 'Insira um número válido de selos';
+  String get pleaseEnterAValidNumberOfStamps =>
+      'Insira um número válido de selos';
 
   @override
   String get pleaseEnterYourEmail => 'Por favor insira seu e-mail';
@@ -2081,13 +2207,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get pleaseEnterYourPassword => 'Por favor digite sua senha';
 
   @override
-  String get pointTheCameraAtAQRCodeToScanAutomatically => 'Aponte a câmera para um código QR para digitalizar automaticamente.';
+  String get pointTheCameraAtAQRCodeToScanAutomatically =>
+      'Aponte a câmera para um código QR para digitalizar automaticamente.';
 
   @override
-  String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton => 'Aponte a câmera para um crachá de evento e toque no botão Câmera.';
+  String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
+      'Aponte a câmera para um crachá de evento e toque no botão Câmera.';
 
   @override
-  String get pointTheCameraAtPaperCardAndTapTheCameraButton => 'Aponte a câmera para o cartão de papel e toque no botão Câmera.';
+  String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
+      'Aponte a câmera para o cartão de papel e toque no botão Câmera.';
 
   @override
   String get preparingQRCode => 'Preparando código QR…';
@@ -2105,7 +2234,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get qrCodeExpired => 'Código QR expirou';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'O código QR expirou. Toque em atualizar.';
+  String get qrCodeExpiredTapRefresh =>
+      'O código QR expirou. Toque em atualizar.';
 
   @override
   String get realEstate => 'Imobiliária';
@@ -2114,7 +2244,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get receiptAttached => 'Recibo anexado';
 
   @override
-  String get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData => 'Renove sua assinatura para restaurar o acesso total aos seus recursos e dados premium.';
+  String
+  get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
+      'Renove sua assinatura para restaurar o acesso total aos seus recursos e dados premium.';
 
   @override
   String get retakePhoto => 'Retirar foto';
@@ -2150,10 +2282,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get saveContact2 => 'Salvar contato';
 
   @override
-  String get savedLocallySyncMayHaveFailed => 'Salvo localmente. A sincronização pode ter falhado.';
+  String get savedLocallySyncMayHaveFailed =>
+      'Salvo localmente. A sincronização pode ter falhado.';
 
   @override
-  String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork => 'Digitalize um código QR ou adicione alguém que você conheceu para construir sua rede.';
+  String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
+      'Digitalize um código QR ou adicione alguém que você conheceu para construir sua rede.';
 
   @override
   String get scannedViaQR => 'Digitalizado via QR';
@@ -2210,10 +2344,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get streetName => 'Nome da rua';
 
   @override
-  String get switchToABusinessAccountToUnlockFullAccess => 'Mude para uma conta comercial para desbloquear acesso total.';
+  String get switchToABusinessAccountToUnlockFullAccess =>
+      'Mude para uma conta comercial para desbloquear acesso total.';
 
   @override
-  String get tapLinkADeviceAndScanThisQR => 'Toque em Vincular um dispositivo e leia este QR';
+  String get tapLinkADeviceAndScanThisQR =>
+      'Toque em Vincular um dispositivo e leia este QR';
 
   @override
   String get tapToAddImage => 'Toque para adicionar imagem';
@@ -2222,7 +2358,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get tapToChange => 'Toque para alterar';
 
   @override
-  String get templateAppliedLocallySyncFailed => 'Modelo aplicado localmente. Falha na sincronização.';
+  String get templateAppliedLocallySyncFailed =>
+      'Modelo aplicado localmente. Falha na sincronização.';
 
   @override
   String get textColor => 'Cor do texto';
@@ -2231,7 +2368,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thisAccount => 'Esta conta';
 
   @override
-  String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 => 'Este recurso está disponível exclusivamente para usuários empresariais.';
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
+      'Este recurso está disponível exclusivamente para usuários empresariais.';
 
   @override
   String get thisPersonIsOnYourTeam => 'Esta pessoa está na sua equipe';
@@ -2243,16 +2381,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get totalStamps => 'Total de Selos';
 
   @override
-  String get tryADifferentNameEmailOrCompany => 'Experimente um nome, e-mail ou empresa diferente.';
+  String get tryADifferentNameEmailOrCompany =>
+      'Experimente um nome, e-mail ou empresa diferente.';
 
   @override
-  String get unableToSaveProfileTryAgain => 'Não foi possível salvar o perfil. Tente novamente.';
+  String get unableToSaveProfileTryAgain =>
+      'Não foi possível salvar o perfil. Tente novamente.';
 
   @override
-  String get unableToUpdateUsernameTryAgain => 'Não foi possível atualizar o nome de usuário. Tente novamente.';
+  String get unableToUpdateUsernameTryAgain =>
+      'Não foi possível atualizar o nome de usuário. Tente novamente.';
 
   @override
-  String get underDevelopmentLoginViaEmailPasswordInstead2 => 'Em Desenvolvimento - Faça login por e-mail/senha.';
+  String get underDevelopmentLoginViaEmailPasswordInstead2 =>
+      'Em Desenvolvimento - Faça login por e-mail/senha.';
 
   @override
   String get unknownUser => 'Usuário desconhecido';
@@ -2282,16 +2424,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get useMyLocation => 'Usar minha localização';
 
   @override
-  String get useLettersNumbersUnderscoresOrHyphensOnly => 'Use apenas letras, números, sublinhados ou hífens';
+  String get useLettersNumbersUnderscoresOrHyphensOnly =>
+      'Use apenas letras, números, sublinhados ou hífens';
 
   @override
-  String get usernameMustBeAtLeast3Characters => 'O nome de usuário deve ter pelo menos 3 caracteres';
+  String get usernameMustBeAtLeast3Characters =>
+      'O nome de usuário deve ter pelo menos 3 caracteres';
 
   @override
-  String get usernameMustBeAtMost30Characters => 'O nome de usuário deve ter no máximo 30 caracteres';
+  String get usernameMustBeAtMost30Characters =>
+      'O nome de usuário deve ter no máximo 30 caracteres';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Nome de usuário atualizado com sucesso!';
+  String get usernameUpdatedSuccessfully =>
+      'Nome de usuário atualizado com sucesso!';
 
   @override
   String get usernameAvailable => 'This username is available';
@@ -2312,7 +2458,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get claimUsernameTitle => 'Claim username';
 
   @override
-  String get claimUsernameSubtitle => 'If you represent a business or brand, submit a claim for review.';
+  String get claimUsernameSubtitle =>
+      'If you represent a business or brand, submit a claim for review.';
 
   @override
   String get claimReasonHint => 'Why should you own this username?';
@@ -2327,7 +2474,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get submitClaim => 'Submit claim';
 
   @override
-  String get claimSubmittedSuccess => 'Claim submitted. We will review it shortly.';
+  String get claimSubmittedSuccess =>
+      'Claim submitted. We will review it shortly.';
 
   @override
   String get myUsernameClaims => 'My username claims';
@@ -2348,7 +2496,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get viewMyClaims => 'View my claims';
 
   @override
-  String get claimUsernameIfUnavailable => 'Reserved or taken? You can request ownership for review.';
+  String get claimUsernameIfUnavailable =>
+      'Reserved or taken? You can request ownership for review.';
 
   @override
   String get waitingForThemToAccept => 'Esperando que eles aceitem';
@@ -2363,19 +2512,23 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workLocation => 'Local de trabalho';
 
   @override
-  String get yourPROSubscriptionHasExpiredNN => 'Sua assinatura PRO expirou.\n\n';
+  String get yourPROSubscriptionHasExpiredNN =>
+      'Sua assinatura PRO expirou.\n\n';
 
   @override
   String get yourPROSubscriptionHasExpired => 'Sua assinatura PRO expirou.';
 
   @override
-  String get premiumFeaturesAreCurrentlyDisabled => 'Os recursos premium estão desativados no momento.';
+  String get premiumFeaturesAreCurrentlyDisabled =>
+      'Os recursos premium estão desativados no momento.';
 
   @override
-  String get proLinksAreHiddenFromYourPublicProfile => 'Os links profissionais ficam ocultos no seu perfil público.';
+  String get proLinksAreHiddenFromYourPublicProfile =>
+      'Os links profissionais ficam ocultos no seu perfil público.';
 
   @override
-  String get yourBusinessDetailsAndDataAreSafe => 'Os detalhes e dados da sua empresa estão seguros.';
+  String get yourBusinessDetailsAndDataAreSafe =>
+      'Os detalhes e dados da sua empresa estão seguros.';
 
   @override
   String addCatalogItem(String label) {
@@ -2441,13 +2594,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get saudiEInvoice => 'Saudi E-Invoice';
 
   @override
-  String get pointTheCameraAtAnyQRCodeWebsiteWifiOrProduct => 'Point the camera at any QR code — website, Wi‑Fi, product, or BarQody card.';
+  String get pointTheCameraAtAnyQRCodeWebsiteWifiOrProduct =>
+      'Point the camera at any QR code — website, Wi‑Fi, product, or BarQody card.';
 
   @override
-  String get pointTheCameraAtASaudiEInvoiceQRCode => 'Point the camera at a Saudi ZATCA e-invoice QR code.';
+  String get pointTheCameraAtASaudiEInvoiceQRCode =>
+      'Point the camera at a Saudi ZATCA e-invoice QR code.';
 
   @override
-  String get invalidEInvoiceQRScanAValidZATCAInvoiceQR => 'Invalid e-invoice QR. Scan a valid ZATCA Saudi invoice QR code.';
+  String get invalidEInvoiceQRScanAValidZATCAInvoiceQR =>
+      'Invalid e-invoice QR. Scan a valid ZATCA Saudi invoice QR code.';
 
   @override
   String get scannedQr => 'Scanned QR';
@@ -2551,7 +2707,8 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get unlockBusinessProDescription => 'Unlock customer orders, team attendance, loyalty programs, and more for your business.';
+  String get unlockBusinessProDescription =>
+      'Unlock customer orders, team attendance, loyalty programs, and more for your business.';
 
   @override
   String get received => 'Received';
@@ -2563,19 +2720,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noInvitationsYet => 'No invitations yet';
 
   @override
-  String get whenSomeoneInvitesYouItWillShowUpHere => 'When someone invites you, it will show up here.';
+  String get whenSomeoneInvitesYouItWillShowUpHere =>
+      'When someone invites you, it will show up here.';
 
   @override
   String get noSentInvitations => 'No sent invitations';
 
   @override
-  String get createInvitationSaveDraftOrSendHint => 'Create an invitation, save as draft, or send to contacts.';
+  String get createInvitationSaveDraftOrSendHint =>
+      'Create an invitation, save as draft, or send to contacts.';
 
   @override
   String get noCardsYet => 'No cards yet';
 
   @override
-  String get designAnInvitationItWillAppearHere => 'Design an invitation — it will appear here';
+  String get designAnInvitationItWillAppearHere =>
+      'Design an invitation — it will appear here';
 
   @override
   String get contactsOnBarqody => 'Contacts on Barqody';
@@ -2608,7 +2768,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get publishTemplate => 'Publish template';
 
   @override
-  String get shareDesignForGallery => 'Share this design so other users can use it from the gallery.';
+  String get shareDesignForGallery =>
+      'Share this design so other users can use it from the gallery.';
 
   @override
   String get templateName => 'Template name';
@@ -2725,7 +2886,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noCommunityTemplatesYet => 'No community templates yet';
 
   @override
-  String get designAndPublishHint => 'Design a card and tap Publish for others to share it here.';
+  String get designAndPublishHint =>
+      'Design a card and tap Publish for others to share it here.';
 
   @override
   String get refresh => 'Refresh';
@@ -2811,7 +2973,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get downloadInvitationCard => 'Download invitation card';
 
   @override
-  String get failedToDownloadInvitationCard => 'Failed to download invitation card';
+  String get failedToDownloadInvitationCard =>
+      'Failed to download invitation card';
 
   @override
   String get downloadCard => 'Download card';
@@ -2834,7 +2997,8 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get usersWhoReceivedInvitation => 'Users who already received this invitation';
+  String get usersWhoReceivedInvitation =>
+      'Users who already received this invitation';
 
   @override
   String get sentTo => 'Sent to';
@@ -2843,7 +3007,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noRecipientsOnInvitation => 'No recipients on this invitation.';
 
   @override
-  String get phoneContactsPermissionHint => 'Phone contacts need permission to invite people from your address book.';
+  String get phoneContactsPermissionHint =>
+      'Phone contacts need permission to invite people from your address book.';
 
   @override
   String get contact => 'Contact';
@@ -2904,7 +3069,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number';
 
   @override
-  String get barqodyWillSendOtp => 'Barqody will send an OTP to verify your number.';
+  String get barqodyWillSendOtp =>
+      'Barqody will send an OTP to verify your number.';
 
   @override
   String get required => 'Required';
@@ -2919,13 +3085,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get searchCountry => 'Search for country';
 
   @override
-  String get selectCountryHelper => 'Select your country so we can show the right options for your region.';
+  String get selectCountryHelper =>
+      'Select your country so we can show the right options for your region.';
 
   @override
   String get searchCategory => 'Search for category';
 
   @override
-  String get selectCategoryHelper => 'Select the category that best describes your business.';
+  String get selectCategoryHelper =>
+      'Select the category that best describes your business.';
 
   @override
   String get noCategoriesFound => 'No categories found';
@@ -2937,7 +3105,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get pleaseEnter6DigitCode => 'Please enter the 6-digit code';
 
   @override
-  String get verificationTokenMissing => 'Verification token missing. Please go back and try again.';
+  String get verificationTokenMissing =>
+      'Verification token missing. Please go back and try again.';
 
   @override
   String get verifyingYourNumber => 'Verifying your number';
@@ -2966,7 +3135,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get profileInfo => 'Profile info';
 
   @override
-  String get pleaseProvideNameAndPhoto => 'Please provide your name and an optional profile photo';
+  String get pleaseProvideNameAndPhoto =>
+      'Please provide your name and an optional profile photo';
 
   @override
   String get typeYourNameHere => 'Type your name here';
@@ -3037,7 +3207,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get appTitleFull => 'BarQody - Digital Business Card';
 
   @override
-  String get contactsPermissionRequired => 'Contacts permission is required to find people you know.';
+  String get contactsPermissionRequired =>
+      'Contacts permission is required to find people you know.';
 
   @override
   String heyJoinMeOnBarqody(String name, String link) {
@@ -3316,7 +3487,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get yourEventTitle => 'Your event title';
 
   @override
-  String get guestNameAppearsOnInvite => 'Guest name appears when they open this invite';
+  String get guestNameAppearsOnInvite =>
+      'Guest name appears when they open this invite';
 
   @override
   String hostedBy(String name) {
@@ -3335,13 +3507,16 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get onboardingShareDescription => 'Share your digital business card instantly with a QR code or link — no paper needed.';
+  String get onboardingShareDescription =>
+      'Share your digital business card instantly with a QR code or link — no paper needed.';
 
   @override
-  String get onboardingUpToDateDescription => 'Keep your contact details always up to date. One change updates everywhere.';
+  String get onboardingUpToDateDescription =>
+      'Keep your contact details always up to date. One change updates everywhere.';
 
   @override
-  String get onboardingSmartCaptureDescription => 'Capture contacts from paper cards and event badges with your camera.';
+  String get onboardingSmartCaptureDescription =>
+      'Capture contacts from paper cards and event badges with your camera.';
 
   @override
   String pkrPerMonth(String amount) {
@@ -3360,7 +3535,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get analyticsAndInsights => 'Analytics and insights';
 
   @override
-  String get completeProfileVisibility => 'Complete your profile for better visibility';
+  String get completeProfileVisibility =>
+      'Complete your profile for better visibility';
 
   @override
   String get greatProfileComplete => 'Great! Your profile looks complete';
@@ -3401,16 +3577,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get industryEntertainment => 'Entertainment';
 
   @override
-  String get accountAlreadyLoggedInOnDevice => 'This account is already logged in on this device';
+  String get accountAlreadyLoggedInOnDevice =>
+      'This account is already logged in on this device';
 
   @override
-  String get deviceLoggedOutFromLinkedDevices => 'This device was logged out from Linked devices';
+  String get deviceLoggedOutFromLinkedDevices =>
+      'This device was logged out from Linked devices';
 
   @override
-  String get selectContactsToSendOrSaveDraft => 'Select contacts to send, or save as draft';
+  String get selectContactsToSendOrSaveDraft =>
+      'Select contacts to send, or save as draft';
 
   @override
-  String get templatePublishedOthersCanUse => 'Template published! Others can use it now.';
+  String get templatePublishedOthersCanUse =>
+      'Template published! Others can use it now.';
 
   @override
   String subscriptionRequestSubmittedOn(String plan) {
@@ -3432,7 +3612,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cardSavedToGallery => 'Card saved to gallery';
 
   @override
-  String get couldNotSaveCheckGalleryPermission => 'Could not save. Check gallery permission.';
+  String get couldNotSaveCheckGalleryPermission =>
+      'Could not save. Check gallery permission.';
 
   @override
   String failedToLoadContactsWithError(String error) {
@@ -3527,13 +3708,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get syncContacts => 'Sync contacts';
 
   @override
-  String get syncContactsSubtitle => 'Upload your address book to identify callers';
+  String get syncContactsSubtitle =>
+      'Upload your address book to identify callers';
 
   @override
   String get syncContactsTitle => 'Find people you know';
 
   @override
-  String get syncContactsDisclosure => 'Barqody uses your contacts to identify names for phone numbers, like caller ID. Your address book is uploaded securely and you can skip this step.';
+  String get syncContactsDisclosure =>
+      'Barqody uses your contacts to identify names for phone numbers, like caller ID. Your address book is uploaded securely and you can skip this step.';
 
   @override
   String get allowAndSync => 'Allow and sync';
@@ -3545,7 +3728,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get contactsSyncFailed => 'Could not sync contacts. Please try again.';
 
   @override
-  String get contactsPermissionDeniedOpenSettings => 'Contacts access is turned off. Enable it in Settings to sync.';
+  String get contactsPermissionDeniedOpenSettings =>
+      'Contacts access is turned off. Enable it in Settings to sync.';
 
   @override
   String contactsSyncedCount(int count) {
@@ -3559,10 +3743,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get callerIdSubtitle => 'Show names on incoming calls';
 
   @override
-  String get callerIdDisclosure => 'When someone calls, Barqody can show their name over the call screen using names saved by the community.';
+  String get callerIdDisclosure =>
+      'When someone calls, Barqody can show their name over the call screen using names saved by the community.';
 
   @override
-  String get callerIdMajorityHint => 'If 10 people saved a number as Ali and 5 saved Ali Shaikh, the call overlay shows Ali.';
+  String get callerIdMajorityHint =>
+      'If 10 people saved a number as Ali and 5 saved Ali Shaikh, the call overlay shows Ali.';
 
   @override
   String get callerIdEnable => 'Identify incoming calls';
@@ -3586,7 +3772,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get callerIdPermissionNeeded => 'Required to identify incoming calls';
 
   @override
-  String get callerIdAndroidOnly => 'Incoming-call name overlay is available on Android. iOS does not allow apps to draw over the Phone screen.';
+  String get callerIdAndroidOnly =>
+      'Incoming-call name overlay is available on Android. iOS does not allow apps to draw over the Phone screen.';
 
   @override
   String get grantPermission => 'Allow';
@@ -3595,7 +3782,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get quickAddLinksTitle => 'Add your links';
 
   @override
-  String get quickAddLinksSubtitle => 'Add WhatsApp, Instagram, TikTok, and Snapchat so people can reach you quickly. You can skip this and add more later.';
+  String get quickAddLinksSubtitle =>
+      'Add WhatsApp, Instagram, TikTok, and Snapchat so people can reach you quickly. You can skip this and add more later.';
 
   @override
   String get quickAddWhatsAppHint => 'WhatsApp number';
@@ -3634,7 +3822,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get viewDocument => 'View';
 
   @override
-  String get noDocumentsYet => 'No documents yet. Upload a certificate, degree, agreement, or any file.';
+  String get noDocumentsYet =>
+      'No documents yet. Upload a certificate, degree, agreement, or any file.';
 
   @override
   String get noDocumentsAvailable => 'No documents available.';
@@ -3652,7 +3841,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thisProfileIsPrivate => 'This profile is private';
 
   @override
-  String get privateProfileHint => 'Send a request to view their profile. You\'ll be notified when they accept.';
+  String get privateProfileHint =>
+      'Send a request to view their profile. You\'ll be notified when they accept.';
 
   @override
   String get requestToView => 'Request';
@@ -3704,7 +3894,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get galleryEmpty => 'No photos yet';
 
   @override
-  String get galleryEmptySubtitle => 'Photos from this profile will show up here.';
+  String get galleryEmptySubtitle =>
+      'Photos from this profile will show up here.';
 
   @override
   String get galleryEmptyOwner => 'Add photos to show on your public profile';
@@ -3747,7 +3938,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get attendanceReport => 'Attendance Report';
 
   @override
-  String get attendanceReportSubtitle => 'Days present, hours worked & off days';
+  String get attendanceReportSubtitle =>
+      'Days present, hours worked & off days';
 
   @override
   String get viewFullReport => 'View full report';
@@ -3793,7 +3985,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
 class AppLocalizationsPtBr extends AppLocalizationsPt {
-  AppLocalizationsPtBr(): super('pt_BR');
+  AppLocalizationsPtBr() : super('pt_BR');
 
   @override
   String get appTitle => 'BarQody';
@@ -3823,28 +4015,33 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get username => 'Nome de usuário';
 
   @override
-  String get setUsernameSubtitle => 'Defina seu nome de usuário de perfil exclusivo';
+  String get setUsernameSubtitle =>
+      'Defina seu nome de usuário de perfil exclusivo';
 
   @override
   String get socialLinks => 'Links Sociais';
 
   @override
-  String get socialLinksSubtitle => 'Adicione Instagram, WhatsApp, site e muito mais';
+  String get socialLinksSubtitle =>
+      'Adicione Instagram, WhatsApp, site e muito mais';
 
   @override
   String get publicProfile => 'Perfil público';
 
   @override
-  String get publicProfileOn => 'Qualquer pessoa pode encontrar e visualizar seu perfil';
+  String get publicProfileOn =>
+      'Qualquer pessoa pode encontrar e visualizar seu perfil';
 
   @override
-  String get publicProfileOff => 'Oculto da pesquisa – outras pessoas não conseguem descobrir você';
+  String get publicProfileOff =>
+      'Oculto da pesquisa – outras pessoas não conseguem descobrir você';
 
   @override
   String get shareQr => 'Compartilhe meu código QR';
 
   @override
-  String get shareQrSubtitle => 'Deixe que outras pessoas digitalizem seu cartão de visita digital';
+  String get shareQrSubtitle =>
+      'Deixe que outras pessoas digitalizem seu cartão de visita digital';
 
   @override
   String get shoppingRewards => 'Compras e recompensas';
@@ -3859,7 +4056,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get myRewardCards => 'Meus cartões de recompensa';
 
   @override
-  String get myRewardCardsSubtitle => 'Veja selos e pontos de programas de fidelidade';
+  String get myRewardCardsSubtitle =>
+      'Veja selos e pontos de programas de fidelidade';
 
   @override
   String get workplace => 'Local de trabalho';
@@ -3868,13 +4066,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get employeeInvitations => 'Convites de funcionários';
 
   @override
-  String get employeeInvitationsSubtitle => 'Aceite ou recuse convites de equipes de empresas';
+  String get employeeInvitationsSubtitle =>
+      'Aceite ou recuse convites de equipes de empresas';
 
   @override
   String get workplaceCheckIn => 'Check-in no local de trabalho';
 
   @override
-  String get workplaceCheckInSubtitle => 'Ponto de entrada e saída do seu trabalho com localização';
+  String get workplaceCheckInSubtitle =>
+      'Ponto de entrada e saída do seu trabalho com localização';
 
   @override
   String get accountsAndDevices => 'Contas e dispositivos';
@@ -3960,7 +4160,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get n2DaysAgo => '2 dias atrás';
 
   @override
-  String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly => '3–30 caracteres. Somente letras, números, sublinhados e hífens.';
+  String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
+      '3–30 caracteres. Somente letras, números, sublinhados e hífens.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
@@ -3972,7 +4173,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get accessRESTRICTED => 'ACESSO RESTRITO';
 
   @override
-  String get accountIBANAddAccountNumberHere => 'Conta/IBAN: Adicione o número da conta aqui';
+  String get accountIBANAddAccountNumberHere =>
+      'Conta/IBAN: Adicione o número da conta aqui';
 
   @override
   String get accountTitleTapni => 'Título da conta: Tapni';
@@ -3996,13 +4198,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get addAccount => 'Adicionar conta';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Adicione pelo menos uma categoria primeiro';
+  String get addAtLeastOneCategoryFirst =>
+      'Adicione pelo menos uma categoria primeiro';
 
   @override
-  String get addCategoriesInDisplayOrderEGFastFoodThenDesi => 'Adicione categorias na ordem de exibição (por exemplo, Fast Food e Desi)';
+  String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
+      'Adicione categorias na ordem de exibição (por exemplo, Fast Food e Desi)';
 
   @override
-  String get addCategoriesInYourCatalogSettingsFirst => 'Adicione categorias nas configurações do seu catálogo primeiro.';
+  String get addCategoriesInYourCatalogSettingsFirst =>
+      'Adicione categorias nas configurações do seu catálogo primeiro.';
 
   @override
   String get addContact => 'Adicionar contato';
@@ -4011,10 +4216,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get addLink => 'Adicionar link';
 
   @override
-  String get addLinksToYourProfileBelow => 'Adicione links ao seu perfil abaixo';
+  String get addLinksToYourProfileBelow =>
+      'Adicione links ao seu perfil abaixo';
 
   @override
-  String get addLinksToYourProfileFirstThenEnableThemHere => 'Adicione links ao seu perfil primeiro e depois ative-os aqui.';
+  String get addLinksToYourProfileFirstThenEnableThemHere =>
+      'Adicione links ao seu perfil primeiro e depois ative-os aqui.';
 
   @override
   String get addLogo => 'Adicionar logotipo';
@@ -4044,13 +4251,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get allCaughtUp => 'Todos apanhados!';
 
   @override
-  String get allNotificationsMarkedAsRead => 'Todas as notificações marcadas como lidas!';
+  String get allNotificationsMarkedAsRead =>
+      'Todas as notificações marcadas como lidas!';
 
   @override
   String get allowCamera => 'Permitir câmera';
 
   @override
-  String get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices => 'Permitir que este dispositivo acesse sua conta Barqody? Você pode removê-lo a qualquer momento dos dispositivos vinculados.';
+  String
+  get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
+      'Permitir que este dispositivo acesse sua conta Barqody? Você pode removê-lo a qualquer momento dos dispositivos vinculados.';
 
   @override
   String get alreadyHaveAnAccount => 'Já tem uma conta?';
@@ -4074,7 +4284,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get ascending => 'Ascendente';
 
   @override
-  String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee => 'Peça à sua empresa para digitalizar seu QR e adicionar você como funcionário';
+  String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
+      'Peça à sua empresa para digitalizar seu QR e adicionar você como funcionário';
 
   @override
   String get assignCategory => 'Atribuir categoria';
@@ -4158,13 +4369,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get businessUsersOnly => 'Somente usuários empresariais';
 
   @override
-  String get bySigningUpYouAgreeToOurTermsAndConditions => 'Ao se inscrever, você concorda com nossos Termos e Condições.';
+  String get bySigningUpYouAgreeToOurTermsAndConditions =>
+      'Ao se inscrever, você concorda com nossos Termos e Condições.';
 
   @override
   String get call => 'Chamar';
 
   @override
-  String get cameraPermissionIsRequiredToScan => 'É necessária permissão da câmera para digitalizar.';
+  String get cameraPermissionIsRequiredToScan =>
+      'É necessária permissão da câmera para digitalizar.';
 
   @override
   String get cancelAnytime => 'Cancele a qualquer momento.';
@@ -4194,7 +4407,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get checkOut => 'Confira';
 
   @override
-  String get chooseAUniqueUsernameForYourProfileLink => 'Escolha um nome de usuário exclusivo para o link do seu perfil.';
+  String get chooseAUniqueUsernameForYourProfileLink =>
+      'Escolha um nome de usuário exclusivo para o link do seu perfil.';
 
   @override
   String get choosePlan => 'Escolha o plano';
@@ -4266,7 +4480,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get copyCode => 'Copiar código';
 
   @override
-  String get couldNotGetLocationPleaseEnableGPSPermission => 'Não foi possível obter a localização. Ative a permissão do GPS.';
+  String get couldNotGetLocationPleaseEnableGPSPermission =>
+      'Não foi possível obter a localização. Ative a permissão do GPS.';
 
   @override
   String get couldNotSwitchAccount => 'Não foi possível mudar de conta';
@@ -4290,19 +4505,22 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get createReward => 'Criar recompensa';
 
   @override
-  String get createStampOrPointsRewardsForCustomers => 'Crie recompensas de selos ou pontos para clientes';
+  String get createStampOrPointsRewardsForCustomers =>
+      'Crie recompensas de selos ou pontos para clientes';
 
   @override
   String get createYourFirstCard => 'Crie seu primeiro cartão';
 
   @override
-  String get createYourFirstRewardCardForCustomers => 'Crie seu primeiro cartão de recompensa para clientes';
+  String get createYourFirstRewardCardForCustomers =>
+      'Crie seu primeiro cartão de recompensa para clientes';
 
   @override
   String get creationDate => 'Data de criação';
 
   @override
-  String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet => 'Imagens personalizadas para slots carimbados e não carimbados. Os padrões serão usados ​​se não forem definidos.';
+  String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
+      'Imagens personalizadas para slots carimbados e não carimbados. Os padrões serão usados ​​se não forem definidos.';
 
   @override
   String get customLink => 'Link personalizado';
@@ -4329,7 +4547,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get customizeDesign => 'Personalizar design';
 
   @override
-  String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads => 'Personalize seu perfil, desbloqueie modelos PRO e obtenha leads ilimitados.';
+  String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
+      'Personalize seu perfil, desbloqueie modelos PRO e obtenha leads ilimitados.';
 
   @override
   String get customizeYourself => 'Personalize você mesmo';
@@ -4461,7 +4680,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get enterCodeInstead => 'Insira o código';
 
   @override
-  String get enterNetworkingContactDetailsBelow => 'Insira os detalhes de contato de rede abaixo.';
+  String get enterNetworkingContactDetailsBelow =>
+      'Insira os detalhes de contato de rede abaixo.';
 
   @override
   String get enterYourName => 'Digite seu nome';
@@ -4530,22 +4750,26 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get hello => 'Olá,';
 
   @override
-  String get helpCenterIsDisabledInThisUIDemo => 'A Central de Ajuda está desativada nesta demonstração da IU.';
+  String get helpCenterIsDisabledInThisUIDemo =>
+      'A Central de Ajuda está desativada nesta demonstração da IU.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
-  String get holdTheQRCodeInsideTheFrameItScansAutomatically => 'Segure o código QR dentro da moldura – ele digitaliza automaticamente.';
+  String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
+      'Segure o código QR dentro da moldura – ele digitaliza automaticamente.';
 
   @override
-  String get howDoYouWantToDesignThisCard => 'Como você deseja projetar este cartão?';
+  String get howDoYouWantToDesignThisCard =>
+      'Como você deseja projetar este cartão?';
 
   @override
   String get importContacts => 'Importar contatos';
 
   @override
-  String get importContactsIsNotAvailableYet => 'A importação de contatos ainda não está disponível.';
+  String get importContactsIsNotAvailableYet =>
+      'A importação de contatos ainda não está disponível.';
 
   @override
   String get inLabel => 'em';
@@ -4554,16 +4778,20 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get incomingOrders => 'Pedidos recebidos';
 
   @override
-  String get invalidProfileURLScanAValidBarQodyCardOrQRCode => 'URL de perfil inválido. Digitalize um cartão BarQody válido ou código QR.';
+  String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
+      'URL de perfil inválido. Digitalize um cartão BarQody válido ou código QR.';
 
   @override
-  String get invalidQRCodeUseABarqodyLinkQR => 'Código QR inválido. Use um QR do link Barqody.';
+  String get invalidQRCodeUseABarqodyLinkQR =>
+      'Código QR inválido. Use um QR do link Barqody.';
 
   @override
-  String get inviteEmployeesSetShiftsAndTrackPresence => 'Convide funcionários, defina turnos e monitore a presença';
+  String get inviteEmployeesSetShiftsAndTrackPresence =>
+      'Convide funcionários, defina turnos e monitore a presença';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Convidei você para ingressar como funcionário';
+  String get invitedYouToJoinAsEmployee =>
+      'Convidei você para ingressar como funcionário';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -4590,7 +4818,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get jpg => 'JPG';
 
   @override
-  String get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust => 'Mantenha sua conta segura. Leia códigos QR apenas quando quiser vincular um dispositivo em que você confia.';
+  String
+  get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
+      'Mantenha sua conta segura. Leia códigos QR apenas quando quiser vincular um dispositivo em que você confia.';
 
   @override
   String get label => 'Rótulo';
@@ -4599,7 +4829,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get lat => 'Lat.';
 
   @override
-  String get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile => 'Deixe que outras pessoas apontem a câmera do telefone para este código QR para visualizar instantaneamente o seu perfil de rede.';
+  String
+  get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
+      'Deixe que outras pessoas apontem a câmera do telefone para este código QR para visualizar instantaneamente o seu perfil de rede.';
 
   @override
   String get link => 'Link';
@@ -4611,7 +4843,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get linkByQROnAnotherPhone => 'Link por QR em outro telefone';
 
   @override
-  String get linkCopiedToClipboard => 'Link copiado para a área de transferência';
+  String get linkCopiedToClipboard =>
+      'Link copiado para a área de transferência';
 
   @override
   String get linkSettings => 'Configurações de link';
@@ -4632,16 +4865,19 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get locationNotSetYet => 'Local ainda não definido';
 
   @override
-  String get locationPermissionRequired => 'Permissão de localização necessária';
+  String get locationPermissionRequired =>
+      'Permissão de localização necessária';
 
   @override
-  String get locationPermissionRequiredForAttendance => 'Permissão de localização necessária para participação';
+  String get locationPermissionRequiredForAttendance =>
+      'Permissão de localização necessária para participação';
 
   @override
   String get logIn => 'Conecte-se';
 
   @override
-  String get logInToManageYourDigitalCardAndNetwork => 'Faça login para gerenciar seu cartão digital e rede.';
+  String get logInToManageYourDigitalCardAndNetwork =>
+      'Faça login para gerenciar seu cartão digital e rede.';
 
   @override
   String get logInWithQRCode => 'Faça login com código QR';
@@ -4668,7 +4904,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get manageEmployees => 'Gerenciar funcionários';
 
   @override
-  String get manageYourPersonalDetailsOtherPreferences => 'Gerencie seus dados pessoais e outras preferências';
+  String get manageYourPersonalDetailsOtherPreferences =>
+      'Gerencie seus dados pessoais e outras preferências';
 
   @override
   String get markCompleted => 'Marcar como concluído';
@@ -4719,7 +4956,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get noActiveLinksConnectedYet => 'Nenhum link ativo conectado ainda';
 
   @override
-  String get noActiveRewardProgramsAvailable => 'Nenhum programa de recompensa ativo disponível.';
+  String get noActiveRewardProgramsAvailable =>
+      'Nenhum programa de recompensa ativo disponível.';
 
   @override
   String get noEmployeeCardsYet => 'Ainda não há cartões de funcionários';
@@ -4740,7 +4978,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get noLinkTemplatesAvailable => 'Nenhum modelo de link disponível';
 
   @override
-  String get noNewNotificationsAtThisTime => 'Nenhuma notificação nova neste momento.';
+  String get noNewNotificationsAtThisTime =>
+      'Nenhuma notificação nova neste momento.';
 
   @override
   String get noOneHasViewedYourProfileYet => 'Ninguém viu seu perfil ainda.';
@@ -4749,10 +4988,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get noPendingInvitations => 'Nenhum convite pendente';
 
   @override
-  String get noProgramsAssignedYetAddProgramsBelow => 'Nenhum programa atribuído ainda. Adicione programas abaixo.';
+  String get noProgramsAssignedYetAddProgramsBelow =>
+      'Nenhum programa atribuído ainda. Adicione programas abaixo.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'Nenhum código QR encontrado nesta imagem.';
+  String get noQRCodeFoundInThisImage =>
+      'Nenhum código QR encontrado nesta imagem.';
 
   @override
   String get noRewardProgramsYet => 'Ainda não há programas de recompensa';
@@ -4767,7 +5008,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get none => 'Nenhum';
 
   @override
-  String get notAvailableOnYourCurrentPlan => 'Não disponível no seu plano atual';
+  String get notAvailableOnYourCurrentPlan =>
+      'Não disponível no seu plano atual';
 
   @override
   String get notCheckedInYet => 'Ainda não fiz check-in';
@@ -4782,16 +5024,20 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get notificationCleared => 'Notificação apagada';
 
   @override
-  String get onlyCoverProfilePhotoNameAndBioAreEditableHere => 'Apenas capa, foto de perfil, nome e biografia são editáveis ​​aqui.';
+  String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
+      'Apenas capa, foto de perfil, nome e biografia são editáveis ​​aqui.';
 
   @override
-  String get onlyEnabledLinksShowWhenSomeoneScansThisCard => 'Somente links habilitados são exibidos quando alguém escaneia este cartão.';
+  String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
+      'Somente links habilitados são exibidos quando alguém escaneia este cartão.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Apenas perfis públicos são mostrados';
+  String get onlyPublicProfilesAreShown =>
+      'Apenas perfis públicos são mostrados';
 
   @override
-  String get onlyThisPhoneIsUsingYourAccountRightNow => 'Somente este telefone está usando sua conta no momento.';
+  String get onlyThisPhoneIsUsingYourAccountRightNow =>
+      'Somente este telefone está usando sua conta no momento.';
 
   @override
   String get orCONTINUEWITH => 'OU CONTINUAR COM';
@@ -4836,7 +5082,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get photos => 'Fotos';
 
   @override
-  String get pickAReadyMadeColorThemeQuickAndClean => 'Escolha um tema de cores pronto. Rápido e limpo.';
+  String get pickAReadyMadeColorThemeQuickAndClean =>
+      'Escolha um tema de cores pronto. Rápido e limpo.';
 
   @override
   String get pickColor => 'Escolha a cor';
@@ -4851,13 +5098,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get planExpired => 'Plano expirado';
 
   @override
-  String get pleaseEnterBusinessDetailsToContinue => 'Insira os detalhes da empresa para continuar';
+  String get pleaseEnterBusinessDetailsToContinue =>
+      'Insira os detalhes da empresa para continuar';
 
   @override
   String get pleaseEnterItemName => 'Por favor insira o nome do item';
 
   @override
-  String get pleaseProvideYourBusinessDetailsBeforeUpgrading => 'Forneça os detalhes da sua empresa antes de atualizar.';
+  String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
+      'Forneça os detalhes da sua empresa antes de atualizar.';
 
   @override
   String get pleaseSelectACategory => 'Selecione uma categoria';
@@ -4866,13 +5115,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get pleaseSelectATimeSlot => 'Selecione um horário';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Defina primeiro o local de trabalho';
+  String get pleaseSetWorkLocationFirst =>
+      'Defina primeiro o local de trabalho';
 
   @override
   String get png => 'PNG';
 
   @override
-  String get pointYourCameraAtTheQRCodeOnTheOtherDevice => 'Aponte sua câmera para o código QR no outro dispositivo';
+  String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
+      'Aponte sua câmera para o código QR no outro dispositivo';
 
   @override
   String get points => 'Pontos';
@@ -4986,7 +5237,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get reset => 'Reiniciar';
 
   @override
-  String get rewardCompletedShowThisCardToRedeem => 'Recompensa concluída! Mostre este cartão para resgatar.';
+  String get rewardCompletedShowThisCardToRedeem =>
+      'Recompensa concluída! Mostre este cartão para resgatar.';
 
   @override
   String get rewardCompleted => 'Recompensa concluída! 🎉';
@@ -5022,19 +5274,23 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get save2 => 'SALVAR';
 
   @override
-  String get saveYourWorkIDCardToPhoneOrWallet => 'Salve seu cartão de identificação de trabalho no telefone ou na carteira';
+  String get saveYourWorkIDCardToPhoneOrWallet =>
+      'Salve seu cartão de identificação de trabalho no telefone ou na carteira';
 
   @override
   String get scan => 'Digitalizar';
 
   @override
-  String get scanAUserQRCodeToAddThemAsEmployee => 'Digitalize o código QR de um usuário para adicioná-lo como funcionário';
+  String get scanAUserQRCodeToAddThemAsEmployee =>
+      'Digitalize o código QR de um usuário para adicioná-lo como funcionário';
 
   @override
-  String get scanAnyUserOrBusinessQRToAddEmployee => 'Digitalize qualquer QR de usuário ou empresa para adicionar funcionário';
+  String get scanAnyUserOrBusinessQRToAddEmployee =>
+      'Digitalize qualquer QR de usuário ou empresa para adicionar funcionário';
 
   @override
-  String get scanBusinessQRToRedeem => 'Digitalize o QR comercial para resgatar';
+  String get scanBusinessQRToRedeem =>
+      'Digitalize o QR comercial para resgatar';
 
   @override
   String get scanCustomerQRCode => 'Digitalize o código QR do cliente';
@@ -5052,7 +5308,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get scanQRCode => 'Digitalize o código QR';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Digitalize o QR mostrado no outro dispositivo';
+  String get scanQRShownOnTheOtherDevice =>
+      'Digitalize o QR mostrado no outro dispositivo';
 
   @override
   String get scanToInvite => 'Digitalizar para convidar';
@@ -5070,7 +5327,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get seeAll => 'Ver tudo';
 
   @override
-  String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded => 'Veja que todas as atividades são ridicularizadas. Novas atividades aparecerão à medida que leads forem adicionados.';
+  String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
+      'Veja que todas as atividades são ridicularizadas. Novas atividades aparecerão à medida que leads forem adicionados.';
 
   @override
   String get selectDate => 'Selecione a data';
@@ -5082,10 +5340,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get selectRegion => 'Selecione a região';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Defina o texto abaixo do ícone do link';
+  String get setTextUnderTheLinkIcon =>
+      'Defina o texto abaixo do ícone do link';
 
   @override
-  String get setYourOwnColorsPhotosAndBackground => 'Defina suas próprias cores, fotos e plano de fundo.';
+  String get setYourOwnColorsPhotosAndBackground =>
+      'Defina suas próprias cores, fotos e plano de fundo.';
 
   @override
   String get share => 'Compartilhar';
@@ -5094,7 +5354,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get shareCard => 'Compartilhar cartão';
 
   @override
-  String get shareDifferentLinksOnEachCard => 'Compartilhe links diferentes em cada cartão';
+  String get shareDifferentLinksOnEachCard =>
+      'Compartilhe links diferentes em cada cartão';
 
   @override
   String get shareProfile => 'Compartilhar perfil';
@@ -5151,7 +5412,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get startHour => 'Hora de início';
 
   @override
-  String get startNetworkingSmarterWithBarqody => 'Comece a fazer networking de maneira mais inteligente com o Barqody.';
+  String get startNetworkingSmarterWithBarqody =>
+      'Comece a fazer networking de maneira mais inteligente com o Barqody.';
 
   @override
   String get stats => 'Estatísticas';
@@ -5163,22 +5425,27 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get subscription => 'Subscrição';
 
   @override
-  String get subscriptionRequestSubmitted => 'Solicitação de assinatura enviada';
+  String get subscriptionRequestSubmitted =>
+      'Solicitação de assinatura enviada';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Solicitação de assinatura enviada.';
+  String get subscriptionRequestSubmitted2 =>
+      'Solicitação de assinatura enviada.';
 
   @override
   String get swipeToBrowseCards => 'Deslize para navegar pelos cartões';
 
   @override
-  String get takeAQuickSelfieForAttendanceVerification => 'Tire uma selfie rápida para verificação de presença';
+  String get takeAQuickSelfieForAttendanceVerification =>
+      'Tire uma selfie rápida para verificação de presença';
 
   @override
-  String get tapSocialLinksAboveToAddAndActivateProfiles => 'Toque em “Links Sociais” acima para adicionar e ativar perfis.';
+  String get tapSocialLinksAboveToAddAndActivateProfiles =>
+      'Toque em “Links Sociais” acima para adicionar e ativar perfis.';
 
   @override
-  String get tapOnTheMapOrUseYourCurrentLocation => 'Toque no mapa ou use sua localização atual';
+  String get tapOnTheMapOrUseYourCurrentLocation =>
+      'Toque no mapa ou use sua localização atual';
 
   @override
   String get tapToAddPhoto => 'Toque para adicionar foto';
@@ -5199,13 +5466,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get templates => 'Modelos';
 
   @override
-  String get thankYouFeedbackSubmissionsAreMockOnly => 'Obrigado! Os envios de feedback são apenas simulados.';
+  String get thankYouFeedbackSubmissionsAreMockOnly =>
+      'Obrigado! Os envios de feedback são apenas simulados.';
 
   @override
-  String get thisCardAndItsQRCodeWillBeRemoved => 'Este cartão e seu código QR serão removidos.';
+  String get thisCardAndItsQRCodeWillBeRemoved =>
+      'Este cartão e seu código QR serão removidos.';
 
   @override
-  String get thisFeatureIsExclusivelyAvailableToBusinessUsers => 'Este recurso está disponível exclusivamente para usuários empresariais.';
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
+      'Este recurso está disponível exclusivamente para usuários empresariais.';
 
   @override
   String get thisIsAlreadyYourUsername => 'Este já é o seu nome de usuário.';
@@ -5214,7 +5484,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get thisMonth => 'Este mês';
 
   @override
-  String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments => 'Isso excluirá permanentemente este programa de recompensas e todas as suas inscrições.';
+  String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
+      'Isso excluirá permanentemente este programa de recompensas e todas as suas inscrições.';
 
   @override
   String get todayIsYourWeekend => 'Hoje é seu fim de semana';
@@ -5229,10 +5500,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get trackYourOrders => 'Acompanhe seus pedidos';
 
   @override
-  String get transactionReferenceOptional => 'Referência de transação (opcional)';
+  String get transactionReferenceOptional =>
+      'Referência de transação (opcional)';
 
   @override
-  String get transactionReferenceNumberOptional => 'Número de referência da transação (opcional)';
+  String get transactionReferenceNumberOptional =>
+      'Número de referência da transação (opcional)';
 
   @override
   String get tryAgain => 'Tente novamente';
@@ -5247,13 +5520,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get type => 'Tipo';
 
   @override
-  String get typeAtLeast2CharactersOfAUsernameToSearch => 'Digite pelo menos 2 caracteres de um nome de usuário para pesquisar.';
+  String get typeAtLeast2CharactersOfAUsernameToSearch =>
+      'Digite pelo menos 2 caracteres de um nome de usuário para pesquisar.';
 
   @override
-  String get typeThe8CharacterCodeShownUnderTheQR => 'Digite o código de 8 caracteres mostrado abaixo do QR.';
+  String get typeThe8CharacterCodeShownUnderTheQR =>
+      'Digite o código de 8 caracteres mostrado abaixo do QR.';
 
   @override
-  String get underDevelopmentLoginViaEmailPasswordInstead => 'Em Desenvolvimento - Faça login por e-mail/senha.';
+  String get underDevelopmentLoginViaEmailPasswordInstead =>
+      'Em Desenvolvimento - Faça login por e-mail/senha.';
 
   @override
   String get unstampIcon => 'Ícone de desmarcação';
@@ -5271,10 +5547,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get useATemplate => 'Use um modelo';
 
   @override
-  String get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime => 'Use o Barqody em outros telefones ou tablets. Você permanece no controle – desconecte-se de qualquer dispositivo a qualquer momento.';
+  String
+  get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
+      'Use o Barqody em outros telefones ou tablets. Você permanece no controle – desconecte-se de qualquer dispositivo a qualquer momento.';
 
   @override
-  String get useBarqodyOnYourPhoneToScanThisCode => 'Use o Barqody no seu telefone para escanear este código';
+  String get useBarqodyOnYourPhoneToScanThisCode =>
+      'Use o Barqody no seu telefone para escanear este código';
 
   @override
   String get useDefaultIcon => 'Usar ícone padrão';
@@ -5289,7 +5568,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get version101 => 'Versão: 1.0.1';
 
   @override
-  String get viewAndUpdateOrdersFromYourCustomers => 'Visualize e atualize pedidos de seus clientes';
+  String get viewAndUpdateOrdersFromYourCustomers =>
+      'Visualize e atualize pedidos de seus clientes';
 
   @override
   String get viewProfile => 'Ver perfil';
@@ -5307,19 +5587,25 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get welcomeToAccountCenter => 'Bem-vindo à Central de Contas';
 
   @override
-  String get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe => 'Quando uma empresa adiciona você como funcionário, seu cartão de funcionário aparecerá aqui. Você pode personalizar seu design a qualquer momento.';
+  String
+  get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
+      'Quando uma empresa adiciona você como funcionário, seu cartão de funcionário aparecerá aqui. Você pode personalizar seu design a qualquer momento.';
 
   @override
-  String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere => 'Quando uma empresa inscreve você em seu programa de recompensas, isso aparecerá aqui.';
+  String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
+      'Quando uma empresa inscreve você em seu programa de recompensas, isso aparecerá aqui.';
 
   @override
-  String get whenABusinessInvitesYouToTheirTeamItWillAppearHere => 'Quando uma empresa convida você para sua equipe, isso aparecerá aqui.';
+  String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
+      'Quando uma empresa convida você para sua equipe, isso aparecerá aqui.';
 
   @override
-  String get whenTurnedOffThisLinkWontBeShownOnYourProfile => 'Quando desativado, este link não será mostrado no seu perfil';
+  String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
+      'Quando desativado, este link não será mostrado no seu perfil';
 
   @override
-  String get writeSomethingAboutYouOrYourBrand => 'Escreva algo sobre você ou sua marca';
+  String get writeSomethingAboutYouOrYourBrand =>
+      'Escreva algo sobre você ou sua marca';
 
   @override
   String get yearly => 'Anual';
@@ -5331,16 +5617,19 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get yourCategories => 'Suas categorias';
 
   @override
-  String get yourEmployeeCardsFromEmployers => 'Seus cartões de funcionário dos empregadores';
+  String get yourEmployeeCardsFromEmployers =>
+      'Seus cartões de funcionário dos empregadores';
 
   @override
-  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed => 'Seu Café Grátis foi resgatado com sucesso.';
+  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
+      'Seu Café Grátis foi resgatado com sucesso.';
 
   @override
   String get yourRewards => 'Suas recompensas';
 
   @override
-  String get yourSubscriptionHasEndedTapTheInfoIconForDetails => 'Sua assinatura terminou. Toque no ícone de informações para obter detalhes.';
+  String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
+      'Sua assinatura terminou. Toque no ícone de informações para obter detalhes.';
 
   @override
   String get yourname => 'seunome';
@@ -5388,7 +5677,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get addLink2 => 'Adicionar link';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Adicione links ao seu perfil abaixo';
+  String get addLinksToYourProfileBelow2 =>
+      'Adicione links ao seu perfil abaixo';
 
   @override
   String get addPhoto => 'Adicionar foto';
@@ -5418,7 +5708,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get alwaysUpToDate => 'Sempre atualizado';
 
   @override
-  String get areYouSureYouWantToLogOutOfBarqody => 'Tem certeza de que deseja sair do Barqody?';
+  String get areYouSureYouWantToLogOutOfBarqody =>
+      'Tem certeza de que deseja sair do Barqody?';
 
   @override
   String get attendanceFailed => 'Falha no comparecimento';
@@ -5430,7 +5721,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get bookingFailed => 'Falha na reserva';
 
   @override
-  String get brieflyDescribeThisReward => 'Descreva resumidamente esta recompensa...';
+  String get brieflyDescribeThisReward =>
+      'Descreva resumidamente esta recompensa...';
 
   @override
   String get businessVerified => 'Empresa verificada';
@@ -5502,7 +5794,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get chooseTemplate2 => 'Escolha o modelo';
 
   @override
-  String get contactCardBusinessAddress => 'Endereço comercial do cartão de contato';
+  String get contactCardBusinessAddress =>
+      'Endereço comercial do cartão de contato';
 
   @override
   String get contactCardCompanyName => 'Nome da empresa do cartão de contato';
@@ -5511,7 +5804,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get contactCardEmail => 'E-mail do cartão de contato';
 
   @override
-  String get contactCardHomeAddress => 'Endereço residencial do cartão de contato';
+  String get contactCardHomeAddress =>
+      'Endereço residencial do cartão de contato';
 
   @override
   String get contactCardPhone => 'Telefone do cartão de contato';
@@ -5529,22 +5823,27 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get couldNotLinkDevice => 'Não foi possível vincular o dispositivo';
 
   @override
-  String get couldNotLogOutDevice => 'Não foi possível desconectar o dispositivo';
+  String get couldNotLogOutDevice =>
+      'Não foi possível desconectar o dispositivo';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Não foi possível abrir a Carteira virtual do Google';
+  String get couldNotOpenGoogleWallet =>
+      'Não foi possível abrir a Carteira virtual do Google';
 
   @override
-  String get couldNotSaveCardDesign => 'Não foi possível salvar o design do cartão';
+  String get couldNotSaveCardDesign =>
+      'Não foi possível salvar o design do cartão';
 
   @override
-  String get couldNotUpdateProfileVisibility => 'Não foi possível atualizar a visibilidade do perfil';
+  String get couldNotUpdateProfileVisibility =>
+      'Não foi possível atualizar a visibilidade do perfil';
 
   @override
   String get createGallery => 'Criar galeria';
 
   @override
-  String get createACardToShareYourProfile => 'Crie um cartão para compartilhar seu perfil';
+  String get createACardToShareYourProfile =>
+      'Crie um cartão para compartilhar seu perfil';
 
   @override
   String get createCard => 'Criar cartão';
@@ -5553,13 +5852,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get customBank => 'Banco personalizado';
 
   @override
-  String get customersCanBeEnrolledAndStamped => 'Os clientes podem ser cadastrados e carimbados';
+  String get customersCanBeEnrolledAndStamped =>
+      'Os clientes podem ser cadastrados e carimbados';
 
   @override
   String get customizeCard => 'Personalizar cartão';
 
   @override
-  String get describeYourLoyaltyProgram => 'Descreva seu programa de fidelidade';
+  String get describeYourLoyaltyProgram =>
+      'Descreva seu programa de fidelidade';
 
   @override
   String get displayName => 'Nome de exibição';
@@ -5598,7 +5899,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get enterAValidEmail => 'Insira um e-mail válido';
 
   @override
-  String get enterBioForTheContactCard => 'Insira a biografia para o cartão de contato';
+  String get enterBioForTheContactCard =>
+      'Insira a biografia para o cartão de contato';
 
   @override
   String get enterProgramName => 'Digite o nome do programa';
@@ -5655,7 +5957,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get failedToSaveQRCode => 'Falha ao salvar o código QR.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Falha ao salvar detalhes da empresa';
+  String get failedToSaveBusinessDetails =>
+      'Falha ao salvar detalhes da empresa';
 
   @override
   String get failedToUpdateStatus => 'Falha ao atualizar o status';
@@ -5670,7 +5973,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get freeDessert => 'Sobremesa grátis';
 
   @override
-  String get galleryPermissionRequiredPleaseEnableItInSettings => 'É necessária permissão da galeria. Por favor, habilite-o em Configurações.';
+  String get galleryPermissionRequiredPleaseEnableItInSettings =>
+      'É necessária permissão da galeria. Por favor, habilite-o em Configurações.';
 
   @override
   String get getStarted => 'Comece';
@@ -5679,13 +5983,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get go2 => 'Ir';
 
   @override
-  String get goToToolsLinkedDevices => 'Vá para Ferramentas → Dispositivos vinculados';
+  String get goToToolsLinkedDevices =>
+      'Vá para Ferramentas → Dispositivos vinculados';
 
   @override
-  String get googleWalletSetupPending => 'Configuração da Carteira virtual do Google pendente.';
+  String get googleWalletSetupPending =>
+      'Configuração da Carteira virtual do Google pendente.';
 
   @override
-  String get googleWalletSetupPendingProfileLinkCopied => 'Configuração da Carteira virtual do Google pendente. Link do perfil copiado.';
+  String get googleWalletSetupPendingProfileLinkCopied =>
+      'Configuração da Carteira virtual do Google pendente. Link do perfil copiado.';
 
   @override
   String get growYourBusiness => 'Expanda o seu negócio';
@@ -5706,7 +6013,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get invitationDeclined => 'Convite recusado';
 
   @override
-  String get invitationSentEmployeeWillBeAddedAfterTheyAccept => 'Convite enviado. O funcionário será adicionado após aceitar.';
+  String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
+      'Convite enviado. O funcionário será adicionado após aceitar.';
 
   @override
   String get inviteEmployee => 'Convidar funcionário';
@@ -5724,10 +6032,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get logInWithQR => 'Faça login com QR';
 
   @override
-  String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone => 'Sair apenas desta conta? Outras contas permanecerão neste telefone.';
+  String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
+      'Sair apenas desta conta? Outras contas permanecerão neste telefone.';
 
   @override
-  String get loggedInWithGoogleDemoAccountSaimY => 'Conectado com Google (conta demo: Saim Y)';
+  String get loggedInWithGoogleDemoAccountSaimY =>
+      'Conectado com Google (conta demo: Saim Y)';
 
   @override
   String get loggingYouIn => 'Fazendo login…';
@@ -5763,7 +6073,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get noDetailsYet => 'Ainda não há detalhes';
 
   @override
-  String get noLinksAddedYetNTapAddLinkToGetStarted => 'Nenhum link adicionado ainda.\nToque em \"Adicionar link\" para começar.';
+  String get noLinksAddedYetNTapAddLinkToGetStarted =>
+      'Nenhum link adicionado ainda.\nToque em \"Adicionar link\" para começar.';
 
   @override
   String get noMatches => 'Nenhuma correspondência';
@@ -5781,7 +6092,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get oneTapToShare => 'Um toque para compartilhar';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Abra o Barqody no seu outro telefone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Abra o Barqody no seu outro telefone';
 
   @override
   String get openCamera => 'Abrir câmera';
@@ -5793,10 +6105,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get paperCard2 => 'Cartão de papel';
 
   @override
-  String get passwordMustBeAtLeast4Characters => 'A senha deve ter pelo menos 4 caracteres';
+  String get passwordMustBeAtLeast4Characters =>
+      'A senha deve ter pelo menos 4 caracteres';
 
   @override
-  String get passwordMustBeAtLeast6Characters => 'A senha deve ter pelo menos 6 caracteres';
+  String get passwordMustBeAtLeast6Characters =>
+      'A senha deve ter pelo menos 6 caracteres';
 
   @override
   String get phoneNumber => 'Número de telefone';
@@ -5817,10 +6131,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get pleaseEnterAUsername => 'Por favor insira um nome de usuário';
 
   @override
-  String get pleaseEnterAValidEmailAddress => 'Por favor insira um endereço de e-mail válido';
+  String get pleaseEnterAValidEmailAddress =>
+      'Por favor insira um endereço de e-mail válido';
 
   @override
-  String get pleaseEnterAValidNumberOfStamps => 'Insira um número válido de selos';
+  String get pleaseEnterAValidNumberOfStamps =>
+      'Insira um número válido de selos';
 
   @override
   String get pleaseEnterYourEmail => 'Por favor insira seu e-mail';
@@ -5832,13 +6148,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get pleaseEnterYourPassword => 'Por favor digite sua senha';
 
   @override
-  String get pointTheCameraAtAQRCodeToScanAutomatically => 'Aponte a câmera para um código QR para digitalizar automaticamente.';
+  String get pointTheCameraAtAQRCodeToScanAutomatically =>
+      'Aponte a câmera para um código QR para digitalizar automaticamente.';
 
   @override
-  String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton => 'Aponte a câmera para um crachá de evento e toque no botão Câmera.';
+  String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
+      'Aponte a câmera para um crachá de evento e toque no botão Câmera.';
 
   @override
-  String get pointTheCameraAtPaperCardAndTapTheCameraButton => 'Aponte a câmera para o cartão de papel e toque no botão Câmera.';
+  String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
+      'Aponte a câmera para o cartão de papel e toque no botão Câmera.';
 
   @override
   String get preparingQRCode => 'Preparando código QR…';
@@ -5856,7 +6175,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get qrCodeExpired => 'Código QR expirou';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'O código QR expirou. Toque em atualizar.';
+  String get qrCodeExpiredTapRefresh =>
+      'O código QR expirou. Toque em atualizar.';
 
   @override
   String get realEstate => 'Imobiliária';
@@ -5865,7 +6185,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get receiptAttached => 'Recibo anexado';
 
   @override
-  String get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData => 'Renove sua assinatura para restaurar o acesso total aos seus recursos e dados premium.';
+  String
+  get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
+      'Renove sua assinatura para restaurar o acesso total aos seus recursos e dados premium.';
 
   @override
   String get retakePhoto => 'Retirar foto';
@@ -5901,10 +6223,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get saveContact2 => 'Salvar contato';
 
   @override
-  String get savedLocallySyncMayHaveFailed => 'Salvo localmente. A sincronização pode ter falhado.';
+  String get savedLocallySyncMayHaveFailed =>
+      'Salvo localmente. A sincronização pode ter falhado.';
 
   @override
-  String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork => 'Digitalize um código QR ou adicione alguém que você conheceu para construir sua rede.';
+  String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
+      'Digitalize um código QR ou adicione alguém que você conheceu para construir sua rede.';
 
   @override
   String get scannedViaQR => 'Digitalizado via QR';
@@ -5961,10 +6285,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get streetName => 'Nome da rua';
 
   @override
-  String get switchToABusinessAccountToUnlockFullAccess => 'Mude para uma conta comercial para desbloquear acesso total.';
+  String get switchToABusinessAccountToUnlockFullAccess =>
+      'Mude para uma conta comercial para desbloquear acesso total.';
 
   @override
-  String get tapLinkADeviceAndScanThisQR => 'Toque em Vincular um dispositivo e leia este QR';
+  String get tapLinkADeviceAndScanThisQR =>
+      'Toque em Vincular um dispositivo e leia este QR';
 
   @override
   String get tapToAddImage => 'Toque para adicionar imagem';
@@ -5973,7 +6299,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get tapToChange => 'Toque para alterar';
 
   @override
-  String get templateAppliedLocallySyncFailed => 'Modelo aplicado localmente. Falha na sincronização.';
+  String get templateAppliedLocallySyncFailed =>
+      'Modelo aplicado localmente. Falha na sincronização.';
 
   @override
   String get textColor => 'Cor do texto';
@@ -5982,7 +6309,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get thisAccount => 'Esta conta';
 
   @override
-  String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 => 'Este recurso está disponível exclusivamente para usuários empresariais.';
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
+      'Este recurso está disponível exclusivamente para usuários empresariais.';
 
   @override
   String get thisPersonIsOnYourTeam => 'Esta pessoa está na sua equipe';
@@ -5994,16 +6322,20 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get totalStamps => 'Total de Selos';
 
   @override
-  String get tryADifferentNameEmailOrCompany => 'Experimente um nome, e-mail ou empresa diferente.';
+  String get tryADifferentNameEmailOrCompany =>
+      'Experimente um nome, e-mail ou empresa diferente.';
 
   @override
-  String get unableToSaveProfileTryAgain => 'Não foi possível salvar o perfil. Tente novamente.';
+  String get unableToSaveProfileTryAgain =>
+      'Não foi possível salvar o perfil. Tente novamente.';
 
   @override
-  String get unableToUpdateUsernameTryAgain => 'Não foi possível atualizar o nome de usuário. Tente novamente.';
+  String get unableToUpdateUsernameTryAgain =>
+      'Não foi possível atualizar o nome de usuário. Tente novamente.';
 
   @override
-  String get underDevelopmentLoginViaEmailPasswordInstead2 => 'Em Desenvolvimento - Faça login por e-mail/senha.';
+  String get underDevelopmentLoginViaEmailPasswordInstead2 =>
+      'Em Desenvolvimento - Faça login por e-mail/senha.';
 
   @override
   String get unknownUser => 'Usuário desconhecido';
@@ -6033,16 +6365,20 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get useMyLocation => 'Usar minha localização';
 
   @override
-  String get useLettersNumbersUnderscoresOrHyphensOnly => 'Use apenas letras, números, sublinhados ou hífens';
+  String get useLettersNumbersUnderscoresOrHyphensOnly =>
+      'Use apenas letras, números, sublinhados ou hífens';
 
   @override
-  String get usernameMustBeAtLeast3Characters => 'O nome de usuário deve ter pelo menos 3 caracteres';
+  String get usernameMustBeAtLeast3Characters =>
+      'O nome de usuário deve ter pelo menos 3 caracteres';
 
   @override
-  String get usernameMustBeAtMost30Characters => 'O nome de usuário deve ter no máximo 30 caracteres';
+  String get usernameMustBeAtMost30Characters =>
+      'O nome de usuário deve ter no máximo 30 caracteres';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Nome de usuário atualizado com sucesso!';
+  String get usernameUpdatedSuccessfully =>
+      'Nome de usuário atualizado com sucesso!';
 
   @override
   String get waitingForThemToAccept => 'Esperando que eles aceitem';
@@ -6057,19 +6393,23 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get workLocation => 'Local de trabalho';
 
   @override
-  String get yourPROSubscriptionHasExpiredNN => 'Sua assinatura PRO expirou.\n\n';
+  String get yourPROSubscriptionHasExpiredNN =>
+      'Sua assinatura PRO expirou.\n\n';
 
   @override
   String get yourPROSubscriptionHasExpired => 'Sua assinatura PRO expirou.';
 
   @override
-  String get premiumFeaturesAreCurrentlyDisabled => 'Os recursos premium estão desativados no momento.';
+  String get premiumFeaturesAreCurrentlyDisabled =>
+      'Os recursos premium estão desativados no momento.';
 
   @override
-  String get proLinksAreHiddenFromYourPublicProfile => 'Os links profissionais ficam ocultos no seu perfil público.';
+  String get proLinksAreHiddenFromYourPublicProfile =>
+      'Os links profissionais ficam ocultos no seu perfil público.';
 
   @override
-  String get yourBusinessDetailsAndDataAreSafe => 'Os detalhes e dados da sua empresa estão seguros.';
+  String get yourBusinessDetailsAndDataAreSafe =>
+      'Os detalhes e dados da sua empresa estão seguros.';
 
   @override
   String addCatalogItem(String label) {
@@ -6110,7 +6450,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
 class AppLocalizationsPtPt extends AppLocalizationsPt {
-  AppLocalizationsPtPt(): super('pt_PT');
+  AppLocalizationsPtPt() : super('pt_PT');
 
   @override
   String get appTitle => 'BarQody';
@@ -6140,28 +6480,33 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get username => 'Nome de usuário';
 
   @override
-  String get setUsernameSubtitle => 'Defina seu nome de usuário de perfil exclusivo';
+  String get setUsernameSubtitle =>
+      'Defina seu nome de usuário de perfil exclusivo';
 
   @override
   String get socialLinks => 'Links Sociais';
 
   @override
-  String get socialLinksSubtitle => 'Adicione Instagram, WhatsApp, site e muito mais';
+  String get socialLinksSubtitle =>
+      'Adicione Instagram, WhatsApp, site e muito mais';
 
   @override
   String get publicProfile => 'Perfil público';
 
   @override
-  String get publicProfileOn => 'Qualquer pessoa pode encontrar e visualizar seu perfil';
+  String get publicProfileOn =>
+      'Qualquer pessoa pode encontrar e visualizar seu perfil';
 
   @override
-  String get publicProfileOff => 'Oculto da pesquisa – outras pessoas não conseguem descobrir você';
+  String get publicProfileOff =>
+      'Oculto da pesquisa – outras pessoas não conseguem descobrir você';
 
   @override
   String get shareQr => 'Compartilhe meu código QR';
 
   @override
-  String get shareQrSubtitle => 'Deixe que outras pessoas digitalizem seu cartão de visita digital';
+  String get shareQrSubtitle =>
+      'Deixe que outras pessoas digitalizem seu cartão de visita digital';
 
   @override
   String get shoppingRewards => 'Compras e recompensas';
@@ -6176,7 +6521,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get myRewardCards => 'Meus cartões de recompensa';
 
   @override
-  String get myRewardCardsSubtitle => 'Veja selos e pontos de programas de fidelidade';
+  String get myRewardCardsSubtitle =>
+      'Veja selos e pontos de programas de fidelidade';
 
   @override
   String get workplace => 'Local de trabalho';
@@ -6185,13 +6531,15 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get employeeInvitations => 'Convites de funcionários';
 
   @override
-  String get employeeInvitationsSubtitle => 'Aceite ou recuse convites de equipes de empresas';
+  String get employeeInvitationsSubtitle =>
+      'Aceite ou recuse convites de equipes de empresas';
 
   @override
   String get workplaceCheckIn => 'Check-in no local de trabalho';
 
   @override
-  String get workplaceCheckInSubtitle => 'Ponto de entrada e saída do seu trabalho com localização';
+  String get workplaceCheckInSubtitle =>
+      'Ponto de entrada e saída do seu trabalho com localização';
 
   @override
   String get accountsAndDevices => 'Contas e dispositivos';
@@ -6277,7 +6625,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get n2DaysAgo => '2 dias atrás';
 
   @override
-  String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly => '3–30 caracteres. Somente letras, números, sublinhados e hífens.';
+  String get n330CharactersLettersNumbersUnderscoresAndHyphensOnly =>
+      '3–30 caracteres. Somente letras, números, sublinhados e hífens.';
 
   @override
   String get aabbccdd => 'AABBCCDD';
@@ -6289,7 +6638,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get accessRESTRICTED => 'ACESSO RESTRITO';
 
   @override
-  String get accountIBANAddAccountNumberHere => 'Conta/IBAN: Adicione o número da conta aqui';
+  String get accountIBANAddAccountNumberHere =>
+      'Conta/IBAN: Adicione o número da conta aqui';
 
   @override
   String get accountTitleTapni => 'Título da conta: Tapni';
@@ -6313,13 +6663,16 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get addAccount => 'Adicionar conta';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Adicione pelo menos uma categoria primeiro';
+  String get addAtLeastOneCategoryFirst =>
+      'Adicione pelo menos uma categoria primeiro';
 
   @override
-  String get addCategoriesInDisplayOrderEGFastFoodThenDesi => 'Adicione categorias na ordem de exibição (por exemplo, Fast Food e Desi)';
+  String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>
+      'Adicione categorias na ordem de exibição (por exemplo, Fast Food e Desi)';
 
   @override
-  String get addCategoriesInYourCatalogSettingsFirst => 'Adicione categorias nas configurações do seu catálogo primeiro.';
+  String get addCategoriesInYourCatalogSettingsFirst =>
+      'Adicione categorias nas configurações do seu catálogo primeiro.';
 
   @override
   String get addContact => 'Adicionar contato';
@@ -6328,10 +6681,12 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get addLink => 'Adicionar link';
 
   @override
-  String get addLinksToYourProfileBelow => 'Adicione links ao seu perfil abaixo';
+  String get addLinksToYourProfileBelow =>
+      'Adicione links ao seu perfil abaixo';
 
   @override
-  String get addLinksToYourProfileFirstThenEnableThemHere => 'Adicione links ao seu perfil primeiro e depois ative-os aqui.';
+  String get addLinksToYourProfileFirstThenEnableThemHere =>
+      'Adicione links ao seu perfil primeiro e depois ative-os aqui.';
 
   @override
   String get addLogo => 'Adicionar logotipo';
@@ -6361,13 +6716,16 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get allCaughtUp => 'Todos apanhados!';
 
   @override
-  String get allNotificationsMarkedAsRead => 'Todas as notificações marcadas como lidas!';
+  String get allNotificationsMarkedAsRead =>
+      'Todas as notificações marcadas como lidas!';
 
   @override
   String get allowCamera => 'Permitir câmera';
 
   @override
-  String get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices => 'Permitir que este dispositivo acesse sua conta Barqody? Você pode removê-lo a qualquer momento dos dispositivos vinculados.';
+  String
+  get allowThisDeviceToAccessYourBarqodyAccountYouCanRemoveItAnytimeFromLinkedDevices =>
+      'Permitir que este dispositivo acesse sua conta Barqody? Você pode removê-lo a qualquer momento dos dispositivos vinculados.';
 
   @override
   String get alreadyHaveAnAccount => 'Já tem uma conta?';
@@ -6391,7 +6749,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get ascending => 'Ascendente';
 
   @override
-  String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee => 'Peça à sua empresa para digitalizar seu QR e adicionar você como funcionário';
+  String get askYourBusinessToScanYourQRAndAddYouAsAnEmployee =>
+      'Peça à sua empresa para digitalizar seu QR e adicionar você como funcionário';
 
   @override
   String get assignCategory => 'Atribuir categoria';
@@ -6475,13 +6834,15 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get businessUsersOnly => 'Somente usuários empresariais';
 
   @override
-  String get bySigningUpYouAgreeToOurTermsAndConditions => 'Ao se inscrever, você concorda com nossos Termos e Condições.';
+  String get bySigningUpYouAgreeToOurTermsAndConditions =>
+      'Ao se inscrever, você concorda com nossos Termos e Condições.';
 
   @override
   String get call => 'Chamar';
 
   @override
-  String get cameraPermissionIsRequiredToScan => 'É necessária permissão da câmera para digitalizar.';
+  String get cameraPermissionIsRequiredToScan =>
+      'É necessária permissão da câmera para digitalizar.';
 
   @override
   String get cancelAnytime => 'Cancele a qualquer momento.';
@@ -6511,7 +6872,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get checkOut => 'Confira';
 
   @override
-  String get chooseAUniqueUsernameForYourProfileLink => 'Escolha um nome de usuário exclusivo para o link do seu perfil.';
+  String get chooseAUniqueUsernameForYourProfileLink =>
+      'Escolha um nome de usuário exclusivo para o link do seu perfil.';
 
   @override
   String get choosePlan => 'Escolha o plano';
@@ -6583,7 +6945,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get copyCode => 'Copiar código';
 
   @override
-  String get couldNotGetLocationPleaseEnableGPSPermission => 'Não foi possível obter a localização. Ative a permissão do GPS.';
+  String get couldNotGetLocationPleaseEnableGPSPermission =>
+      'Não foi possível obter a localização. Ative a permissão do GPS.';
 
   @override
   String get couldNotSwitchAccount => 'Não foi possível mudar de conta';
@@ -6607,19 +6970,22 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get createReward => 'Criar recompensa';
 
   @override
-  String get createStampOrPointsRewardsForCustomers => 'Crie recompensas de selos ou pontos para clientes';
+  String get createStampOrPointsRewardsForCustomers =>
+      'Crie recompensas de selos ou pontos para clientes';
 
   @override
   String get createYourFirstCard => 'Crie seu primeiro cartão';
 
   @override
-  String get createYourFirstRewardCardForCustomers => 'Crie seu primeiro cartão de recompensa para clientes';
+  String get createYourFirstRewardCardForCustomers =>
+      'Crie seu primeiro cartão de recompensa para clientes';
 
   @override
   String get creationDate => 'Data de criação';
 
   @override
-  String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet => 'Imagens personalizadas para slots carimbados e não carimbados. Os padrões serão usados ​​se não forem definidos.';
+  String get customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet =>
+      'Imagens personalizadas para slots carimbados e não carimbados. Os padrões serão usados ​​se não forem definidos.';
 
   @override
   String get customLink => 'Link personalizado';
@@ -6646,7 +7012,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get customizeDesign => 'Personalizar design';
 
   @override
-  String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads => 'Personalize seu perfil, desbloqueie modelos PRO e obtenha leads ilimitados.';
+  String get customizeYourProfileUnlockPROTemplatesAndGetUnlimitedLeads =>
+      'Personalize seu perfil, desbloqueie modelos PRO e obtenha leads ilimitados.';
 
   @override
   String get customizeYourself => 'Personalize você mesmo';
@@ -6778,7 +7145,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get enterCodeInstead => 'Insira o código';
 
   @override
-  String get enterNetworkingContactDetailsBelow => 'Insira os detalhes de contato de rede abaixo.';
+  String get enterNetworkingContactDetailsBelow =>
+      'Insira os detalhes de contato de rede abaixo.';
 
   @override
   String get enterYourName => 'Digite seu nome';
@@ -6847,22 +7215,26 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get hello => 'Olá,';
 
   @override
-  String get helpCenterIsDisabledInThisUIDemo => 'A Central de Ajuda está desativada nesta demonstração da IU.';
+  String get helpCenterIsDisabledInThisUIDemo =>
+      'A Central de Ajuda está desativada nesta demonstração da IU.';
 
   @override
   String get hex => 'Hex: #';
 
   @override
-  String get holdTheQRCodeInsideTheFrameItScansAutomatically => 'Segure o código QR dentro da moldura – ele digitaliza automaticamente.';
+  String get holdTheQRCodeInsideTheFrameItScansAutomatically =>
+      'Segure o código QR dentro da moldura – ele digitaliza automaticamente.';
 
   @override
-  String get howDoYouWantToDesignThisCard => 'Como você deseja projetar este cartão?';
+  String get howDoYouWantToDesignThisCard =>
+      'Como você deseja projetar este cartão?';
 
   @override
   String get importContacts => 'Importar contatos';
 
   @override
-  String get importContactsIsNotAvailableYet => 'A importação de contatos ainda não está disponível.';
+  String get importContactsIsNotAvailableYet =>
+      'A importação de contatos ainda não está disponível.';
 
   @override
   String get inLabel => 'em';
@@ -6871,16 +7243,20 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get incomingOrders => 'Pedidos recebidos';
 
   @override
-  String get invalidProfileURLScanAValidBarQodyCardOrQRCode => 'URL de perfil inválido. Digitalize um cartão BarQody válido ou código QR.';
+  String get invalidProfileURLScanAValidBarQodyCardOrQRCode =>
+      'URL de perfil inválido. Digitalize um cartão BarQody válido ou código QR.';
 
   @override
-  String get invalidQRCodeUseABarqodyLinkQR => 'Código QR inválido. Use um QR do link Barqody.';
+  String get invalidQRCodeUseABarqodyLinkQR =>
+      'Código QR inválido. Use um QR do link Barqody.';
 
   @override
-  String get inviteEmployeesSetShiftsAndTrackPresence => 'Convide funcionários, defina turnos e monitore a presença';
+  String get inviteEmployeesSetShiftsAndTrackPresence =>
+      'Convide funcionários, defina turnos e monitore a presença';
 
   @override
-  String get invitedYouToJoinAsEmployee => 'Convidei você para ingressar como funcionário';
+  String get invitedYouToJoinAsEmployee =>
+      'Convidei você para ingressar como funcionário';
 
   @override
   String get janeDoe => 'Jane Doe';
@@ -6907,7 +7283,9 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get jpg => 'JPG';
 
   @override
-  String get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust => 'Mantenha sua conta segura. Leia códigos QR apenas quando quiser vincular um dispositivo em que você confia.';
+  String
+  get keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust =>
+      'Mantenha sua conta segura. Leia códigos QR apenas quando quiser vincular um dispositivo em que você confia.';
 
   @override
   String get label => 'Rótulo';
@@ -6916,7 +7294,9 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get lat => 'Lat.';
 
   @override
-  String get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile => 'Deixe que outras pessoas apontem a câmera do telefone para este código QR para visualizar instantaneamente o seu perfil de rede.';
+  String
+  get letOthersPointTheirPhoneCameraToThisQRCodeToInstantlyViewYourNetworkingProfile =>
+      'Deixe que outras pessoas apontem a câmera do telefone para este código QR para visualizar instantaneamente o seu perfil de rede.';
 
   @override
   String get link => 'Link';
@@ -6928,7 +7308,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get linkByQROnAnotherPhone => 'Link por QR em outro telefone';
 
   @override
-  String get linkCopiedToClipboard => 'Link copiado para a área de transferência';
+  String get linkCopiedToClipboard =>
+      'Link copiado para a área de transferência';
 
   @override
   String get linkSettings => 'Configurações de link';
@@ -6949,16 +7330,19 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get locationNotSetYet => 'Local ainda não definido';
 
   @override
-  String get locationPermissionRequired => 'Permissão de localização necessária';
+  String get locationPermissionRequired =>
+      'Permissão de localização necessária';
 
   @override
-  String get locationPermissionRequiredForAttendance => 'Permissão de localização necessária para participação';
+  String get locationPermissionRequiredForAttendance =>
+      'Permissão de localização necessária para participação';
 
   @override
   String get logIn => 'Conecte-se';
 
   @override
-  String get logInToManageYourDigitalCardAndNetwork => 'Faça login para gerenciar seu cartão digital e rede.';
+  String get logInToManageYourDigitalCardAndNetwork =>
+      'Faça login para gerenciar seu cartão digital e rede.';
 
   @override
   String get logInWithQRCode => 'Faça login com código QR';
@@ -6985,7 +7369,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get manageEmployees => 'Gerenciar funcionários';
 
   @override
-  String get manageYourPersonalDetailsOtherPreferences => 'Gerencie seus dados pessoais e outras preferências';
+  String get manageYourPersonalDetailsOtherPreferences =>
+      'Gerencie seus dados pessoais e outras preferências';
 
   @override
   String get markCompleted => 'Marcar como concluído';
@@ -7036,7 +7421,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get noActiveLinksConnectedYet => 'Nenhum link ativo conectado ainda';
 
   @override
-  String get noActiveRewardProgramsAvailable => 'Nenhum programa de recompensa ativo disponível.';
+  String get noActiveRewardProgramsAvailable =>
+      'Nenhum programa de recompensa ativo disponível.';
 
   @override
   String get noEmployeeCardsYet => 'Ainda não há cartões de funcionários';
@@ -7057,7 +7443,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get noLinkTemplatesAvailable => 'Nenhum modelo de link disponível';
 
   @override
-  String get noNewNotificationsAtThisTime => 'Nenhuma notificação nova neste momento.';
+  String get noNewNotificationsAtThisTime =>
+      'Nenhuma notificação nova neste momento.';
 
   @override
   String get noOneHasViewedYourProfileYet => 'Ninguém viu seu perfil ainda.';
@@ -7066,10 +7453,12 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get noPendingInvitations => 'Nenhum convite pendente';
 
   @override
-  String get noProgramsAssignedYetAddProgramsBelow => 'Nenhum programa atribuído ainda. Adicione programas abaixo.';
+  String get noProgramsAssignedYetAddProgramsBelow =>
+      'Nenhum programa atribuído ainda. Adicione programas abaixo.';
 
   @override
-  String get noQRCodeFoundInThisImage => 'Nenhum código QR encontrado nesta imagem.';
+  String get noQRCodeFoundInThisImage =>
+      'Nenhum código QR encontrado nesta imagem.';
 
   @override
   String get noRewardProgramsYet => 'Ainda não há programas de recompensa';
@@ -7084,7 +7473,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get none => 'Nenhum';
 
   @override
-  String get notAvailableOnYourCurrentPlan => 'Não disponível no seu plano atual';
+  String get notAvailableOnYourCurrentPlan =>
+      'Não disponível no seu plano atual';
 
   @override
   String get notCheckedInYet => 'Ainda não fiz check-in';
@@ -7099,16 +7489,20 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get notificationCleared => 'Notificação apagada';
 
   @override
-  String get onlyCoverProfilePhotoNameAndBioAreEditableHere => 'Apenas capa, foto de perfil, nome e biografia são editáveis ​​aqui.';
+  String get onlyCoverProfilePhotoNameAndBioAreEditableHere =>
+      'Apenas capa, foto de perfil, nome e biografia são editáveis ​​aqui.';
 
   @override
-  String get onlyEnabledLinksShowWhenSomeoneScansThisCard => 'Somente links habilitados são exibidos quando alguém escaneia este cartão.';
+  String get onlyEnabledLinksShowWhenSomeoneScansThisCard =>
+      'Somente links habilitados são exibidos quando alguém escaneia este cartão.';
 
   @override
-  String get onlyPublicProfilesAreShown => 'Apenas perfis públicos são mostrados';
+  String get onlyPublicProfilesAreShown =>
+      'Apenas perfis públicos são mostrados';
 
   @override
-  String get onlyThisPhoneIsUsingYourAccountRightNow => 'Somente este telefone está usando sua conta no momento.';
+  String get onlyThisPhoneIsUsingYourAccountRightNow =>
+      'Somente este telefone está usando sua conta no momento.';
 
   @override
   String get orCONTINUEWITH => 'OU CONTINUAR COM';
@@ -7153,7 +7547,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get photos => 'Fotos';
 
   @override
-  String get pickAReadyMadeColorThemeQuickAndClean => 'Escolha um tema de cores pronto. Rápido e limpo.';
+  String get pickAReadyMadeColorThemeQuickAndClean =>
+      'Escolha um tema de cores pronto. Rápido e limpo.';
 
   @override
   String get pickColor => 'Escolha a cor';
@@ -7168,13 +7563,15 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get planExpired => 'Plano expirado';
 
   @override
-  String get pleaseEnterBusinessDetailsToContinue => 'Insira os detalhes da empresa para continuar';
+  String get pleaseEnterBusinessDetailsToContinue =>
+      'Insira os detalhes da empresa para continuar';
 
   @override
   String get pleaseEnterItemName => 'Por favor insira o nome do item';
 
   @override
-  String get pleaseProvideYourBusinessDetailsBeforeUpgrading => 'Forneça os detalhes da sua empresa antes de atualizar.';
+  String get pleaseProvideYourBusinessDetailsBeforeUpgrading =>
+      'Forneça os detalhes da sua empresa antes de atualizar.';
 
   @override
   String get pleaseSelectACategory => 'Selecione uma categoria';
@@ -7183,13 +7580,15 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get pleaseSelectATimeSlot => 'Selecione um horário';
 
   @override
-  String get pleaseSetWorkLocationFirst => 'Defina primeiro o local de trabalho';
+  String get pleaseSetWorkLocationFirst =>
+      'Defina primeiro o local de trabalho';
 
   @override
   String get png => 'PNG';
 
   @override
-  String get pointYourCameraAtTheQRCodeOnTheOtherDevice => 'Aponte sua câmera para o código QR no outro dispositivo';
+  String get pointYourCameraAtTheQRCodeOnTheOtherDevice =>
+      'Aponte sua câmera para o código QR no outro dispositivo';
 
   @override
   String get points => 'Pontos';
@@ -7303,7 +7702,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get reset => 'Reiniciar';
 
   @override
-  String get rewardCompletedShowThisCardToRedeem => 'Recompensa concluída! Mostre este cartão para resgatar.';
+  String get rewardCompletedShowThisCardToRedeem =>
+      'Recompensa concluída! Mostre este cartão para resgatar.';
 
   @override
   String get rewardCompleted => 'Recompensa concluída! 🎉';
@@ -7339,19 +7739,23 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get save2 => 'SALVAR';
 
   @override
-  String get saveYourWorkIDCardToPhoneOrWallet => 'Salve seu cartão de identificação de trabalho no telefone ou na carteira';
+  String get saveYourWorkIDCardToPhoneOrWallet =>
+      'Salve seu cartão de identificação de trabalho no telefone ou na carteira';
 
   @override
   String get scan => 'Digitalizar';
 
   @override
-  String get scanAUserQRCodeToAddThemAsEmployee => 'Digitalize o código QR de um usuário para adicioná-lo como funcionário';
+  String get scanAUserQRCodeToAddThemAsEmployee =>
+      'Digitalize o código QR de um usuário para adicioná-lo como funcionário';
 
   @override
-  String get scanAnyUserOrBusinessQRToAddEmployee => 'Digitalize qualquer QR de usuário ou empresa para adicionar funcionário';
+  String get scanAnyUserOrBusinessQRToAddEmployee =>
+      'Digitalize qualquer QR de usuário ou empresa para adicionar funcionário';
 
   @override
-  String get scanBusinessQRToRedeem => 'Digitalize o QR comercial para resgatar';
+  String get scanBusinessQRToRedeem =>
+      'Digitalize o QR comercial para resgatar';
 
   @override
   String get scanCustomerQRCode => 'Digitalize o código QR do cliente';
@@ -7369,7 +7773,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get scanQRCode => 'Digitalize o código QR';
 
   @override
-  String get scanQRShownOnTheOtherDevice => 'Digitalize o QR mostrado no outro dispositivo';
+  String get scanQRShownOnTheOtherDevice =>
+      'Digitalize o QR mostrado no outro dispositivo';
 
   @override
   String get scanToInvite => 'Digitalizar para convidar';
@@ -7387,7 +7792,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get seeAll => 'Ver tudo';
 
   @override
-  String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded => 'Veja que todas as atividades são ridicularizadas. Novas atividades aparecerão à medida que leads forem adicionados.';
+  String get seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded =>
+      'Veja que todas as atividades são ridicularizadas. Novas atividades aparecerão à medida que leads forem adicionados.';
 
   @override
   String get selectDate => 'Selecione a data';
@@ -7399,10 +7805,12 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get selectRegion => 'Selecione a região';
 
   @override
-  String get setTextUnderTheLinkIcon => 'Defina o texto abaixo do ícone do link';
+  String get setTextUnderTheLinkIcon =>
+      'Defina o texto abaixo do ícone do link';
 
   @override
-  String get setYourOwnColorsPhotosAndBackground => 'Defina suas próprias cores, fotos e plano de fundo.';
+  String get setYourOwnColorsPhotosAndBackground =>
+      'Defina suas próprias cores, fotos e plano de fundo.';
 
   @override
   String get share => 'Compartilhar';
@@ -7411,7 +7819,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get shareCard => 'Compartilhar cartão';
 
   @override
-  String get shareDifferentLinksOnEachCard => 'Compartilhe links diferentes em cada cartão';
+  String get shareDifferentLinksOnEachCard =>
+      'Compartilhe links diferentes em cada cartão';
 
   @override
   String get shareProfile => 'Compartilhar perfil';
@@ -7468,7 +7877,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get startHour => 'Hora de início';
 
   @override
-  String get startNetworkingSmarterWithBarqody => 'Comece a fazer networking de maneira mais inteligente com o Barqody.';
+  String get startNetworkingSmarterWithBarqody =>
+      'Comece a fazer networking de maneira mais inteligente com o Barqody.';
 
   @override
   String get stats => 'Estatísticas';
@@ -7480,22 +7890,27 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get subscription => 'Subscrição';
 
   @override
-  String get subscriptionRequestSubmitted => 'Solicitação de assinatura enviada';
+  String get subscriptionRequestSubmitted =>
+      'Solicitação de assinatura enviada';
 
   @override
-  String get subscriptionRequestSubmitted2 => 'Solicitação de assinatura enviada.';
+  String get subscriptionRequestSubmitted2 =>
+      'Solicitação de assinatura enviada.';
 
   @override
   String get swipeToBrowseCards => 'Deslize para navegar pelos cartões';
 
   @override
-  String get takeAQuickSelfieForAttendanceVerification => 'Tire uma selfie rápida para verificação de presença';
+  String get takeAQuickSelfieForAttendanceVerification =>
+      'Tire uma selfie rápida para verificação de presença';
 
   @override
-  String get tapSocialLinksAboveToAddAndActivateProfiles => 'Toque em “Links Sociais” acima para adicionar e ativar perfis.';
+  String get tapSocialLinksAboveToAddAndActivateProfiles =>
+      'Toque em “Links Sociais” acima para adicionar e ativar perfis.';
 
   @override
-  String get tapOnTheMapOrUseYourCurrentLocation => 'Toque no mapa ou use sua localização atual';
+  String get tapOnTheMapOrUseYourCurrentLocation =>
+      'Toque no mapa ou use sua localização atual';
 
   @override
   String get tapToAddPhoto => 'Toque para adicionar foto';
@@ -7516,13 +7931,16 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get templates => 'Modelos';
 
   @override
-  String get thankYouFeedbackSubmissionsAreMockOnly => 'Obrigado! Os envios de feedback são apenas simulados.';
+  String get thankYouFeedbackSubmissionsAreMockOnly =>
+      'Obrigado! Os envios de feedback são apenas simulados.';
 
   @override
-  String get thisCardAndItsQRCodeWillBeRemoved => 'Este cartão e seu código QR serão removidos.';
+  String get thisCardAndItsQRCodeWillBeRemoved =>
+      'Este cartão e seu código QR serão removidos.';
 
   @override
-  String get thisFeatureIsExclusivelyAvailableToBusinessUsers => 'Este recurso está disponível exclusivamente para usuários empresariais.';
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers =>
+      'Este recurso está disponível exclusivamente para usuários empresariais.';
 
   @override
   String get thisIsAlreadyYourUsername => 'Este já é o seu nome de usuário.';
@@ -7531,7 +7949,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get thisMonth => 'Este mês';
 
   @override
-  String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments => 'Isso excluirá permanentemente este programa de recompensas e todas as suas inscrições.';
+  String get thisWillPermanentlyDeleteThisRewardProgramAndAllItsEnrollments =>
+      'Isso excluirá permanentemente este programa de recompensas e todas as suas inscrições.';
 
   @override
   String get todayIsYourWeekend => 'Hoje é seu fim de semana';
@@ -7546,10 +7965,12 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get trackYourOrders => 'Acompanhe seus pedidos';
 
   @override
-  String get transactionReferenceOptional => 'Referência de transação (opcional)';
+  String get transactionReferenceOptional =>
+      'Referência de transação (opcional)';
 
   @override
-  String get transactionReferenceNumberOptional => 'Número de referência da transação (opcional)';
+  String get transactionReferenceNumberOptional =>
+      'Número de referência da transação (opcional)';
 
   @override
   String get tryAgain => 'Tente novamente';
@@ -7564,13 +7985,16 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get type => 'Tipo';
 
   @override
-  String get typeAtLeast2CharactersOfAUsernameToSearch => 'Digite pelo menos 2 caracteres de um nome de usuário para pesquisar.';
+  String get typeAtLeast2CharactersOfAUsernameToSearch =>
+      'Digite pelo menos 2 caracteres de um nome de usuário para pesquisar.';
 
   @override
-  String get typeThe8CharacterCodeShownUnderTheQR => 'Digite o código de 8 caracteres mostrado abaixo do QR.';
+  String get typeThe8CharacterCodeShownUnderTheQR =>
+      'Digite o código de 8 caracteres mostrado abaixo do QR.';
 
   @override
-  String get underDevelopmentLoginViaEmailPasswordInstead => 'Em Desenvolvimento - Faça login por e-mail/senha.';
+  String get underDevelopmentLoginViaEmailPasswordInstead =>
+      'Em Desenvolvimento - Faça login por e-mail/senha.';
 
   @override
   String get unstampIcon => 'Ícone de desmarcação';
@@ -7588,10 +8012,13 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get useATemplate => 'Use um modelo';
 
   @override
-  String get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime => 'Use o Barqody em outros telefones ou tablets. Você permanece no controle – desconecte-se de qualquer dispositivo a qualquer momento.';
+  String
+  get useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime =>
+      'Use o Barqody em outros telefones ou tablets. Você permanece no controle – desconecte-se de qualquer dispositivo a qualquer momento.';
 
   @override
-  String get useBarqodyOnYourPhoneToScanThisCode => 'Use o Barqody no seu telefone para escanear este código';
+  String get useBarqodyOnYourPhoneToScanThisCode =>
+      'Use o Barqody no seu telefone para escanear este código';
 
   @override
   String get useDefaultIcon => 'Usar ícone padrão';
@@ -7606,7 +8033,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get version101 => 'Versão: 1.0.1';
 
   @override
-  String get viewAndUpdateOrdersFromYourCustomers => 'Visualize e atualize pedidos de seus clientes';
+  String get viewAndUpdateOrdersFromYourCustomers =>
+      'Visualize e atualize pedidos de seus clientes';
 
   @override
   String get viewProfile => 'Ver perfil';
@@ -7624,19 +8052,25 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get welcomeToAccountCenter => 'Bem-vindo à Central de Contas';
 
   @override
-  String get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe => 'Quando uma empresa adiciona você como funcionário, seu cartão de funcionário aparecerá aqui. Você pode personalizar seu design a qualquer momento.';
+  String
+  get whenABusinessAddsYouAsEmployeeYourEmployeeCardWillAppearHereYouCanCustomizeItsDe =>
+      'Quando uma empresa adiciona você como funcionário, seu cartão de funcionário aparecerá aqui. Você pode personalizar seu design a qualquer momento.';
 
   @override
-  String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere => 'Quando uma empresa inscreve você em seu programa de recompensas, isso aparecerá aqui.';
+  String get whenABusinessEnrollsYouInTheirRewardProgramItWillAppearHere =>
+      'Quando uma empresa inscreve você em seu programa de recompensas, isso aparecerá aqui.';
 
   @override
-  String get whenABusinessInvitesYouToTheirTeamItWillAppearHere => 'Quando uma empresa convida você para sua equipe, isso aparecerá aqui.';
+  String get whenABusinessInvitesYouToTheirTeamItWillAppearHere =>
+      'Quando uma empresa convida você para sua equipe, isso aparecerá aqui.';
 
   @override
-  String get whenTurnedOffThisLinkWontBeShownOnYourProfile => 'Quando desativado, este link não será mostrado no seu perfil';
+  String get whenTurnedOffThisLinkWontBeShownOnYourProfile =>
+      'Quando desativado, este link não será mostrado no seu perfil';
 
   @override
-  String get writeSomethingAboutYouOrYourBrand => 'Escreva algo sobre você ou sua marca';
+  String get writeSomethingAboutYouOrYourBrand =>
+      'Escreva algo sobre você ou sua marca';
 
   @override
   String get yearly => 'Anual';
@@ -7648,16 +8082,19 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get yourCategories => 'Suas categorias';
 
   @override
-  String get yourEmployeeCardsFromEmployers => 'Seus cartões de funcionário dos empregadores';
+  String get yourEmployeeCardsFromEmployers =>
+      'Seus cartões de funcionário dos empregadores';
 
   @override
-  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed => 'Seu Café Grátis foi resgatado com sucesso.';
+  String get yourFreeCoffeeHasBeenSuccessfullyRedeemed =>
+      'Seu Café Grátis foi resgatado com sucesso.';
 
   @override
   String get yourRewards => 'Suas recompensas';
 
   @override
-  String get yourSubscriptionHasEndedTapTheInfoIconForDetails => 'Sua assinatura terminou. Toque no ícone de informações para obter detalhes.';
+  String get yourSubscriptionHasEndedTapTheInfoIconForDetails =>
+      'Sua assinatura terminou. Toque no ícone de informações para obter detalhes.';
 
   @override
   String get yourname => 'seunome';
@@ -7705,7 +8142,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get addLink2 => 'Adicionar link';
 
   @override
-  String get addLinksToYourProfileBelow2 => 'Adicione links ao seu perfil abaixo';
+  String get addLinksToYourProfileBelow2 =>
+      'Adicione links ao seu perfil abaixo';
 
   @override
   String get addPhoto => 'Adicionar foto';
@@ -7735,7 +8173,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get alwaysUpToDate => 'Sempre atualizado';
 
   @override
-  String get areYouSureYouWantToLogOutOfBarqody => 'Tem certeza de que deseja sair do Barqody?';
+  String get areYouSureYouWantToLogOutOfBarqody =>
+      'Tem certeza de que deseja sair do Barqody?';
 
   @override
   String get attendanceFailed => 'Falha no comparecimento';
@@ -7747,7 +8186,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get bookingFailed => 'Falha na reserva';
 
   @override
-  String get brieflyDescribeThisReward => 'Descreva resumidamente esta recompensa...';
+  String get brieflyDescribeThisReward =>
+      'Descreva resumidamente esta recompensa...';
 
   @override
   String get businessVerified => 'Empresa verificada';
@@ -7819,7 +8259,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get chooseTemplate2 => 'Escolha o modelo';
 
   @override
-  String get contactCardBusinessAddress => 'Endereço comercial do cartão de contato';
+  String get contactCardBusinessAddress =>
+      'Endereço comercial do cartão de contato';
 
   @override
   String get contactCardCompanyName => 'Nome da empresa do cartão de contato';
@@ -7828,7 +8269,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get contactCardEmail => 'E-mail do cartão de contato';
 
   @override
-  String get contactCardHomeAddress => 'Endereço residencial do cartão de contato';
+  String get contactCardHomeAddress =>
+      'Endereço residencial do cartão de contato';
 
   @override
   String get contactCardPhone => 'Telefone do cartão de contato';
@@ -7846,22 +8288,27 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get couldNotLinkDevice => 'Não foi possível vincular o dispositivo';
 
   @override
-  String get couldNotLogOutDevice => 'Não foi possível desconectar o dispositivo';
+  String get couldNotLogOutDevice =>
+      'Não foi possível desconectar o dispositivo';
 
   @override
-  String get couldNotOpenGoogleWallet => 'Não foi possível abrir a Carteira virtual do Google';
+  String get couldNotOpenGoogleWallet =>
+      'Não foi possível abrir a Carteira virtual do Google';
 
   @override
-  String get couldNotSaveCardDesign => 'Não foi possível salvar o design do cartão';
+  String get couldNotSaveCardDesign =>
+      'Não foi possível salvar o design do cartão';
 
   @override
-  String get couldNotUpdateProfileVisibility => 'Não foi possível atualizar a visibilidade do perfil';
+  String get couldNotUpdateProfileVisibility =>
+      'Não foi possível atualizar a visibilidade do perfil';
 
   @override
   String get createGallery => 'Criar galeria';
 
   @override
-  String get createACardToShareYourProfile => 'Crie um cartão para compartilhar seu perfil';
+  String get createACardToShareYourProfile =>
+      'Crie um cartão para compartilhar seu perfil';
 
   @override
   String get createCard => 'Criar cartão';
@@ -7870,13 +8317,15 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get customBank => 'Banco personalizado';
 
   @override
-  String get customersCanBeEnrolledAndStamped => 'Os clientes podem ser cadastrados e carimbados';
+  String get customersCanBeEnrolledAndStamped =>
+      'Os clientes podem ser cadastrados e carimbados';
 
   @override
   String get customizeCard => 'Personalizar cartão';
 
   @override
-  String get describeYourLoyaltyProgram => 'Descreva seu programa de fidelidade';
+  String get describeYourLoyaltyProgram =>
+      'Descreva seu programa de fidelidade';
 
   @override
   String get displayName => 'Nome de exibição';
@@ -7915,7 +8364,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get enterAValidEmail => 'Insira um e-mail válido';
 
   @override
-  String get enterBioForTheContactCard => 'Insira a biografia para o cartão de contato';
+  String get enterBioForTheContactCard =>
+      'Insira a biografia para o cartão de contato';
 
   @override
   String get enterProgramName => 'Digite o nome do programa';
@@ -7972,7 +8422,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get failedToSaveQRCode => 'Falha ao salvar o código QR.';
 
   @override
-  String get failedToSaveBusinessDetails => 'Falha ao salvar detalhes da empresa';
+  String get failedToSaveBusinessDetails =>
+      'Falha ao salvar detalhes da empresa';
 
   @override
   String get failedToUpdateStatus => 'Falha ao atualizar o status';
@@ -7987,7 +8438,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get freeDessert => 'Sobremesa grátis';
 
   @override
-  String get galleryPermissionRequiredPleaseEnableItInSettings => 'É necessária permissão da galeria. Por favor, habilite-o em Configurações.';
+  String get galleryPermissionRequiredPleaseEnableItInSettings =>
+      'É necessária permissão da galeria. Por favor, habilite-o em Configurações.';
 
   @override
   String get getStarted => 'Comece';
@@ -7996,13 +8448,16 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get go2 => 'Ir';
 
   @override
-  String get goToToolsLinkedDevices => 'Vá para Ferramentas → Dispositivos vinculados';
+  String get goToToolsLinkedDevices =>
+      'Vá para Ferramentas → Dispositivos vinculados';
 
   @override
-  String get googleWalletSetupPending => 'Configuração da Carteira virtual do Google pendente.';
+  String get googleWalletSetupPending =>
+      'Configuração da Carteira virtual do Google pendente.';
 
   @override
-  String get googleWalletSetupPendingProfileLinkCopied => 'Configuração da Carteira virtual do Google pendente. Link do perfil copiado.';
+  String get googleWalletSetupPendingProfileLinkCopied =>
+      'Configuração da Carteira virtual do Google pendente. Link do perfil copiado.';
 
   @override
   String get growYourBusiness => 'Expanda o seu negócio';
@@ -8023,7 +8478,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get invitationDeclined => 'Convite recusado';
 
   @override
-  String get invitationSentEmployeeWillBeAddedAfterTheyAccept => 'Convite enviado. O funcionário será adicionado após aceitar.';
+  String get invitationSentEmployeeWillBeAddedAfterTheyAccept =>
+      'Convite enviado. O funcionário será adicionado após aceitar.';
 
   @override
   String get inviteEmployee => 'Convidar funcionário';
@@ -8041,10 +8497,12 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get logInWithQR => 'Faça login com QR';
 
   @override
-  String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone => 'Sair apenas desta conta? Outras contas permanecerão neste telefone.';
+  String get logOutOfThisAccountOnlyOtherAccountsWillStayOnThisPhone =>
+      'Sair apenas desta conta? Outras contas permanecerão neste telefone.';
 
   @override
-  String get loggedInWithGoogleDemoAccountSaimY => 'Conectado com Google (conta demo: Saim Y)';
+  String get loggedInWithGoogleDemoAccountSaimY =>
+      'Conectado com Google (conta demo: Saim Y)';
 
   @override
   String get loggingYouIn => 'Fazendo login…';
@@ -8080,7 +8538,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get noDetailsYet => 'Ainda não há detalhes';
 
   @override
-  String get noLinksAddedYetNTapAddLinkToGetStarted => 'Nenhum link adicionado ainda.\nToque em \"Adicionar link\" para começar.';
+  String get noLinksAddedYetNTapAddLinkToGetStarted =>
+      'Nenhum link adicionado ainda.\nToque em \"Adicionar link\" para começar.';
 
   @override
   String get noMatches => 'Nenhuma correspondência';
@@ -8098,7 +8557,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get oneTapToShare => 'Um toque para compartilhar';
 
   @override
-  String get openBarqodyOnYourOtherPhone => 'Abra o Barqody no seu outro telefone';
+  String get openBarqodyOnYourOtherPhone =>
+      'Abra o Barqody no seu outro telefone';
 
   @override
   String get openCamera => 'Abrir câmera';
@@ -8110,10 +8570,12 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get paperCard2 => 'Cartão de papel';
 
   @override
-  String get passwordMustBeAtLeast4Characters => 'A senha deve ter pelo menos 4 caracteres';
+  String get passwordMustBeAtLeast4Characters =>
+      'A senha deve ter pelo menos 4 caracteres';
 
   @override
-  String get passwordMustBeAtLeast6Characters => 'A senha deve ter pelo menos 6 caracteres';
+  String get passwordMustBeAtLeast6Characters =>
+      'A senha deve ter pelo menos 6 caracteres';
 
   @override
   String get phoneNumber => 'Número de telefone';
@@ -8134,10 +8596,12 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get pleaseEnterAUsername => 'Por favor insira um nome de usuário';
 
   @override
-  String get pleaseEnterAValidEmailAddress => 'Por favor insira um endereço de e-mail válido';
+  String get pleaseEnterAValidEmailAddress =>
+      'Por favor insira um endereço de e-mail válido';
 
   @override
-  String get pleaseEnterAValidNumberOfStamps => 'Insira um número válido de selos';
+  String get pleaseEnterAValidNumberOfStamps =>
+      'Insira um número válido de selos';
 
   @override
   String get pleaseEnterYourEmail => 'Por favor insira seu e-mail';
@@ -8149,13 +8613,16 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get pleaseEnterYourPassword => 'Por favor digite sua senha';
 
   @override
-  String get pointTheCameraAtAQRCodeToScanAutomatically => 'Aponte a câmera para um código QR para digitalizar automaticamente.';
+  String get pointTheCameraAtAQRCodeToScanAutomatically =>
+      'Aponte a câmera para um código QR para digitalizar automaticamente.';
 
   @override
-  String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton => 'Aponte a câmera para um crachá de evento e toque no botão Câmera.';
+  String get pointTheCameraAtAnEventBadgeAndTapTheCameraButton =>
+      'Aponte a câmera para um crachá de evento e toque no botão Câmera.';
 
   @override
-  String get pointTheCameraAtPaperCardAndTapTheCameraButton => 'Aponte a câmera para o cartão de papel e toque no botão Câmera.';
+  String get pointTheCameraAtPaperCardAndTapTheCameraButton =>
+      'Aponte a câmera para o cartão de papel e toque no botão Câmera.';
 
   @override
   String get preparingQRCode => 'Preparando código QR…';
@@ -8173,7 +8640,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get qrCodeExpired => 'Código QR expirou';
 
   @override
-  String get qrCodeExpiredTapRefresh => 'O código QR expirou. Toque em atualizar.';
+  String get qrCodeExpiredTapRefresh =>
+      'O código QR expirou. Toque em atualizar.';
 
   @override
   String get realEstate => 'Imobiliária';
@@ -8182,7 +8650,9 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get receiptAttached => 'Recibo anexado';
 
   @override
-  String get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData => 'Renove sua assinatura para restaurar o acesso total aos seus recursos e dados premium.';
+  String
+  get renewYourSubscriptionToRestoreFullAccessToYourPremiumFeaturesAndData =>
+      'Renove sua assinatura para restaurar o acesso total aos seus recursos e dados premium.';
 
   @override
   String get retakePhoto => 'Retirar foto';
@@ -8218,10 +8688,12 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get saveContact2 => 'Salvar contato';
 
   @override
-  String get savedLocallySyncMayHaveFailed => 'Salvo localmente. A sincronização pode ter falhado.';
+  String get savedLocallySyncMayHaveFailed =>
+      'Salvo localmente. A sincronização pode ter falhado.';
 
   @override
-  String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork => 'Digitalize um código QR ou adicione alguém que você conheceu para construir sua rede.';
+  String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
+      'Digitalize um código QR ou adicione alguém que você conheceu para construir sua rede.';
 
   @override
   String get scannedViaQR => 'Digitalizado via QR';
@@ -8278,10 +8750,12 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get streetName => 'Nome da rua';
 
   @override
-  String get switchToABusinessAccountToUnlockFullAccess => 'Mude para uma conta comercial para desbloquear acesso total.';
+  String get switchToABusinessAccountToUnlockFullAccess =>
+      'Mude para uma conta comercial para desbloquear acesso total.';
 
   @override
-  String get tapLinkADeviceAndScanThisQR => 'Toque em Vincular um dispositivo e leia este QR';
+  String get tapLinkADeviceAndScanThisQR =>
+      'Toque em Vincular um dispositivo e leia este QR';
 
   @override
   String get tapToAddImage => 'Toque para adicionar imagem';
@@ -8290,7 +8764,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get tapToChange => 'Toque para alterar';
 
   @override
-  String get templateAppliedLocallySyncFailed => 'Modelo aplicado localmente. Falha na sincronização.';
+  String get templateAppliedLocallySyncFailed =>
+      'Modelo aplicado localmente. Falha na sincronização.';
 
   @override
   String get textColor => 'Cor do texto';
@@ -8299,7 +8774,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get thisAccount => 'Esta conta';
 
   @override
-  String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 => 'Este recurso está disponível exclusivamente para usuários empresariais.';
+  String get thisFeatureIsExclusivelyAvailableToBusinessUsers2 =>
+      'Este recurso está disponível exclusivamente para usuários empresariais.';
 
   @override
   String get thisPersonIsOnYourTeam => 'Esta pessoa está na sua equipe';
@@ -8311,16 +8787,20 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get totalStamps => 'Total de Selos';
 
   @override
-  String get tryADifferentNameEmailOrCompany => 'Experimente um nome, e-mail ou empresa diferente.';
+  String get tryADifferentNameEmailOrCompany =>
+      'Experimente um nome, e-mail ou empresa diferente.';
 
   @override
-  String get unableToSaveProfileTryAgain => 'Não foi possível salvar o perfil. Tente novamente.';
+  String get unableToSaveProfileTryAgain =>
+      'Não foi possível salvar o perfil. Tente novamente.';
 
   @override
-  String get unableToUpdateUsernameTryAgain => 'Não foi possível atualizar o nome de usuário. Tente novamente.';
+  String get unableToUpdateUsernameTryAgain =>
+      'Não foi possível atualizar o nome de usuário. Tente novamente.';
 
   @override
-  String get underDevelopmentLoginViaEmailPasswordInstead2 => 'Em Desenvolvimento - Faça login por e-mail/senha.';
+  String get underDevelopmentLoginViaEmailPasswordInstead2 =>
+      'Em Desenvolvimento - Faça login por e-mail/senha.';
 
   @override
   String get unknownUser => 'Usuário desconhecido';
@@ -8350,16 +8830,20 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get useMyLocation => 'Usar minha localização';
 
   @override
-  String get useLettersNumbersUnderscoresOrHyphensOnly => 'Use apenas letras, números, sublinhados ou hífens';
+  String get useLettersNumbersUnderscoresOrHyphensOnly =>
+      'Use apenas letras, números, sublinhados ou hífens';
 
   @override
-  String get usernameMustBeAtLeast3Characters => 'O nome de usuário deve ter pelo menos 3 caracteres';
+  String get usernameMustBeAtLeast3Characters =>
+      'O nome de usuário deve ter pelo menos 3 caracteres';
 
   @override
-  String get usernameMustBeAtMost30Characters => 'O nome de usuário deve ter no máximo 30 caracteres';
+  String get usernameMustBeAtMost30Characters =>
+      'O nome de usuário deve ter no máximo 30 caracteres';
 
   @override
-  String get usernameUpdatedSuccessfully => 'Nome de usuário atualizado com sucesso!';
+  String get usernameUpdatedSuccessfully =>
+      'Nome de usuário atualizado com sucesso!';
 
   @override
   String get waitingForThemToAccept => 'Esperando que eles aceitem';
@@ -8374,19 +8858,23 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get workLocation => 'Local de trabalho';
 
   @override
-  String get yourPROSubscriptionHasExpiredNN => 'Sua assinatura PRO expirou.\n\n';
+  String get yourPROSubscriptionHasExpiredNN =>
+      'Sua assinatura PRO expirou.\n\n';
 
   @override
   String get yourPROSubscriptionHasExpired => 'Sua assinatura PRO expirou.';
 
   @override
-  String get premiumFeaturesAreCurrentlyDisabled => 'Os recursos premium estão desativados no momento.';
+  String get premiumFeaturesAreCurrentlyDisabled =>
+      'Os recursos premium estão desativados no momento.';
 
   @override
-  String get proLinksAreHiddenFromYourPublicProfile => 'Os links profissionais ficam ocultos no seu perfil público.';
+  String get proLinksAreHiddenFromYourPublicProfile =>
+      'Os links profissionais ficam ocultos no seu perfil público.';
 
   @override
-  String get yourBusinessDetailsAndDataAreSafe => 'Os detalhes e dados da sua empresa estão seguros.';
+  String get yourBusinessDetailsAndDataAreSafe =>
+      'Os detalhes e dados da sua empresa estão seguros.';
 
   @override
   String addCatalogItem(String label) {

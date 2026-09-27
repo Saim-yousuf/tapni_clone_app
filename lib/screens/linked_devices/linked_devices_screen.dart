@@ -7,6 +7,7 @@ import 'package:tapni_app/screens/linked_devices/link_device_scan_screen.dart';
 import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 
@@ -88,28 +89,63 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
 
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(WaUi.radiusLg),
-        ),
-        title: Text(context.l10n.logOutDevice, style: WaUi.title),
-        content: Text(
-          '“${_deviceLabel(device)}” will be removed from your account.',
-          style: WaUi.body,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(context.l10n.cancel, style: WaUi.bodyMedium),
+      barrierColor: Colors.black.withValues(alpha: 0.45),
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 28),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(BarqodyChrome.modalRadius),
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(
-              context.l10n.logOut2,
-              style: WaUi.bodyMedium.copyWith(color: Colors.redAccent),
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: CircleCloseButton(
+                  onTap: () => Navigator.pop(ctx, false),
+                ),
+              ),
+              AssetIcon(
+                'assets/images/png/logout-icon.png',
+                size: 48,
+                color: Colors.black,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                context.l10n.logOutDevice,
+                textAlign: TextAlign.center,
+                style: WaUi.toolsTitleOf(
+                  size: 18,
+                  weight: FontWeight.w700,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                '“${_deviceLabel(device)}” will be removed from your account.',
+                textAlign: TextAlign.center,
+                style: WaUi.body.copyWith(
+                  color: BarqodyChrome.bodyText,
+                  height: 1.4,
+                ),
+              ),
+              const SizedBox(height: 24),
+              PillButton(
+                label: context.l10n.cancel,
+                filled: false,
+                onPressed: () => Navigator.pop(ctx, false),
+              ),
+              const SizedBox(height: 12),
+              PillButton(
+                label: context.l10n.logOut2,
+                onPressed: () => Navigator.pop(ctx, true),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
 
@@ -142,160 +178,249 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
     return context.l10n.lastActiveAt(DateFormat('d MMM, h:mm a').format(dt));
   }
 
-  IconData _platformIcon(String? platform) {
-    final p = (platform ?? '').toLowerCase();
-    if (p.contains('ios') || p.contains('iphone')) return Icons.phone_iphone;
-    if (p.contains('android')) return Icons.phone_android;
-    if (p.contains('web') || p.contains('desktop')) return Icons.laptop_mac;
-    return Icons.devices_other_outlined;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: WaUi.toolsScaffold,
-      appBar: AppBar(
-        title: Text(context.l10n.linkedDevices),
-      ),
-      body: _loading
-          ? Center(
-              child: CircularProgressIndicator(color: WaUi.accent),
-            )
-          : RefreshIndicator(
-              color: WaUi.accent,
-              onRefresh: _load,
-              child: ListView(
-                padding: EdgeInsets.only(bottom: 32),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Row(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 8, 20, 16),
+                  const CircleBackButton(),
+                  Expanded(
                     child: Text(
-                      context.l10n.useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime,
-                      style: WaUi.body.copyWith(color: WaUi.secondaryText),
+                      context.l10n.linkedDevices,
+                      textAlign: TextAlign.center,
+                      style: WaUi.toolsTitleOf(
+                        size: 18,
+                        weight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Material(
-                      color: WaUi.chipBg,
-                      borderRadius: BorderRadius.circular(WaUi.radiusLg),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(WaUi.radiusLg),
-                        onTap: _linkDevice,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 18,
+                  const SizedBox(width: 40),
+                ],
+              ),
+            ),
+            Expanded(
+              child: _loading
+                  ? const Center(
+                      child: CircularProgressIndicator(color: Colors.black),
+                    )
+                  : RefreshIndicator(
+                      color: Colors.black,
+                      onRefresh: _load,
+                      child: ListView(
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+                        children: [
+                          Text(
+                            context.l10n
+                                .useBarqodyOnOtherPhonesOrTabletsYouStayInControlLogOutAnyDeviceAnytime,
+                            style: WaUi.body.copyWith(
+                              color: BarqodyChrome.bodyText,
+                              height: 1.45,
+                              fontSize: 14,
+                            ),
                           ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 44,
-                                height: 44,
-                                decoration: BoxDecoration(
-                                  color: WaUi.accent,
-                                  shape: BoxShape.circle,
+                          const SizedBox(height: 20),
+                          Material(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(18),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(18),
+                              onTap: _linkDevice,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 16,
                                 ),
-                                child: Icon(
-                                  Icons.qr_code_scanner,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              SizedBox(width: 14),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Row(
                                   children: [
-                                    Text(context.l10n.linkADevice, style: WaUi.listTitle),
-                                    SizedBox(height: 2),
-                                    Text(
-                                      context.l10n.scanQRShownOnTheOtherDevice,
-                                      style: WaUi.listSubtitle,
+                                    Container(
+                                      width: 44,
+                                      height: 44,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Image.asset(
+                                        'assets/images/png/scan-icon-1.png',
+                                        width: 24,
+                                        height: 24,
+                                        errorBuilder: (_, __, ___) =>
+                                            const Icon(
+                                          Icons.qr_code_scanner,
+                                          color: Colors.black,
+                                          size: 22,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 14),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            context.l10n.linkADevice,
+                                            style: WaUi.body.copyWith(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            context
+                                                .l10n.scanQRShownOnTheOtherDevice,
+                                            style: WaUi.caption.copyWith(
+                                              color: Colors.white
+                                                  .withValues(alpha: 0.85),
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.chevron_right_rounded,
+                                      color: Colors.white.withValues(alpha: 0.9),
                                     ),
                                   ],
                                 ),
                               ),
-                              Icon(
-                                Icons.chevron_right,
-                                color: WaUi.secondaryText,
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20, 28, 20, 8),
-                    child: Text(context.l10n.deviceStatus, style: WaUi.sectionHeader),
-                  ),
-                  if (_devices.isEmpty)
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 24,
-                      ),
-                      child: Text(
-                        context.l10n.onlyThisPhoneIsUsingYourAccountRightNow,
-                        style: WaUi.caption,
-                      ),
-                    )
-                  else
-                    ..._devices.map((device) {
-                      final isCurrent = device['isCurrent'] == true;
-                      return ListTile(
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 4,
-                        ),
-                        leading: CircleAvatar(
-                          backgroundColor: WaUi.navPill,
-                          child: Icon(
-                            _platformIcon(device['platform']?.toString()),
-                            color: WaUi.promoIconFg,
+                          const SizedBox(height: 28),
+                          Text(
+                            context.l10n.deviceStatus,
+                            style: WaUi.body.copyWith(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        title: Text(
-                          _deviceLabel(device),
-                          style: WaUi.listTitle,
-                        ),
-                        subtitle: Text(
-                          isCurrent
-                              ? context.l10n.thisDeviceWithName(
-                                  _formatActive(device['lastActiveAt']),
-                                )
-                              : _formatActive(device['lastActiveAt']),
-                          style: WaUi.listSubtitle,
-                        ),
-                        trailing: isCurrent
-                            ? Text(
-                                context.l10n.active,
+                          const SizedBox(height: 8),
+                          if (_devices.isEmpty)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 24),
+                              child: Text(
+                                context.l10n
+                                    .onlyThisPhoneIsUsingYourAccountRightNow,
                                 style: WaUi.caption.copyWith(
-                                  color: WaUi.accent,
-                                  fontWeight: FontWeight.w600,
+                                  color: BarqodyChrome.secondaryText,
                                 ),
-                              )
-                            : IconButton(
-                                icon: Icon(
-                                  Icons.logout,
-                                  color: Colors.redAccent,
-                                  size: 20,
-                                ),
-                                onPressed: () => _logoutDevice(device),
                               ),
-                      );
-                    }),
-                  Divider(height: 32),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      context.l10n.keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust,
-                      style: WaUi.caption,
+                            )
+                          else
+                            ..._devices.map((device) {
+                              final isCurrent = device['isCurrent'] == true;
+                              return InkWell(
+                                onTap: isCurrent
+                                    ? null
+                                    : () => _logoutDevice(device),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 46,
+                                        height: 46,
+                                        decoration: const BoxDecoration(
+                                          color: BarqodyChrome.circleBtn,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: Image.asset(
+                                          'assets/images/png/scan-icon-2.png',
+                                          width: 22,
+                                          height: 22,
+                                          color: Colors.black,
+                                          errorBuilder: (_, __, ___) =>
+                                              const Icon(
+                                            Icons.phone_android,
+                                            color: Colors.black,
+                                            size: 22,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 14),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              _deviceLabel(device),
+                                              style: WaUi.body.copyWith(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Text(
+                                              isCurrent
+                                                  ? context.l10n
+                                                      .thisDeviceWithName(
+                                                      _formatActive(
+                                                        device['lastActiveAt'],
+                                                      ),
+                                                    )
+                                                  : _formatActive(
+                                                      device['lastActiveAt'],
+                                                    ),
+                                              style: WaUi.caption.copyWith(
+                                                color:
+                                                    BarqodyChrome.secondaryText,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      if (isCurrent)
+                                        Text(
+                                          context.l10n.active,
+                                          style: WaUi.body.copyWith(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                          const SizedBox(height: 16),
+                          const Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: BarqodyChrome.divider,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            context.l10n
+                                .keepYourAccountSafeOnlyScanQRCodesWhenYouWantToLinkADeviceYouTrust,
+                            style: WaUi.body.copyWith(
+                              fontSize: 13,
+                              color: BarqodyChrome.bodyText,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
             ),
+          ],
+        ),
+      ),
     );
   }
 }

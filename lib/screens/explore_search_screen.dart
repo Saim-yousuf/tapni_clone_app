@@ -648,11 +648,11 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
     final primaryText = theme.colorScheme.onSurface;
     final secondaryText =
         isDark ? const Color(0xFFB0B3B8) : WaUi.secondaryText;
-    final searchBg = isDark ? const Color(0xFF3A3B3C) : WaUi.searchBg;
-    final hintColor = isDark ? const Color(0xFF8A8D91) : const Color(0xFF667781);
+    final searchBg = isDark ? const Color(0xFF3A3B3C) : const Color(0xFFF2F2F7);
+    final hintColor = isDark ? const Color(0xFF8A8D91) : const Color(0xFF8E8E93);
     final accent = isDark ? AppTheme.secondaryWhite : AppTheme.primaryBlack;
-    final chipBg = isDark ? const Color(0xFF2A2B2C) : const Color(0xFFF0F2F5);
-    final chipSelectedBg = isDark ? Colors.white : const Color(0xFF18181B);
+    final chipBg = isDark ? const Color(0xFF2A2B2C) : Colors.white;
+    final chipSelectedBg = isDark ? Colors.white : WaUi.buttonDark;
     final chipSelectedFg = isDark ? Colors.black : Colors.white;
 
     return Scaffold(
@@ -661,13 +661,29 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(4, 4, 8, 0),
+              padding: const EdgeInsets.fromLTRB(12, 8, 16, 0),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back, color: primaryText),
-                    onPressed: () => Navigator.of(context).pop(),
+                  Material(
+                    color: isDark
+                        ? const Color(0xFF3A3B3C)
+                        : const Color(0xFFF2F2F7),
+                    shape: const CircleBorder(),
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      onTap: () => Navigator.of(context).pop(),
+                      child: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 16,
+                          color: primaryText,
+                        ),
+                      ),
+                    ),
                   ),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: SizedBox(
                       height: 44,
@@ -676,7 +692,7 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
                         focusNode: _searchFocus,
                         autofocus: widget.autofocus,
                         style: WaUi.body.copyWith(
-                          fontSize: 16,
+                          fontSize: 15,
                           height: 1.2,
                           color: primaryText,
                         ),
@@ -691,9 +707,9 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: searchBg,
-                          hintText: 'Search items, services, catalog...',
+                          hintText: 'Search offers',
                           hintStyle: TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.w400,
                             color: hintColor,
                           ),
@@ -701,7 +717,7 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
                             padding: const EdgeInsets.only(left: 12, right: 6),
                             child: Icon(
                               Icons.search,
-                              size: 22,
+                              size: 20,
                               color: hintColor,
                             ),
                           ),
@@ -742,17 +758,26 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 4),
-                  IconButton(
-                    tooltip: 'Filters',
-                    onPressed: _openFilterSheet,
-                    icon: Badge(
-                      isLabelVisible: _hasActiveFilters,
-                      smallSize: 8,
-                      backgroundColor: const Color(0xFF10A375),
-                      child: Icon(
-                        Icons.tune_rounded,
-                        color: primaryText,
+                  const SizedBox(width: 10),
+                  Material(
+                    color: accent,
+                    shape: const CircleBorder(),
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      onTap: _openFilterSheet,
+                      child: SizedBox(
+                        width: 44,
+                        height: 44,
+                        child: Badge(
+                          isLabelVisible: _hasActiveFilters,
+                          smallSize: 8,
+                          backgroundColor: const Color(0xFF10A375),
+                          child: Icon(
+                            Icons.tune_rounded,
+                            color: isDark ? Colors.black : Colors.white,
+                            size: 20,
+                          ),
+                        ),
                       ),
                     ),
                   ),
