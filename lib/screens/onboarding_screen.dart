@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tapni_app/screens/phone_auth_screen.dart';
-import 'package:tapni_app/utils/theme.dart';
-import 'package:tapni_app/widgets/custom_button.dart';
-
+import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/providers/locale_provider.dart';
+import 'package:tapni_app/screens/app_language_screen.dart';
+import 'package:tapni_app/screens/phone_auth_screen.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
 
@@ -16,25 +19,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
 
   List<Map<String, dynamic>> _pages(BuildContext context) => [
-    {
-      'title': context.l10n.oneTapToShare,
-      'description': context.l10n.onboardingShareDescription,
-      'icon': Icons.contactless_rounded,
-      'gradient': [Color(0xFF1E1E24), Color(0xFF0D0D0E)],
-    },
-    {
-      'title': context.l10n.alwaysUpToDate,
-      'description': context.l10n.onboardingUpToDateDescription,
-      'icon': Icons.sync_lock_rounded,
-      'gradient': [Color(0xFF251F14), Color(0xFF0D0D0E)],
-    },
-    {
-      'title': context.l10n.smartContactCapture,
-      'description': context.l10n.onboardingSmartCaptureDescription,
-      'icon': Icons.people_outline_rounded,
-      'gradient': [Color(0xFF15221F), Color(0xFF0D0D0E)],
-    },
-  ];
+        {
+          'title': context.l10n.oneTapToShare,
+          'description': context.l10n.onboardingShareDescription,
+          'icon': Icons.contactless_rounded,
+        },
+        {
+          'title': context.l10n.alwaysUpToDate,
+          'description': context.l10n.onboardingUpToDateDescription,
+          'icon': Icons.sync_lock_rounded,
+        },
+        {
+          'title': context.l10n.smartContactCapture,
+          'description': context.l10n.onboardingSmartCaptureDescription,
+          'icon': Icons.people_outline_rounded,
+        },
+      ];
 
   @override
   void dispose() {
@@ -54,222 +54,233 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _goToLogin() {
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => const PhoneAuthScreen()));
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const PhoneAuthScreen()),
+    );
+  }
+
+  String _languageChipLabel(LocaleProvider localeProvider) {
+    if (localeProvider.isSystemLanguage) return 'English Us';
+    final lang = localeProvider.selectedLanguage;
+    if (lang == null) return 'English Us';
+    final name = lang.englishName;
+    final region = lang.code.contains('_') ? lang.code.split('_').last : 'Us';
+    if (name.toLowerCase().startsWith('english')) {
+      return 'English ${region[0].toUpperCase()}${region.substring(1).toLowerCase()}';
+    }
+    return lang.nativeName;
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final pages = _pages(context);
+    final localeProvider = context.watch<LocaleProvider>();
 
     return Scaffold(
-      body: Stack(
-        children: [
-          // Background Gradient Transition
-          AnimatedContainer(
-            duration: Duration(milliseconds: 400),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: isDark
-                    ? _pages(context)[_currentPage]['gradient']
-                    : [Colors.white, const Color(0xFFF3F3F7)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-          ),
-
-          SafeArea(
-            child: Column(
-              children: [
-                // Top Header with Skip Button
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
+      backgroundColor: AuthUi.bg,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 16, 0),
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/images/png/app_icon.png',
+                    width: 28,
+                    height: 28,
+                    fit: BoxFit.cover,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 32,
-                            height: 32,
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.goldGradient,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            // child: Icon(Icons.contactless, color: Colors.black, size: 18),
-                            child: Image.asset(
-                              "assets/images/png/app_icon.png",
-                              fit: BoxFit.cover,
-                            ),
+                  const SizedBox(width: 8),
+                  Text(
+                    context.l10n.appTitle.toUpperCase(),
+                    style: WaUi.headline.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.8,
+                      color: AuthUi.textPrimary,
+                    ),
+                  ),
+                  const Spacer(),
+                  Material(
+                    color: AuthUi.backBtnBg,
+                    borderRadius: BorderRadius.circular(20),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const AppLanguageScreen(),
                           ),
-                          SizedBox(width: 8),
-                          Text(
-                            context.l10n.appTitle,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: isDark ? Colors.white : Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                      TextButton(
-                        onPressed: _goToLogin,
-                        child: Text(
-                          context.l10n.skip,
-                          style: TextStyle(
-                            color: isDark
-                                ? AppTheme.textGreyDark
-                                : AppTheme.textGreyLight,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Slider Content
-                Expanded(
-                  child: PageView.builder(
-                    controller: _pageController,
-                    onPageChanged: (int index) {
-                      setState(() {
-                        _currentPage = index;
-                      });
-                    },
-                    itemCount: _pages(context).length,
-                    itemBuilder: (context, index) {
-                      final item = _pages(context)[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            // Beautiful interactive vector container instead of missing local image
-                            Container(
-                              width: 220,
-                              height: 220,
-                              decoration: BoxDecoration(
-                                color: (isDark ? Colors.white : Colors.black)
-                                    .withOpacity(0.03),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: (isDark
-                                      ? Colors.white24
-                                      : Colors.black12),
-                                  width: 1,
-                                ),
-                              ),
-                              child: Center(
-                                child: Container(
-                                  width: 160,
-                                  height: 160,
-                                  decoration: BoxDecoration(
-                                    gradient: AppTheme.goldGradient,
-                                    borderRadius: BorderRadius.circular(40),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppTheme.accentGold.withOpacity(
-                                          0.2,
-                                        ),
-                                        blurRadius: 30,
-                                        spreadRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  child: index == 0
-                                      ? Image.asset(
-                                          'assets/images/png/app_icon.png',
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Icon(
-                                          item['icon'],
-                                          size: 72,
-                                          color: AppTheme.secondaryWhite,
-                                        ),
-                                ),
+                            Image.asset(
+                              AuthUi.iconLanguage,
+                              width: 16,
+                              height: 16,
+                              color: AuthUi.textPrimary,
+                              errorBuilder: (_, __, ___) => const Icon(
+                                Icons.language_rounded,
+                                size: 16,
+                                color: AuthUi.textPrimary,
                               ),
                             ),
-                            const SizedBox(height: 48),
+                            const SizedBox(width: 6),
                             Text(
-                              item['title'],
-                              style: theme.textTheme.headlineMedium?.copyWith(
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: -0.5,
+                              _languageChipLabel(localeProvider),
+                              style: WaUi.caption.copyWith(
+                                color: AuthUi.textPrimary,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              item['description'],
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: isDark
-                                    ? AppTheme.textGreyDark
-                                    : AppTheme.textGreyLight,
-                                height: 1.5,
-                              ),
-                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
-                      );
-                    },
-                  ),
-                ),
-
-                // Navigation Indicator & Controls
-                Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Column(
-                    children: [
-                      // Page Indicators
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          _pages(context).length,
-                          (index) => AnimatedContainer(
-                            duration: Duration(milliseconds: 350),
-                            margin: EdgeInsets.symmetric(horizontal: 4.0),
-                            height: 8.0,
-                            width: _currentPage == index ? 24.0 : 8.0,
-                            decoration: BoxDecoration(
-                              color: _currentPage == index
-                                  ? AppTheme.accentGold
-                                  : (isDark ? Colors.white24 : Colors.black12),
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                          ),
-                        ),
                       ),
-                      SizedBox(height: 32),
-
-                      // Action Button
-                      Row(
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: (index) => setState(() => _currentPage = index),
+                itemCount: pages.length,
+                itemBuilder: (context, index) {
+                  final item = pages[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 12),
+                        Expanded(
+                          child: index == 0
+                              ? const _OnboardingCardsHero()
+                              : _OnboardingIconHero(icon: item['icon'] as IconData),
+                        ),
+                        Text(
+                          index == 0
+                              ? 'Your Identity.\nOne Tap Away'
+                              : item['title'] as String,
+                          textAlign: TextAlign.center,
+                          style: AuthUi.heroTitle.copyWith(fontSize: 26),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          item['description'] as String,
+                          textAlign: TextAlign.center,
+                          style: AuthUi.body,
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(pages.length, (index) {
+                      final active = _currentPage == index;
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        height: 8,
+                        width: active ? 22 : 8,
+                        decoration: BoxDecoration(
+                          color: active
+                              ? AuthUi.textPrimary
+                              : const Color(0xFFE5E5E5),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      );
+                    }),
+                  ),
+                  const SizedBox(height: 22),
+                  AuthPillButton(
+                    label: _currentPage == pages.length - 1
+                        ? context.l10n.getStarted
+                        : context.l10n.next,
+                    onPressed: _onNextPage,
+                  ),
+                  const SizedBox(height: 14),
+                  GestureDetector(
+                    onTap: _goToLogin,
+                    behavior: HitTestBehavior.opaque,
+                    child: Text.rich(
+                      TextSpan(
+                        style: AuthUi.body.copyWith(fontSize: 14),
                         children: [
-                          Expanded(
-                            child: CustomButton(
-                              text: _currentPage == _pages(context).length - 1
-                                  ? context.l10n.getStarted
-                                  : context.l10n.next,
-                              onTap: _onNextPage,
+                          TextSpan(text: context.l10n.alreadyHaveAnAccount2),
+                          TextSpan(
+                            text: 'Sign In',
+                            style: WaUi.bodyMedium.copyWith(
+                              color: AuthUi.textPrimary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
                             ),
                           ),
                         ],
                       ),
-                    ],
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _OnboardingCardsHero extends StatelessWidget {
+  const _OnboardingCardsHero();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Image.asset(
+        AuthUi.iconCardsArena,
+        fit: BoxFit.contain,
+        width: double.infinity,
+        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+      ),
+    );
+  }
+}
+
+class _OnboardingIconHero extends StatelessWidget {
+  const _OnboardingIconHero({required this.icon});
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 160,
+        height: 160,
+        decoration: BoxDecoration(
+          color: AuthUi.fieldFill,
+          borderRadius: BorderRadius.circular(36),
+          border: Border.all(color: AuthUi.border),
+        ),
+        child: Icon(icon, size: 64, color: AuthUi.textPrimary),
       ),
     );
   }

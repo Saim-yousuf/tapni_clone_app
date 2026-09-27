@@ -5,12 +5,13 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/screens/linked_devices/qr_login_screen.dart';
 import 'package:tapni_app/screens/otp_screen.dart';
+import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/phone_utils.dart';
-import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/country_picker_sheet.dart';
-import 'package:tapni_app/widgets/wa_primary_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PhoneAuthScreen extends StatefulWidget {
   const PhoneAuthScreen({Key? key, this.addAccount = false}) : super(key: key);
@@ -24,12 +25,20 @@ class PhoneAuthScreen extends StatefulWidget {
 class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
+  final _phoneFocus = FocusNode();
   CountryDialCode _country = defaultCountryDialCode;
   bool _alreadyOnDevice = false;
 
   @override
+  void initState() {
+    super.initState();
+    _phoneFocus.addListener(() => setState(() {}));
+  }
+
+  @override
   void dispose() {
     _phoneController.dispose();
+    _phoneFocus.dispose();
     super.dispose();
   }
 
@@ -116,150 +125,270 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     }
   }
 
-  InputDecoration _fieldDecoration({String? hint}) {
-    return WaUi.fieldDecoration(hintText: hint);
+  Future<void> _openLegal(String path) async {
+    final uri = Uri.parse('${Constants.appDomain}$path');
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+    final phoneFocused = _phoneFocus.hasFocus;
 
     return Scaffold(
-      backgroundColor: WaUi.toolsScaffold,
+      backgroundColor: AuthUi.bg,
       body: SafeArea(
         child: Form(
           key: _formKey,
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  'LOGIN',
+                  style: AuthUi.screenTitle,
+                ),
+              ),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AuthUi.horizontalPad,
+                  ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 48),
+                      const SizedBox(height: 20),
                       Text(
-                        context.l10n.enterYourPhoneNumber,
-                        textAlign: TextAlign.center,
-                        style: WaUi.headline.copyWith(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        context.l10n.welcomeBack,
+                        style: AuthUi.heroTitle.copyWith(fontSize: 30),
                       ),
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 8),
                       Text(
                         context.l10n.barqodyWillSendOtp,
-                        textAlign: TextAlign.center,
-                        style: WaUi.body.copyWith(color: WaUi.secondaryText),
+                        style: AuthUi.body,
                       ),
-                      const SizedBox(height: 36),
+                      const SizedBox(height: 28),
+                      AuthFieldLabel(
+                        '${context.l10n.country} / REGION',
+                      ),
+                      const SizedBox(height: 8),
                       InkWell(
                         onTap: _pickCountry,
-                        child: InputDecorator(
-                          decoration: WaUi.fieldDecoration(),
+                        borderRadius:
+                            BorderRadius.circular(AuthUi.fieldRadius),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 14,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AuthUi.bg,
+                            borderRadius:
+                                BorderRadius.circular(AuthUi.fieldRadius),
+                            border: Border.all(color: AuthUi.border),
+                          ),
                           child: Row(
                             children: [
+                              Text(
+                                _country.flagEmoji,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              const SizedBox(width: 10),
                               Expanded(
                                 child: Text(
-                                  _country.name,
-                                  textAlign: TextAlign.center,
+                                  '${_country.name} (${_country.code})',
                                   style: WaUi.bodyMedium.copyWith(
-                                    color: AppTheme.primaryBlack,
+                                    color: AuthUi.textPrimary,
+                                    fontSize: 15,
                                   ),
                                 ),
                               ),
                               const Icon(
-                                Icons.arrow_drop_down,
-                                color: WaUi.secondaryText,
+                                Icons.keyboard_arrow_down_rounded,
+                                color: AuthUi.textMuted,
                               ),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            onTap: _pickCountry,
-                            child: SizedBox(
-                              width: 92,
-                              child: InputDecorator(
-                                decoration: WaUi.fieldDecoration(),
+                      const SizedBox(height: 18),
+                      AuthFieldLabel(context.l10n.phoneNumber),
+                      const SizedBox(height: 8),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        decoration: BoxDecoration(
+                          color: AuthUi.bg,
+                          borderRadius:
+                              BorderRadius.circular(AuthUi.fieldRadius),
+                          border: Border.all(
+                            color: phoneFocused
+                                ? AuthUi.borderFocused
+                                : AuthUi.border,
+                            width: phoneFocused ? 1.8 : 1,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            InkWell(
+                              onTap: _pickCountry,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 14,
+                                  right: 10,
+                                  top: 14,
+                                  bottom: 14,
+                                ),
                                 child: Text(
                                   _country.code,
-                                  style: WaUi.bodyMedium,
+                                  style: WaUi.bodyMedium.copyWith(
+                                    fontSize: 15,
+                                    color: AuthUi.textPrimary,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: TextFormField(
-                              controller: _phoneController,
-                              keyboardType: TextInputType.phone,
-                              textInputAction: TextInputAction.done,
-                              style: WaUi.bodyMedium.copyWith(fontSize: 16),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                                LengthLimitingTextInputFormatter(15),
-                              ],
-                              onChanged: (_) => _checkAlreadyOnDevice(),
-                              onFieldSubmitted: (_) => _handleContinue(),
-                              decoration: _fieldDecoration(
-                                hint: context.l10n.phoneNumber2,
-                              ).copyWith(
-                                errorText: _alreadyOnDevice
-                                    ? context.l10n.accountAlreadyLoggedInOnDevice
-                                    : null,
-                                errorMaxLines: 2,
-                              ),
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return context.l10n.required;
-                                }
-                                if (value
-                                        .replaceAll(RegExp(r'\D'), '')
-                                        .length <
-                                    7) {
-                                  return context.l10n.tooShort;
-                                }
-                                if (_alreadyOnDevice) {
-                                  return context
-                                      .l10n.accountAlreadyLoggedInOnDevice;
-                                }
-                                return null;
-                              },
+                            Container(
+                              width: 1,
+                              height: 22,
+                              color: AuthUi.border,
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 28),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => QrLoginScreen(
-                                addAccount: widget.addAccount,
+                            Expanded(
+                              child: TextFormField(
+                                controller: _phoneController,
+                                focusNode: _phoneFocus,
+                                keyboardType: TextInputType.phone,
+                                textInputAction: TextInputAction.done,
+                                style: WaUi.bodyMedium.copyWith(fontSize: 16),
+                                cursorColor: AuthUi.textPrimary,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(15),
+                                ],
+                                onChanged: (_) => _checkAlreadyOnDevice(),
+                                onFieldSubmitted: (_) => _handleContinue(),
+                                decoration: InputDecoration(
+                                  hintText: context.l10n.phoneNumber2,
+                                  hintStyle: WaUi.body.copyWith(
+                                    color: AuthUi.textMuted,
+                                    fontSize: 16,
+                                  ),
+                                  border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  focusedErrorBorder: InputBorder.none,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 14,
+                                  ),
+                                  errorText: _alreadyOnDevice
+                                      ? context
+                                          .l10n.accountAlreadyLoggedInOnDevice
+                                      : null,
+                                  errorMaxLines: 2,
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return context.l10n.required;
+                                  }
+                                  if (value
+                                          .replaceAll(RegExp(r'\D'), '')
+                                          .length <
+                                      7) {
+                                    return context.l10n.tooShort;
+                                  }
+                                  if (_alreadyOnDevice) {
+                                    return context
+                                        .l10n.accountAlreadyLoggedInOnDevice;
+                                  }
+                                  return null;
+                                },
                               ),
                             ),
-                          );
-                        },
-                        child: Text(
-                          context.l10n.logInWithQRCode,
-                          style: WaUi.bodyMedium.copyWith(color: AppTheme.primaryBlack),
+                          ],
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.center,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => QrLoginScreen(
+                                  addAccount: widget.addAccount,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            context.l10n.logInWithQRCode,
+                            style: WaUi.bodyMedium.copyWith(
+                              color: AuthUi.textPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      AuthPillButton(
+                        label: context.l10n.continueLabel,
+                        loading: authProvider.isLoading,
+                        onPressed:
+                            authProvider.isLoading ? null : _handleContinue,
+                      ),
+                      const SizedBox(height: 16),
+                      Text.rich(
+                        TextSpan(
+                          style: AuthUi.body.copyWith(fontSize: 12),
+                          children: [
+                            TextSpan(
+                              text: '${context.l10n.byContinuingYouAgreeTo} ',
+                            ),
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.baseline,
+                              baseline: TextBaseline.alphabetic,
+                              child: GestureDetector(
+                                onTap: () => _openLegal('/terms'),
+                                child: Text(
+                                  context.l10n.termsOfService,
+                                  style: AuthUi.body.copyWith(
+                                    fontSize: 12,
+                                    color: AuthUi.textPrimary,
+                                    fontWeight: FontWeight.w600,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' ${context.l10n.andConjunction} ',
+                            ),
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.baseline,
+                              baseline: TextBaseline.alphabetic,
+                              child: GestureDetector(
+                                onTap: () => _openLegal('/privacy'),
+                                child: Text(
+                                  context.l10n.privacyPolicy,
+                                  style: AuthUi.body.copyWith(
+                                    fontSize: 12,
+                                    color: AuthUi.textPrimary,
+                                    fontWeight: FontWeight.w600,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const TextSpan(text: '.'),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
                     ],
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(28, 8, 28, 20),
-                child: WaPrimaryButton(
-                  label: context.l10n.next,
-                  loading: authProvider.isLoading,
-                  onPressed:
-                      authProvider.isLoading ? null : _handleContinue,
                 ),
               ),
             ],

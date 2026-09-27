@@ -34,7 +34,7 @@ class WaUi {
   static const double radiusMd = 14;
   static const double radiusLg = 16;
   static const double radiusPill = 100;
-  static const double primaryButtonHeight = 48;
+  static const double primaryButtonHeight = 52;
 
   static String get fontFamily => AppFonts.fontFamily;
 

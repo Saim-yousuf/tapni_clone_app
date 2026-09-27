@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Locale-aware typography for scripts that Roboto does not render well.
+/// Locale-aware typography. Latin UI uses Figma **Poppins** (bundled assets).
 class AppFonts {
   AppFonts._();
+
+  static const String poppinsFamily = 'Poppins';
 
   static Locale? _locale;
 
@@ -29,7 +31,26 @@ class AppFonts {
   /// Default line height — Nastaliq needs more vertical space.
   static double get defaultHeight => isUrdu ? 1.55 : 1.35;
 
-  static String get fontFamily => textStyle().fontFamily!;
+  static String get fontFamily => textStyle().fontFamily ?? poppinsFamily;
+
+  static TextStyle _poppins({
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    double? height,
+    double? letterSpacing,
+    TextDecoration? decoration,
+  }) {
+    return TextStyle(
+      fontFamily: poppinsFamily,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
+      decoration: decoration,
+    );
+  }
 
   static TextStyle textStyle({
     double? fontSize,
@@ -74,7 +95,7 @@ class AppFonts {
       );
     }
 
-    return GoogleFonts.roboto(
+    return _poppins(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -120,7 +141,7 @@ class AppFonts {
       );
     }
 
-    return GoogleFonts.roboto(
+    return _poppins(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -140,6 +161,6 @@ class AppFonts {
     if (isHebrew) {
       return GoogleFonts.rubikTextTheme(base);
     }
-    return GoogleFonts.robotoTextTheme(base);
+    return base.apply(fontFamily: poppinsFamily);
   }
 }

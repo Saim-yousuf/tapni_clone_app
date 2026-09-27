@@ -8,9 +8,9 @@ import 'package:tapni_app/screens/contacts_sync_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/services/contacts_sync_service.dart';
 import 'package:tapni_app/utils/phone_utils.dart';
-import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
-import 'package:tapni_app/widgets/wa_primary_button.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/links_widget.dart';
 
 class QuickAddLinksScreen extends StatefulWidget {
   const QuickAddLinksScreen({super.key, this.phone});
@@ -178,7 +178,8 @@ class _QuickAddLinksScreenState extends State<QuickAddLinksScreen> {
     if (_saving) return;
 
     final whatsAppRaw = _whatsAppController.text.trim();
-    final normalized = whatsAppRaw.isEmpty ? '' : PhoneUtils.normalize(whatsAppRaw);
+    final normalized =
+        whatsAppRaw.isEmpty ? '' : PhoneUtils.normalize(whatsAppRaw);
     final whatsApp = normalized.isNotEmpty ? normalized : whatsAppRaw;
     final instagram = _cleanUsername(_instagramController.text);
     final tiktok = _cleanUsername(_tiktokController.text);
@@ -246,39 +247,46 @@ class _QuickAddLinksScreenState extends State<QuickAddLinksScreen> {
     }
   }
 
+  void _openAddMore() {
+    final profileProvider = context.read<ProfileProvider>();
+    LinkSheet().showAddLinkBottomSheet(context, profileProvider);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ProfileProvider>(context);
 
     return Scaffold(
-      backgroundColor: WaUi.toolsScaffold,
+      backgroundColor: AuthUi.bg,
       appBar: AppBar(
+        backgroundColor: AuthUi.bg,
+        elevation: 0,
+        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
+        title: Text(
+          context.l10n.quickAddLinksTitle,
+          style: AuthUi.screenTitle.copyWith(letterSpacing: 0),
+        ),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AuthUi.horizontalPad,
+                ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 8),
-                    Text(
-                      context.l10n.quickAddLinksTitle,
-                      textAlign: TextAlign.center,
-                      style: WaUi.headline.copyWith(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 4),
                     Text(
                       context.l10n.quickAddLinksSubtitle,
                       textAlign: TextAlign.center,
-                      style: WaUi.body.copyWith(color: WaUi.secondaryText),
+                      style: AuthUi.body,
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 24),
                     _LinkField(
                       controller: _whatsAppController,
                       hintText: context.l10n.quickAddWhatsAppHint,
@@ -303,15 +311,6 @@ class _QuickAddLinksScreenState extends State<QuickAddLinksScreen> {
                     ),
                     const SizedBox(height: 12),
                     _LinkField(
-                      controller: _tiktokController,
-                      hintText: context.l10n.quickAddTiktokHint,
-                      assetPath: SocialLink.getAssetPath(SocialPlatform.tiktok),
-                      logoUrl:
-                          _templateFor(SocialPlatform.tiktok, provider)?.logo,
-                      enabled: !_saving,
-                    ),
-                    const SizedBox(height: 12),
-                    _LinkField(
                       controller: _snapchatController,
                       hintText: context.l10n.quickAddSnapchatHint,
                       assetPath:
@@ -322,13 +321,43 @@ class _QuickAddLinksScreenState extends State<QuickAddLinksScreen> {
                       )?.logo,
                       enabled: !_saving,
                     ),
+                    const SizedBox(height: 12),
+                    _LinkField(
+                      controller: _tiktokController,
+                      hintText: context.l10n.quickAddTiktokHint,
+                      assetPath: SocialLink.getAssetPath(SocialPlatform.tiktok),
+                      logoUrl:
+                          _templateFor(SocialPlatform.tiktok, provider)?.logo,
+                      enabled: !_saving,
+                    ),
+                    const SizedBox(height: 16),
+                    AuthOutlinedChip(
+                      label: 'Add more links',
+                      onTap: _saving ? null : _openAddMore,
+                      icon: Image.asset(
+                        AuthUi.iconPlus,
+                        width: 14,
+                        height: 14,
+                        color: AuthUi.textPrimary,
+                        errorBuilder: (_, __, ___) => const Icon(
+                          Icons.add,
+                          size: 16,
+                          color: AuthUi.textPrimary,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(28, 8, 28, 8),
-              child: WaPrimaryButton(
+              padding: const EdgeInsets.fromLTRB(
+                AuthUi.horizontalPad,
+                8,
+                AuthUi.horizontalPad,
+                8,
+              ),
+              child: AuthPillButton(
                 label: context.l10n.next,
                 loading: _saving,
                 onPressed: _saving ? null : _handleContinue,
@@ -338,10 +367,13 @@ class _QuickAddLinksScreenState extends State<QuickAddLinksScreen> {
               onPressed: _saving ? null : _goToContactsSync,
               child: Text(
                 context.l10n.skip,
-                style: WaUi.bodyMedium.copyWith(color: WaUi.secondaryText),
+                style: WaUi.bodyMedium.copyWith(
+                  color: AuthUi.textSecondary,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
           ],
         ),
       ),
@@ -370,19 +402,19 @@ class _LinkField extends StatelessWidget {
     final network = logoUrl?.trim() ?? '';
     final asset = Image.asset(
       assetPath,
-      width: 24,
-      height: 24,
-      errorBuilder: (_, __, ___) => Icon(
+      width: 28,
+      height: 28,
+      errorBuilder: (_, __, ___) => const Icon(
         Icons.link,
         size: 22,
-        color: WaUi.promoIconFg,
+        color: AuthUi.textMuted,
       ),
     );
     if (network.startsWith('http://') || network.startsWith('https://')) {
       return Image.network(
         network,
-        width: 24,
-        height: 24,
+        width: 28,
+        height: 28,
         errorBuilder: (_, __, ___) => asset,
       );
     }
@@ -396,13 +428,47 @@ class _LinkField extends StatelessWidget {
       enabled: enabled,
       keyboardType: keyboardType,
       textInputAction: TextInputAction.next,
-      style: WaUi.bodyMedium.copyWith(fontSize: 16),
-      cursorColor: AppTheme.primaryBlack,
-      decoration: WaUi.fieldDecoration(
+      style: WaUi.bodyMedium.copyWith(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: AuthUi.textPrimary,
+      ),
+      cursorColor: AuthUi.textPrimary,
+      decoration: InputDecoration(
         hintText: hintText,
+        hintStyle: WaUi.body.copyWith(
+          color: AuthUi.textMuted,
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+        ),
         prefixIcon: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(12),
           child: _icon(),
+        ),
+        filled: true,
+        fillColor: AuthUi.bg,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 14,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AuthUi.fieldRadius),
+          borderSide: const BorderSide(color: AuthUi.border),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AuthUi.fieldRadius),
+          borderSide: const BorderSide(color: AuthUi.border),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AuthUi.fieldRadius),
+          borderSide: const BorderSide(
+            color: AuthUi.borderFocused,
+            width: 1.6,
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AuthUi.fieldRadius),
+          borderSide: const BorderSide(color: AuthUi.border),
         ),
       ),
     );

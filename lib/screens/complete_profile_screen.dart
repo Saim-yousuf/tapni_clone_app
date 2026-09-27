@@ -3,16 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/quick_add_links_screen.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
-import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
-import 'package:tapni_app/widgets/wa_primary_button.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
   const CompleteProfileScreen({
@@ -102,11 +101,19 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
-      backgroundColor: WaUi.toolsScaffold,
+      backgroundColor: AuthUi.bg,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, size: 22),
-          onPressed: () => Navigator.of(context).pop()),
+        backgroundColor: AuthUi.bg,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: AuthBackButton(
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          context.l10n.profileInfo,
+          style: AuthUi.screenTitle.copyWith(letterSpacing: 0),
+        ),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: Form(
@@ -115,88 +122,111 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AuthUi.horizontalPad,
+                  ),
                   child: Column(
                     children: [
-                      const SizedBox(height: 8),
-                      Text(
-                        context.l10n.profileInfo,
-                        textAlign: TextAlign.center,
-                        style: WaUi.headline.copyWith(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 4),
                       Text(
                         context.l10n.pleaseProvideNameAndPhoto,
                         textAlign: TextAlign.center,
-                        style: WaUi.body.copyWith(color: WaUi.secondaryText),
+                        style: AuthUi.body,
                       ),
                       const SizedBox(height: 36),
                       GestureDetector(
-                        onTap: authProvider.isLoading ? null : _pickProfilePhoto,
-                        child: Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            CircleAvatar(
-                              radius: 48,
-                              backgroundColor: WaUi.navPill,
-                              backgroundImage: _profileImage != null
-                                  ? FileImage(_profileImage!)
-                                  : null,
-                              child: _profileImage == null
-                                  ? Icon(
-                                      Icons.camera_alt,
-                                      size: 32,
-                                      color: WaUi.promoIconFg,
-                                    )
-                                  : null,
-                            ),
-                            Container(
-                              width: 28,
-                              height: 28,
-                              decoration: BoxDecoration(
-                                color: AppTheme.primaryBlack,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white,
-                                  width: 2,
-                                ),
-                              ),
-                              child: const Icon(
-                                Icons.photo_library_outlined,
-                                size: 14,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextButton(
-                        onPressed:
+                        onTap:
                             authProvider.isLoading ? null : _pickProfilePhoto,
-                        child: Text(
-                          _profileImage == null
-                              ? context.l10n.addPhoto
-                              : context.l10n.changePhoto,
-                          style: WaUi.bodyMedium.copyWith(
-                            color: AppTheme.primaryBlack,
-                            fontWeight: FontWeight.w600,
+                        child: Container(
+                          width: 148,
+                          height: 148,
+                          decoration: BoxDecoration(
+                            color: AuthUi.fieldFill,
+                            shape: BoxShape.circle,
+                            image: _profileImage != null
+                                ? DecorationImage(
+                                    image: FileImage(_profileImage!),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
                           ),
+                          child: _profileImage == null
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      AuthUi.iconCamera,
+                                      width: 40,
+                                      height: 40,
+                                      errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.photo_camera_outlined,
+                                        size: 36,
+                                        color: AuthUi.textPrimary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      context.l10n.addPhoto,
+                                      style: AuthUi.body.copyWith(
+                                        color: AuthUi.textMuted,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : null,
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 36),
+                      AuthFieldLabel('YOUR NAME'),
+                      const SizedBox(height: 8),
                       TextFormField(
                         controller: _nameController,
                         textInputAction: TextInputAction.done,
                         textCapitalization: TextCapitalization.words,
                         style: WaUi.bodyMedium.copyWith(fontSize: 16),
-                        cursorColor: AppTheme.primaryBlack,
+                        cursorColor: AuthUi.textPrimary,
                         onFieldSubmitted: (_) => _handleContinue(),
-                        decoration: WaUi.fieldDecoration(
+                        decoration: InputDecoration(
                           hintText: context.l10n.typeYourNameHere,
+                          hintStyle: WaUi.body.copyWith(
+                            color: AuthUi.textMuted,
+                            fontSize: 15,
+                          ),
+                          filled: true,
+                          fillColor: AuthUi.fieldFill,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: const BorderSide(
+                              color: AuthUi.borderFocused,
+                              width: 1.5,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFE53935),
+                            ),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFE53935),
+                              width: 1.2,
+                            ),
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -213,7 +243,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           widget.phone,
-                          style: WaUi.caption,
+                          style: AuthUi.body.copyWith(fontSize: 13),
                         ),
                       ),
                     ],
@@ -221,8 +251,13 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(28, 8, 28, 20),
-                child: WaPrimaryButton(
+                padding: const EdgeInsets.fromLTRB(
+                  AuthUi.horizontalPad,
+                  8,
+                  AuthUi.horizontalPad,
+                  20,
+                ),
+                child: AuthPillButton(
                   label: context.l10n.next,
                   loading: authProvider.isLoading,
                   onPressed:
