@@ -18,6 +18,111 @@ class BarqodyChrome {
   static const double sidePad = 20;
 }
 
+class BarqodyTitleBar extends StatelessWidget {
+  final String title;
+  final Widget? trailing;
+  final VoidCallback? onBack;
+
+  const BarqodyTitleBar({
+    super.key,
+    required this.title,
+    this.trailing,
+    this.onBack,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+      child: SizedBox(
+        height: 44,
+        child: Row(
+          children: [
+            CircleBackButton(onTap: onBack),
+            Expanded(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: WaUi.toolsTitleOf(
+                  size: 18,
+                  weight: FontWeight.w700,
+                  color: Colors.black,
+                  height: 1.1,
+                ),
+              ),
+            ),
+            trailing ?? const SizedBox(width: 40),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CircleAssetButton extends StatelessWidget {
+  final String asset;
+  final VoidCallback? onTap;
+  final double iconSize;
+  final Widget? child;
+  final bool badge;
+
+  const CircleAssetButton({
+    super.key,
+    required this.asset,
+    this.onTap,
+    this.iconSize = 16,
+    this.child,
+    this.badge = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: BarqodyChrome.circleBtn,
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              child ??
+                  Image.asset(
+                    asset,
+                    width: iconSize,
+                    height: iconSize,
+                    filterQuality: FilterQuality.medium,
+                    errorBuilder: (_, _, _) => Icon(
+                      Icons.circle_outlined,
+                      size: iconSize,
+                      color: Colors.black,
+                    ),
+                  ),
+              if (badge)
+                const Positioned(
+                  top: 7,
+                  right: 7,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      shape: BoxShape.circle,
+                    ),
+                    child: SizedBox(width: 7, height: 7),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class CircleBackButton extends StatelessWidget {
   final VoidCallback? onTap;
   final Color? color;

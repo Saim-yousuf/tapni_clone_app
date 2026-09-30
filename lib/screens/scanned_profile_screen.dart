@@ -1449,7 +1449,14 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => AddStampScreen(enrollment: e)),
+          MaterialPageRoute(
+            builder: (_) => AddStampScreen(
+              enrollment: e,
+              customerName: widget.customer.name,
+              customerUsername: widget.customer.username,
+              customerPhoto: widget.customer.profilePhotoUrl,
+            ),
+          ),
         );
       },
       child: Container(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
-/// Official-style Add to Apple / Google Wallet button (black pill, two-line label).
+/// Official-style Add to Apple / Google Wallet button.
 class WalletBrandButton extends StatelessWidget {
   static const double height = WaUi.primaryButtonHeight;
 
@@ -10,6 +10,7 @@ class WalletBrandButton extends StatelessWidget {
   final String iconAsset;
   final VoidCallback? onPressed;
   final bool loading;
+  final bool outlined;
 
   const WalletBrandButton({
     super.key,
@@ -18,6 +19,7 @@ class WalletBrandButton extends StatelessWidget {
     required this.iconAsset,
     required this.onPressed,
     this.loading = false,
+    this.outlined = false,
   });
 
   factory WalletBrandButton.apple({
@@ -47,19 +49,25 @@ class WalletBrandButton extends StatelessWidget {
       iconAsset: 'assets/images/png/google-wallet-icon.png',
       onPressed: onPressed,
       loading: loading,
+      outlined: true,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final disabled = onPressed == null || loading;
+    final fg = outlined ? Colors.black : Colors.white;
 
     return SizedBox(
       width: double.infinity,
       height: height,
       child: Material(
-        color: Colors.black,
-        shape: const StadiumBorder(),
+        color: outlined ? Colors.white : Colors.black,
+        shape: StadiumBorder(
+          side: outlined
+              ? const BorderSide(color: Colors.black, width: 1.2)
+              : BorderSide.none,
+        ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: disabled ? null : onPressed,
@@ -68,12 +76,12 @@ class WalletBrandButton extends StatelessWidget {
             opacity: disabled && !loading ? 0.5 : 1,
             child: Center(
               child: loading
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 22,
                       height: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.2,
-                        color: Colors.white,
+                        color: fg,
                       ),
                     )
                   : Row(
@@ -92,8 +100,8 @@ class WalletBrandButton extends StatelessWidget {
                           children: [
                             Text(
                               title,
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: fg,
                                 fontSize: 11,
                                 height: 1.1,
                                 fontWeight: FontWeight.w400,
@@ -102,8 +110,8 @@ class WalletBrandButton extends StatelessWidget {
                             ),
                             Text(
                               subtitle,
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: fg,
                                 fontSize: 16,
                                 height: 1.15,
                                 fontWeight: FontWeight.w600,

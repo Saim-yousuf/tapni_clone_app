@@ -1,4 +1,4 @@
-enum OrderStatus { pending, completed, cancelled, noShow }
+enum OrderStatus { pending, confirmed, completed, cancelled, noShow }
 
 class CatalogOrder {
   final String id;
@@ -81,6 +81,8 @@ class CatalogOrder {
 
   static OrderStatus _parseStatus(String? value) {
     switch (value) {
+      case 'confirmed':
+        return OrderStatus.confirmed;
       case 'completed':
         return OrderStatus.completed;
       case 'cancelled':
@@ -108,6 +110,8 @@ class CatalogOrder {
 
   String get statusApiValue {
     switch (status) {
+      case OrderStatus.confirmed:
+        return 'confirmed';
       case OrderStatus.completed:
         return 'completed';
       case OrderStatus.cancelled:
@@ -141,20 +145,26 @@ class CatalogOrderLineItem {
   final double price;
   final int quantity;
   final String notes;
+  final String imageUrl;
 
   CatalogOrderLineItem({
     required this.name,
     required this.price,
     this.quantity = 1,
     this.notes = '',
+    this.imageUrl = '',
   });
 
   factory CatalogOrderLineItem.fromJson(Map<String, dynamic> json) {
     return CatalogOrderLineItem(
       name: json['name']?.toString() ?? '',
       price: (json['price'] is num) ? (json['price'] as num).toDouble() : 0,
-      quantity: (json['quantity'] is num) ? (json['quantity'] as num).toInt() : 1,
+      quantity: (json['quantity'] is num)
+          ? (json['quantity'] as num).toInt()
+          : 1,
       notes: json['notes']?.toString() ?? '',
+      imageUrl:
+          json['image']?.toString() ?? json['imageUrl']?.toString() ?? '',
     );
   }
 

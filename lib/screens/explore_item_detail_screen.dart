@@ -15,6 +15,8 @@ import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/profile_reviews_section.dart';
+import 'package:tapni_app/models/cart_line_item.dart';
+import 'package:tapni_app/screens/catalog/service_booking_cart_screen.dart';
 import 'package:tapni_app/widgets/service_booking_sheet.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
 
@@ -74,8 +76,8 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
       );
 
   String get _priceLabel {
-    if (_item.price > 0) {
-      return formatMoney(_item.price, currency: _currency);
+    if (_item.displayPrice > 0) {
+      return formatMoney(_item.displayPrice, currency: _currency);
     }
     return _isService ? 'Contact for price' : 'Free';
   }
@@ -175,13 +177,41 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
     if (businessId == null) return;
 
     if (_isService) {
-      await showServiceBookingSheet(
+      final result = await showServiceBookingSheet(
         context: context,
         item: _item,
         businessId: businessId,
         businessLinkId: widget.catalogLink.id,
         businessName: _businessName,
         currency: _currency,
+      );
+      if (result == null || !mounted) return;
+
+      final cartItems = widget.catalogLink.catalogItems ?? [_item];
+      final itemIndex = cartItems.indexWhere((i) => i.name == _item.name);
+      final index = itemIndex >= 0 ? itemIndex : 0;
+      final items = itemIndex >= 0 ? cartItems : [_item];
+
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => ServiceBookingCartScreen(
+            catalogItems: items,
+            initialCart: [
+              CartLineItem(
+                itemIndex: index,
+                quantity: _qty,
+                notes: _notesCtrl.text.trim(),
+                bookingDate: result.bookingDate,
+                bookingTime: result.bookingTime,
+              ),
+            ],
+            businessId: businessId,
+            businessLinkId: widget.catalogLink.id,
+            businessName: _businessName,
+            businessUsername: widget.profile.username ?? _businessName,
+            currency: _currency,
+          ),
+        ),
       );
       return;
     }
@@ -641,8 +671,8 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
   }
 
   Widget _bottomBar() {
-    final total = _item.price * (_isService ? 1 : _qty);
-    final hasPrice = _item.price > 0;
+    final total = _item.displayPrice * (_isService ? 1 : _qty);
+    final hasPrice = _item.displayPrice > 0;
     final money = hasPrice
         ? formatMoney(total, currency: _currency)
         : null;

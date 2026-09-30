@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/explore_business.dart';
 import 'package:tapni_app/screens/explore_item_detail_loader_screen.dart';
-import 'package:tapni_app/screens/explore_offer_loader_screen.dart';
+import 'package:tapni_app/screens/explore_offer_detail_screen.dart';
 
-/// Opens real Explore flows: loyalty enroll → customer detail; item → detail page.
+/// Opens real Explore flows: offer detail → enroll; item → detail page.
 class ExploreActions {
   static Future<void> openOffer(
     BuildContext context,
@@ -13,7 +13,7 @@ class ExploreActions {
 
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => ExploreOfferLoaderScreen(offer: offer),
+        builder: (_) => ExploreOfferDetailScreen(offer: offer),
       ),
     );
   }

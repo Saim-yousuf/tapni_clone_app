@@ -7,6 +7,7 @@ import 'package:tapni_app/screens/attendance/business/employee_settings_screen.d
 import 'package:tapni_app/utils/attendance_utils.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class AttendanceReportScreen extends StatefulWidget {
   final AttendanceEmployee? employee;
@@ -23,10 +24,12 @@ class AttendanceReportScreen extends StatefulWidget {
 }
 
 class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
-  static const Color _absentTint = Color(0xFFE57373);
-  static const Color _partialTint = Color(0xFFFFB74D);
+  static const Color _absentTint = Color(0xFFC62828);
+  static const Color _partialTint = Color(0xFFE65100);
   static const Color _hoursTint = Color(0xFF64B5F6);
   static const Color _neutralTint = Color(0xFF90A4AE);
+  static const Color _statCardBg = Color(0xFFF2F2F7);
+  static const Color _presentFill = Color(0xFF1B8A4A);
 
   List<AttendanceEmployee> _employers = [];
   AttendanceEmployee? _selected;
@@ -129,7 +132,7 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   Color _statusColor(String status) {
     switch (status) {
       case 'present':
-        return WaUi.navGreen;
+        return _presentFill;
       case 'absent':
         return _absentTint;
       case 'partial':
@@ -143,85 +146,115 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
     }
   }
 
+  String _titleBarLabel(AttendanceEmployee? selected) {
+    if (selected == null) return context.l10n.attendanceReport;
+    if (widget.isBusinessView) {
+      return selected.employee.displayName;
+    }
+    final username = selected.employee.username;
+    if (username.isNotEmpty) return '@$username';
+    final name = selected.employee.displayName;
+    return name.isNotEmpty ? name : context.l10n.attendanceReport;
+  }
+
   @override
   Widget build(BuildContext context) {
     final selected = _selected;
     final summary = _summary;
-    final title = widget.isBusinessView && selected != null
-        ? selected.employee.displayName
-        : context.l10n.attendanceReport;
+    final title = _titleBarLabel(selected);
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AttendanceUi.appBar(
-        title,
-        actions: [
-          if (widget.isBusinessView && selected != null)
-            IconButton(
-              icon: const Icon(Icons.settings_outlined),
-              tooltip: context.l10n.manageEmployees,
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        EmployeeSettingsScreen(employee: selected),
-                  ),
-                );
-                if (mounted) _loadSummary();
-              },
+      backgroundColor: BarqodyChrome.scaffold,
+      body: SafeArea(
+        child: Column(
+          children: [
+            BarqodyTitleBar(
+              title: title,
+              trailing: widget.isBusinessView && selected != null
+                  ? CircleAssetButton(
+                      asset: 'assets/images/png/settings-sliders.png',
+                      iconSize: 18,
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                EmployeeSettingsScreen(employee: selected),
+                          ),
+                        );
+                        if (mounted) _loadSummary();
+                      },
+                    )
+                  : null,
             ),
-        ],
-      ),
-      body: _isLoading && summary == null
-          ? Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                color: WaUi.navGreen.withValues(alpha: 0.7),
-              ),
-            )
-          : selected == null
-              ? _emptyEmployers()
-              : RefreshIndicator(
-                  color: WaUi.navGreen,
-                  backgroundColor: WaUi.surface,
-                  onRefresh: _loadSummary,
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
-                    children: [
-                      if (!widget.isBusinessView && _employers.length > 1) ...[
-                        _employerPicker(),
-                        const SizedBox(height: 14),
-                      ],
-                      if (widget.isBusinessView) ...[
-                        _businessHeader(selected),
-                        const SizedBox(height: 14),
-                      ],
-                      _monthPicker(),
-                      const SizedBox(height: 16),
-                      if (summary != null) ...[
-                        _summarySection(context, summary),
-                        const SizedBox(height: 22),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4, bottom: 10),
-                          child: Text(
-                            context.l10n.dailyBreakdown,
-                            style: WaUi.sectionHeader,
+            Expanded(
+              child: _isLoading && summary == null
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: Colors.black,
+                      ),
+                    )
+                  : selected == null
+                      ? _emptyEmployers()
+                      : RefreshIndicator(
+                          color: Colors.black,
+                          backgroundColor: Colors.white,
+                          onRefresh: _loadSummary,
+                          child: ListView(
+                            padding: const EdgeInsets.fromLTRB(
+                              BarqodyChrome.sidePad,
+                              8,
+                              BarqodyChrome.sidePad,
+                              28,
+                            ),
+                            children: [
+                              if (!widget.isBusinessView &&
+                                  _employers.length > 1) ...[
+                                _employerPicker(),
+                                const SizedBox(height: 16),
+                              ],
+                              if (widget.isBusinessView) ...[
+                                _businessHeader(selected),
+                                const SizedBox(height: 16),
+                              ],
+                              _monthPicker(),
+                              const SizedBox(height: 20),
+                              if (summary != null) ...[
+                                _summarySection(context, summary),
+                                const SizedBox(height: 24),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    context.l10n.attendance,
+                                    style: WaUi.toolsTitleOf(
+                                      size: 17,
+                                      weight: FontWeight.w700,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                _calendarSection(context, summary),
+                              ] else
+                                _noData(),
+                            ],
                           ),
                         ),
-                        _calendarSection(context, summary),
-                      ] else
-                        _noData(),
-                    ],
-                  ),
-                ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _employerPicker() {
     return Container(
       padding: const EdgeInsets.all(14),
-      decoration: AttendanceUi.softCard,
+      decoration: BoxDecoration(
+        color: _statCardBg,
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -297,7 +330,10 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   Widget _businessHeader(AttendanceEmployee employee) {
     return Container(
       padding: const EdgeInsets.all(14),
-      decoration: AttendanceUi.softCard,
+      decoration: BoxDecoration(
+        color: _statCardBg,
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Row(
         children: [
           CircleAvatar(
@@ -350,49 +386,35 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
         (_month.year == DateTime.now().year &&
             _month.month < DateTime.now().month);
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(WaUi.radiusLg),
-          border: Border.all(color: WaUi.divider),
-          boxShadow: [
-            BoxShadow(
-              color: WaUi.primaryText.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            _monthNavButton(
-              icon: Icons.chevron_left_rounded,
-              onPressed: () => _changeMonth(-1),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Text(
-                    DateFormat(context.l10n.mmmmYyyy).format(_month),
-                    textAlign: TextAlign.center,
-                    style: WaUi.listTitle,
-                  ),
-                  Text(
-                    context.l10n.thisMonth,
-                    style: WaUi.caption,
-                  ),
-                ],
+    return Container(
+      height: 48,
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      decoration: BoxDecoration(
+        color: BarqodyChrome.fieldFill,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        children: [
+          _monthNavButton(
+            icon: Icons.chevron_left_rounded,
+            onPressed: () => _changeMonth(-1),
+          ),
+          Expanded(
+            child: Text(
+              DateFormat(context.l10n.mmmmYyyy).format(_month),
+              textAlign: TextAlign.center,
+              style: WaUi.body.copyWith(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
               ),
             ),
-            _monthNavButton(
-              icon: Icons.chevron_right_rounded,
-              onPressed: canGoForward ? () => _changeMonth(1) : null,
-            ),
-          ],
-        ),
+          ),
+          _monthNavButton(
+            icon: Icons.chevron_right_rounded,
+            onPressed: canGoForward ? () => _changeMonth(1) : null,
+          ),
+        ],
       ),
     );
   }
@@ -402,22 +424,20 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
     VoidCallback? onPressed,
   }) {
     return Material(
-      color: Colors.transparent,
+      color: Colors.white,
+      shape: const CircleBorder(),
       child: InkWell(
+        customBorder: const CircleBorder(),
         onTap: onPressed,
-        borderRadius: BorderRadius.circular(WaUi.radiusPill),
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: onPressed != null ? WaUi.navPill : Colors.transparent,
-            shape: BoxShape.circle,
-          ),
+        child: SizedBox(
+          width: 36,
+          height: 36,
           child: Icon(
             icon,
+            size: 22,
             color: onPressed != null
-                ? WaUi.primaryText
-                : WaUi.secondaryText.withValues(alpha: 0.35),
+                ? Colors.black
+                : BarqodyChrome.secondaryText.withValues(alpha: 0.35),
           ),
         ),
       ),
@@ -426,93 +446,55 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
 
   Widget _summarySection(BuildContext context, AttendanceSummary summary) {
     final totalHours = totalWorkedDuration(summary);
-    final avg = averageWorkedDuration(summary);
     final rate = summary.totalWorkingDays > 0
         ? '${((summary.present / summary.totalWorkingDays) * 100).round()}%'
         : '0%';
 
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: _calendarBoxDecoration(),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
-            decoration: AttendanceUi.thickCard,
-            child: Row(
-              children: [
-                Expanded(
-                  child: _dashboardMetric(
-                    label: context.l10n.totalHours,
-                    value: _formatDuration(context, totalHours),
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  height: 44,
-                  color: WaUi.divider,
-                ),
-                Expanded(
-                  child: _dashboardMetric(
-                    label: context.l10n.avgHoursPerDay,
-                    value: avg != null && summary.present > 0
-                        ? _formatDuration(context, avg)
-                        : '—',
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              _dashboardStat(context.l10n.present, '${summary.present}'),
-              const SizedBox(width: 10),
-              _dashboardStat(context.l10n.absent, '${summary.absent}'),
-              const SizedBox(width: 10),
-              _dashboardStat(context.l10n.partial, '${summary.partial}'),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              _dashboardStat(context.l10n.offDays, '${summary.weekend}'),
-              const SizedBox(width: 10),
-              _dashboardStat(
-                context.l10n.workingDays,
-                '${summary.totalWorkingDays}',
-              ),
-              const SizedBox(width: 10),
-              _dashboardStat(context.l10n.attendanceRate, rate),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _dashboardMetric({
-    required String label,
-    required String value,
-  }) {
     return Column(
       children: [
         Text(
-          value,
+          _formatDuration(context, totalHours),
           textAlign: TextAlign.center,
-          style: AttendanceUi.statNumber.copyWith(
-            color: WaUi.primaryText,
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
+          style: WaUi.toolsTitleOf(
+            size: 36,
+            weight: FontWeight.w700,
+            color: Colors.black,
+            height: 1.1,
           ),
         ),
         const SizedBox(height: 6),
         Text(
-          label,
+          'Total hours & minutes',
           textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: AttendanceUi.statLabel,
+          style: WaUi.body.copyWith(
+            fontSize: 14,
+            color: BarqodyChrome.secondaryText,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Divider(height: 1, color: BarqodyChrome.divider),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            _dashboardStat(context.l10n.present, '${summary.present}'),
+            const SizedBox(width: 8),
+            _dashboardStat(context.l10n.absent, '${summary.absent}'),
+            const SizedBox(width: 8),
+            _dashboardStat(context.l10n.partial, '${summary.partial}'),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            _dashboardStat(context.l10n.offDays, '${summary.weekend}'),
+            const SizedBox(width: 8),
+            _dashboardStat(
+              context.l10n.workingDays,
+              '${summary.totalWorkingDays}',
+            ),
+            const SizedBox(width: 8),
+            _dashboardStat(context.l10n.attendanceRate, rate),
+          ],
         ),
       ],
     );
@@ -521,26 +503,33 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   Widget _dashboardStat(String label, String value) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
-        decoration: AttendanceUi.thickCard,
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
+        decoration: BoxDecoration(
+          color: _statCardBg,
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: Column(
           children: [
             Text(
               value,
               textAlign: TextAlign.center,
-              style: AttendanceUi.statNumber.copyWith(
-                color: WaUi.primaryText,
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
+              style: WaUi.toolsTitleOf(
+                size: 22,
+                weight: FontWeight.w700,
+                color: Colors.black,
               ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
               label,
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: AttendanceUi.statLabel,
+              style: WaUi.body.copyWith(
+                fontSize: 12,
+                color: BarqodyChrome.secondaryText,
+                height: 1.2,
+              ),
             ),
           ],
         ),
@@ -549,16 +538,8 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   }
 
   BoxDecoration _calendarBoxDecoration() => BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(WaUi.radiusLg),
-        border: Border.all(color: WaUi.divider),
-        boxShadow: [
-          BoxShadow(
-            color: WaUi.primaryText.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: _statCardBg,
+        borderRadius: BorderRadius.circular(20),
       );
 
   List<String> _weekdayLabels() {
@@ -656,57 +637,53 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
     required bool isToday,
     VoidCallback? onTap,
   }) {
-    final color = _statusColor(status);
     final isUpcoming = status == 'upcoming';
-    final hasStatus = status != 'upcoming';
+    final isWeekend = status == 'weekend';
+    final color = _statusColor(status);
+
+    Color bg;
+    Color textColor;
+    Border? border;
+
+    if (isSelected) {
+      bg = Colors.black;
+      textColor = Colors.white;
+    } else if (isWeekend) {
+      bg = Colors.white;
+      textColor = Colors.black;
+      border = Border.all(color: BarqodyChrome.divider);
+    } else if (isUpcoming) {
+      bg = Colors.transparent;
+      textColor = BarqodyChrome.secondaryText.withValues(alpha: 0.45);
+    } else {
+      bg = color;
+      textColor = Colors.white;
+    }
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
-            color: hasStatus
-                ? color.withValues(alpha: isSelected ? 0.28 : 0.14)
-                : WaUi.searchBg.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: isSelected
-                  ? color
-                  : isToday
-                      ? WaUi.navGreen.withValues(alpha: 0.5)
-                      : Colors.transparent,
-              width: isSelected ? 1.5 : 1,
-            ),
+            color: bg,
+            borderRadius: BorderRadius.circular(12),
+            border: border ??
+                (isToday && !isSelected
+                    ? Border.all(color: Colors.black.withValues(alpha: 0.25))
+                    : null),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '$dayNum',
-                style: WaUi.bodyMedium.copyWith(
-                  color: isUpcoming
-                      ? WaUi.secondaryText.withValues(alpha: 0.45)
-                      : color,
-                  fontWeight:
-                      isSelected || isToday ? FontWeight.w600 : FontWeight.w500,
-                  fontSize: 13,
-                ),
-              ),
-              if (hasStatus) ...[
-                const SizedBox(height: 3),
-                Container(
-                  width: 5,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ],
-            ],
+          alignment: Alignment.center,
+          child: Text(
+            '$dayNum',
+            style: WaUi.bodyMedium.copyWith(
+              color: textColor,
+              fontWeight:
+                  isSelected || isToday ? FontWeight.w700 : FontWeight.w600,
+              fontSize: 13,
+            ),
           ),
         ),
       ),
@@ -715,31 +692,40 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
 
   Widget _calendarLegend(BuildContext context) {
     final items = [
-      ('present', context.l10n.present),
-      ('absent', context.l10n.absent),
-      ('partial', context.l10n.partial),
-      ('weekend', context.l10n.statusWeekend),
+      ('present', context.l10n.present, _presentFill),
+      ('absent', context.l10n.absent, _absentTint),
+      ('partial', context.l10n.partial, _partialTint),
+      ('weekend', context.l10n.statusWeekend, Colors.white),
     ];
 
     return Wrap(
-      spacing: 12,
-      runSpacing: 6,
+      spacing: 14,
+      runSpacing: 8,
       alignment: WrapAlignment.center,
       children: items.map((item) {
-        final color = _statusColor(item.$1);
+        final isWeekend = item.$1 == 'weekend';
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 8,
-              height: 8,
+              width: 12,
+              height: 12,
               decoration: BoxDecoration(
-                color: color,
+                color: item.$3,
                 shape: BoxShape.circle,
+                border: isWeekend
+                    ? Border.all(color: BarqodyChrome.divider)
+                    : null,
               ),
             ),
-            const SizedBox(width: 5),
-            Text(item.$2, style: WaUi.caption.copyWith(fontSize: 11)),
+            const SizedBox(width: 6),
+            Text(
+              item.$2,
+              style: WaUi.body.copyWith(
+                fontSize: 11,
+                color: BarqodyChrome.bodyText,
+              ),
+            ),
           ],
         );
       }).toList(),
@@ -865,14 +851,24 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AttendanceUi.softIconBox(
-              icon: Icons.assessment_outlined,
-              size: 64,
+            Image.asset(
+              'assets/images/png/waiting-icon.png',
+              width: 56,
+              height: 56,
+              errorBuilder: (_, _, _) => Icon(
+                Icons.assessment_outlined,
+                size: 52,
+                color: BarqodyChrome.secondaryText.withValues(alpha: 0.45),
+              ),
             ),
             const SizedBox(height: 18),
             Text(
               context.l10n.noEmployerFound,
-              style: WaUi.sectionHeader,
+              style: WaUi.toolsTitleOf(
+                size: 17,
+                weight: FontWeight.w700,
+                color: Colors.black,
+              ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -885,19 +881,25 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
-      decoration: AttendanceUi.softCard,
+      decoration: BoxDecoration(
+        color: _statCardBg,
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
         children: [
           Icon(
             Icons.event_busy_outlined,
             size: 36,
-            color: WaUi.secondaryText.withValues(alpha: 0.45),
+            color: BarqodyChrome.secondaryText.withValues(alpha: 0.45),
           ),
           const SizedBox(height: 12),
           Text(
             context.l10n.noAttendanceDataForMonth,
             textAlign: TextAlign.center,
-            style: WaUi.listSubtitle,
+            style: WaUi.body.copyWith(
+              fontSize: 14,
+              color: BarqodyChrome.bodyText,
+            ),
           ),
         ],
       ),

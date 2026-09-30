@@ -41,9 +41,9 @@ class QrCardStackCarousel extends StatefulWidget {
 
 class _QrCardStackCarouselState extends State<QrCardStackCarousel>
     with SingleTickerProviderStateMixin {
-  static const _cardWidth = 340.0;
-  static const _cardHeight = 440.0;
-  static const _stackHeight = 460.0;
+  static const _cardWidth = 320.0;
+  static const _cardHeight = 420.0;
+  static const _stackHeight = 440.0;
   static const _swipeThreshold = 72.0;
   static const _velocityThreshold = 700.0;
   static const _maxVisibleDepth = 3;
@@ -127,20 +127,6 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
 
   void _notifyTopChanged() {
     widget.onPageChanged(_topCardIndex);
-  }
-
-  void _bringNextToFront() {
-    if (_stackOrder.length <= 1 || _isAnimating) return;
-    _runSwipeAwayAnimation(_dragOffset.dx >= 0 ? 1 : -1);
-  }
-
-  void _bringPreviousToFront() {
-    if (_stackOrder.length <= 1 || _isAnimating) return;
-    setState(() {
-      final back = _stackOrder.removeLast();
-      _stackOrder.insert(0, back);
-    });
-    _notifyTopChanged();
   }
 
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
@@ -300,97 +286,63 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
                 ],
               ),
             ),
-            SizedBox(height: 8),
-            if (cards.length > 1) ...[
-              Text(context.l10n.swipeToBrowseCards, style: WaUi.caption),
-              SizedBox(height: 10),
-            ] else
-              SizedBox(height: 10),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (cards.length > 1) ...[
-                    _IconCircleButton(
-                      icon: Icons.chevron_left,
-                      tooltip: context.l10n.previousCard,
-                      onTap: () => _bringPreviousToFront(),
-                      enabled: !_isAnimating,
-                    ),
-                    SizedBox(width: 6),
-                    ...List.generate(cards.length, (i) {
-                      final active = i == topIndex;
-                      return AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
-                        margin: EdgeInsets.symmetric(horizontal: 3),
-                        width: active ? 18 : 6,
-                        height: 6,
-                        decoration: BoxDecoration(
-                          color: active ? WaUi.accent : WaUi.divider,
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                      );
-                    }),
-                    SizedBox(width: 6),
-                    _IconCircleButton(
-                      icon: Icons.chevron_right,
-                      tooltip: context.l10n.nextCard,
-                      onTap: () => _bringNextToFront(),
-                      enabled: !_isAnimating,
-                    ),
-                    SizedBox(width: 8),
-                  ],
-                  _IconCircleButton(
-                    icon: Icons.add,
-                    tooltip: context.l10n.newCard2,
-                    onTap: widget.onAddCard,
-                  ),
-                  if (widget.onEditCard != null &&
-                      !cards[topIndex].isPrimary) ...[
-                    SizedBox(width: 8),
-                    _IconCircleButton(
-                      icon: Icons.edit_outlined,
-                      tooltip: context.l10n.editCard,
-                      onTap: widget.onEditCard!,
-                    ),
-                  ],
-                  // Last remaining card cannot be deleted.
-                  if (widget.onDeleteCard != null &&
-                      cards.length > 1 &&
-                      !cards[topIndex].isPrimary) ...[
-                    SizedBox(width: 8),
-                    _IconCircleButton(
-                      icon: Icons.delete_outline,
-                      tooltip: context.l10n.deleteCard,
-                      onTap: widget.onDeleteCard!,
-                    ),
-                  ],
-                  if (widget.onDownload != null) ...[
-                    SizedBox(width: 8),
-                    _IconCircleButton(
-                      icon: Icons.download_rounded,
-                      tooltip: context.l10n.download,
-                      onTap: widget.onDownload!,
-                    ),
-                  ],
-                  if (widget.onShare != null) ...[
-                    SizedBox(width: 8),
-                    _IconCircleButton(
-                      icon: Icons.ios_share_rounded,
-                      tooltip: context.l10n.share,
-                      onTap: widget.onShare!,
-                    ),
-                  ],
-                ],
+            SizedBox(height: 10),
+            Text(
+              context.l10n.swipeToBrowseCards,
+              style: WaUi.caption.copyWith(
+                color: const Color(0xFF8E8E93),
+                fontSize: 13,
               ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              cards.length > 1
-                  ? '${topIndex + 1} of ${cards.length} · ${cards[topIndex].title}'
-                  : cards[topIndex].title,
-              style: WaUi.caption,
+            if (cards.length > 1) ...[
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(cards.length, (i) {
+                  final active = i == topIndex;
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    width: active ? 18 : 7,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: active ? Colors.black : const Color(0xFFD1D1D6),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  );
+                }),
+              ),
+            ],
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (widget.onEditCard != null) ...[
+                  _IconCircleButton(
+                    icon: Icons.edit_outlined,
+                    asset: 'assets/images/png/edit-icon.png',
+                    tooltip: context.l10n.editCard,
+                    onTap: widget.onEditCard!,
+                  ),
+                  const SizedBox(width: 14),
+                ],
+                if (widget.onShare != null) ...[
+                  _IconCircleButton(
+                    icon: Icons.ios_share_rounded,
+                    asset: 'assets/images/png/arrow-up-icon.png',
+                    tooltip: context.l10n.share,
+                    onTap: widget.onShare!,
+                  ),
+                  const SizedBox(width: 14),
+                ],
+                if (widget.onDownload != null)
+                  _IconCircleButton(
+                    icon: Icons.download_rounded,
+                    asset: 'assets/images/png/download-icon.png',
+                    tooltip: context.l10n.download,
+                    onTap: widget.onDownload!,
+                  ),
+              ],
             ),
           ],
         );
@@ -448,6 +400,7 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
         behavior: HitTestBehavior.opaque,
         onHorizontalDragUpdate: _onHorizontalDragUpdate,
         onHorizontalDragEnd: _onHorizontalDragEnd,
+        onLongPress: widget.onDeleteCard,
         child: card,
       ),
     );
@@ -536,33 +489,48 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
 
 class _IconCircleButton extends StatelessWidget {
   final IconData icon;
+  final String? asset;
   final String tooltip;
   final VoidCallback onTap;
-  final bool enabled;
 
   const _IconCircleButton({
     required this.icon,
     required this.tooltip,
     required this.onTap,
-    this.enabled = true,
+    this.asset,
   });
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: WaUi.scaffold,
+      color: const Color(0xFFF2F2F7),
       shape: const CircleBorder(),
       child: InkWell(
-        onTap: enabled ? onTap : null,
+        onTap: onTap,
         customBorder: const CircleBorder(),
         child: Tooltip(
           message: tooltip,
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Icon(
-              icon,
-              size: 20,
-              color: enabled ? WaUi.primaryText : WaUi.divider,
+          child: SizedBox(
+            width: 48,
+            height: 48,
+            child: Center(
+              child: asset != null
+                  ? Image.asset(
+                      asset!,
+                      width: 18,
+                      height: 18,
+                      color: Colors.black,
+                      errorBuilder: (_, __, ___) => Icon(
+                        icon,
+                        size: 20,
+                        color: Colors.black,
+                      ),
+                    )
+                  : Icon(
+                      icon,
+                      size: 20,
+                      color: Colors.black,
+                    ),
             ),
           ),
         ),

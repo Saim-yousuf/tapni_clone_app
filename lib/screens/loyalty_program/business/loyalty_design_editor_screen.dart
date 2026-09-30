@@ -11,6 +11,8 @@ import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
+import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_success_screen.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 
 /// Full Canva-style loyalty stamp-card editor (same tools as invitations).
@@ -743,7 +745,17 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.l10n.loyaltyProgramSaved)),
       );
-      Navigator.of(context).pop(true);
+      final isNewProgram =
+          widget.existingProgramId == null || widget.existingProgramId!.isEmpty;
+      if (isNewProgram) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => const LoyaltyProgramSuccessScreen(),
+          ),
+        );
+      } else {
+        Navigator.of(context).pop(true);
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(res.message ?? context.l10n.failedToSave)),
@@ -834,39 +846,43 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFE8EAED),
-      appBar: AppBar(
-        title: Text(context.l10n.customizeCard),
-        actions: [
-          IconButton(
-            tooltip: context.l10n.publishForOthers,
-            onPressed: _publishing ? null : _publishTemplate,
-            icon: _publishing
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2))
-                : const Icon(Icons.public)),
-          IconButton(
-            tooltip: context.l10n.undo,
-            onPressed: _undo.isEmpty ? null : _doUndo,
-            icon: const Icon(Icons.undo)),
-          IconButton(
-            tooltip: context.l10n.redo,
-            onPressed: _redo.isEmpty ? null : _doRedo,
-            icon: const Icon(Icons.redo)),
-          IconButton(
-            tooltip: context.l10n.download,
-            onPressed: _downloading ? null : _download,
-            icon: _downloading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2))
-                : const Icon(Icons.download_rounded)),
-        ],
-      ),
       body: Column(
         children: [
+          ColoredBox(
+            color: BarqodyChrome.scaffold,
+            child: SafeArea(
+              bottom: false,
+              child: BarqodyTitleBar(
+                title: 'Design Card',
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      tooltip: context.l10n.undo,
+                      onPressed: _undo.isEmpty ? null : _doUndo,
+                      icon: const Icon(Icons.undo, size: 22),
+                    ),
+                    IconButton(
+                      tooltip: context.l10n.redo,
+                      onPressed: _redo.isEmpty ? null : _doRedo,
+                      icon: const Icon(Icons.redo, size: 22),
+                    ),
+                    IconButton(
+                      tooltip: context.l10n.download,
+                      onPressed: _downloading ? null : _download,
+                      icon: _downloading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.download_rounded, size: 22),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           Container(
             color: WaUi.surface,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -950,36 +966,24 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
           SafeArea(
             top: false,
             child: Container(
-              color: WaUi.surface,
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+              color: BarqodyChrome.scaffold,
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
               child: Row(
                 children: [
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: _showProgramMeta,
-                      child: Text(context.l10n.details),
+                    child: PillButton(
+                      label: 'Save & Draft',
+                      filled: false,
+                      enabled: !_saving,
+                      onPressed: _saveProgram,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    flex: 2,
-                    child: FilledButton(
-                      onPressed: _saving ? null : _saveProgram,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: WaUi.buttonDark,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: _saving
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text(context.l10n.saveProgram),
+                    child: PillButton(
+                      label: context.l10n.publish,
+                      enabled: !_publishing,
+                      onPressed: _publishTemplate,
                     ),
                   ),
                 ],

@@ -209,12 +209,15 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     }
 
     final profile = Provider.of<ProfileProvider>(context).profile;
-    final bottomPad = CurvedBottomNav.fabOverhang() + 16;
+    final bottomPad = CurvedBottomNav.contentClearance(context) +
+        CurvedBottomNav.fabOverhang() +
+        24;
     final isPro = profile.isPro;
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
+        bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -223,7 +226,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               actions: [NotificationIconButton()],
             ),
             Expanded(
-              child: !isPro
+              child: ClipRect(
+                child: !isPro
                   ? _LockedAnalyticsPreview(bottomPad: bottomPad)
                   : _isLoading
                   ? _AnalyticsShimmer(bottomPad: bottomPad)
@@ -231,17 +235,19 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       color: WaUi.buttonDark,
                       onRefresh: _fetchAnalytics,
                       child: ListView(
-                        physics: const AlwaysScrollableScrollPhysics(),
+                        physics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics(),
+                        ),
                         padding: EdgeInsets.fromLTRB(16, 4, 16, bottomPad),
                         children: [
                           _RangeChips(selected: _range, onSelected: _setRange),
-                          const SizedBox(height: 18),
+                          const SizedBox(height: 14),
                           if (_insights.isNotEmpty) ...[
                             _InsightStrip(
                               insights: _insights,
                               compareLabel: _range.compareLabel,
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 16),
                           ],
                           _MetricsGrid(
                             profileViews: _profileViews,
@@ -315,8 +321,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                         ],
                       ),
                     ),
+              ),
             ),
-            const SizedBox(height: 70),
           ],
         ),
       ),
@@ -465,9 +471,10 @@ class _InsightStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: 44,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(vertical: 2),
         itemCount: insights.length,
         separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
@@ -523,107 +530,107 @@ class _MetricsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final audienceTotal = guestViews + userViews;
     final guestFrac = audienceTotal == 0 ? 0.0 : guestViews / audienceTotal;
+    final guestSharePct =
+        audienceTotal == 0 ? 0 : (guestFrac * 100).round();
 
     return Column(
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: _MetricCell(
-                label: context.l10n.profileViews,
-                value: '$profileViews',
-                deltaPct: viewsChangePct,
-              ),
-            ),
-            Container(width: 1, height: 72, color: WaUi.divider),
-            Expanded(
-              child: _MetricCell(
-                label: context.l10n.qrScans,
-                value: '$cardScans',
-                deltaPct: scansChangePct,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 18),
-        Container(height: 1, color: WaUi.divider),
-        const SizedBox(height: 18),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: _MetricCell(
-                label: 'Unique viewers',
-                value: '$uniqueViewers',
-              ),
-            ),
-            Container(width: 1, height: 72, color: WaUi.divider),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Guest vs Users',
-                      style: WaUi.caption.copyWith(
-                        color: WaUi.secondaryText,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      audienceTotal == 0 ? '—' : '$guestViews · $userViews',
-                      style: WaUi.toolsTitleOf(
-                        size: 24,
-                        weight: FontWeight.w700,
-                        height: 1.05,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(99),
-                      child: LinearProgressIndicator(
-                        value: audienceTotal == 0 ? 0 : guestFrac,
-                        minHeight: 5,
-                        backgroundColor: WaUi.primaryText,
-                        color: const Color(0xFF98A2AB),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Guest share ${audienceTotal == 0 ? 0 : (guestFrac * 100).round()}%',
-                      style: WaUi.label.copyWith(
-                        color: WaUi.secondaryText,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _MetricCard(
+                  label: context.l10n.profileViews,
+                  value: '$profileViews',
+                  deltaPct: viewsChangePct,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(width: 10),
+              Expanded(
+                child: _MetricCard(
+                  label: context.l10n.qrScans,
+                  value: '$cardScans',
+                  deltaPct: scansChangePct,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _MetricCard(
+                  label: 'Unique viewers',
+                  value: '$uniqueViewers',
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _MetricCard(
+                  label: 'Guest vs Users',
+                  value: audienceTotal == 0 ? '—' : '$guestViews-$userViews',
+                  footer: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(99),
+                        child: LinearProgressIndicator(
+                          value: audienceTotal == 0 ? 0 : guestFrac,
+                          minHeight: 4,
+                          backgroundColor: const Color(0xFFE5E5EA),
+                          color: WaUi.buttonDark,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Guest share $guestSharePct%',
+                        style: WaUi.label.copyWith(
+                          color: WaUi.secondaryText,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
 }
 
-class _MetricCell extends StatelessWidget {
+class _MetricCard extends StatelessWidget {
   final String label;
   final String value;
   final int? deltaPct;
+  final Widget? footer;
 
-  const _MetricCell({required this.label, required this.value, this.deltaPct});
+  const _MetricCard({
+    required this.label,
+    required this.value,
+    this.deltaPct,
+    this.footer,
+  });
 
   @override
   Widget build(BuildContext context) {
     final delta = deltaPct;
     final up = (delta ?? 0) >= 0;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF2F2F7),
+        borderRadius: BorderRadius.circular(22),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -632,19 +639,20 @@ class _MetricCell extends StatelessWidget {
             style: WaUi.caption.copyWith(
               color: WaUi.secondaryText,
               fontWeight: FontWeight.w500,
+              fontSize: 13,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Text(
             value,
             style: WaUi.toolsTitleOf(
-              size: 32,
+              size: 28,
               weight: FontWeight.w700,
               height: 1.0,
             ),
           ),
           if (delta != null) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text(
               '${up ? '▲' : '▼'} ${up ? '+' : ''}$delta%',
               style: WaUi.label.copyWith(
@@ -654,6 +662,7 @@ class _MetricCell extends StatelessWidget {
               ),
             ),
           ],
+          if (footer != null) footer!,
         ],
       ),
     );
@@ -1128,60 +1137,38 @@ class _AnalyticsShimmer extends StatelessWidget {
           const Row(
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ShimmerBox(width: 80, height: 12, borderRadius: 6),
-                    SizedBox(height: 10),
-                    ShimmerBox(width: 56, height: 30, borderRadius: 6),
-                    SizedBox(height: 8),
-                    ShimmerBox(width: 40, height: 12, borderRadius: 6),
-                  ],
+                child: ShimmerBox(
+                  width: double.infinity,
+                  height: 100,
+                  borderRadius: 22,
                 ),
               ),
+              SizedBox(width: 10),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ShimmerBox(width: 70, height: 12, borderRadius: 6),
-                    SizedBox(height: 10),
-                    ShimmerBox(width: 48, height: 30, borderRadius: 6),
-                    SizedBox(height: 8),
-                    ShimmerBox(width: 40, height: 12, borderRadius: 6),
-                  ],
+                child: ShimmerBox(
+                  width: double.infinity,
+                  height: 100,
+                  borderRadius: 22,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 22),
-          const Divider(height: 1, color: Color(0xFFE9EDEF)),
-          const SizedBox(height: 22),
+          const SizedBox(height: 10),
           const Row(
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ShimmerBox(width: 90, height: 12, borderRadius: 6),
-                    SizedBox(height: 10),
-                    ShimmerBox(width: 48, height: 28, borderRadius: 6),
-                  ],
+                child: ShimmerBox(
+                  width: double.infinity,
+                  height: 100,
+                  borderRadius: 22,
                 ),
               ),
+              SizedBox(width: 10),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ShimmerBox(width: 100, height: 12, borderRadius: 6),
-                    SizedBox(height: 10),
-                    ShimmerBox(width: 70, height: 28, borderRadius: 6),
-                    SizedBox(height: 10),
-                    ShimmerBox(
-                      width: double.infinity,
-                      height: 5,
-                      borderRadius: 99,
-                    ),
-                  ],
+                child: ShimmerBox(
+                  width: double.infinity,
+                  height: 100,
+                  borderRadius: 22,
                 ),
               ),
             ],
@@ -1383,17 +1370,41 @@ class _FakeMetrics extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(child: ShimmerBox(width: 80, height: 64, borderRadius: 8)),
-            SizedBox(width: 24),
-            Expanded(child: ShimmerBox(width: 80, height: 64, borderRadius: 8)),
+            Expanded(
+              child: ShimmerBox(
+                width: double.infinity,
+                height: 100,
+                borderRadius: 22,
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: ShimmerBox(
+                width: double.infinity,
+                height: 100,
+                borderRadius: 22,
+              ),
+            ),
           ],
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 10),
         Row(
           children: [
-            Expanded(child: ShimmerBox(width: 80, height: 64, borderRadius: 8)),
-            SizedBox(width: 24),
-            Expanded(child: ShimmerBox(width: 80, height: 64, borderRadius: 8)),
+            Expanded(
+              child: ShimmerBox(
+                width: double.infinity,
+                height: 100,
+                borderRadius: 22,
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: ShimmerBox(
+                width: double.infinity,
+                height: 100,
+                borderRadius: 22,
+              ),
+            ),
           ],
         ),
       ],

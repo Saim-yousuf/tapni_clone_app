@@ -8,8 +8,7 @@ import 'package:tapni_app/screens/attendance/business/map_location_picker_screen
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/location_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
-import 'package:tapni_app/widgets/attendance_ui.dart';
-import 'package:tapni_app/widgets/custom_app_button.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/face_capture_sheet.dart';
 
 class EmployeeSettingsScreen extends StatefulWidget {
@@ -220,26 +219,47 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
     if (res.success) Navigator.pop(context, true);
   }
 
+  String _screenTitle(BuildContext context) {
+    if (widget.employee != null) {
+      return widget.employee!.employee.displayName;
+    }
+    if (widget.employeeName != null && widget.employeeName!.isNotEmpty) {
+      return widget.employeeName!;
+    }
+    return 'Add Member';
+  }
+
   Widget _buildMapPreview() {
     if (_latitude == null || _longitude == null) {
       return Container(
-        height: 148,
+        height: 160,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: const Color(0xFFFAFAFA),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: WaUi.divider),
+          color: BarqodyChrome.fieldFill,
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.map_outlined,
-              size: 28,
-              color: WaUi.secondaryText.withValues(alpha: 0.45),
+            Image.asset(
+              'assets/images/png/map.png',
+              width: 40,
+              height: 40,
+              color: BarqodyChrome.secondaryText.withValues(alpha: 0.5),
+              errorBuilder: (_, _, _) => Icon(
+                Icons.map_outlined,
+                size: 32,
+                color: BarqodyChrome.secondaryText.withValues(alpha: 0.45),
+              ),
             ),
             const SizedBox(height: 8),
-            Text(context.l10n.locationNotSetYet, style: WaUi.caption),
+            Text(
+              context.l10n.locationNotSetYet,
+              style: WaUi.body.copyWith(
+                fontSize: 13,
+                color: BarqodyChrome.secondaryText,
+              ),
+            ),
           ],
         ),
       );
@@ -247,10 +267,10 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
 
     final point = LatLng(_latitude!, _longitude!);
     return Container(
-      height: 168,
+      height: 160,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: WaUi.divider),
+        borderRadius: BorderRadius.circular(16),
+        color: BarqodyChrome.fieldFill,
       ),
       clipBehavior: Clip.antiAlias,
       child: IgnorePointer(
@@ -273,8 +293,8 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
                   point: point,
                   radius: _radiusMeters.toDouble(),
                   useRadiusInMeter: true,
-                  color: WaUi.buttonDark.withValues(alpha: 0.08),
-                  borderColor: WaUi.buttonDark,
+                  color: Colors.black.withValues(alpha: 0.08),
+                  borderColor: Colors.black,
                   borderStrokeWidth: 1.5,
                 ),
               ],
@@ -287,7 +307,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
                   height: 36,
                   child: const Icon(
                     Icons.location_on,
-                    color: WaUi.buttonDark,
+                    color: Colors.black,
                     size: 32,
                   ),
                 ),
@@ -301,163 +321,145 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.employee?.employee.displayName ??
-        widget.employeeName ??
-        context.l10n.inviteEmployee;
     final dayNames = _dayNames(context);
     final hasFace = _facePhotoBase64 != null ||
         widget.employee?.facePhoto.isNotEmpty == true;
+    final saveLabel = widget.employee != null
+        ? context.l10n.saveSettings
+        : context.l10n.sendInvitation;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-              children: [
-                _Section(
-                  title: context.l10n.shiftTiming,
-                  child: Row(
+      backgroundColor: BarqodyChrome.scaffold,
+      body: SafeArea(
+        child: Column(
+          children: [
+            BarqodyTitleBar(title: _screenTitle(context)),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(
+                  BarqodyChrome.sidePad,
+                  12,
+                  BarqodyChrome.sidePad,
+                  24,
+                ),
+                children: [
+                  Row(
                     children: [
-                      _TimeField(
-                        label: context.l10n.start,
+                      _ShiftTimeField(
+                        label: '${context.l10n.start.toUpperCase()} SHIFT',
                         value: _formatTime(_shiftStart),
                         onTap: () => _pickTime(isStart: true),
                       ),
                       const SizedBox(width: 10),
-                      _TimeField(
-                        label: context.l10n.end,
+                      _ShiftTimeField(
+                        label: '${context.l10n.end.toUpperCase()} SHIFT',
                         value: _formatTime(_shiftEnd),
                         onTap: () => _pickTime(isStart: false),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 22),
-                _Section(
-                  title: context.l10n.workLocation,
-                  child: Column(
+                  const SizedBox(height: 24),
+                  _BarqodySectionLabel(context.l10n.workLocation.toUpperCase()),
+                  const SizedBox(height: 10),
+                  _buildMapPreview(),
+                  const SizedBox(height: 12),
+                  Row(
                     children: [
-                      _buildMapPreview(),
-                      const SizedBox(height: 12),
-                      CustomAppButton(
-                        width: double.infinity,
-                        text: context.l10n.pickOnMap,
-                        icon: Icons.map_outlined,
-                        backgroundColor: WaUi.buttonDark,
-                        onTap: _pickOnMap,
+                      Expanded(
+                        child: _CompactPillButton(
+                          label: context.l10n.pickOnMap,
+                          filled: false,
+                          onPressed: _pickOnMap,
+                        ),
                       ),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        width: double.infinity,
-                        height: WaUi.primaryButtonHeight,
-                        child: OutlinedButton.icon(
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _CompactPillButton(
+                          label: _latitude != null
+                              ? context.l10n.updateGPSLocation
+                              : context.l10n.useMyLocation,
+                          filled: true,
+                          loading: _isLoadingLocation,
                           onPressed:
                               _isLoadingLocation ? null : _useCurrentLocation,
-                          icon: _isLoadingLocation
-                              ? const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : const Icon(Icons.my_location_outlined, size: 18),
-                          label: Text(
-                            _latitude != null
-                                ? context.l10n.updateGPSLocation
-                                : context.l10n.useMyLocation,
-                            style: WaUi.bodyMedium,
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: WaUi.primaryText,
-                            side: const BorderSide(color: WaUi.divider),
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(WaUi.radiusMd),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: _addressController,
-                        style: WaUi.body,
-                        decoration: WaUi.fieldDecoration(
-                          labelText: context.l10n.addressOptional,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextField(
-                        controller: _radiusController,
-                        keyboardType: TextInputType.number,
-                        style: WaUi.body,
-                        onChanged: (_) => setState(() {}),
-                        decoration: WaUi.fieldDecoration(
-                          labelText: context.l10n.allowedRadiusMeters,
                         ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 22),
-                _Section(
-                  title: context.l10n.weekendDays,
-                  child: Column(
+                  const SizedBox(height: 16),
+                  _BarqodySectionLabel('ADDRESS'),
+                  const SizedBox(height: 8),
+                  _BarqodyFilledField(
+                    controller: _addressController,
+                    hint: context.l10n.addressOptional,
+                  ),
+                  const SizedBox(height: 14),
+                  _BarqodySectionLabel('RADIUS (KM)'),
+                  const SizedBox(height: 8),
+                  _BarqodyFilledField(
+                    controller: _radiusController,
+                    hint: context.l10n.allowedRadiusMeters,
+                    keyboardType: TextInputType.number,
+                    onChanged: (_) => setState(() {}),
+                  ),
+                  const SizedBox(height: 24),
+                  _BarqodySectionLabel(
+                    context.l10n.weekendDays.toUpperCase(),
+                  ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: List.generate(7, (index) {
                       final selected = _weekendDays.contains(index);
-                      final isLast = index == 6;
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: isLast ? 0 : 8),
-                        child: _DayRow(
-                          label: dayNames[index],
-                          selected: selected,
-                          onTap: () {
-                            setState(() {
-                              if (selected) {
-                                _weekendDays.remove(index);
-                              } else {
-                                _weekendDays.add(index);
-                              }
-                            });
-                          },
-                        ),
+                      return _WeekendDayChip(
+                        label: dayNames[index],
+                        selected: selected,
+                        onTap: () {
+                          setState(() {
+                            if (selected) {
+                              _weekendDays.remove(index);
+                            } else {
+                              _weekendDays.add(index);
+                            }
+                          });
+                        },
                       );
                     }),
                   ),
-                ),
-                const SizedBox(height: 22),
-                _Section(
-                  title: context.l10n.employeeFacePhoto,
-                  child: Material(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+                  const SizedBox(height: 24),
+                  _BarqodySectionLabel(
+                    context.l10n.employeeFacePhoto.toUpperCase(),
+                  ),
+                  const SizedBox(height: 10),
+                  Material(
+                    color: BarqodyChrome.fieldFill,
+                    borderRadius: BorderRadius.circular(16),
                     child: InkWell(
                       onTap: _captureFace,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 13,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: WaUi.divider),
+                          horizontal: 16,
+                          vertical: 14,
                         ),
                         child: Row(
                           children: [
-                            Icon(
+                            Image.asset(
                               hasFace
-                                  ? Icons.check_circle_outline_rounded
-                                  : Icons.face_outlined,
-                              size: 22,
-                              color: hasFace
-                                  ? WaUi.navGreen
-                                  : WaUi.secondaryText,
+                                  ? 'assets/images/png/check-icon-1.png'
+                                  : 'assets/images/png/person-icon.png',
+                              width: 22,
+                              height: 22,
+                              errorBuilder: (_, _, _) => Icon(
+                                hasFace
+                                    ? Icons.check_circle_outline_rounded
+                                    : Icons.face_outlined,
+                                size: 22,
+                                color: hasFace
+                                    ? Colors.black
+                                    : BarqodyChrome.secondaryText,
+                              ),
                             ),
                             const SizedBox(width: 12),
                             Expanded(
@@ -465,87 +467,97 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
                                 hasFace
                                     ? context.l10n.facePhotoAdded
                                     : context.l10n.addFacePhoto,
-                                style: WaUi.listTitle,
+                                style: WaUi.body.copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                             Icon(
                               Icons.chevron_right_rounded,
-                              color: WaUi.secondaryText.withValues(alpha: 0.6),
+                              color: BarqodyChrome.secondaryText
+                                  .withValues(alpha: 0.6),
                             ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                top: BorderSide(color: WaUi.divider, width: 1),
+                ],
               ),
             ),
-            child: SafeArea(
-              top: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-                child: CustomAppButton(
-                  width: double.infinity,
-                  text: widget.employee != null
-                      ? context.l10n.saveSettings
-                      : context.l10n.sendInvitation,
-                  icon: widget.employee != null
-                      ? Icons.check_rounded
-                      : Icons.send_outlined,
-                  backgroundColor: WaUi.buttonDark,
-                  isLoading: _isSaving,
-                  onTap: _save,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                BarqodyChrome.sidePad,
+                8,
+                BarqodyChrome.sidePad,
+                12,
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton(
+                  onPressed: _isSaving ? null : _save,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    disabledBackgroundColor:
+                        Colors.black.withValues(alpha: 0.35),
+                    elevation: 0,
+                    shape: const StadiumBorder(),
+                  ),
+                  child: _isSaving
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          saveLabel,
+                          style: WaUi.promoButton.copyWith(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-class _Section extends StatelessWidget {
-  final String title;
-  final Widget child;
+class _BarqodySectionLabel extends StatelessWidget {
+  final String text;
 
-  const _Section({required this.title, required this.child});
+  const _BarqodySectionLabel(this.text);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: WaUi.label.copyWith(
-            color: WaUi.secondaryText,
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-            letterSpacing: 0.3,
-          ),
-        ),
-        const SizedBox(height: 10),
-        child,
-      ],
+    return Text(
+      text,
+      style: WaUi.label.copyWith(
+        fontSize: 11,
+        letterSpacing: 0.6,
+        fontWeight: FontWeight.w600,
+        color: BarqodyChrome.secondaryText,
+      ),
     );
   }
 }
 
-class _TimeField extends StatelessWidget {
+class _ShiftTimeField extends StatelessWidget {
   final String label;
   final String value;
   final VoidCallback onTap;
 
-  const _TimeField({
+  const _ShiftTimeField({
     required this.label,
     required this.value,
     required this.onTap,
@@ -555,46 +567,33 @@ class _TimeField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Material(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        color: BarqodyChrome.fieldFill,
+        borderRadius: BorderRadius.circular(16),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: WaUi.divider),
-            ),
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  label.toUpperCase(),
+                  label,
                   style: WaUi.label.copyWith(
                     fontSize: 10,
-                    letterSpacing: 0.6,
-                    color: WaUi.secondaryText,
+                    letterSpacing: 0.5,
+                    fontWeight: FontWeight.w600,
+                    color: BarqodyChrome.secondaryText,
                   ),
                 ),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        value,
-                        style: WaUi.headline.copyWith(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Icon(
-                      Icons.schedule_rounded,
-                      size: 18,
-                      color: WaUi.secondaryText.withValues(alpha: 0.7),
-                    ),
-                  ],
+                const SizedBox(height: 8),
+                Text(
+                  value,
+                  style: WaUi.toolsTitleOf(
+                    size: 22,
+                    weight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
                 ),
               ],
             ),
@@ -605,12 +604,132 @@ class _TimeField extends StatelessWidget {
   }
 }
 
-class _DayRow extends StatelessWidget {
+class _BarqodyFilledField extends StatelessWidget {
+  final TextEditingController controller;
+  final String hint;
+  final TextInputType? keyboardType;
+  final ValueChanged<String>? onChanged;
+
+  const _BarqodyFilledField({
+    required this.controller,
+    required this.hint,
+    this.keyboardType,
+    this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      onChanged: onChanged,
+      style: WaUi.body.copyWith(fontSize: 15, color: Colors.black),
+      cursorColor: Colors.black,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: BarqodyChrome.fieldFill,
+        hintText: hint,
+        hintStyle: WaUi.body.copyWith(
+          fontSize: 15,
+          color: BarqodyChrome.secondaryText,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+      ),
+    );
+  }
+}
+
+class _CompactPillButton extends StatelessWidget {
+  final String label;
+  final bool filled;
+  final bool loading;
+  final VoidCallback? onPressed;
+
+  const _CompactPillButton({
+    required this.label,
+    required this.filled,
+    this.loading = false,
+    this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final child = loading
+        ? const SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Colors.white,
+            ),
+          )
+        : Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: WaUi.body.copyWith(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: filled ? Colors.white : Colors.black,
+            ),
+          );
+
+    if (filled) {
+      return SizedBox(
+        height: 44,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            disabledBackgroundColor: Colors.black.withValues(alpha: 0.35),
+            elevation: 0,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            shape: const StadiumBorder(),
+          ),
+          child: child,
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: 44,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.black,
+          side: const BorderSide(color: Colors.black, width: 1.2),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          shape: const StadiumBorder(),
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
+class _WeekendDayChip extends StatelessWidget {
   final String label;
   final bool selected;
   final VoidCallback onTap;
 
-  const _DayRow({
+  const _WeekendDayChip({
     required this.label,
     required this.selected,
     required this.onTap,
@@ -619,39 +738,53 @@ class _DayRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12),
+      color: selected ? Colors.black : Colors.white,
+      elevation: selected ? 0 : 0.5,
+      shadowColor: Colors.black.withValues(alpha: 0.08),
+      shape: StadiumBorder(
+        side: BorderSide(
+          color: selected ? Colors.black : const Color(0xFFE5E5EA),
+          width: 1,
+        ),
+      ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 140),
-          curve: Curves.easeOut,
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: selected ? WaUi.buttonDark : WaUi.divider,
-              width: selected ? 1.5 : 1,
-            ),
-          ),
+        customBorder: const StadiumBorder(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                selected
-                    ? Icons.check_box_outlined
-                    : Icons.check_box_outline_blank,
-                size: 22,
-                color: selected ? WaUi.buttonDark : WaUi.secondaryText,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  label,
-                  style: WaUi.listTitle.copyWith(
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+              if (selected)
+                Padding(
+                  padding: const EdgeInsets.only(right: 6),
+                  child: Image.asset(
+                    'assets/images/png/check-icon-1.png',
+                    width: 14,
+                    height: 14,
+                    color: Colors.white,
+                    errorBuilder: (_, _, _) => const Icon(
+                      Icons.check,
+                      size: 14,
+                      color: Colors.white,
+                    ),
                   ),
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.only(right: 6),
+                  child: Icon(
+                    Icons.check_box_outline_blank,
+                    size: 18,
+                    color: BarqodyChrome.secondaryText.withValues(alpha: 0.7),
+                  ),
+                ),
+              Text(
+                label,
+                style: WaUi.body.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: selected ? Colors.white : Colors.black,
                 ),
               ),
             ],

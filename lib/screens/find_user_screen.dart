@@ -2,15 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tapni_app/providers/profile_provider.dart';
-import 'package:tapni_app/providers/theme_provider.dart';
-import 'package:tapni_app/repository/auth_repo.dart';
-import 'package:tapni_app/utils/api_error_messages.dart';
-import 'package:tapni_app/screens/scanned_profile_screen.dart';
-import 'package:tapni_app/utils/theme.dart';
-import 'package:tapni_app/utils/whatsapp_ui.dart';
-
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:tapni_app/screens/scanned_profile_screen.dart';
+import 'package:tapni_app/utils/api_error_messages.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
+
 class PublicUserResult {
   final String id;
   final String name;
@@ -90,7 +89,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
       return;
     }
 
-    _debounce = Timer(Duration(milliseconds: 400), () {
+    _debounce = Timer(const Duration(milliseconds: 400), () {
       _searchUsers(query);
     });
   }
@@ -155,23 +154,41 @@ class _FindUserScreenState extends State<FindUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     final query = _searchController.text.trim().replaceFirst(RegExp(r'^@'), '');
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
-      appBar: AppBar(
-        backgroundColor: isDark ? AppTheme.cardDarkBg : Colors.white,
-        automaticallyImplyLeading: !widget.isTab,
-        title: Text(
-          context.l10n.findUser2,
-          style: TextStyle(color: isDark ? Colors.white : Colors.black)),
-      ),
+      backgroundColor: BarqodyChrome.scaffold,
       body: SafeArea(
         child: Column(
           children: [
+            if (widget.isTab)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 4),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    context.l10n.findUser2,
+                    style: WaUi.toolsTitleOf(
+                      size: 22,
+                      weight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              )
+            else
+              BarqodyTitleBar(
+                title: context.l10n.findUser2,
+                trailing: CircleAssetButton(
+                  asset: 'assets/images/png/icon-morehoriz.png',
+                  iconSize: 18,
+                  onTap: () {},
+                ),
+              ),
+            const SizedBox(height: 8),
+            const Divider(height: 1, thickness: 1, color: BarqodyChrome.divider),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
               child: SizedBox(
                 height: 48,
                 child: TextField(
@@ -187,31 +204,29 @@ class _FindUserScreenState extends State<FindUserScreen> {
                   style: WaUi.body.copyWith(
                     fontSize: 16,
                     height: 1.2,
-                    color: isDark ? Colors.white : WaUi.primaryText,
+                    color: Colors.black,
                   ),
-                  cursorColor: isDark ? Colors.white : WaUi.accent,
+                  cursorColor: Colors.black,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: isDark
-                        ? const Color(0xFF3A3B3C)
-                        : WaUi.searchBg,
+                    fillColor: const Color(0xFFF5F5F5),
                     hintText: context.l10n.searchByUsername,
-                    hintStyle: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: isDark
-                          ? const Color(0xFF8A8D91)
-                          : const Color(0xFF667781),
-                      height: 1.2,
+                    hintStyle: WaUi.body.copyWith(
+                      fontSize: 15,
+                      color: BarqodyChrome.secondaryText,
                     ),
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(left: 14, right: 8),
-                      child: Icon(
-                        Icons.search,
-                        size: 22,
-                        color: isDark
-                            ? const Color(0xFF8A8D91)
-                            : const Color(0xFF667781),
+                      child: Image.asset(
+                        'assets/images/png/search-icon.png',
+                        width: 18,
+                        height: 18,
+                        color: BarqodyChrome.secondaryText,
+                        errorBuilder: (_, __, ___) => const Icon(
+                          Icons.search,
+                          size: 20,
+                          color: BarqodyChrome.secondaryText,
+                        ),
                       ),
                     ),
                     prefixIconConstraints: const BoxConstraints(
@@ -221,9 +236,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
                             icon: const Icon(Icons.close, size: 18),
-                            color: isDark
-                                ? const Color(0xFF8A8D91)
-                                : const Color(0xFF667781),
+                            color: BarqodyChrome.secondaryText,
                             onPressed: () {
                               _searchController.clear();
                               _onSearchChanged('');
@@ -252,45 +265,30 @@ class _FindUserScreenState extends State<FindUserScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  context.l10n.onlyPublicProfilesAreShown,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: isDark ? Colors.white38 : Colors.grey.shade600,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 12),
-            Expanded(child: _buildBody(isDark, query)),
+            Expanded(child: _buildBody(query)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBody(bool isDark, String query) {
+  Widget _buildBody(String query) {
     if (query.length < 2) {
       return _buildHint(
-        isDark,
-        icon: Icons.person_search_outlined,
+        iconAsset: 'assets/images/png/empty-search.png',
+        fallbackIcon: Icons.person_search_outlined,
         title: context.l10n.findPeopleOnBarQody,
         subtitle: context.l10n.typeAtLeast2CharactersOfAUsernameToSearch,
       );
     }
 
     if (_isSearching) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator(color: Colors.black));
     }
 
     if (_errorMessage != null) {
       return _buildHint(
-        isDark,
-        icon: Icons.error_outline,
+        fallbackIcon: Icons.error_outline,
         title: context.l10n.somethingWentWrong,
         subtitle: _errorMessage!,
       );
@@ -298,27 +296,31 @@ class _FindUserScreenState extends State<FindUserScreen> {
 
     if (_results.isEmpty) {
       return _buildHint(
-        isDark,
-        icon: Icons.search_off_rounded,
+        fallbackIcon: Icons.search_off_rounded,
         title: context.l10n.noUsersFound,
         subtitle: context.l10n.noPublicProfileMatchesQuery(query),
       );
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+      padding: const EdgeInsets.fromLTRB(4, 4, 4, 24),
       itemCount: _results.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      separatorBuilder: (_, __) => const Divider(
+        height: 1,
+        thickness: 1,
+        indent: 72,
+        color: BarqodyChrome.divider,
+      ),
       itemBuilder: (context, index) {
         final user = _results[index];
-        return _buildUserTile(user, isDark);
+        return _buildUserTile(user);
       },
     );
   }
 
-  Widget _buildHint(
-    bool isDark, {
-    required IconData icon,
+  Widget _buildHint({
+    String? iconAsset,
+    required IconData fallbackIcon,
     required String title,
     required String subtitle,
   }) {
@@ -328,24 +330,36 @@ class _FindUserScreenState extends State<FindUserScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 56,
-              color: isDark ? Colors.white24 : Colors.black26,
-            ),
+            if (iconAsset != null)
+              Image.asset(
+                iconAsset,
+                width: 72,
+                height: 72,
+                errorBuilder: (_, __, ___) => Icon(
+                  fallbackIcon,
+                  size: 56,
+                  color: Colors.black26,
+                ),
+              )
+            else
+              Icon(fallbackIcon, size: 56, color: Colors.black26),
             const SizedBox(height: 16),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+              style: WaUi.toolsTitleOf(
+                size: 17,
+                weight: FontWeight.w600,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               subtitle,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: WaUi.body.copyWith(
                 fontSize: 14,
-                color: isDark ? AppTheme.textGreyDark : AppTheme.textGreyLight,
+                color: BarqodyChrome.secondaryText,
               ),
             ),
           ],
@@ -354,129 +368,116 @@ class _FindUserScreenState extends State<FindUserScreen> {
     );
   }
 
-  Widget _buildUserTile(PublicUserResult user, bool isDark) {
+  Widget _buildUserTile(PublicUserResult user) {
     final isMe = _isCurrentUser(user);
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => _openProfile(user),
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            color: isDark ? Colors.white.withOpacity(0.05) : Colors.grey.shade50,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: isDark ? Colors.white10 : Colors.grey.shade200,
-            ),
-          ),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  width: 52,
-                  height: 52,
-                  color: isDark ? Colors.white10 : Colors.grey.shade200,
-                  child: user.profilePhoto != null && user.profilePhoto!.isNotEmpty
-                      ? Image.network(
-                          user.profilePhoto!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => _avatarFallback(user, isDark),
-                        )
-                      : _avatarFallback(user, isDark),
-                ),
+    return InkWell(
+      onTap: () => _openProfile(user),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            ClipOval(
+              child: Container(
+                width: 44,
+                height: 44,
+                color: const Color(0xFFF2F2F7),
+                child: user.profilePhoto != null &&
+                        user.profilePhoto!.isNotEmpty
+                    ? Image.network(
+                        user.profilePhoto!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) =>
+                            _avatarFallback(user),
+                      )
+                    : _avatarFallback(user),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          user.name.isNotEmpty
+                              ? user.name
+                              : '@${user.username}',
+                          style: WaUi.body.copyWith(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (!user.isPublic) ...[
+                        const SizedBox(width: 6),
+                        const Icon(
+                          Icons.lock_outline,
+                          size: 14,
+                          color: BarqodyChrome.secondaryText,
+                        ),
+                      ],
+                      if (isMe) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: BarqodyChrome.circleBtn,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           child: Text(
-                            user.name.isNotEmpty
-                                ? user.name
-                                : '@${user.username}',
-                            style: TextStyle(
-                              fontSize: 16,
+                            context.l10n.you,
+                            style: WaUi.label.copyWith(
+                              fontSize: 11,
                               fontWeight: FontWeight.w600,
-                              color: isDark ? Colors.white : Colors.black,
+                              color: Colors.black54,
                             ),
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (!user.isPublic) ...[
-                          const SizedBox(width: 6),
-                          Icon(
-                            Icons.lock_outline,
-                            size: 14,
-                            color: isDark ? Colors.white54 : Colors.black45,
-                          ),
-                        ],
-                        if (isMe) ...[
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? Colors.white12
-                                  : Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              context.l10n.you,
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                                color: isDark
-                                    ? Colors.white70
-                                    : Colors.black54,
-                              ),
-                            ),
-                          ),
-                        ],
                       ],
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    isMe
+                        ? '@${user.username} · ${context.l10n.thisIsYou}'
+                        : '@${user.username}',
+                    style: WaUi.body.copyWith(
+                      fontSize: 13,
+                      color: BarqodyChrome.secondaryText,
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      isMe
-                          ? '@${user.username} · ${context.l10n.thisIsYou}'
-                          : '@${user.username}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: isDark ? Colors.white54 : Colors.black54,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Icon(
-                Icons.chevron_right,
-                color: isDark ? Colors.white38 : Colors.black38,
-              ),
-            ],
-          ),
+            ),
+            const Icon(
+              Icons.chevron_right,
+              color: Colors.black,
+              size: 22,
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _avatarFallback(PublicUserResult user, bool isDark) {
+  Widget _avatarFallback(PublicUserResult user) {
     final initial = user.name.isNotEmpty
         ? user.name[0].toUpperCase()
         : (user.username.isNotEmpty ? user.username[0].toUpperCase() : '?');
     return Center(
       child: Text(
         initial,
-        style: TextStyle(
-          fontSize: 20,
+        style: WaUi.body.copyWith(
+          fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: isDark ? Colors.white : Colors.black87,
+          color: Colors.black87,
         ),
       ),
     );

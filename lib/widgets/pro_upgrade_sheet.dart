@@ -8,6 +8,7 @@ import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/utils/business_categories.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/radio_option_picker_sheet.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
@@ -149,10 +150,6 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final profileProvider = Provider.of<ProfileProvider>(
-      context,
-      listen: false,
-    );
     final subscriptionProvider = Provider.of<SubscriptionProvider>(context);
     final subscription = subscriptionProvider.currentSubscription;
     final media = MediaQuery.of(context);
@@ -168,16 +165,11 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           // Keep the sheet above the keyboard and scrollable if needed.
           maxHeight: media.size.height - keyboardInset - media.padding.top,
         ),
-        decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF161618) : Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.15),
-              blurRadius: 10,
-              spreadRadius: 2,
-            ),
-          ],
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(BarqodyChrome.sheetRadius),
+          ),
         ),
         padding: EdgeInsets.only(
           top: 10,
@@ -287,42 +279,49 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
   }
 
   Widget _buildIntroStep(bool isDark) {
-    final bodyColor = isDark ? Colors.white70 : const Color(0xFF4B4F56);
-    final linkColor = const Color(0xFF1877F2);
+    final bodyColor = BarqodyChrome.bodyText;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            const SheetDragHandle(),
+            Align(
+              alignment: Alignment.centerRight,
+              child: CircleCloseButton(onTap: () => Navigator.pop(context)),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
         Center(
-          child: Container(
-            width: 44,
-            height: 5,
-            decoration: BoxDecoration(
-              color: isDark ? Colors.white24 : Colors.black12,
-              borderRadius: BorderRadius.circular(2.5),
+          child: Image.asset(
+            'assets/images/png/premium-icon2.png',
+            width: 120,
+            height: 120,
+            fit: BoxFit.contain,
+            errorBuilder: (_, __, ___) => Image.asset(
+              'assets/images/png/premium-icon.png',
+              width: 120,
+              height: 120,
+              errorBuilder: (_, __, ___) => const Icon(
+                Icons.workspace_premium_rounded,
+                size: 96,
+                color: Colors.black,
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 28),
-        const Center(child: _BusinessProIntroArt()),
-        const SizedBox(height: 20),
-        Text(
-          context.l10n.businessProBrand,
-          textAlign: TextAlign.center,
-          style: WaUi.headline.copyWith(
-            color: linkColor,
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 22),
         Text(
           context.l10n.upgradeYourBusiness,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w800,
+          style: WaUi.toolsTitleOf(
+            size: 24,
+            weight: FontWeight.w800,
+            color: Colors.black,
             height: 1.15,
           ),
         ),
@@ -330,29 +329,34 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
         Text(
           context.l10n.businessProIntroBody,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: WaUi.body.copyWith(
             fontSize: 15,
-            height: 1.4,
+            height: 1.45,
             color: bodyColor,
           ),
         ),
         const SizedBox(height: 28),
         Text.rich(
           TextSpan(
-            style: TextStyle(fontSize: 13, height: 1.4, color: bodyColor),
+            style: WaUi.body.copyWith(
+              fontSize: 13,
+              height: 1.4,
+              color: bodyColor,
+            ),
             children: [
               TextSpan(text: '${context.l10n.byContinuingYouAgreeTo} '),
               WidgetSpan(
                 alignment: PlaceholderAlignment.baseline,
                 baseline: TextBaseline.alphabetic,
                 child: GestureDetector(
-                  onTap: () => _openLegalPage('/privacy'),
+                  onTap: () => _openLegalPage('/terms'),
                   child: Text(
-                    context.l10n.privacyPolicy,
-                    style: TextStyle(
+                    context.l10n.termsOfService,
+                    style: WaUi.body.copyWith(
                       fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: linkColor,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
@@ -362,13 +366,14 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
                 alignment: PlaceholderAlignment.baseline,
                 baseline: TextBaseline.alphabetic,
                 child: GestureDetector(
-                  onTap: () => _openLegalPage('/terms'),
+                  onTap: () => _openLegalPage('/privacy'),
                   child: Text(
-                    context.l10n.termsOfService,
-                    style: TextStyle(
+                    context.l10n.privacyPolicy,
+                    style: WaUi.body.copyWith(
                       fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: linkColor,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
@@ -378,12 +383,10 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 16),
-        WaPrimaryButton(
+        const SizedBox(height: 18),
+        PillButton(
           label: context.l10n.continueLabel,
           onPressed: () => setState(() => _step = 1),
-          backgroundColor: isDark ? Colors.white : Colors.black,
-          foregroundColor: isDark ? Colors.black : Colors.white,
         ),
       ],
     );
@@ -724,129 +727,4 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
     if (value == null) return '--';
     return '${value.day}/${value.month}/${value.year}';
   }
-}
-
-class _BusinessProIntroArt extends StatelessWidget {
-  const _BusinessProIntroArt();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 168,
-      height: 118,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Positioned(
-            left: 18,
-            top: 18,
-            child: CustomPaint(
-              size: const Size(10, 10),
-              painter: _SparkPainter(),
-            ),
-          ),
-          Positioned(
-            right: 22,
-            top: 8,
-            child: CustomPaint(
-              size: const Size(8, 8),
-              painter: _SparkPainter(),
-            ),
-          ),
-          Positioned(
-            left: 8,
-            bottom: 22,
-            child: CustomPaint(
-              size: const Size(7, 7),
-              painter: _SparkPainter(),
-            ),
-          ),
-          Positioned(
-            left: 10,
-            top: 28,
-            child: Container(
-              width: 88,
-              height: 72,
-              decoration: BoxDecoration(
-                color: const Color(0xFFD7F0C8),
-                borderRadius: BorderRadius.circular(22),
-              ),
-              child: const Icon(
-                Icons.headset_mic_rounded,
-                size: 36,
-                color: Color(0xFF1B5E20),
-              ),
-            ),
-          ),
-          Positioned(
-            right: 8,
-            top: 36,
-            child: Container(
-              width: 96,
-              height: 64,
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE9DFD0),
-                borderRadius: BorderRadius.circular(22),
-              ),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _ArtLine(width: 52),
-                  SizedBox(height: 8),
-                  _ArtLine(width: 36),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            right: 2,
-            bottom: 14,
-            child: Container(
-              width: 28,
-              height: 28,
-              decoration: const BoxDecoration(
-                color: Color(0xFF2E7D32),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.check, color: Colors.white, size: 16),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ArtLine extends StatelessWidget {
-  const _ArtLine({required this.width});
-  final double width;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: 6,
-      decoration: BoxDecoration(
-        color: const Color(0xFFC4B8A6),
-        borderRadius: BorderRadius.circular(4),
-      ),
-    );
-  }
-}
-
-class _SparkPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFF1C1C1C)
-      ..strokeWidth = 1.4
-      ..strokeCap = StrokeCap.round;
-    final c = Offset(size.width / 2, size.height / 2);
-    canvas.drawLine(Offset(c.dx, 0), Offset(c.dx, size.height), paint);
-    canvas.drawLine(Offset(0, c.dy), Offset(size.width, c.dy), paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

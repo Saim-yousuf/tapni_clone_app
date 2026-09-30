@@ -11,7 +11,8 @@ import 'package:tapni_app/repository/wallet_repo.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
-import 'package:tapni_app/widgets/attendance_ui.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/employee_card_template_sheet.dart';
 import 'package:tapni_app/widgets/employee_company_card_preview.dart';
@@ -165,7 +166,8 @@ class BusinessCardShareSheet extends StatefulWidget {
 
 class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
   final GlobalKey _cardKey = GlobalKey();
-  bool _walletLoading = false;
+  bool _googleWalletLoading = false;
+  bool _appleWalletLoading = false;
   late CardTemplate _template;
 
   @override
@@ -215,16 +217,30 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
     );
   }
 
+  Future<void> _addToAppleWallet() async {
+    final messenger = ScaffoldMessenger.of(context);
+    setState(() => _appleWalletLoading = true);
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    if (!mounted) return;
+    setState(() => _appleWalletLoading = false);
+
+    _snack(
+      messenger,
+      context.l10n.appleWalletSetupPendingProfileLinkCopied,
+    );
+    await Clipboard.setData(ClipboardData(text: widget.profileUrl));
+  }
+
   Future<void> _addToGoogleWallet() async {
     final messenger = ScaffoldMessenger.of(context);
-    setState(() => _walletLoading = true);
+    setState(() => _googleWalletLoading = true);
 
     final res = widget.useMyCardWallet || widget.businessUserId == null
         ? await WalletRepo().getMyGoogleWalletLink()
         : await WalletRepo().getCompanyGoogleWalletLink(widget.businessUserId!);
 
     if (!mounted) return;
-    setState(() => _walletLoading = false);
+    setState(() => _googleWalletLoading = false);
 
     if (!res.success) {
       _snack(
@@ -257,57 +273,93 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
     await Clipboard.setData(ClipboardData(text: widget.profileUrl));
   }
 
+  void _shareCard() {
+    Share.share(
+      widget.isEmployeeCard
+          ? 'Employee card - ${widget.employeeName}: ${widget.profileUrl}'
+          : 'Business card: ${widget.profileUrl}',
+      subject: widget.isEmployeeCard
+          ? 'Employee Card - ${widget.employeeName}'
+          : widget.displayName,
+    );
+  }
+
+  bool get _walletBusy => _googleWalletLoading || _appleWalletLoading;
+
   @override
   Widget build(BuildContext context) {
     final bottomPadding = MediaQuery.paddingOf(context).bottom;
+    final title = widget.isEmployeeCard
+        ? context.l10n.employeeCard
+        : widget.displayName;
+    final subtitle = widget.isEmployeeCard
+        ? widget.companyName ?? _template.name
+        : '${_template.name} template';
 
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.92,
+      initialChildSize: 0.94,
       minChildSize: 0.45,
-      maxChildSize: 0.92,
+      maxChildSize: 0.94,
       shouldCloseOnMinExtent: true,
       builder: (context, scrollController) {
         return Container(
           width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            border: Border.all(
-              color: Colors.black,
-              width: AttendanceUi.borderWidth,
+          decoration: const BoxDecoration(
+            color: BarqodyChrome.scaffold,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(BarqodyChrome.sheetRadius),
             ),
           ),
           child: ListView(
             controller: scrollController,
-            padding: EdgeInsets.fromLTRB(20, 12, 20, 24 + bottomPadding),
+            padding: EdgeInsets.fromLTRB(
+              BarqodyChrome.sidePad,
+              10,
+              BarqodyChrome.sidePad,
+              24 + bottomPadding,
+            ),
             children: [
-              Center(
-                child: Container(
-                  width: 48,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
+              const Center(child: SheetDragHandle()),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 44,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: WaUi.toolsTitleOf(
+                        size: 18,
+                        weight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: CircleCloseButton(
+                        onTap: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 18),
-              Text(
-                widget.isEmployeeCard
-                    ? context.l10n.employeeCard
-                    : widget.displayName,
-                textAlign: TextAlign.center,
-                style: AttendanceUi.sectionTitle,
-              ),
-              const SizedBox(height: 6),
-              Text(
-                widget.isEmployeeCard
-                    ? '${widget.companyName ?? ''} • ${_template.name} template'
-                    : '${_template.name} template',
-                textAlign: TextAlign.center,
-                style: AttendanceUi.bodyMuted,
-              ),
+              if (subtitle.isNotEmpty) ...[
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: WaUi.body.copyWith(
+                    fontSize: 14,
+                    color: BarqodyChrome.secondaryText,
+                  ),
+                ),
+              ],
               const SizedBox(height: 20),
               Center(
                 child: RepaintBoundary(
@@ -335,55 +387,162 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
                         ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 22),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: AttendanceUi.secondaryButton(
-                      label: context.l10n.download,
-                      icon: Icons.download_rounded,
-                      height: 56,
-                      onPressed: _openDownloadSheet,
+                  if (widget.isEmployeeCard && widget.companyCard != null)
+                    CircleAssetButton(
+                      asset: 'assets/images/png/settings-sliders.png',
+                      iconSize: 18,
+                      onTap: _openCustomizeDesign,
                     ),
+                  if (widget.isEmployeeCard && widget.companyCard != null)
+                    const SizedBox(width: 12),
+                  CircleAssetButton(
+                    asset: 'assets/images/png/download-icon.png',
+                    iconSize: 18,
+                    onTap: _openDownloadSheet,
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: AttendanceUi.secondaryButton(
-                      label: context.l10n.share,
-                      icon: Icons.share_rounded,
-                      height: 56,
-                      onPressed: () => Share.share(
-                        widget.isEmployeeCard
-                            ? 'Employee card - ${widget.employeeName}: ${widget.profileUrl}'
-                            : 'Business card: ${widget.profileUrl}',
-                        subject: widget.isEmployeeCard
-                            ? 'Employee Card - ${widget.employeeName}'
-                            : widget.displayName,
-                      ),
-                    ),
+                  const SizedBox(width: 12),
+                  CircleAssetButton(
+                    asset: 'assets/images/png/arrow-up-icon.png',
+                    iconSize: 16,
+                    onTap: _shareCard,
                   ),
                 ],
               ),
-              if (widget.isEmployeeCard && widget.companyCard != null) ...[
-                const SizedBox(height: 14),
-                AttendanceUi.secondaryButton(
-                  label: context.l10n.customizeDesign,
-                  icon: Icons.palette_outlined,
-                  height: 56,
-                  onPressed: _openCustomizeDesign,
-                ),
-              ],
-              const SizedBox(height: 14),
-              AttendanceUi.primaryButton(
-                label: context.l10n.addToGoogleWallet,
-                icon: Icons.account_balance_wallet_outlined,
-                loading: _walletLoading,
-                onPressed: _addToGoogleWallet,
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (widget.isEmployeeCard && widget.companyCard != null) ...[
+                    Text(
+                      context.l10n.customizeDesign,
+                      style: _actionCaptionStyle,
+                    ),
+                    const SizedBox(width: 36),
+                  ],
+                  Text(context.l10n.download, style: _actionCaptionStyle),
+                  const SizedBox(width: 52),
+                  Text(context.l10n.share, style: _actionCaptionStyle),
+                ],
+              ),
+              const SizedBox(height: 24),
+              _WalletPillButton(
+                title: 'Add to',
+                subtitle: 'Apple Wallet',
+                iconAsset: 'assets/images/png/apple-wallet-icon-1.png',
+                loading: _appleWalletLoading,
+                onPressed: _walletBusy ? null : _addToAppleWallet,
+              ),
+              const SizedBox(height: 10),
+              _WalletPillButton(
+                title: 'Add to',
+                subtitle: 'Google Wallet',
+                iconAsset: 'assets/images/png/google_wallet_icon.png',
+                loading: _googleWalletLoading,
+                onPressed: _walletBusy ? null : _addToGoogleWallet,
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  TextStyle get _actionCaptionStyle => WaUi.body.copyWith(
+        fontSize: 11,
+        color: BarqodyChrome.secondaryText,
+      );
+}
+
+class _WalletPillButton extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String iconAsset;
+  final VoidCallback? onPressed;
+  final bool loading;
+
+  const _WalletPillButton({
+    required this.title,
+    required this.subtitle,
+    required this.iconAsset,
+    required this.onPressed,
+    this.loading = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final disabled = onPressed == null || loading;
+
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: Material(
+        color: Colors.black,
+        shape: const StadiumBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: disabled ? null : onPressed,
+          customBorder: const StadiumBorder(),
+          child: Opacity(
+            opacity: disabled && !loading ? 0.5 : 1,
+            child: Center(
+              child: loading
+                  ? const SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          iconAsset,
+                          width: 28,
+                          height: 28,
+                          fit: BoxFit.contain,
+                          errorBuilder: (_, _, _) => Image.asset(
+                            'assets/images/png/google-wallet-icon.png',
+                            width: 28,
+                            height: 28,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                height: 1.1,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              subtitle,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                height: 1.15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

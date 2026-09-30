@@ -8,11 +8,9 @@ import 'package:tapni_app/screens/invitations/invitation_design_editor_screen.da
 import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/invitation_template_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/country_picker_sheet.dart';
-import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
-import 'package:tapni_app/widgets/official_community_tabs.dart';
-import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 
 /// Browse invitation templates by country and category (Canva-style start).
 class TemplateGalleryScreen extends StatefulWidget {
@@ -137,178 +135,173 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
     return null;
   }
 
+  Future<void> _openFilters() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (sheetContext, setSheet) {
+            return _TemplateFilterSheet(
+              segment: _segment,
+              country: _country,
+              countryInfo: _country == null ? null : _countryInfo(_country!),
+              featured: InvitationTemplateCatalog.featuredCountryCodes,
+              infoFor: _countryInfo,
+              onSegment: (index) {
+                _selectSegment(index);
+                setSheet(() {});
+              },
+              onCountry: (code) {
+                _country = code;
+                _onFilterChanged();
+                setSheet(() {});
+              },
+              onSeeAll: () async {
+                await _pickCountry();
+                if (sheetContext.mounted) setSheet(() {});
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final templates = _filtered;
     final provider = context.watch<InvitationProvider>();
     final community = provider.communityTemplates;
-    final featured = InvitationTemplateCatalog.featuredCountryCodes;
-    final selectedInfo = _country == null ? null : _countryInfo(_country!);
+    final filtersOn = _country != null || _segment == 1;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(context.l10n.chooseATemplate),
-        actions: [
-          TextButton(
-            onPressed: _startBlank,
-            child: Text(context.l10n.blank)),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            BarqodyTitleBar(
+              title: context.l10n.template,
+              trailing: Tooltip(
+                message: context.l10n.country,
+                child: CircleAssetButton(
+                  asset: 'assets/images/png/settings-sliders.png',
+                  iconSize: 18,
+                  badge: filtersOn,
+                  onTap: _openFilters,
+                ),
+              ),
+            ),
+            const SizedBox(height: 14),
+            SizedBox(
+              height: 36,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                children: [
+                  _FilterChip(
+                    label: context.l10n.all,
+                    selected: _category == null,
+                    onTap: () {
+                      _category = null;
+                      _onFilterChanged();
+                    },
+                  ),
+                  ...InvitationTemplateCatalog.categories.map((c) {
+                    return _FilterChip(
+                      label: c['name']!,
+                      selected: _category == c['id'],
+                      onTap: () {
+                        _category = c['id'];
+                        _onFilterChanged();
+                      },
+                    );
+                  }),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  if (_segment == index) return;
+                  setState(() => _segment = index);
+                  if (index == 1) _loadCommunity();
+                },
+                children: [
+                  _OfficialGrid(
+                    templates: templates,
+                    onOpen: _openTemplate,
+                  ),
+                  _CommunityGrid(
+                    templates: community,
+                    loading: provider.loadingCommunity,
+                    onOpen: _openCommunity,
+                    onRefresh: _loadCommunity,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+              child: PillButton(
+                label: '${context.l10n.create} ${context.l10n.blank}',
+                onPressed: _startBlank,
+              ),
+            ),
+          ],
+        ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
-            child: AnimatedBuilder(
-              animation: _pageController,
-              builder: (context, _) {
-                final page = _pageController.hasClients
-                    ? (_pageController.page ?? _segment.toDouble())
-                    : _segment.toDouble();
-                return OfficialCommunityTabs(
-                  position: page.clamp(0.0, 1.0),
-                  onChanged: _selectSegment,
-                  officialLabel: context.l10n.official,
-                  communityLabel: context.l10n.community,
-                );
-              },
-            ),
+    );
+  }
+}
+
+class _FilterChip extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _FilterChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: Material(
+        color: selected ? Colors.black : Colors.white,
+        shape: StadiumBorder(
+          side: BorderSide(
+            color: selected ? Colors.black : const Color(0xFFE0E0E0),
+            width: 1,
           ),
-          const SizedBox(height: 12),
-          Padding(
+        ),
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const StadiumBorder(),
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(context.l10n.country, style: WaUi.label),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 42,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-              children: [
-                WaPillFilterChip(
-                  label: context.l10n.all,
-                  selected: _country == null,
-                  selectedColor: WaUi.chipBg,
-                  onTap: () {
-                    _country = null;
-                    _onFilterChanged();
-                  },
+            child: Center(
+              child: Text(
+                label,
+                style: WaUi.body.copyWith(
+                  fontSize: 14,
+                  height: 1.1,
+                  fontWeight: FontWeight.w600,
+                  color: selected ? Colors.white : const Color(0xFF6B6B6B),
                 ),
-                if (selectedInfo != null &&
-                    !featured.contains(_country))
-                  WaPillFilterChip(
-                    label: selectedInfo['name']!,
-                    selected: true,
-                    selectedColor: WaUi.chipBg,
-                    leading: Text(
-                      selectedInfo['flag']!,
-                      style: const TextStyle(fontSize: 14, height: 1),
-                    ),
-                    onTap: _pickCountry,
-                  ),
-                ...featured.map((code) {
-                  final c = _countryInfo(code);
-                  if (c == null) return const SizedBox.shrink();
-                  return WaPillFilterChip(
-                    label: c['name']!,
-                    selected: _country == code,
-                    selectedColor: WaUi.chipBg,
-                    leading: Text(
-                      c['flag']!,
-                      style: const TextStyle(fontSize: 14, height: 1),
-                    ),
-                    onTap: () {
-                      _country = code;
-                      _onFilterChanged();
-                    },
-                  );
-                }),
-                WaPillFilterChip(
-                  label: context.l10n.seeAll,
-                  selected: false,
-                  selectedColor: WaUi.chipBg,
-                  leading: const Icon(
-                    Icons.search_rounded,
-                    size: 16,
-                    color: WaUi.secondaryText,
-                  ),
-                  onTap: _pickCountry,
-                ),
-              ],
+              ),
             ),
           ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(context.l10n.categoryLabel, style: WaUi.label),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 42,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-              children: [
-                WaPillFilterChip(
-                  label: context.l10n.all,
-                  selected: _category == null,
-                  selectedColor: WaUi.chipBg,
-                  onTap: () {
-                    _category = null;
-                    _onFilterChanged();
-                  },
-                ),
-                ...InvitationTemplateCatalog.categories.map((c) {
-                  return WaPillFilterChip(
-                    label: c['name']!,
-                    selected: _category == c['id'],
-                    selectedColor: WaUi.chipBg,
-                    onTap: () {
-                      _category = c['id'];
-                      _onFilterChanged();
-                    },
-                  );
-                }),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              _segment == 0
-                  ? '${templates.length} templates'
-                  : '${community.length} community templates',
-              style: WaUi.listSubtitle,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) {
-                if (_segment == index) return;
-                setState(() => _segment = index);
-                if (index == 1) _loadCommunity();
-              },
-              children: [
-                _OfficialGrid(
-                  templates: templates,
-                  onOpen: _openTemplate,
-                  onBlank: _startBlank,
-                ),
-                _CommunityGrid(
-                  templates: community,
-                  loading: provider.loadingCommunity,
-                  onOpen: _openCommunity,
-                  onRefresh: _loadCommunity,
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -317,40 +310,36 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
 class _OfficialGrid extends StatelessWidget {
   final List<InvitationTemplate> templates;
   final void Function(InvitationTemplate) onOpen;
-  final VoidCallback onBlank;
 
   const _OfficialGrid({
     required this.templates,
     required this.onOpen,
-    required this.onBlank,
   });
 
   @override
   Widget build(BuildContext context) {
     if (templates.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.inbox_outlined, size: 48, color: WaUi.secondaryText),
-            const SizedBox(height: 8),
-            Text(context.l10n.noTemplatesForFilter, style: WaUi.listSubtitle),
-            const SizedBox(height: 12),
-            OutlinedButton(
-              onPressed: onBlank,
-              child: Text(context.l10n.startFromBlank),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Text(
+            context.l10n.noTemplatesForFilter,
+            textAlign: TextAlign.center,
+            style: WaUi.body.copyWith(
+              fontSize: 15,
+              color: BarqodyChrome.secondaryText,
             ),
-          ],
+          ),
         ),
       );
     }
     return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 14,
+        mainAxisSpacing: 20,
         crossAxisSpacing: 14,
-        childAspectRatio: 0.62,
+        childAspectRatio: 0.68,
       ),
       itemCount: templates.length,
       itemBuilder: (context, i) {
@@ -377,7 +366,9 @@ class _CommunityGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (loading && templates.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.black),
+      );
     }
     if (templates.isEmpty) {
       return Center(
@@ -386,23 +377,35 @@ class _CommunityGrid extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.people_outline, size: 48, color: WaUi.secondaryText),
-              const SizedBox(height: 8),
               Text(
                 context.l10n.noCommunityTemplatesYet,
-                style: WaUi.sectionHeader,
+                style: WaUi.toolsTitleOf(
+                  size: 18,
+                  weight: FontWeight.w700,
+                  color: Colors.black,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
                 context.l10n.designAndPublishHint,
-                style: WaUi.listSubtitle,
+                style: WaUi.body.copyWith(
+                  fontSize: 14,
+                  color: BarqodyChrome.secondaryText,
+                  height: 1.4,
+                ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               TextButton(
                 onPressed: onRefresh,
-                child: Text(context.l10n.refresh),
+                child: Text(
+                  context.l10n.refresh,
+                  style: WaUi.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
               ),
             ],
           ),
@@ -410,19 +413,28 @@ class _CommunityGrid extends StatelessWidget {
       );
     }
     return RefreshIndicator(
+      color: Colors.black,
+      backgroundColor: Colors.white,
       onRefresh: () async => onRefresh(),
       child: GridView.builder(
-        padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 14,
+          mainAxisSpacing: 20,
           crossAxisSpacing: 14,
-          childAspectRatio: 0.58,
+          childAspectRatio: 0.68,
         ),
         itemCount: templates.length,
         itemBuilder: (context, i) {
           final t = templates[i];
-          return _CommunityCard(template: t, onTap: () => onOpen(t));
+          return _NamedPreviewCard(
+            name: t.name,
+            onTap: () => onOpen(t),
+            child: InvitationDesignRenderer(
+              design: t.design,
+              shadows: const [],
+            ),
+          );
         },
       ),
     );
@@ -437,70 +449,55 @@ class _TemplateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final design = template.build();
-    final accent = invitationColorFromHex(template.accentColor);
+    return _NamedPreviewCard(
+      name: template.name,
+      onTap: onTap,
+      child: InvitationDesignRenderer(
+        design: template.build(),
+        shadows: const [],
+      ),
+    );
+  }
+}
 
+class _NamedPreviewCard extends StatelessWidget {
+  final String name;
+  final VoidCallback onTap;
+  final Widget child;
+
+  const _NamedPreviewCard({
+    required this.name,
+    required this.onTap,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: InvitationDesignRenderer(
-              design: design,
-              shadows: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.12),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: ColoredBox(
+                color: const Color(0xFFF4F4F6),
+                child: child,
+              ),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Text(
-            template.name,
+            name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 13,
-              color: WaUi.primaryText,
+            style: WaUi.body.copyWith(
+              fontSize: 14,
+              height: 1.2,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
             ),
-          ),
-          const SizedBox(height: 2),
-          Row(
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: accent,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  '${template.countryCode} · ${template.category}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: WaUi.secondaryText,
-                  ),
-                ),
-              ),
-              if (template.rtl)
-                Text(
-                  context.l10n.rtl,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: WaUi.secondaryText,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-            ],
           ),
         ],
       ),
@@ -508,53 +505,172 @@ class _TemplateCard extends StatelessWidget {
   }
 }
 
-class _CommunityCard extends StatelessWidget {
-  final PublishedInvitationTemplate template;
-  final VoidCallback onTap;
+class _TemplateFilterSheet extends StatelessWidget {
+  final int segment;
+  final String? country;
+  final Map<String, String>? countryInfo;
+  final List<String> featured;
+  final Map<String, String>? Function(String code) infoFor;
+  final ValueChanged<int> onSegment;
+  final ValueChanged<String?> onCountry;
+  final VoidCallback onSeeAll;
 
-  const _CommunityCard({required this.template, required this.onTap});
+  const _TemplateFilterSheet({
+    required this.segment,
+    required this.country,
+    required this.countryInfo,
+    required this.featured,
+    required this.infoFor,
+    required this.onSegment,
+    required this.onCountry,
+    required this.onSeeAll,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Center(child: SheetDragHandle()),
+            const SizedBox(height: 18),
+            _SourceTabs(
+              segment: segment,
+              officialLabel: context.l10n.official,
+              communityLabel: context.l10n.community,
+              onChanged: onSegment,
+            ),
+            const SizedBox(height: 22),
+            Text(
+              context.l10n.country,
+              style: WaUi.body.copyWith(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 36,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  _FilterChip(
+                    label: context.l10n.all,
+                    selected: country == null,
+                    onTap: () => onCountry(null),
+                  ),
+                  if (countryInfo != null && !featured.contains(country))
+                    _FilterChip(
+                      label: '${countryInfo!['flag']}  ${countryInfo!['name']}',
+                      selected: true,
+                      onTap: onSeeAll,
+                    ),
+                  ...featured.map((code) {
+                    final c = infoFor(code);
+                    if (c == null) return const SizedBox.shrink();
+                    return _FilterChip(
+                      label: '${c['flag']}  ${c['name']}',
+                      selected: country == code,
+                      onTap: () => onCountry(code),
+                    );
+                  }),
+                  _FilterChip(
+                    label: context.l10n.seeAll,
+                    selected: false,
+                    onTap: onSeeAll,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SourceTabs extends StatelessWidget {
+  final int segment;
+  final String officialLabel;
+  final String communityLabel;
+  final ValueChanged<int> onChanged;
+
+  const _SourceTabs({
+    required this.segment,
+    required this.officialLabel,
+    required this.communityLabel,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 48,
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF2F2F7),
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Row(
         children: [
-          Expanded(
-            child: InvitationDesignRenderer(
-              design: template.design,
-              shadows: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.12),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
+          _SourceTab(
+            label: officialLabel,
+            selected: segment == 0,
+            onTap: () => onChanged(0),
           ),
-          const SizedBox(height: 8),
-          Text(
-            template.name,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 13,
-              color: WaUi.primaryText,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            context.l10n.templateByPublisherUses(
-              template.publisher.displayName,
-              template.useCount,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 11, color: WaUi.secondaryText),
+          _SourceTab(
+            label: communityLabel,
+            selected: segment == 1,
+            onTap: () => onChanged(1),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SourceTab extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _SourceTab({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOutCubic,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: selected ? Colors.black : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: WaUi.body.copyWith(
+              fontSize: 15,
+              height: 1.1,
+              fontWeight: FontWeight.w600,
+              color: selected ? Colors.white : const Color(0xFF8E8E93),
+            ),
+          ),
+        ),
       ),
     );
   }

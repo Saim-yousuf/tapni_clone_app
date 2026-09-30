@@ -7,6 +7,7 @@ import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -135,187 +136,274 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
   Widget build(BuildContext context) {
     final isEdit = widget.existing != null;
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        surfaceTintColor: Colors.white,
-        title: Text(
-          isEdit ? context.l10n.editReward : context.l10n.createReward,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-      ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20),
+      backgroundColor: BarqodyChrome.scaffold,
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Logo
-              _sectionTitle(context.l10n.logo),
-              SizedBox(height: 10),
-              GestureDetector(
-                onTap: _pickLogo,
-                child: Container(
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    border: Border.all(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: _buildLogoWidget(),
-                ),
+              BarqodyTitleBar(
+                title: isEdit ? context.l10n.editReward : 'Create Program',
               ),
-              SizedBox(height: 24),
-
-              // Stamp Icons (optional)
-              _sectionTitle(context.l10n.stampIconsOptional),
-              SizedBox(height: 6),
-              Text(
-                context.l10n.customImagesForStampedAndUnstampedSlotsDefaultsAreUsedIfNotSet,
-                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-              ),
-              SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: _iconPickerTile(
-                      label: context.l10n.stampIcon,
-                      subtitle: context.l10n.filledSlot,
-                      base64: _stampIconBase64,
-                      existingUrl: _existingStampIconUrl,
-                      onTap: _pickStampIcon,
-                      onClear: () => setState(() {
-                        _stampIconBase64 = null;
-                        _existingStampIconUrl = null;
-                      }),
-                      preview: RewardStampSlot(
-                        filled: true,
-                        theme: _theme,
-                        size: 32,
-                        stampIconBase64: _stampIconBase64,
-                        stampIconUrl: _existingStampIconUrl,
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _barqodyLabel('REWARD PROGRAM NAME'),
+                      const SizedBox(height: 8),
+                      _buildTextField(
+                        _labelController,
+                        context.l10n.egCoffeeClub,
+                        required: true,
                       ),
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: _iconPickerTile(
-                      label: context.l10n.unstampIcon,
-                      subtitle: context.l10n.emptySlot,
-                      base64: _unstampIconBase64,
-                      existingUrl: _existingUnstampIconUrl,
-                      onTap: _pickUnstampIcon,
-                      onClear: () => setState(() {
-                        _unstampIconBase64 = null;
-                        _existingUnstampIconUrl = null;
-                      }),
-                      preview: RewardStampSlot(
-                        filled: false,
-                        theme: _theme,
-                        size: 32,
-                        unstampIconBase64: _unstampIconBase64,
-                        unstampIconUrl: _existingUnstampIconUrl,
+                      const SizedBox(height: 20),
+                      _barqodyLabel('STAMPS REQUIRED'),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _stampsController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        decoration: _barqodyFieldDecoration('e.g. 10'),
+                        validator: (v) => (v == null || v.isEmpty)
+                            ? context.l10n.required
+                            : null,
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24),
-
-              // Card Label Name
-              _sectionTitle(context.l10n.cardLabelName),
-              SizedBox(height: 8),
-              _buildTextField(_labelController, context.l10n.egCoffeeClub, required: true),
-              SizedBox(height: 20),
-
-              // Title
-              _sectionTitle(context.l10n.title),
-              SizedBox(height: 8),
-              _buildTextField(_titleController, context.l10n.egBuy10Get1Free, required: true),
-              SizedBox(height: 20),
-
-              // Description
-              _sectionTitle(context.l10n.description),
-              SizedBox(height: 8),
-              _buildTextField(_descController, context.l10n.brieflyDescribeThisReward, maxLines: 3),
-              SizedBox(height: 20),
-
-              // Stamps
-              _sectionTitle(context.l10n.numberOfStamps),
-              SizedBox(height: 8),
-              TextFormField(
-                controller: _stampsController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: _inputDecoration('e.g. 10'),
-                validator: (v) => (v == null || v.isEmpty) ? context.l10n.required : null,
-              ),
-              SizedBox(height: 32),
-
-              // Card Theme
-              _themeSectionTitle(context.l10n.cardTheme),
-              SizedBox(height: 14),
-              _colorRow(context.l10n.backgroundColor2, _theme.cardBackgroundColor, (c) {
-                setState(() => _theme = _theme.copyWith(cardBackgroundColor: c));
-              }),
-              SizedBox(height: 12),
-              _colorRow(context.l10n.textColor, _theme.cardTextColor, (c) {
-                setState(() => _theme = _theme.copyWith(cardTextColor: c));
-              }),
-              SizedBox(height: 12),
-              _colorRow(context.l10n.stampColor, _theme.stampColor, (c) {
-                setState(() => _theme = _theme.copyWith(stampColor: c));
-              }),
-              SizedBox(height: 12),
-              _colorRow(context.l10n.stampBorderColor, _theme.stampBorderColor, (c) {
-                setState(() => _theme = _theme.copyWith(stampBorderColor: c));
-              }),
-              SizedBox(height: 28),
-
-              // Screen Theme
-              _themeSectionTitle(context.l10n.screenTheme),
-              SizedBox(height: 14),
-              _colorRow(context.l10n.backgroundColor2, _theme.screenBackgroundColor, (c) {
-                setState(() => _theme = _theme.copyWith(screenBackgroundColor: c));
-              }),
-              SizedBox(height: 12),
-              _colorRow(context.l10n.textColor, _theme.screenTextColor, (c) {
-                setState(() => _theme = _theme.copyWith(screenTextColor: c));
-              }),
-              SizedBox(height: 32),
-
-              // Live Card Preview
-              _sectionTitle(context.l10n.cardPreview),
-              SizedBox(height: 12),
-              _buildCardPreview(),
-              SizedBox(height: 40),
-
-              // Save Button
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _save,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                    elevation: 0,
-                  ),
-                  child: _isLoading
-                      ? SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                      : Text(
-                          isEdit ? context.l10n.saveChanges : context.l10n.createReward,
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      const SizedBox(height: 20),
+                      _barqodyLabel('REWARD'),
+                      const SizedBox(height: 8),
+                      _buildTextField(
+                        _titleController,
+                        context.l10n.egBuy10Get1Free,
+                        required: true,
+                      ),
+                      const SizedBox(height: 20),
+                      _barqodyLabel('REWARD SUB TITLE'),
+                      const SizedBox(height: 8),
+                      _buildTextField(
+                        _descController,
+                        context.l10n.brieflyDescribeThisReward,
+                        maxLines: 3,
+                      ),
+                      const SizedBox(height: 20),
+                      _barqodyLabel('REWARD ITEM (OPTIONAL)'),
+                      const SizedBox(height: 8),
+                      Material(
+                        color: BarqodyChrome.fieldFill,
+                        borderRadius: BorderRadius.circular(14),
+                        child: InkWell(
+                          onTap: _pickLogo,
+                          borderRadius: BorderRadius.circular(14),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 14,
+                            ),
+                            child: Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: SizedBox(
+                                    width: 44,
+                                    height: 44,
+                                    child: _buildLogoWidget(),
+                                  ),
+                                ),
+                                const SizedBox(width: 14),
+                                Expanded(
+                                  child: Text(
+                                    _logoBase64 != null ||
+                                            (_existingLogoUrl != null &&
+                                                _existingLogoUrl!.isNotEmpty)
+                                        ? context.l10n.tapToChange
+                                        : context.l10n.addLogo,
+                                    style: WaUi.body.copyWith(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: BarqodyChrome.secondaryText,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
+                      ),
+                      const SizedBox(height: 28),
+                      Theme(
+                        data: Theme.of(context).copyWith(
+                          dividerColor: BarqodyChrome.divider,
+                        ),
+                        child: ExpansionTile(
+                          tilePadding: EdgeInsets.zero,
+                          title: Text(
+                            'Theme & icons',
+                            style: WaUi.body.copyWith(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
+                          children: [
+                            Text(
+                              context.l10n.stampIconsOptional,
+                              style: WaUi.caption,
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _iconPickerTile(
+                                    label: context.l10n.stampIcon,
+                                    subtitle: context.l10n.filledSlot,
+                                    base64: _stampIconBase64,
+                                    existingUrl: _existingStampIconUrl,
+                                    onTap: _pickStampIcon,
+                                    onClear: () => setState(() {
+                                      _stampIconBase64 = null;
+                                      _existingStampIconUrl = null;
+                                    }),
+                                    preview: RewardStampSlot(
+                                      filled: true,
+                                      theme: _theme,
+                                      size: 32,
+                                      stampIconBase64: _stampIconBase64,
+                                      stampIconUrl: _existingStampIconUrl,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _iconPickerTile(
+                                    label: context.l10n.unstampIcon,
+                                    subtitle: context.l10n.emptySlot,
+                                    base64: _unstampIconBase64,
+                                    existingUrl: _existingUnstampIconUrl,
+                                    onTap: _pickUnstampIcon,
+                                    onClear: () => setState(() {
+                                      _unstampIconBase64 = null;
+                                      _existingUnstampIconUrl = null;
+                                    }),
+                                    preview: RewardStampSlot(
+                                      filled: false,
+                                      theme: _theme,
+                                      size: 32,
+                                      unstampIconBase64: _unstampIconBase64,
+                                      unstampIconUrl: _existingUnstampIconUrl,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            _themeSectionTitle(context.l10n.cardTheme),
+                            const SizedBox(height: 10),
+                            _colorRow(
+                              context.l10n.backgroundColor2,
+                              _theme.cardBackgroundColor,
+                              (c) => setState(
+                                () => _theme = _theme.copyWith(
+                                  cardBackgroundColor: c,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            _colorRow(
+                              context.l10n.textColor,
+                              _theme.cardTextColor,
+                              (c) => setState(
+                                () => _theme =
+                                    _theme.copyWith(cardTextColor: c),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            _colorRow(
+                              context.l10n.stampColor,
+                              _theme.stampColor,
+                              (c) => setState(
+                                () => _theme = _theme.copyWith(stampColor: c),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            _colorRow(
+                              context.l10n.stampBorderColor,
+                              _theme.stampBorderColor,
+                              (c) => setState(
+                                () => _theme = _theme.copyWith(
+                                  stampBorderColor: c,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            _themeSectionTitle(context.l10n.screenTheme),
+                            const SizedBox(height: 10),
+                            _colorRow(
+                              context.l10n.backgroundColor2,
+                              _theme.screenBackgroundColor,
+                              (c) => setState(
+                                () => _theme = _theme.copyWith(
+                                  screenBackgroundColor: c,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            _colorRow(
+                              context.l10n.textColor,
+                              _theme.screenTextColor,
+                              (c) => setState(
+                                () => _theme =
+                                    _theme.copyWith(screenTextColor: c),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            _sectionTitle(context.l10n.cardPreview),
+                            const SizedBox(height: 10),
+                            _buildCardPreview(),
+                            const SizedBox(height: 8),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                child: PillButton(
+                  label: isEdit
+                      ? context.l10n.saveChanges
+                      : context.l10n.continueLabel,
+                  enabled: !_isLoading,
+                  onPressed: _save,
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _barqodyLabel(String text) {
+    return Text(
+      text,
+      style: WaUi.caption.copyWith(
+        fontSize: 12,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.6,
+        color: BarqodyChrome.secondaryText,
+      ),
+    );
+  }
+
+  InputDecoration _barqodyFieldDecoration(String hint) {
+    return WaUi.fieldDecoration(hintText: hint, radius: 14);
   }
 
   Widget _buildLogoWidget() {
@@ -577,6 +665,5 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
     );
   }
 
-  InputDecoration _inputDecoration(String hint) =>
-      WaUi.fieldDecoration(hintText: hint, radius: 12);
+  InputDecoration _inputDecoration(String hint) => _barqodyFieldDecoration(hint);
 }

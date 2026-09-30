@@ -115,12 +115,20 @@ class WaChatSearchBar extends StatelessWidget {
             minWidth: 44,
             minHeight: 48,
           ),
-          suffixIcon: !readOnly && controller.text.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.close, size: 18),
-                  color: const Color(0xFF8E8E93),
-                  onPressed: onClear,
+          suffixIcon: trailing != null
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 6),
+                  child: trailing,
                 )
+              : (!readOnly && controller.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.close, size: 18),
+                      color: const Color(0xFF8E8E93),
+                      onPressed: onClear,
+                    )
+                  : null),
+          suffixIconConstraints: trailing != null
+              ? const BoxConstraints(minWidth: 40, minHeight: 40)
               : null,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(24),
@@ -145,15 +153,7 @@ class WaChatSearchBar extends StatelessWidget {
 
     return Padding(
       padding: padding,
-      child: trailing == null
-          ? field
-          : Row(
-              children: [
-                Expanded(child: field),
-                const SizedBox(width: 10),
-                trailing!,
-              ],
-            ),
+      child: field,
     );
   }
 }

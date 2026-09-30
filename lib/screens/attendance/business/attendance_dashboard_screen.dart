@@ -5,9 +5,9 @@ import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/attendance_report_screen.dart';
 import 'package:tapni_app/screens/attendance/business/employee_list_screen.dart';
+import 'package:tapni_app/screens/attendance/business/scan_to_invite_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
-import 'package:tapni_app/widgets/attendance_ui.dart';
-import 'package:tapni_app/widgets/custom_app_button.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class AttendanceDashboardScreen extends StatefulWidget {
   const AttendanceDashboardScreen({super.key});
@@ -17,9 +17,13 @@ class AttendanceDashboardScreen extends StatefulWidget {
       _AttendanceDashboardScreenState();
 }
 
+const _teamSectionCardBg = Color(0xFFF5F5F5);
+const _teamStatCardBg = Color(0xFFF2F2F7);
+
 class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
   List<AttendanceEmployee> _employees = [];
   List<AttendanceRecord> _todayRecords = [];
+  int _pendingInviteCount = 0;
   bool _isLoading = true;
 
   @override
@@ -40,10 +44,13 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
     setState(() {
       _isLoading = false;
       if (employeesRes.success) {
-        _employees = parseAttendanceList(
+        final all = parseAttendanceList(
           employeesRes.data,
           AttendanceEmployee.fromJson,
-        ).where((e) => e.isAccepted).toList();
+        );
+        _pendingInviteCount =
+            all.where((e) => e.isPendingInvitation).length;
+        _employees = all.where((e) => e.isAccepted).toList();
       }
       if (recordsRes.success) {
         _todayRecords = parseAttendanceList(
@@ -61,12 +68,15 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
     return null;
   }
 
+  // Kept for attendance status mapping (report / future UI).
+  // ignore: unused_element
   String _statusKey(AttendanceRecord? record) {
     if (record == null || record.checkInTime == null) return 'absent';
     if (record.checkOutTime == null) return 'in_office';
     return 'present';
   }
 
+  // ignore: unused_element
   String _statusLabel(String statusKey) {
     switch (statusKey) {
       case 'present':
@@ -78,6 +88,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
     }
   }
 
+  // ignore: unused_element
   Color _statusColor(String statusKey) {
     switch (statusKey) {
       case 'present':
@@ -89,10 +100,32 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
     }
   }
 
+  List<AttendanceEmployee> get _presentEmployees {
+    return _employees.where((employee) {
+      final record = _recordForEmployee(employee.id);
+      return record?.checkInTime != null;
+    }).toList();
+  }
+
+  List<AttendanceEmployee> get _absentEmployees {
+    return _employees.where((employee) {
+      final record = _recordForEmployee(employee.id);
+      return record == null || record.checkInTime == null;
+    }).toList();
+  }
+
   Future<void> _openEmployees() async {
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const EmployeeListScreen()),
+    );
+    _load();
+  }
+
+  Future<void> _scanToAddMember() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ScanToInviteScreen()),
     );
     _load();
   }
@@ -117,36 +150,44 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
 
     final picked = await showModalBottomSheet<AttendanceEmployee>(
       context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
       builder: (ctx) {
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              const SizedBox(height: 10),
+              const SheetDragHandle(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Text(
                   context.l10n.attendanceReport,
-                  style: AttendanceUi.sectionTitle,
+                  style: WaUi.toolsTitleOf(
+                    size: 17,
+                    weight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               ..._employees.map(
                 (employee) => ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: employee.employee.profilePhoto.isNotEmpty
-                        ? NetworkImage(employee.employee.profilePhoto)
-                        : null,
-                    child: employee.employee.profilePhoto.isEmpty
-                        ? Text(
-                            employee.employee.displayName.isNotEmpty
-                                ? employee.employee.displayName[0]
-                                    .toUpperCase()
-                                : '?',
-                          )
-                        : null,
+                  leading: _EmployeeAvatar(employee: employee, radius: 22),
+                  title: Text(
+                    employee.employee.displayName,
+                    style: WaUi.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
                   ),
-                  title: Text(employee.employee.displayName),
                   subtitle: Text(
                     '${employee.shiftStart} - ${employee.shiftEnd}',
+                    style: WaUi.body.copyWith(
+                      fontSize: 13,
+                      color: BarqodyChrome.secondaryText,
+                    ),
                   ),
                   onTap: () => Navigator.pop(ctx, employee),
                 ),
@@ -165,150 +206,139 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final presentCount = _todayRecords
-        .where((r) => r.checkInTime != null && r.checkOutTime != null)
-        .length;
-    final checkedInCount = _todayRecords
-        .where((r) => r.checkInTime != null && r.checkOutTime == null)
-        .length;
-    final absentCount = _employees.length -
-        _todayRecords.where((r) => r.checkInTime != null).length;
+    final presentEmployees = _presentEmployees;
+    final absentEmployees = _absentEmployees;
+    final sendInviteCount =
+        _pendingInviteCount > 0 ? _pendingInviteCount : 0;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AttendanceUi.appBar(
-        context.l10n.attendance,
-        actions: [
-          IconButton(
-            tooltip: context.l10n.attendanceReport,
-            icon: const Icon(Icons.assessment_outlined),
-            onPressed: _employees.isEmpty
-                ? null
-                : () => _showEmployeeReportPicker(),
-          ),
-          IconButton(
-            tooltip: context.l10n.manageEmployees,
-            icon: const Icon(Icons.people_outline_rounded),
-            onPressed: _openEmployees,
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(strokeWidth: 2.5),
-                  )
-                : RefreshIndicator(
-                    color: WaUi.accent,
-                    backgroundColor: Colors.white,
-                    onRefresh: _load,
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                      children: [
-                        Row(
-                          children: [
-                            _StatCard(
-                              label: context.l10n.presentUpper,
-                              count: presentCount,
-                              color: const Color(0xFF1B8A4A),
-                            ),
-                            const SizedBox(width: 10),
-                            _StatCard(
-                              label: context.l10n.inOFFICE,
-                              count: checkedInCount,
-                              color: const Color(0xFFC46A00),
-                            ),
-                            const SizedBox(width: 10),
-                            _StatCard(
-                              label: context.l10n.absentUpper,
-                              count: absentCount,
-                              color: const Color(0xFFC62828),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          context.l10n.todaysAttendance,
-                          style: AttendanceUi.sectionTitle,
-                        ),
-                        const SizedBox(height: 12),
-                        if (_employees.isEmpty)
-                          _EmptyState(onManage: _openEmployees)
-                        else
-                          ..._employees.map((employee) {
-                            final record = _recordForEmployee(employee.id);
-                            final statusKey = _statusKey(record);
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: _EmployeeRow(
-                                employee: employee,
-                                statusLabel: _statusLabel(statusKey),
-                                statusColor: _statusColor(statusKey),
-                                checkInTime: record?.checkInTime,
-                                onTap: () => _openEmployeeReport(employee),
-                              ),
-                            );
-                          }),
-                      ],
-                    ),
-                  ),
-          ),
-          Material(
-            color: Colors.white,
-            child: SafeArea(
-              top: false,
-              maintainBottomViewPadding: true,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                child: CustomAppButton(
-                  width: double.infinity,
-                  text: context.l10n.manageEmployees,
-                  icon: Icons.person_add_alt_1_rounded,
-                  backgroundColor: AttendanceUi.buttonDark,
-                  onTap: _openEmployees,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  final String label;
-  final int count;
-  final Color color;
-
-  const _StatCard({
-    required this.label,
-    required this.count,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
-        decoration: AttendanceUi.thickCard,
+      backgroundColor: BarqodyChrome.scaffold,
+      body: SafeArea(
         child: Column(
           children: [
-            Text(
-              '$count',
-              style: AttendanceUi.statNumber.copyWith(color: color),
+            BarqodyTitleBar(
+              title: 'Team',
+              trailing: _employees.isEmpty
+                  ? null
+                  : CircleAssetButton(
+                      asset: 'assets/images/png/file-icon.png',
+                      iconSize: 18,
+                      onTap: _showEmployeeReportPicker,
+                    ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AttendanceUi.statLabel,
+            Expanded(
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: Colors.black,
+                      ),
+                    )
+                  : RefreshIndicator(
+                      color: Colors.black,
+                      backgroundColor: Colors.white,
+                      onRefresh: _load,
+                      child: _employees.isEmpty
+                          ? LayoutBuilder(
+                              builder: (context, constraints) {
+                                return SingleChildScrollView(
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minHeight: constraints.maxHeight,
+                                    ),
+                                    child: Center(
+                                      child: _TeamEmptyState(
+                                        onAdd: _openEmployees,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : ListView(
+                              padding: const EdgeInsets.fromLTRB(
+                                BarqodyChrome.sidePad,
+                                16,
+                                BarqodyChrome.sidePad,
+                                16,
+                              ),
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: _TeamStatCard(
+                                        label: 'Active Members',
+                                        count: _employees.length,
+                                        iconAsset:
+                                            'assets/images/png/account-icon.png',
+                                        onTap: _openEmployees,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: _TeamStatCard(
+                                        label: 'Send Invite',
+                                        count: sendInviteCount,
+                                        iconAsset:
+                                            'assets/images/png/email-icon-1.png',
+                                        onTap: _openEmployees,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                _MemberSectionCard(
+                                  title: 'Present Members',
+                                  count: presentEmployees.length,
+                                  employees: presentEmployees,
+                                  onViewAll: _openEmployees,
+                                ),
+                                const SizedBox(height: 12),
+                                _MemberSectionCard(
+                                  title: 'Absent Members',
+                                  count: absentEmployees.length,
+                                  employees: absentEmployees,
+                                  onViewAll: _openEmployees,
+                                ),
+                              ],
+                            ),
+                    ),
             ),
+            if (!_isLoading && _employees.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  BarqodyChrome.sidePad,
+                  4,
+                  BarqodyChrome.sidePad,
+                  12,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 52,
+                        child: PillButton(
+                          label: 'View Members',
+                          filled: false,
+                          onPressed: _openEmployees,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: SizedBox(
+                        height: 52,
+                        child: PillButton(
+                          label: 'Add Member',
+                          onPressed: _scanToAddMember,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
@@ -316,82 +346,133 @@ class _StatCard extends StatelessWidget {
   }
 }
 
-class _EmployeeRow extends StatelessWidget {
-  final AttendanceEmployee employee;
-  final String statusLabel;
-  final Color statusColor;
-  final DateTime? checkInTime;
-  final VoidCallback onTap;
+class _TeamEmptyState extends StatelessWidget {
+  final VoidCallback onAdd;
 
-  const _EmployeeRow({
-    required this.employee,
-    required this.statusLabel,
-    required this.statusColor,
-    required this.checkInTime,
-    required this.onTap,
+  const _TeamEmptyState({required this.onAdd});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/images/png/leadership.png',
+            width: 160,
+            height: 160,
+            fit: BoxFit.contain,
+            errorBuilder: (_, _, _) => Icon(
+              Icons.groups_outlined,
+              size: 80,
+              color: BarqodyChrome.secondaryText.withValues(alpha: 0.5),
+            ),
+          ),
+          const SizedBox(height: 28),
+          Text(
+            'Build Your Team',
+            textAlign: TextAlign.center,
+            style: WaUi.toolsTitleOf(
+              size: 22,
+              weight: FontWeight.w700,
+              color: Colors.black,
+              height: 1.2,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'No team members have been added yet. Add employees to get your team started',
+            textAlign: TextAlign.center,
+            style: WaUi.body.copyWith(
+              fontSize: 15,
+              height: 1.45,
+              color: BarqodyChrome.secondaryText,
+            ),
+          ),
+          const SizedBox(height: 32),
+          PillButton(
+            label: 'Add Team Member',
+            onPressed: onAdd,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TeamStatCard extends StatelessWidget {
+  final String label;
+  final int count;
+  final String iconAsset;
+  final VoidCallback? onTap;
+
+  const _TeamStatCard({
+    required this.label,
+    required this.count,
+    required this.iconAsset,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final name = employee.employee.displayName;
-    final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
-
     return Material(
-      color: AttendanceUi.tileBg,
-      borderRadius: BorderRadius.circular(AttendanceUi.radius),
+      color: _teamStatCardBg,
+      borderRadius: BorderRadius.circular(18),
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AttendanceUi.radius),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: Colors.white,
-                backgroundImage: employee.employee.profilePhoto.isNotEmpty
-                    ? NetworkImage(employee.employee.profilePhoto)
-                    : null,
-                child: employee.employee.profilePhoto.isEmpty
-                    ? Text(initial, style: WaUi.avatarInitial)
-                    : null,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: AttendanceUi.cardTitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      '${employee.shiftStart} - ${employee.shiftEnd}',
-                      style: AttendanceUi.bodyMuted,
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  AttendanceUi.statusText(
-                    label: statusLabel,
-                    color: statusColor,
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black, width: 1.1),
                   ),
-                  if (checkInTime != null) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      DateFormat('hh:mm a').format(checkInTime!.toLocal()),
-                      style: AttendanceUi.bodyMuted.copyWith(fontSize: 12),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    iconAsset,
+                    width: 18,
+                    height: 18,
+                    errorBuilder: (_, _, _) => const Icon(
+                      Icons.person_outline,
+                      size: 18,
+                      color: Colors.black,
                     ),
-                  ],
-                ],
-              ),
-            ],
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  '$count',
+                  style: WaUi.toolsTitleOf(
+                    size: 28,
+                    weight: FontWeight.w700,
+                    color: Colors.black,
+                    height: 1,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: WaUi.body.copyWith(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: BarqodyChrome.secondaryText,
+                    height: 1.2,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -399,35 +480,166 @@ class _EmployeeRow extends StatelessWidget {
   }
 }
 
-class _EmptyState extends StatelessWidget {
-  final VoidCallback onManage;
+class _MemberSectionCard extends StatelessWidget {
+  final String title;
+  final int count;
+  final List<AttendanceEmployee> employees;
+  final VoidCallback onViewAll;
 
-  const _EmptyState({required this.onManage});
+  const _MemberSectionCard({
+    required this.title,
+    required this.count,
+    required this.employees,
+    required this.onViewAll,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+    final preview = employees.take(3).toList();
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+      decoration: BoxDecoration(
+        color: _teamSectionCardBg,
+        borderRadius: BorderRadius.circular(18),
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.groups_outlined,
-            size: 48,
-            color: WaUi.secondaryText.withValues(alpha: 0.45),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: WaUi.toolsTitleOf(
+                    size: 16,
+                    weight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Text(
+                '$count',
+                style: WaUi.toolsTitleOf(
+                  size: 16,
+                  weight: FontWeight.w700,
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 14),
-          Text(
-            context.l10n.noEmployeesYet,
-            style: AttendanceUi.sectionTitle,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            context.l10n.scanAUserQRCodeToAddThemAsEmployee,
-            textAlign: TextAlign.center,
-            style: AttendanceUi.bodyMuted,
+          Row(
+            children: [
+              if (preview.isEmpty)
+                Text(
+                  '—',
+                  style: WaUi.body.copyWith(
+                    color: BarqodyChrome.secondaryText,
+                    fontSize: 15,
+                  ),
+                )
+              else
+                SizedBox(
+                  height: 44,
+                  width: 44 + (preview.length - 1) * 24.0,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      for (var i = 0; i < preview.length; i++)
+                        Positioned(
+                          left: i * 24.0,
+                          child: _EmployeeAvatar(
+                            employee: preview[i],
+                            radius: 20,
+                            border: true,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              const Spacer(),
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: onViewAll,
+                  borderRadius: BorderRadius.circular(20),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 6,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          context.l10n.seeAll,
+                          style: WaUi.body.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Image.asset(
+                          'assets/images/png/multiple-users.png',
+                          width: 18,
+                          height: 18,
+                          errorBuilder: (_, _, _) => const Icon(
+                            Icons.groups_outlined,
+                            size: 18,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _EmployeeAvatar extends StatelessWidget {
+  final AttendanceEmployee employee;
+  final double radius;
+  final bool border;
+
+  const _EmployeeAvatar({
+    required this.employee,
+    this.radius = 20,
+    this.border = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final name = employee.employee.displayName;
+    final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
+
+    return Container(
+      decoration: border
+          ? BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+            )
+          : null,
+      child: CircleAvatar(
+        radius: radius,
+        backgroundColor: Colors.white,
+        backgroundImage: employee.employee.profilePhoto.isNotEmpty
+            ? NetworkImage(employee.employee.profilePhoto)
+            : null,
+        child: employee.employee.profilePhoto.isEmpty
+            ? Text(
+                initial,
+                style: WaUi.avatarInitial.copyWith(fontSize: radius * 0.85),
+              )
+            : null,
       ),
     );
   }

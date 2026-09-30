@@ -5,8 +5,7 @@ import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
-import 'package:tapni_app/widgets/attendance_ui.dart';
-import 'package:tapni_app/widgets/custom_app_button.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class EmployeeInvitationsScreen extends StatefulWidget {
   const EmployeeInvitationsScreen({super.key});
@@ -75,171 +74,215 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AttendanceUi.appBar(context.l10n.employeeInvitations),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(strokeWidth: 2.5))
-          : RefreshIndicator(
-              color: WaUi.accent,
-              backgroundColor: Colors.white,
-              onRefresh: _load,
-              child: _invitations.isEmpty
-                  ? ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(24),
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.5,
-                          child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.mail_outline_rounded,
-                                  size: 52,
-                                  color: WaUi.secondaryText
-                                      .withValues(alpha: 0.4),
-                                ),
-                                const SizedBox(height: 14),
-                                Text(
-                                  context.l10n.noPendingInvitations,
-                                  style: AttendanceUi.sectionTitle,
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  context.l10n
-                                      .whenABusinessInvitesYouToTheirTeamItWillAppearHere,
-                                  textAlign: TextAlign.center,
-                                  style: AttendanceUi.bodyMuted,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+      backgroundColor: BarqodyChrome.scaffold,
+      body: SafeArea(
+        child: Column(
+          children: [
+            BarqodyTitleBar(title: context.l10n.invitations),
+            Expanded(
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: Colors.black,
+                      ),
                     )
-                  : ListView.separated(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                      itemCount: _invitations.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 10),
-                      itemBuilder: (_, i) {
-                        final invitation = _invitations[i];
-                        final isResponding = _respondingId == invitation.id;
-                        final name = invitation.business.displayName;
-                        final initial =
-                            name.isNotEmpty ? name[0].toUpperCase() : '?';
-
-                        return Container(
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.circular(AttendanceUi.radius),
-                            border: Border.all(color: WaUi.divider),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 24,
-                                    backgroundColor: AttendanceUi.tileBg,
-                                    backgroundImage: invitation
-                                            .business.profilePhoto.isNotEmpty
-                                        ? NetworkImage(
-                                            invitation.business.profilePhoto,
-                                          )
-                                        : null,
-                                    child: invitation
-                                            .business.profilePhoto.isEmpty
-                                        ? Text(
-                                            initial,
-                                            style: WaUi.avatarInitial,
-                                          )
-                                        : null,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
+                  : RefreshIndicator(
+                      color: Colors.black,
+                      backgroundColor: Colors.white,
+                      onRefresh: _load,
+                      child: _invitations.isEmpty
+                          ? ListView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              padding: const EdgeInsets.all(24),
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.45,
+                                  child: Center(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Text(
-                                          name,
-                                          style: AttendanceUi.cardTitle,
+                                        Image.asset(
+                                          'assets/images/png/email-icon-1.png',
+                                          width: 56,
+                                          height: 56,
+                                          errorBuilder: (_, _, _) => Icon(
+                                            Icons.mail_outline_rounded,
+                                            size: 52,
+                                            color: BarqodyChrome.secondaryText
+                                                .withValues(alpha: 0.45),
+                                          ),
                                         ),
-                                        const SizedBox(height: 3),
+                                        const SizedBox(height: 16),
+                                        Text(
+                                          context.l10n.noPendingInvitations,
+                                          style: WaUi.toolsTitleOf(
+                                            size: 18,
+                                            weight: FontWeight.w700,
+                                            color: Colors.black,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 8),
                                         Text(
                                           context.l10n
-                                              .invitedYouToJoinAsEmployee,
-                                          style: AttendanceUi.bodyMuted,
-                                        ),
-                                        const SizedBox(height: 3),
-                                        Text(
-                                          context.l10n.shiftLabel(
-                                            invitation.shiftStart,
-                                            invitation.shiftEnd,
+                                              .whenABusinessInvitesYouToTheirTeamItWillAppearHere,
+                                          textAlign: TextAlign.center,
+                                          style: WaUi.body.copyWith(
+                                            fontSize: 14,
+                                            color: BarqodyChrome.secondaryText,
+                                            height: 1.4,
                                           ),
-                                          style: WaUi.caption
-                                              .copyWith(fontSize: 12),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                              const SizedBox(height: 14),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: SizedBox(
-                                      height: WaUi.primaryButtonHeight,
-                                      child: OutlinedButton(
-                                        onPressed: isResponding
-                                            ? null
-                                            : () =>
-                                                _respond(invitation, false),
-                                        style: OutlinedButton.styleFrom(
-                                          foregroundColor: WaUi.primaryText,
-                                          side: const BorderSide(
-                                            color: WaUi.divider,
+                                ),
+                              ],
+                            )
+                          : ListView.separated(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+                              itemCount: _invitations.length,
+                              separatorBuilder: (_, _) =>
+                                  const SizedBox(height: 12),
+                              itemBuilder: (_, i) {
+                                final invitation = _invitations[i];
+                                final isResponding =
+                                    _respondingId == invitation.id;
+                                final name = invitation.business.displayName;
+                                final initial = name.isNotEmpty
+                                    ? name[0].toUpperCase()
+                                    : '?';
+
+                                return Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: BarqodyChrome.fieldFill,
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 24,
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: invitation.business
+                                                    .profilePhoto.isNotEmpty
+                                                ? NetworkImage(
+                                                    invitation
+                                                        .business.profilePhoto,
+                                                  )
+                                                : null,
+                                            child: invitation.business
+                                                    .profilePhoto.isEmpty
+                                                ? Text(
+                                                    initial,
+                                                    style: WaUi.body.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: Colors.black,
+                                                    ),
+                                                  )
+                                                : null,
                                           ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(
-                                              WaUi.radiusMd,
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  name,
+                                                  style: WaUi.body.copyWith(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 3),
+                                                Text(
+                                                  context.l10n
+                                                      .invitedYouToJoinAsEmployee,
+                                                  style: WaUi.body.copyWith(
+                                                    fontSize: 13,
+                                                    color: BarqodyChrome
+                                                        .secondaryText,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 3),
+                                                Text(
+                                                  context.l10n.shiftLabel(
+                                                    invitation.shiftStart,
+                                                    invitation.shiftEnd,
+                                                  ),
+                                                  style: WaUi.body.copyWith(
+                                                    fontSize: 12,
+                                                    color: BarqodyChrome
+                                                        .secondaryText,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                        child: Text(
-                                          context.l10n.decline,
-                                          style: WaUi.bodyMedium,
-                                        ),
+                                        ],
                                       ),
-                                    ),
+                                      const SizedBox(height: 14),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: SizedBox(
+                                              height: 48,
+                                              child: OutlinedButton(
+                                                onPressed: isResponding
+                                                    ? null
+                                                    : () => _respond(
+                                                          invitation,
+                                                          false,
+                                                        ),
+                                                style: OutlinedButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  side: const BorderSide(
+                                                    color: Colors.black,
+                                                    width: 1.2,
+                                                  ),
+                                                  shape: const StadiumBorder(),
+                                                ),
+                                                child: Text(
+                                                  context.l10n.decline,
+                                                  style: WaUi.body.copyWith(
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: PillButton(
+                                              label: context.l10n.accept,
+                                              enabled: !isResponding,
+                                              onPressed: () =>
+                                                  _respond(invitation, true),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: CustomAppButton(
-                                      text: context.l10n.accept,
-                                      icon: Icons.check_rounded,
-                                      backgroundColor: WaUi.buttonDark,
-                                      isLoading: isResponding,
-                                      onTap: () =>
-                                          _respond(invitation, true),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                                );
+                              },
+                            ),
                     ),
             ),
+          ],
+        ),
+      ),
     );
   }
 }

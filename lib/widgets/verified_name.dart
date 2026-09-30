@@ -20,14 +20,13 @@ class VerifiedName extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.badgeColor,
-    this.badgeSize = 22,
+    this.badgeSize = 20,
   });
 
-  static const Color defaultBadgeColor = Color(0xFF1D9BF0);
+  static const Color defaultBadgeColor = Color(0xFFFFCC00);
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = badgeColor ?? defaultBadgeColor;
     return Text.rich(
       TextSpan(
         style: style,
@@ -37,10 +36,15 @@ class VerifiedName extends StatelessWidget {
             const WidgetSpan(child: SizedBox(width: 6)),
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
-              child: Icon(
-                Icons.verified,
-                size: badgeSize,
-                color: iconColor,
+              child: Image.asset(
+                'assets/images/png/verified-badge.png',
+                width: badgeSize,
+                height: badgeSize,
+                errorBuilder: (_, __, ___) => Icon(
+                  Icons.verified,
+                  size: badgeSize,
+                  color: badgeColor ?? defaultBadgeColor,
+                ),
               ),
             ),
           ],

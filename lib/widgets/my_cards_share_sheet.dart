@@ -9,6 +9,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/wallet_repo.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/custom_card_editor_sheet.dart';
 import 'package:tapni_app/widgets/qr_card_stack_carousel.dart';
@@ -16,6 +17,7 @@ import 'package:tapni_app/widgets/wallet_brand_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+
 class MyCardsShareSheet extends StatefulWidget {
   const MyCardsShareSheet({super.key});
 
@@ -60,7 +62,7 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   void _snack(String message, {Color color = WaUi.accent}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: TextStyle(fontSize: 14)),
+        content: Text(message, style: const TextStyle(fontSize: 14)),
         behavior: SnackBarBehavior.floating,
         backgroundColor: color == WaUi.accent ? WaUi.primaryText : color,
       ),
@@ -68,7 +70,8 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   }
 
   Future<void> _openDownloadSheet() async {
-    final card = _currentCard(Provider.of<ProfileProvider>(context, listen: false));
+    final card =
+        _currentCard(Provider.of<ProfileProvider>(context, listen: false));
     if (card == null) return;
     await CardDownloadSizeSheet.show(
       context,
@@ -81,7 +84,8 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   }
 
   Future<void> _shareCard() async {
-    final card = _currentCard(Provider.of<ProfileProvider>(context, listen: false));
+    final card =
+        _currentCard(Provider.of<ProfileProvider>(context, listen: false));
     if (card == null) return;
     await Share.share(
       'Business card: ${card.profileUrl}',
@@ -96,14 +100,16 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
     setState(() => _googleWalletLoading = false);
 
     if (!res.success) {
-      _snack(res.message ?? context.l10n.couldNotOpenGoogleWallet, color: Colors.red);
+      _snack(res.message ?? context.l10n.couldNotOpenGoogleWallet,
+          color: Colors.red);
       return;
     }
 
     final data = unwrapWalletPayload(res.data);
     final saveUrl = data['saveUrl'] as String?;
     final configured = data['configured'] as bool? ?? false;
-    final card = _currentCard(Provider.of<ProfileProvider>(context, listen: false));
+    final card =
+        _currentCard(Provider.of<ProfileProvider>(context, listen: false));
 
     if (configured && saveUrl != null && saveUrl.isNotEmpty) {
       final uri = Uri.parse(saveUrl);
@@ -127,7 +133,8 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
     if (!mounted) return;
     setState(() => _appleWalletLoading = false);
 
-    final card = _currentCard(Provider.of<ProfileProvider>(context, listen: false));
+    final card =
+        _currentCard(Provider.of<ProfileProvider>(context, listen: false));
     _snack(context.l10n.appleWalletSetupPending);
     if (card != null) {
       await Clipboard.setData(ClipboardData(text: card.profileUrl));
@@ -143,8 +150,6 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   }
 
   void _openEditor({UserCustomCard? existing}) {
-    // Always open the card editor (links, title, photos). Design canvas is
-    // available from inside that sheet when the card has a print design.
     CustomCardEditorSheet.show(context, existing: existing);
   }
 
@@ -205,48 +210,42 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
       builder: (context, scrollController) {
         return Container(
           width: double.infinity,
-          decoration: WaUi.sheetDecoration,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(BarqodyChrome.sheetRadius),
+            ),
+          ),
           child: SafeArea(
             top: false,
             child: ListView(
               controller: scrollController,
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
               children: [
-                Center(
-                  child: Container(
-                    width: 56,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: WaUi.divider,
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
+                const Center(child: SheetDragHandle()),
+                const SizedBox(height: 14),
+                SizedBox(
+                  height: 44,
                   child: Row(
                     children: [
+                      CircleBackButton(
+                        onTap: () => Navigator.pop(context),
+                      ),
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(context.l10n.shareCard, style: WaUi.headline),
-                            const SizedBox(height: 2),
-                            Text(
-                              card != null
-                                  ? cards.length > 1
-                                      ? '${card.template.name} · Swipe for more cards'
-                                      : card.template.name
-                                  : context.l10n.createACardToShareYourProfile,
-                              style: WaUi.caption,
-                            ),
-                          ],
+                        child: Text(
+                          'Card',
+                          textAlign: TextAlign.center,
+                          style: WaUi.toolsTitleOf(
+                            size: 18,
+                            weight: FontWeight.w700,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close, color: WaUi.secondaryText),
+                      CircleAssetButton(
+                        asset: 'assets/images/png/plus-icon.png',
+                        iconSize: 16,
+                        onTap: () => _openEditor(),
                       ),
                     ],
                   ),

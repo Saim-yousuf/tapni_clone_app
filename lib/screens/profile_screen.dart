@@ -13,11 +13,9 @@ import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/progress_score_card.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
-import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
-import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
-import 'package:tapni_app/widgets/glass_card.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
@@ -222,35 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-                child: SizedBox(
-                  height: 64,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'BARQODY',
-                                style: WaUi.toolsTitleOf(
-                                  weight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      NotificationIconButton(),
-                    ],
-                  ),
-                ),
-              ),
+              if (!isEditing) _buildProfileTopBar(profileProvider),
               Expanded(
                 child: showShimmer
                     ? const ProfileScreenShimmer()
@@ -275,9 +245,91 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _buildProfileTopBar(ProfileProvider profileProvider) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 6, 12, 4),
+      child: SizedBox(
+        height: 48,
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                'assets/images/png/app_icon.png',
+                width: 32,
+                height: 32,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'BARQODY',
+                style: WaUi.toolsTitleOf(
+                  size: 20,
+                  weight: FontWeight.w700,
+                  color: Colors.black,
+                  letterSpacing: 0.4,
+                ),
+              ),
+            ),
+            NotificationIconButton(),
+            const SizedBox(width: 4),
+            PopupMenuButton<String>(
+              padding: EdgeInsets.zero,
+              offset: const Offset(0, 40),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+              onSelected: (value) {
+                if (value == 'edit') {
+                  _enterEditMode(profileProvider);
+                } else if (value == 'share') {
+                  SharingProfileSheet.show(context);
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'edit',
+                  child: Text(context.l10n.editProfile2),
+                ),
+                PopupMenuItem(
+                  value: 'share',
+                  child: Text(context.l10n.shareCard),
+                ),
+              ],
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Image.asset(
+                  'assets/images/png/icon-morehoriz.png',
+                  width: 20,
+                  height: 20,
+                  color: Colors.black,
+                  errorBuilder: (_, __, ___) => const Icon(
+                    Icons.more_vert,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildViewMode(ProfileProvider profileProvider, UserProfile profile) {
-    final theme = Theme.of(context);
-    final activeCard = profileProvider.activeCardDisplay;
+    final username = (profile.username ?? '').trim();
+    final bio = profile.bio.trim();
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -286,18 +338,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
               child: ProfileScoreCard(),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
           ],
           _buildProfileAvatar(profile),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: VerifiedName(
-              name: profile.name,
-              verified: profile.isPro,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+            child: Column(
+              children: [
+                VerifiedName(
+                  name: profile.name.toUpperCase(),
+                  verified: profile.isPro,
+                  badgeSize: 18,
+                  style: WaUi.toolsTitleOf(
+                    size: 20,
+                    weight: FontWeight.w700,
+                    color: Colors.black,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+                if (username.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    '@$username',
+                    style: WaUi.body.copyWith(
+                      fontSize: 14,
+                      color: BarqodyChrome.secondaryText,
+                    ),
+                  ),
+                ],
+                if (bio.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    bio,
+                    textAlign: TextAlign.center,
+                    style: WaUi.body.copyWith(
+                      fontSize: 13.5,
+                      height: 1.35,
+                      color: BarqodyChrome.bodyText,
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 28),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: _buildLinkSection(
@@ -307,138 +391,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 10),
+            padding: const EdgeInsets.fromLTRB(20, 28, 20, 10),
             child: Column(
               children: [
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: ElevatedButton(
-                onPressed: () => _enterEditMode(profileProvider),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFF1F5F9),
-                  elevation: 0,
-                  surfaceTintColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28),
-                    side: BorderSide(
-                      color: Colors.black.withOpacity(0.06),
-                      width: 1,
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: OutlinedButton(
+                    onPressed: () => _enterEditMode(profileProvider),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      side: const BorderSide(color: Colors.black, width: 1.2),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: Text(
+                      context.l10n.editProfile2,
+                      style: WaUi.body.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-                child: Text(
-                  context.l10n.editProfile2,
-                  style: const TextStyle(
-                    color: Color(0xFF0F172A),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.2,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                SharingProfileSheet.show(context);
-              },
-              child: GlassCard(
-                customBgColor: Colors.black.withOpacity(0.02),
-                padding: EdgeInsets.all(20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: AppTheme.accentGold.withOpacity(0.5),
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(context.l10n.activeCARD,
-                              style: TextStyle(
-                                color: AppTheme.accentGold,
-                                fontSize: 9,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.0,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          Text(
-                            activeCard.title,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: AppTheme.textGreyLight,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            activeCard.name,
-                            style: theme.textTheme.headlineMedium?.copyWith(
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -0.5,
-                            ),
-                          ),
-                          // Text(
-                          //   '${profile.designation} at ${profile.company}',
-                          //   style: theme.textTheme.bodyMedium?.copyWith(
-                          //     color: AppTheme.textGreyLight,
-                          //   ),
-                          // ),
-                          SizedBox(height: 8),
-                          Text(
-                            '${activeCard.template.name} template',
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Row(
+                const SizedBox(height: 14),
+                GestureDetector(
+                  onTap: () => SharingProfileSheet.show(context),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(
-                                Icons.qr_code,
-                                size: 16,
-                                color: AppTheme.accentGold,
+                              Text(
+                                context.l10n.shareCard,
+                                style: WaUi.body.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
+                                ),
                               ),
-                              SizedBox(width: 6),
+                              const SizedBox(height: 4),
                               Text(
                                 context.l10n.tapToShareQRCode,
-                                style: TextStyle(
-                                  color: Colors.black87,
+                                style: WaUi.caption.copyWith(
+                                  color: Colors.white70,
                                   fontSize: 12,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                        Image.asset(
+                          'assets/images/png/qr-code-icon.png',
+                          width: 28,
+                          height: 28,
+                          color: Colors.white,
+                          errorBuilder: (_, __, ___) => const Icon(
+                            Icons.qr_code_2_rounded,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-
-            // Spacer(),
-            const SizedBox(height: 40),
+                const SizedBox(height: 40),
               ],
             ),
           ),
           const SizedBox(height: 70),
-        
-        
         ],
       ),
     );
@@ -451,259 +483,278 @@ class _ProfileScreenState extends State<ProfileScreen> {
         physics: _isReorderingLink
             ? const NeverScrollableScrollPhysics()
             : null,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Top Bar
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Username & edit pencil visual
-                Row(
-                  children: [
-                    Text(
-                      '${Constants.appDomain}/${profile.username ?? ''}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.edit,
-                        size: 12,
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 8),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // Cover and Profile Stack
             Stack(
               clipBehavior: Clip.none,
               children: [
-                // Cover Card
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F5F5),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    child: coverImageFile != null
-                        ? Image.file(
-                            coverImageFile!,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) =>
-                                Container(color: const Color(0xFFF5F5F5)),
-                          )
-                        : profile.coverPhotoUrl != null &&
-                              profile.coverPhotoUrl!.isNotEmpty
-                        ? Image.network(
-                            profile.coverPhotoUrl!,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) =>
-                                Container(color: const Color(0xFFF5F5F5)),
-                          )
-                        : null,
-                  ),
-                ),
-                // Edit Cover Pencil Icon
-                Positioned(
-                  bottom: 55,
-                  right: 12,
-                  child: InkWell(
-                    onTap: () {
-                      if (profile.isPro == false) {
-                        SubcriptionSheet.show(context);
-                        return;
+                GestureDetector(
+                  onTap: () {
+                    if (profile.isPro == false) {
+                      SubcriptionSheet.show(context);
+                      return;
+                    }
+                    pickFile().then((file) {
+                      if (file != null) {
+                        setState(() => coverImageFile = file.file);
                       }
-                      pickFile().then((file) {
-                        if (file != null) {
-                          setState(() {
-                            coverImageFile = file.file;
-                          });
-                        }
-                      });
-                    },
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.edit,
-                        size: 16,
-                        color: Colors.black54,
-                      ),
+                    });
+                  },
+                  child: SizedBox(
+                    height: 220,
+                    width: double.infinity,
+                    child: ColoredBox(
+                      color: const Color(0xFFE8F1F8),
+                      child: coverImageFile != null
+                          ? Image.file(coverImageFile!, fit: BoxFit.cover)
+                          : profile.coverPhotoUrl != null &&
+                                  profile.coverPhotoUrl!.isNotEmpty
+                              ? Image.network(
+                                  profile.coverPhotoUrl!,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) =>
+                                      const ColoredBox(color: Color(0xFFE8F1F8)),
+                                )
+                              : null,
                     ),
                   ),
                 ),
-                // Overlapping Avatar
-                Center(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      margin: EdgeInsets.only(top: 120),
-                      child: GestureDetector(
-                        onTap: () {
-                          print(context.l10n.avatarTAPPED);
-                          pickFile().then((file) {
-                            if (file != null)
-                              setState(() => profileImageFile = file.file);
-                          });
-                        },
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            Container(
-                              width: 130,
-                              height: 130,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFF1E2022),
-                                border: Border.all(
-                                  color: Colors.white,
-                                  width: 4,
+                Positioned(
+                  top: 6,
+                  left: 16,
+                  right: 16,
+                  child: SizedBox(
+                    height: 44,
+                    child: Row(
+                      children: [
+                        CircleBackButton(
+                          onTap: () => _exitEditMode(profileProvider),
+                          color: Colors.white,
+                        ),
+                        Expanded(
+                          child: Text(
+                            context.l10n.editProfile,
+                            textAlign: TextAlign.center,
+                            style: WaUi.toolsTitleOf(
+                              size: 18,
+                              weight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Material(
+                          color: Colors.white,
+                          shape: const CircleBorder(),
+                          child: InkWell(
+                            customBorder: const CircleBorder(),
+                            onTap: () => _saveProfile(profileProvider),
+                            child: SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: Center(
+                                child: Image.asset(
+                                  'assets/images/png/edit-icon.png',
+                                  width: 16,
+                                  height: 16,
+                                  errorBuilder: (_, __, ___) => const Icon(
+                                    Icons.edit,
+                                    size: 16,
+                                    color: Colors.black,
+                                  ),
                                 ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: -55,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        pickFile().then((file) {
+                          if (file != null) {
+                            setState(() => profileImageFile = file.file);
+                          }
+                        });
+                      },
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: const Color(0xFF1E2022),
+                              border: Border.all(color: Colors.white, width: 4),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.1),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: ClipOval(
+                              child: profileImageFile != null
+                                  ? Image.file(
+                                      profileImageFile!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : profile.profilePhotoUrl != null &&
+                                          profile.profilePhotoUrl!.isNotEmpty
+                                      ? Image.network(
+                                          profile.profilePhotoUrl!,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Center(
+                                          child: Text(
+                                            profile.name.isNotEmpty
+                                                ? profile.name[0].toUpperCase()
+                                                : '?',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 40,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 2,
+                            right: 2,
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
+                                    color: Colors.black.withValues(alpha: 0.12),
+                                    blurRadius: 4,
                                   ),
                                 ],
                               ),
-                              child: ClipOval(
-                                child: profileImageFile != null
-                                    ? Image.file(
-                                        profileImageFile!,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : profile.profilePhotoUrl != null &&
-                                          profile.profilePhotoUrl!.isNotEmpty
-                                    ? Image.network(
-                                        profile.profilePhotoUrl!,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Center(
-                                        child: Text(
-                                          profile.name.isNotEmpty
-                                              ? profile.name[0].toUpperCase()
-                                              : '?',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                              ),
-                            ),
-                            // Pencil icon
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 4,
-                                    ),
-                                  ],
-                                ),
-                                child: Icon(
-                                  Icons.edit_outlined,
-                                  size: 14,
-                                  color: Colors.black54,
+                              child: Center(
+                                child: Image.asset(
+                                  'assets/images/png/edit-icon.png',
+                                  width: 12,
+                                  height: 12,
+                                  errorBuilder: (_, __, ___) => const Icon(
+                                    Icons.edit_outlined,
+                                    size: 14,
+                                    color: Colors.black54,
+                                  ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-
-            SizedBox(height: 15), // Wait for overlapping avatar
-            // Name Field input
-            TextFormField(
-              controller: _nameController,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              decoration: WaUi.fieldDecoration(
-                hintText: context.l10n.enterYourName,
-                radius: 16,
-              ).copyWith(
-                contentPadding: const EdgeInsets.symmetric(vertical: 2),
-              ),
-              validator: (value) => value == null || value.trim().isEmpty
-                  ? context.l10n.nameCannotBeEmpty
-                  : null,
-            ),
-
-            SizedBox(height: 10),
-
-            // Bio Field input
-            TextFormField(
-              controller: _bioController,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              decoration: WaUi.fieldDecoration(
-                hintText: context.l10n.writeSomethingAboutYouOrYourBrand,
-                radius: 16,
-              ).copyWith(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 6,
-                  vertical: 6,
-                ),
-              ),
-            ),
-
-            SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Color(0xFFF3F3F3),
-              ),
+            const SizedBox(height: 72),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  Center(
+                  TextFormField(
+                    controller: _nameController,
+                    textAlign: TextAlign.center,
+                    style: WaUi.body.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: BarqodyChrome.fieldFill,
+                      hintText: context.l10n.enterYourName,
+                      hintStyle: WaUi.body.copyWith(
+                        color: BarqodyChrome.secondaryText,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
+                    ),
+                    validator: (value) => value == null || value.trim().isEmpty
+                        ? context.l10n.nameCannotBeEmpty
+                        : null,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _bioController,
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    style: WaUi.body.copyWith(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: BarqodyChrome.fieldFill,
+                      hintText: context.l10n.writeSomethingAboutYouOrYourBrand,
+                      hintStyle: WaUi.body.copyWith(
+                        color: BarqodyChrome.secondaryText,
+                        fontSize: 14,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(12, 14, 12, 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: const Color(0xFFF3F3F3),
+                    ),
                     child: Column(
                       children: [
                         Text(
                           context.l10n.addLinksToYourProfileBelow2,
-                          style: TextStyle(
+                          style: WaUi.body.copyWith(
                             fontSize: 12,
-                            color: Colors.black,
+                            color: Colors.black87,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -711,32 +762,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const SizedBox(height: 4),
                           Text(
                             context.l10n.holdAndDragToReorderLinks,
-                            style: TextStyle(
+                            style: WaUi.caption.copyWith(
                               fontSize: 11,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.w400,
+                              color: BarqodyChrome.secondaryText,
                             ),
                           ),
                         ],
+                        const SizedBox(height: 16),
+                        _buildLinkSection(
+                          profile,
+                          isEditable: true,
+                          profileProvider: profileProvider,
+                        ),
                       ],
                     ),
                   ),
-
-                  SizedBox(height: 16),
-
-                  // Links Section Grid
-                  _buildLinkSection(
-                    profile,
-                    isEditable: true,
-                    profileProvider: profileProvider,
-                  ),
+                  const SizedBox(height: 80),
                 ],
               ),
             ),
-
-            const SizedBox(
-              height: 80,
-            ), // extra scrolling offset for FAB bottom navigation
           ],
         ),
       ),
@@ -894,13 +938,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(radius),
-                        border: Border.all(color: Colors.grey.shade200),
+                        border: Border.all(color: const Color(0xFFE0E0E0)),
                       ),
                       child: Center(
-                        child: Icon(
-                          Icons.add,
-                          size: iconSize * 0.54,
-                          color: Colors.black,
+                        child: Image.asset(
+                          'assets/images/png/plus-icon.png',
+                          width: iconSize * 0.32,
+                          height: iconSize * 0.32,
+                          errorBuilder: (_, __, ___) => Icon(
+                            Icons.add,
+                            size: iconSize * 0.4,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),

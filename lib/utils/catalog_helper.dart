@@ -47,6 +47,8 @@ class CatalogHelper {
     switch (status) {
       case OrderStatus.pending:
         return l10n.pending;
+      case OrderStatus.confirmed:
+        return 'Confirmed';
       case OrderStatus.completed:
         return l10n.completed;
       case OrderStatus.cancelled:
@@ -60,6 +62,8 @@ class CatalogHelper {
     switch (status) {
       case OrderStatus.pending:
         return 'pending';
+      case OrderStatus.confirmed:
+        return 'confirmed';
       case OrderStatus.completed:
         return 'completed';
       case OrderStatus.cancelled:
@@ -71,6 +75,8 @@ class CatalogHelper {
 
   static OrderStatus statusFromApi(String? value) {
     switch (value) {
+      case 'confirmed':
+        return OrderStatus.confirmed;
       case 'completed':
         return OrderStatus.completed;
       case 'cancelled':

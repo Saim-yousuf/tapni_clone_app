@@ -6,8 +6,10 @@ import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/invitations/invite_contacts_screen.dart';
+import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
 
@@ -168,6 +170,24 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
     }
   }
 
+  void _openSender(InvitationUserSummary sender) {
+    if (sender.username.trim().isNotEmpty) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => ScannedProfileScreen(username: sender.username.trim()),
+        ),
+      );
+      return;
+    }
+    if (sender.id.trim().isNotEmpty) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => ScannedProfileScreen(user: sender.id.trim()),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final profile = context.watch<ProfileProvider>().profile;
@@ -179,421 +199,383 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
         inv != null && _isSender(inv, userId) && inv.status == 'sent';
 
     return Scaffold(
-      backgroundColor: WaUi.toolsScaffold,
-      appBar: AppBar(
-        title: Text(context.l10n.invitation),
-        actions: [
-          if (canInviteMore)
-            IconButton(
-              tooltip: context.l10n.inviteMorePeople,
-              onPressed: _inviteMore,
-              icon: const Icon(Icons.person_add_alt_1_rounded)),
-          if (inv != null)
-            IconButton(
-              tooltip: context.l10n.downloadCard,
-              onPressed: _downloading ? null : _downloadCard,
-              icon: _downloading
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Icon(Icons.download_rounded)),
-        ],
-      ),
-      body: _loading && inv == null
-          ? const Center(child: CircularProgressIndicator(strokeWidth: 2.5))
-          : _error != null && inv == null
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 64,
-                          height: 64,
-                          decoration: const BoxDecoration(
-                            color: WaUi.navPill,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.error_outline_rounded,
-                            color: WaUi.secondaryText.withValues(alpha: 0.7),
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        Text(
-                          _error ?? context.l10n.notFound,
-                          style: WaUi.bodyMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 12),
-                        TextButton(
-                          onPressed: () => _load(),
-                          child: Text(context.l10n.retry, style: WaUi.bodyMedium),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : RefreshIndicator(
-                  color: WaUi.accent,
-                  backgroundColor: WaUi.toolsScaffold,
-                  onRefresh: () => _load(),
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 36),
-                    children: [
-                      _CardPreviewFrame(
-                        child: RepaintBoundary(
-                          key: _cardKey,
-                          child: inv!.hasDesign && inv.design != null
-                              ? InvitationDesignRenderer(
-                                  design: inv.design!,
-                                  invitationId: inv.id,
-                                  shadows: const [],
-                                )
-                              : InvitationCardPreview.fromInvitation(
-                                  inv,
-                                  guestName: isGuest
-                                      ? (profile.name.isNotEmpty
-                                          ? profile.name
-                                          : (profile.username ?? ''))
-                                      : null,
-                                  guestEmail:
-                                      isGuest && profile.email.isNotEmpty
-                                          ? profile.email
-                                          : null,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            BarqodyTitleBar(
+              title: context.l10n.invitation,
+              trailing: inv == null
+                  ? const SizedBox(width: 40)
+                  : Tooltip(
+                      message: context.l10n.downloadCard,
+                      child: CircleAssetButton(
+                        asset: 'assets/images/png/download-icon.png',
+                        iconSize: 18,
+                        onTap: _downloading ? null : _downloadCard,
+                        child: _downloading
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.black,
                                 ),
-                        ),
+                              )
+                            : null,
                       ),
-                      const SizedBox(height: 14),
-                      _EventMetaChips(invitation: inv),
-                      const SizedBox(height: 18),
-                      Row(
-                        children: [
-                          if (canInviteMore) ...[
-                            Expanded(
-                              child: _PrimaryActionButton(
-                                onPressed: _inviteMore,
-                                icon: Icons.person_add_alt_1_rounded,
-                                label: context.l10n.inviteMorePeople,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                          ],
-                          Expanded(
-                            child: _SecondaryActionButton(
-                              onPressed: _downloading ? null : _downloadCard,
-                              icon: Icons.download_rounded,
-                              label: _downloading
-                                  ? context.l10n.savingEllipsis
-                                  : context.l10n.downloadCard,
-                              loading: _downloading,
-                            ),
-                          ),
-                        ],
+                    ),
+            ),
+            Expanded(
+              child: _loading && inv == null
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: Colors.black,
                       ),
-                      if (!isGuest && inv.recipients.isNotEmpty) ...[
-                        const SizedBox(height: 28),
-                        Row(
-                          children: [
-                            Text(
-                              context.l10n.sentToCount(inv.recipients.length),
-                              style: WaUi.sectionHeader,
-                            ),
-                            const Spacer(),
-                            if (canInviteMore)
-                              GestureDetector(
-                                onTap: _inviteMore,
-                                child: Text(
-                                  context.l10n.inviteMorePeople,
-                                  style: WaUi.bodyMedium.copyWith(
-                                    color: WaUi.accent,
-                                    fontSize: 13,
+                    )
+                  : _error != null && inv == null
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  _error ?? context.l10n.notFound,
+                                  style: WaUi.body.copyWith(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 12),
+                                TextButton(
+                                  onPressed: () => _load(),
+                                  child: Text(
+                                    context.l10n.retry,
+                                    style: WaUi.body.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          context.l10n.usersWhoReceivedInvitation,
-                          style: WaUi.caption,
-                        ),
-                        const SizedBox(height: 14),
-                        ...inv.recipients.map(
-                          (r) => Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: _RecipientTile(recipient: r),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                      if (!isGuest &&
-                          inv.status == 'sent' &&
-                          inv.recipients.isEmpty) ...[
-                        const SizedBox(height: 28),
-                        Text(context.l10n.sentTo, style: WaUi.sectionHeader),
-                        const SizedBox(height: 12),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 22,
-                            horizontal: 16,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF6F7F8),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Column(
+                        )
+                      : RefreshIndicator(
+                          color: Colors.black,
+                          backgroundColor: Colors.white,
+                          onRefresh: () => _load(),
+                          child: ListView(
+                            padding: const EdgeInsets.fromLTRB(20, 14, 20, 32),
                             children: [
-                              Icon(
-                                Icons.group_outlined,
-                                size: 32,
-                                color: WaUi.secondaryText.withValues(
-                                  alpha: 0.55,
+                              _InvitationHeroCard(
+                                cardKey: _cardKey,
+                                invitation: inv!,
+                                guestName: isGuest
+                                    ? (profile.name.isNotEmpty
+                                        ? profile.name
+                                        : (profile.username ?? ''))
+                                    : null,
+                                guestEmail: isGuest && profile.email.isNotEmpty
+                                    ? profile.email
+                                    : null,
+                              ),
+                              const SizedBox(height: 22),
+                              _SendBySection(
+                                sender: inv.sender,
+                                onTap: () => _openSender(inv.sender),
+                              ),
+                              if (!isGuest && inv.recipients.isNotEmpty) ...[
+                                const SizedBox(height: 28),
+                                Row(
+                                  children: [
+                                    Text(
+                                      context.l10n
+                                          .sentToCount(inv.recipients.length),
+                                      style: WaUi.body.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    if (canInviteMore)
+                                      GestureDetector(
+                                        onTap: _inviteMore,
+                                        child: Text(
+                                          context.l10n.inviteMorePeople,
+                                          style: WaUi.body.copyWith(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                context.l10n.noRecipientsOnInvitation,
-                                textAlign: TextAlign.center,
-                                style: WaUi.caption,
-                              ),
-                              if (canInviteMore) ...[
+                                const SizedBox(height: 4),
+                                Text(
+                                  context.l10n.usersWhoReceivedInvitation,
+                                  style: WaUi.body.copyWith(
+                                    fontSize: 13,
+                                    color: BarqodyChrome.secondaryText,
+                                  ),
+                                ),
+                                const SizedBox(height: 14),
+                                ...inv.recipients.map(
+                                  (r) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: _RecipientTile(recipient: r),
+                                  ),
+                                ),
+                              ],
+                              if (!isGuest &&
+                                  inv.status == 'sent' &&
+                                  inv.recipients.isEmpty) ...[
+                                const SizedBox(height: 28),
+                                Text(
+                                  context.l10n.sentTo,
+                                  style: WaUi.body.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
+                                  ),
+                                ),
                                 const SizedBox(height: 12),
-                                TextButton.icon(
-                                  onPressed: _inviteMore,
-                                  icon: const Icon(Icons.person_add_alt_1, size: 18),
-                                  label: Text(
-                                    context.l10n.inviteMorePeople,
-                                    style: WaUi.bodyMedium,
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 22,
+                                    horizontal: 16,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: BarqodyChrome.fieldFill,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.group_outlined,
+                                        size: 32,
+                                        color: BarqodyChrome.secondaryText
+                                            .withValues(alpha: 0.7),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        context.l10n.noRecipientsOnInvitation,
+                                        textAlign: TextAlign.center,
+                                        style: WaUi.body.copyWith(
+                                          fontSize: 13,
+                                          color: BarqodyChrome.secondaryText,
+                                        ),
+                                      ),
+                                      if (canInviteMore) ...[
+                                        const SizedBox(height: 14),
+                                        TextButton(
+                                          onPressed: _inviteMore,
+                                          child: Text(
+                                            context.l10n.inviteMorePeople,
+                                            style: WaUi.body.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ),
                               ],
                             ],
                           ),
                         ),
-                      ],
-                    ],
-                  ),
-                ),
-    );
-  }
-}
-
-class _CardPreviewFrame extends StatelessWidget {
-  final Widget child;
-
-  const _CardPreviewFrame({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF6F7F8),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 18,
-              offset: const Offset(0, 6),
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: child,
-        ),
       ),
     );
   }
 }
 
-class _EventMetaChips extends StatelessWidget {
+class _InvitationHeroCard extends StatelessWidget {
+  final GlobalKey cardKey;
   final EventInvitation invitation;
+  final String? guestName;
+  final String? guestEmail;
 
-  const _EventMetaChips({required this.invitation});
-
-  @override
-  Widget build(BuildContext context) {
-    final chips = <Widget>[
-      _MetaChip(
-        icon: Icons.celebration_outlined,
-        label: invitation.typeDisplay,
-      ),
-    ];
-
-    if (invitation.eventAt != null) {
-      chips.add(
-        _MetaChip(
-          icon: Icons.event_outlined,
-          label: DateFormat('MMM d, yyyy').format(invitation.eventAt!.toLocal()),
-        ),
-      );
-    }
-
-    if (invitation.venue.trim().isNotEmpty) {
-      chips.add(
-        _MetaChip(
-          icon: Icons.place_outlined,
-          label: invitation.venue.trim(),
-        ),
-      );
-    }
-
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: chips,
-    );
-  }
-}
-
-class _MetaChip extends StatelessWidget {
-  final IconData icon;
-  final String label;
-
-  const _MetaChip({required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF6F7F8),
-        borderRadius: BorderRadius.circular(WaUi.radiusPill),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: WaUi.secondaryText),
-          const SizedBox(width: 6),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.45,
-            ),
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: WaUi.label.copyWith(
-                color: WaUi.primaryText,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PrimaryActionButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final IconData icon;
-  final String label;
-
-  const _PrimaryActionButton({
-    required this.onPressed,
-    required this.icon,
-    required this.label,
+  const _InvitationHeroCard({
+    required this.cardKey,
+    required this.invitation,
+    this.guestName,
+    this.guestEmail,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: WaUi.primaryButtonHeight,
-      child: FilledButton(
-        onPressed: onPressed,
-        style: FilledButton.styleFrom(
-          backgroundColor: WaUi.buttonDark,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(WaUi.radiusMd),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 18),
-            const SizedBox(width: 6),
-            Flexible(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  style: WaUi.promoButton.copyWith(fontSize: 13),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SecondaryActionButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final IconData icon;
-  final String label;
-  final bool loading;
-
-  const _SecondaryActionButton({
-    required this.onPressed,
-    required this.icon,
-    required this.label,
-    this.loading = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: WaUi.primaryButtonHeight,
-      child: OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: WaUi.primaryText,
-          backgroundColor: const Color(0xFFF6F7F8),
-          side: BorderSide.none,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(WaUi.radiusMd),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (loading)
-              const SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(strokeWidth: 2),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: RepaintBoundary(
+        key: cardKey,
+        child: invitation.hasDesign && invitation.design != null
+            ? InvitationDesignRenderer(
+                design: invitation.design!,
+                invitationId: invitation.id,
+                shadows: const [],
               )
-            else
-              Icon(icon, size: 18),
-            const SizedBox(width: 6),
-            Flexible(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  style: WaUi.bodyMedium.copyWith(fontSize: 13),
-                ),
+            : InvitationCardPreview.fromInvitation(
+                invitation,
+                guestName: guestName,
+                guestEmail: guestEmail,
+              ),
+      ),
+    );
+  }
+}
+
+class _SendBySection extends StatelessWidget {
+  final InvitationUserSummary sender;
+  final VoidCallback onTap;
+
+  const _SendBySection({
+    required this.sender,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final displayName = sender.businessName.trim().isNotEmpty
+        ? sender.businessName.trim()
+        : sender.displayName;
+    final subtitle = sender.businessName.trim().isNotEmpty &&
+            sender.name.trim().isNotEmpty &&
+            sender.businessName.trim() != sender.name.trim()
+        ? sender.name.trim()
+        : (sender.username.trim().isNotEmpty
+            ? '@${sender.username.trim()}'
+            : (sender.businessName.trim().isNotEmpty
+                ? sender.displayName
+                : ''));
+    final showBadge = sender.businessName.trim().isNotEmpty;
+    final initial =
+        displayName.isNotEmpty ? displayName[0].toUpperCase() : '?';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Send by',
+          style: WaUi.body.copyWith(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+            height: 1.1,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Divider(height: 1, thickness: 1, color: Color(0xFFE8E8E8)),
+        Material(
+          color: Colors.white,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 24,
+                    backgroundColor: BarqodyChrome.circleBtn,
+                    backgroundImage: sender.profilePhoto.isNotEmpty
+                        ? NetworkImage(sender.profilePhoto)
+                        : null,
+                    child: sender.profilePhoto.isEmpty
+                        ? Text(
+                            initial,
+                            style: WaUi.body.copyWith(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
+                          )
+                        : null,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                displayName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: WaUi.body.copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                  height: 1.15,
+                                ),
+                              ),
+                            ),
+                            if (showBadge) ...[
+                              const SizedBox(width: 6),
+                              Container(
+                                width: 16,
+                                height: 16,
+                                decoration: const BoxDecoration(
+                                  color: BarqodyChrome.star,
+                                  shape: BoxShape.circle,
+                                ),
+                                alignment: Alignment.center,
+                                child: Image.asset(
+                                  'assets/images/png/check-icon.png',
+                                  width: 9,
+                                  height: 9,
+                                  color: Colors.white,
+                                  errorBuilder: (_, _, _) => const Icon(
+                                    Icons.check,
+                                    size: 10,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                        if (subtitle.isNotEmpty) ...[
+                          const SizedBox(height: 3),
+                          Text(
+                            subtitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: WaUi.body.copyWith(
+                              fontSize: 13,
+                              color: BarqodyChrome.secondaryText,
+                              height: 1.2,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    size: 22,
+                    color: Colors.black,
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
-      ),
+        const Divider(height: 1, thickness: 1, color: Color(0xFFE8E8E8)),
+      ],
     );
   }
 }
@@ -611,7 +593,7 @@ class _RecipientTile extends StatelessWidget {
     final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
 
     return Material(
-      color: const Color(0xFFF6F7F8),
+      color: BarqodyChrome.fieldFill,
       borderRadius: BorderRadius.circular(16),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 14, 12),
@@ -619,15 +601,15 @@ class _RecipientTile extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 22,
-              backgroundColor: WaUi.chipBg,
+              backgroundColor: Colors.white,
               backgroundImage: recipient.user.profilePhoto.isNotEmpty
                   ? NetworkImage(recipient.user.profilePhoto)
                   : null,
               child: recipient.user.profilePhoto.isEmpty
                   ? Text(
                       initial,
-                      style: WaUi.bodyMedium.copyWith(
-                        color: WaUi.navGreen,
+                      style: WaUi.body.copyWith(
+                        color: Colors.black,
                         fontWeight: FontWeight.w700,
                       ),
                     )
@@ -638,19 +620,32 @@ class _RecipientTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name, style: WaUi.bodyMedium),
+                  Text(
+                    name,
+                    style: WaUi.body.copyWith(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
                   if (recipient.user.username.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(
                       '@${recipient.user.username}',
-                      style: WaUi.caption.copyWith(fontSize: 13),
+                      style: WaUi.body.copyWith(
+                        fontSize: 13,
+                        color: BarqodyChrome.secondaryText,
+                      ),
                     ),
                   ],
                   if (recipient.phone.isNotEmpty) ...[
                     const SizedBox(height: 1),
                     Text(
                       recipient.phone,
-                      style: WaUi.caption.copyWith(fontSize: 12),
+                      style: WaUi.body.copyWith(
+                        fontSize: 12,
+                        color: BarqodyChrome.secondaryText,
+                      ),
                     ),
                   ],
                 ],
@@ -665,13 +660,13 @@ class _RecipientTile extends StatelessWidget {
                     vertical: 3,
                   ),
                   decoration: BoxDecoration(
-                    color: WaUi.chipBg,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(WaUi.radiusPill),
                   ),
                   child: Text(
                     context.l10n.sent,
-                    style: WaUi.label.copyWith(
-                      color: WaUi.navGreen,
+                    style: WaUi.body.copyWith(
+                      color: Colors.black,
                       fontWeight: FontWeight.w700,
                       fontSize: 11,
                     ),
@@ -683,7 +678,10 @@ class _RecipientTile extends StatelessWidget {
                     DateFormat('MMM d, h:mm a').format(
                       recipient.deliveredAt!.toLocal(),
                     ),
-                    style: WaUi.label.copyWith(fontSize: 11),
+                    style: WaUi.body.copyWith(
+                      fontSize: 11,
+                      color: BarqodyChrome.secondaryText,
+                    ),
                   ),
                 ],
               ],
@@ -702,8 +700,10 @@ class _DownloadFormatSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: WaUi.toolsScaffold,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(BarqodyChrome.sheetRadius),
+        ),
       ),
       child: SafeArea(
         top: false,
@@ -712,39 +712,45 @@ class _DownloadFormatSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: WaUi.divider,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
+              const SheetDragHandle(),
               const SizedBox(height: 18),
               Container(
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF6F7F8),
+                  color: BarqodyChrome.circleBtn,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Icon(
-                  Icons.download_rounded,
-                  size: 28,
-                  color: WaUi.buttonDark,
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/images/png/download-icon.png',
+                  width: 22,
+                  height: 22,
+                  errorBuilder: (_, _, _) => const Icon(
+                    Icons.download_rounded,
+                    size: 24,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               const SizedBox(height: 14),
               Text(
                 context.l10n.downloadInvitationCard,
                 textAlign: TextAlign.center,
-                style: WaUi.sectionHeader,
+                style: WaUi.toolsTitleOf(
+                  size: 18,
+                  weight: FontWeight.w700,
+                  color: Colors.black,
+                ),
               ),
               const SizedBox(height: 6),
               Text(
                 context.l10n.downloadCardPngJpg,
                 textAlign: TextAlign.center,
-                style: WaUi.caption,
+                style: WaUi.body.copyWith(
+                  fontSize: 13,
+                  color: BarqodyChrome.secondaryText,
+                ),
               ),
               const SizedBox(height: 20),
               Row(
@@ -753,8 +759,6 @@ class _DownloadFormatSheet extends StatelessWidget {
                     child: _DownloadFormatCard(
                       format: 'PNG',
                       subtitle: context.l10n.saveAsPng,
-                      icon: Icons.image_outlined,
-                      accent: WaUi.navGreen,
                       onTap: () => Navigator.pop(context, 'png'),
                     ),
                   ),
@@ -763,8 +767,6 @@ class _DownloadFormatSheet extends StatelessWidget {
                     child: _DownloadFormatCard(
                       format: 'JPG',
                       subtitle: context.l10n.saveAsJpg,
-                      icon: Icons.photo_outlined,
-                      accent: WaUi.buttonDark,
                       onTap: () => Navigator.pop(context, 'jpg'),
                     ),
                   ),
@@ -776,13 +778,13 @@ class _DownloadFormatSheet extends StatelessWidget {
                 height: 48,
                 child: TextButton(
                   onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(
-                    foregroundColor: WaUi.secondaryText,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(WaUi.radiusMd),
+                  child: Text(
+                    context.l10n.cancel,
+                    style: WaUi.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: BarqodyChrome.secondaryText,
                     ),
                   ),
-                  child: Text(context.l10n.cancel, style: WaUi.bodyMedium),
                 ),
               ),
             ],
@@ -796,22 +798,18 @@ class _DownloadFormatSheet extends StatelessWidget {
 class _DownloadFormatCard extends StatelessWidget {
   final String format;
   final String subtitle;
-  final IconData icon;
-  final Color accent;
   final VoidCallback onTap;
 
   const _DownloadFormatCard({
     required this.format,
     required this.subtitle,
-    required this.icon,
-    required this.accent,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: const Color(0xFFF6F7F8),
+      color: BarqodyChrome.fieldFill,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
@@ -824,18 +822,29 @@ class _DownloadFormatCard extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: WaUi.toolsScaffold,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: WaUi.divider),
+                  border: Border.all(color: BarqodyChrome.divider),
                 ),
-                child: Icon(icon, color: accent, size: 22),
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/images/png/download-icon.png',
+                  width: 18,
+                  height: 18,
+                  errorBuilder: (_, _, _) => const Icon(
+                    Icons.image_outlined,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                ),
               ),
               const SizedBox(height: 12),
               Text(
                 format,
-                style: WaUi.bodyMedium.copyWith(
+                style: WaUi.body.copyWith(
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
+                  color: Colors.black,
                 ),
               ),
               const SizedBox(height: 4),
@@ -844,7 +853,10 @@ class _DownloadFormatCard extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: WaUi.caption.copyWith(fontSize: 12),
+                style: WaUi.body.copyWith(
+                  fontSize: 12,
+                  color: BarqodyChrome.secondaryText,
+                ),
               ),
             ],
           ),

@@ -12,6 +12,7 @@ import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/contact_card_sheet.dart' as contact_card;
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
@@ -55,7 +56,6 @@ class _LinkEntryDraft {
 
 class LinkSheet {
   void showAddLinkBottomSheet(BuildContext context, ProfileProvider provider) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final parentContext = context;
     if (provider.linkCatalog.isEmpty && !provider.isLinkCatalogLoading) {
       provider.fetchLinkCatalog();
@@ -65,9 +65,11 @@ class LinkSheet {
     showModalBottomSheet(
       context: parentContext,
       isScrollControlled: true,
-      backgroundColor: isDark ? const Color(0xFF111111) : Colors.white,
+      backgroundColor: BarqodyChrome.scaffold,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(BarqodyChrome.sheetRadius),
+        ),
       ),
       builder: (ctx) {
         return DraggableScrollableSheet(
@@ -82,56 +84,68 @@ class LinkSheet {
               builder: (context, setSheetState) {
                 return Column(
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 12, bottom: 8),
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade400,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
+                    const SizedBox(height: 10),
+                    const SheetDragHandle(),
                     //Header Open
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 15,
-                      ),
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                       child: Row(
                         children: [
-                          IconButton(
-                            icon: Icon(Icons.arrow_back_ios_new, size: 24),
-                            onPressed: () => Navigator.pop(ctx),
-                          ),
+                          CircleBackButton(onTap: () => Navigator.pop(ctx)),
                           Expanded(
                             child: isSearching
-                                ? TextField(
-                                    controller: searchController,
-                                    autofocus: true,
-                                    decoration: InputDecoration(
-                                      hintText: ctx.l10n.searchLinks,
-                                      border: InputBorder.none,
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
                                     ),
-                                    onChanged: (_) => setSheetState(() {}),
-                                  )
-                                : Center(
-                                    child: Text(
-                                      ctx.l10n.addLink,
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w600,
+                                    child: TextField(
+                                      controller: searchController,
+                                      autofocus: true,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
                                       ),
+                                      decoration: InputDecoration(
+                                        hintText: ctx.l10n.searchLinks,
+                                        hintStyle: const TextStyle(
+                                          color: BarqodyChrome.secondaryText,
+                                        ),
+                                        filled: true,
+                                        fillColor: BarqodyChrome.fieldFill,
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                      onChanged: (_) => setSheetState(() {}),
+                                    ),
+                                  )
+                                : Text(
+                                    ctx.l10n.addLink,
+                                    textAlign: TextAlign.center,
+                                    style: WaUi.toolsTitleOf(
+                                      size: 20,
+                                      weight: FontWeight.w700,
+                                      color: Colors.black,
                                     ),
                                   ),
                           ),
-                          IconButton(
-                            icon: Icon(
-                              isSearching
-                                  ? Icons.close_rounded
-                                  : Icons.search_rounded,
-                              size: 24,
-                            ),
-                            onPressed: () {
+                          CircleAssetButton(
+                            asset: 'assets/images/png/search-icon.png',
+                            iconSize: 16,
+                            child: isSearching
+                                ? const Icon(
+                                    Icons.close_rounded,
+                                    size: 18,
+                                    color: Colors.black,
+                                  )
+                                : null,
+                            onTap: () {
                               setSheetState(() {
                                 isSearching = !isSearching;
                                 if (!isSearching) searchController.clear();
@@ -147,8 +161,11 @@ class LinkSheet {
                         builder: (context, watchedProvider, _) {
                           if (watchedProvider.isLinkCatalogLoading &&
                               watchedProvider.linkCatalog.isEmpty) {
-                            return Center(
-                              child: CircularProgressIndicator(),
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                                strokeWidth: 2.5,
+                              ),
                             );
                           }
 
@@ -217,8 +234,11 @@ class LinkSheet {
 
                             return SingleChildScrollView(
                               controller: scrollController,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16,
+                              padding: const EdgeInsets.fromLTRB(
+                                BarqodyChrome.sidePad,
+                                4,
+                                BarqodyChrome.sidePad,
+                                12,
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,9 +261,9 @@ class LinkSheet {
                           return Center(
                             child: Text(
                               context.l10n.noLinkTemplatesAvailable,
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.grey,
+                              style: WaUi.body.copyWith(
+                                fontSize: 16,
+                                color: BarqodyChrome.secondaryText,
                               ),
                             ),
                           );
@@ -405,9 +425,13 @@ class LinkSheet {
         children: [
           Text(
             category.name,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: WaUi.toolsTitleOf(
+              size: 16,
+              weight: FontWeight.w700,
+              color: Colors.black,
+            ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -539,30 +563,32 @@ class LinkSheet {
                         }
                       }
                     },
-                    child: Column(
-                      children: [
-                        _buildTemplateLogo(
-                          template.logo,
-                          size: 130,
-                          radius: 24,
-                          isPro: template.isPro,
-                          context: context,
-                          template: template,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          template.label,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppTheme.primaryBlack,
-                            fontWeight: FontWeight.w500,
+                    child: SizedBox(
+                      width: 130,
+                      child: Column(
+                        children: [
+                          _buildTemplateLogo(
+                            template.logo,
+                            size: 130,
+                            radius: 24,
+                            isPro: template.isPro,
+                            context: context,
+                            template: template,
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            template.label,
+                            style: WaUi.body.copyWith(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -885,18 +911,29 @@ class LinkSheet {
   }
 
   Widget _deleteCircleButton(VoidCallback onPressed) {
-    return Container(
-      width: 48,
-      height: 48,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: const Color(0xFFF5F5F5),
-        border: Border.all(color: Colors.grey.shade200, width: 0.5),
-      ),
-      child: IconButton(
-        icon: const Icon(Icons.delete_forever_outlined, size: 24),
-        color: Colors.grey.shade600,
-        onPressed: onPressed,
+    return Material(
+      color: const Color(0xFFFF3B30),
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onPressed,
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: Center(
+            child: Image.asset(
+              'assets/images/png/delete-icon.png',
+              width: 16,
+              height: 16,
+              color: Colors.white,
+              errorBuilder: (_, __, ___) => const Icon(
+                Icons.delete_outline,
+                size: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -1095,6 +1132,37 @@ class LinkSheet {
     );
   }
 
+  /// Barqody-style light-grey rounded field (fill `#F2F2F7`, no border).
+  InputDecoration _barqodyFieldDecoration({
+    String? hintText,
+    Widget? prefixIcon,
+    Widget? prefix,
+    EdgeInsetsGeometry? contentPadding,
+    double radius = 14,
+  }) {
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(radius),
+      borderSide: BorderSide.none,
+    );
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: const TextStyle(
+        fontSize: 15,
+        color: BarqodyChrome.secondaryText,
+      ),
+      filled: true,
+      fillColor: BarqodyChrome.fieldFill,
+      prefixIcon: prefixIcon,
+      prefix: prefix,
+      contentPadding:
+          contentPadding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      border: border,
+      enabledBorder: border,
+      focusedBorder: border,
+      disabledBorder: border,
+    );
+  }
+
   Widget _sheetTextField(
     TextEditingController controller,
     String hint,
@@ -1105,10 +1173,12 @@ class LinkSheet {
       controller: controller,
       readOnly: readOnly,
       keyboardType: keyboardType,
-      decoration: WaUi.fieldDecoration(
-        hintText: hint,
-        radius: 10,
+      style: const TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
       ),
+      decoration: _barqodyFieldDecoration(hintText: hint),
     );
   }
 
@@ -1120,24 +1190,54 @@ class LinkSheet {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? Color(0xFF1E1E1E) : Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey.shade200, width: 0.5),
+        color: BarqodyChrome.fieldFill,
+        borderRadius: BorderRadius.circular(14),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(context.l10n.showLink,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+          Text(
+            context.l10n.showLink,
+            style: WaUi.body.copyWith(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
           ),
           Switch(
             value: value,
             activeColor: Colors.white,
-            activeTrackColor: Color(0xFF1E2022),
+            activeTrackColor: Colors.black,
             onChanged: onChanged,
           ),
         ],
+      ),
+    );
+  }
+
+  /// Black circle + white plus, used to add another multi-entry row.
+  Widget _addEntryCircleButton(VoidCallback onPressed) {
+    return Material(
+      color: Colors.black,
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onPressed,
+        child: SizedBox(
+          width: 28,
+          height: 28,
+          child: Center(
+            child: Image.asset(
+              'assets/images/png/plus-icon.png',
+              width: 12,
+              height: 12,
+              color: Colors.white,
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.add, size: 14, color: Colors.white),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -1373,24 +1473,55 @@ class LinkSheet {
             onChanged: onChanged,
           ),
         ],
-        const SizedBox(height: 10),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: TextButton.icon(
-            onPressed: () {
-              drafts.add(_LinkEntryDraft());
-              onChanged();
-            },
-            icon: const Icon(Icons.add_circle_outline, size: 20),
-            label: Text(context.l10n.add),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.grey.shade800,
-              padding: EdgeInsets.zero,
+        const SizedBox(height: 12),
+        InkWell(
+          onTap: () {
+            drafts.add(_LinkEntryDraft());
+            onChanged();
+          },
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _addEntryCircleButton(() {
+                  drafts.add(_LinkEntryDraft());
+                  onChanged();
+                }),
+                const SizedBox(width: 10),
+                Text(
+                  context.l10n.add,
+                  style: WaUi.body.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       ],
     );
+  }
+
+  /// Returns the current profile's dial code (e.g. `+92`) for phone fields,
+  /// purely as a visual prefix — the stored value is untouched.
+  String? _dialPrefixFor(BuildContext context, TextInputType keyboardType) {
+    if (keyboardType != TextInputType.phone) return null;
+    try {
+      final country = Provider.of<ProfileProvider>(context, listen: false)
+          .profile
+          .country
+          ?.trim()
+          .toLowerCase();
+      if (country == null || country.isEmpty) return null;
+      for (final dial in kCountryDialCodes) {
+        if (dial.name.toLowerCase() == country) return dial.code;
+      }
+    } catch (_) {}
+    return null;
   }
 
   Widget _buildEntryEditorRow({
@@ -1406,17 +1537,18 @@ class LinkSheet {
   }) {
     final displayLogo =
         draft.logo.isNotEmpty ? draft.logo : (fallbackLogo ?? '');
+    final dialPrefix = _dialPrefixFor(context, keyboardType);
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200, width: 0.8),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: BarqodyChrome.divider, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               GestureDetector(
                 onTap: () async {
@@ -1426,36 +1558,101 @@ class LinkSheet {
                     onChanged();
                   }
                 },
-                child: _selectedLogoTile(displayLogo),
+                child: _selectedEntryAvatar(displayLogo),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(
-                  children: [
-                    _sheetTextField(
-                      draft.nameController,
-                      context.l10n.name,
-                      TextInputType.text,
-                    ),
-                    const SizedBox(height: 8),
-                    _sheetTextField(
-                      draft.valueController,
-                      valueHint,
-                      keyboardType,
-                    ),
-                  ],
+                child: _sheetTextField(
+                  draft.nameController,
+                  context.l10n.name,
+                  TextInputType.text,
                 ),
               ),
-              if (canRemove)
-                IconButton(
-                  onPressed: onRemove,
-                  icon: Icon(Icons.close, color: Colors.grey.shade600),
-                  visualDensity: VisualDensity.compact,
-                ),
+              if (canRemove) ...[
+                const SizedBox(width: 10),
+                _deleteCircleButton(onRemove),
+              ],
             ],
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            controller: draft.valueController,
+            keyboardType: keyboardType,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+            decoration: _barqodyFieldDecoration(
+              hintText: valueHint,
+              prefix: dialPrefix == null
+                  ? null
+                  : Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Text(
+                        dialPrefix,
+                        style: WaUi.body.copyWith(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  /// Small circular avatar for a multi-entry row — shows the entry/template
+  /// logo, or a person-icon placeholder while empty. Tapping still opens the
+  /// existing logo picker (unchanged logic).
+  Widget _selectedEntryAvatar(String logo, {double size = 44}) {
+    Widget content;
+    if (logo.isEmpty) {
+      content = Container(
+        color: BarqodyChrome.fieldFill,
+        alignment: Alignment.center,
+        child: Image.asset(
+          'assets/images/png/person-icon.png',
+          width: size * 0.42,
+          height: size * 0.42,
+          color: BarqodyChrome.secondaryText,
+          errorBuilder: (_, __, ___) => Icon(
+            Icons.person_outline_rounded,
+            size: size * 0.5,
+            color: BarqodyChrome.secondaryText,
+          ),
+        ),
+      );
+    } else if (logo.startsWith('http://') || logo.startsWith('https://')) {
+      content = Image.network(
+        logo,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) =>
+            Container(color: BarqodyChrome.fieldFill),
+      );
+    } else {
+      try {
+        content = Image.memory(
+          base64Decode(logo),
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) =>
+              Container(color: BarqodyChrome.fieldFill),
+        );
+      } catch (_) {
+        content = Container(color: BarqodyChrome.fieldFill);
+      }
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(size / 2),
+      child: SizedBox(width: size, height: size, child: content),
     );
   }
 
@@ -1464,7 +1661,6 @@ class LinkSheet {
     LinkTemplate template,
     ProfileProvider provider,
   ) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final drafts = <_LinkEntryDraft>[_LinkEntryDraft()];
     bool showLink = true;
 
@@ -1475,6 +1671,19 @@ class LinkSheet {
       builder: (ctx) {
         return StatefulBuilder(
           builder: (context, setState) {
+            Future<void> doSave() async {
+              final entries = _entriesFromDrafts(drafts);
+              if (entries.isEmpty) return;
+              await provider.addTemplateLink(
+                template,
+                entries.first.value,
+                showLink,
+                context,
+                entries: entries,
+              );
+              Navigator.pop(ctx);
+            }
+
             return Padding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(ctx).viewInsets.bottom,
@@ -1483,13 +1692,13 @@ class LinkSheet {
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(ctx).size.height * 0.9,
                 ),
-                decoration: BoxDecoration(
-                  color: isDark ? Color(0xFF111111) : Colors.white,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
                   borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(24),
+                    top: Radius.circular(BarqodyChrome.sheetRadius),
                   ),
                 ),
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 14,
                 ),
@@ -1497,58 +1706,83 @@ class LinkSheet {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 4, bottom: 14),
-                        width: 36,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(2),
+                      const SheetDragHandle(),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 44,
+                        child: Row(
+                          children: [
+                            CircleBackButton(
+                              onTap: () => Navigator.pop(ctx),
+                            ),
+                            Expanded(
+                              child: Text(
+                                ctx.l10n.createNewLink,
+                                textAlign: TextAlign.center,
+                                style: WaUi.toolsTitleOf(
+                                  size: 18,
+                                  weight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Material(
+                              color: Colors.black,
+                              shape: const CircleBorder(),
+                              child: InkWell(
+                                customBorder: const CircleBorder(),
+                                onTap: doSave,
+                                child: SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: Center(
+                                    child: Image.asset(
+                                      'assets/images/png/check-icon-1.png',
+                                      width: 16,
+                                      height: 16,
+                                      color: Colors.white,
+                                      errorBuilder: (_, __, ___) =>
+                                          const Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Text(
-                        ctx.l10n.createNewLink,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildTemplateLogo(
                             template.logo,
-                            size: 60,
+                            size: 48,
                             isPro: template.isPro,
                             context: context,
                           ),
-                          SizedBox(width: 14),
+                          const SizedBox(width: 12),
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextFormField(
-                                  readOnly: true,
-                                  initialValue: template.label,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  decoration: WaUi.fieldDecoration(
-                                    hintText: ctx.l10n.label,
-                                    radius: 10,
-                                  ),
+                            child: Container(
+                              height: 48,
+                              alignment: Alignment.centerLeft,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                color: BarqodyChrome.fieldFill,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Text(
+                                template.label,
+                                style: WaUi.body.copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
                                 ),
-                                SizedBox(height: 5),
-                                Text(
-                                  ctx.l10n.setTextUnderTheLinkIcon,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey.shade800,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ],
@@ -1562,19 +1796,13 @@ class LinkSheet {
                         fallbackLogo: template.logo,
                         onChanged: () => setState(() {}),
                       ),
-                      SizedBox(height: 14),
+                      const SizedBox(height: 14),
                       Container(
                         decoration: BoxDecoration(
-                          color: isDark
-                              ? Color(0xFF1E1E1E)
-                              : Color(0xFFF5F5F5),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                            width: 0.5,
-                          ),
+                          color: BarqodyChrome.fieldFill,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 4,
                         ),
@@ -1583,7 +1811,7 @@ class LinkSheet {
                           children: [
                             Text(
                               ctx.l10n.showLink,
-                              style: TextStyle(
+                              style: WaUi.body.copyWith(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -1591,7 +1819,7 @@ class LinkSheet {
                             Switch(
                               value: showLink,
                               activeColor: Colors.white,
-                              activeTrackColor: const Color(0xFF1E2022),
+                              activeTrackColor: Colors.black,
                               onChanged: (val) =>
                                   setState(() => showLink = val),
                             ),
@@ -1601,40 +1829,18 @@ class LinkSheet {
                       const SizedBox(height: 24),
                       Row(
                         children: [
-                          const SizedBox(width: 60),
+                          Expanded(
+                            child: PillButton(
+                              label: context.l10n.cancel,
+                              filled: false,
+                              onPressed: () => Navigator.pop(ctx),
+                            ),
+                          ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: SizedBox(
-                              height: 60,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  final entries = _entriesFromDrafts(drafts);
-                                  if (entries.isEmpty) return;
-                                  await provider.addTemplateLink(
-                                    template,
-                                    entries.first.value,
-                                    showLink,
-                                    context,
-                                    entries: entries,
-                                  );
-                                  Navigator.pop(ctx);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.primaryBlack,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                  elevation: 0,
-                                ),
-                                child: Text(
-                                  context.l10n.save,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
+                            child: PillButton(
+                              label: context.l10n.save,
+                              onPressed: doSave,
                             ),
                           ),
                         ],
@@ -1669,11 +1875,7 @@ class LinkSheet {
     SocialPlatform platform,
     ProfileProvider provider,
   ) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final usernameController = TextEditingController();
-    final labelController = TextEditingController(
-      text: SocialLink.getPlatformName(platform),
-    );
     bool showLink = true;
 
     showModalBottomSheet(
@@ -1683,40 +1885,75 @@ class LinkSheet {
       builder: (ctx) {
         return StatefulBuilder(
           builder: (context, setState) {
+            Future<void> doSave() async {
+              final value = usernameController.text.trim();
+              if (value.isEmpty) return;
+              await provider.addSocialLink(platform, value, showLink, context);
+              Navigator.pop(ctx);
+            }
+
             return Padding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(ctx).viewInsets.bottom,
               ),
               child: Container(
-                decoration: BoxDecoration(
-                  color: isDark ? Color(0xFF111111) : Colors.white,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
                   borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(24),
+                    top: Radius.circular(BarqodyChrome.sheetRadius),
                   ),
                 ),
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 14,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Drag handle
-                    Container(
-                      margin: EdgeInsets.only(top: 4, bottom: 14),
-                      width: 36,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-
-                    // Title
-                    Text(ctx.l10n.createNewLink,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
+                    const SheetDragHandle(),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      height: 44,
+                      child: Row(
+                        children: [
+                          CircleBackButton(onTap: () => Navigator.pop(ctx)),
+                          Expanded(
+                            child: Text(
+                              ctx.l10n.createNewLink,
+                              textAlign: TextAlign.center,
+                              style: WaUi.toolsTitleOf(
+                                size: 18,
+                                weight: FontWeight.w700,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Material(
+                            color: Colors.black,
+                            shape: const CircleBorder(),
+                            child: InkWell(
+                              customBorder: const CircleBorder(),
+                              onTap: doSave,
+                              child: SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: Center(
+                                  child: Image.asset(
+                                    'assets/images/png/check-icon-1.png',
+                                    width: 16,
+                                    height: 16,
+                                    color: Colors.white,
+                                    errorBuilder: (_, __, ___) => const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -1726,41 +1963,45 @@ class LinkSheet {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 60,
-                          height: 60,
-
+                          width: 48,
+                          height: 48,
                           child: Image.asset(
                             SocialLink.getAssetPath(platform),
                             fit: BoxFit.contain,
                             errorBuilder: (_, __, ___) =>
-                                Icon(Icons.link, size: 28),
+                                const Icon(Icons.link, size: 28),
                           ),
                         ),
-                        SizedBox(width: 14),
-
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextFormField(
-                                readOnly: true,
-
-                                controller: labelController,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
+                              Container(
+                                height: 48,
+                                alignment: Alignment.centerLeft,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
                                 ),
-                                decoration: WaUi.fieldDecoration(
-                                  hintText: ctx.l10n.label,
-                                  radius: 10,
+                                decoration: BoxDecoration(
+                                  color: BarqodyChrome.fieldFill,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Text(
+                                  SocialLink.getPlatformName(platform),
+                                  style: WaUi.body.copyWith(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 6),
                               Text(
                                 ctx.l10n.setTextUnderTheLinkIcon,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey.shade800,
+                                style: WaUi.body.copyWith(
+                                  fontSize: 13,
+                                  color: BarqodyChrome.secondaryText,
                                 ),
                               ),
                             ],
@@ -1771,133 +2012,54 @@ class LinkSheet {
                     const SizedBox(height: 14),
 
                     // Username field
-                    TextField(
-                      controller: usernameController,
-                      autofocus: true,
-                      style: TextStyle(fontSize: 15),
-
-                      decoration: WaUi.fieldDecoration(
-                        hintText:
-                            '${SocialLink.getPlatformName(platform)} username',
-                        radius: 10,
-                      ),
+                    _sheetTextField(
+                      usernameController,
+                      '${SocialLink.getPlatformName(platform)} username',
+                      TextInputType.text,
                     ),
                     const SizedBox(height: 6),
                     Text(
                       context.l10n.enterYourPlatformUsername(
                         SocialLink.getPlatformName(platform),
                       ),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade800,
+                      style: WaUi.body.copyWith(
+                        fontSize: 13,
+                        color: BarqodyChrome.secondaryText,
                       ),
                     ),
-                    SizedBox(height: 14),
+                    const SizedBox(height: 14),
 
-                    // Show link toggle
-                    Container(
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? Color(0xFF1E1E1E)
-                            : Color(0xFFF5F5F5),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Colors.grey.shade200,
-                          width: 0.5,
-                        ),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(ctx.l10n.showLink,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Switch(
-                            value: showLink,
-                            activeColor: Colors.white,
-                            activeTrackColor: Color(0xFF1E2022),
-                            onChanged: (val) => setState(() => showLink = val),
-                          ),
-                        ],
-                      ),
+                    _showPublicToggle(
+                      context: context,
+                      isDark: false,
+                      value: showLink,
+                      onChanged: (val) => setState(() => showLink = val),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
                       ctx.l10n.whenTurnedOffThisLinkWontBeShownOnYourProfile,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade800,
+                      style: WaUi.body.copyWith(
+                        fontSize: 13,
+                        color: BarqodyChrome.secondaryText,
                       ),
                     ),
-                    const SizedBox(height: 80),
+                    const SizedBox(height: 24),
 
-                    // Bottom row: delete + save
                     Row(
                       children: [
-                        // Delete button
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: isDark
-                                ? const Color(0xFF1E1E1E)
-                                : const Color(0xFFF5F5F5),
-                            border: Border.all(
-                              color: Colors.grey.shade200,
-                              width: 0.5,
-                            ),
-                          ),
-                          child: IconButton(
-                            icon: Icon(Icons.delete_forever_outlined, size: 24),
-                            color: Colors.grey.shade600,
-                            onPressed: () async {
-                              Navigator.pop(ctx);
-                            },
+                        Expanded(
+                          child: PillButton(
+                            label: context.l10n.cancel,
+                            filled: false,
+                            onPressed: () => Navigator.pop(ctx),
                           ),
                         ),
                         const SizedBox(width: 12),
-
-                        // Save button
                         Expanded(
-                          child: SizedBox(
-                            height: 60,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                final value = usernameController.text.trim();
-                                if (value.isNotEmpty) {
-                                  await provider.addSocialLink(
-                                    platform,
-                                    value,
-                                    showLink,
-                                    context,
-                                  );
-                                  Navigator.pop(ctx);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppTheme.primaryBlack,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                elevation: 0,
-                              ),
-                              child: Text(context.l10n.save,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                          child: PillButton(
+                            label: context.l10n.save,
+                            onPressed: doSave,
                           ),
                         ),
                       ],
@@ -2201,7 +2363,6 @@ class LinkSheet {
       return;
     }
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final drafts = _draftsFromLink(link);
     bool showLink = link.isPublic;
 
@@ -2212,6 +2373,38 @@ class LinkSheet {
       builder: (ctx) {
         return StatefulBuilder(
           builder: (context, setState) {
+            Future<void> doSave() async {
+              final entries = _entriesFromDrafts(drafts);
+              if (entries.isEmpty) return;
+              if (link.templateId?.isNotEmpty == true) {
+                await provider.updateTemplateLink(
+                  link,
+                  entries.first.value,
+                  showLink,
+                  context,
+                  entries: entries,
+                );
+              } else {
+                final updated = List<SocialLink>.from(
+                  provider.profile.socialLinks,
+                );
+                final idx = updated.indexWhere((item) => item.id == link.id);
+                if (idx != -1) {
+                  updated[idx] = link.copyWith(
+                    value: entries.first.value,
+                    entries: entries,
+                    isPublic: showLink,
+                    isActive: true,
+                  );
+                  await provider.updateLinks(
+                    links: updated,
+                    context: context,
+                  );
+                }
+              }
+              Navigator.pop(ctx);
+            }
+
             return Padding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(ctx).viewInsets.bottom,
@@ -2220,13 +2413,13 @@ class LinkSheet {
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(ctx).size.height * 0.9,
                 ),
-                decoration: BoxDecoration(
-                  color: isDark ? Color(0xFF111111) : Colors.white,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
                   borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(24),
+                    top: Radius.circular(BarqodyChrome.sheetRadius),
                   ),
                 ),
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 14,
                 ),
@@ -2234,20 +2427,52 @@ class LinkSheet {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 4, bottom: 14),
-                        width: 36,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                      Text(
-                        ctx.l10n.linkSettings,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
+                      const SheetDragHandle(),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 44,
+                        child: Row(
+                          children: [
+                            CircleBackButton(
+                              onTap: () => Navigator.pop(ctx),
+                            ),
+                            Expanded(
+                              child: Text(
+                                ctx.l10n.linkSettings,
+                                textAlign: TextAlign.center,
+                                style: WaUi.toolsTitleOf(
+                                  size: 18,
+                                  weight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Material(
+                              color: Colors.black,
+                              shape: const CircleBorder(),
+                              child: InkWell(
+                                customBorder: const CircleBorder(),
+                                onTap: doSave,
+                                child: SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: Center(
+                                    child: Image.asset(
+                                      'assets/images/png/check-icon-1.png',
+                                      width: 16,
+                                      height: 16,
+                                      color: Colors.white,
+                                      errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -2255,39 +2480,44 @@ class LinkSheet {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: 60,
-                            height: 60,
+                            width: 48,
+                            height: 48,
                             child: LinkPlatformIcon(
                               link: link,
-                              size: 60,
+                              size: 48,
                               fit: BoxFit.contain,
                             ),
                           ),
-                          SizedBox(width: 14),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                TextFormField(
-                                  readOnly: true,
-                                  controller: TextEditingController(
-                                    text: link.platformName,
+                                Container(
+                                  height: 48,
+                                  alignment: Alignment.centerLeft,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
                                   ),
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
+                                  decoration: BoxDecoration(
+                                    color: BarqodyChrome.fieldFill,
+                                    borderRadius: BorderRadius.circular(14),
                                   ),
-                                  decoration: WaUi.fieldDecoration(
-                                    hintText: ctx.l10n.label,
-                                    radius: 10,
+                                  child: Text(
+                                    link.platformName,
+                                    style: WaUi.body.copyWith(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 6),
                                 Text(
                                   ctx.l10n.setTextUnderTheLinkIcon,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey.shade800,
+                                  style: WaUi.body.copyWith(
+                                    fontSize: 13,
+                                    color: BarqodyChrome.secondaryText,
                                   ),
                                 ),
                               ],
@@ -2307,137 +2537,38 @@ class LinkSheet {
                         fallbackLogo: link.logoUrl,
                         onChanged: () => setState(() {}),
                       ),
-                      SizedBox(height: 14),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? Color(0xFF1E1E1E)
-                              : Color(0xFFF5F5F5),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                            width: 0.5,
-                          ),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 4,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              ctx.l10n.showLink,
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Switch(
-                              value: showLink,
-                              activeColor: Colors.white,
-                              activeTrackColor: Color(0xFF1E2022),
-                              onChanged: (val) =>
-                                  setState(() => showLink = val),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(height: 14),
+                      _showPublicToggle(
+                        context: context,
+                        isDark: false,
+                        value: showLink,
+                        onChanged: (val) => setState(() => showLink = val),
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       Text(
                         ctx.l10n
                             .whenTurnedOffThisLinkWontBeShownOnYourProfile,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade800,
+                        style: WaUi.body.copyWith(
+                          fontSize: 13,
+                          color: BarqodyChrome.secondaryText,
                         ),
                       ),
                       const SizedBox(height: 24),
                       Row(
                         children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: isDark
-                                  ? const Color(0xFF1E1E1E)
-                                  : const Color(0xFFF5F5F5),
-                              border: Border.all(
-                                color: Colors.grey.shade200,
-                                width: 0.5,
-                              ),
-                            ),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.delete_forever_outlined,
-                                size: 24,
-                              ),
-                              color: Colors.grey.shade600,
-                              onPressed: () async {
-                                await provider.deleteSocialLink(
-                                  link.id,
-                                  context,
-                                );
-                                Navigator.pop(ctx);
-                              },
-                            ),
-                          ),
+                          _deleteCircleButton(() async {
+                            await provider.deleteSocialLink(
+                              link.id,
+                              context,
+                            );
+                            Navigator.pop(ctx);
+                          }),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: SizedBox(
-                              height: 60,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  final entries = _entriesFromDrafts(drafts);
-                                  if (entries.isEmpty) return;
-                                  if (link.templateId?.isNotEmpty == true) {
-                                    await provider.updateTemplateLink(
-                                      link,
-                                      entries.first.value,
-                                      showLink,
-                                      context,
-                                      entries: entries,
-                                    );
-                                  } else {
-                                    final updated = List<SocialLink>.from(
-                                      provider.profile.socialLinks,
-                                    );
-                                    final idx = updated.indexWhere(
-                                      (item) => item.id == link.id,
-                                    );
-                                    if (idx != -1) {
-                                      updated[idx] = link.copyWith(
-                                        value: entries.first.value,
-                                        entries: entries,
-                                        isPublic: showLink,
-                                        isActive: true,
-                                      );
-                                      await provider.updateLinks(
-                                        links: updated,
-                                        context: context,
-                                      );
-                                    }
-                                  }
-                                  Navigator.pop(ctx);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.primaryBlack,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                  elevation: 0,
-                                ),
-                                child: Text(
-                                  context.l10n.save,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
+                            child: PillButton(
+                              label: context.l10n.save,
+                              onPressed: doSave,
                             ),
                           ),
                         ],

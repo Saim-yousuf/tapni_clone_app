@@ -1,7 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/social_link.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> showLinkEntriesSheet({
@@ -30,28 +34,33 @@ class LinkEntriesSheet extends StatelessWidget {
       return Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(12),
+        decoration: const BoxDecoration(
+          color: Color(0xFFF2F2F7),
+          shape: BoxShape.circle,
         ),
         child: Padding(
-          padding: EdgeInsets.all(size * 0.18),
+          padding: EdgeInsets.all(size * 0.2),
           child: Image.asset(
             link.assetPath,
             fit: BoxFit.contain,
             errorBuilder: (_, __, ___) =>
-                Icon(Icons.link, size: size * 0.4),
+                Icon(Icons.person, size: size * 0.4, color: Colors.black54),
           ),
         ),
+      );
+    }
+
+    Widget clipped(Widget child) {
+      return ClipOval(
+        child: SizedBox(width: size, height: size, child: child),
       );
     }
 
     if (logo.isEmpty) return fallback();
 
     if (logo.startsWith('http://') || logo.startsWith('https://')) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Image.network(
+      return clipped(
+        Image.network(
           logo,
           width: size,
           height: size,
@@ -63,9 +72,8 @@ class LinkEntriesSheet extends StatelessWidget {
 
     try {
       final raw = logo.contains(',') ? logo.split(',').last : logo;
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Image.memory(
+      return clipped(
+        Image.memory(
           base64Decode(raw),
           width: size,
           height: size,
@@ -88,90 +96,154 @@ class LinkEntriesSheet extends StatelessWidget {
     );
   }
 
+  void _copyValue(BuildContext context, String value) {
+    if (value.trim().isEmpty) return;
+    Clipboard.setData(ClipboardData(text: value));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.copied)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final entries = link.effectiveEntries;
-    final bg = isDark ? const Color(0xFF111111) : Colors.white;
 
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Material(
-        color: bg,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        color: Colors.white,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(BarqodyChrome.sheetRadius),
+        ),
         clipBehavior: Clip.antiAlias,
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.7,
+            maxHeight: MediaQuery.of(context).size.height * 0.72,
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 8),
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(2),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 10),
+              const SheetDragHandle(),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: SizedBox(
+                  height: 44,
+                  child: Row(
+                    children: [
+                      CircleBackButton(
+                        onTap: () => Navigator.pop(context),
+                      ),
+                      Expanded(
+                        child: Text(
+                          link.platformName,
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: WaUi.toolsTitleOf(
+                            size: 18,
+                            weight: FontWeight.w700,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 40),
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-                  child: Text(
-                    link.platformName,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                ListView.separated(
+              ),
+              Flexible(
+                child: ListView.separated(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 28),
                   itemCount: entries.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 4),
+                  separatorBuilder: (_, __) => const Divider(
+                    height: 1,
+                    thickness: 1,
+                    indent: 76,
+                    color: BarqodyChrome.divider,
+                  ),
                   itemBuilder: (context, index) {
                     final entry = entries[index];
                     final title = entry.name.trim().isNotEmpty
                         ? entry.name.trim()
                         : entry.value;
-                    return ListTile(
+                    final subtitle = entry.value.trim();
+                    return InkWell(
                       onTap: () => _openEntry(context, entry),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      leading: _entryImage(entry),
-                      title: Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 14,
                         ),
-                      ),
-                      subtitle: entry.name.trim().isNotEmpty &&
-                              entry.name.trim() != entry.value
-                          ? Text(
-                              entry.value,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey.shade600,
+                        child: Row(
+                          children: [
+                            _entryImage(entry, size: 48),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    title,
+                                    style: WaUi.body.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  if (subtitle.isNotEmpty) ...[
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            subtitle,
+                                            style: WaUi.body.copyWith(
+                                              fontSize: 13,
+                                              color: BarqodyChrome.secondaryText,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        GestureDetector(
+                                          onTap: () =>
+                                              _copyValue(context, subtitle),
+                                          child: Image.asset(
+                                            'assets/images/png/copy-icon.png',
+                                            width: 16,
+                                            height: 16,
+                                            errorBuilder: (_, __, ___) =>
+                                                const Icon(
+                                              Icons.copy_rounded,
+                                              size: 16,
+                                              color: BarqodyChrome.secondaryText,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ],
                               ),
-                            )
-                          : null,
-                      trailing: Icon(
-                        Icons.chevron_right_rounded,
-                        color: Colors.grey.shade500,
+                            ),
+                            const Icon(
+                              Icons.chevron_right,
+                              color: Colors.black,
+                              size: 22,
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

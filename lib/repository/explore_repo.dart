@@ -42,6 +42,48 @@ class ExploreRepo {
     );
   }
 
+  Future<ApiResponse> getBannerPlans() {
+    return ApiHandler.request(
+      api: Api.explore.bannerPlans,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> getMyBanners() {
+    return ApiHandler.request(
+      api: Api.explore.myBanners,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> createMyBanner(Map<String, dynamic> body) {
+    return ApiHandler.request(
+      api: Api.explore.myBanners,
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: body,
+    );
+  }
+
+  Future<ApiResponse> updateMyBanner(String id, Map<String, dynamic> body) {
+    return ApiHandler.request(
+      api: Api.explore.myBanner(id),
+      method: ApiMethod.put,
+      authorization: true,
+      jsonBody: body,
+    );
+  }
+
+  Future<ApiResponse> deleteMyBanner(String id) {
+    return ApiHandler.request(
+      api: Api.explore.myBanner(id),
+      method: ApiMethod.delete,
+      authorization: true,
+    );
+  }
+
   Future<ApiResponse> getCategories() {
     return ApiHandler.request(
       api: Api.explore.categories,
@@ -88,6 +130,40 @@ class ExploreRepo {
         .whereType<Map>()
         .map((e) => ExploreBanner.fromJson(Map<String, dynamic>.from(e)))
         .toList();
+  }
+
+  List<BannerAdPlan> parseBannerPlans(dynamic data) {
+    final root = data is Map ? data : <String, dynamic>{};
+    final list = root['plans'] as List? ??
+        (root['data'] is Map ? (root['data'] as Map)['plans'] as List? : null) ??
+        const [];
+    if (list.isEmpty) return BannerAdPlan.defaults;
+    return list
+        .whereType<Map>()
+        .map((e) => BannerAdPlan.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+  }
+
+  ({List<ExploreBanner> banners, int liveCount, int total}) parseMyBanners(
+    dynamic data,
+  ) {
+    final root = data is Map ? data : <String, dynamic>{};
+    final banners = parseBanners(root);
+    return (
+      banners: banners,
+      liveCount: (root['liveCount'] as num?)?.toInt() ??
+          banners.where((b) => b.isLive).length,
+      total: (root['total'] as num?)?.toInt() ?? banners.length,
+    );
+  }
+
+  ExploreBanner? parseBanner(dynamic data) {
+    final root = data is Map ? data : <String, dynamic>{};
+    final banner = root['banner'];
+    if (banner is Map) {
+      return ExploreBanner.fromJson(Map<String, dynamic>.from(banner));
+    }
+    return null;
   }
 
   List<ExploreCategoryItem> parseCategories(dynamic data) {

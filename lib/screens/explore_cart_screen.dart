@@ -8,8 +8,8 @@ import 'package:tapni_app/providers/explore_cart_provider.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
-import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 class ExploreCartScreen extends StatefulWidget {
   const ExploreCartScreen({super.key});
@@ -208,108 +208,204 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
   Widget build(BuildContext context) {
     final cart = context.watch<ExploreCartProvider>();
     final vendors = cart.vendors;
+    final currencies = cart.vendors.map((v) => v.currency).toSet();
+    final totalMoney = currencies.length == 1
+        ? formatMoney(cart.total, currency: currencies.first)
+        : null;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text('Cart'),
-      ),
-      body: cart.isEmpty
-          ? Center(
-              child: Text(
-                'Your cart is empty',
-                style: WaUi.body.copyWith(color: WaUi.secondaryText),
+      backgroundColor: BarqodyChrome.scaffold,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            BarqodyTitleBar(
+              title: 'Cart',
+              trailing: CircleAssetButton(
+                asset: 'assets/images/png/bag-icon.png',
+                iconSize: 18,
               ),
-            )
-          : ListView(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
-              children: [
-                Text(
-                  '${cart.itemCount} item${cart.itemCount == 1 ? '' : 's'}'
-                  '${cart.vendorCount > 1 ? ' · ${cart.vendorCount} stores' : ''}',
-                  style: WaUi.label.copyWith(color: WaUi.secondaryText),
-                ),
-                const SizedBox(height: 12),
-                ...vendors.map((vendor) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              vendor.businessName,
-                              style: WaUi.title.copyWith(
-                                fontWeight: FontWeight.w700,
+            ),
+            Expanded(
+              child: cart.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Your cart is empty',
+                        style: WaUi.body.copyWith(
+                          color: BarqodyChrome.secondaryText,
+                        ),
+                      ),
+                    )
+                  : ListView(
+                      padding: const EdgeInsets.fromLTRB(
+                        BarqodyChrome.sidePad,
+                        12,
+                        BarqodyChrome.sidePad,
+                        24,
+                      ),
+                      children: [
+                        ...vendors.expand((vendor) {
+                          final lineWidgets = <Widget>[];
+                          for (var i = 0; i < vendor.lines.length; i++) {
+                            final line = vendor.lines[i];
+                            if (i > 0) {
+                              lineWidgets.add(
+                                const Divider(
+                                  height: 24,
+                                  color: BarqodyChrome.divider,
+                                ),
+                              );
+                            }
+                            lineWidgets.add(
+                              _CartTile(
+                                line: line,
+                                currency: vendor.currency,
+                                onRemove: () => cart.removeLine(
+                                  businessLinkId: vendor.businessLinkId,
+                                  lineIndex: i,
+                                ),
+                                onQtyChanged: (qty) => cart.updateQuantity(
+                                  businessLinkId: vendor.businessLinkId,
+                                  lineIndex: i,
+                                  quantity: qty,
+                                ),
+                              ),
+                            );
+                          }
+
+                          return [
+                            if (cart.vendorCount > 1) ...[
+                              const SizedBox(height: 8),
+                              Text(
+                                vendor.businessName,
+                                style: WaUi.title.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                formatMoney(
+                                  vendor.total,
+                                  currency: vendor.currency,
+                                ),
+                                style: WaUi.label.copyWith(
+                                  color: BarqodyChrome.secondaryText,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                            ],
+                            ...lineWidgets,
+                            const SizedBox(height: 8),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: TextButton.icon(
+                                onPressed: () => _addMore(vendor),
+                                icon: Image.asset(
+                                  'assets/images/png/plus-icon.png',
+                                  width: 14,
+                                  height: 14,
+                                  errorBuilder: (_, _, _) => const Icon(
+                                    Icons.add_rounded,
+                                    size: 18,
+                                  ),
+                                ),
+                                label: Text(
+                                  'Add more from ${vendor.businessName}',
+                                  style: WaUi.body.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                          Text(
-                            formatMoney(
-                              vendor.total,
-                              currency: vendor.currency,
-                            ),
-                            style: WaUi.label.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      ...vendor.lines.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final line = entry.value;
-                        return _CartTile(
-                          line: line,
-                          currency: vendor.currency,
-                          onRemove: () => cart.removeLine(
-                            businessLinkId: vendor.businessLinkId,
-                            lineIndex: index,
-                          ),
-                          onQtyChanged: (qty) => cart.updateQuantity(
-                            businessLinkId: vendor.businessLinkId,
-                            lineIndex: index,
-                            quantity: qty,
-                          ),
-                        );
-                      }),
-                      TextButton.icon(
-                        onPressed: () => _addMore(vendor),
-                        icon: const Icon(Icons.add_rounded),
-                        label: Text('Add more from ${vendor.businessName}'),
-                      ),
-                      const SizedBox(height: 8),
-                      const Divider(height: 24),
-                    ],
-                  );
-                }),
-              ],
+                            if (cart.vendorCount > 1)
+                              const Padding(
+                                padding: EdgeInsets.only(top: 16, bottom: 8),
+                                child: Divider(
+                                  height: 1,
+                                  color: BarqodyChrome.divider,
+                                ),
+                              ),
+                          ];
+                        }),
+                      ],
+                    ),
             ),
+          ],
+        ),
+      ),
       bottomNavigationBar: cart.isEmpty
           ? null
           : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                child: Builder(
-                  builder: (context) {
-                    final currencies =
-                        cart.vendors.map((v) => v.currency).toSet();
-                    final money = currencies.length == 1
-                        ? formatMoney(
-                            cart.total,
-                            currency: currencies.first,
-                          )
-                        : null;
-                    final base = cart.vendorCount > 1
-                        ? 'Place all orders'
-                        : context.l10n.placeOrder;
-                    final label = money != null ? '$base ($money)' : base;
-                    return WaPrimaryButton(
-                      label: label,
-                      loading: _placing,
-                      onPressed: _placing ? null : _placeOrders,
-                    );
-                  },
+              top: false,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    top: BorderSide(color: BarqodyChrome.divider),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            context.l10n.placeOrder,
+                            style: WaUi.body.copyWith(
+                              fontSize: 15,
+                              color: BarqodyChrome.secondaryText,
+                            ),
+                          ),
+                          if (totalMoney != null) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              totalMoney,
+                              style: WaUi.toolsTitleOf(
+                                size: 18,
+                                weight: FontWeight.w700,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    SizedBox(
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: _placing ? null : _placeOrders,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          disabledBackgroundColor:
+                              Colors.black.withValues(alpha: 0.35),
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(horizontal: 22),
+                          shape: const StadiumBorder(),
+                        ),
+                        child: _placing
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                context.l10n.placeOrder,
+                                style: WaUi.promoButton.copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -333,108 +429,158 @@ class _CartTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final item = line.item;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: WaUi.divider),
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: SizedBox(
-              width: 64,
-              height: 64,
-              child: item.imageUrl.isNotEmpty
-                  ? Image.network(
-                      item.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => Container(
-                        color: WaUi.searchBg,
-                        child: const Icon(Icons.fastfood_outlined),
-                      ),
-                    )
-                  : Container(
-                      color: WaUi.searchBg,
-                      child: const Icon(Icons.fastfood_outlined),
-                    ),
-            ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: SizedBox(
+            width: 56,
+            height: 56,
+            child: item.imageUrl.isNotEmpty
+                ? Image.network(
+                    item.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => _thumbPlaceholder(),
+                  )
+                : _thumbPlaceholder(),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w700),
-                ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                formatMoney(line.lineTotal, currency: currency),
+                style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w700),
+              ),
+              if (line.notes.isNotEmpty) ...[
                 const SizedBox(height: 2),
                 Text(
-                  formatMoney(line.lineTotal, currency: currency),
-                  style: WaUi.label.copyWith(fontWeight: FontWeight.w700),
-                ),
-                if (line.notes.isNotEmpty) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    line.notes,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: WaUi.label.copyWith(color: WaUi.secondaryText),
-                  ),
-                ],
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    _qtyBtn(
-                      icon: Icons.remove,
-                      onTap: () => onQtyChanged(line.quantity - 1),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        '${line.quantity}',
-                        style: WaUi.bodyMedium.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    _qtyBtn(
-                      icon: Icons.add,
-                      onTap: () => onQtyChanged(line.quantity + 1),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      onPressed: onRemove,
-                      icon: const Icon(Icons.delete_outline, size: 20),
-                      color: Colors.redAccent,
-                    ),
-                  ],
+                  line.notes,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: WaUi.label.copyWith(color: BarqodyChrome.secondaryText),
                 ),
               ],
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+        const SizedBox(width: 8),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _QtyCircle(
+              filled: true,
+              onTap: () => onQtyChanged(line.quantity + 1),
+              child: Image.asset(
+                'assets/images/png/plus-icon.png',
+                width: 12,
+                height: 12,
+                color: Colors.white,
+                errorBuilder: (_, _, _) => const Icon(
+                  Icons.add,
+                  size: 14,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                '${line.quantity}',
+                style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w700),
+              ),
+            ),
+            if (line.quantity <= 1)
+              _QtyCircle(
+                filled: false,
+                borderColor: Colors.redAccent,
+                backgroundColor: Colors.redAccent.withValues(alpha: 0.12),
+                onTap: onRemove,
+                child: Icon(
+                  Icons.delete_outline_rounded,
+                  size: 16,
+                  color: Colors.redAccent.shade700,
+                ),
+              )
+            else
+              _QtyCircle(
+                filled: false,
+                onTap: () => onQtyChanged(line.quantity - 1),
+                child: Image.asset(
+                  'assets/images/png/minus-icon.png',
+                  width: 12,
+                  height: 12,
+                  errorBuilder: (_, _, _) => const Icon(
+                    Icons.remove,
+                    size: 14,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 
-  Widget _qtyBtn({required IconData icon, required VoidCallback onTap}) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        width: 28,
-        height: 28,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: WaUi.chipBorder),
+  Widget _thumbPlaceholder() {
+    return Container(
+      color: BarqodyChrome.fieldFill,
+      child: const Icon(Icons.fastfood_outlined, color: BarqodyChrome.bodyText),
+    );
+  }
+}
+
+class _QtyCircle extends StatelessWidget {
+  final bool filled;
+  final VoidCallback onTap;
+  final Widget child;
+  final Color? borderColor;
+  final Color? backgroundColor;
+
+  const _QtyCircle({
+    required this.filled,
+    required this.onTap,
+    required this.child,
+    this.borderColor,
+    this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: filled
+          ? Colors.black
+          : (backgroundColor ?? Colors.transparent),
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: filled
+                ? null
+                : Border.all(
+                    color: borderColor ?? Colors.black,
+                    width: 1.2,
+                  ),
+          ),
+          alignment: Alignment.center,
+          child: child,
         ),
-        child: Icon(icon, size: 16),
       ),
     );
   }

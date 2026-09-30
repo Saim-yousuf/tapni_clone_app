@@ -179,12 +179,12 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                     onTap: () =>
                                         _showAddLeadSheet(context, leadsProvider),
                                     child: const SizedBox(
-                                      width: 44,
-                                      height: 44,
+                                      width: 34,
+                                      height: 34,
                                       child: Icon(
                                         Icons.add,
                                         color: Colors.white,
-                                        size: 22,
+                                        size: 20,
                                       ),
                                     ),
                                   ),

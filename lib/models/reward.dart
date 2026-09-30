@@ -198,6 +198,9 @@ class RewardEnrollment {
   final String programId;
   final int stamps;
   final String status;
+  final String? customerName;
+  final String? customerUsername;
+  final String? customerPhoto;
 
   RewardEnrollment({
     required this.id,
@@ -205,6 +208,9 @@ class RewardEnrollment {
     this.programId = '',
     this.stamps = 0,
     this.status = 'ACTIVE',
+    this.customerName,
+    this.customerUsername,
+    this.customerPhoto,
   });
 
   bool get isCompleted => status == 'COMPLETED';
@@ -218,12 +224,53 @@ class RewardEnrollment {
     } else {
       progId = json['program']?.toString() ?? '';
     }
+
+    String? customerName;
+    String? customerUsername;
+    String? customerPhoto;
+    final userJson = json['user'] ?? json['customer'];
+    if (userJson is Map<String, dynamic>) {
+      customerName = userJson['name']?.toString().trim();
+      if (customerName != null && customerName.isEmpty) customerName = null;
+      customerUsername = userJson['username']?.toString().trim();
+      if (customerUsername != null && customerUsername.isEmpty) {
+        customerUsername = null;
+      }
+      customerPhoto = userJson['profilePhoto']?.toString();
+      if (customerPhoto != null && customerPhoto.isEmpty) {
+        customerPhoto = null;
+      }
+    }
+
     return RewardEnrollment(
       id: json['_id']?.toString() ?? json['id']?.toString() ?? '',
       program: prog,
       programId: progId,
       stamps: (json['stamps'] as num?)?.toInt() ?? 0,
       status: json['status']?.toString() ?? 'ACTIVE',
+      customerName: customerName,
+      customerUsername: customerUsername,
+      customerPhoto: customerPhoto,
+    );
+  }
+
+  RewardEnrollment copyWith({
+    RewardProgram? program,
+    int? stamps,
+    String? status,
+    String? customerName,
+    String? customerUsername,
+    String? customerPhoto,
+  }) {
+    return RewardEnrollment(
+      id: id,
+      program: program ?? this.program,
+      programId: programId,
+      stamps: stamps ?? this.stamps,
+      status: status ?? this.status,
+      customerName: customerName ?? this.customerName,
+      customerUsername: customerUsername ?? this.customerUsername,
+      customerPhoto: customerPhoto ?? this.customerPhoto,
     );
   }
 }

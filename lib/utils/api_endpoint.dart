@@ -240,6 +240,9 @@ class _ExploreApi {
   String get nearby => "${Api.baseUrl}/api/explore/nearby";
   String get banners => "${Api.baseUrl}/api/explore/banners";
   String get categories => "${Api.baseUrl}/api/explore/categories";
+  String get bannerPlans => "${Api.baseUrl}/api/explore/banner-plans";
+  String get myBanners => "${Api.baseUrl}/api/explore/my-banners";
+  String myBanner(String id) => "${Api.baseUrl}/api/explore/my-banners/$id";
 }
 
 class _ReviewsApi {

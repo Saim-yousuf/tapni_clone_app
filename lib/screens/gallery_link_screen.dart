@@ -4,6 +4,7 @@ import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/gallery_item.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/profile_gallery_grid.dart';
 
 /// Full-screen gallery opened from a Gallery app/link tile.
@@ -70,37 +71,34 @@ class _GalleryLinkScreenState extends State<GalleryLinkScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        title: Text(context.l10n.profileTabGallery),
-      ),
+      backgroundColor: BarqodyChrome.scaffold,
       body: SafeArea(
-        child: widget.isOwner
-            ? Consumer<ProfileProvider>(
-                builder: (context, profileProvider, _) {
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
-                    child: ProfileGalleryGrid(
-                      items: profileProvider.profile.gallery,
-                      isOwner: true,
-                      uploading: profileProvider.isGalleryUploading,
-                      onAddPhotos: () => _addPhotos(profileProvider),
-                      onDeletePhoto: (item) =>
-                          _deletePhoto(profileProvider, item),
+        child: Column(
+          children: [
+            BarqodyTitleBar(title: context.l10n.profileTabGallery),
+            Expanded(
+              child: widget.isOwner
+                  ? Consumer<ProfileProvider>(
+                      builder: (context, profileProvider, _) {
+                        return ProfileGalleryGrid(
+                          items: profileProvider.profile.gallery,
+                          isOwner: true,
+                          uploading: profileProvider.isGalleryUploading,
+                          onAddPhotos: () => _addPhotos(profileProvider),
+                          onDeletePhoto: (item) =>
+                              _deletePhoto(profileProvider, item),
+                          fullScreenEmpty: true,
+                        );
+                      },
+                    )
+                  : ProfileGalleryGrid(
+                      items: widget.items,
+                      isOwner: false,
+                      fullScreenEmpty: true,
                     ),
-                  );
-                },
-              )
-            : SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
-                child: ProfileGalleryGrid(
-                  items: widget.items,
-                  isOwner: false,
-                ),
-              ),
+            ),
+          ],
+        ),
       ),
     );
   }

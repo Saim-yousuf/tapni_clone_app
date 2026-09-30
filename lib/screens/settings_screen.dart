@@ -7,6 +7,7 @@ import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/attendance/business/attendance_dashboard_screen.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/models/attendance.dart';
+import 'package:tapni_app/screens/banner_ads/banner_ads_plans_screen.dart';
 import 'package:tapni_app/screens/linked_devices/account_switcher_sheet.dart';
 import 'package:tapni_app/screens/linked_devices/linked_devices_screen.dart';
 import 'package:tapni_app/l10n/app_languages.dart';
@@ -18,7 +19,7 @@ import 'package:tapni_app/screens/find_user_screen.dart';
 import 'package:tapni_app/screens/help/help_center_screen.dart';
 import 'package:tapni_app/screens/invitations/invitations_home_screen.dart';
 import 'package:tapni_app/screens/phone_auth_screen.dart';
-import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_screen.dart';
+import 'package:tapni_app/screens/loyalty_program/business/loyalty_hub_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/notifications_screen.dart';
@@ -478,7 +479,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           if (!ok || !context.mounted) return;
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => LoyaltyProgramListScreen(),
+                              builder: (_) => const LoyaltyHubScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      WaToolsListTile(
+                        icon: Icons.campaign_outlined,
+                        title: 'Banner Ads',
+                        subtitle:
+                            'Promote your business on the Explore carousel',
+                        onTap: () async {
+                          final ok = await ensureBusinessProfileComplete(context);
+                          if (!ok || !context.mounted) return;
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const BannerAdsPlansScreen(),
                             ),
                           );
                         },

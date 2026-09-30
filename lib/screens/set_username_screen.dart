@@ -11,7 +11,7 @@ import 'package:tapni_app/screens/my_username_claims_screen.dart';
 import 'package:tapni_app/screens/username_claim_screen.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
-import 'package:tapni_app/widgets/custom_button.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class SetUsernameScreen extends StatefulWidget {
   SetUsernameScreen({super.key});
@@ -219,9 +219,9 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
       case UsernameAvailabilityStatus.unavailable:
         return const Color(0xFFC62828);
       case UsernameAvailabilityStatus.checking:
-        return WaUi.secondaryText;
+        return BarqodyChrome.secondaryText;
       default:
-        return WaUi.secondaryText;
+        return BarqodyChrome.secondaryText;
     }
   }
 
@@ -252,12 +252,12 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (result.status == UsernameAvailabilityStatus.checking)
-            SizedBox(
+            const SizedBox(
               width: 18,
               height: 18,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: WaUi.secondaryText,
+                color: BarqodyChrome.secondaryText,
               ),
             )
           else if (_availabilityIcon(result) != null)
@@ -283,103 +283,186 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
   @override
   Widget build(BuildContext context) {
     final previewUsername = _usernameController.text.trim().isEmpty
-        ? 'username'
+        ? 'your_username'
         : _usernameController.text.trim().toLowerCase();
     final showClaim = _availability?.canClaim == true;
+    final domain = Constants.appDomain
+        .replaceFirst(RegExp(r'^https?://'), '')
+        .replaceAll(RegExp(r'/$'), '');
 
     return Scaffold(
-      backgroundColor: WaUi.toolsScaffold,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-          color: WaUi.primaryText,
-          onPressed: () => Navigator.of(context).pop()),
-        title: Text(context.l10n.username),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const MyUsernameClaimsScreen()));
-            },
-            child: Text(
-              context.l10n.viewMyClaims,
-              style: WaUi.bodyMedium.copyWith(color: WaUi.accent))),
-        ],
-      ),
+      backgroundColor: BarqodyChrome.scaffold,
       body: SafeArea(
         child: Form(
           key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+          child: Column(
             children: [
-              Text(
-                context.l10n.chooseAUniqueUsernameForYourProfileLink,
-                style: WaUi.body.copyWith(color: WaUi.secondaryText),
-              ),
-              const SizedBox(height: 24),
-              Text(context.l10n.username, style: WaUi.title),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _usernameController,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.done,
-                autofillHints: const [AutofillHints.username],
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9_-]')),
-                  LengthLimitingTextInputFormatter(30),
-                ],
-                style: WaUi.body,
-                decoration: WaUi.fieldDecoration(
-                  hintText: context.l10n.yourname,
-                  prefixIcon: const Icon(Icons.alternate_email, size: 22),
-                ),
-                validator: _validateUsername,
-                onChanged: (value) {
-                  setState(() {});
-                  _scheduleAvailabilityCheck(value);
-                },
-                onFieldSubmitted: (_) => _saveUsername(),
-              ),
-              _buildAvailabilityBanner() ?? const SizedBox.shrink(),
-              const SizedBox(height: 12),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                decoration: WaUi.fieldBox,
-                child: Text(
-                  '${Constants.appDomain}/$previewUsername',
-                  style: WaUi.bodyMedium.copyWith(color: WaUi.secondaryText),
+              BarqodyTitleBar(
+                title: context.l10n.username,
+                trailing: CircleAssetButton(
+                  asset: 'assets/images/png/icon-morehoriz.png',
+                  iconSize: 18,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const MyUsernameClaimsScreen(),
+                      ),
+                    );
+                  },
                 ),
               ),
-              const SizedBox(height: 12),
-              Text(
-                context.l10n.n330CharactersLettersNumbersUnderscoresAndHyphensOnly,
-                style: WaUi.label,
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        'assets/images/png/username-img.png',
+                        width: 140,
+                        height: 140,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) => Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(28),
+                          ),
+                          child: const Icon(
+                            Icons.person_outline,
+                            color: Colors.white,
+                            size: 56,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    Text(
+                      context.l10n.chooseAUniqueUsernameForYourProfileLink,
+                      textAlign: TextAlign.center,
+                      style: WaUi.toolsTitleOf(
+                        size: 20,
+                        weight: FontWeight.w700,
+                        color: Colors.black,
+                        height: 1.3,
+                      ),
+                    ),
+                    const SizedBox(height: 36),
+                    Text(
+                      context.l10n.username.toUpperCase(),
+                      style: WaUi.label.copyWith(
+                        fontSize: 12,
+                        letterSpacing: 0.8,
+                        color: BarqodyChrome.secondaryText,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      controller: _usernameController,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      autofillHints: const [AutofillHints.username],
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'[a-zA-Z0-9_-]'),
+                        ),
+                        LengthLimitingTextInputFormatter(30),
+                      ],
+                      style: WaUi.body.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: BarqodyChrome.fieldFill,
+                        hintText: 'e.g. your_username',
+                        hintStyle: WaUi.body.copyWith(
+                          color: BarqodyChrome.secondaryText,
+                          fontStyle: FontStyle.italic,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 16,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(100),
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: 1.2,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(100),
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: 1.2,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(100),
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: 1.4,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(100),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFC62828),
+                            width: 1.2,
+                          ),
+                        ),
+                      ),
+                      validator: _validateUsername,
+                      onChanged: (value) {
+                        setState(() {});
+                        _scheduleAvailabilityCheck(value);
+                      },
+                      onFieldSubmitted: (_) => _saveUsername(),
+                    ),
+                    _buildAvailabilityBanner() ?? const SizedBox.shrink(),
+                    const SizedBox(height: 14),
+                    Text(
+                      'https://$domain/$previewUsername',
+                      textAlign: TextAlign.center,
+                      style: WaUi.body.copyWith(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    if (showClaim) ...[
+                      const SizedBox(height: 20),
+                      Text(
+                        context.l10n.claimUsernameIfUnavailable,
+                        textAlign: TextAlign.center,
+                        style: WaUi.label.copyWith(
+                          color: BarqodyChrome.secondaryText,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      OutlinedButton.icon(
+                        onPressed: _checking ? null : _openClaimScreen,
+                        icon: const Icon(Icons.verified_outlined, size: 18),
+                        label: Text(context.l10n.claimThisUsername),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          side: const BorderSide(color: Colors.black),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: const StadiumBorder(),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
-              if (showClaim) ...[
-                const SizedBox(height: 16),
-                Text(
-                  context.l10n.claimUsernameIfUnavailable,
-                  style: WaUi.label.copyWith(color: WaUi.secondaryText),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+                child: PillButton(
+                  label: context.l10n.save,
+                  enabled: !_checking,
+                  onPressed: _saveUsername,
                 ),
-                const SizedBox(height: 12),
-                OutlinedButton.icon(
-                  onPressed: _checking ? null : _openClaimScreen,
-                  icon: const Icon(Icons.verified_outlined, size: 18),
-                  label: Text(context.l10n.claimThisUsername),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: WaUi.accent,
-                    side: BorderSide(color: WaUi.accent.withValues(alpha: 0.5)),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                ),
-              ],
-              const SizedBox(height: 32),
-              CustomButton(
-                text: context.l10n.saveUsername,
-                isLoading: _checking,
-                onTap: _saveUsername,
               ),
             ],
           ),

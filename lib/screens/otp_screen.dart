@@ -368,6 +368,8 @@ class _OtpScreenState extends State<OtpScreen> {
                         height: boxW + 4,
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 120),
+                          alignment: Alignment.center,
+                          clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(
                             color: filled && !active
                                 ? AuthUi.fieldFill
@@ -383,40 +385,49 @@ class _OtpScreenState extends State<OtpScreen> {
                             ),
                           ),
                           child: TextField(
-                              controller: _controllers[index],
-                              focusNode: _focusNodes[index],
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.center,
-                              textInputAction: index == _otpLength - 1
-                                  ? TextInputAction.done
-                                  : TextInputAction.next,
-                              style: WaUi.headline.copyWith(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                                color: AuthUi.textPrimary,
-                              ),
-                              cursorColor: AuthUi.textPrimary,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                                LengthLimitingTextInputFormatter(1),
-                              ],
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: EdgeInsets.zero,
-                                counterText: '',
-                              ),
-                              onChanged: (value) =>
-                                  _onDigitChanged(index, value),
-                              onTap: () {
-                                _controllers[index].selection =
-                                    TextSelection(
-                                  baseOffset: 0,
-                                  extentOffset:
-                                      _controllers[index].text.length,
-                                );
-                              },
+                            controller: _controllers[index],
+                            focusNode: _focusNodes[index],
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            textAlignVertical: TextAlignVertical.center,
+                            textInputAction: index == _otpLength - 1
+                                ? TextInputAction.done
+                                : TextInputAction.next,
+                            style: WaUi.headline.copyWith(
+                              fontSize: 22,
+                              height: 1.1,
+                              fontWeight: FontWeight.w600,
+                              color: AuthUi.textPrimary,
                             ),
+                            cursorColor: AuthUi.textPrimary,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(1),
+                            ],
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              filled: false,
+                              fillColor: Colors.transparent,
+                              isCollapsed: true,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              counterText: '',
+                            ),
+                            onChanged: (value) =>
+                                _onDigitChanged(index, value),
+                            onTap: () {
+                              _controllers[index].selection =
+                                  TextSelection(
+                                baseOffset: 0,
+                                extentOffset:
+                                    _controllers[index].text.length,
+                              );
+                            },
+                          ),
                         ),
                       );
                     }),

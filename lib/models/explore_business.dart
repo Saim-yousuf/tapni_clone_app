@@ -266,6 +266,17 @@ class ExploreBanner {
   final String actionType;
   final String actionUrl;
   final int sortOrder;
+  final bool isActive;
+  final String status;
+  final String source;
+  final String planId;
+  final int planDays;
+  final double planPrice;
+  final DateTime? startsAt;
+  final DateTime? endsAt;
+  final DateTime? createdAt;
+  final String businessName;
+  final String businessUsername;
 
   const ExploreBanner({
     required this.id,
@@ -279,9 +290,32 @@ class ExploreBanner {
     this.actionType = 'none',
     this.actionUrl = '',
     this.sortOrder = 0,
+    this.isActive = true,
+    this.status = 'live',
+    this.source = 'admin',
+    this.planId = '',
+    this.planDays = 0,
+    this.planPrice = 0,
+    this.startsAt,
+    this.endsAt,
+    this.createdAt,
+    this.businessName = '',
+    this.businessUsername = '',
   });
 
+  bool get isLive {
+    if (!isActive) return false;
+    if (status == 'paused' || status == 'expired') return false;
+    if (endsAt != null && endsAt!.isBefore(DateTime.now())) return false;
+    return true;
+  }
+
   factory ExploreBanner.fromJson(Map<String, dynamic> json) {
+    DateTime? parseDate(dynamic v) {
+      if (v == null) return null;
+      return DateTime.tryParse(v.toString());
+    }
+
     return ExploreBanner(
       id: json['id']?.toString() ?? '',
       tag: json['tag']?.toString() ?? '',
@@ -294,8 +328,73 @@ class ExploreBanner {
       actionType: json['actionType']?.toString() ?? 'none',
       actionUrl: json['actionUrl']?.toString() ?? '',
       sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
+      isActive: json['isActive'] as bool? ?? true,
+      status: json['status']?.toString() ?? 'live',
+      source: json['source']?.toString() ?? 'admin',
+      planId: json['planId']?.toString() ?? '',
+      planDays: (json['planDays'] as num?)?.toInt() ?? 0,
+      planPrice: (json['planPrice'] as num?)?.toDouble() ?? 0,
+      startsAt: parseDate(json['startsAt']),
+      endsAt: parseDate(json['endsAt']),
+      createdAt: parseDate(json['createdAt']),
+      businessName: json['businessName']?.toString() ?? '',
+      businessUsername: json['businessUsername']?.toString() ?? '',
     );
   }
+}
+
+class BannerAdPlan {
+  final String id;
+  final int days;
+  final double price;
+  final String label;
+  final bool popular;
+  final String feature;
+
+  const BannerAdPlan({
+    required this.id,
+    required this.days,
+    required this.price,
+    required this.label,
+    this.popular = false,
+    this.feature = '',
+  });
+
+  factory BannerAdPlan.fromJson(Map<String, dynamic> json) {
+    return BannerAdPlan(
+      id: json['id']?.toString() ?? '',
+      days: (json['days'] as num?)?.toInt() ?? 0,
+      price: (json['price'] as num?)?.toDouble() ?? 0,
+      label: json['label']?.toString() ?? '',
+      popular: json['popular'] as bool? ?? false,
+      feature: json['feature']?.toString() ?? '',
+    );
+  }
+
+  static const defaults = <BannerAdPlan>[
+    BannerAdPlan(
+      id: '3d',
+      days: 3,
+      price: 29,
+      label: '3 Days',
+      popular: true,
+      feature: 'Promote profile for 3 full days',
+    ),
+    BannerAdPlan(
+      id: '5d',
+      days: 5,
+      price: 35,
+      label: '5 Days',
+      feature: 'Maximize reach for 5 consecutive days',
+    ),
+    BannerAdPlan(
+      id: '7d',
+      days: 7,
+      price: 45,
+      label: '7 Days',
+      feature: 'Ultimate exposure for 1 week',
+    ),
+  ];
 }
 
 class ExploreCategoryItem {

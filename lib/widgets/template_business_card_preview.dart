@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:tapni_app/widgets/branded_qr_image.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+
 class TemplateBusinessCardPreview extends StatelessWidget {
   final CardTemplate template;
   final String name;
@@ -21,6 +23,9 @@ class TemplateBusinessCardPreview extends StatelessWidget {
   final bool verified;
   final double width;
   final double? height;
+
+  /// When false, hides the profile URL under the QR (matches Card mock).
+  final bool showProfileUrl;
 
   const TemplateBusinessCardPreview({
     super.key,
@@ -35,16 +40,24 @@ class TemplateBusinessCardPreview extends StatelessWidget {
     this.verified = false,
     this.width = 340,
     this.height,
+    this.showProfileUrl = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final hasBorder = template.backgroundColor == const Color(0xFFFFFFFF);
     final cover = coverPhotoUrl?.trim();
+    final compact = height != null;
+    final pad = compact ? 18.0 : 22.0;
+    final avatarSize = compact ? 70.0 : 78.0;
+    final qrSize = compact
+        ? math.min(136.0, math.max(112.0, (height! - 260) * 0.55))
+        : 148.0;
 
     return Container(
       width: width,
       height: height,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: cover == null || cover.isEmpty ? template.backgroundColor : null,
         borderRadius: BorderRadius.circular(24),
@@ -55,7 +68,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.14),
             blurRadius: 18,
-            offset: Offset(0, 8),
+            offset: const Offset(0, 8),
           ),
         ],
         image: cover != null && cover.isNotEmpty
@@ -65,7 +78,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
               )
             : null,
       ),
-      padding: EdgeInsets.all(22),
+      padding: EdgeInsets.all(pad),
       child: Column(
         mainAxisSize: height == null ? MainAxisSize.min : MainAxisSize.max,
         children: [
@@ -92,88 +105,97 @@ class TemplateBusinessCardPreview extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 18),
-          _buildAvatar(),
-          const SizedBox(height: 14),
+          SizedBox(height: compact ? 12 : 18),
+          _buildAvatar(avatarSize),
+          SizedBox(height: compact ? 10 : 14),
           VerifiedName(
             name: name,
             verified: verified,
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: template.textColor,
-              fontSize: 20,
+              fontSize: compact ? 18 : 20,
               fontWeight: FontWeight.w600,
               letterSpacing: -0.3,
-              height: 1.2,
+              height: 1.15,
             ),
-            badgeColor: template.textColor,
-            badgeSize: 20,
+            badgeColor: const Color(0xFFFFCC00),
+            badgeSize: 18,
           ),
           if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
               subtitle!,
               textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: template.brandingColor.withValues(alpha: 0.9),
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.w400,
               ),
             ),
           ],
           if (bio != null && bio!.trim().isNotEmpty) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
               bio!,
               textAlign: TextAlign.center,
-              maxLines: 2,
+              maxLines: compact ? 2 : 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: template.textColor.withValues(alpha: 0.85),
-                fontSize: 14,
+                fontSize: compact ? 12.5 : 14,
                 fontWeight: FontWeight.w400,
-                height: 1.35,
+                height: 1.3,
               ),
             ),
           ],
-          if (height != null) const Spacer() else const SizedBox(height: 18),
+          if (height != null)
+            const Spacer(flex: 1)
+          else
+            const SizedBox(height: 18),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(compact ? 10 : 12),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
             ),
             child: BrandedQrImage(
               data: profileUrl,
-              size: 148,
+              size: qrSize,
               padding: EdgeInsets.zero,
               backgroundColor: Colors.white,
             ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            profileUrl.replaceAll('https://', ''),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: template.labelColor,
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
+          if (showProfileUrl) ...[
+            const SizedBox(height: 8),
+            Text(
+              profileUrl.replaceAll('https://', ''),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: template.labelColor,
+                fontSize: 11,
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
   }
 
-  Widget _buildAvatar() {
+  Widget _buildAvatar(double size) {
     final photo = profilePhotoUrl?.trim();
     if (photo != null && photo.isNotEmpty) {
-      ImageProvider imageProvider = _imageProvider(photo);
+      final imageProvider = _imageProvider(photo);
       return Container(
-        width: 78,
-        height: 78,
+        width: size,
+        height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
@@ -189,8 +211,8 @@ class TemplateBusinessCardPreview extends StatelessWidget {
     }
 
     return Container(
-      width: 78,
-      height: 78,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: template.isDark
@@ -202,7 +224,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
         userInitial.toUpperCase(),
         style: TextStyle(
           color: template.textColor,
-          fontSize: 26,
+          fontSize: size * 0.33,
           fontWeight: FontWeight.w600,
         ),
       ),

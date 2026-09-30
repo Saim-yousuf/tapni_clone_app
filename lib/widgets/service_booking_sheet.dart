@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tapni_app/models/catalog_item.dart';
-import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/models/service_schedule.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
-import 'package:tapni_app/utils/money_format.dart';
-import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
-Future<bool?> showServiceBookingSheet({
+
+class ServiceBookingResult {
+  final String bookingDate;
+  final String bookingTime;
+  final bool bookNow;
+
+  const ServiceBookingResult({
+    required this.bookingDate,
+    required this.bookingTime,
+    required this.bookNow,
+  });
+}
+
+Future<ServiceBookingResult?> showServiceBookingSheet({
   required BuildContext context,
   required CatalogItem item,
   required String businessId,
@@ -17,7 +28,7 @@ Future<bool?> showServiceBookingSheet({
   required String businessName,
   String? currency,
 }) {
-  return showModalBottomSheet<bool>(
+  return showModalBottomSheet<ServiceBookingResult>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
@@ -55,12 +66,10 @@ class ServiceBookingSheet extends StatefulWidget {
 
 class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
   final _repo = CatalogRepo();
-  final _notesCtrl = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   String? _selectedTime;
   List<TimeSlot> _slots = [];
   bool _loadingSlots = false;
-  bool _isBooking = false;
 
   String get _dateStr => DateFormat('yyyy-MM-dd').format(_selectedDate);
 
@@ -68,12 +77,6 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
   void initState() {
     super.initState();
     _loadSlots();
-  }
-
-  @override
-  void dispose() {
-    _notesCtrl.dispose();
-    super.dispose();
   }
 
   Future<void> _loadSlots() async {
@@ -99,7 +102,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 60)),
+      lastDate: DateTime.now().add(const Duration(days: 60)),
     );
     if (picked != null && picked != _selectedDate) {
       setState(() => _selectedDate = picked);
@@ -107,260 +110,257 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
     }
   }
 
-  Future<void> _book() async {
+  void _popResult({required bool bookNow}) {
     if (_selectedTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.l10n.pleaseSelectATimeSlot)),
       );
       return;
     }
-
-    setState(() => _isBooking = true);
-
-    try {
-      final res = await _repo.placeOrder(
-        businessId: widget.businessId,
-        businessLinkId: widget.businessLinkId,
-        catalogType: 'services',
+    Navigator.of(context, rootNavigator: true).pop(
+      ServiceBookingResult(
         bookingDate: _dateStr,
-        bookingTime: _selectedTime,
-        items: [
-          {
-            'name': widget.item.name,
-            'price': widget.item.price,
-            'quantity': 1,
-            'notes': _notesCtrl.text.trim(),
-          },
-        ],
-      );
-
-      if (!mounted) return;
-
-      if (res.success) {
-        final token = CatalogOrder.tokenFromApi(res.data);
-        final message = token > 0
-            ? 'Token #$token — ${context.l10n.bookedWith(widget.item.name, widget.businessName)}'
-            : context.l10n.bookedWith(widget.item.name, widget.businessName);
-        final messenger = ScaffoldMessenger.of(context);
-        Navigator.of(context, rootNavigator: true).pop(true);
-        messenger.showSnackBar(SnackBar(content: Text(message)));
-        return;
-      }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? context.l10n.bookingFailed)),
-      );
-    } catch (_) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.bookingFailed)),
-      );
-    } finally {
-      if (mounted) setState(() => _isBooking = false);
-    }
+        bookingTime: _selectedTime!,
+        bookNow: bookNow,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final dateLabel = DateFormat('EEE, d MMM yyyy').format(_selectedDate);
 
     return Padding(
       padding: EdgeInsets.only(bottom: bottomInset),
       child: Container(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.9,
+          maxHeight: MediaQuery.of(context).size.height * 0.75,
         ),
-        decoration: BoxDecoration(
-          color: isDark ? Color(0xFF111111) : Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(BarqodyChrome.sheetRadius),
+          ),
         ),
         child: SafeArea(
           top: false,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                margin: const EdgeInsets.only(top: 12, bottom: 8),
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                    onPressed: () =>
-                        Navigator.of(context, rootNavigator: true).pop(),
-                    ),
-                    Expanded(
-                      child: Text(
-                        context.l10n.bookItem(widget.item.name),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 48),
-                  ],
-                ),
+              const SizedBox(height: 10),
+              const Center(child: SheetDragHandle()),
+              const SizedBox(height: 8),
+              BarqodyTitleBar(
+                title: 'Book Service',
+                onBack: () =>
+                    Navigator.of(context, rootNavigator: true).pop(),
               ),
               Flexible(
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 16),
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.item.price > 0
-                            ? formatMoney(
-                                widget.item.price,
-                                currency: widget.currency,
-                              )
-                            : context.l10n.free,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                        'SELECT DATE',
+                        style: WaUi.caption.copyWith(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.6,
+                          color: BarqodyChrome.secondaryText,
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text(context.l10n.selectDate,
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       InkWell(
                         onTap: _pickDate,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(14),
                         child: Container(
                           width: double.infinity,
-                          padding: EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? Color(0xFF1E1E1E)
-                                : Color(0xFFF5F5F5),
-                            borderRadius: BorderRadius.circular(12),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
                           ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.calendar_month_outlined),
-                              SizedBox(width: 12),
-                              Text(
-                                DateFormat(context.l10n.eeeDMMMYyyy).format(_selectedDate),
-                                style: TextStyle(fontWeight: FontWeight.w500),
-                              ),
-                              Spacer(),
-                              Icon(Icons.chevron_right),
-                            ],
+                          decoration: BoxDecoration(
+                            color: BarqodyChrome.fieldFill,
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Text(
+                            dateLabel,
+                            style: WaUi.body.copyWith(
+                              fontSize: 15,
+                              color: BarqodyChrome.secondaryText,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text(context.l10n.availableSlots,
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                      const SizedBox(height: 22),
+                      Text(
+                        'CHOOSE A TIME',
+                        style: WaUi.caption.copyWith(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.6,
+                          color: BarqodyChrome.secondaryText,
+                        ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 12),
                       if (_loadingSlots)
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(24),
-                            child: CircularProgressIndicator(),
-                          ),
+                        const Padding(
+                          padding: EdgeInsets.all(24),
+                          child: Center(child: CircularProgressIndicator()),
                         )
                       else if (_slots.isEmpty)
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Text(
                             context.l10n.noSlotsAvailableOnThisDay,
-                            style: TextStyle(color: Colors.grey.shade600),
+                            style: WaUi.body.copyWith(
+                              color: BarqodyChrome.secondaryText,
+                            ),
                           ),
                         )
                       else
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: _slots.map((slot) {
-                            final selected = _selectedTime == slot.time;
-                            final enabled = slot.available;
-                            return ChoiceChip(
-                              label: Text(slot.time),
-                              selected: selected,
-                              onSelected: enabled
-                                  ? (val) => setState(
-                                        () => _selectedTime =
-                                            val ? slot.time : null,
-                                      )
-                                  : null,
-                              selectedColor: AppTheme.primaryBlack,
-                              labelStyle: TextStyle(
-                                color: selected
-                                    ? Colors.white
-                                    : enabled
-                                        ? Colors.black87
-                                        : Colors.grey,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              backgroundColor: isDark
-                                  ? Color(0xFF1E1E1E)
-                                  : Color(0xFFF5F5F5),
-                              disabledColor: Colors.grey.shade200,
-                            );
-                          }).toList(),
+                        _TimeSlotGrid(
+                          slots: _slots,
+                          selectedTime: _selectedTime,
+                          onSelect: (time) =>
+                              setState(() => _selectedTime = time),
                         ),
-                      SizedBox(height: 20),
-                      Text(context.l10n.notesOptional,
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(height: 8),
-                      TextField(
-                        controller: _notesCtrl,
-                        maxLines: 2,
-                        decoration: WaUi.fieldDecoration(
-                          hintText: context.l10n.anySpecialRequests,
-                          radius: 12,
-                        ),
-                      ),
                     ],
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(20, 8, 20, 16),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    onPressed: _isBooking || _selectedTime == null ? null : _book,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryBlack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: PillButton(
+                        label: 'Later',
+                        filled: false,
+                        onPressed: () => _popResult(bookNow: false),
                       ),
                     ),
-                    child: _isBooking
-                        ? SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : Text(context.l10n.confirmBooking,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                            ),
-                          ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: PillButton(
+                        label: 'Book Now',
+                        enabled: _selectedTime != null,
+                        onPressed: () => _popResult(bookNow: true),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TimeSlotGrid extends StatelessWidget {
+  final List<TimeSlot> slots;
+  final String? selectedTime;
+  final ValueChanged<String> onSelect;
+
+  const _TimeSlotGrid({
+    required this.slots,
+    required this.selectedTime,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const gap = 10.0;
+        final tileW = (constraints.maxWidth - gap) / 2;
+        return Wrap(
+          spacing: gap,
+          runSpacing: gap,
+          children: slots.map((slot) {
+            final selected = selectedTime == slot.time;
+            final enabled = slot.available;
+            return SizedBox(
+              width: tileW,
+              child: _TimeSlotTile(
+                time: slot.time,
+                selected: selected,
+                enabled: enabled,
+                onTap: enabled ? () => onSelect(slot.time) : null,
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+}
+
+class _TimeSlotTile extends StatelessWidget {
+  final String time;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback? onTap;
+
+  const _TimeSlotTile({
+    required this.time,
+    required this.selected,
+    required this.enabled,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bg = !enabled
+        ? BarqodyChrome.fieldFill
+        : selected
+            ? Colors.black
+            : Colors.white;
+    final fg = !enabled
+        ? BarqodyChrome.secondaryText
+        : selected
+            ? Colors.white
+            : Colors.black;
+
+    return Material(
+      color: bg,
+      elevation: enabled && !selected ? 1 : 0,
+      shadowColor: Colors.black.withValues(alpha: 0.08),
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: enabled && !selected
+                ? Border.all(color: BarqodyChrome.divider)
+                : null,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  time,
+                  style: WaUi.body.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: fg,
                   ),
                 ),
+              ),
+              Icon(
+                selected ? Icons.check_box_rounded : Icons.check_box_outline_blank,
+                size: 20,
+                color: !enabled
+                    ? BarqodyChrome.secondaryText.withValues(alpha: 0.5)
+                    : fg,
               ),
             ],
           ),

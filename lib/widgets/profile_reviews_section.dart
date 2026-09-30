@@ -1,15 +1,18 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/models/business_review.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/repository/review_repo.dart';
+import 'package:tapni_app/screens/reviews_list_screen.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/profile_empty_state.dart';
-import 'package:tapni_app/widgets/wa_primary_button.dart';
+import 'package:tapni_app/widgets/review_ui.dart';
+
+export 'package:tapni_app/widgets/review_ui.dart'
+    show WriteReviewResult, showWriteReviewSheet;
 
 class ProfileReviewsSection extends StatefulWidget {
   final UserProfile profile;
@@ -30,58 +33,23 @@ class ProfileReviewsSection extends StatefulWidget {
 class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
   final _repo = ReviewRepo();
   int _tabIndex = 0;
-  late final PageController _pageController;
 
   List<BusinessReview> _businessReviews = [];
   List<ItemReviewSummary> _itemSummaries = [];
   bool _loading = true;
   String? _error;
 
-  static const double _emptyHeight = 220;
-  static const double _reviewTileHeight = 120;
-  static const double _itemTileHeight = 72;
-  static const double _writeButtonHeight = 48;
+  static const int _previewLimit = 3;
+
+  bool get _showItemTab =>
+      _itemSummaries.isNotEmpty ||
+      (!widget.isOwnProfile && widget.catalogItems.isNotEmpty);
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
     if (Constants.reviewsEnabled) _load();
   }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void _selectTab(int index) {
-    final current = _pageController.hasClients
-        ? (_pageController.page ?? _tabIndex.toDouble())
-        : _tabIndex.toDouble();
-    if ((current - index).abs() < 0.01) return;
-    setState(() => _tabIndex = index);
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 280),
-      curve: Curves.easeOutCubic,
-    );
-  }
-
-  double _tabContentHeight(int tab) {
-    final writeBtn = widget.isOwnProfile ? 0.0 : _writeButtonHeight;
-    if (tab == 0) {
-      if (_businessReviews.isEmpty) return _emptyHeight;
-      return writeBtn +
-          _businessReviews.length * _reviewTileHeight +
-          16;
-    }
-    if (_itemSummaries.isEmpty) return _emptyHeight;
-    return writeBtn + _itemSummaries.length * _itemTileHeight + 16;
-  }
-
-  double _pageHeight() =>
-      math.max(_tabContentHeight(0), _tabContentHeight(1));
 
   Future<void> _load() async {
     final businessId = widget.profile.id;
@@ -111,13 +79,31 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
       return;
     }
 
+    final summaries = itemsRes.success
+        ? _repo.parseItemSummaries(itemsRes.data)
+        : <ItemReviewSummary>[];
+    final showItems = summaries.isNotEmpty ||
+        (!widget.isOwnProfile && widget.catalogItems.isNotEmpty);
+
     setState(() {
       _loading = false;
       _businessReviews = _repo.parseReviews(businessRes.data);
-      _itemSummaries = itemsRes.success
-          ? _repo.parseItemSummaries(itemsRes.data)
-          : [];
+      _itemSummaries = summaries;
+      if (!showItems) _tabIndex = 0;
     });
+  }
+
+  Future<void> _openReviewsList() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ReviewsListScreen(
+          profile: widget.profile,
+          isOwnProfile: widget.isOwnProfile,
+          catalogItems: widget.catalogItems,
+        ),
+      ),
+    );
+    if (mounted) _load();
   }
 
   Future<void> _writeBusinessReview() async {
@@ -194,20 +180,30 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
 
     final item = await showModalBottomSheet<CatalogItem>(
       context: context,
-      backgroundColor: WaUi.surface,
+      backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(WaUi.radiusLg)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(BarqodyChrome.sheetRadius),
+        ),
       ),
       builder: (ctx) {
         return SafeArea(
           child: ListView(
             shrinkWrap: true,
             children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(20, 12, 20, 8),
+                child: Center(child: SheetDragHandle()),
+              ),
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
                 child: Text(
                   'Select item or service',
-                  style: WaUi.headline.copyWith(fontWeight: FontWeight.w600),
+                  style: WaUi.toolsTitleOf(
+                    size: 17,
+                    weight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               ...widget.catalogItems.map(
@@ -255,219 +251,208 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
     if (res.success) _load();
   }
 
+  Future<void> _report(String id) async {
+    await _repo.reportReview(id);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Review reported')),
+    );
+  }
+
+  void _onPlus() {
+    HapticFeedback.selectionClick();
+    if (widget.isOwnProfile) {
+      _openReviewsList();
+      return;
+    }
+    if (_tabIndex == 0) {
+      _writeBusinessReview();
+    } else {
+      _writeNewItemReview();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!Constants.reviewsEnabled) return const SizedBox.shrink();
 
-    final avg = widget.profile.avgRating;
-    final count = widget.profile.reviewCount;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-          child: Row(
-            children: [
-              Text(
-                'Reviews',
-                style: WaUi.headline.copyWith(fontWeight: FontWeight.w700),
-              ),
-              const Spacer(),
-              if (count > 0) ...[
-                const Icon(Icons.star_rounded,
-                    size: 18, color: Color(0xFFF5A623)),
-                const SizedBox(width: 4),
-                Text(
-                  '${avg.toStringAsFixed(1)} ($count)',
-                  style: WaUi.bodyMedium,
-                ),
-              ] else
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF4F5F7),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'No ratings yet',
-                    style: WaUi.label.copyWith(
-                      color: WaUi.secondaryText,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _YourReviewsHeader(
+            onTitleTap: _openReviewsList,
+            onPlus: _onPlus,
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: AnimatedBuilder(
-            animation: _pageController,
-            builder: (context, _) {
-              final page = _pageController.hasClients
-                  ? (_pageController.page ?? _tabIndex.toDouble())
-                  : _tabIndex.toDouble();
-              return _ReviewsSegmentedTabs(
-                position: page.clamp(0.0, 1.0),
-                onChanged: _selectTab,
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 4),
-        if (_loading)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 40),
-            child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
-          )
-        else if (_error != null)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-            child: Center(
-              child: Text(
-                _error!,
-                textAlign: TextAlign.center,
-                style: WaUi.body.copyWith(color: WaUi.secondaryText),
-              ),
-            ),
-          )
-        else
-          SizedBox(
-            height: _pageHeight(),
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (i) {
-                if (_tabIndex == i) return;
+          if (_showItemTab) ...[
+            const SizedBox(height: 14),
+            _ReviewsSegmentedTabs(
+              selected: _tabIndex,
+              onChanged: (i) {
+                HapticFeedback.selectionClick();
                 setState(() => _tabIndex = i);
               },
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: _BusinessReviewsTab(
-                    reviews: _businessReviews,
-                    isOwnProfile: widget.isOwnProfile,
-                    onWrite: _writeBusinessReview,
-                    onReport: (id) async {
-                      await _repo.reportReview(id);
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Review reported')),
-                      );
-                    },
-                  ),
+            ),
+          ],
+          const SizedBox(height: 14),
+          if (_loading)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+            )
+          else if (_error != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 28),
+              child: Center(
+                child: Text(
+                  _error!,
+                  textAlign: TextAlign.center,
+                  style: WaUi.body.copyWith(color: BarqodyChrome.secondaryText),
                 ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: _ItemReviewsTab(
-                    summaries: _itemSummaries,
-                    isOwnProfile: widget.isOwnProfile,
-                    onWriteSummary: _writeItemReview,
-                    onWriteNew: _writeNewItemReview,
-                  ),
-                ),
-              ],
+              ),
+            )
+          else if (_tabIndex == 0)
+            _BusinessReviewsBody(
+              reviews: _businessReviews,
+              previewLimit: _previewLimit,
+              isOwnProfile: widget.isOwnProfile,
+              onWrite: _writeBusinessReview,
+              onReport: _report,
+              onSeeAll: _businessReviews.length > _previewLimit
+                  ? _openReviewsList
+                  : null,
+            )
+          else
+            _ItemReviewsBody(
+              summaries: _itemSummaries,
+              isOwnProfile: widget.isOwnProfile,
+              onWriteSummary: _writeItemReview,
+              onWriteNew: _writeNewItemReview,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _YourReviewsHeader extends StatelessWidget {
+  final VoidCallback onTitleTap;
+  final VoidCallback onPlus;
+
+  const _YourReviewsHeader({
+    required this.onTitleTap,
+    required this.onPlus,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: onTitleTap,
+          behavior: HitTestBehavior.opaque,
+          child: Text(
+            'Your Reviews',
+            style: WaUi.toolsTitleOf(
+              size: 17,
+              weight: FontWeight.w700,
+              color: Colors.black,
+              height: 1.1,
             ),
           ),
-        const SizedBox(height: 8),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Container(
+            height: 1,
+            color: const Color(0xFFE8E8E8),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Material(
+          color: Colors.transparent,
+          shape: const CircleBorder(),
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: onPlus,
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: const Color(0xFFD1D1D6),
+                  width: 1.2,
+                ),
+              ),
+              child: Center(
+                child: Image.asset(
+                  'assets/images/png/plus-icon.png',
+                  width: 12,
+                  height: 12,
+                  color: Colors.black,
+                  errorBuilder: (_, __, ___) => const Icon(
+                    Icons.add,
+                    size: 16,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 }
 
 class _ReviewsSegmentedTabs extends StatelessWidget {
-  final double position;
+  final int selected;
   final ValueChanged<int> onChanged;
 
   const _ReviewsSegmentedTabs({
-    required this.position,
+    required this.selected,
     required this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
-    final t = position.clamp(0.0, 1.0);
-    final selected = t < 0.5 ? 0 : 1;
-
     return Container(
-      height: 44,
-      padding: const EdgeInsets.all(4),
+      height: 40,
+      padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: Colors.black.withOpacity(0.04),
-          width: 1,
-        ),
+        color: const Color(0xFFF2F2F7),
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final tabWidth = (constraints.maxWidth - 4) / 2;
-          return Stack(
-            children: [
-              Align(
-                alignment: Alignment.lerp(
-                  Alignment.centerLeft,
-                  Alignment.centerRight,
-                  t,
-                )!,
-                child: SizedBox(
-                  width: tabWidth,
-                  height: double.infinity,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.07),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: _ReviewSegTab(
-                      selected: selected == 0,
-                      label: 'Business',
-                      onTap: () {
-                        HapticFeedback.selectionClick();
-                        onChanged(0);
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: _ReviewSegTab(
-                      selected: selected == 1,
-                      label: 'Items / Services',
-                      onTap: () {
-                        HapticFeedback.selectionClick();
-                        onChanged(1);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
+      child: Row(
+        children: [
+          Expanded(
+            child: _SegTab(
+              selected: selected == 0,
+              label: 'Business',
+              onTap: () => onChanged(0),
+            ),
+          ),
+          Expanded(
+            child: _SegTab(
+              selected: selected == 1,
+              label: 'Items / Services',
+              onTap: () => onChanged(1),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _ReviewSegTab extends StatelessWidget {
+class _SegTab extends StatelessWidget {
   final bool selected;
   final String label;
   final VoidCallback onTap;
 
-  const _ReviewSegTab({
+  const _SegTab({
     required this.selected,
     required this.label,
     required this.onTap,
@@ -478,16 +463,29 @@ class _ReviewSegTab extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      child: Center(
-        child: DefaultTextStyle(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: selected ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(17),
+          boxShadow: selected
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 6,
+                    offset: const Offset(0, 1),
+                  ),
+                ]
+              : null,
+        ),
+        child: Text(
+          label,
           style: TextStyle(
-            fontSize: 13,
+            fontSize: 12.5,
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-            color: selected ? const Color(0xFF0F172A) : const Color(0xFF64748B),
-          ),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
+            color: selected ? Colors.black : BarqodyChrome.secondaryText,
           ),
         ),
       ),
@@ -495,17 +493,21 @@ class _ReviewSegTab extends StatelessWidget {
   }
 }
 
-class _BusinessReviewsTab extends StatelessWidget {
+class _BusinessReviewsBody extends StatelessWidget {
   final List<BusinessReview> reviews;
+  final int previewLimit;
   final bool isOwnProfile;
   final VoidCallback onWrite;
   final ValueChanged<String> onReport;
+  final VoidCallback? onSeeAll;
 
-  const _BusinessReviewsTab({
+  const _BusinessReviewsBody({
     required this.reviews,
+    required this.previewLimit,
     required this.isOwnProfile,
     required this.onWrite,
     required this.onReport,
+    this.onSeeAll,
   });
 
   @override
@@ -519,57 +521,51 @@ class _BusinessReviewsTab extends StatelessWidget {
             : 'Be the first to share your experience.',
         action: isOwnProfile
             ? null
-            : TextButton.icon(
+            : TextButton(
                 onPressed: onWrite,
-                icon: const Icon(Icons.rate_review_outlined, size: 18),
-                label: const Text('Write a review'),
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.black,
-                ),
+                style: TextButton.styleFrom(foregroundColor: Colors.black),
+                child: const Text('Write a review'),
               ),
       );
     }
 
+    final preview = reviews.take(previewLimit).toList();
+
     return Column(
       children: [
-        if (!isOwnProfile)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: onWrite,
-                icon: const Icon(Icons.rate_review_outlined, size: 18),
-                label: const Text('Write a review'),
+        ...preview.map(
+          (review) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: BarqodyReviewCard(
+              review: review,
+              onDelete: () => onReport(review.id),
+            ),
+          ),
+        ),
+        if (onSeeAll != null)
+          TextButton(
+            onPressed: onSeeAll,
+            style: TextButton.styleFrom(foregroundColor: Colors.black),
+            child: Text(
+              'See all ${reviews.length} reviews',
+              style: WaUi.body.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
               ),
             ),
           ),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          itemCount: reviews.length,
-          separatorBuilder: (_, __) => const Divider(height: 20),
-          itemBuilder: (context, index) {
-            final review = reviews[index];
-            return _ReviewTile(
-              review: review,
-              onReport: () => onReport(review.id),
-            );
-          },
-        ),
       ],
     );
   }
 }
 
-class _ItemReviewsTab extends StatelessWidget {
+class _ItemReviewsBody extends StatelessWidget {
   final List<ItemReviewSummary> summaries;
   final bool isOwnProfile;
   final ValueChanged<ItemReviewSummary> onWriteSummary;
   final VoidCallback onWriteNew;
 
-  const _ItemReviewsTab({
+  const _ItemReviewsBody({
     required this.summaries,
     required this.isOwnProfile,
     required this.onWriteSummary,
@@ -587,13 +583,10 @@ class _ItemReviewsTab extends StatelessWidget {
             : 'Review an item or service you have used.',
         action: isOwnProfile
             ? null
-            : TextButton.icon(
+            : TextButton(
                 onPressed: onWriteNew,
-                icon: const Icon(Icons.rate_review_outlined, size: 18),
-                label: const Text('Review an item'),
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.black,
-                ),
+                style: TextButton.styleFrom(foregroundColor: Colors.black),
+                child: const Text('Review an item'),
               ),
       );
     }
@@ -601,231 +594,67 @@ class _ItemReviewsTab extends StatelessWidget {
     return Column(
       children: [
         if (!isOwnProfile)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: onWriteNew,
-                icon: const Icon(Icons.rate_review_outlined, size: 18),
-                label: const Text('Review an item'),
-              ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              onPressed: onWriteNew,
+              style: TextButton.styleFrom(foregroundColor: Colors.black),
+              child: const Text('Review an item'),
             ),
           ),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          itemCount: summaries.length,
-          separatorBuilder: (_, __) => const Divider(height: 16),
-          itemBuilder: (context, index) {
-            final summary = summaries[index];
-            return ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                summary.targetLabel.isEmpty ? 'Item' : summary.targetLabel,
-                style: WaUi.bodyMedium,
-              ),
-              subtitle: Text(
-                '${summary.avgRating.toStringAsFixed(1)} · ${summary.reviewCount} reviews',
-                style: WaUi.label.copyWith(color: WaUi.secondaryText),
-              ),
-              trailing: isOwnProfile
-                  ? null
-                  : IconButton(
-                      icon: const Icon(Icons.edit_outlined),
-                      onPressed: () => onWriteSummary(summary),
-                    ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class _ReviewTile extends StatelessWidget {
-  final BusinessReview review;
-  final VoidCallback onReport;
-
-  const _ReviewTile({required this.review, required this.onReport});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundImage: review.reviewerPhoto != null &&
-                      review.reviewerPhoto!.isNotEmpty
-                  ? NetworkImage(review.reviewerPhoto!)
-                  : null,
-              child: review.reviewerPhoto == null ||
-                      review.reviewerPhoto!.isEmpty
-                  ? Text(
-                      review.reviewerName.isNotEmpty
-                          ? review.reviewerName[0].toUpperCase()
-                          : '?',
-                    )
-                  : null,
+        ...summaries.map((summary) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.fromLTRB(16, 14, 10, 14),
+            decoration: BoxDecoration(
+              color: ReviewUi.cardBg,
+              borderRadius: BorderRadius.circular(ReviewUi.cardRadius),
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    review.reviewerName.isNotEmpty
-                        ? review.reviewerName
-                        : '@${review.reviewerUsername}',
-                    style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w600),
-                  ),
-                  Row(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...List.generate(
-                        5,
-                        (i) => Icon(
-                          i < review.rating
-                              ? Icons.star_rounded
-                              : Icons.star_border_rounded,
-                          size: 14,
-                          color: const Color(0xFFF5A623),
+                      Text(
+                        summary.targetLabel.isEmpty
+                            ? 'Item'
+                            : summary.targetLabel,
+                        style: WaUi.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
                         ),
                       ),
-                      if (review.verified) ...[
-                        const SizedBox(width: 6),
-                        Text(
-                          'Verified',
-                          style: WaUi.label.copyWith(color: WaUi.accent),
-                        ),
-                      ],
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star_rounded,
+                            size: 14,
+                            color: ReviewUi.starActive,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${summary.avgRating.toStringAsFixed(1)} · ${summary.reviewCount} reviews',
+                            style: WaUi.label.copyWith(
+                              color: BarqodyChrome.secondaryText,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            PopupMenuButton<String>(
-              onSelected: (v) {
-                if (v == 'report') onReport();
-              },
-              itemBuilder: (_) => const [
-                PopupMenuItem(value: 'report', child: Text('Report')),
+                ),
+                if (!isOwnProfile)
+                  IconButton(
+                    icon: const Icon(Icons.edit_outlined, size: 20),
+                    onPressed: () => onWriteSummary(summary),
+                  ),
               ],
             ),
-          ],
-        ),
-        if (review.text.isNotEmpty) ...[
-          const SizedBox(height: 8),
-          Text(review.text, style: WaUi.body),
-        ],
+          );
+        }),
       ],
-    );
-  }
-}
-
-class WriteReviewResult {
-  final int rating;
-  final String text;
-  const WriteReviewResult({required this.rating, required this.text});
-}
-
-Future<WriteReviewResult?> showWriteReviewSheet(
-  BuildContext context, {
-  required String title,
-}) {
-  return showModalBottomSheet<WriteReviewResult>(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: WaUi.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(WaUi.radiusLg)),
-    ),
-    builder: (ctx) => _WriteReviewSheet(title: title),
-  );
-}
-
-class _WriteReviewSheet extends StatefulWidget {
-  final String title;
-  const _WriteReviewSheet({required this.title});
-
-  @override
-  State<_WriteReviewSheet> createState() => _WriteReviewSheetState();
-}
-
-class _WriteReviewSheetState extends State<_WriteReviewSheet> {
-  int _rating = 5;
-  final _textController = TextEditingController();
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
-    return Padding(
-      padding: EdgeInsets.fromLTRB(20, 16, 20, 20 + bottom),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.title,
-            style: WaUi.headline.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Only customers with a completed order or loyalty card can review.',
-            style: WaUi.label.copyWith(color: WaUi.secondaryText),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: List.generate(5, (i) {
-              final star = i + 1;
-              return IconButton(
-                onPressed: () => setState(() => _rating = star),
-                icon: Icon(
-                  star <= _rating
-                      ? Icons.star_rounded
-                      : Icons.star_border_rounded,
-                  color: const Color(0xFFF5A623),
-                ),
-              );
-            }),
-          ),
-          TextField(
-            controller: _textController,
-            maxLines: 4,
-            maxLength: 1000,
-            decoration: InputDecoration(
-              hintText: 'Share your experience',
-              filled: true,
-              fillColor: WaUi.fieldFill,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(WaUi.radiusMd),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          WaPrimaryButton(
-            label: 'Submit review',
-            onPressed: () {
-              Navigator.pop(
-                context,
-                WriteReviewResult(
-                  rating: _rating,
-                  text: _textController.text.trim(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
     );
   }
 }
