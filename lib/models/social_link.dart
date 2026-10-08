@@ -37,12 +37,15 @@ class LinkEntry {
   final String name;
   final String value;
   final String? logo;
+  /// Per-entry visibility on the public profile (independent of siblings).
+  final bool isPublic;
 
   const LinkEntry({
     required this.id,
     required this.name,
     required this.value,
     this.logo,
+    this.isPublic = true,
   });
 
   LinkEntry copyWith({
@@ -50,12 +53,14 @@ class LinkEntry {
     String? name,
     String? value,
     String? logo,
+    bool? isPublic,
   }) {
     return LinkEntry(
       id: id ?? this.id,
       name: name ?? this.name,
       value: value ?? this.value,
       logo: logo ?? this.logo,
+      isPublic: isPublic ?? this.isPublic,
     );
   }
 
@@ -66,6 +71,7 @@ class LinkEntry {
       'name': name,
       'value': value,
       if (logo != null && logo!.isNotEmpty) 'logo': logo,
+      'isPublic': isPublic,
     };
   }
 
@@ -82,6 +88,7 @@ class LinkEntry {
       name: name,
       value: json['value']?.toString() ?? '',
       logo: json['logo']?.toString(),
+      isPublic: json['isPublic'] as bool? ?? true,
     );
   }
 }
@@ -197,9 +204,14 @@ class SocialLink {
         name: platformName,
         value: value,
         logo: logoUrl,
+        isPublic: isPublic,
       ),
     ];
   }
+
+  /// Public-profile entries only (per-entry [LinkEntry.isPublic]).
+  List<LinkEntry> get publicEntries =>
+      effectiveEntries.where((e) => e.isPublic).toList();
 
   // ─── API mapping ─────────────────────────────────────────────────────────────
 

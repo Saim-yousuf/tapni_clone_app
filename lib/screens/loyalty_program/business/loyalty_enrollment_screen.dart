@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/loyalty_program/business/customer_detail_screen.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 class LoyaltyEnrollmentScreen extends StatelessWidget {
   LoyaltyEnrollmentScreen({super.key});
 
@@ -98,19 +99,21 @@ class LoyaltyEnrollmentScreen extends StatelessWidget {
 
             SizedBox(
               width: double.infinity,
-              height: 56,
+              height: WaUi.primaryButtonHeight,
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
+                  shape: const StadiumBorder(),
                 ),
-                child: Text(context.l10n.enrollCustomer,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                child: Text(
+                  context.l10n.enrollCustomer,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),

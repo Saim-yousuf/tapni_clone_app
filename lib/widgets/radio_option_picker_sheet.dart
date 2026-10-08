@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 class RadioPickerOption {
@@ -170,16 +171,7 @@ class _RadioOptionPickerSheetState extends State<RadioOptionPickerSheet> {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: isDark && widget.sheetColor == null
-                    ? Colors.white24
-                    : const Color(0xFFD0D0D0),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
+            const SheetDragHandle(),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: TextField(

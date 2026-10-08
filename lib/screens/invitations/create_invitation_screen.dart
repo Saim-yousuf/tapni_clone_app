@@ -206,18 +206,22 @@ class _CreateInvitationScreenState extends State<CreateInvitationScreen> {
             _BottomBar(
               child: SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: WaUi.primaryButtonHeight,
                 child: ElevatedButton(
                   onPressed: _continue,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: WaUi.buttonDark,
                     foregroundColor: Colors.white,
                     elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    shape: const StadiumBorder(),
+                  ),
+                  child: Text(
+                    context.l10n.nextCustomizeCard,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  child: Text(context.l10n.nextCustomizeCard),
                 ),
               ),
             ),

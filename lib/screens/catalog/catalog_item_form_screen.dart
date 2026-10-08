@@ -172,16 +172,9 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Center(child: SheetDragHandle()),
-              const SizedBox(height: 16),
-              Text(
-                'Add Category',
-                textAlign: TextAlign.center,
-                style: WaUi.toolsTitleOf(
-                  size: 18,
-                  weight: FontWeight.w700,
-                  color: Colors.black,
-                ),
+              SheetHeader(
+                title: 'Add Category',
+                onBack: () => Navigator.pop(ctx),
               ),
               const SizedBox(height: 20),
               const _FieldLabel('CATEGORY NAME'),

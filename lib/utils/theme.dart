@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/utils/app_fonts.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/app_ui.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
@@ -100,6 +101,7 @@ class AppTheme {
       scaffoldBackgroundColor: secondaryWhite,
       cardColor: secondaryWhite,
       fontFamily: AppFonts.fontFamily,
+      pageTransitionsTheme: kAppPageTransitionsTheme,
       colorScheme: const ColorScheme.light(
         primary: primaryBlack,
         secondary: primaryBlack,
@@ -215,12 +217,13 @@ class AppTheme {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           minimumSize: const Size(64, WaUi.primaryButtonHeight),
           maximumSize: const Size(double.infinity, WaUi.primaryButtonHeight),
+          fixedSize: const Size.fromHeight(WaUi.primaryButtonHeight),
           elevation: 0,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
             fontSize: AppUi.fontBodyLg,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             height: 1.0,
           ),
         ),
@@ -228,16 +231,17 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: primaryBlack,
-          side: const BorderSide(color: primaryBlack),
+          side: const BorderSide(color: primaryBlack, width: 1.5),
           shape: const StadiumBorder(),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           minimumSize: const Size(64, WaUi.primaryButtonHeight),
           maximumSize: const Size(double.infinity, WaUi.primaryButtonHeight),
+          fixedSize: const Size.fromHeight(WaUi.primaryButtonHeight),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
             fontSize: AppUi.fontBodyLg,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             height: 1.0,
           ),
         ),
@@ -250,12 +254,13 @@ class AppTheme {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           minimumSize: const Size(64, WaUi.primaryButtonHeight),
           maximumSize: const Size(double.infinity, WaUi.primaryButtonHeight),
+          fixedSize: const Size.fromHeight(WaUi.primaryButtonHeight),
           elevation: 0,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
             fontSize: AppUi.fontBodyLg,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             height: 1.0,
           ),
         ),
@@ -297,6 +302,7 @@ class AppTheme {
       brightness: Brightness.dark,
       primaryColor: secondaryWhite,
       scaffoldBackgroundColor: primaryBlack,
+      pageTransitionsTheme: kAppPageTransitionsTheme,
       cardColor: primaryBlack,
       fontFamily: AppFonts.fontFamily,
       colorScheme: const ColorScheme.dark(
@@ -414,12 +420,13 @@ class AppTheme {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           minimumSize: const Size(64, WaUi.primaryButtonHeight),
           maximumSize: const Size(double.infinity, WaUi.primaryButtonHeight),
+          fixedSize: const Size.fromHeight(WaUi.primaryButtonHeight),
           elevation: 0,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
             fontSize: AppUi.fontBodyLg,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             height: 1.0,
           ),
         ),
@@ -427,16 +434,17 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: secondaryWhite,
-          side: const BorderSide(color: secondaryWhite),
+          side: const BorderSide(color: secondaryWhite, width: 1.5),
           shape: const StadiumBorder(),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           minimumSize: const Size(64, WaUi.primaryButtonHeight),
           maximumSize: const Size(double.infinity, WaUi.primaryButtonHeight),
+          fixedSize: const Size.fromHeight(WaUi.primaryButtonHeight),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
             fontSize: AppUi.fontBodyLg,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             height: 1.0,
           ),
         ),
@@ -449,12 +457,13 @@ class AppTheme {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           minimumSize: const Size(64, WaUi.primaryButtonHeight),
           maximumSize: const Size(double.infinity, WaUi.primaryButtonHeight),
+          fixedSize: const Size.fromHeight(WaUi.primaryButtonHeight),
           elevation: 0,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           textStyle: AppFonts.textStyle(
             fontSize: AppUi.fontBodyLg,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             height: 1.0,
           ),
         ),

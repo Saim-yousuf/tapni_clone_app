@@ -6,10 +6,10 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/find_user_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
-import 'package:tapni_app/screens/invitations/invitations_home_screen.dart';
 import 'package:tapni_app/screens/contacts_search_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 import 'package:tapni_app/widgets/filter_contacts_sheet.dart';
 import 'package:tapni_app/widgets/wa_chats_widgets.dart';
@@ -71,6 +71,31 @@ class _LeadsScreenState extends State<LeadsScreen> {
     ).push(MaterialPageRoute(builder: (_) => FindUserScreen()));
   }
 
+  void _showAddContactOptions(
+    BuildContext context,
+    LeadsProvider provider,
+  ) {
+    _dismissKeyboard();
+    showDialog<void>(
+      context: context,
+      barrierColor: Colors.black54,
+      builder: (ctx) => _AddContactOptionsDialog(
+        onAddForm: () {
+          Navigator.of(ctx).pop();
+          _showAddLeadSheet(context, provider);
+        },
+        onFindUser: () {
+          Navigator.of(ctx).pop();
+          _openFindUser();
+        },
+        onScanQr: () {
+          Navigator.of(ctx).pop();
+          _openScan();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final leadsProvider = Provider.of<LeadsProvider>(context);
@@ -79,13 +104,6 @@ class _LeadsScreenState extends State<LeadsScreen> {
 
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 88, right: 20),
-        child: WaContactSpeedDial(
-          onAdd: () => _showAddLeadSheet(context, leadsProvider),
-          onFind: _openFindUser,
-        ),
-      ),
       body: GestureDetector(
         onTap: _dismissKeyboard,
         behavior: HitTestBehavior.translucent,
@@ -96,17 +114,11 @@ class _LeadsScreenState extends State<LeadsScreen> {
               WaChatsHeader(
                 title: context.l10n.contacts,
                 actions: [
-                  IconButton(
-                    icon: const Icon(Icons.photo_camera_outlined, size: 24),
-                    color: WaUi.primaryText,
-                    tooltip: context.l10n.scan,
-                    onPressed: _openScan,
-                  ),
                   PopupMenuButton<String>(
                     icon: const Icon(
                       Icons.more_vert,
                       size: 24,
-                      color: WaUi.primaryText,
+                      color: Colors.black,
                     ),
                     color: WaUi.surface,
                     shape: RoundedRectangleBorder(
@@ -115,20 +127,6 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     onSelected: (value) =>
                         _onMenuAction(context, value, leadsProvider),
                     itemBuilder: (_) => [
-                      PopupMenuItem(
-                        value: 'invitations',
-                        child: Text(
-                          context.l10n.invitations,
-                          style: WaUi.body,
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 'find',
-                        child: Text(
-                          context.l10n.findUsername,
-                          style: WaUi.body,
-                        ),
-                      ),
                       PopupMenuItem(
                         value: 'filter',
                         child: Text(
@@ -151,7 +149,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                 child: leadsProvider.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : RefreshIndicator(
-                        color: WaUi.accent,
+                        color: Colors.black,
                         onRefresh: _refreshContacts,
                         child: CustomScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),
@@ -162,6 +160,12 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                 focusNode: _searchFocus,
                                 hintText: 'Search contact',
                                 readOnly: true,
+                                padding: const EdgeInsets.fromLTRB(
+                                  25,
+                                  10,
+                                  25,
+                                  12,
+                                ),
                                 onTap: () {
                                   _dismissKeyboard();
                                   Navigator.of(context).push(
@@ -172,19 +176,21 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                   );
                                 },
                                 trailing: Material(
-                                  color: WaUi.buttonDark,
+                                  color: Colors.black,
                                   shape: const CircleBorder(),
                                   child: InkWell(
                                     customBorder: const CircleBorder(),
-                                    onTap: () =>
-                                        _showAddLeadSheet(context, leadsProvider),
+                                    onTap: () => _showAddContactOptions(
+                                      context,
+                                      leadsProvider,
+                                    ),
                                     child: const SizedBox(
-                                      width: 34,
-                                      height: 34,
+                                      width: 42,
+                                      height: 42,
                                       child: Icon(
                                         Icons.add,
                                         color: Colors.white,
-                                        size: 20,
+                                        size: 24,
                                       ),
                                     ),
                                   ),
@@ -217,7 +223,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                 child: WaContactEmptyState(
                                   isSearching: isFiltering,
                                   onScan: _openScan,
-                                  onAdd: () => _showAddLeadSheet(
+                                  onAdd: () => _showAddContactOptions(
                                     context,
                                     leadsProvider,
                                   ),
@@ -257,15 +263,6 @@ class _LeadsScreenState extends State<LeadsScreen> {
     LeadsProvider provider,
   ) {
     switch (value) {
-      case 'invitations':
-        _dismissKeyboard();
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const InvitationsHomeScreen()),
-        );
-        break;
-      case 'find':
-        _openFindUser();
-        break;
       case 'filter':
         showModalBottomSheet(
           context: context,
@@ -297,19 +294,11 @@ class _LeadsScreenState extends State<LeadsScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Container(
-                    width: 36,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: WaUi.divider,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
+                SheetHeader(
+                  title: ctx.l10n.categories,
+                  onBack: () => Navigator.pop(ctx),
                 ),
-                SizedBox(height: 16),
-                Text(ctx.l10n.categories, style: WaUi.sectionHeader),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -462,26 +451,11 @@ class _LeadsScreenState extends State<LeadsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Handle bar
-                    Center(
-                      child: Container(
-                        width: 40,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: isDark ? Colors.white24 : Colors.black12,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
+                    SheetHeader(
+                      title: ctx.l10n.captureNewContact,
+                      onBack: () => Navigator.pop(ctx),
                     ),
-                    SizedBox(height: 20),
-                    Text(
-                      ctx.l10n.captureNewContact,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
                       ctx.l10n.enterNetworkingContactDetailsBelow,
                       style: TextStyle(fontSize: 12, color: Colors.grey),
@@ -682,65 +656,45 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Handle bar
-                      Center(
-                        child: Container(
-                          width: 40,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: isDark ? Colors.white24 : Colors.black12,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-
-                      // Title row
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            ctx.l10n.manageContact,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          if (!isEditing)
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? Colors.white10
-                                    : Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.lock_outline,
-                                    size: 12,
-                                    color: isDark
-                                        ? Colors.white38
-                                        : Colors.grey,
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    ctx.l10n.readOnly2,
-                                    style: TextStyle(
-                                      fontSize: 11,
+                      SheetHeader(
+                        title: ctx.l10n.manageContact,
+                        onBack: () => Navigator.pop(ctx),
+                        trailing: !isEditing
+                            ? Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isDark
+                                      ? Colors.white10
+                                      : Colors.grey.shade100,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.lock_outline,
+                                      size: 12,
                                       color: isDark
                                           ? Colors.white38
                                           : Colors.grey,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                        ],
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      ctx.l10n.readOnly2,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: isDark
+                                            ? Colors.white38
+                                            : Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : null,
                       ),
 
                       // Categories chips
@@ -860,8 +814,8 @@ class _LeadsScreenState extends State<LeadsScreen> {
                             GestureDetector(
                               onTap: () => Navigator.of(ctx).pop(),
                               child: Container(
-                                width: 48,
-                                height: 52,
+                                width: WaUi.primaryButtonHeight,
+                                height: WaUi.primaryButtonHeight,
                                 decoration: BoxDecoration(
                                   color: isDark
                                       ? Colors.white12
@@ -884,10 +838,12 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                   setSheetState(() => isEditing = true);
                                 },
                                 child: Container(
-                                  height: 52,
+                                  height: WaUi.primaryButtonHeight,
                                   decoration: BoxDecoration(
                                     color: Colors.black,
-                                    borderRadius: BorderRadius.circular(14),
+                                    borderRadius: BorderRadius.circular(
+                                      WaUi.primaryButtonHeight / 2,
+                                    ),
                                   ),
                                   child: Center(
                                     child: Row(
@@ -904,7 +860,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 16,
-                                            fontWeight: FontWeight.w600,
+                                            fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                       ],
@@ -934,8 +890,8 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                 setSheetState(() => isEditing = false);
                               },
                               child: Container(
-                                width: 48,
-                                height: 52,
+                                width: WaUi.primaryButtonHeight,
+                                height: WaUi.primaryButtonHeight,
                                 decoration: BoxDecoration(
                                   color: isDark
                                       ? Colors.white12
@@ -1035,12 +991,14 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                         }
                                       },
                                 child: Container(
-                                  height: 52,
+                                  height: WaUi.primaryButtonHeight,
                                   decoration: BoxDecoration(
                                     color: isSaving
                                         ? Colors.black54
                                         : Colors.black,
-                                    borderRadius: BorderRadius.circular(14),
+                                    borderRadius: BorderRadius.circular(
+                                      WaUi.primaryButtonHeight / 2,
+                                    ),
                                   ),
                                   child: Center(
                                     child: isSaving
@@ -1066,7 +1024,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
+                                                  fontWeight: FontWeight.w700,
                                                 ),
                                               ),
                                             ],
@@ -1304,13 +1262,17 @@ class _LeadsScreenState extends State<LeadsScreen> {
   }
 
   String _contactPreview(Lead lead) {
+    final username = lead.displayUsername;
+    if (username.isNotEmpty) {
+      return username.startsWith('@') ? username : '@$username';
+    }
+    if (lead.displayPhone.trim().isNotEmpty) return lead.displayPhone.trim();
     if (lead.note.trim().isNotEmpty) return lead.note.trim();
     final company = lead.displayCompany.trim();
     final job = lead.displayJobTitle.trim();
     if (job.isNotEmpty && company.isNotEmpty) return '$job · $company';
     if (company.isNotEmpty) return company;
     if (lead.displayEmail.trim().isNotEmpty) return lead.displayEmail.trim();
-    if (lead.displayPhone.trim().isNotEmpty) return lead.displayPhone.trim();
     return lead.isScannedContact
         ? context.l10n.scannedViaQR
         : context.l10n.noDetailsYet;
@@ -1372,16 +1334,15 @@ class _LeadsScreenState extends State<LeadsScreen> {
       child: WaChatListTile(
         name: displayName,
         preview: _contactPreview(lead),
-        date: waFormatContactDate(lead.timestamp, context),
+        date: '',
         imageUrl: photoUrl,
         initial: displayName,
         avatarColor: waAvatarColorFor(displayName),
-        categoryColor: lead.category != null
-            ? _parseColor(lead.category!.color)
-            : null,
+        categoryColor: null,
         highlightDate: false,
-        previewIcon: _previewIcon(lead),
-        showDivider: false,
+        previewIcon: null,
+        verified: lead.isScannedContact,
+        showDivider: true,
         onTap: () {
           if (lead.contactUser != null) {
             Navigator.of(context).push(
@@ -1432,6 +1393,172 @@ class _LeadsScreenState extends State<LeadsScreen> {
                 const SizedBox(width: 8),
                 Icon(icon, color: Colors.white),
               ],
+      ),
+    );
+  }
+}
+
+class _AddContactOptionsDialog extends StatelessWidget {
+  const _AddContactOptionsDialog({
+    required this.onAddForm,
+    required this.onFindUser,
+    required this.onScanQr,
+  });
+
+  final VoidCallback onAddForm;
+  final VoidCallback onFindUser;
+  final VoidCallback onScanQr;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.white,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 22),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(BarqodyChrome.modalRadius),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 22),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    context.l10n.addContact,
+                    style: WaUi.toolsTitleOf(
+                      size: 20,
+                      weight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                CircleCloseButton(onTap: () => Navigator.of(context).pop()),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Choose how you want to add a contact.',
+              style: WaUi.body.copyWith(
+                fontSize: 14,
+                color: BarqodyChrome.bodyText,
+                height: 1.35,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: _AddContactOptionBox(
+                    label: 'Add Form',
+                    asset: 'assets/images/png/person-icon.png',
+                    fallbackIcon: Icons.person_add_alt_1_rounded,
+                    onTap: onAddForm,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _AddContactOptionBox(
+                    label: context.l10n.findUser2,
+                    asset: 'assets/images/png/search-icon.png',
+                    fallbackIcon: Icons.person_search_rounded,
+                    onTap: onFindUser,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _AddContactOptionBox(
+                    label: context.l10n.scanQR,
+                    asset: 'assets/images/png/qr-code-icon.png',
+                    fallbackIcon: Icons.qr_code_scanner_rounded,
+                    onTap: onScanQr,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AddContactOptionBox extends StatelessWidget {
+  const _AddContactOptionBox({
+    required this.label,
+    required this.asset,
+    required this.fallbackIcon,
+    required this.onTap,
+  });
+
+  final String label;
+  final String asset;
+  final IconData fallbackIcon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: const Color(0xFFF5F5F7),
+      borderRadius: BorderRadius.circular(18),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(10, 18, 10, 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: const Color(0xFFE8E8ED)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.06),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Image.asset(
+                    asset,
+                    width: 24,
+                    height: 24,
+                    color: Colors.black,
+                    errorBuilder: (_, __, ___) => Icon(
+                      fallbackIcon,
+                      size: 24,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: WaUi.body.copyWith(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
+                  height: 1.2,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

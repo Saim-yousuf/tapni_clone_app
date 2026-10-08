@@ -10,7 +10,6 @@ import 'package:tapni_app/screens/gallery_link_screen.dart';
 import 'package:tapni_app/widgets/bank_widgets.dart';
 import 'package:tapni_app/widgets/document_viewer.dart';
 import 'package:tapni_app/widgets/link_entries_sheet.dart';
-import 'package:tapni_app/widgets/loading_widget.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -91,17 +90,17 @@ class Launcher {
       return;
     }
     if (model.fieldType == "bank") {
-      CustomDialog.showDailog(
-        child: BlurredDialog(
-          child: BankDetailDialog(
-            bankDetails: {
-              "accountHolderName": "Saim Yousuf",
-              "iban": "PK43747374783747",
-              "accountNumber": "473747374737434",
-            },
-          ),
-        ),
-        context: context,
+      final details = model.bankDetails ?? const <String, String>{};
+      await BankDetailDialog.show(
+        context,
+        title: model.platformName,
+        bankDetails: {
+          'accountHolderName':
+              details['accountHolderName'] ?? details['holder'] ?? '',
+          'iban': details['iban'] ?? '',
+          'accountNumber':
+              details['accountNumber'] ?? details['account'] ?? '',
+        },
       );
       return;
     }
@@ -131,9 +130,22 @@ class Launcher {
       "link.entries=${link.entries?.length ?? 0} multi=${link.hasMultipleEntries}",
     );
 
-    if (link.hasMultipleEntries) {
-      await showLinkEntriesSheet(context: context, link: link);
+    final publicEntries = link.publicEntries;
+    if (publicEntries.length > 1) {
+      await showLinkEntriesSheet(
+        context: context,
+        link: link.copyWith(
+          entries: publicEntries,
+          value: publicEntries.first.value,
+        ),
+      );
       return;
+    }
+    if (publicEntries.length == 1) {
+      link = link.copyWith(
+        entries: publicEntries,
+        value: publicEntries.first.value,
+      );
     }
 
     final launchTarget = link.fullUrl;

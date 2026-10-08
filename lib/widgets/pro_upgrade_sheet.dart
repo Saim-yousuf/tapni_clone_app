@@ -16,7 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SubcriptionSheet {
   static void show(BuildContext context) {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -168,14 +168,14 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(BarqodyChrome.sheetRadius),
+            top: Radius.circular(40),
           ),
         ),
         padding: EdgeInsets.only(
           top: 10,
-          left: 20,
-          right: 20,
-          bottom: media.padding.bottom + 16,
+          left: 24,
+          right: 24,
+          bottom: media.padding.bottom + 20,
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -185,16 +185,8 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Handle
-                    Container(
-                      width: 44,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.white24 : Colors.black12,
-                        borderRadius: BorderRadius.circular(2.5),
-                      ),
-                    ),
-                    SizedBox(height: 32),
+                    const SheetDragHandle(),
+                    const SizedBox(height: 32),
 
                     // Big center icon
                     Container(
@@ -262,7 +254,6 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
                         ? _buildBusinessDetailsStep(isDark)
                         : _buildPlanSelectionStep(
                             isDark,
-                            theme,
                             subscriptionProvider,
                           ),
             ],
@@ -279,70 +270,75 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
   }
 
   Widget _buildIntroStep(bool isDark) {
-    final bodyColor = BarqodyChrome.bodyText;
+    const bodyColor = Color(0xFF6B7280);
+    const title = 'Upgrade Your Business';
+    const body =
+        'Do more with BarQody for Business, build trust with \na verified badge, and access other premium \nbenefits—all in one subscription.';
+
+    final linkStyle = WaUi.body.copyWith(
+      fontSize: 13,
+      fontWeight: FontWeight.w700,
+      color: Colors.black,
+      decoration: TextDecoration.underline,
+      decorationColor: Colors.black,
+      height: 1.4,
+    );
+    final legalStyle = WaUi.body.copyWith(
+      fontSize: 13,
+      height: 1.4,
+      fontWeight: FontWeight.w400,
+      color: bodyColor,
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            const SheetDragHandle(),
-            Align(
-              alignment: Alignment.centerRight,
-              child: CircleCloseButton(onTap: () => Navigator.pop(context)),
+        // Handle first — close and all content start after it.
+        SheetHandleThen(
+          topGap: 0,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: CircleCloseButton(
+              onTap: () => Navigator.pop(context),
             ),
-          ],
+          ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         Center(
           child: Image.asset(
-            'assets/images/png/premium-icon2.png',
+            'assets/images/png/star_badge.png',
             width: 120,
             height: 120,
             fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => Image.asset(
-              'assets/images/png/premium-icon.png',
-              width: 120,
-              height: 120,
-              errorBuilder: (_, __, ___) => const Icon(
-                Icons.workspace_premium_rounded,
-                size: 96,
-                color: Colors.black,
-              ),
-            ),
           ),
         ),
         const SizedBox(height: 22),
         Text(
-          context.l10n.upgradeYourBusiness,
+          title,
           textAlign: TextAlign.center,
           style: WaUi.toolsTitleOf(
-            size: 24,
-            weight: FontWeight.w800,
+            size: 22,
+            weight: FontWeight.w700,
             color: Colors.black,
-            height: 1.15,
+            height: 1.2,
           ),
         ),
         const SizedBox(height: 12),
         Text(
-          context.l10n.businessProIntroBody,
+          body,
           textAlign: TextAlign.center,
           style: WaUi.body.copyWith(
             fontSize: 15,
             height: 1.45,
+            fontWeight: FontWeight.w400,
             color: bodyColor,
           ),
         ),
         const SizedBox(height: 28),
         Text.rich(
           TextSpan(
-            style: WaUi.body.copyWith(
-              fontSize: 13,
-              height: 1.4,
-              color: bodyColor,
-            ),
+            style: legalStyle,
             children: [
               TextSpan(text: '${context.l10n.byContinuingYouAgreeTo} '),
               WidgetSpan(
@@ -350,32 +346,16 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
                 baseline: TextBaseline.alphabetic,
                 child: GestureDetector(
                   onTap: () => _openLegalPage('/terms'),
-                  child: Text(
-                    context.l10n.termsOfService,
-                    style: WaUi.body.copyWith(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
+                  child: Text(context.l10n.termsOfService, style: linkStyle),
                 ),
               ),
-              TextSpan(text: ' ${context.l10n.andConjunction} '),
+              TextSpan(text: ' ${context.l10n.andConjunction}\n'),
               WidgetSpan(
                 alignment: PlaceholderAlignment.baseline,
                 baseline: TextBaseline.alphabetic,
                 child: GestureDetector(
                   onTap: () => _openLegalPage('/privacy'),
-                  child: Text(
-                    context.l10n.privacyPolicy,
-                    style: WaUi.body.copyWith(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
+                  child: Text(context.l10n.privacyPolicy, style: linkStyle),
                 ),
               ),
               const TextSpan(text: '.'),
@@ -383,7 +363,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 22),
         PillButton(
           label: context.l10n.continueLabel,
           onPressed: () => setState(() => _step = 1),
@@ -397,22 +377,11 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Center(
-          child: Container(
-            width: 44,
-            height: 5,
-            decoration: BoxDecoration(
-              color: isDark ? Colors.white24 : Colors.black12,
-              borderRadius: BorderRadius.circular(2.5),
-            ),
-          ),
+        SheetHeader(
+          title: context.l10n.businessDetails,
+          onBack: () => setState(() => _step = 0),
         ),
-        SizedBox(height: 24),
-        Text(context.l10n.businessDetails,
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           context.l10n.pleaseProvideYourBusinessDetailsBeforeUpgrading,
           style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
@@ -447,53 +416,16 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
 
   Widget _buildPlanSelectionStep(
     bool isDark,
-    ThemeData theme,
     SubscriptionProvider subscriptionProvider,
   ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        /// HANDLE
-        Container(
-          width: 44,
-          height: 5,
-          decoration: BoxDecoration(
-            color: isDark ? Colors.white24 : Colors.black12,
-            borderRadius: BorderRadius.circular(2.5),
-          ),
+        SheetHeader(
+          title: '${context.l10n.upgradeTo2} ${context.l10n.pro}',
+          onBack: () => setState(() => _step = 1),
         ),
-        SizedBox(height: 12),
-
-        /// TITLE (same UI)
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              context.l10n.upgradeTo2,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w900,
-                fontSize: 24,
-                color: isDark ? Colors.white : Colors.black,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(context.l10n.pro,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 13,
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
         /// YEARLY (same UI style)
         GestureDetector(
@@ -728,3 +660,4 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
     return '${value.day}/${value.month}/${value.year}';
   }
 }
+

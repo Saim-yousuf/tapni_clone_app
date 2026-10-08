@@ -10,10 +10,12 @@ import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/services/account_storage.dart';
-import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/utils/app_fonts.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/widgets/alert.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/branded_qr_image.dart';
+import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 
 /// WhatsApp Web style: this device shows a QR, another logged-in phone scans it.
 class QrLoginScreen extends StatefulWidget {
@@ -155,76 +157,186 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
 
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => MainShell()),
+      AppPageRoute(builder: (_) => MainShell()),
       (_) => false,
+    );
+  }
+
+  TextStyle _text(
+    AuthScale m, {
+    required double size,
+    FontWeight weight = FontWeight.w400,
+    Color color = AuthUi.textPrimary,
+    double height = 1.2,
+    double letterSpacing = 0,
+  }) {
+    return AppFonts.textStyle(
+      fontSize: m.s(size),
+      fontWeight: weight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final title = widget.addAccount
+        ? context.l10n.addAccount.toUpperCase()
+        : 'LOGIN WITH QR';
+
     return Scaffold(
       backgroundColor: AuthUi.bg,
-      appBar: AppBar(
-        backgroundColor: AuthUi.bg,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leading: AuthBackButton(
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          widget.addAccount
-              ? context.l10n.addAccount.toUpperCase()
-              : 'LOGIN WITH QR',
-          style: AuthUi.screenTitle,
-        ),
-        centerTitle: true,
-      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AuthUi.horizontalPad),
-          child: Column(
-            children: [
-              const SizedBox(height: 4),
-              Text(
-                context.l10n.useBarqodyOnYourPhoneToScanThisCode,
-                textAlign: TextAlign.center,
-                style: AuthUi.body,
-              ),
-              const SizedBox(height: 24),
-              Expanded(
-                child: Center(child: _buildQrArea()),
-              ),
-              if (_code != null && _error == null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  context.l10n.codeWithValue(_code!),
-                  style: AuthUi.body.copyWith(
-                    letterSpacing: 0.4,
-                    fontWeight: FontWeight.w500,
-                  ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Shared auth app bar (Login / OTP / QR) — bold ALL-CAPS title.
+            AuthAppBarTitle(
+              title,
+              showBack: true,
+              onBack: () => Navigator.of(context).pop(),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(
+                  m.padH,
+                  m.v(8),
+                  m.padH,
+                  m.v(24),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: _code!));
-                    ShowAlert.success(
-                      message: context.l10n.codeCopied,
-                      context: context,
-                    );
-                  },
-                  child: Text(
-                    context.l10n.copyCode,
-                    style: WaUi.bodyMedium.copyWith(
-                      color: AuthUi.textPrimary,
-                      fontWeight: FontWeight.w700,
+                child: Column(
+                  children: [
+                    Text(
+                      context.l10n.useBarqodyOnYourPhoneToScanThisCode,
+                      textAlign: TextAlign.center,
+                      style: _text(
+                        m,
+                        size: AuthUi.bodySize,
+                        color: AuthUi.textSecondary,
+                        height: 1.45,
+                      ),
+                    ),
+                    SizedBox(height: m.v(40)),
+                    _buildQrArea(m),
+                    SizedBox(height: m.v(20)),
+                    _buildCodeRow(m),
+                    SizedBox(height: m.v(36)),
+                    _howtoStep(m, '1', context.l10n.openBarqodyOnYourOtherPhone),
+                    SizedBox(height: m.v(14)),
+                    _howtoStep(m, '2', context.l10n.goToToolsLinkedDevices),
+                    SizedBox(height: m.v(14)),
+                    _howtoStep(
+                      m,
+                      '3',
+                      context.l10n.tapLinkADeviceAndScanThisQR,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Fixed footprint: loading / live / expired all share the same card size
+  /// so expiry never collapses the layout.
+  Widget _buildQrArea(AuthScale m) {
+    final qrSize = m.s(240);
+    final cardPad = m.s(18);
+    final cardRadius = m.s(16);
+    final cardSide = qrSize + cardPad * 2;
+    final expired = _error != null;
+
+    if (_loading || _completing) {
+      return AppShimmer(
+        child: ShimmerBox(
+          width: cardSide,
+          height: cardSide,
+          borderRadius: cardRadius,
+        ),
+      );
+    }
+
+    return SizedBox(
+      width: cardSide,
+      height: cardSide,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: AuthUi.bg,
+          borderRadius: BorderRadius.circular(cardRadius),
+          border: Border.all(color: AuthUi.border, width: 1),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(cardRadius),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              if (_qrPayload != null)
+                Padding(
+                  padding: EdgeInsets.all(cardPad),
+                  child: Opacity(
+                    opacity: expired ? 0.18 : 1,
+                    child: BrandedQrImage(
+                      data: _qrPayload!,
+                      size: qrSize,
+                      backgroundColor: AuthUi.bg,
+                      foregroundColor: AuthUi.textPrimary,
                     ),
                   ),
                 ),
-              ],
-              const SizedBox(height: 8),
-              _howtoStep('1', context.l10n.openBarqodyOnYourOtherPhone),
-              _howtoStep('2', context.l10n.goToToolsLinkedDevices),
-              _howtoStep('3', context.l10n.tapLinkADeviceAndScanThisQR),
-              const SizedBox(height: 24),
+              if (expired)
+                Positioned.fill(
+                  child: ColoredBox(
+                    color: AuthUi.bg.withValues(alpha: 0.72),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: m.s(20)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.qr_code_2,
+                            size: m.s(36),
+                            color: AuthUi.textMuted,
+                          ),
+                          SizedBox(height: m.v(12)),
+                          Text(
+                            _error ?? context.l10n.somethingWentWrong,
+                            textAlign: TextAlign.center,
+                            style: _text(
+                              m,
+                              size: 14,
+                              color: AuthUi.textSecondary,
+                              height: 1.35,
+                            ),
+                          ),
+                          SizedBox(height: m.v(14)),
+                          GestureDetector(
+                            onTap: _startPairing,
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: m.s(8),
+                                vertical: m.s(6),
+                              ),
+                              child: Text(
+                                context.l10n.refreshQR,
+                                style: _text(
+                                  m,
+                                  size: 15,
+                                  weight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
@@ -232,102 +344,136 @@ class _QrLoginScreenState extends State<QrLoginScreen> {
     );
   }
 
-  Widget _buildQrArea() {
+  /// Same vertical space for code + action whether live, loading, or expired.
+  Widget _buildCodeRow(AuthScale m) {
     if (_loading || _completing) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(
-            width: 36,
-            height: 36,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.5,
-              color: AuthUi.textPrimary,
+      return AppShimmer(
+        child: Column(
+          children: [
+            ShimmerBox(
+              width: m.s(148),
+              height: m.s(14),
+              borderRadius: 6,
             ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            _completing
-                ? context.l10n.loggingYouIn
-                : context.l10n.preparingQRCode,
-            style: AuthUi.body,
-          ),
-        ],
+            SizedBox(height: m.v(10)),
+            ShimmerBox(
+              width: m.s(100),
+              height: m.s(16),
+              borderRadius: 6,
+            ),
+          ],
+        ),
       );
     }
 
-    if (_error != null || _qrPayload == null) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.qr_code_2, size: 64, color: Colors.grey.shade400),
-          const SizedBox(height: 16),
-          Text(
-            _error ?? context.l10n.somethingWentWrong,
-            textAlign: TextAlign.center,
-            style: AuthUi.body,
-          ),
-          const SizedBox(height: 16),
-          TextButton.icon(
-            onPressed: _startPairing,
-            icon: const Icon(Icons.refresh, color: AuthUi.textPrimary),
-            label: Text(
-              context.l10n.refreshQR,
-              style: WaUi.bodyMedium.copyWith(color: AuthUi.textPrimary),
-            ),
-          ),
-        ],
-      );
+    if (_code == null) {
+      return SizedBox(height: m.v(14) + m.s(16) + m.v(10) + m.s(28));
     }
 
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AuthUi.border),
-      ),
-      child: BrandedQrImage(
-        data: _qrPayload!,
-        size: 240,
-        backgroundColor: Colors.white,
-        foregroundColor: AuthUi.textPrimary,
-      ),
-    );
-  }
-
-  Widget _howtoStep(String n, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 24,
-            height: 24,
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              color: AuthUi.textPrimary,
-              shape: BoxShape.circle,
+    final expired = _error != null;
+    return Column(
+      children: [
+        Text(
+          context.l10n.codeWithValue(_code!),
+          textAlign: TextAlign.center,
+          style: _text(
+            m,
+            size: 14,
+            color: AuthUi.textSecondary.withValues(alpha: expired ? 0.55 : 1),
+            letterSpacing: 0.3,
+          ),
+        ),
+        SizedBox(height: m.v(8)),
+        if (expired)
+          GestureDetector(
+            onTap: _startPairing,
+            behavior: HitTestBehavior.opaque,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: m.s(12),
+                vertical: m.s(6),
+              ),
+              child: Text(
+                context.l10n.refreshQR,
+                textAlign: TextAlign.center,
+                style: _text(
+                  m,
+                  size: 16,
+                  weight: FontWeight.w700,
+                ),
+              ),
             ),
-            child: Text(
-              n,
-              style: WaUi.label.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 12,
+          )
+        else
+          GestureDetector(
+            onTap: () {
+              Clipboard.setData(ClipboardData(text: _code!));
+              ShowAlert.success(
+                message: context.l10n.codeCopied,
+                context: context,
+              );
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: m.s(12),
+                vertical: m.s(6),
+              ),
+              child: Text(
+                context.l10n.copyCode,
+                textAlign: TextAlign.center,
+                style: _text(
+                  m,
+                  size: 16,
+                  weight: FontWeight.w700,
+                ),
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: AuthUi.body.copyWith(height: 1.35),
+      ],
+    );
+  }
+
+  Widget _howtoStep(AuthScale m, String n, String text) {
+    final circle = m.s(24);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: circle,
+          height: circle,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            color: AuthUi.textPrimary,
+            shape: BoxShape.circle,
+          ),
+          child: Text(
+            n,
+            style: _text(
+              m,
+              size: 12,
+              weight: FontWeight.w700,
+              color: Colors.white,
+              height: 1,
             ),
           ),
-        ],
-      ),
+        ),
+        SizedBox(width: m.s(12)),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(top: m.s(2)),
+            child: Text(
+              text,
+              style: _text(
+                m,
+                size: AuthUi.bodySize,
+                color: AuthUi.textSecondary,
+                height: 1.35,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

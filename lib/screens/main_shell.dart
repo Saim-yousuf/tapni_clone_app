@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/models/stored_account.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
@@ -331,7 +333,16 @@ class _MainShellState extends State<MainShell> {
     final l10n = context.l10n;
     final navClearance = CurvedBottomNav.contentClearance(context);
 
-    return PopScope(
+    // My Card (view + edit): cover draws under the status bar.
+    final coverUnderStatusBar = _onProfile;
+    final systemUi = AppTheme.systemUiFor(Theme.of(context).brightness);
+    final overlayStyle = coverUnderStatusBar
+        ? systemUi.copyWith(statusBarColor: Colors.transparent)
+        : systemUi;
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: overlayStyle,
+      child: PopScope(
       canPop: _onProfile && !isEditing,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) return;
@@ -349,7 +360,11 @@ class _MainShellState extends State<MainShell> {
         body: Stack(
           children: [
             Positioned.fill(
-              child: SafeArea(bottom: false, child: _buildCurrentScreen()),
+              child: SafeArea(
+                top: !coverUnderStatusBar,
+                bottom: false,
+                child: _buildCurrentScreen(),
+              ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -401,6 +416,7 @@ class _MainShellState extends State<MainShell> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

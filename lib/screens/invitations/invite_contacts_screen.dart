@@ -10,6 +10,7 @@ import 'package:tapni_app/providers/invitation_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/screens/invitations/invitation_nav.dart';
 import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/utils/phone_utils.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -536,7 +537,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
               ),
               child: SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: WaUi.primaryButtonHeight,
                 child: ElevatedButton(
                   onPressed: provider.isSending || selectedCount == 0
                       ? null
@@ -547,9 +548,7 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                     disabledBackgroundColor:
                         onSurface.withValues(alpha: 0.12),
                     elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
+                    shape: const StadiumBorder(),
                   ),
                   child: provider.isSending
                       ? SizedBox(
@@ -566,7 +565,8 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
                               : context.l10n.sendInvitationCount(selectedCount),
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: onPrimary,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                 ),

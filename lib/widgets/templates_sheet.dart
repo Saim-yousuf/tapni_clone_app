@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
@@ -63,26 +65,9 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Drag Handle
-          Container(
-            width: 44,
-            height: 5,
-            decoration: BoxDecoration(
-              color: isDark ? Colors.white24 : Colors.black12,
-              borderRadius: BorderRadius.circular(2.5),
-            ),
-          ),
-          SizedBox(height: 16),
-          
-          // Title
-          Text(
-            context.l10n.templates,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-              letterSpacing: -0.5,
-              color: isDark ? Colors.white : Colors.black87,
-            ),
+          SheetHeader(
+            title: context.l10n.templates,
+            onBack: () => Navigator.pop(context),
           ),
           const SizedBox(height: 24),
 
@@ -145,14 +130,12 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: SizedBox(
               width: double.infinity,
-              height: 52,
+              height: WaUi.primaryButtonHeight,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isDark ? Colors.white : Colors.black,
                   foregroundColor: isDark ? Colors.black : Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(26),
-                  ),
+                  shape: const StadiumBorder(),
                   elevation: 0,
                 ),
                 onPressed: _isApplying
@@ -207,10 +190,11 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                           color: isDark ? Colors.black : Colors.white,
                         ),
                       )
-                    : Text(context.l10n.applyTemplate,
-                        style: TextStyle(
+                    : Text(
+                        context.l10n.applyTemplate,
+                        style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                           letterSpacing: -0.2,
                         ),
                       ),

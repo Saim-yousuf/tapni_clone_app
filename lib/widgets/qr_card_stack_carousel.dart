@@ -20,7 +20,9 @@ class QrCardStackCarousel extends StatefulWidget {
   final VoidCallback? onDeleteCard;
   final VoidCallback? onDownload;
   final VoidCallback? onShare;
-  final VoidCallback onAddCard;
+  /// When null, empty state is shown instead of an add-card tile.
+  final VoidCallback? onAddCard;
+  final String? emptyMessage;
 
   const QrCardStackCarousel({
     super.key,
@@ -28,11 +30,12 @@ class QrCardStackCarousel extends StatefulWidget {
     required this.initialIndex,
     required this.cardKey,
     required this.onPageChanged,
-    required this.onAddCard,
+    this.onAddCard,
     this.onEditCard,
     this.onDeleteCard,
     this.onDownload,
     this.onShare,
+    this.emptyMessage,
   });
 
   @override
@@ -253,7 +256,16 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
   Widget build(BuildContext context) {
     final cards = widget.cards;
     if (cards.isEmpty) {
-      return _AddOnlyCard(onAdd: widget.onAddCard);
+      final onAdd = widget.onAddCard;
+      if (onAdd != null) return _AddOnlyCard(onAdd: onAdd);
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
+        child: Text(
+          widget.emptyMessage ?? context.l10n.noCardsYet,
+          textAlign: TextAlign.center,
+          style: WaUi.body.copyWith(color: const Color(0xFF8E8E93)),
+        ),
+      );
     }
 
     final topIndex = _topCardIndex;
@@ -459,7 +471,8 @@ class _QrCardStackCarouselState extends State<QrCardStackCarousel>
         coverPhotoUrl: card.coverPhotoUrl,
         subtitle: card.subtitle,
         bio: card.bio,
-        verified: Provider.of<ProfileProvider>(context, listen: false).isProUser,
+        verified: card.isVerified ??
+            Provider.of<ProfileProvider>(context, listen: false).isProUser,
         width: cardWidth,
         height: cardHeight,
       );

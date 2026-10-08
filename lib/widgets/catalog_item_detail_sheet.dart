@@ -93,7 +93,7 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 10),
-              const Center(child: SheetDragHandle()),
+              const SheetDragHandle(),
               const SizedBox(height: 8),
               BarqodyTitleBar(
                 title: l10n.menu,
@@ -259,7 +259,7 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
           const SizedBox(width: 12),
           Expanded(
             child: SizedBox(
-              height: 48,
+              height: WaUi.primaryButtonHeight,
               child: ElevatedButton(
                 onPressed: _popWithResult,
                 style: ElevatedButton.styleFrom(
@@ -275,7 +275,7 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: WaUi.promoButton.copyWith(
-                    fontSize: 15,
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),
                 ),

@@ -106,7 +106,9 @@ class LinkEntriesSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final entries = link.effectiveEntries;
+    final entries = link.publicEntries.isNotEmpty
+        ? link.publicEntries
+        : link.effectiveEntries;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -155,16 +157,18 @@ class LinkEntriesSheet extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 4),
               Flexible(
                 child: ListView.separated(
                   shrinkWrap: true,
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 28),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 28),
                   itemCount: entries.length,
                   separatorBuilder: (_, __) => const Divider(
                     height: 1,
                     thickness: 1,
-                    indent: 76,
-                    color: BarqodyChrome.divider,
+                    indent: 20,
+                    endIndent: 12,
+                    color: Color(0xFFE8E8E8),
                   ),
                   itemBuilder: (context, index) {
                     final entry = entries[index];
@@ -172,73 +176,91 @@ class LinkEntriesSheet extends StatelessWidget {
                         ? entry.name.trim()
                         : entry.value;
                     final subtitle = entry.value.trim();
-                    return InkWell(
-                      onTap: () => _openEntry(context, entry),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 14,
-                        ),
-                        child: Row(
-                          children: [
-                            _entryImage(entry, size: 48),
-                            const SizedBox(width: 14),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    title,
-                                    style: WaUi.body.copyWith(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  if (subtitle.isNotEmpty) ...[
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            subtitle,
-                                            style: WaUi.body.copyWith(
-                                              fontSize: 13,
-                                              color: BarqodyChrome.secondaryText,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (index == 0)
+                          const Divider(
+                            height: 1,
+                            thickness: 1,
+                            indent: 20,
+                            endIndent: 12,
+                            color: Color(0xFFE8E8E8),
+                          ),
+                        InkWell(
+                          onTap: () => _openEntry(context, entry),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(12, 14, 8, 14),
+                            child: Row(
+                              children: [
+                                _entryImage(entry, size: 52),
+                                const SizedBox(width: 14),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        title,
+                                        style: WaUi.body.copyWith(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black,
+                                          height: 1.2,
                                         ),
-                                        const SizedBox(width: 8),
-                                        GestureDetector(
-                                          onTap: () =>
-                                              _copyValue(context, subtitle),
-                                          child: Image.asset(
-                                            'assets/images/png/copy-icon.png',
-                                            width: 16,
-                                            height: 16,
-                                            errorBuilder: (_, __, ___) =>
-                                                const Icon(
-                                              Icons.copy_rounded,
-                                              size: 16,
-                                              color: BarqodyChrome.secondaryText,
+                                      ),
+                                      if (subtitle.isNotEmpty) ...[
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                subtitle,
+                                                style: WaUi.body.copyWith(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: const Color(
+                                                    0xFF6B7280,
+                                                  ),
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
-                                          ),
+                                            const SizedBox(width: 8),
+                                            GestureDetector(
+                                              onTap: () => _copyValue(
+                                                context,
+                                                subtitle,
+                                              ),
+                                              child: Image.asset(
+                                                'assets/images/png/copy-icon.png',
+                                                width: 15,
+                                                height: 15,
+                                                color: const Color(0xFF6B7280),
+                                                errorBuilder: (_, __, ___) =>
+                                                    const Icon(
+                                                  Icons.copy_rounded,
+                                                  size: 15,
+                                                  color: Color(0xFF6B7280),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
-                                    ),
-                                  ],
-                                ],
-                              ),
+                                    ],
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: Colors.black,
+                                  size: 24,
+                                ),
+                              ],
                             ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Colors.black,
-                              size: 22,
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     );
                   },
                 ),

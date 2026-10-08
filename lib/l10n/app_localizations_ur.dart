@@ -1546,7 +1546,7 @@ class AppLocalizationsUr extends AppLocalizations {
       'Do more with BarQody for Business, build trust with a verified badge, and access other premium benefits all in one subscription.';
 
   @override
-  String get byContinuingYouAgreeTo => 'By continuing, you agree to the';
+  String get byContinuingYouAgreeTo => 'By continuing, you agree to our';
 
   @override
   String get privacyPolicy => 'Privacy Policy';
@@ -3056,7 +3056,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get barqodyWillSendOtp =>
-      'Barqody will send an OTP to verify your number.';
+      'Enter your phone number to log in or create a new digital identity.';
 
   @override
   String get required => 'Required';
@@ -3770,7 +3770,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get quickAddLinksSubtitle =>
-      'WhatsApp، Instagram، TikTok اور Snapchat شامل کریں تاکہ لوگ جلدی آپ تک پہنچ سکیں۔ آپ اسے چھوڑ بھی سکتے ہیں اور بعد میں مزید لنکس شامل کر سکتے ہیں۔';
+      'اپنے کیٹلاگ سے لنکس شامل کریں تاکہ لوگ جلدی آپ تک پہنچ سکیں۔ آپ اسے چھوڑ بھی سکتے ہیں اور بعد میں مزید شامل کر سکتے ہیں۔';
 
   @override
   String get quickAddWhatsAppHint => 'WhatsApp نمبر';

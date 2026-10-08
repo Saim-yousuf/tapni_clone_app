@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/invitations/invite_contacts_screen.dart';
 import 'package:tapni_app/screens/invitations/invitation_nav.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
 
@@ -125,7 +126,10 @@ class _InvitationDesignEditorScreenState
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(ctx.l10n.editText, style: WaUi.sectionHeader),
+              SheetHeader(
+                title: ctx.l10n.editText,
+                onBack: () => Navigator.pop(ctx),
+              ),
               const SizedBox(height: 12),
               TextField(
                 controller: controller,
@@ -177,7 +181,10 @@ class _InvitationDesignEditorScreenState
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(ctx.l10n.qrCodeDataUrlText, style: WaUi.sectionHeader),
+              SheetHeader(
+                title: ctx.l10n.qrCodeDataUrlText,
+                onBack: () => Navigator.pop(ctx),
+              ),
               const SizedBox(height: 12),
               TextField(
                 controller: controller,
@@ -553,7 +560,10 @@ class _InvitationDesignEditorScreenState
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(ctx.l10n.backgroundColor, style: WaUi.sectionHeader),
+              SheetHeader(
+                title: ctx.l10n.backgroundColor,
+                onBack: () => Navigator.pop(ctx),
+              ),
               const SizedBox(height: 16),
               Wrap(
                 spacing: 12,

@@ -40,23 +40,9 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: WaUi.divider,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-                  child: Text(
-                    'Add more from ${vendor.businessName}',
-                    style: WaUi.headline.copyWith(fontWeight: FontWeight.w700),
-                  ),
+                SheetHeader(
+                  title: 'Add more from ${vendor.businessName}',
+                  onBack: () => Navigator.pop(ctx),
                 ),
                 Expanded(
                   child: ListView.separated(
@@ -375,7 +361,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
                     ),
                     const SizedBox(width: 12),
                     SizedBox(
-                      height: 48,
+                      height: WaUi.primaryButtonHeight,
                       child: ElevatedButton(
                         onPressed: _placing ? null : _placeOrders,
                         style: ElevatedButton.styleFrom(
@@ -399,7 +385,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
                             : Text(
                                 context.l10n.placeOrder,
                                 style: WaUi.promoButton.copyWith(
-                                  fontSize: 15,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),

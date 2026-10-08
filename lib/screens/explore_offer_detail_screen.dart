@@ -89,7 +89,7 @@ class _ExploreOfferDetailScreenState extends State<ExploreOfferDetailScreen> {
                     ),
                     const SizedBox(height: 22),
                     SizedBox(
-                      height: 52,
+                      height: WaUi.primaryButtonHeight,
                       child: ElevatedButton(
                         onPressed: _enrolling ? null : _enrollMe,
                         style: ElevatedButton.styleFrom(

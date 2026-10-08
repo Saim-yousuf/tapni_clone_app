@@ -496,7 +496,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
               ),
               child: SizedBox(
                 width: double.infinity,
-                height: 52,
+                height: WaUi.primaryButtonHeight,
                 child: ElevatedButton(
                   onPressed: _isSaving ? null : _save,
                   style: ElevatedButton.styleFrom(

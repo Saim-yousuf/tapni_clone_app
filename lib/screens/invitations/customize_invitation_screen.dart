@@ -502,18 +502,22 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
               children: [
                 SizedBox(
                   width: double.infinity,
-                  height: 48,
+                  height: WaUi.primaryButtonHeight,
                   child: ElevatedButton(
                     onPressed: isSending ? null : _continue,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: WaUi.buttonDark,
                       foregroundColor: Colors.white,
                       elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: Text(
+                      context.l10n.selectContactsAndSend,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                    child: Text(context.l10n.selectContactsAndSend),
                   ),
                 ),
                 const SizedBox(height: 8),

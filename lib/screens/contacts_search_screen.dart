@@ -13,6 +13,8 @@ import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/phone_utils.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/filter_contacts_sheet.dart';
 import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -253,71 +255,54 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(4, 4, 8, 0),
+              padding: const EdgeInsets.fromLTRB(16, 6, 25, 0),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back, color: WaUi.primaryText),
-                    onPressed: () => Navigator.of(context).pop(),
+                  AuthBackButton(
+                    onPressed: () => Navigator.of(context).maybePop(),
                   ),
+                  const SizedBox(width: 10),
                   Expanded(
-                    child: SizedBox(
-                      height: 44,
-                      child: TextField(
-                        controller: _searchController,
-                        focusNode: _searchFocus,
-                        autofocus: true,
-                        style: WaUi.body.copyWith(fontSize: 16, height: 1.2),
-                        cursorColor: WaUi.accent,
-                        textInputAction: TextInputAction.search,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: WaUi.searchBg,
-                          hintText: context.l10n.searchNameOrNumber,
-                          hintStyle: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF667781),
-                          ),
-                          prefixIcon: const Padding(
-                            padding: EdgeInsets.only(left: 12, right: 6),
-                            child: Icon(
-                              Icons.search,
-                              size: 22,
-                              color: Color(0xFF667781),
+                    child: WaChatSearchBar(
+                      controller: _searchController,
+                      focusNode: _searchFocus,
+                      autofocus: true,
+                      hintText: 'Search contact',
+                      padding: EdgeInsets.zero,
+                      onClear: () {
+                        _searchController.clear();
+                        _searchFocus.requestFocus();
+                      },
+                      trailing: Material(
+                        color: Colors.black,
+                        shape: const CircleBorder(),
+                        child: InkWell(
+                          customBorder: const CircleBorder(),
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (_) => FilterContactsSheet(),
+                            );
+                          },
+                          child: SizedBox(
+                            width: 42,
+                            height: 42,
+                            child: Center(
+                              child: Image.asset(
+                                'assets/images/png/filter-icon.png',
+                                width: 18,
+                                height: 18,
+                                color: Colors.white,
+                                errorBuilder: (_, __, ___) => const Icon(
+                                  Icons.tune_rounded,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
                             ),
                           ),
-                          prefixIconConstraints: const BoxConstraints(
-                            minWidth: 42,
-                            minHeight: 44,
-                          ),
-                          suffixIcon: _searchController.text.isNotEmpty
-                              ? IconButton(
-                                  icon: const Icon(Icons.close, size: 18),
-                                  color: const Color(0xFF667781),
-                                  onPressed: () {
-                                    _searchController.clear();
-                                    _searchFocus.requestFocus();
-                                  },
-                                )
-                              : null,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24),
-                            borderSide: BorderSide.none,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 4,
-                            vertical: 12,
-                          ),
-                          isDense: true,
                         ),
                       ),
                     ),

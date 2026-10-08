@@ -536,7 +536,10 @@ class _TemplateFilterSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Center(child: SheetDragHandle()),
+            SheetHeader(
+              title: 'Filters',
+              onBack: () => Navigator.pop(context),
+            ),
             const SizedBox(height: 18),
             _SourceTabs(
               segment: segment,

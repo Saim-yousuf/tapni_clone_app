@@ -5,15 +5,33 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// Shared branding for in-app QR widgets and downloaded PNGs.
+///
+/// Starbucks-style mark: circular data dots, circular finder eyes, and a
+/// circular white center plate with the Barqody logo. High ECC recovers the
+/// covered center (standard logo-in-QR approach).
 abstract final class BrandedQr {
   static const logoAsset = 'assets/images/png/app_icon.png';
   static const errorCorrectionLevel = QrErrorCorrectLevel.H;
 
-  /// White plate size relative to the QR side.
-  static const plateFraction = 0.30;
-  static const plateCornerFraction = 0.2;
-  static const logoInsetFraction = 0.08;
-  static const logoCornerFraction = 0.16;
+  /// Circular white plate diameter relative to the QR side.
+  static const plateFraction = 0.28;
+
+  /// Padding between plate edge and logo (relative to plate side).
+  /// Near-zero so the logo fills the white circle.
+  static const logoInsetFraction = 0.02;
+
+  /// Spaced circular modules (not a solid square mosaic).
+  static const gapless = false;
+
+  static QrEyeStyle eyeStyleFor(Color color) => QrEyeStyle(
+        eyeShape: QrEyeShape.circle,
+        color: color,
+      );
+
+  static QrDataModuleStyle moduleStyleFor(Color color) => QrDataModuleStyle(
+        dataModuleShape: QrDataModuleShape.circle,
+        color: color,
+      );
 
   static ui.Image? _logoImage;
   static Future<ui.Image>? _logoFuture;
@@ -39,45 +57,53 @@ abstract final class BrandedQr {
   static Size plateSizeFor(double qrSide) =>
       Size.square(qrSide * plateFraction);
 
-  static double plateRadiusFor(double plateSide) =>
-      plateSide * plateCornerFraction;
+  /// Full-circle plate (Starbucks-style logo buffer).
+  static double plateRadiusFor(double plateSide) => plateSide / 2;
 
+  /// Circular white plate + Barqody logo in the QR center.
   static void paintLogoBadge(
     Canvas canvas,
     double qrSide, {
-    required ui.Image logo,
+    ui.Image? logo,
   }) {
     final plateSide = qrSide * plateFraction;
     final center = Offset(qrSide / 2, qrSide / 2);
-    final plateRect = Rect.fromCenter(
-      center: center,
-      width: plateSide,
-      height: plateSide,
+    canvas.drawCircle(
+      center,
+      plateSide / 2,
+      Paint()..color = const Color(0xFFFFFFFF),
     );
-    final plate = RRect.fromRectAndRadius(
-      plateRect,
-      Radius.circular(plateRadiusFor(plateSide)),
-    );
-    canvas.drawRRect(plate, Paint()..color = const Color(0xFFFFFFFF));
+
+    if (logo == null) return;
 
     final inset = plateSide * logoInsetFraction;
-    final logoRect = plateRect.deflate(inset);
-    final logoRRect = RRect.fromRectAndRadius(
-      logoRect,
-      Radius.circular(logoRect.width * logoCornerFraction),
+    final logoSide = plateSide - inset * 2;
+    final dst = Rect.fromCenter(
+      center: center,
+      width: logoSide,
+      height: logoSide,
+    );
+    final src = Rect.fromLTWH(
+      0,
+      0,
+      logo.width.toDouble(),
+      logo.height.toDouble(),
     );
     canvas.save();
-    canvas.clipRRect(logoRRect);
+    canvas.clipPath(Path()..addOval(dst));
     canvas.drawImageRect(
       logo,
-      Rect.fromLTWH(0, 0, logo.width.toDouble(), logo.height.toDouble()),
-      logoRect,
+      src,
+      dst,
       Paint()..filterQuality = FilterQuality.high,
     );
     canvas.restore();
   }
 
-  /// High-res QR PNG with the app logo baked into the pixels.
+  /// High-res QR PNG with the Barqody logo **baked into the pixels** (for
+  /// download / share / print). Always use this (or
+  /// [BusinessCardExportHelper.saveQrPng]) for saved files — do not rely on
+  /// screen-capture alone for QR-only exports.
   static Future<Uint8List?> encodePng({
     required String data,
     int size = 1024,
@@ -88,15 +114,9 @@ abstract final class BrandedQr {
       data: data,
       version: QrVersions.auto,
       errorCorrectionLevel: errorCorrectionLevel,
-      gapless: true,
-      eyeStyle: QrEyeStyle(
-        eyeShape: QrEyeShape.square,
-        color: foreground,
-      ),
-      dataModuleStyle: QrDataModuleStyle(
-        dataModuleShape: QrDataModuleShape.square,
-        color: foreground,
-      ),
+      gapless: gapless,
+      eyeStyle: eyeStyleFor(foreground),
+      dataModuleStyle: moduleStyleFor(foreground),
     );
 
     final recorder = ui.PictureRecorder();
@@ -109,7 +129,7 @@ abstract final class BrandedQr {
       final logo = await loadLogoImage();
       paintLogoBadge(canvas, size.toDouble(), logo: logo);
     } catch (_) {
-      // Save a still-scannable QR if the asset fails to decode.
+      // Save a still-scannable QR if badge paint fails.
     }
 
     final image = await recorder.endRecording().toImage(size, size);

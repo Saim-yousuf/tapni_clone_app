@@ -104,19 +104,21 @@ class _CreateLoyaltyProgramScreenState
 
             SizedBox(
               width: double.infinity,
-              height: 56,
+              height: WaUi.primaryButtonHeight,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
+                  shape: const StadiumBorder(),
                 ),
                 onPressed: () {},
-                child: Text(context.l10n.createProgram,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                child: Text(
+                  context.l10n.createProgram,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),

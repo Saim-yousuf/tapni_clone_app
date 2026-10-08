@@ -7,6 +7,7 @@ import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 
@@ -81,24 +82,13 @@ void _generalBottomSheet(BuildContext context) {
               key: formKey,
               child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 12),
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: WaUi.divider,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+                const SizedBox(height: 12),
+                const SheetDragHandle(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                   child: Row(
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios, size: 20),
-                        color: WaUi.primaryText,
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                      CircleBackButton(onTap: () => Navigator.pop(context)),
                       Expanded(
                         child: Center(
                           child: Image.asset(
@@ -188,17 +178,13 @@ void _generalBottomSheet(BuildContext context) {
                         const SizedBox(height: 40),
                         SizedBox(
                           width: double.infinity,
-                          height: 52,
+                          height: WaUi.primaryButtonHeight,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppTheme.primaryBlack,
                               foregroundColor: Colors.white,
                               elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  WaUi.radiusPill,
-                                ),
-                              ),
+                              shape: const StadiumBorder(),
                             ),
                             onPressed: () async {
                               if (!(formKey.currentState?.validate() ??
@@ -251,7 +237,8 @@ void _generalBottomSheet(BuildContext context) {
                             child: Text(
                               context.l10n.save2,
                               style: WaUi.promoButton.copyWith(
-                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ),
@@ -361,20 +348,13 @@ void _showTapniAccountBottomSheet(BuildContext context) {
         ),
         child: Column(
           children: [
-            Container(
-              margin: const EdgeInsets.only(top: 12),
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: WaUi.divider,
-                borderRadius: BorderRadius.circular(2),
-              ),
+            SheetHeader(
+              title: context.l10n.welcomeToAccountCenter,
+              onBack: () => Navigator.pop(context),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
             Image.asset('assets/images/png/barqody_name.png', height: 70),
             const SizedBox(height: 12),
-            Text(context.l10n.welcomeToAccountCenter, style: WaUi.headline),
-            const SizedBox(height: 6),
             Text(displayName, style: WaUi.bodyMedium),
             if (identity.isNotEmpty) ...[
               const SizedBox(height: 4),

@@ -182,16 +182,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Center(child: SheetDragHandle()),
-                const SizedBox(height: 16),
-                Text(
-                  context.l10n.selectCompany,
-                  textAlign: TextAlign.center,
-                  style: WaUi.toolsTitleOf(
-                    size: 18,
-                    weight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
+                SheetHeader(
+                  title: context.l10n.selectCompany,
+                  onBack: () => Navigator.pop(ctx),
                 ),
                 const SizedBox(height: 16),
                 Flexible(

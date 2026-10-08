@@ -712,35 +712,30 @@ class _DownloadFormatSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SheetDragHandle(),
-              const SizedBox(height: 18),
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: BarqodyChrome.circleBtn,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/images/png/download-icon.png',
-                  width: 22,
-                  height: 22,
-                  errorBuilder: (_, _, _) => const Icon(
-                    Icons.download_rounded,
-                    size: 24,
-                    color: Colors.black,
-                  ),
-                ),
+              SheetHeader(
+                title: context.l10n.downloadInvitationCard,
+                onBack: () => Navigator.pop(context),
               ),
-              const SizedBox(height: 14),
-              Text(
-                context.l10n.downloadInvitationCard,
-                textAlign: TextAlign.center,
-                style: WaUi.toolsTitleOf(
-                  size: 18,
-                  weight: FontWeight.w700,
-                  color: Colors.black,
+              const SizedBox(height: 12),
+              Center(
+                child: Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: BarqodyChrome.circleBtn,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/images/png/download-icon.png',
+                    width: 22,
+                    height: 22,
+                    errorBuilder: (_, _, _) => const Icon(
+                      Icons.download_rounded,
+                      size: 24,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 6),
@@ -775,7 +770,7 @@ class _DownloadFormatSheet extends StatelessWidget {
               const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: WaUi.primaryButtonHeight,
                 child: TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(

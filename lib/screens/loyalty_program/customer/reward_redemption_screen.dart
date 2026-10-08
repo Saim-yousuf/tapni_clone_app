@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 class RewardRedemptionScreen extends StatefulWidget {
   RewardRedemptionScreen({super.key});
 
@@ -129,7 +130,7 @@ class _RewardRedemptionScreenState extends State<RewardRedemptionScreen> {
 
         SizedBox(
           width: double.infinity,
-          height: 50,
+          height: WaUi.primaryButtonHeight,
           child: OutlinedButton(
             onPressed: () {
               setState(() {
@@ -138,9 +139,16 @@ class _RewardRedemptionScreenState extends State<RewardRedemptionScreen> {
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.black,
-              side: BorderSide(color: Colors.black12),
+              side: const BorderSide(color: Colors.black12),
+              shape: const StadiumBorder(),
             ),
-            child: Text(context.l10n.redeemAnotherReward),
+            child: Text(
+              context.l10n.redeemAnotherReward,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ),
         ),
       ],

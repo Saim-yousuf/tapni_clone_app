@@ -173,7 +173,10 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(ctx.l10n.editText, style: WaUi.sectionHeader),
+              SheetHeader(
+                title: ctx.l10n.editText,
+                onBack: () => Navigator.pop(ctx),
+              ),
               const SizedBox(height: 12),
               TextField(
                 controller: controller,
@@ -225,7 +228,10 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(ctx.l10n.qrCodeDataUrlText, style: WaUi.sectionHeader),
+              SheetHeader(
+                title: ctx.l10n.qrCodeDataUrlText,
+                onBack: () => Navigator.pop(ctx),
+              ),
               const SizedBox(height: 12),
               TextField(
                 controller: controller,
@@ -439,7 +445,10 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(ctx.l10n.backgroundColor, style: WaUi.sectionHeader),
+              SheetHeader(
+                title: ctx.l10n.backgroundColor,
+                onBack: () => Navigator.pop(ctx),
+              ),
               const SizedBox(height: 16),
               Wrap(
                 spacing: 12,
@@ -624,7 +633,10 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(ctx.l10n.rewardProgram, style: WaUi.sectionHeader),
+              SheetHeader(
+                title: ctx.l10n.rewardProgram,
+                onBack: () => Navigator.pop(ctx),
+              ),
               const SizedBox(height: 16),
               TextField(
                 controller: _labelCtrl,

@@ -12,6 +12,7 @@ import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/screens/business_card/business_card_design_editor_screen.dart';
 import 'package:tapni_app/screens/business_card/business_card_template_gallery_screen.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/business_card_design_renderer.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
@@ -358,39 +359,24 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 10),
-          Container(
-            width: 36,
-            height: 4,
-            decoration: BoxDecoration(
-              color: WaUi.divider,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
-            child: Row(
+          SheetHeader(
+            title: _headerTitle,
+            onBack: () {
+              if (_step != _CardSetupMode.pick && !_isEditing) {
+                setState(() => _step = _CardSetupMode.pick);
+              } else {
+                Navigator.pop(context);
+              }
+            },
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                if (_step != _CardSetupMode.pick && !_isEditing)
-                  IconButton(
-                    onPressed: () => setState(() => _step = _CardSetupMode.pick),
-                    icon: Icon(Icons.arrow_back, color: WaUi.secondaryText),
-                  ),
-                Expanded(
-                  child: Text(
-                    _headerTitle,
-                    style: WaUi.headline,
-                  ),
-                ),
                 if (_isEditing)
                   IconButton(
                     onPressed: _delete,
-                    icon: Icon(Icons.delete_outline, color: Colors.red),
+                    icon: const Icon(Icons.delete_outline, color: Colors.red),
                   ),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.close, color: WaUi.secondaryText),
-                ),
+                CircleCloseButton(onTap: () => Navigator.pop(context)),
               ],
             ),
           ),
@@ -703,14 +689,12 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
   Widget _buildSaveButton() {
     return SizedBox(
       width: double.infinity,
-      height: 48,
+      height: WaUi.primaryButtonHeight,
       child: FilledButton(
         onPressed: _saving ? null : _save,
         style: FilledButton.styleFrom(
           backgroundColor: WaUi.primaryText,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(WaUi.radiusMd),
-          ),
+          shape: const StadiumBorder(),
         ),
         child: _saving
             ? const SizedBox(
@@ -723,7 +707,11 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
               )
             : Text(
                 _isEditing ? context.l10n.saveCard : context.l10n.createCard,
-                style: WaUi.button.copyWith(color: Colors.white),
+                style: WaUi.button.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
               ),
       ),
     );

@@ -641,7 +641,7 @@ class _OutlineActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = destructive ? Colors.red : Colors.black;
     return SizedBox(
-      height: 48,
+      height: WaUi.primaryButtonHeight,
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
@@ -654,7 +654,7 @@ class _OutlineActionButton extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: WaUi.body.copyWith(
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: FontWeight.w700,
             color: color,
           ),

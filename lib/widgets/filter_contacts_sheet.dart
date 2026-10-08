@@ -5,6 +5,7 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:intl/intl.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 class FilterContactsSheet extends StatefulWidget {
   FilterContactsSheet({Key? key}) : super(key: key);
 
@@ -101,30 +102,11 @@ class _FilterContactsSheetState extends State<FilterContactsSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Handle bar
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: isDark ? Colors.white24 : Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+              SheetHeader(
+                title: context.l10n.filterContacts2,
+                onBack: () => Navigator.pop(context),
               ),
-              SizedBox(height: 20),
-              
-              // Title
-              Center(
-                child: Text(
-                  context.l10n.filterContacts2,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Contact Source
               Text(

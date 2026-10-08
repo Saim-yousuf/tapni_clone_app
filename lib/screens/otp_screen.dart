@@ -9,7 +9,8 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/choose_profile_type_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
-import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/utils/app_fonts.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -36,42 +37,48 @@ class _OtpScreenState extends State<OtpScreen> {
 
   late final List<TextEditingController> _controllers;
   late final List<FocusNode> _focusNodes;
-  String? _debugOtp;
   int _secondsLeft = _resendSeconds;
   Timer? _timer;
   bool _verifying = false;
+  int _cursorIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _debugOtp = widget.debugOtp;
     _controllers = List.generate(_otpLength, (_) => TextEditingController());
-    _focusNodes = List.generate(_otpLength, (i) {
-      final node = FocusNode();
-      node.onKeyEvent = (focusNode, event) {
-        if (event is! KeyDownEvent) return KeyEventResult.ignored;
-        if (event.logicalKey != LogicalKeyboardKey.backspace) {
-          return KeyEventResult.ignored;
+    _focusNodes = List.generate(_otpLength, (_) => FocusNode());
+    for (var i = 0; i < _otpLength; i++) {
+      _focusNodes[i].addListener(() {
+        if (_focusNodes[i].hasFocus && mounted) {
+          setState(() => _cursorIndex = i);
         }
-        if (_controllers[i].text.isEmpty && i > 0) {
-          _controllers[i - 1].clear();
-          _focusNodes[i - 1].requestFocus();
-          setState(() {});
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
-      };
-      return node;
-    });
-    for (final node in _focusNodes) {
-      node.addListener(() {
-        if (mounted) setState(() {});
       });
     }
     _startResendTimer();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _focusNodes.first.requestFocus();
+      if (!mounted) return;
+      final debug = widget.debugOtp?.replaceAll(RegExp(r'[^0-9]'), '');
+      if (debug != null && debug.isNotEmpty) {
+        _fillDebugOtp(debug);
+      } else {
+        _focusNodes.first.requestFocus();
+      }
     });
+  }
+
+  /// Testing OTP from API — fill boxes (no banner). Does not auto-submit.
+  void _fillDebugOtp(String digits) {
+    final chars = digits.replaceAll(RegExp(r'[^0-9]'), '').split('');
+    if (chars.isEmpty) return;
+    for (var i = 0; i < _otpLength; i++) {
+      _controllers[i].text = i < chars.length ? chars[i] : '';
+    }
+    final next = chars.length >= _otpLength
+        ? _otpLength - 1
+        : chars.length.clamp(0, _otpLength - 1);
+    _cursorIndex = next;
+    _focusNodes[next].requestFocus();
+    setState(() {});
   }
 
   @override
@@ -115,7 +122,7 @@ class _OtpScreenState extends State<OtpScreen> {
     await profileProvider.fetchProfile();
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => MainShell()),
+      AppPageRoute(builder: (_) => MainShell()),
       (_) => false,
     );
   }
@@ -128,9 +135,9 @@ class _OtpScreenState extends State<OtpScreen> {
         SnackBar(
           content: Text(
             context.l10n.pleaseEnter6DigitCode,
-            style: WaUi.body.copyWith(color: Colors.white),
+            style: AppFonts.textStyle(fontSize: 14, color: Colors.white),
           ),
-          backgroundColor: WaUi.primaryText,
+          backgroundColor: AuthUi.textPrimary,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -161,16 +168,16 @@ class _OtpScreenState extends State<OtpScreen> {
             SnackBar(
               content: Text(
                 context.l10n.verificationTokenMissing,
-                style: WaUi.body.copyWith(color: Colors.white),
+                style: AppFonts.textStyle(fontSize: 14, color: Colors.white),
               ),
-              backgroundColor: WaUi.primaryText,
+              backgroundColor: AuthUi.textPrimary,
               behavior: SnackBarBehavior.floating,
             ),
           );
           return;
         }
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => ChooseProfileTypeScreen(
               phone: result.phone ?? widget.phone,
               verificationToken: token,
@@ -193,48 +200,89 @@ class _OtpScreenState extends State<OtpScreen> {
       final result = await authProvider.sendOtp(widget.phone, context);
       if (!mounted) return;
       if (!result.success) return;
-      setState(() => _debugOtp = result.otp);
-      for (final c in _controllers) {
-        c.clear();
-      }
-      _focusNodes.first.requestFocus();
       _startResendTimer();
+      final debug = result.otp?.replaceAll(RegExp(r'[^0-9]'), '');
+      if (debug != null && debug.isNotEmpty) {
+        _fillDebugOtp(debug);
+      } else {
+        setState(() => _cursorIndex = 0);
+        for (final c in _controllers) {
+          c.clear();
+        }
+        _focusNodes.first.requestFocus();
+      }
     } finally {
       authProvider.setLoading(false);
     }
   }
 
-  void _onDigitChanged(int index, String value) {
-    final digit = value.replaceAll(RegExp(r'[^0-9]'), '');
+  void _applyDigits(String digits) {
+    final clean = digits.replaceAll(RegExp(r'[^0-9]'), '');
+    if (clean.isEmpty) return;
 
-    // Paste / SMS autofill of full code into one box
-    if (digit.length > 1) {
-      final chars = digit.split('');
+    if (clean.length > 1) {
+      final chars = clean.split('');
       for (var i = 0; i < _otpLength; i++) {
         _controllers[i].text = i < chars.length ? chars[i] : '';
       }
       if (chars.length >= _otpLength) {
-        _focusNodes[_otpLength - 1].unfocus();
+        _cursorIndex = _otpLength - 1;
+        _focusNodes[_otpLength - 1].requestFocus();
         setState(() {});
         _handleVerify();
       } else {
-        _focusNodes[chars.length.clamp(0, _otpLength - 1)].requestFocus();
+        _cursorIndex = chars.length.clamp(0, _otpLength - 1);
+        _focusNodes[_cursorIndex].requestFocus();
         setState(() {});
       }
       return;
     }
 
+    final i = _cursorIndex.clamp(0, _otpLength - 1);
+    _controllers[i].text = clean;
+    if (i < _otpLength - 1) {
+      _cursorIndex = i + 1;
+      _focusNodes[_cursorIndex].requestFocus();
+    } else {
+      _focusNodes[i].requestFocus();
+    }
+    setState(() {});
+    if (_otpCode.length == _otpLength) {
+      _handleVerify();
+    }
+  }
+
+  void _onKeypadDigit(String digit) => _applyDigits(digit);
+
+  void _onKeypadBackspace() {
+    var i = _cursorIndex.clamp(0, _otpLength - 1);
+    if (_controllers[i].text.isEmpty && i > 0) {
+      i -= 1;
+    }
+    _controllers[i].clear();
+    _cursorIndex = i;
+    _focusNodes[i].requestFocus();
+    setState(() {});
+  }
+
+  void _onDigitChanged(int index, String value) {
+    final digit = value.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digit.length > 1) {
+      _applyDigits(digit);
+      return;
+    }
     if (_controllers[index].text != digit) {
       _controllers[index].value = TextEditingValue(
         text: digit,
         selection: TextSelection.collapsed(offset: digit.length),
       );
     }
-
     if (digit.isNotEmpty && index < _otpLength - 1) {
+      _cursorIndex = index + 1;
       _focusNodes[index + 1].requestFocus();
+    } else {
+      _cursorIndex = index;
     }
-
     if (_otpCode.length == _otpLength) {
       _handleVerify();
     } else {
@@ -242,247 +290,295 @@ class _OtpScreenState extends State<OtpScreen> {
     }
   }
 
+  TextStyle _text(
+    AuthScale m, {
+    required double size,
+    FontWeight weight = FontWeight.w400,
+    Color color = AuthUi.textPrimary,
+    double height = 1.2,
+    double letterSpacing = 0,
+  }) {
+    return AppFonts.textStyle(
+      fontSize: m.s(size),
+      fontWeight: weight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final canResend = _secondsLeft <= 0 && !authProvider.isLoading;
+    final m = AuthScale.of(context);
 
     return Scaffold(
       backgroundColor: AuthUi.bg,
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: AuthUi.bg,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
-        leadingWidth: 56,
-        leading: AuthBackButton(
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          'VERIFY',
-          style: AuthUi.screenTitle.copyWith(
-            fontSize: 16,
-            letterSpacing: 1.2,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Verify Number',
-                style: AuthUi.heroTitle.copyWith(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.4,
+        bottom: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AuthAppBarTitle(
+              'VERIFY',
+              showBack: true,
+              onBack: () => Navigator.of(context).pop(),
+            ),
+            // Same rhythm as Login: top-aligned content, keypad pinned bottom.
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(
+                  m.padH,
+                  m.v(40),
+                  m.padH,
+                  m.v(24),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Text.rich(
-                TextSpan(
-                  style: AuthUi.body.copyWith(
-                    fontSize: 15,
-                    height: 1.4,
-                    color: AuthUi.textSecondary,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const TextSpan(text: 'We sent a 6-digit code to '),
-                    TextSpan(
-                      text: widget.phone,
-                      style: const TextStyle(
-                        color: AuthUi.textPrimary,
-                        fontWeight: FontWeight.w700,
+                    Text(
+                      'Verify Number',
+                      style: _text(
+                        m,
+                        size: AuthUi.heroTitleSize,
+                        weight: FontWeight.w700,
+                        height: 1.15,
+                        letterSpacing: -0.5,
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-              GestureDetector(
-                onTap: () => Navigator.of(context).pop(),
-                child: Text(
-                  'Change',
-                  style: WaUi.bodyMedium.copyWith(
-                    color: AuthUi.textPrimary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                    decoration: TextDecoration.underline,
-                    decorationColor: AuthUi.textPrimary,
-                  ),
-                ),
-              ),
-              if (_debugOtp != null && _debugOtp!.isNotEmpty) ...[
-                const SizedBox(height: 14),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AuthUi.fieldFill,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        '${context.l10n.forTesting}: ',
-                        style: WaUi.caption.copyWith(
-                          color: AuthUi.textMuted,
-                          fontSize: 12,
+                    SizedBox(height: m.v(10)),
+                    Text.rich(
+                      TextSpan(
+                        style: _text(
+                          m,
+                          size: AuthUi.bodySize,
+                          color: AuthUi.textSecondary,
+                          height: 1.45,
+                        ),
+                        children: [
+                          const TextSpan(text: 'We sent a 6-digit code to '),
+                          TextSpan(
+                            text: widget.phone,
+                            style: _text(
+                              m,
+                              size: AuthUi.bodySize,
+                              weight: FontWeight.w700,
+                              height: 1.45,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: m.v(8)),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      behavior: HitTestBehavior.opaque,
+                      child: Text(
+                        'Change',
+                        style: _text(
+                          m,
+                          size: AuthUi.bodySize,
+                          weight: FontWeight.w700,
+                        ).copyWith(
+                          decoration: TextDecoration.underline,
+                          decorationColor: AuthUi.textPrimary,
+                          decorationThickness: 1.4,
                         ),
                       ),
-                      Text(
-                        _debugOtp!,
-                        style: WaUi.bodyMedium.copyWith(
-                          letterSpacing: 2,
-                          fontWeight: FontWeight.w700,
-                          color: AuthUi.textPrimary,
-                          fontSize: 14,
+                    ),
+                    SizedBox(height: m.v(40)),
+                    _OtpBoxes(
+                      length: _otpLength,
+                      controllers: _controllers,
+                      focusNodes: _focusNodes,
+                      cursorIndex: _cursorIndex,
+                      onChanged: _onDigitChanged,
+                      onBoxTap: (i) {
+                        _cursorIndex = i;
+                        _focusNodes[i].requestFocus();
+                        setState(() {});
+                      },
+                      scale: m,
+                    ),
+                    SizedBox(height: m.v(28)),
+                    AuthPrimaryPillButton(
+                      label: 'Verify',
+                      loading: authProvider.isLoading,
+                      onPressed:
+                          authProvider.isLoading ? null : _handleVerify,
+                    ),
+                    SizedBox(height: m.v(18)),
+                    Center(
+                      child: GestureDetector(
+                        onTap: canResend ? _handleResend : null,
+                        behavior: HitTestBehavior.opaque,
+                        child: Text.rich(
+                          TextSpan(
+                            style: _text(
+                              m,
+                              size: 14,
+                              color: AuthUi.textSecondary,
+                            ),
+                            children: [
+                              const TextSpan(
+                                text: "Didn't receive the code? ",
+                              ),
+                              TextSpan(
+                                text: 'Resend Code',
+                                style: _text(
+                                  m,
+                                  size: 14,
+                                  weight: FontWeight.w700,
+                                  color: AuthUi.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    if (_secondsLeft > 0) ...[
+                      SizedBox(height: m.v(6)),
+                      Center(
+                        child: Text(
+                          'Resend available in 0:${_secondsLeft.toString().padLeft(2, '0')}',
+                          style: _text(
+                            m,
+                            size: 13,
+                            color: AuthUi.textSecondary,
+                          ),
                         ),
                       ),
                     ],
-                  ),
-                ),
-              ],
-              const SizedBox(height: 28),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  const gap = 8.0;
-                  final boxW =
-                      ((constraints.maxWidth - gap * (_otpLength - 1)) /
-                              _otpLength)
-                          .clamp(40.0, 52.0);
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List.generate(_otpLength, (index) {
-                      final filled = _controllers[index].text.isNotEmpty;
-                      final active = _focusNodes[index].hasFocus;
-                      return SizedBox(
-                        width: boxW,
-                        height: boxW + 4,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 120),
-                          alignment: Alignment.center,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            color: filled && !active
-                                ? AuthUi.fieldFill
-                                : AuthUi.bg,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: active
-                                  ? AuthUi.borderFocused
-                                  : (filled
-                                      ? Colors.transparent
-                                      : const Color(0xFFE0E0E0)),
-                              width: active ? 2.2 : 1.2,
-                            ),
-                          ),
-                          child: TextField(
-                            controller: _controllers[index],
-                            focusNode: _focusNodes[index],
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            textAlignVertical: TextAlignVertical.center,
-                            textInputAction: index == _otpLength - 1
-                                ? TextInputAction.done
-                                : TextInputAction.next,
-                            style: WaUi.headline.copyWith(
-                              fontSize: 22,
-                              height: 1.1,
-                              fontWeight: FontWeight.w600,
-                              color: AuthUi.textPrimary,
-                            ),
-                            cursorColor: AuthUi.textPrimary,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(1),
-                            ],
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              filled: false,
-                              fillColor: Colors.transparent,
-                              isCollapsed: true,
-                              isDense: true,
-                              contentPadding: EdgeInsets.zero,
-                              counterText: '',
-                            ),
-                            onChanged: (value) =>
-                                _onDigitChanged(index, value),
-                            onTap: () {
-                              _controllers[index].selection =
-                                  TextSelection(
-                                baseOffset: 0,
-                                extentOffset:
-                                    _controllers[index].text.length,
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    }),
-                  );
-                },
-              ),
-              const SizedBox(height: 28),
-              AuthPillButton(
-                label: 'Verify',
-                loading: authProvider.isLoading,
-                onPressed: authProvider.isLoading ? null : _handleVerify,
-              ),
-              const SizedBox(height: 18),
-              Center(
-                child: GestureDetector(
-                  onTap: canResend ? _handleResend : null,
-                  child: Text.rich(
-                    TextSpan(
-                      style: AuthUi.body.copyWith(
-                        fontSize: 14,
-                        color: AuthUi.textMuted,
-                      ),
-                      children: [
-                        const TextSpan(text: "Didn't receive the code? "),
-                        TextSpan(
-                          text: 'Resend Code',
-                          style: TextStyle(
-                            color: canResend
-                                ? AuthUi.textPrimary
-                                : AuthUi.textMuted,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  ],
                 ),
               ),
-              if (_secondsLeft > 0) ...[
-                const SizedBox(height: 6),
-                Center(
-                  child: Text(
-                    'Resend available in 0:${_secondsLeft.toString().padLeft(2, '0')}',
-                    style: AuthUi.body.copyWith(
-                      fontSize: 13,
-                      color: AuthUi.textMuted,
-                    ),
-                  ),
-                ),
-              ],
-            ],
-          ),
+            ),
+            AuthNumericKeypad(
+              onDigit: _onKeypadDigit,
+              onBackspace: _onKeypadBackspace,
+            ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class _OtpBoxes extends StatelessWidget {
+  const _OtpBoxes({
+    required this.length,
+    required this.controllers,
+    required this.focusNodes,
+    required this.cursorIndex,
+    required this.onChanged,
+    required this.onBoxTap,
+    required this.scale,
+  });
+
+  final int length;
+  final List<TextEditingController> controllers;
+  final List<FocusNode> focusNodes;
+  final int cursorIndex;
+  final void Function(int index, String value) onChanged;
+  final ValueChanged<int> onBoxTap;
+  final AuthScale scale;
+
+  @override
+  Widget build(BuildContext context) {
+    final m = scale;
+
+    // Figma: gap ≈ 1/4 of box side → 6*box + 5*(box/4) = width.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final boxW = constraints.maxWidth / 7.25;
+        final gap = boxW / 4;
+        final radius = m.s(10);
+
+        return Row(
+          children: List.generate(length * 2 - 1, (slot) {
+            if (slot.isOdd) return SizedBox(width: gap);
+            final index = slot ~/ 2;
+            final filled = controllers[index].text.isNotEmpty;
+            final active = cursorIndex == index;
+
+            final Color bg;
+            final Color borderColor;
+            final double borderW;
+            if (active) {
+              bg = AuthUi.bg;
+              borderColor = AuthUi.borderFocused;
+              borderW = AuthUi.focusBorderWidth;
+            } else if (filled) {
+              bg = AuthUi.fieldFill;
+              borderColor = AuthUi.border;
+              borderW = 1;
+            } else {
+              bg = AuthUi.bg;
+              borderColor = AuthUi.border;
+              borderW = 1;
+            }
+
+            return SizedBox(
+              width: boxW,
+              height: boxW,
+              child: GestureDetector(
+                onTap: () => onBoxTap(index),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 120),
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    color: bg,
+                    borderRadius: BorderRadius.circular(radius),
+                    border: Border.all(color: borderColor, width: borderW),
+                  ),
+                  child: TextField(
+                    controller: controllers[index],
+                    focusNode: focusNodes[index],
+                    readOnly: true,
+                    showCursor: true,
+                    enableInteractiveSelection: false,
+                    keyboardType: TextInputType.none,
+                    textAlign: TextAlign.center,
+                    textAlignVertical: TextAlignVertical.center,
+                    style: AppFonts.textStyle(
+                      fontSize: m.s(22),
+                      fontWeight: FontWeight.w700,
+                      color: AuthUi.textPrimary,
+                      height: 1.1,
+                    ),
+                    cursorColor: AuthUi.textPrimary,
+                    cursorWidth: 1.6,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(1),
+                    ],
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      filled: false,
+                      fillColor: Colors.transparent,
+                      isCollapsed: true,
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                      counterText: '',
+                    ),
+                    onChanged: (value) => onChanged(index, value),
+                    onTap: () => onBoxTap(index),
+                  ),
+                ),
+              ),
+            );
+          }),
+        );
+      },
     );
   }
 }

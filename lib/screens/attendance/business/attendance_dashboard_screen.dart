@@ -159,18 +159,9 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 10),
-              const SheetDragHandle(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: Text(
-                  context.l10n.attendanceReport,
-                  style: WaUi.toolsTitleOf(
-                    size: 17,
-                    weight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
-                ),
+              SheetHeader(
+                title: context.l10n.attendanceReport,
+                onBack: () => Navigator.pop(ctx),
               ),
               ..._employees.map(
                 (employee) => ListTile(

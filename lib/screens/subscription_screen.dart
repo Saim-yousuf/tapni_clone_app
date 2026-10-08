@@ -200,16 +200,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Center(child: SheetDragHandle()),
-              const SizedBox(height: 16),
-              Text(
-                'Add Payment Method',
-                textAlign: TextAlign.center,
-                style: WaUi.toolsTitleOf(
-                  size: 18,
-                  weight: FontWeight.w700,
-                  color: Colors.black,
-                ),
+              SheetHeader(
+                title: 'Add Payment Method',
+                onBack: () => Navigator.pop(ctx),
               ),
               const SizedBox(height: 16),
               _bankPanel(),

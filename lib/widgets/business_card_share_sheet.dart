@@ -320,32 +320,12 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
               24 + bottomPadding,
             ),
             children: [
-              const Center(child: SheetDragHandle()),
-              const SizedBox(height: 12),
-              SizedBox(
-                height: 44,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: WaUi.toolsTitleOf(
-                        size: 18,
-                        weight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: CircleCloseButton(
-                        onTap: () => Navigator.of(context).pop(),
-                      ),
-                    ),
-                  ],
+              SheetHeader(
+                title: title,
+                trailing: CircleCloseButton(
+                  onTap: () => Navigator.of(context).pop(),
                 ),
+                onBack: () => Navigator.of(context).pop(),
               ),
               if (subtitle.isNotEmpty) ...[
                 const SizedBox(height: 2),
@@ -478,7 +458,7 @@ class _WalletPillButton extends StatelessWidget {
 
     return SizedBox(
       width: double.infinity,
-      height: 52,
+      height: WaUi.primaryButtonHeight,
       child: Material(
         color: Colors.black,
         shape: const StadiumBorder(),
@@ -532,7 +512,7 @@ class _WalletPillButton extends StatelessWidget {
                                 color: Colors.white,
                                 fontSize: 16,
                                 height: 1.15,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],

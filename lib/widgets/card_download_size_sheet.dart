@@ -4,9 +4,11 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/branded_qr_image.dart';
 import 'package:tapni_app/models/business_card_design.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/utils/branded_qr.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 /// Bottom sheet: download full business card or QR-only PNG at selectable sizes.
@@ -145,7 +147,6 @@ class _CardDownloadSizeSheetState extends State<CardDownloadSizeSheet> {
   bool _customQr = false;
   final _customPxCtrl = TextEditingController(text: '1024');
   bool _saving = false;
-  final GlobalKey _qrKey = GlobalKey();
 
   @override
   void initState() {
@@ -192,15 +193,22 @@ class _CardDownloadSizeSheetState extends State<CardDownloadSizeSheet> {
           );
         }
       } else {
-        // Wait a frame so QR RepaintBoundary is laid out at target preview size
-        await Future<void>.delayed(Duration.zero);
-        ok = await BusinessCardExportHelper.captureAndSaveSized(
-          _qrKey,
-          size: _activeSize,
-          fileName: '${widget.fileName ?? 'tapni'}_qr',
-          contentAspectRatio: 1.0,
-          pixelRatio: 3.0,
+        // Bake BQ into PNG pixels (not a screen capture of the overlay).
+        final px = _activeSize.width.clamp(128, 4096);
+        final bytes = await BrandedQr.encodePng(
+          data: widget.profileUrl,
+          size: px,
+          foreground: widget.qrForeground ?? Colors.black,
+          background: widget.qrBackground ?? Colors.white,
         );
+        if (bytes != null) {
+          ok = await BusinessCardExportHelper.saveSizedPng(
+            bytes,
+            size: _activeSize,
+            fileName: '${widget.fileName ?? 'tapni'}_qr',
+            contentAspectRatio: 1.0,
+          );
+        }
       }
     } catch (_) {
       ok = false;
@@ -234,18 +242,11 @@ class _CardDownloadSizeSheetState extends State<CardDownloadSizeSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: WaUi.divider,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
+            SheetHeader(
+              title: 'Download PNG',
+              onBack: () => Navigator.pop(context),
             ),
-            const SizedBox(height: 16),
-            Text('Download PNG', style: WaUi.headline),
+            const SizedBox(height: 8),
             const SizedBox(height: 4),
             Text(
               size.dimensionLabel,
@@ -327,24 +328,21 @@ class _CardDownloadSizeSheetState extends State<CardDownloadSizeSheet> {
               ],
               const SizedBox(height: 16),
               Center(
-                child: RepaintBoundary(
-                  key: _qrKey,
-                  child: Container(
-                    color: widget.qrBackground ?? Colors.white,
-                    padding: const EdgeInsets.all(16),
-                    child: BrandedQrImage(
-                      data: widget.profileUrl,
-                      size: 200,
-                      backgroundColor: widget.qrBackground ?? Colors.white,
-                      foregroundColor: widget.qrForeground ?? Colors.black,
-                    ),
+                child: Container(
+                  color: widget.qrBackground ?? Colors.white,
+                  padding: const EdgeInsets.all(16),
+                  child: BrandedQrImage(
+                    data: widget.profileUrl,
+                    size: 200,
+                    backgroundColor: widget.qrBackground ?? Colors.white,
+                    foregroundColor: widget.qrForeground ?? Colors.black,
                   ),
                 ),
               ),
             ],
             const SizedBox(height: 20),
             SizedBox(
-              height: 52,
+              height: WaUi.primaryButtonHeight,
               child: FilledButton.icon(
                 onPressed: _saving ? null : _save,
                 icon: _saving
@@ -357,10 +355,14 @@ class _CardDownloadSizeSheetState extends State<CardDownloadSizeSheet> {
                         ),
                       )
                     : const Icon(Icons.download_rounded),
-                label: Text(_saving ? 'Saving…' : 'Save PNG'),
+                label: Text(
+                  _saving ? 'Saving…' : 'Save PNG',
+                  style: WaUi.promoButton.copyWith(fontSize: 16),
+                ),
                 style: FilledButton.styleFrom(
                   backgroundColor: WaUi.buttonDark,
                   foregroundColor: Colors.white,
+                  shape: const StadiumBorder(),
                 ),
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class LinkDeviceScanScreen extends StatefulWidget {
@@ -141,8 +142,11 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(ctx.l10n.enterCodeInstead, style: WaUi.headline),
-              SizedBox(height: 8),
+              SheetHeader(
+                title: ctx.l10n.enterCodeInstead,
+                onBack: () => Navigator.pop(ctx),
+              ),
+              const SizedBox(height: 8),
               Text(
                 ctx.l10n.typeThe8CharacterCodeShownUnderTheQR,
                 style: WaUi.caption,

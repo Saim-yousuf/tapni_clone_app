@@ -217,6 +217,8 @@ class CardDisplayData {
   final String profileUrl;
   final bool isPrimary;
   final BusinessCardDesign? printDesign;
+  /// When set (e.g. viewing another user's cards), overrides viewer Pro badge.
+  final bool? isVerified;
 
   const CardDisplayData({
     required this.id,
@@ -231,5 +233,6 @@ class CardDisplayData {
     this.enabledLinkIds = const [],
     this.isPrimary = false,
     this.printDesign,
+    this.isVerified,
   });
 }

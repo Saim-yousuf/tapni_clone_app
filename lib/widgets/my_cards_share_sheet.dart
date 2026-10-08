@@ -222,7 +222,7 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
               controller: scrollController,
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
               children: [
-                const Center(child: SheetDragHandle()),
+                const SheetDragHandle(),
                 const SizedBox(height: 14),
                 SizedBox(
                   height: 44,

@@ -1317,22 +1317,20 @@ class _LockedAnalyticsPreview extends StatelessWidget {
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
+                  height: WaUi.primaryButtonHeight,
                   child: ElevatedButton(
                     onPressed: () => SubcriptionSheet.show(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       foregroundColor: Colors.white,
                       elevation: 0,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      shape: const StadiumBorder(),
                     ),
                     child: Text(
                       context.l10n.goBusiness,
                       style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
                       ),
                     ),
                   ),

@@ -3157,7 +3157,7 @@ abstract class AppLocalizations {
   /// No description provided for @byContinuingYouAgreeTo.
   ///
   /// In en, this message translates to:
-  /// **'By continuing, you agree to the'**
+  /// **'By continuing, you agree to our'**
   String get byContinuingYouAgreeTo;
 
   /// No description provided for @privacyPolicy.
@@ -5986,7 +5986,7 @@ abstract class AppLocalizations {
   /// No description provided for @barqodyWillSendOtp.
   ///
   /// In en, this message translates to:
-  /// **'Barqody will send an OTP to verify your number.'**
+  /// **'Enter your phone number to log in or create a new digital identity.'**
   String get barqodyWillSendOtp;
 
   /// No description provided for @required.
@@ -7168,7 +7168,7 @@ abstract class AppLocalizations {
   /// No description provided for @quickAddLinksSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Add WhatsApp, Instagram, TikTok, and Snapchat so people can reach you quickly. You can skip this and add more later.'**
+  /// **'Add the links from your catalog so people can reach you quickly. You can skip this and add more later.'**
   String get quickAddLinksSubtitle;
 
   /// No description provided for @quickAddWhatsAppHint.

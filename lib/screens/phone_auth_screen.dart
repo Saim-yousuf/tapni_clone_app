@@ -5,10 +5,11 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/screens/linked_devices/qr_login_screen.dart';
 import 'package:tapni_app/screens/otp_screen.dart';
+import 'package:tapni_app/utils/app_fonts.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/phone_utils.dart';
-import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/country_picker_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,11 +29,14 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   final _phoneFocus = FocusNode();
   CountryDialCode _country = defaultCountryDialCode;
   bool _alreadyOnDevice = false;
+  String? _phoneError;
 
   @override
   void initState() {
     super.initState();
-    _phoneFocus.addListener(() => setState(() {}));
+    _phoneFocus.addListener(() {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -58,8 +62,23 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     }
   }
 
+  String? _validatePhone(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return context.l10n.required;
+    }
+    if (value.replaceAll(RegExp(r'\D'), '').length < 7) {
+      return context.l10n.tooShort;
+    }
+    if (_alreadyOnDevice) {
+      return context.l10n.accountAlreadyLoggedInOnDevice;
+    }
+    return null;
+  }
+
   Future<void> _handleContinue() async {
-    if (!_formKey.currentState!.validate()) return;
+    final err = _validatePhone(_phoneController.text);
+    setState(() => _phoneError = err);
+    if (err != null) return;
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final phone = _normalizedPhone();
@@ -69,9 +88,9 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
         SnackBar(
           content: Text(
             context.l10n.pleaseEnterValidPhoneNumber,
-            style: WaUi.body.copyWith(color: Colors.white),
+            style: AppFonts.textStyle(fontSize: 14, color: Colors.white),
           ),
-          backgroundColor: WaUi.primaryText,
+          backgroundColor: AuthUi.textPrimary,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -79,17 +98,10 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     }
 
     if (authProvider.isAlreadyOnThisDevice(phone: phone)) {
-      setState(() => _alreadyOnDevice = true);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.l10n.accountAlreadyLoggedInOnDevice,
-            style: WaUi.body.copyWith(color: Colors.white),
-          ),
-          backgroundColor: WaUi.primaryText,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      setState(() {
+        _alreadyOnDevice = true;
+        _phoneError = context.l10n.accountAlreadyLoggedInOnDevice;
+      });
       return;
     }
 
@@ -100,7 +112,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
       if (!result.success) return;
 
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => OtpScreen(
             phone: result.phone ?? phone,
             debugOtp: result.otp,
@@ -130,10 +142,28 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
+  TextStyle _text(
+    AuthScale m, {
+    required double size,
+    FontWeight weight = FontWeight.w400,
+    Color color = AuthUi.textPrimary,
+    double height = 1.2,
+    double letterSpacing = 0,
+  }) {
+    return AppFonts.textStyle(
+      fontSize: m.s(size),
+      fontWeight: weight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final phoneFocused = _phoneFocus.hasFocus;
+    final m = AuthScale.of(context);
 
     return Scaffold(
       backgroundColor: AuthUi.bg,
@@ -141,259 +171,388 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Text(
-                  'LOGIN',
-                  style: AuthUi.screenTitle,
-                ),
-              ),
+              const AuthAppBarTitle('LOGIN'),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AuthUi.horizontalPad,
+                  padding: EdgeInsets.fromLTRB(
+                    m.padH,
+                    m.v(40),
+                    m.padH,
+                    m.v(24),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 20),
-                      Text(
-                        context.l10n.welcomeBack,
-                        style: AuthUi.heroTitle.copyWith(fontSize: 30),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        context.l10n.barqodyWillSendOtp,
-                        style: AuthUi.body,
-                      ),
-                      const SizedBox(height: 28),
-                      AuthFieldLabel(
-                        '${context.l10n.country} / REGION',
-                      ),
-                      const SizedBox(height: 8),
-                      InkWell(
-                        onTap: _pickCountry,
-                        borderRadius:
-                            BorderRadius.circular(AuthUi.fieldRadius),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 14,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AuthUi.bg,
-                            borderRadius:
-                                BorderRadius.circular(AuthUi.fieldRadius),
-                            border: Border.all(color: AuthUi.border),
-                          ),
-                          child: Row(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                _country.flagEmoji,
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  '${_country.name} (${_country.code})',
-                                  style: WaUi.bodyMedium.copyWith(
-                                    color: AuthUi.textPrimary,
-                                    fontSize: 15,
-                                  ),
+                                context.l10n.welcomeBack,
+                                textAlign: TextAlign.left,
+                                style: _text(
+                                  m,
+                                  size: 32,
+                                  weight: FontWeight.w700,
+                                  height: 1.15,
+                                  letterSpacing: -0.6,
                                 ),
                               ),
-                              const Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                color: AuthUi.textMuted,
+                              SizedBox(height: m.v(10)),
+                              Text(
+                                context.l10n.barqodyWillSendOtp,
+                                textAlign: TextAlign.left,
+                                style: _text(
+                                  m,
+                                  size: 15,
+                                  color: AuthUi.textSecondary,
+                                  height: 1.45,
+                                ),
+                              ),
+                              SizedBox(height: m.v(40)),
+                              Text(
+                                '${context.l10n.country} / REGION'
+                                    .toUpperCase(),
+                                textAlign: TextAlign.left,
+                                style: _text(
+                                  m,
+                                  size: 11,
+                                  weight: FontWeight.w600,
+                                  color: AuthUi.textMuted,
+                                  letterSpacing: 0.85,
+                                  height: 1.2,
+                                ),
+                              ),
+                              SizedBox(height: m.v(10)),
+                              _CountryField(
+                                height: m.fieldH,
+                                radius: m.radius,
+                                country: _country,
+                                textStyle: _text(m, size: 15),
+                                onTap: _pickCountry,
+                                flagSize: m.s(22),
+                                chevronSize: m.s(20),
+                                padH: m.s(14),
+                              ),
+                              SizedBox(height: m.v(18)),
+                              Text(
+                                context.l10n.phoneNumber.toUpperCase(),
+                                textAlign: TextAlign.left,
+                                style: _text(
+                                  m,
+                                  size: 11,
+                                  weight: FontWeight.w600,
+                                  color: AuthUi.textMuted,
+                                  letterSpacing: 0.85,
+                                  height: 1.2,
+                                ),
+                              ),
+                              SizedBox(height: m.v(10)),
+                              _PhoneField(
+                                height: m.fieldH,
+                                radius: m.radius,
+                                focused: phoneFocused,
+                                dialCode: _country.code,
+                                dialStyle: _text(
+                                  m,
+                                  size: 15,
+                                  weight: FontWeight.w500,
+                                ),
+                                inputStyle: _text(m, size: 15),
+                                hintStyle: _text(
+                                  m,
+                                  size: 15,
+                                  color: AuthUi.textMuted,
+                                ),
+                                controller: _phoneController,
+                                focusNode: _phoneFocus,
+                                onDialTap: _pickCountry,
+                                onChanged: (_) {
+                                  _checkAlreadyOnDevice();
+                                  if (_phoneError != null) {
+                                    setState(() => _phoneError = null);
+                                  }
+                                },
+                                onSubmitted: (_) => _handleContinue(),
+                                padH: m.s(14),
+                                dividerH: m.s(20),
+                              ),
+                              if (_phoneError != null) ...[
+                                SizedBox(height: m.v(8)),
+                                Text(
+                                  _phoneError!,
+                                  style: _text(
+                                    m,
+                                    size: 12,
+                                    color: const Color(0xFFD32F2F),
+                                  ),
+                                ),
+                              ],
+                              SizedBox(height: m.v(32)),
+                              AuthPrimaryPillButton(
+                                label: context.l10n.continueLabel,
+                                loading: authProvider.isLoading,
+                                onPressed: authProvider.isLoading
+                                    ? null
+                                    : _handleContinue,
+                              ),
+                              SizedBox(height: m.v(16)),
+                              AuthOutlinedPillButton(
+                                label: context.l10n.logInWithQRCode,
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    AppPageRoute(
+                                      builder: (_) => QrLoginScreen(
+                                        addAccount: widget.addAccount,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: m.v(28)),
+                              Text.rich(
+                                TextSpan(
+                                  style: _text(
+                                    m,
+                                    size: 12,
+                                    color: AuthUi.textSecondary,
+                                    height: 1.45,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          '${context.l10n.byContinuingYouAgreeTo} ',
+                                    ),
+                                    WidgetSpan(
+                                      alignment:
+                                          PlaceholderAlignment.baseline,
+                                      baseline: TextBaseline.alphabetic,
+                                      child: GestureDetector(
+                                        onTap: () => _openLegal('/terms'),
+                                        child: Text(
+                                          context.l10n.termsOfService,
+                                          style: _text(
+                                            m,
+                                            size: 12,
+                                            weight: FontWeight.w700,
+                                            height: 1.45,
+                                          ).copyWith(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            decorationColor:
+                                                AuthUi.textPrimary,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // Force 2 lines (Figma):
+                                    // line1: … Terms of Service
+                                    // line2: and Privacy Policy.
+                                    TextSpan(
+                                      text:
+                                          '\n${context.l10n.andConjunction} ',
+                                    ),
+                                    WidgetSpan(
+                                      alignment:
+                                          PlaceholderAlignment.baseline,
+                                      baseline: TextBaseline.alphabetic,
+                                      child: GestureDetector(
+                                        onTap: () => _openLegal('/privacy'),
+                                        child: Text(
+                                          context.l10n.privacyPolicy,
+                                          style: _text(
+                                            m,
+                                            size: 12,
+                                            weight: FontWeight.w700,
+                                            height: 1.45,
+                                          ).copyWith(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            decorationColor:
+                                                AuthUi.textPrimary,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const TextSpan(text: '.'),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 18),
-                      AuthFieldLabel(context.l10n.phoneNumber),
-                      const SizedBox(height: 8),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 150),
-                        decoration: BoxDecoration(
-                          color: AuthUi.bg,
-                          borderRadius:
-                              BorderRadius.circular(AuthUi.fieldRadius),
-                          border: Border.all(
-                            color: phoneFocused
-                                ? AuthUi.borderFocused
-                                : AuthUi.border,
-                            width: phoneFocused ? 1.8 : 1,
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: _pickCountry,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 14,
-                                  right: 10,
-                                  top: 14,
-                                  bottom: 14,
-                                ),
-                                child: Text(
-                                  _country.code,
-                                  style: WaUi.bodyMedium.copyWith(
-                                    fontSize: 15,
-                                    color: AuthUi.textPrimary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 1,
-                              height: 22,
-                              color: AuthUi.border,
-                            ),
-                            Expanded(
-                              child: TextFormField(
-                                controller: _phoneController,
-                                focusNode: _phoneFocus,
-                                keyboardType: TextInputType.phone,
-                                textInputAction: TextInputAction.done,
-                                style: WaUi.bodyMedium.copyWith(fontSize: 16),
-                                cursorColor: AuthUi.textPrimary,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(15),
-                                ],
-                                onChanged: (_) => _checkAlreadyOnDevice(),
-                                onFieldSubmitted: (_) => _handleContinue(),
-                                decoration: InputDecoration(
-                                  hintText: context.l10n.phoneNumber2,
-                                  hintStyle: WaUi.body.copyWith(
-                                    color: AuthUi.textMuted,
-                                    fontSize: 16,
-                                  ),
-                                  border: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  focusedErrorBorder: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 14,
-                                  ),
-                                  errorText: _alreadyOnDevice
-                                      ? context
-                                          .l10n.accountAlreadyLoggedInOnDevice
-                                      : null,
-                                  errorMaxLines: 2,
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return context.l10n.required;
-                                  }
-                                  if (value
-                                          .replaceAll(RegExp(r'\D'), '')
-                                          .length <
-                                      7) {
-                                    return context.l10n.tooShort;
-                                  }
-                                  if (_alreadyOnDevice) {
-                                    return context
-                                        .l10n.accountAlreadyLoggedInOnDevice;
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Align(
-                        alignment: Alignment.center,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => QrLoginScreen(
-                                  addAccount: widget.addAccount,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            context.l10n.logInWithQRCode,
-                            style: WaUi.bodyMedium.copyWith(
-                              color: AuthUi.textPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      AuthPillButton(
-                        label: context.l10n.continueLabel,
-                        loading: authProvider.isLoading,
-                        onPressed:
-                            authProvider.isLoading ? null : _handleContinue,
-                      ),
-                      const SizedBox(height: 16),
-                      Text.rich(
-                        TextSpan(
-                          style: AuthUi.body.copyWith(fontSize: 12),
-                          children: [
-                            TextSpan(
-                              text: '${context.l10n.byContinuingYouAgreeTo} ',
-                            ),
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.baseline,
-                              baseline: TextBaseline.alphabetic,
-                              child: GestureDetector(
-                                onTap: () => _openLegal('/terms'),
-                                child: Text(
-                                  context.l10n.termsOfService,
-                                  style: AuthUi.body.copyWith(
-                                    fontSize: 12,
-                                    color: AuthUi.textPrimary,
-                                    fontWeight: FontWeight.w600,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TextSpan(
-                              text: ' ${context.l10n.andConjunction} ',
-                            ),
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.baseline,
-                              baseline: TextBaseline.alphabetic,
-                              child: GestureDetector(
-                                onTap: () => _openLegal('/privacy'),
-                                child: Text(
-                                  context.l10n.privacyPolicy,
-                                  style: AuthUi.body.copyWith(
-                                    fontSize: 12,
-                                    color: AuthUi.textPrimary,
-                                    fontWeight: FontWeight.w600,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const TextSpan(text: '.'),
-                          ],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                    ],
-                  ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CountryField extends StatelessWidget {
+  const _CountryField({
+    required this.height,
+    required this.radius,
+    required this.country,
+    required this.textStyle,
+    required this.onTap,
+    required this.flagSize,
+    required this.chevronSize,
+    required this.padH,
+  });
+
+  final double height;
+  final double radius;
+  final CountryDialCode country;
+  final TextStyle textStyle;
+  final VoidCallback onTap;
+  final double flagSize;
+  final double chevronSize;
+  final double padH;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AuthUi.bg,
+      borderRadius: BorderRadius.circular(radius),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(radius),
+        child: Container(
+          height: height,
+          padding: EdgeInsets.symmetric(horizontal: padH),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(radius),
+            border: Border.all(color: AuthUi.border, width: 1),
+          ),
+          child: Row(
+            children: [
+              Text(
+                country.flagEmoji,
+                style: TextStyle(fontSize: flagSize, height: 1),
+              ),
+              SizedBox(width: padH * 0.7),
+              Expanded(
+                child: Text(
+                  '${country.name} (${country.code})',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textStyle,
                 ),
+              ),
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                size: chevronSize,
+                color: AuthUi.textMuted,
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _PhoneField extends StatelessWidget {
+  const _PhoneField({
+    required this.height,
+    required this.radius,
+    required this.focused,
+    required this.dialCode,
+    required this.dialStyle,
+    required this.inputStyle,
+    required this.hintStyle,
+    required this.controller,
+    required this.focusNode,
+    required this.onDialTap,
+    required this.onChanged,
+    required this.onSubmitted,
+    required this.padH,
+    required this.dividerH,
+  });
+
+  final double height;
+  final double radius;
+  final bool focused;
+  final String dialCode;
+  final TextStyle dialStyle;
+  final TextStyle inputStyle;
+  final TextStyle hintStyle;
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final VoidCallback onDialTap;
+  final ValueChanged<String> onChanged;
+  final ValueChanged<String> onSubmitted;
+  final double padH;
+  final double dividerH;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 120),
+      curve: Curves.easeOut,
+      height: height,
+      decoration: BoxDecoration(
+        color: AuthUi.bg,
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(
+          color: focused ? AuthUi.borderFocused : AuthUi.border,
+          width: focused ? 2 : 1,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          InkWell(
+            onTap: onDialTap,
+            child: Padding(
+              padding: EdgeInsets.only(left: padH, right: padH * 0.7),
+              child: Text(dialCode, style: dialStyle),
+            ),
+          ),
+          Container(
+            width: 1,
+            height: dividerH,
+            color: AuthUi.border,
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: padH * 0.85),
+              // Theme's InputDecorationTheme draws a nested outline —
+              // fully override so only the outer field border shows.
+              child: TextField(
+                controller: controller,
+                focusNode: focusNode,
+                keyboardType: TextInputType.phone,
+                textInputAction: TextInputAction.done,
+                style: inputStyle,
+                cursorColor: AuthUi.textPrimary,
+                cursorWidth: 1.5,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(15),
+                ],
+                onChanged: onChanged,
+                onSubmitted: onSubmitted,
+                decoration: InputDecoration(
+                  isCollapsed: true,
+                  isDense: true,
+                  filled: false,
+                  fillColor: Colors.transparent,
+                  contentPadding: EdgeInsets.zero,
+                  hintText: '(555) 123-4567',
+                  hintStyle: hintStyle,
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedErrorBorder: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

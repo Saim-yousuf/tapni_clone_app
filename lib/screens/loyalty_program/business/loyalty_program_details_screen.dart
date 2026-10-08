@@ -6,6 +6,7 @@ import 'package:tapni_app/screens/loyalty_program/business/create_reward_screen.
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_design_editor_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_template_gallery_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
@@ -133,15 +134,8 @@ class _LoyaltyProgramDetailsScreenState
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 36,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 8),
-                  decoration: BoxDecoration(
-                    color: WaUi.divider,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+                const SheetDragHandle(),
+                const SizedBox(height: 8),
                 ListTile(
                   leading: const Icon(Icons.palette_outlined),
                   title: Text(ctx.l10n.chooseATemplate, style: WaUi.listTitle),

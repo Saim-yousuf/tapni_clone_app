@@ -149,7 +149,7 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 10),
-              const Center(child: SheetDragHandle()),
+              const SheetDragHandle(),
               const SizedBox(height: 8),
               BarqodyTitleBar(
                 title: 'Book Service',

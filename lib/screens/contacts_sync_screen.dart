@@ -175,7 +175,7 @@ class _ContactsSyncScreenState extends State<ContactsSyncScreen> {
               ),
               SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: WaUi.primaryButtonHeight,
                 child: ElevatedButton(
                   onPressed: _syncing ? null : _allowAndSync,
                   style: ElevatedButton.styleFrom(
@@ -184,9 +184,7 @@ class _ContactsSyncScreenState extends State<ContactsSyncScreen> {
                     disabledBackgroundColor:
                         AppTheme.primaryBlack.withValues(alpha: 0.5),
                     elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(WaUi.radiusPill),
-                    ),
+                    shape: const StadiumBorder(),
                   ),
                   child: _syncing
                       ? const SizedBox(
@@ -200,7 +198,8 @@ class _ContactsSyncScreenState extends State<ContactsSyncScreen> {
                       : Text(
                           context.l10n.allowAndSync,
                           style: WaUi.promoButton.copyWith(
-                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                 ),

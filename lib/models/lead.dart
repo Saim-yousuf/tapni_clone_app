@@ -76,6 +76,11 @@ class Lead {
   String get displayPhone =>
       contactUserData != null ? contactUserData!.phone : phone;
 
+  String get displayUsername {
+    final u = contactUserData?.username?.trim() ?? '';
+    return u;
+  }
+
   String get displayCompany =>
       contactUserData != null ? contactUserData!.company : company;
 

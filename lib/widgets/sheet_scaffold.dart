@@ -17,14 +17,20 @@ class SheetMessengerScope extends StatelessWidget {
 
 /// Sheet layout (transparent full-height [Scaffold]). Do not nest another
 /// [ScaffoldMessenger] here — the sheet [State] cannot see descendants.
+///
+/// Taps on the dimmed area above [body] dismiss the route (same as
+/// [showModalBottomSheet] `isDismissible: true`). Without this, the
+/// full-height scaffold swallows barrier taps.
 class SheetScaffold extends StatelessWidget {
   final Widget body;
   final Color backgroundColor;
+  final bool dismissOnBarrierTap;
 
   const SheetScaffold({
     super.key,
     required this.body,
     this.backgroundColor = Colors.transparent,
+    this.dismissOnBarrierTap = true,
   });
 
   @override
@@ -34,12 +40,52 @@ class SheetScaffold extends StatelessWidget {
       // Sheets pad for the keyboard themselves; resizing here double-applies
       // viewInsets and can push the sheet off-screen.
       resizeToAvoidBottomInset: false,
-      body: Align(
-        alignment: Alignment.bottomCenter,
-        child: body,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (dismissOnBarrierTap)
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  final nav = Navigator.of(context);
+                  if (nav.canPop()) nav.pop();
+                },
+              ),
+            ),
+          // Painted above the barrier detector — sheet content keeps its taps.
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: body,
+          ),
+        ],
       ),
     );
   }
+}
+
+/// App-wide bottom sheet: always dismissible by barrier tap + drag.
+Future<T?> showAppModalBottomSheet<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  bool isScrollControlled = true,
+  bool useSafeArea = false,
+  Color? backgroundColor,
+  Color? barrierColor,
+  ShapeBorder? shape,
+  bool enableDrag = true,
+}) {
+  return showModalBottomSheet<T>(
+    context: context,
+    isScrollControlled: isScrollControlled,
+    isDismissible: true,
+    enableDrag: enableDrag,
+    useSafeArea: useSafeArea,
+    backgroundColor: backgroundColor,
+    barrierColor: barrierColor,
+    shape: shape,
+    builder: builder,
+  );
 }
 
 SnackBar sheetSnackBar(

@@ -236,7 +236,7 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                                         children: [
                                           Expanded(
                                             child: SizedBox(
-                                              height: 48,
+                                              height: WaUi.primaryButtonHeight,
                                               child: OutlinedButton(
                                                 onPressed: isResponding
                                                     ? null
@@ -255,6 +255,7 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                                                 child: Text(
                                                   context.l10n.decline,
                                                   style: WaUi.body.copyWith(
+                                                    fontSize: 16,
                                                     fontWeight: FontWeight.w700,
                                                     color: Colors.black,
                                                   ),

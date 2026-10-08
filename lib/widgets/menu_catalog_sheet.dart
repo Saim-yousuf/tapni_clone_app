@@ -222,7 +222,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             child: Column(
               children: [
                 const SizedBox(height: 12),
-                const Center(child: SheetDragHandle()),
+                const SheetDragHandle(),
                 const SizedBox(height: 14),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -672,16 +672,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Center(child: SheetDragHandle()),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Manage Section',
-                    textAlign: TextAlign.center,
-                    style: WaUi.toolsTitleOf(
-                      size: 18,
-                      weight: FontWeight.w700,
-                      color: Colors.black,
-                    ),
+                  SheetHeader(
+                    title: 'Manage Section',
+                    showHandle: true,
+                    onBack: () => Navigator.pop(ctx),
                   ),
                   const SizedBox(height: 18),
                   if (_catalogCategories.isEmpty)
@@ -838,16 +832,9 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Center(child: SheetDragHandle()),
-                const SizedBox(height: 16),
-                Text(
-                  'Add Section',
-                  textAlign: TextAlign.center,
-                  style: WaUi.toolsTitleOf(
-                    size: 18,
-                    weight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
+                SheetHeader(
+                  title: 'Add Section',
+                  onBack: () => Navigator.pop(ctx),
                 ),
                 const SizedBox(height: 20),
                 _capsLabel('SECTION NAME'),
@@ -916,16 +903,9 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Center(child: SheetDragHandle()),
-                const SizedBox(height: 16),
-                Text(
-                  'Rename Section',
-                  textAlign: TextAlign.center,
-                  style: WaUi.toolsTitleOf(
-                    size: 18,
-                    weight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
+                SheetHeader(
+                  title: 'Rename Section',
+                  onBack: () => Navigator.pop(ctx),
                 ),
                 const SizedBox(height: 20),
                 _capsLabel('SECTION NAME'),
@@ -1527,7 +1507,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           ),
           SizedBox(
             width: 148,
-            height: 50,
+            height: WaUi.primaryButtonHeight,
             child: ElevatedButton(
               onPressed: _openServiceCart,
               style: ElevatedButton.styleFrom(
@@ -1539,7 +1519,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               child: Text(
                 'Continue',
                 style: WaUi.promoButton.copyWith(
-                  fontSize: 15,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -1595,7 +1575,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           ),
           SizedBox(
             width: 156,
-            height: 50,
+            height: WaUi.primaryButtonHeight,
             child: ElevatedButton(
               onPressed:
                   itemCount == 0 || _isOrdering ? null : _placeOrder,
@@ -1618,7 +1598,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                   : Text(
                       context.l10n.placeOrder,
                       style: WaUi.promoButton.copyWith(
-                        fontSize: 15,
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -1850,8 +1830,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      isDismissible: false,
-      enableDrag: false,
+      isDismissible: true,
+      enableDrag: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         decoration: const BoxDecoration(

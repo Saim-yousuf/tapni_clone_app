@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/utils/branded_qr.dart';
 
-/// QR with the BarQody logo in the center and high error correction.
+/// Starbucks-style branded QR: circular modules, circular eyes, and a
+/// circular white center plate with the Barqody logo. High ECC recovers the
+/// covered center.
 class BrandedQrImage extends StatelessWidget {
   final String data;
   final double? size;
@@ -21,7 +23,7 @@ class BrandedQrImage extends StatelessWidget {
     this.padding = const EdgeInsets.all(10),
     this.backgroundColor = Colors.transparent,
     this.foregroundColor = Colors.black,
-    this.gapless = true,
+    this.gapless = BrandedQr.gapless,
     this.eyeStyle,
     this.dataModuleStyle,
     this.showLogo = true,
@@ -29,13 +31,10 @@ class BrandedQrImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final resolvedEye = eyeStyle ??
-        QrEyeStyle(eyeShape: QrEyeShape.square, color: foregroundColor);
-    final resolvedModules = dataModuleStyle ??
-        QrDataModuleStyle(
-          dataModuleShape: QrDataModuleShape.square,
-          color: foregroundColor,
-        );
+    final resolvedEye =
+        eyeStyle ?? BrandedQr.eyeStyleFor(foregroundColor);
+    final resolvedModules =
+        dataModuleStyle ?? BrandedQr.moduleStyleFor(foregroundColor);
 
     final qr = QrImageView(
       data: data,
@@ -54,7 +53,6 @@ class BrandedQrImage extends StatelessWidget {
     Widget stackFor(double side) {
       final inner = (side - padding.horizontal).clamp(1.0, side);
       final plate = BrandedQr.plateSizeFor(inner).width;
-      final radius = BrandedQr.plateRadiusFor(plate);
       final inset = plate * BrandedQr.logoInsetFraction;
       return Stack(
         alignment: Alignment.center,
@@ -65,14 +63,11 @@ class BrandedQrImage extends StatelessWidget {
               width: plate,
               height: plate,
               padding: EdgeInsets.all(inset),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(radius),
+                shape: BoxShape.circle,
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(
-                  (plate - inset * 2) * BrandedQr.logoCornerFraction,
-                ),
+              child: ClipOval(
                 child: Image.asset(
                   BrandedQr.logoAsset,
                   fit: BoxFit.cover,

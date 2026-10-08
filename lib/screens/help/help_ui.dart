@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/help_center_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 /// Shared Help Center design tokens & widgets (match reference UI).
 class HelpUi {
@@ -17,6 +19,7 @@ class HelpUi {
   static const double sidePad = 20;
 }
 
+/// Alias of [AuthBackButton] (OTP / Verify) for Help Center screens.
 class HelpCircleBackButton extends StatelessWidget {
   final VoidCallback? onTap;
 
@@ -24,23 +27,7 @@ class HelpCircleBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: HelpUi.circleBtn,
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onTap ?? () => Navigator.of(context).maybePop(),
-        child: const SizedBox(
-          width: 40,
-          height: 40,
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 16,
-            color: Colors.black,
-          ),
-        ),
-      ),
-    );
+    return AuthBackButton(onPressed: onTap);
   }
 }
 
@@ -438,26 +425,9 @@ class HelpContactUsBar extends StatelessWidget {
           top: false,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-            child: SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: ElevatedButton(
-                onPressed: onPressed,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shadowColor: Colors.transparent,
-                  shape: const StadiumBorder(),
-                ),
-                child: Text(
-                  'Contact Us',
-                  style: WaUi.promoButton.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
+            child: PillButton(
+              label: 'Contact Us',
+              onPressed: onPressed,
             ),
           ),
         ),

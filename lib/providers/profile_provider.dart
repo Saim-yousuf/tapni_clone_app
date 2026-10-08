@@ -234,16 +234,11 @@ class ProfileProvider extends ChangeNotifier {
 
       if (response.success && response.data is Map<String, dynamic>) {
         final data = response.data as Map<String, dynamic>;
-        _linkCatalog = ensureGalleryLinkTemplate(
-          ensureProductCatalogTemplate(
-            ensureDocumentsCatalogTemplate(
-              (data['categories'] as List<dynamic>? ?? [])
-                  .map((item) => LinkCategory.fromJson(item as Map<String, dynamic>))
-                  .where((category) => category.templates.isNotEmpty)
-                  .toList(),
-            ),
-          ),
-        );
+        // Use admin/API catalog only — do not inject client-side stub templates.
+        _linkCatalog = (data['categories'] as List<dynamic>? ?? [])
+            .map((item) => LinkCategory.fromJson(item as Map<String, dynamic>))
+            .where((category) => category.templates.isNotEmpty)
+            .toList();
       }
     } finally {
       _isLinkCatalogLoading = false;

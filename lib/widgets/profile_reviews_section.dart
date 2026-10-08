@@ -191,19 +191,11 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
           child: ListView(
             shrinkWrap: true,
             children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(20, 12, 20, 8),
-                child: Center(child: SheetDragHandle()),
-              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
-                child: Text(
-                  'Select item or service',
-                  style: WaUi.toolsTitleOf(
-                    size: 17,
-                    weight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
+                padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                child: SheetHeader(
+                  title: 'Select item or service',
+                  onBack: () => Navigator.pop(ctx),
                 ),
               ),
               ...widget.catalogItems.map(

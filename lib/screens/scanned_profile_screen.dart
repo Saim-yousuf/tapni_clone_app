@@ -1,5 +1,11 @@
+import 'dart:math';
+import 'dart:ui' show ImageFilter;
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
@@ -11,17 +17,19 @@ import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/repository/follow_repo.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
-import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/business/add_stamp_screen.dart';
-import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/profile_reviews_section.dart';
 import 'package:tapni_app/widgets/profile_empty_state.dart';
 import 'package:tapni_app/widgets/explore_detail_shimmers.dart';
+import 'package:tapni_app/widgets/user_cards_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 
@@ -60,16 +68,25 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   bool _isCustomerEnrolledInBusiness = false;
   bool _enrollmentStatusChecked = false;
   List<RewardEnrollment> _customerProgramEnrollments = [];
-  bool _isEmployee = false;
-  bool _isPendingEmployee = false;
-  bool _employeeStatusChecked = false;
   bool _followBusy = false;
+  final ValueNotifier<double> _sheetExpandProgress = ValueNotifier<double>(0);
+  final DraggableScrollableController _sheetController =
+      DraggableScrollableController();
+  double _sheetInitialSize = 0.6;
+  double _sheetMaxSize = 0.92;
 
   @override
   void initState() {
     super.initState();
     _fetchProfile();
     _checkBusinessPrograms();
+  }
+
+  @override
+  void dispose() {
+    _sheetExpandProgress.dispose();
+    _sheetController.dispose();
+    super.dispose();
   }
 
   bool _isOwnProfile(UserProfile profile) {
@@ -154,55 +171,6 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     });
   }
 
-  Future<void> _loadEmployeeStatus(String employeeUserId) async {
-    final isBusinessUser = Provider.of<ProfileProvider>(
-      context,
-      listen: false,
-    ).isProUser;
-    if (!isBusinessUser) {
-      if (mounted) setState(() => _employeeStatusChecked = true);
-      return;
-    }
-
-    final res = await AttendanceRepo().getEmployeeStatus(employeeUserId);
-    if (!mounted) return;
-
-    var isEmployee = false;
-    var isPending = false;
-    if (res.success && res.data != null) {
-      final data = _unwrapApiPayload(res.data);
-      isEmployee = data['isEmployee'] as bool? ?? false;
-      isPending = data['isPending'] as bool? ?? false;
-    }
-
-    setState(() {
-      _isEmployee = isEmployee;
-      _isPendingEmployee = isPending;
-      _employeeStatusChecked = true;
-    });
-  }
-
-  Future<void> _addAsEmployee(UserProfile profile) async {
-    if (profile.id == null) return;
-
-    final created = await Navigator.push<bool>(
-      context,
-      MaterialPageRoute(
-        builder: (_) => EmployeeSettingsScreen(
-          employeeUserId: profile.id,
-          employeeName: profile.name,
-        ),
-      ),
-    );
-
-    if (created == true && mounted) {
-      setState(() {
-        _isPendingEmployee = true;
-        _isEmployee = false;
-      });
-    }
-  }
-
   Future<void> _checkBusinessPrograms() async {
     final isBusinessUser = Provider.of<ProfileProvider>(
       context,
@@ -279,7 +247,6 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
           if (isOwn) {
             _programsChecked = true;
             _enrollmentStatusChecked = true;
-            _employeeStatusChecked = true;
           }
         });
         if (isOwn) return;
@@ -288,17 +255,14 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
           setState(() {
             _programsChecked = true;
             _enrollmentStatusChecked = true;
-            _employeeStatusChecked = true;
           });
           return;
         }
 
         if (profile.id != null) {
           _loadCustomerEnrollmentStatus(profile.id!);
-          _loadEmployeeStatus(profile.id!);
         } else {
           setState(() => _enrollmentStatusChecked = true);
-          setState(() => _employeeStatusChecked = true);
         }
         // Automatically add scanned contact to the user's contact list
         if (mounted) {
@@ -321,41 +285,72 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        foregroundColor: Colors.black,
-        title: Text(
-          widget.username ?? context.l10n.profile,
-          style: TextStyle(fontWeight: FontWeight.w600)),
-        actions: [
-          _buildShareButton(),
-          _buildAppBarMenu(),
-        ],
-      ),
-      body: SafeArea(
-        child: _isLoading
-            ? const ScannedProfileShimmer()
-            : _errorMessage != null
-            ? _buildErrorView()
-            : _buildProfileView(_profile!),
+    final showChrome =
+        !_isLoading && _errorMessage == null && _profile != null;
+    final systemUi = AppTheme.systemUiFor(Theme.of(context).brightness);
+    final overlayStyle = showChrome
+        ? systemUi.copyWith(statusBarColor: Colors.transparent)
+        : systemUi;
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: overlayStyle,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          top: !showChrome,
+          child: _isLoading
+              ? const ScannedProfileShimmer()
+              : _errorMessage != null
+                  ? Column(
+                      children: [
+                        _buildSimpleTopBar(),
+                        Expanded(child: _buildErrorView()),
+                      ],
+                    )
+                  : _buildProfileView(_profile!),
+        ),
       ),
     );
   }
 
-  Widget _buildShareButton() {
-    if (_isLoading ||
-        _errorMessage != null ||
-        _profile == null ||
-        !_profile!.canView) {
-      return const SizedBox.shrink();
-    }
+  /// Matches Contacts (`WaChatsHeader` / search) horizontal inset.
+  static const double _padH = 25.0;
 
-    return IconButton(
-      icon: const Icon(Icons.share_rounded),
-      tooltip: context.l10n.shareProfile,
-      onPressed: () => _shareProfile(_profile!),
+  Widget _buildSimpleTopBar() {
+    final m = AuthScale.of(context);
+    final title = (widget.username ?? context.l10n.profile).trim();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: _padH, vertical: 4),
+      child: SizedBox(
+        height: m.appBarH,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Text(
+              title.toUpperCase(),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AuthAppBarTitle.titleStyle(m),
+            ),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: AuthBackButton(),
+            ),
+          ],
+        ),
+      ),
     );
+  }
+
+  Future<void> _collapseSheet() async {
+    if (!_sheetController.isAttached) return;
+    await _sheetController.animateTo(
+      _sheetInitialSize,
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+    );
+    _sheetExpandProgress.value = 0;
   }
 
   Future<void> _shareProfile(UserProfile profile) async {
@@ -377,88 +372,209 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     );
   }
 
-  Widget _buildAppBarMenu() {
-    if (_isLoading || _errorMessage != null || _profile == null) {
-      return SizedBox.shrink();
-    }
-
-    if (_isOwnProfile(_profile!)) {
-      return SizedBox.shrink();
-    }
-
-    final isBusinessUser = Provider.of<ProfileProvider>(
-      context,
-      listen: false,
-    ).isProUser;
-    final canUnfollow = _profile!.followStatus == 'following' &&
-        (_profile!.id ?? '').isNotEmpty;
-    final showEmployee =
-        isBusinessUser && _employeeStatusChecked && _profile!.id != null;
-    if (!canUnfollow && !showEmployee) {
-      return SizedBox.shrink();
-    }
-
-    return PopupMenuButton<String>(
-      icon: Icon(Icons.more_vert),
-      tooltip: context.l10n.businessOptions,
-      onSelected: (value) {
-        if (value == 'unfollow') {
-          _cancelFollowRequest(_profile!);
-        }
-        if (value == 'add_employee' && !_isEmployee && !_isPendingEmployee) {
-          _addAsEmployee(_profile!);
-        }
-      },
-      itemBuilder: (context) => [
-        if (canUnfollow)
-          PopupMenuItem<String>(
-            value: 'unfollow',
-            child: Text(context.l10n.removeAccess),
-          ),
-        if (showEmployee)
-        PopupMenuItem<String>(
-          value: 'add_employee',
-          enabled: !_isEmployee && !_isPendingEmployee,
-          child: ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(
-              _isEmployee
-                  ? Icons.badge_outlined
-                  : _isPendingEmployee
-                  ? Icons.hourglass_top_outlined
-                  : Icons.person_add_alt_1_outlined,
-              color: _isEmployee
-                  ? Colors.green.shade700
-                  : _isPendingEmployee
-                  ? Colors.orange.shade800
-                  : Colors.black87,
-            ),
-            title: Text(
-              _isEmployee
-                  ? context.l10n.alreadyEmployee
-                  : _isPendingEmployee
-                  ? context.l10n.invitationPending
-                  : context.l10n.inviteAsEmployee,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: _isEmployee
-                    ? Colors.green.shade700
-                    : _isPendingEmployee
-                    ? Colors.orange.shade800
-                    : Colors.black87,
+  PopupMenuItem<String> _menuRow({
+    required String value,
+    required String label,
+    required Widget icon,
+  }) {
+    return PopupMenuItem<String>(
+      value: value,
+      height: 48,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          SizedBox(width: 22, height: 22, child: Center(child: icon)),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              label,
+              style: WaUi.body.copyWith(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+                height: 1.2,
               ),
             ),
-            subtitle: Text(
-              _isEmployee
-                  ? context.l10n.thisPersonIsOnYourTeam
-                  : _isPendingEmployee
-                  ? context.l10n.waitingForThemToAccept
-                  : context.l10n.sendInvitationForAttendance,
-              style: TextStyle(fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<PopupMenuEntry<String>> _overflowMenuItems(UserProfile profile) {
+    if (_isOwnProfile(profile)) return const [];
+
+    final canUnfollow =
+        profile.followStatus == 'following' && (profile.id ?? '').isNotEmpty;
+    final canView = profile.canView;
+
+    return [
+      if (canView) ...[
+        _menuRow(
+          value: 'share_link',
+          label: context.l10n.shareLink,
+          icon: Image.asset(
+            'assets/images/png/arrow-up-icon.png',
+            width: 18,
+            height: 18,
+            color: Colors.black,
+            errorBuilder: (_, __, ___) => const Icon(
+              Icons.ios_share_rounded,
+              size: 20,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        _menuRow(
+          value: 'exchange',
+          label: context.l10n.exchangeContact,
+          icon: const Icon(
+            Icons.sync_alt_rounded,
+            size: 20,
+            color: Colors.black,
+          ),
+        ),
+        _menuRow(
+          value: 'business_card',
+          label: 'Business Card',
+          icon: Image.asset(
+            'assets/images/png/card-icon.png',
+            width: 18,
+            height: 18,
+            color: Colors.black,
+            errorBuilder: (_, __, ___) => const Icon(
+              Icons.credit_card_outlined,
+              size: 20,
+              color: Colors.black,
             ),
           ),
         ),
       ],
+      if (canUnfollow)
+        _menuRow(
+          value: 'unfollow',
+          label: context.l10n.removeAccess,
+          icon: const Icon(
+            Icons.person_remove_outlined,
+            size: 20,
+            color: Colors.black,
+          ),
+        ),
+    ];
+  }
+
+  void _onOverflowSelected(String value, UserProfile profile) {
+    if (value == 'exchange') {
+      _exchangeContact();
+    } else if (value == 'business_card') {
+      // Wait for the popup route to close — opening a sheet in the same
+      // frame freezes the navigator under an already-draggable profile sheet.
+      final target = profile;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        UserCardsSheet.show(context, profile: target);
+      });
+    } else if (value == 'share_link') {
+      _shareProfile(profile);
+    } else if (value == 'unfollow') {
+      _cancelFollowRequest(profile);
+    }
+  }
+
+  String _displayUsername(UserProfile profile) {
+    final fromProfile = profile.username?.trim();
+    if (fromProfile != null && fromProfile.isNotEmpty) return fromProfile;
+    final fromArg = widget.username?.trim();
+    if (fromArg != null && fromArg.isNotEmpty) return fromArg;
+    return context.l10n.profile;
+  }
+
+  Widget _buildScannedTopBar(
+    UserProfile profile, {
+    bool overlayOnCover = false,
+    bool showClose = false,
+    VoidCallback? onClose,
+  }) {
+    // SafeArea top is off in chrome mode so cover can go edge-to-edge;
+    // always pad the bar by the status-bar inset.
+    final topInset = MediaQuery.paddingOf(context).top;
+    final m = AuthScale.of(context);
+    final menuItems = _overflowMenuItems(profile);
+    final username = _displayUsername(profile);
+
+    Widget? trailing;
+    if (showClose) {
+      trailing = IconButton(
+        onPressed: onClose,
+        padding: EdgeInsets.zero,
+        constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+        icon: const Icon(
+          Icons.close_rounded,
+          size: 24,
+          color: Colors.black,
+        ),
+      );
+    } else if (menuItems.isNotEmpty) {
+      trailing = PopupMenuButton<String>(
+        padding: EdgeInsets.zero,
+        offset: const Offset(0, 8),
+        tooltip: context.l10n.businessOptions,
+        color: Colors.white,
+        elevation: 8,
+        shadowColor: Colors.black.withValues(alpha: 0.12),
+        surfaceTintColor: Colors.white,
+        constraints: const BoxConstraints(minWidth: 220, maxWidth: 280),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
+        ),
+        onSelected: (value) => _onOverflowSelected(value, profile),
+        itemBuilder: (_) => menuItems,
+        child: const Padding(
+          padding: EdgeInsets.all(8),
+          child: Icon(
+            Icons.more_vert_rounded,
+            size: 22,
+            color: Colors.black,
+          ),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        _padH,
+        topInset + 6,
+        _padH,
+        overlayOnCover ? 0 : 4,
+      ),
+      child: SizedBox(
+        height: m.appBarH,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 48),
+              child: Text(
+                username.toUpperCase(),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AuthAppBarTitle.titleStyle(m),
+              ),
+            ),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: AuthBackButton(),
+            ),
+            if (trailing != null)
+              Align(
+                alignment: Alignment.centerRight,
+                child: trailing,
+              ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -512,90 +628,91 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     String? photoUrl,
   ) {
     final requested = profile.followStatus == 'requested';
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 24),
-      child: Column(
-        children: [
-          _buildProfileAvatar(profile, photoUrl, null),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28),
+    final bottomPad = MediaQuery.paddingOf(context).bottom;
+    return Column(
+      children: [
+        _buildScannedTopBar(profile),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(_padH, 24, _padH, 24 + bottomPad),
             child: Column(
               children: [
+                _buildAvatarCircle(
+                  displayName: displayName,
+                  photoUrl: photoUrl,
+                  size: 118,
+                ),
+                const SizedBox(height: 16),
                 VerifiedName(
-                  name: displayName,
+                  name: displayName.toUpperCase(),
                   verified: profile.isPro,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
+                  badgeSize: 20,
+                  style: WaUi.toolsTitleOf(
+                    size: 22,
+                    weight: FontWeight.w800,
+                    color: Colors.black,
+                    letterSpacing: 0.15,
                   ),
                 ),
                 if ((profile.username ?? '').trim().isNotEmpty) ...[
                   const SizedBox(height: 4),
                   Text(
                     '@${profile.username}',
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
+                    style: WaUi.body.copyWith(
+                      fontSize: 14,
+                      color: const Color(0xFF6B7280),
+                    ),
                   ),
                 ],
                 const SizedBox(height: 28),
-                const Icon(Icons.lock_outline_rounded, size: 42, color: Colors.black54),
+                const Icon(
+                  Icons.lock_outline_rounded,
+                  size: 42,
+                  color: Colors.black54,
+                ),
                 const SizedBox(height: 12),
                 Text(
                   context.l10n.thisProfileIsPrivate,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                  style: WaUi.toolsTitleOf(
+                    size: 18,
+                    weight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   context.l10n.privateProfileHint,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                  style: WaUi.body.copyWith(
+                    fontSize: 14,
+                    color: const Color(0xFF6B7280),
+                  ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
                 if (_followBusy)
                   const Padding(
                     padding: EdgeInsets.all(12),
                     child: CircularProgressIndicator(),
                   )
-                else if (requested)
-                  OutlinedButton(
-                    onPressed: () => _cancelFollowRequest(profile),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.black87,
-                      side: const BorderSide(color: Colors.black26),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 28,
-                        vertical: 12,
-                      ),
-                    ),
-                    child: Text(context.l10n.requested),
-                  )
                 else
-                  FilledButton(
-                    onPressed: () => _sendFollowRequest(profile),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 28,
-                        vertical: 12,
-                      ),
-                    ),
-                    child: Text(context.l10n.requestToView),
+                  _ScannedActionPill(
+                    label: requested
+                        ? context.l10n.requested
+                        : context.l10n.requestToView,
+                    filled: !requested,
+                    onTap: () {
+                      if (requested) {
+                        _cancelFollowRequest(profile);
+                      } else {
+                        _sendFollowRequest(profile);
+                      }
+                    },
                   ),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -624,12 +741,28 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     );
   }
 
+  Future<void> _exchangeContact() async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.exchangingContact)),
+    );
+    final res = await AuthRepo().exchangeContact(
+      username: widget.username,
+      id: widget.user,
+    );
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          res.success
+              ? context.l10n.contactExchangedSuccessfully
+              : (res.message ?? context.l10n.failedToExchangeContact),
+        ),
+      ),
+    );
+  }
+
   Widget _buildProfileView(UserProfile profile) {
     final isOwn = _isOwnProfile(profile);
-    final isBusinessUser = Provider.of<ProfileProvider>(
-      context,
-      listen: false,
-    ).isProUser;
     final card = _scannedCard;
     final displayName = card?.displayName.isNotEmpty == true
         ? card!.displayName
@@ -641,300 +774,496 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     if (!isOwn && !profile.canView) {
       return _buildPrivateProfileView(profile, displayName, displayPhoto);
     }
-    final showRewardsButton =
-        !isOwn &&
-        _programsChecked &&
-        _enrollmentStatusChecked &&
-        isBusinessUser &&
-        _hasActivePrograms &&
-        profile.id != null;
-    final rewardButtonLabel = _isCustomerEnrolledInBusiness
-        ? context.l10n.enrolled
-        : context.l10n.notEnrolled;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Column(
+    final bio = displayBio.trim();
+    final bottomPad = MediaQuery.paddingOf(context).bottom;
+    const padH = _padH;
+    final coverUrl = displayCover?.trim();
+    final hasCoverUrl = coverUrl != null && coverUrl.isNotEmpty;
+
+    const coverHeight = 270.0;
+    const collapsedCoverVisible = 100.0;
+    const sheetOverlapOnCover = 28.0;
+    const avatarSize = 118.0;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final h = constraints.maxHeight;
+        if (h <= 0) return const SizedBox.shrink();
+
+        final coverH = min(coverHeight, h * 0.48);
+        final sheetTop = coverH - sheetOverlapOnCover;
+        final initial = ((h - sheetTop) / h).clamp(0.40, 0.90).toDouble();
+        final minSize = initial;
+        final maxSize = ((h - collapsedCoverVisible) / h)
+            .clamp(initial + 0.04, 0.96)
+            .toDouble();
+        _sheetInitialSize = initial;
+        _sheetMaxSize = maxSize;
+
+        return NotificationListener<DraggableScrollableNotification>(
+          onNotification: (notification) {
+            final range = _sheetMaxSize - _sheetInitialSize;
+            if (range <= 0) return false;
+            final next = ((notification.extent - _sheetInitialSize) / range)
+                .clamp(0.0, 1.0);
+            if ((next - _sheetExpandProgress.value).abs() > 0.01) {
+              _sheetExpandProgress.value = next;
+            }
+            return false;
+          },
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              ValueListenableBuilder<double>(
+                valueListenable: _sheetExpandProgress,
+                builder: (_, expand, __) {
+                  final t = expand.clamp(0.0, 1.0);
+                  final extent = initial + t * (maxSize - initial);
+                  final visibleH = t <= 0.001
+                      ? coverH
+                      : (h * (1.0 - extent))
+                          .clamp(collapsedCoverVisible, coverH)
+                          .toDouble();
+                  final blur = t * 16.0;
+                  return Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: visibleH,
+                    child: _buildCoverBackdrop(
+                      coverUrl: hasCoverUrl ? coverUrl : null,
+                      topBar: _buildScannedTopBar(
+                        profile,
+                        overlayOnCover: true,
+                        showClose: t > 0.12,
+                        onClose: _collapseSheet,
+                      ),
+                      blurSigma: blur,
+                      height: visibleH,
+                      expandProgress: t,
+                    ),
+                  );
+                },
+              ),
+              DraggableScrollableSheet(
+                controller: _sheetController,
+                initialChildSize: initial,
+                minChildSize: minSize,
+                maxChildSize: maxSize,
+                expand: true,
+                snap: true,
+                snapSizes: <double>{minSize, initial, maxSize}.toList()
+                  ..sort(),
+                builder: (context, scrollController) {
+                  return Material(
+                    color: Colors.transparent,
+                    elevation: 0,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(BarqodyChrome.sheetRadius),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0x1A000000),
+                            blurRadius: 16,
+                            offset: Offset(0, -4),
+                          ),
+                        ],
+                      ),
+                      child: ValueListenableBuilder<double>(
+                        valueListenable: _sheetExpandProgress,
+                        builder: (context, expand, _) {
+                          final t = expand.clamp(0.0, 1.0);
+                          final headerOpacity =
+                              (1.0 - t * 1.25).clamp(0.0, 1.0);
+                          final showHeader = headerOpacity > 0.02;
+                          const avatarTopOffset = 6.0;
+                          final avatarInSheet =
+                              (avatarSize / 2 - avatarTopOffset)
+                                  .clamp(0.0, avatarSize);
+                          final headerBlockHeight = showHeader
+                              ? (avatarInSheet + 8) * headerOpacity
+                              : 20.0;
+
+                          return Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Column(
+                                children: [
+                                  const SizedBox(height: 15),
+                                  Center(
+                                    child: Container(
+                                      width: 80,
+                                      height: 6,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFD1D1D6),
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: headerBlockHeight),
+                                  Expanded(
+                                    child: ListView(
+                                      controller: scrollController,
+                                      physics:
+                                          const AlwaysScrollableScrollPhysics(
+                                        parent: ClampingScrollPhysics(),
+                                      ),
+                                      padding: EdgeInsets.only(
+                                        bottom: 32 + bottomPad,
+                                      ),
+                                      children: [
+                                        if (showHeader)
+                                          Opacity(
+                                            opacity: headerOpacity,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: padH,
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  VerifiedName(
+                                                    name: displayName
+                                                        .toUpperCase(),
+                                                    verified: profile.isPro,
+                                                    badgeSize: 20,
+                                                    style: WaUi.toolsTitleOf(
+                                                      size: 22,
+                                                      weight: FontWeight.w800,
+                                                      color: Colors.black,
+                                                      letterSpacing: 0.15,
+                                                    ),
+                                                  ),
+                                                  if (Constants
+                                                          .reviewsEnabled &&
+                                                      profile.reviewCount >
+                                                          0) ...[
+                                                    const SizedBox(height: 6),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        const Icon(
+                                                          Icons.star_rounded,
+                                                          size: 18,
+                                                          color: Color(
+                                                            0xFFF5A623,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Text(
+                                                          '${profile.avgRating.toStringAsFixed(1)} (${profile.reviewCount})',
+                                                          style: WaUi.body
+                                                              .copyWith(
+                                                            fontSize: 13,
+                                                            color: const Color(
+                                                              0xFF6B7280,
+                                                            ),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                  if (bio.isNotEmpty) ...[
+                                                    const SizedBox(height: 8),
+                                                    Text(
+                                                      bio,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: WaUi.body.copyWith(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        height: 1.35,
+                                                        color: const Color(
+                                                          0xFF6B7280,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        SizedBox(height: 28 * headerOpacity),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: padH,
+                                          ),
+                                          child: _buildLinkSection(
+                                            profile,
+                                            card,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                            padH,
+                                            32,
+                                            padH,
+                                            8,
+                                          ),
+                                          child: isOwn
+                                              ? Column(
+                                                  children: [
+                                                    Text(
+                                                      context.l10n.thisIsYou,
+                                                      style:
+                                                          WaUi.toolsTitleOf(
+                                                        size: 16,
+                                                        weight: FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Text(
+                                                      context.l10n
+                                                          .viewingOwnProfile,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: WaUi.body.copyWith(
+                                                        fontSize: 13,
+                                                        color: const Color(
+                                                          0xFF6B7280,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 16),
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child:
+                                                              _ScannedActionPill(
+                                                            label: context
+                                                                .l10n
+                                                                .shareCard,
+                                                            filled: false,
+                                                            onTap: () =>
+                                                                _shareProfile(
+                                                              profile,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 12,
+                                                        ),
+                                                        Expanded(
+                                                          child:
+                                                              _ScannedActionPill(
+                                                            label: context
+                                                                .l10n
+                                                                .openMyCard,
+                                                            filled: true,
+                                                            onTap: _openMyCard,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )
+                                              : _ScannedActionPill(
+                                                  label: context
+                                                      .l10n.exchangeContact,
+                                                  filled: true,
+                                                  onTap: _exchangeContact,
+                                                ),
+                                        ),
+                                        if (Constants.reviewsEnabled &&
+                                            ((profile.businessName ?? '')
+                                                    .trim()
+                                                    .isNotEmpty ||
+                                                profile.reviewCount > 0 ||
+                                                !isOwn))
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                              padH,
+                                              16,
+                                              padH,
+                                              0,
+                                            ),
+                                            child: ProfileReviewsSection(
+                                              profile: profile,
+                                              isOwnProfile: isOwn,
+                                              catalogItems: profile.socialLinks
+                                                  .expand(
+                                                    (l) =>
+                                                        l.catalogItems ??
+                                                        const <CatalogItem>[],
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (showHeader)
+                                Positioned(
+                                  top: -avatarSize / 2 + avatarTopOffset,
+                                  left: 0,
+                                  right: 0,
+                                  child: IgnorePointer(
+                                    child: Opacity(
+                                      opacity: headerOpacity,
+                                      child: Center(
+                                        child: _buildAvatarCircle(
+                                          displayName: displayName,
+                                          photoUrl: displayPhoto,
+                                          size: avatarSize,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildCoverBackdrop({
+    String? coverUrl,
+    Widget? topBar,
+    double blurSigma = 0,
+    double expandProgress = 0,
+    required double height,
+  }) {
+    final hasCoverUrl = coverUrl != null && coverUrl.trim().isNotEmpty;
+    final coverImage = SizedBox(
+      width: double.infinity,
+      height: height,
+      child: hasCoverUrl
+          ? ColoredBox(
+              color: const Color(0xFFE8EEF2),
+              child: CachedNetworkImage(
+                imageUrl: coverUrl.trim(),
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: height,
+                alignment: Alignment.center,
+                errorWidget: (_, _, _) =>
+                    const ProfileCoverPlaceholder(),
+                placeholder: (_, _) => const ColoredBox(
+                  color: Color(0xFFE8EEF2),
+                ),
+              ),
+            )
+          : ProfileCoverPlaceholder(height: height),
+    );
+
+    final t = expandProgress.clamp(0.0, 1.0);
+    final topScrim = 0.18 + t * 0.22;
+
+    return ClipRect(
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          _buildProfileAvatar(profile, displayPhoto, displayCover),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                VerifiedName(
-                  name: displayName,
-                  verified: profile.isPro,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
+          if (blurSigma > 0.5)
+            ImageFiltered(
+              imageFilter: ImageFilter.blur(
+                sigmaX: blurSigma,
+                sigmaY: blurSigma,
+                tileMode: TileMode.clamp,
+              ),
+              child: coverImage,
+            )
+          else
+            coverImage,
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: MediaQuery.paddingOf(context).top + 56,
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white.withValues(alpha: topScrim),
+                      Colors.white.withValues(alpha: 0),
+                    ],
                   ),
                 ),
-                if (Constants.reviewsEnabled && profile.reviewCount > 0) ...[
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.star_rounded,
-                        size: 18,
-                        color: Color(0xFFF5A623),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${profile.avgRating.toStringAsFixed(1)} (${profile.reviewCount})',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-                if (displayBio.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  Text(
-                    displayBio,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                ],
-                const SizedBox(height: 16),
-                if (isOwn) ...[
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          context.l10n.thisIsYou,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          context.l10n.viewingOwnProfile,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        FilledButton.icon(
-                          onPressed: _openMyCard,
-                          icon: const Icon(Icons.badge_outlined),
-                          label: Text(context.l10n.openMyCard),
-                          style: FilledButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ] else
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FilledButton.icon(
-                        onPressed: () async {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(context.l10n.exchangingContact),
-                            ),
-                          );
-                          final res = await AuthRepo().exchangeContact(
-                            username: widget.username,
-                            id: widget.user,
-                          );
-                          if (mounted) {
-                            if (res.success) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    context.l10n.contactExchangedSuccessfully,
-                                  ),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    res.message ??
-                                        context.l10n.failedToExchangeContact,
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                        },
-                        icon: const Icon(Icons.sync_alt),
-                        label: Text(context.l10n.exchangeContact),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
-                          ),
-                        ),
-                      ),
-                      if (showRewardsButton) ...[
-                        const SizedBox(width: 10),
-                        OutlinedButton.icon(
-                          onPressed: () => _showRewardSheet(profile),
-                          icon: Icon(
-                            _isCustomerEnrolledInBusiness
-                                ? Icons.check_circle_outline
-                                : Icons.card_giftcard_outlined,
-                            size: 18,
-                          ),
-                          label: Text(rewardButtonLabel),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: _isCustomerEnrolledInBusiness
-                                ? Colors.green.shade700
-                                : Colors.black,
-                            side: BorderSide(
-                              color: _isCustomerEnrolledInBusiness
-                                  ? Colors.green.shade700
-                                  : Colors.black,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                const SizedBox(height: 20),
-              ],
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: _buildLinkSection(profile, card),
-          ),
-          const SizedBox(height: 24),
-          if (Constants.reviewsEnabled &&
-              ((profile.businessName ?? '').trim().isNotEmpty ||
-                  profile.reviewCount > 0 ||
-                  !isOwn))
-            ProfileReviewsSection(
-              profile: profile,
-              isOwnProfile: isOwn,
-              catalogItems: profile.socialLinks
-                  .expand((l) => l.catalogItems ?? const <CatalogItem>[])
-                  .toList(),
-            ),
+          if (topBar != null)
+            Positioned(top: 0, left: 0, right: 0, child: topBar),
         ],
       ),
     );
   }
 
-  Widget _buildProfileAvatar(
-    UserProfile profile,
-    String? photoUrl,
-    String? coverUrl,
-  ) {
-    final hasCover = coverUrl != null && coverUrl.trim().isNotEmpty;
-    const avatarSize = 110.0;
-
-    final avatar = Container(
-      width: hasCover ? avatarSize : 130,
-      height: hasCover ? avatarSize : 130,
+  Widget _buildAvatarCircle({
+    required String displayName,
+    required String? photoUrl,
+    required double size,
+  }) {
+    final hasPhoto = photoUrl != null && photoUrl.trim().isNotEmpty;
+    return Container(
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: const Color(0xFF1E2022),
-        border: hasCover
-            ? Border.all(color: Colors.white, width: 3.5)
-            : null,
+        color: Colors.white,
+        border: Border.all(color: Colors.white, width: 4),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.10),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: ClipOval(
-        child: photoUrl != null && photoUrl.trim().isNotEmpty
-            ? Image.network(photoUrl, fit: BoxFit.cover)
-            : Center(
-                child: Text(
-                  profile.name.isNotEmpty
-                      ? profile.name[0].toUpperCase()
-                      : '?',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: hasCover ? 36 : 40,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+        child: hasPhoto
+            ? CachedNetworkImage(
+                imageUrl: photoUrl.trim(),
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+                errorWidget: (_, _, _) =>
+                    _avatarInitials(displayName, true),
+                placeholder: (_, _) => _avatarInitials(displayName, true),
+              )
+            : ColoredBox(
+                color: const Color(0xFF1E2022),
+                child: _avatarInitials(displayName, true),
               ),
       ),
     );
+  }
 
-    // No cover photo: skip the tall empty cover area to avoid white space.
-    if (!hasCover) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Center(child: avatar),
-      );
-    }
-
-    // Full-bleed cover + WhatsApp-style avatar sitting lower over the cover edge.
-    return Column(
-      children: [
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            SizedBox(
-              height: 200,
-              width: double.infinity,
-              child: ColoredBox(
-                color: const Color(0xFFF5F5F5),
-                child: Image.network(
-                  coverUrl,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 200,
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: -48,
-              left: 0,
-              right: 0,
-              child: Center(child: avatar),
-            ),
-          ],
+  Widget _avatarInitials(String name, bool light) {
+    final initial = name.trim().isNotEmpty ? name.trim()[0].toUpperCase() : '?';
+    return Center(
+      child: Text(
+        initial,
+        style: TextStyle(
+          color: light ? Colors.white : Colors.black87,
+          fontSize: 36,
+          fontWeight: FontWeight.bold,
         ),
-        const SizedBox(height: 60),
-      ],
+      ),
     );
   }
 
@@ -968,16 +1297,17 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         const columns = 3;
-        const spacing = 12.0;
+        const spacing = 21.0;
+        const runSpacing = 41.0;
+        const radius = 16.0;
         final cellWidth =
             (constraints.maxWidth - spacing * (columns - 1)) / columns;
-        // Keep original ~130 look; only shrink if needed to fit 3 per row
-        final iconSize = cellWidth > 130 ? 130.0 : cellWidth;
+        final iconSize = cellWidth;
 
         return Wrap(
           spacing: spacing,
-          runSpacing: 16,
-          alignment: WrapAlignment.center,
+          runSpacing: runSpacing,
+          alignment: WrapAlignment.start,
           children: activeLinks.map((link) {
             return SizedBox(
               width: cellWidth,
@@ -985,18 +1315,42 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                 onTap: () => _openScannedLink(link, profile),
                 child: Column(
                   children: [
-                    _buildLinkIcon(link, size: iconSize),
-                    const SizedBox(height: 8),
+                    Container(
+                      width: iconSize,
+                      height: iconSize,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(radius),
+                        border: Border.all(
+                          color: const Color(0xFFE5E7EB),
+                          width: 1,
+                        ),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(radius - 1),
+                        child: SizedBox(
+                          width: iconSize,
+                          height: iconSize,
+                          child: LinkPlatformIcon(
+                            link: link,
+                            size: iconSize,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
                     Text(
                       link.platformName,
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: Color(0xFF0F172A),
-                        fontSize: 13.5,
+                        color: Colors.black,
+                        fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        letterSpacing: -0.2,
+                        height: 1.2,
                       ),
                     ),
                   ],
@@ -1023,43 +1377,6 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       currency: profile.currency,
       galleryItems: profile.gallery,
       allowedEntryIds: allowedEntryIds,
-    );
-  }
-
-  Widget _buildLinkIcon(SocialLink link, {required double size}) {
-    final radius = 24.0 * (size / 130.0);
-
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(radius),
-        border: Border.all(
-          color: Colors.black.withOpacity(0.06),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius - 1),
-        child: LinkPlatformIcon(
-          link: link,
-          size: size,
-          fit: BoxFit.cover,
-        ),
-      ),
     );
   }
 
@@ -1142,6 +1459,61 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       _isCustomerEnrolledInBusiness = isEnrolled;
       _customerProgramEnrollments = enrollments;
     });
+  }
+}
+
+class _ScannedActionPill extends StatelessWidget {
+  const _ScannedActionPill({
+    required this.label,
+    required this.filled,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool filled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final h = AuthScale.of(context).buttonH;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(h / 2),
+        child: Ink(
+          height: h,
+          decoration: BoxDecoration(
+            color: filled ? Colors.black : Colors.white,
+            borderRadius: BorderRadius.circular(h / 2),
+            border: filled
+                ? null
+                : Border.all(color: Colors.black, width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: filled ? 0.18 : 0.10),
+                blurRadius: filled ? 10 : 8,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: WaUi.body.copyWith(
+                fontSize: AuthScale.of(context).s(AuthUi.buttonLabelSize),
+                fontWeight: FontWeight.w700,
+                color: filled ? Colors.white : Colors.black,
+                height: 1,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -1250,18 +1622,12 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
       ),
       child: Column(
         children: [
-          const SizedBox(height: 12),
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(2),
-            ),
+          SheetHeader(
+            title: context.l10n.rewardsForName(widget.customer.name),
+            onBack: () => Navigator.pop(context),
           ),
-          const SizedBox(height: 16),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
                 Icon(
@@ -1270,35 +1636,22 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
                       : Icons.card_giftcard_outlined,
                   color: _isBusinessEnrolled ? Colors.green.shade700 : null,
                 ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        context.l10n.rewardsForName(widget.customer.name),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        _isBusinessEnrolled
-                            ? context.l10n.enrolled
-                            : context.l10n.notEnrolled,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: _isBusinessEnrolled
-                              ? Colors.green.shade700
-                              : Colors.black45,
-                        ),
-                      ),
-                    ],
+                const SizedBox(width: 10),
+                Text(
+                  _isBusinessEnrolled
+                      ? context.l10n.enrolled
+                      : context.l10n.notEnrolled,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: _isBusinessEnrolled
+                        ? Colors.green.shade700
+                        : Colors.black45,
                   ),
                 ),
               ],
             ),
           ),
+          const SizedBox(height: 8),
           SizedBox(height: 8),
           Expanded(
             child: ListView(

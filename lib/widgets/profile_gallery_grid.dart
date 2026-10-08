@@ -77,7 +77,7 @@ class ProfileGalleryGrid extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 36),
           child: SizedBox(
             width: double.infinity,
-            height: 52,
+            height: WaUi.primaryButtonHeight,
             child: ElevatedButton(
               onPressed: uploading ? null : onAddPhotos,
               style: ElevatedButton.styleFrom(

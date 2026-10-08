@@ -592,8 +592,11 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(context.l10n.pickColor, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              SizedBox(height: 16),
+              SheetHeader(
+                title: context.l10n.pickColor,
+                onBack: () => Navigator.pop(ctx),
+              ),
+              const SizedBox(height: 16),
               Wrap(
                 spacing: 12,
                 runSpacing: 12,

@@ -21,7 +21,7 @@ import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/services/push_notification_service.dart';
 import 'package:tapni_app/widgets/offline_banner.dart';
-
+  
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // Hold native splash until first frame / route is ready (no white flash).

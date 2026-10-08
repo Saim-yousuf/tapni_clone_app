@@ -8,6 +8,7 @@ import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 void showContactCardBottomSheet(
@@ -223,8 +224,10 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
           clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
-              _buildHandle(),
-              _buildTitle(),
+              SheetHeader(
+                title: context.l10n.contactCard,
+                onBack: () => Navigator.pop(context),
+              ),
               Expanded(
                 child: ListView(
                   controller: _scrollController,
@@ -265,24 +268,6 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
       ),
     );
   }
-
-  Widget _buildHandle() => Container(
-    margin: EdgeInsets.only(top: 12, bottom: 8),
-    width: 40,
-    height: 4,
-    decoration: BoxDecoration(
-      color: Colors.grey[300],
-      borderRadius: BorderRadius.circular(2),
-    ),
-  );
-
-  Widget _buildTitle() => Padding(
-    padding: EdgeInsets.symmetric(vertical: 8),
-    child: Text(
-      context.l10n.contactCard,
-      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-    ),
-  );
 
   Widget _buildAvatarRow() => Row(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -640,19 +625,21 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
         SizedBox(width: 12),
         Expanded(
           child: SizedBox(
-            height: 52,
+            height: WaUi.primaryButtonHeight,
             child: ElevatedButton(
               onPressed: _saveContactCard,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
+                shape: const StadiumBorder(),
                 elevation: 0,
               ),
-              child: Text(context.l10n.save,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              child: Text(
+                context.l10n.save,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),

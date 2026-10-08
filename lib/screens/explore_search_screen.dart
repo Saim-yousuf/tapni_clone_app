@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/explore_actions.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/cached_app_image.dart';
 import 'package:tapni_app/widgets/shop_product_card.dart';
 
@@ -492,47 +493,23 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 10),
-                    Center(
-                      child: Container(
-                        width: 40,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: secondary.withValues(alpha: 0.35),
-                          borderRadius: BorderRadius.circular(4),
+                    SheetHeader(
+                      title: 'Filters',
+                      onBack: () => Navigator.pop(ctx),
+                      trailing: TextButton(
+                        onPressed: () {
+                          setSheetState(() {
+                            draftTab = ExploreSearchTab.items;
+                            draftIndustry = null;
+                          });
+                        },
+                        child: Text(
+                          'Reset',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: secondary,
+                          ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 14, 8, 8),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Filters',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
-                                color: primary,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              setSheetState(() {
-                                draftTab = ExploreSearchTab.items;
-                                draftIndustry = null;
-                              });
-                            },
-                            child: Text(
-                              'Reset',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: secondary,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                     Expanded(
@@ -589,22 +566,20 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
                         child: SizedBox(
-                          height: 50,
+                          height: WaUi.primaryButtonHeight,
                           child: ElevatedButton(
                             onPressed: () => Navigator.pop(ctx, true),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black,
                               foregroundColor: Colors.white,
                               elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
+                              shape: const StadiumBorder(),
                             ),
                             child: const Text(
                               'Apply filters',
                               style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
                               ),
                             ),
                           ),

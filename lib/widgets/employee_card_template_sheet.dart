@@ -8,6 +8,7 @@ import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/employee_company_card_preview.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -156,17 +157,10 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(height: 12),
-            Container(
-              width: 48,
-              height: 5,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(3),
-              ),
+            SheetHeader(
+              title: context.l10n.customizeCardDesign,
+              onBack: () => Navigator.pop(context),
             ),
-            SizedBox(height: 18),
-            Text(context.l10n.customizeCardDesign, style: AttendanceUi.sectionTitle),
             const SizedBox(height: 6),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),

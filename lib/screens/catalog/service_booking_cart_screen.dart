@@ -251,7 +251,7 @@ class _ServiceBookingCartScreenState extends State<ServiceBookingCartScreen> {
                   ),
                   SizedBox(
                     width: 148,
-                    height: 50,
+                    height: WaUi.primaryButtonHeight,
                     child: ElevatedButton(
                       onPressed:
                           _cart.isEmpty || _placing ? null : _bookNow,
@@ -274,7 +274,7 @@ class _ServiceBookingCartScreenState extends State<ServiceBookingCartScreen> {
                           : Text(
                               'Book Now',
                               style: WaUi.promoButton.copyWith(
-                                fontSize: 15,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),

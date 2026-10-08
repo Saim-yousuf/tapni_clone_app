@@ -26,10 +26,10 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
     final isBusiness =
         Provider.of<ProfileProvider>(context, listen: false).isProUser;
 
-    // Individual: save the on-screen QR card as-is (no size picker).
+    // Individual: bake BQ into a high-res QR PNG (embedded mark, not capture).
     if (!isBusiness) {
-      final ok = await BusinessCardExportHelper.savePng(
-        _globalKey,
+      final ok = await BusinessCardExportHelper.saveQrPng(
+        profileUrl,
         fileName: fileName,
       );
       if (!mounted) return;

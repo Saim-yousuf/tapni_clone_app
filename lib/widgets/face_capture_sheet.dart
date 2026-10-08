@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -77,20 +78,11 @@ class _FaceCaptureSheetState extends State<FaceCaptureSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 48,
-            height: 5,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(3),
-            ),
+          SheetHeader(
+            title: widget.title ?? context.l10n.captureFace,
+            onBack: () => Navigator.pop(context),
           ),
-          SizedBox(height: 20),
-          Text(
-            widget.title ?? context.l10n.captureFace,
-            style: AttendanceUi.sectionTitle,
-          ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             context.l10n.takeAQuickSelfieForAttendanceVerification,
             textAlign: TextAlign.center,

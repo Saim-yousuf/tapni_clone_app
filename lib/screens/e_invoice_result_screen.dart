@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/utils/zatca_qr_parser.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -241,7 +242,7 @@ class EInvoiceResultScreen extends StatelessWidget {
           if (isValid) ...[
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: WaUi.primaryButtonHeight,
               child: FilledButton.icon(
                 onPressed: () => _copy(context, _shareText(context)),
                 icon: const Icon(Icons.copy_rounded, size: 20),
@@ -256,16 +257,14 @@ class EInvoiceResultScreen extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   backgroundColor: _successGreen,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: const StadiumBorder(),
                 ),
               ),
             ),
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: WaUi.primaryButtonHeight,
               child: OutlinedButton.icon(
                 onPressed: () => Share.share(_shareText(context)),
                 icon: const Icon(Icons.share_outlined, size: 20),
@@ -273,22 +272,20 @@ class EInvoiceResultScreen extends StatelessWidget {
                   l10n.share,
                   style: _style(
                     size: 16,
-                    weight: FontWeight.w500,
+                    weight: FontWeight.w700,
                   ),
                 ),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.black87,
                   side: BorderSide(color: Colors.black.withValues(alpha: 0.12)),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: const StadiumBorder(),
                 ),
               ),
             ),
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: WaUi.primaryButtonHeight,
               child: TextButton(
                 onPressed: () => _openUrl(_zatcaLookupAr),
                 child: Text(
@@ -304,15 +301,13 @@ class EInvoiceResultScreen extends StatelessWidget {
           ] else ...[
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: WaUi.primaryButtonHeight,
               child: FilledButton(
                 onPressed: () => _openUrl(_zatcaReportAr),
                 style: FilledButton.styleFrom(
                   backgroundColor: _successGreen,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: const StadiumBorder(),
                 ),
                 child: Text(
                   l10n.submitVatReport,
@@ -327,21 +322,19 @@ class EInvoiceResultScreen extends StatelessWidget {
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: WaUi.primaryButtonHeight,
               child: OutlinedButton(
                 onPressed: () => _openUrl(_zatcaLookupAr),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.black87,
                   side: BorderSide(color: Colors.black.withValues(alpha: 0.12)),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: const StadiumBorder(),
                 ),
                 child: Text(
                   l10n.verifyVatRegistration,
                   style: _style(
-                    size: 15,
-                    weight: FontWeight.w500,
+                    size: 16,
+                    weight: FontWeight.w700,
                   ),
                 ),
               ),

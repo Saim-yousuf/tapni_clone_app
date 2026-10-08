@@ -34,7 +34,8 @@ class WaUi {
   static const double radiusMd = 14;
   static const double radiusLg = 16;
   static const double radiusPill = 100;
-  static const double primaryButtonHeight = 52;
+  /// Matches login Continue / [AuthUi.buttonHeight].
+  static const double primaryButtonHeight = 54;
 
   static String get fontFamily => AppFonts.fontFamily;
 
@@ -172,7 +173,7 @@ class WaUi {
 
   static TextStyle get promoButton => _style(
         size: AppUi.fontBodyLg,
-        weight: FontWeight.w600,
+        weight: FontWeight.w700,
         color: Colors.white,
         height: 1.0,
       );

@@ -4,6 +4,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/business_profile_screen.dart';
 import 'package:tapni_app/utils/business_completeness.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
 
 /// Returns true if business profile is complete; otherwise shows checklist sheet.
@@ -34,20 +35,9 @@ Future<void> showBusinessCompletenessSheet(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: WaUi.divider,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Complete Business Profile',
-                style: WaUi.headline.copyWith(fontWeight: FontWeight.w700),
+              SheetHeader(
+                title: 'Complete Business Profile',
+                onBack: () => Navigator.pop(ctx),
               ),
               const SizedBox(height: 6),
               Text(

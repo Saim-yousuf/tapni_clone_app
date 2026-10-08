@@ -8,7 +8,28 @@ class BankDetailDialog extends StatelessWidget {
   final Map<String, dynamic> bankDetails;
   final String? title;
 
-  BankDetailDialog({super.key, required this.bankDetails, this.title});
+  const BankDetailDialog({
+    super.key,
+    required this.bankDetails,
+    this.title,
+  });
+
+  static Future<void> show(
+    BuildContext context, {
+    required Map<String, dynamic> bankDetails,
+    String? title,
+  }) {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black54,
+      builder: (_) => BankDetailDialog(
+        bankDetails: bankDetails,
+        title: title,
+      ),
+    );
+  }
 
   void _copy(BuildContext context, String value) {
     if (value.trim().isEmpty) return;
@@ -36,7 +57,7 @@ class BankDetailDialog extends StatelessWidget {
 
   Widget _buildRow(BuildContext context, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -46,33 +67,42 @@ class BankDetailDialog extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: WaUi.label.copyWith(
-                    fontSize: 12,
+                  style: WaUi.body.copyWith(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
                     color: BarqodyChrome.secondaryText,
+                    height: 1.2,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   value.isEmpty ? '-' : value,
                   style: WaUi.body.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
                     color: Colors.black,
+                    height: 1.25,
                   ),
                 ),
               ],
             ),
           ),
+          const SizedBox(width: 12),
           GestureDetector(
             onTap: () => _copy(context, value),
-            child: Image.asset(
-              'assets/images/png/copy-icon.png',
-              width: 20,
-              height: 20,
-              errorBuilder: (_, __, ___) => const Icon(
-                Icons.copy_rounded,
-                size: 20,
+            behavior: HitTestBehavior.opaque,
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Image.asset(
+                'assets/images/png/copy-icon.png',
+                width: 18,
+                height: 18,
                 color: Colors.black,
+                errorBuilder: (_, __, ___) => const Icon(
+                  Icons.copy_rounded,
+                  size: 18,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),
@@ -81,79 +111,90 @@ class BankDetailDialog extends StatelessWidget {
     );
   }
 
+  static const _divider = Divider(
+    height: 1,
+    thickness: 1,
+    color: Color(0xFFE8E8E8),
+  );
+
   @override
   Widget build(BuildContext context) {
     final sheetTitle = title?.trim().isNotEmpty == true
         ? title!.trim()
         : context.l10n.bankDetails;
+    final bottomPad = MediaQuery.paddingOf(context).bottom;
 
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(BarqodyChrome.modalRadius),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 10),
-            const SheetDragHandle(),
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SizedBox(
-                height: 44,
-                child: Row(
-                  children: [
-                    CircleBackButton(
-                      onTap: () => Navigator.pop(context),
-                    ),
-                    Expanded(
-                      child: Text(
-                        sheetTitle,
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: WaUi.toolsTitleOf(
-                          size: 18,
-                          weight: FontWeight.w700,
-                          color: Colors.black,
+    return Material(
+      color: Colors.white,
+      borderRadius: const BorderRadius.vertical(
+        top: Radius.circular(BarqodyChrome.sheetRadius),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPad > 0 ? 0 : 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 10),
+              const SheetDragHandle(),
+              const SizedBox(height: 14),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: SizedBox(
+                  height: 44,
+                  child: Row(
+                    children: [
+                      CircleBackButton(
+                        onTap: () => Navigator.pop(context),
+                      ),
+                      Expanded(
+                        child: Text(
+                          sheetTitle,
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: WaUi.toolsTitleOf(
+                            size: 18,
+                            weight: FontWeight.w700,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 40),
-                  ],
+                      const SizedBox(width: 40),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-            _buildRow(
-              context,
-              'Account Holder Name',
-              bankDetails['accountHolderName']?.toString() ?? '',
-            ),
-            const Divider(height: 1, color: BarqodyChrome.divider),
-            _buildRow(
-              context,
-              'Account Iban',
-              bankDetails['iban']?.toString() ?? '',
-            ),
-            const Divider(height: 1, color: BarqodyChrome.divider),
-            _buildRow(
-              context,
-              'Account Number',
-              bankDetails['accountNumber']?.toString() ?? '',
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-              child: PillButton(
-                label: context.l10n.copyAllDetails,
-                onPressed: () => _copyAll(context),
+              const SizedBox(height: 8),
+              _divider,
+              _buildRow(
+                context,
+                'Account Holder Name',
+                bankDetails['accountHolderName']?.toString() ?? '',
               ),
-            ),
-          ],
+              _divider,
+              _buildRow(
+                context,
+                'Account Iban',
+                bankDetails['iban']?.toString() ?? '',
+              ),
+              _divider,
+              _buildRow(
+                context,
+                'Account Number',
+                bankDetails['accountNumber']?.toString() ?? '',
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(22, 28, 22, 22),
+                child: PillButton(
+                  label: context.l10n.copyAllDetails,
+                  onPressed: () => _copyAll(context),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
