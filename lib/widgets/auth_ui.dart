@@ -235,28 +235,47 @@ class AuthAppBarTitle extends StatelessWidget {
 
 /// Canonical circular back control (OTP / Verify). Use this everywhere.
 class AuthBackButton extends StatelessWidget {
-  const AuthBackButton({super.key, this.onPressed, this.backgroundColor});
+  const AuthBackButton({
+    super.key,
+    this.onPressed,
+    this.backgroundColor,
+    this.iconColor,
+  });
+
+  static const asset = 'assets/images/png/arrow-back.png';
 
   final VoidCallback? onPressed;
 
   /// Defaults to [AuthUi.backBtnBg]. Pass white (etc.) when over a photo.
   final Color? backgroundColor;
 
+  /// Defaults to [AuthUi.textPrimary].
+  final Color? iconColor;
+
   @override
   Widget build(BuildContext context) {
+    final fg = iconColor ?? AuthUi.textPrimary;
     return Material(
       color: backgroundColor ?? AuthUi.backBtnBg,
       shape: const CircleBorder(),
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: onPressed ?? () => Navigator.of(context).maybePop(),
-        child: const SizedBox(
+        child: SizedBox(
           width: 40,
           height: 40,
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 16,
-            color: AuthUi.textPrimary,
+          child: Center(
+            child: Image.asset(
+              asset,
+              width: 18,
+              height: 18,
+              color: fg,
+              errorBuilder: (_, _, _) => Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 16,
+                color: fg,
+              ),
+            ),
           ),
         ),
       ),

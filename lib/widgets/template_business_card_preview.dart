@@ -122,7 +122,7 @@ class TemplateBusinessCardPreview extends StatelessWidget {
               height: 1.15,
             ),
             badgeColor: const Color(0xFFFFCC00),
-            badgeSize: 18,
+            badgeSize: 24,
           ),
           if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
             const SizedBox(height: 4),

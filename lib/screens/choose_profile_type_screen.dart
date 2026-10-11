@@ -37,6 +37,7 @@ class _ChooseProfileTypeScreenState extends State<ChooseProfileTypeScreen> {
           phone: widget.phone,
           verificationToken: widget.verificationToken,
           country: widget.country,
+          isBusiness: _selected == _ProfileType.business,
         ),
       ),
     );

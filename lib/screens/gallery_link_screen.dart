@@ -71,7 +71,7 @@ class _GalleryLinkScreenState extends State<GalleryLinkScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: BarqodyChrome.scaffold,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [

@@ -7,6 +7,7 @@ import 'package:tapni_app/screens/attendance/business/employee_settings_screen.d
 import 'package:tapni_app/utils/attendance_utils.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class AttendanceReportScreen extends StatefulWidget {
@@ -24,12 +25,22 @@ class AttendanceReportScreen extends StatefulWidget {
 }
 
 class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
+  /// Figma Report surfaces / calendar tints (match Report screenshot).
+  static const Color _cardBg = Color(0xFFF3F4F6);
+  static const Color _presentFill = Color(0xFFEAF7EE);
+  static const Color _presentBorder = Color(0xFFA8D5B5);
+  static const Color _absentFill = Color(0xFFFDECEC);
+  static const Color _absentBorder = Color(0xFFF0A8A8);
+  static const Color _partialFill = Color(0xFFFFF4E5);
+  static const Color _partialBorder = Color(0xFFF5C48A);
+  static const Color _offDayBg = Color(0xFFE5E7EB);
+  static const Color _dayBorder = Color(0xFFE5E7EB);
   static const Color _absentTint = Color(0xFFC62828);
   static const Color _partialTint = Color(0xFFE65100);
   static const Color _hoursTint = Color(0xFF64B5F6);
   static const Color _neutralTint = Color(0xFF90A4AE);
-  static const Color _statCardBg = Color(0xFFF2F2F7);
-  static const Color _presentFill = Color(0xFF1B8A4A);
+  static const Color _presentSolid = Color(0xFF1B8A4A);
+  static const String _arrowAsset = AuthBackButton.asset;
 
   List<AttendanceEmployee> _employers = [];
   AttendanceEmployee? _selected;
@@ -132,7 +143,7 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   Color _statusColor(String status) {
     switch (status) {
       case 'present':
-        return _presentFill;
+        return _presentSolid;
       case 'absent':
         return _absentTint;
       case 'partial':
@@ -159,12 +170,14 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final side = m.s(BarqodyChrome.sidePad);
     final selected = _selected;
     final summary = _summary;
     final title = _titleBarLabel(selected);
 
     return Scaffold(
-      backgroundColor: BarqodyChrome.scaffold,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
@@ -175,14 +188,21 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
                       asset: 'assets/images/png/settings-sliders.png',
                       iconSize: 18,
                       onTap: () async {
-                        await Navigator.push(
+                        final result = await Navigator.push<String>(
                           context,
                           MaterialPageRoute(
                             builder: (_) =>
                                 EmployeeSettingsScreen(employee: selected),
                           ),
                         );
-                        if (mounted) _loadSummary();
+                        if (!mounted) return;
+                        if (result != null && result.isNotEmpty) {
+                          EmployeeSettingsScreen.showResultSnack(
+                            context,
+                            result,
+                          );
+                        }
+                        _loadSummary();
                       },
                     )
                   : null,
@@ -202,39 +222,40 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
                           backgroundColor: Colors.white,
                           onRefresh: _loadSummary,
                           child: ListView(
-                            padding: const EdgeInsets.fromLTRB(
-                              BarqodyChrome.sidePad,
-                              8,
-                              BarqodyChrome.sidePad,
-                              28,
+                            padding: EdgeInsets.fromLTRB(
+                              side,
+                              0,
+                              side,
+                              m.v(28),
                             ),
                             children: [
                               if (!widget.isBusinessView &&
                                   _employers.length > 1) ...[
                                 _employerPicker(),
-                                const SizedBox(height: 16),
+                                SizedBox(height: m.v(16)),
                               ],
                               if (widget.isBusinessView) ...[
                                 _businessHeader(selected),
-                                const SizedBox(height: 16),
+                                SizedBox(height: m.v(16)),
                               ],
                               _monthPicker(),
-                              const SizedBox(height: 20),
+                              SizedBox(height: m.v(20)),
                               if (summary != null) ...[
                                 _summarySection(context, summary),
-                                const SizedBox(height: 24),
-                                Align(
+                                SizedBox(height: m.v(24)),
+                                                Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     context.l10n.attendance,
                                     style: WaUi.toolsTitleOf(
-                                      size: 17,
+                                      size: m.s(20),
                                       weight: FontWeight.w700,
                                       color: Colors.black,
+                                      height: 1.2,
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 12),
+                                SizedBox(height: m.v(14)),
                                 _calendarSection(context, summary),
                               ] else
                                 _noData(),
@@ -249,11 +270,12 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   }
 
   Widget _employerPicker() {
+    final m = AuthScale.of(context);
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(m.s(14)),
       decoration: BoxDecoration(
-        color: _statCardBg,
-        borderRadius: BorderRadius.circular(20),
+        color: _cardBg,
+        borderRadius: BorderRadius.circular(m.s(20)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,11 +350,12 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   }
 
   Widget _businessHeader(AttendanceEmployee employee) {
+    final m = AuthScale.of(context);
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(m.s(14)),
       decoration: BoxDecoration(
-        color: _statCardBg,
-        borderRadius: BorderRadius.circular(20),
+        color: _cardBg,
+        borderRadius: BorderRadius.circular(m.s(20)),
       ),
       child: Row(
         children: [
@@ -382,36 +405,38 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   }
 
   Widget _monthPicker() {
+    final m = AuthScale.of(context);
     final canGoForward = _month.year < DateTime.now().year ||
         (_month.year == DateTime.now().year &&
             _month.month < DateTime.now().month);
 
     return Container(
-      height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 6),
+      height: m.s(52),
+      padding: EdgeInsets.symmetric(horizontal: m.s(8)),
       decoration: BoxDecoration(
-        color: BarqodyChrome.fieldFill,
+        color: _cardBg,
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
         children: [
           _monthNavButton(
-            icon: Icons.chevron_left_rounded,
+            forward: false,
             onPressed: () => _changeMonth(-1),
           ),
           Expanded(
             child: Text(
               DateFormat(context.l10n.mmmmYyyy).format(_month),
               textAlign: TextAlign.center,
-              style: WaUi.body.copyWith(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+              style: WaUi.toolsTitleOf(
+                size: m.s(16),
+                weight: FontWeight.w700,
                 color: Colors.black,
+                height: 1.2,
               ),
             ),
           ),
           _monthNavButton(
-            icon: Icons.chevron_right_rounded,
+            forward: true,
             onPressed: canGoForward ? () => _changeMonth(1) : null,
           ),
         ],
@@ -419,25 +444,47 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
     );
   }
 
+  /// White circle + 1px black border + arrow-back asset (mirrored for next).
   Widget _monthNavButton({
-    required IconData icon,
+    required bool forward,
     VoidCallback? onPressed,
   }) {
+    final m = AuthScale.of(context);
+    final size = m.s(34);
+    final iconSize = m.s(16);
+    final enabled = onPressed != null;
+    final iconColor = enabled
+        ? Colors.black
+        : BarqodyChrome.secondaryText.withValues(alpha: 0.35);
+
     return Material(
       color: Colors.white,
-      shape: const CircleBorder(),
+      shape: const CircleBorder(
+        side: BorderSide(color: Colors.black, width: 1),
+      ),
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: onPressed,
         child: SizedBox(
-          width: 36,
-          height: 36,
-          child: Icon(
-            icon,
-            size: 22,
-            color: onPressed != null
-                ? Colors.black
-                : BarqodyChrome.secondaryText.withValues(alpha: 0.35),
+          width: size,
+          height: size,
+          child: Center(
+            child: Transform.flip(
+              flipX: forward,
+              child: Image.asset(
+                _arrowAsset,
+                width: iconSize,
+                height: iconSize,
+                color: iconColor,
+                errorBuilder: (_, _, _) => Icon(
+                  forward
+                      ? Icons.arrow_forward_ios_rounded
+                      : Icons.arrow_back_ios_new_rounded,
+                  size: iconSize,
+                  color: iconColor,
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -445,55 +492,63 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   }
 
   Widget _summarySection(BuildContext context, AttendanceSummary summary) {
+    final m = AuthScale.of(context);
     final totalHours = totalWorkedDuration(summary);
     final rate = summary.totalWorkingDays > 0
         ? '${((summary.present / summary.totalWorkingDays) * 100).round()}%'
         : '0%';
+    final hoursLabelStyle = WaUi.body.copyWith(
+      fontSize: m.s(14),
+      fontWeight: FontWeight.w400,
+      color: BarqodyChrome.secondaryText,
+      height: 1.3,
+    );
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           _formatDuration(context, totalHours),
-          textAlign: TextAlign.center,
           style: WaUi.toolsTitleOf(
-            size: 36,
+            size: m.s(28),
             weight: FontWeight.w700,
             color: Colors.black,
-            height: 1.1,
+            height: 1.15,
           ),
         ),
-        const SizedBox(height: 6),
-        Text(
-          'Total hours & minutes',
-          textAlign: TextAlign.center,
-          style: WaUi.body.copyWith(
-            fontSize: 14,
-            color: BarqodyChrome.secondaryText,
+        SizedBox(height: m.v(6)),
+        // Divider width matches the label text (Figma).
+        IntrinsicWidth(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text('Total hours & minutes', style: hoursLabelStyle),
+              SizedBox(height: m.v(8)),
+              Container(height: 1, color: const Color(0xFFE5E7EB)),
+            ],
           ),
         ),
-        const SizedBox(height: 16),
-        Divider(height: 1, color: BarqodyChrome.divider),
-        const SizedBox(height: 16),
+        SizedBox(height: m.v(16)),
         Row(
           children: [
             _dashboardStat(context.l10n.present, '${summary.present}'),
-            const SizedBox(width: 8),
+            SizedBox(width: m.s(10)),
             _dashboardStat(context.l10n.absent, '${summary.absent}'),
-            const SizedBox(width: 8),
+            SizedBox(width: m.s(10)),
             _dashboardStat(context.l10n.partial, '${summary.partial}'),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: m.v(10)),
         Row(
           children: [
             _dashboardStat(context.l10n.offDays, '${summary.weekend}'),
-            const SizedBox(width: 8),
+            SizedBox(width: m.s(10)),
             _dashboardStat(
               context.l10n.workingDays,
               '${summary.totalWorkingDays}',
             ),
-            const SizedBox(width: 8),
-            _dashboardStat(context.l10n.attendanceRate, rate),
+            SizedBox(width: m.s(10)),
+            _dashboardStat('Rate', rate),
           ],
         ),
       ],
@@ -501,12 +556,13 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   }
 
   Widget _dashboardStat(String label, String value) {
+    final m = AuthScale.of(context);
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
+        padding: EdgeInsets.symmetric(vertical: m.v(16), horizontal: m.s(6)),
         decoration: BoxDecoration(
-          color: _statCardBg,
-          borderRadius: BorderRadius.circular(16),
+          color: _cardBg,
+          borderRadius: BorderRadius.circular(m.s(16)),
         ),
         child: Column(
           children: [
@@ -514,19 +570,21 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
               value,
               textAlign: TextAlign.center,
               style: WaUi.toolsTitleOf(
-                size: 22,
+                size: m.s(20),
                 weight: FontWeight.w700,
                 color: Colors.black,
+                height: 1.1,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: m.v(8)),
             Text(
               label,
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: WaUi.body.copyWith(
-                fontSize: 12,
+                fontSize: m.s(13),
+                fontWeight: FontWeight.w400,
                 color: BarqodyChrome.secondaryText,
                 height: 1.2,
               ),
@@ -537,10 +595,13 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
     );
   }
 
-  BoxDecoration _calendarBoxDecoration() => BoxDecoration(
-        color: _statCardBg,
-        borderRadius: BorderRadius.circular(20),
-      );
+  BoxDecoration _calendarBoxDecoration() {
+    final m = AuthScale.of(context);
+    return BoxDecoration(
+      color: _cardBg,
+      borderRadius: BorderRadius.circular(m.s(20)),
+    );
+  }
 
   List<String> _weekdayLabels() {
     return List.generate(7, (i) {
@@ -552,6 +613,7 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   Widget _calendarSection(BuildContext context, AttendanceSummary summary) {
     if (summary.daily.isEmpty) return _noData();
 
+    final m = AuthScale.of(context);
     final dailyMap = {
       for (final day in summary.daily) day.date: day,
     };
@@ -565,7 +627,7 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+          padding: EdgeInsets.fromLTRB(m.s(12), m.v(14), m.s(12), m.v(14)),
           decoration: _calendarBoxDecoration(),
           child: Column(
             children: [
@@ -576,22 +638,24 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
                         child: Text(
                           label,
                           textAlign: TextAlign.center,
-                          style: WaUi.caption.copyWith(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 11,
+                          style: WaUi.body.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: m.s(11),
+                            color: BarqodyChrome.secondaryText,
+                            height: 1.2,
                           ),
                         ),
                       ),
                     )
                     .toList(),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: m.v(10)),
               GridView.count(
                 crossAxisCount: 7,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 6,
-                crossAxisSpacing: 6,
+                mainAxisSpacing: m.s(5),
+                crossAxisSpacing: m.s(5),
                 childAspectRatio: 1,
                 children: [
                   ...List.generate(startOffset, (_) => const SizedBox.shrink()),
@@ -617,13 +681,13 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
                   }),
                 ],
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: m.v(14)),
               _calendarLegend(context),
             ],
           ),
         ),
         if (_selectedDay != null) ...[
-          const SizedBox(height: 12),
+          SizedBox(height: m.v(12)),
           _selectedDayDetail(context, _selectedDay!),
         ],
       ],
@@ -637,52 +701,67 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
     required bool isToday,
     VoidCallback? onTap,
   }) {
-    final isUpcoming = status == 'upcoming';
-    final isWeekend = status == 'weekend';
-    final color = _statusColor(status);
+    final m = AuthScale.of(context);
+    final radius = m.s(8);
 
     Color bg;
-    Color textColor;
+    Color textColor = Colors.black;
     Border? border;
 
     if (isSelected) {
       bg = Colors.black;
       textColor = Colors.white;
-    } else if (isWeekend) {
-      bg = Colors.white;
-      textColor = Colors.black;
-      border = Border.all(color: BarqodyChrome.divider);
-    } else if (isUpcoming) {
-      bg = Colors.transparent;
-      textColor = BarqodyChrome.secondaryText.withValues(alpha: 0.45);
+      border = null;
     } else {
-      bg = color;
-      textColor = Colors.white;
+      switch (status) {
+        case 'present':
+          bg = _presentFill;
+          border = Border.all(color: _presentBorder, width: 1);
+        case 'absent':
+          bg = _absentFill;
+          border = Border.all(color: _absentBorder, width: 1);
+        case 'partial':
+          bg = _partialFill;
+          border = Border.all(color: _partialBorder, width: 1);
+        case 'weekend':
+          // Off days — solid muted gray (Figma).
+          bg = _offDayBg;
+          border = null;
+        case 'upcoming':
+          // Unmarked — white + thin gray border.
+          bg = Colors.white;
+          border = Border.all(color: _dayBorder, width: 1);
+          textColor = Colors.black;
+        default:
+          bg = Colors.white;
+          border = Border.all(color: _dayBorder, width: 1);
+      }
     }
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(radius),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
             color: bg,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(radius),
             border: border ??
                 (isToday && !isSelected
-                    ? Border.all(color: Colors.black.withValues(alpha: 0.25))
+                    ? Border.all(color: Colors.black.withValues(alpha: 0.18))
                     : null),
           ),
           alignment: Alignment.center,
           child: Text(
             '$dayNum',
-            style: WaUi.bodyMedium.copyWith(
+            style: WaUi.body.copyWith(
               color: textColor,
               fontWeight:
                   isSelected || isToday ? FontWeight.w700 : FontWeight.w600,
-              fontSize: 13,
+              fontSize: m.s(12),
+              height: 1,
             ),
           ),
         ),
@@ -691,39 +770,39 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   }
 
   Widget _calendarLegend(BuildContext context) {
-    final items = [
-      ('present', context.l10n.present, _presentFill),
-      ('absent', context.l10n.absent, _absentTint),
-      ('partial', context.l10n.partial, _partialTint),
-      ('weekend', context.l10n.statusWeekend, Colors.white),
+    final m = AuthScale.of(context);
+    // Figma: white fill + colored ring only.
+    final items = <(String, Color)>[
+      (context.l10n.present, _presentBorder),
+      (context.l10n.absent, _absentBorder),
+      (context.l10n.partial, _partialBorder),
+      ('Off', const Color(0xFFD1D5DB)),
     ];
 
     return Wrap(
-      spacing: 14,
-      runSpacing: 8,
+      spacing: m.s(16),
+      runSpacing: m.v(8),
       alignment: WrapAlignment.center,
       children: items.map((item) {
-        final isWeekend = item.$1 == 'weekend';
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 12,
-              height: 12,
+              width: m.s(10),
+              height: m.s(10),
               decoration: BoxDecoration(
-                color: item.$3,
+                color: Colors.white,
                 shape: BoxShape.circle,
-                border: isWeekend
-                    ? Border.all(color: BarqodyChrome.divider)
-                    : null,
+                border: Border.all(color: item.$2, width: 1.5),
               ),
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: m.s(6)),
             Text(
-              item.$2,
+              item.$1,
               style: WaUi.body.copyWith(
-                fontSize: 11,
-                color: BarqodyChrome.bodyText,
+                fontSize: m.s(12),
+                fontWeight: FontWeight.w400,
+                color: BarqodyChrome.secondaryText,
               ),
             ),
           ],
@@ -878,12 +957,13 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
   }
 
   Widget _noData() {
+    final m = AuthScale.of(context);
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: m.v(32), horizontal: m.s(20)),
       decoration: BoxDecoration(
-        color: _statCardBg,
-        borderRadius: BorderRadius.circular(20),
+        color: _cardBg,
+        borderRadius: BorderRadius.circular(m.s(20)),
       ),
       child: Column(
         children: [

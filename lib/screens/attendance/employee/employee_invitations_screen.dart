@@ -5,6 +5,7 @@ import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/alert.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class EmployeeInvitationsScreen extends StatefulWidget {
@@ -49,19 +50,15 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
     if (!mounted) return;
     setState(() => _respondingId = null);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text(
-          res.success
-              ? (accept
-                  ? context.l10n
-                      .youJoinedBusiness(invitation.business.displayName)
-                  : context.l10n.invitationDeclined)
-              : (res.message ?? context.l10n.somethingWentWrong),
-          style: WaUi.body,
-        ),
-      ),
+    showSnackBar(
+      context,
+      res.success
+          ? (accept
+              ? context.l10n
+                  .youJoinedBusiness(invitation.business.displayName)
+              : context.l10n.invitationDeclined)
+          : (res.message ?? context.l10n.somethingWentWrong),
+      isError: !res.success,
     );
 
     if (res.success) {
@@ -143,7 +140,7 @@ class _EmployeeInvitationsScreenState extends State<EmployeeInvitationsScreen> {
                             )
                           : ListView.separated(
                               physics: const AlwaysScrollableScrollPhysics(),
-                              padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                               itemCount: _invitations.length,
                               separatorBuilder: (_, _) =>
                                   const SizedBox(height: 12),

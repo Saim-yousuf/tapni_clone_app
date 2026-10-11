@@ -5,6 +5,7 @@ import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
 import 'package:tapni_app/screens/attendance/business/scan_to_invite_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/alert.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
@@ -52,20 +53,28 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   }
 
   Future<void> _scanToInvite() async {
-    await Navigator.push(
+    final result = await Navigator.push<String>(
       context,
       MaterialPageRoute(builder: (_) => const ScanToInviteScreen()),
     );
+    if (!mounted) return;
+    if (result != null && result.isNotEmpty) {
+      EmployeeSettingsScreen.showResultSnack(context, result);
+    }
     _load();
   }
 
   Future<void> _openSettings(AttendanceEmployee employee) async {
-    await Navigator.push(
+    final result = await Navigator.push<String>(
       context,
       MaterialPageRoute(
         builder: (_) => EmployeeSettingsScreen(employee: employee),
       ),
     );
+    if (!mounted) return;
+    if (result != null && result.isNotEmpty) {
+      EmployeeSettingsScreen.showResultSnack(context, result);
+    }
     _load();
   }
 
@@ -110,16 +119,12 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     final res = await AttendanceRepo().removeEmployee(employee.id);
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text(
-          res.success
-              ? context.l10n.employeeRemoved
-              : (res.message ?? context.l10n.failedToRemove),
-          style: WaUi.body,
-        ),
-      ),
+    showSnackBar(
+      context,
+      res.success
+          ? context.l10n.employeeRemoved
+          : (res.message ?? context.l10n.failedToRemove),
+      isError: !res.success,
     );
     if (res.success) _load();
   }
@@ -166,7 +171,6 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                 onTap: _scanToInvite,
               ),
             ),
-            const SizedBox(height: 14),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: BarqodyChrome.sidePad),
               child: _MembersSearchField(
@@ -274,18 +278,6 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                                   },
                                 ),
                     ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                BarqodyChrome.sidePad,
-                8,
-                BarqodyChrome.sidePad,
-                12,
-              ),
-              child: PillButton(
-                label: l10n.scanToInvite,
-                onPressed: _scanToInvite,
-              ),
             ),
           ],
         ),

@@ -20,8 +20,8 @@ class Api {
   static void init(
     // Environment env
   ) {
-    // baseUrl = _localBaseUrl;
-    baseUrl = _liveBaseUrl;
+    baseUrl = _localBaseUrl;
+    // baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }
@@ -110,7 +110,8 @@ class _AuthApi {
 class _SubscriptionApi {
   String get plans => "${Api.baseUrl}/api/user/subscription/plans";
   String get my => "${Api.baseUrl}/api/user/subscription/my";
-  String get subscribe => "${Api.baseUrl}/api/user/subscription/subscribe";
+  String get checkout => "${Api.baseUrl}/api/user/subscription/checkout";
+  String get confirm => "${Api.baseUrl}/api/user/subscription/confirm";
   String get cancel => "${Api.baseUrl}/api/user/subscription/cancel";
 }
 

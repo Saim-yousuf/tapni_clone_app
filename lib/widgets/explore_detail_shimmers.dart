@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 
 /// Skeleton for [ExploreItemDetailScreen] — hero image, title, business row, CTA bar.
@@ -186,16 +187,19 @@ class CustomerProgramDetailShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bg = isDark ? AppTheme.primaryBlack : Colors.white;
-    final text = isDark ? Colors.white : WaUi.primaryText;
     final cardWidth = MediaQuery.sizeOf(context).width * 0.84;
 
     return Scaffold(
       backgroundColor: bg,
       appBar: AppBar(
         backgroundColor: bg,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: text),
-          onPressed: () => Navigator.maybePop(context)),
+        leading: Center(
+          child: CircleBackButton(
+            color: isDark ? const Color(0xFF3A3B3C) : null,
+            iconColor: isDark ? Colors.white : null,
+            onTap: () => Navigator.maybePop(context),
+          ),
+        ),
         title: AppShimmer(
           child: ShimmerBox(width: 120, height: 18, borderRadius: 6)),
       ),

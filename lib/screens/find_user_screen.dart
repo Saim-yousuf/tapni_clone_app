@@ -9,6 +9,7 @@ import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/api_error_messages.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/verified_name.dart';
 
 class PublicUserResult {
   final String id;
@@ -18,6 +19,7 @@ class PublicUserResult {
   final String bio;
   final String businessName;
   final bool isPublic;
+  final bool isPro;
 
   const PublicUserResult({
     required this.id,
@@ -27,6 +29,7 @@ class PublicUserResult {
     this.bio = '',
     this.businessName = '',
     this.isPublic = true,
+    this.isPro = false,
   });
 
   factory PublicUserResult.fromJson(Map<String, dynamic> json) {
@@ -38,13 +41,8 @@ class PublicUserResult {
       bio: json['bio']?.toString() ?? '',
       businessName: json['businessName']?.toString() ?? '',
       isPublic: json['isPublic'] as bool? ?? true,
+      isPro: json['isPro'] as bool? ?? json['IsPro'] as bool? ?? false,
     );
-  }
-
-  String get subtitle {
-    if (businessName.isNotEmpty) return businessName;
-    if (bio.isNotEmpty) return bio;
-    return '@$username';
   }
 }
 
@@ -65,6 +63,10 @@ class _FindUserScreenState extends State<FindUserScreen> {
   bool _isSearching = false;
   String? _errorMessage;
   String _lastQuery = '';
+
+  static const _searchHint = 'Search by name or username';
+  static const _title = 'Search Users';
+  static const _chevron = Color(0xFFC7C7CC);
 
   @override
   void dispose() {
@@ -157,7 +159,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
     final query = _searchController.text.trim().replaceFirst(RegExp(r'^@'), '');
 
     return Scaffold(
-      backgroundColor: BarqodyChrome.scaffold,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
@@ -167,7 +169,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    context.l10n.findUser2,
+                    _title,
                     style: WaUi.toolsTitleOf(
                       size: 22,
                       weight: FontWeight.w700,
@@ -177,93 +179,30 @@ class _FindUserScreenState extends State<FindUserScreen> {
                 ),
               )
             else
-              BarqodyTitleBar(
-                title: context.l10n.findUser2,
-                trailing: CircleAssetButton(
-                  asset: 'assets/images/png/icon-morehoriz.png',
-                  iconSize: 18,
-                  onTap: () {},
-                ),
-              ),
-            const SizedBox(height: 8),
-            const Divider(height: 1, thickness: 1, color: BarqodyChrome.divider),
+              const BarqodyTitleBar(title: _title),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-              child: SizedBox(
-                height: 48,
-                child: TextField(
-                  controller: _searchController,
-                  focusNode: _searchFocus,
-                  autofocus: !widget.isTab,
-                  onChanged: _onSearchChanged,
-                  textInputAction: TextInputAction.search,
-                  onSubmitted: (value) {
-                    final q = value.trim().replaceFirst(RegExp(r'^@'), '');
-                    if (q.length >= 2) _searchUsers(q);
-                  },
-                  style: WaUi.body.copyWith(
-                    fontSize: 16,
-                    height: 1.2,
-                    color: Colors.black,
-                  ),
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xFFF5F5F5),
-                    hintText: context.l10n.searchByUsername,
-                    hintStyle: WaUi.body.copyWith(
-                      fontSize: 15,
-                      color: BarqodyChrome.secondaryText,
-                    ),
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.only(left: 14, right: 8),
-                      child: Image.asset(
-                        'assets/images/png/search-icon.png',
-                        width: 18,
-                        height: 18,
-                        color: BarqodyChrome.secondaryText,
-                        errorBuilder: (_, __, ___) => const Icon(
-                          Icons.search,
-                          size: 20,
-                          color: BarqodyChrome.secondaryText,
-                        ),
-                      ),
-                    ),
-                    prefixIconConstraints: const BoxConstraints(
-                      minWidth: 44,
-                      minHeight: 48,
-                    ),
-                    suffixIcon: _searchController.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.close, size: 18),
-                            color: BarqodyChrome.secondaryText,
-                            onPressed: () {
-                              _searchController.clear();
-                              _onSearchChanged('');
-                              _searchFocus.requestFocus();
-                            },
-                          )
-                        : null,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(24),
-                      borderSide: BorderSide.none,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(24),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(24),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 14,
-                    ),
-                    isDense: true,
-                  ),
-                ),
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
+              child: _SearchUsersField(
+                controller: _searchController,
+                focusNode: _searchFocus,
+                autofocus: !widget.isTab,
+                hintText: _searchHint,
+                onChanged: _onSearchChanged,
+                onSubmitted: (value) {
+                  final q = value.trim().replaceFirst(RegExp(r'^@'), '');
+                  if (q.length >= 2) _searchUsers(q);
+                },
+                onClear: () {
+                  _searchController.clear();
+                  _onSearchChanged('');
+                  _searchFocus.requestFocus();
+                },
               ),
+            ),
+            const Divider(
+              height: 1,
+              thickness: 1,
+              color: BarqodyChrome.divider,
             ),
             Expanded(child: _buildBody(query)),
           ],
@@ -283,7 +222,9 @@ class _FindUserScreenState extends State<FindUserScreen> {
     }
 
     if (_isSearching) {
-      return const Center(child: CircularProgressIndicator(color: Colors.black));
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.black),
+      );
     }
 
     if (_errorMessage != null) {
@@ -303,12 +244,11 @@ class _FindUserScreenState extends State<FindUserScreen> {
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(4, 4, 4, 24),
+      padding: EdgeInsets.zero,
       itemCount: _results.length,
       separatorBuilder: (_, __) => const Divider(
         height: 1,
         thickness: 1,
-        indent: 72,
         color: BarqodyChrome.divider,
       ),
       itemBuilder: (context, index) {
@@ -370,29 +310,31 @@ class _FindUserScreenState extends State<FindUserScreen> {
 
   Widget _buildUserTile(PublicUserResult user) {
     final isMe = _isCurrentUser(user);
+    final displayName =
+        user.name.isNotEmpty ? user.name : '@${user.username}';
+
     return InkWell(
       onTap: () => _openProfile(user),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.fromLTRB(20, 14, 16, 14),
         child: Row(
           children: [
             ClipOval(
               child: Container(
-                width: 44,
-                height: 44,
+                width: 48,
+                height: 48,
                 color: const Color(0xFFF2F2F7),
                 child: user.profilePhoto != null &&
                         user.profilePhoto!.isNotEmpty
                     ? Image.network(
                         user.profilePhoto!,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) =>
-                            _avatarFallback(user),
+                        errorBuilder: (_, __, ___) => _avatarFallback(user),
                       )
                     : _avatarFallback(user),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -400,26 +342,19 @@ class _FindUserScreenState extends State<FindUserScreen> {
                   Row(
                     children: [
                       Flexible(
-                        child: Text(
-                          user.name.isNotEmpty
-                              ? user.name
-                              : '@${user.username}',
+                        child: VerifiedName(
+                          name: displayName,
+                          verified: user.isPro,
+                          textAlign: TextAlign.left,
+                          badgeSize: 18,
                           style: WaUi.body.copyWith(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: Colors.black,
+                            height: 1.2,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      if (!user.isPublic) ...[
-                        const SizedBox(width: 6),
-                        const Icon(
-                          Icons.lock_outline,
-                          size: 14,
-                          color: BarqodyChrome.secondaryText,
-                        ),
-                      ],
                       if (isMe) ...[
                         const SizedBox(width: 8),
                         Container(
@@ -443,23 +378,24 @@ class _FindUserScreenState extends State<FindUserScreen> {
                       ],
                     ],
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 3),
                   Text(
-                    isMe
-                        ? '@${user.username} · ${context.l10n.thisIsYou}'
-                        : '@${user.username}',
+                    '@${user.username}',
                     style: WaUi.body.copyWith(
-                      fontSize: 13,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
                       color: BarqodyChrome.secondaryText,
+                      height: 1.2,
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(width: 8),
             const Icon(
-              Icons.chevron_right,
-              color: Colors.black,
-              size: 22,
+              Icons.chevron_right_rounded,
+              color: _chevron,
+              size: 24,
             ),
           ],
         ),
@@ -478,6 +414,105 @@ class _FindUserScreenState extends State<FindUserScreen> {
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: Colors.black87,
+        ),
+      ),
+    );
+  }
+}
+
+class _SearchUsersField extends StatelessWidget {
+  const _SearchUsersField({
+    required this.controller,
+    required this.focusNode,
+    required this.hintText,
+    required this.onChanged,
+    required this.onSubmitted,
+    required this.onClear,
+    this.autofocus = false,
+  });
+
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final String hintText;
+  final ValueChanged<String> onChanged;
+  final ValueChanged<String> onSubmitted;
+  final VoidCallback onClear;
+  final bool autofocus;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasText = controller.text.isNotEmpty;
+
+    return SizedBox(
+      height: 48,
+      child: TextField(
+        controller: controller,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        onChanged: onChanged,
+        onSubmitted: onSubmitted,
+        textInputAction: TextInputAction.search,
+        style: WaUi.body.copyWith(
+          fontSize: 16,
+          height: 1.2,
+          color: Colors.black,
+        ),
+        cursorColor: Colors.black,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: BarqodyChrome.searchBg,
+          hintText: hintText,
+          hintStyle: WaUi.body.copyWith(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+            color: BarqodyChrome.secondaryText,
+          ),
+          prefixIcon: Padding(
+            padding: const EdgeInsets.only(left: 16, right: 8),
+            child: Image.asset(
+              'assets/images/png/search-icon.png',
+              width: 18,
+              height: 18,
+              color: BarqodyChrome.secondaryText,
+              errorBuilder: (_, __, ___) => const Icon(
+                Icons.search,
+                size: 20,
+                color: BarqodyChrome.secondaryText,
+              ),
+            ),
+          ),
+          prefixIconConstraints: const BoxConstraints(
+            minWidth: 46,
+            minHeight: 48,
+          ),
+          suffixIcon: hasText
+              ? IconButton(
+                  icon: const Icon(Icons.close, size: 18),
+                  color: BarqodyChrome.secondaryText,
+                  onPressed: onClear,
+                )
+              : null,
+          suffixIconConstraints: const BoxConstraints(
+            minWidth: 40,
+            minHeight: 48,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(24),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 4,
+            vertical: 14,
+          ),
+          isDense: true,
         ),
       ),
     );

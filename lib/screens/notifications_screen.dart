@@ -10,6 +10,7 @@ import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -78,9 +79,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.notifications),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => Navigator.of(context).pop()),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).pop(),
+          ),
+        ),
         actions: [
           if (notificationsList.isNotEmpty)
             TextButton(

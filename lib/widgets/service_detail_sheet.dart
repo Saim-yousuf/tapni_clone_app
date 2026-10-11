@@ -238,12 +238,12 @@ class _ServiceDetailSheet extends StatelessWidget {
                                         const SizedBox(width: 6),
                                         Image.asset(
                                           'assets/images/png/verified-badge.png',
-                                          width: 16,
-                                          height: 16,
+                                          width: 22,
+                                          height: 22,
                                           errorBuilder: (_, __, ___) =>
                                               const Icon(
                                             Icons.verified,
-                                            size: 16,
+                                            size: 22,
                                             color: BarqodyChrome.star,
                                           ),
                                         ),

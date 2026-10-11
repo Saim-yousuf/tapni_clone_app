@@ -17,6 +17,9 @@ class BarqodyChrome {
   static const double sheetRadius = 32;
   static const double modalRadius = 28;
   static const double sidePad = 20;
+
+  /// Gap below [BarqodyTitleBar] before page content (same on every screen).
+  static const double titleContentGap = 24;
 }
 
 class BarqodyTitleBar extends StatelessWidget {
@@ -34,7 +37,12 @@ class BarqodyTitleBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+      padding: const EdgeInsets.fromLTRB(
+        16,
+        6,
+        16,
+        BarqodyChrome.titleContentGap,
+      ),
       child: SizedBox(
         height: 44,
         child: Row(
@@ -191,14 +199,16 @@ class CircleAssetButton extends StatelessWidget {
 class CircleBackButton extends StatelessWidget {
   final VoidCallback? onTap;
   final Color? color;
+  final Color? iconColor;
 
-  const CircleBackButton({super.key, this.onTap, this.color});
+  const CircleBackButton({super.key, this.onTap, this.color, this.iconColor});
 
   @override
   Widget build(BuildContext context) {
     return AuthBackButton(
       onPressed: onTap,
       backgroundColor: color,
+      iconColor: iconColor,
     );
   }
 }
@@ -293,6 +303,10 @@ class PillButton extends StatelessWidget {
       height: 1,
     );
 
+    // Override theme fixedSize (54) so AuthScale.buttonH never conflicts
+    // (e.g. 59.5 min vs 54 max → non-normalized constraints).
+    final size = Size(double.infinity, h);
+
     if (filled) {
       return Container(
         width: double.infinity,
@@ -311,8 +325,9 @@ class PillButton extends StatelessWidget {
             elevation: 0,
             shadowColor: Colors.transparent,
             shape: const StadiumBorder(),
-            minimumSize: Size(double.infinity, h),
-            maximumSize: Size(double.infinity, h),
+            minimumSize: size,
+            maximumSize: size,
+            fixedSize: size,
             padding: EdgeInsets.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
@@ -333,8 +348,9 @@ class PillButton extends StatelessWidget {
             width: AuthUi.outlineBorderWidth,
           ),
           shape: const StadiumBorder(),
-          minimumSize: Size(double.infinity, h),
-          maximumSize: Size(double.infinity, h),
+          minimumSize: size,
+          maximumSize: size,
+          fixedSize: size,
           padding: EdgeInsets.zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),

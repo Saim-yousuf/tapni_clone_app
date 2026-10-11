@@ -75,28 +75,56 @@ class SubscriptionProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<bool> subscribe(
-    String planId,
-    BuildContext context, {
-    String transactionRef = '',
-    String paymentReceipt = '',
+  /// Mock checkout + confirm (Stripe-shaped). Card data never leaves the device.
+  Future<bool> pay({
+    required String planId,
+    required BuildContext context,
   }) async {
     setLoading(true);
-    final response = await _subscriptionRepo.subscribe(
-      planId: planId,
-      transactionRef: transactionRef,
-      paymentReceipt: paymentReceipt,
+
+    final checkoutResponse = await _subscriptionRepo.checkout(planId: planId);
+    if (!checkoutResponse.success) {
+      setLoading(false);
+      if (context.mounted) {
+        ShowAlert.error(
+          message: checkoutResponse.message ?? 'Checkout failed',
+          context: context,
+        );
+      }
+      return false;
+    }
+
+    final raw = checkoutResponse.data;
+    if (raw is! Map<String, dynamic>) {
+      setLoading(false);
+      if (context.mounted) {
+        ShowAlert.error(message: 'Invalid checkout response', context: context);
+      }
+      return false;
+    }
+
+    final session = CheckoutSession.fromJson(raw);
+    if (session.checkoutId.isEmpty) {
+      setLoading(false);
+      if (context.mounted) {
+        ShowAlert.error(message: 'Missing checkout id', context: context);
+      }
+      return false;
+    }
+
+    final confirmResponse = await _subscriptionRepo.confirmCheckout(
+      checkoutId: session.checkoutId,
     );
     setLoading(false);
 
-    if (response.success) {
-      await checkSubscriptionStatus(); // Refresh status
+    if (confirmResponse.success) {
+      await checkSubscriptionStatus();
       return true;
     }
 
     if (context.mounted) {
       ShowAlert.error(
-        message: response.message ?? 'Subscription failed',
+        message: confirmResponse.message ?? 'Payment failed',
         context: context,
       );
     }

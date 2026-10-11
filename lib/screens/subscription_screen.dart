@@ -1,19 +1,26 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/models/explore_business.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
-import 'package:tapni_app/utils/business_categories.dart';
+import 'package:tapni_app/repository/explore_repo.dart';
+import 'package:tapni_app/screens/quick_add_links_screen.dart';
+import 'package:tapni_app/screens/subscription_purchased_screen.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
-import 'package:tapni_app/widgets/radio_option_picker_sheet.dart';
+import 'package:tapni_app/widgets/business_option_grid.dart';
 
 class SubscriptionScreen extends StatefulWidget {
-  SubscriptionScreen({Key? key}) : super(key: key);
+  SubscriptionScreen({
+    Key? key,
+    this.fromRegistration = false,
+  }) : super(key: key);
+
+  /// Business account signup — payment required before onboarding continues.
+  final bool fromRegistration;
 
   @override
   State<SubscriptionScreen> createState() => _SubscriptionScreenState();
@@ -22,7 +29,6 @@ class SubscriptionScreen extends StatefulWidget {
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
   static const _cardBg = Color(0xFFF2F2F7);
   static const _muted = Color(0xFF8E8E93);
-  static const _bodyGrey = Color(0xFF707070);
   static const _border = Color(0xFFE8E8E8);
 
   /// Design prices (SAR). Overridden when API plans provide prices.
@@ -31,14 +37,61 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   static const _monthlyPrice = 9.99;
 
   bool _isYearlySelected = true;
-  final _transactionController = TextEditingController();
-  String _receiptBase64 = '';
 
-  /// 0 = Business Details, 1 = Plan, 2 = Payment
+  /// Local mock card (never sent to backend).
+  String? _cardBrand;
+  String? _cardLast4;
+
+  /// 0 = Concern, 1 = Category, 2 = Plan, 3 = Payment
   int _step = 0;
-  final _businessNameController = TextEditingController();
+  String? _selectedConcernId;
   String? _selectedCategory;
   bool _isSavingBusinessData = false;
+  bool _loadingCategories = false;
+  List<ExploreCategoryItem> _categories = [];
+
+  static const _concernOptions = <BusinessOptionItem>[
+    BusinessOptionItem(
+      id: 'more_customers',
+      label: 'More customers',
+      emoji: '📈',
+    ),
+    BusinessOptionItem(
+      id: 'digital_card',
+      label: 'Digital card',
+      emoji: '💳',
+    ),
+    BusinessOptionItem(
+      id: 'loyalty_rewards',
+      label: 'Loyalty rewards',
+      emoji: '🎁',
+    ),
+    BusinessOptionItem(
+      id: 'showcase_catalog',
+      label: 'Menu & catalog',
+      emoji: '📋',
+    ),
+    BusinessOptionItem(
+      id: 'team_management',
+      label: 'Team tools',
+      emoji: '👥',
+    ),
+    BusinessOptionItem(
+      id: 'analytics',
+      label: 'Analytics',
+      emoji: '📊',
+    ),
+    BusinessOptionItem(
+      id: 'online_presence',
+      label: 'Online presence',
+      emoji: '🌐',
+    ),
+    BusinessOptionItem(
+      id: 'other',
+      label: 'Other',
+      emoji: '✨',
+    ),
+  ];
 
   @override
   void initState() {
@@ -48,22 +101,29 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           Provider.of<SubscriptionProvider>(context, listen: false);
       final profileProvider =
           Provider.of<ProfileProvider>(context, listen: false);
-      _businessNameController.text =
-          profileProvider.profile.businessName ?? '';
-      if (kBusinessCategories
-          .contains(profileProvider.profile.businessCategory)) {
-        _selectedCategory = profileProvider.profile.businessCategory;
+      final concern = profileProvider.profile.businessConcern;
+      if (concern != null && concern.isNotEmpty) {
+        _selectedConcernId = concern;
+      }
+      final cat = profileProvider.profile.businessCategory;
+      if (cat != null && cat.isNotEmpty) {
+        _selectedCategory = cat;
       }
       provider.fetchPlans();
       provider.checkSubscriptionStatus();
+      _loadCategories();
     });
   }
 
-  @override
-  void dispose() {
-    _businessNameController.dispose();
-    _transactionController.dispose();
-    super.dispose();
+  Future<void> _loadCategories() async {
+    setState(() => _loadingCategories = true);
+    final repo = ExploreRepo();
+    final response = await repo.getCategories();
+    if (!mounted) return;
+    if (response.success) {
+      _categories = repo.parseCategories(response.data);
+    }
+    setState(() => _loadingCategories = false);
   }
 
   double get _totalAmount {
@@ -109,38 +169,59 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     return value.toStringAsFixed(2);
   }
 
-  Future<void> _submitRequest() async {
-    final provider = Provider.of<SubscriptionProvider>(context, listen: false);
-    final planId = _isYearlySelected ? 'yearly' : 'monthly';
-    final success = await provider.subscribe(
-      planId,
-      context,
-      transactionRef: _transactionController.text.trim(),
-      paymentReceipt: _receiptBase64,
-    );
-
-    if (success && mounted) {
+  Future<void> _pay() async {
+    if (_cardLast4 == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.subscriptionRequestSubmitted2)),
-      );
-    }
-  }
-
-  Future<void> _handleNext() async {
-    final name = _businessNameController.text.trim();
-    if (name.isEmpty || _selectedCategory == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.pleaseEnterBusinessDetailsToContinue),
-        ),
+        const SnackBar(content: Text('Please add a payment method')),
       );
       return;
     }
+
+    final provider = Provider.of<SubscriptionProvider>(context, listen: false);
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    final planId = _isYearlySelected ? 'yearly' : 'monthly';
+    final amount = _totalAmount;
+    final success = await provider.pay(planId: planId, context: context);
+
+    if (!success || !mounted) return;
+
+    // Unlock Pro gates immediately (profile.isPro + isProUser), then refresh.
+    profileProvider.upgradeToPro();
+    await profileProvider.fetchProfile();
+    if (!mounted) return;
+
+    final sub = provider.currentSubscription;
+
+    Navigator.of(context).pushReplacement(
+      AppPageRoute(
+        builder: (_) => SubscriptionPurchasedScreen(
+          planName: sub?.planName ??
+              (_isYearlySelected ? 'Yearly Plan' : 'Monthly Plan'),
+          planLabel: _planLabel,
+          amount: sub?.amount != null && sub!.amount > 0 ? sub.amount : amount,
+          currency: sub?.currency.isNotEmpty == true ? sub!.currency : 'SAR',
+          transactionId: sub?.providerPaymentId.isNotEmpty == true
+              ? sub!.providerPaymentId
+              : (sub?.checkoutId ?? ''),
+          startDate: sub?.startDate,
+          endDate: sub?.endDate,
+          fromRegistration: widget.fromRegistration,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _saveOnboardingAndGoToPlan() async {
+    if (_selectedConcernId == null || _selectedCategory == null) return;
 
     setState(() => _isSavingBusinessData = true);
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
     final profile = profileProvider.profile;
+    final displayName = (profile.businessName?.trim().isNotEmpty == true)
+        ? profile.businessName!.trim()
+        : profile.name;
 
     final response = await profileProvider.updateProfile(
       name: profile.name,
@@ -151,8 +232,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       email: profile.email,
       website: profile.website,
       country: profile.country,
-      businessName: name,
+      businessName: displayName,
       businessCategory: _selectedCategory,
+      businessConcern: _selectedConcernId,
       links: profile.socialLinks,
       context: context,
     );
@@ -161,7 +243,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     setState(() => _isSavingBusinessData = false);
 
     if (response.success) {
-      setState(() => _step = 1);
+      setState(() => _step = 2);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -173,194 +255,249 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     }
   }
 
-  Future<void> _pickReceipt() async {
-    final file = await pickFile();
-    if (file?.file == null) return;
-    _receiptBase64 = await fileToBase64(File(file!.file!.path));
-    setState(() {});
-  }
-
   Future<void> _openAddPaymentMethod() async {
-    await showModalBottomSheet<void>(
+    final result = await showModalBottomSheet<_SavedCardPreview>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      builder: (ctx) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 12,
-            bottom: MediaQuery.viewInsetsOf(ctx).bottom + 24,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SheetHeader(
-                title: 'Add Payment Method',
-                onBack: () => Navigator.pop(ctx),
-              ),
-              const SizedBox(height: 16),
-              _bankPanel(),
-              const SizedBox(height: 14),
-              TextField(
-                controller: _transactionController,
-                decoration: WaUi.fieldDecoration(
-                  labelText:
-                      context.l10n.transactionReferenceNumberOptional,
-                ),
-              ),
-              const SizedBox(height: 12),
-              OutlinedButton.icon(
-                onPressed: () async {
-                  await _pickReceipt();
-                  if (ctx.mounted) setState(() {});
-                },
-                icon: const Icon(Icons.receipt_long_outlined),
-                label: Text(
-                  _receiptBase64.isEmpty
-                      ? context.l10n.uploadReceiptOptional
-                      : context.l10n.receiptAttached,
-                ),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  side: const BorderSide(color: Colors.black),
-                  shape: const StadiumBorder(),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-              ),
-              const SizedBox(height: 16),
-              PillButton(
-                label: 'Done',
-                onPressed: () => Navigator.pop(ctx),
-              ),
-            ],
-          ),
-        );
-      },
+      builder: (ctx) => const _AddPaymentMethodSheet(),
     );
-    if (mounted) setState(() {});
+
+    if (!mounted || result == null) return;
+    setState(() {
+      _cardLast4 = result.last4;
+      _cardBrand = result.brand;
+    });
   }
 
   String get _titleBarLabel {
     switch (_step) {
-      case 1:
-        return 'Plan';
       case 2:
+        return 'Plan';
+      case 3:
         return 'Payment';
       default:
         return context.l10n.subscription;
     }
   }
 
+  IconData _categoryIcon(String iconName) {
+    switch (iconName) {
+      case 'devices_rounded':
+        return Icons.devices_rounded;
+      case 'shopping_bag_rounded':
+        return Icons.shopping_bag_rounded;
+      case 'spa_rounded':
+        return Icons.spa_rounded;
+      case 'school_rounded':
+        return Icons.school_rounded;
+      case 'account_balance_rounded':
+        return Icons.account_balance_rounded;
+      case 'home_work_rounded':
+        return Icons.home_work_rounded;
+      case 'restaurant_rounded':
+        return Icons.restaurant_rounded;
+      case 'movie_rounded':
+        return Icons.movie_rounded;
+      case 'storefront_rounded':
+        return Icons.storefront_rounded;
+      case 'checkroom_rounded':
+        return Icons.checkroom_rounded;
+      default:
+        return Icons.category_rounded;
+    }
+  }
+
+  void _onBack(bool isActive) {
+    if (_step > 0 && !isActive) {
+      setState(() => _step -= 1);
+      return;
+    }
+    if (widget.fromRegistration && !isActive) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Complete payment to activate your Business profile.',
+          ),
+        ),
+      );
+      return;
+    }
+    Navigator.of(context).maybePop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<SubscriptionProvider>(context);
     final subscription = provider.currentSubscription;
+    final isActive = subscription?.isActive == true;
 
-    return Scaffold(
-      backgroundColor: BarqodyChrome.scaffold,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            BarqodyTitleBar(
-              title: _titleBarLabel,
-              onBack: () {
-                if (_step > 0 &&
-                    subscription?.isRequested != true &&
-                    subscription?.isActive != true) {
-                  setState(() => _step -= 1);
-                  return;
-                }
-                Navigator.of(context).maybePop();
-              },
-            ),
-            Expanded(
-              child: subscription?.isRequested == true
-                  ? _StatusView(
-                      title: context.l10n.requestPending,
-                      text: context.l10n.subscriptionRequestSubmittedOn(
-                        subscription!.planName,
+    return PopScope(
+      canPop: !widget.fromRegistration || isActive,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        _onBack(isActive);
+      },
+      child: Scaffold(
+        backgroundColor: BarqodyChrome.scaffold,
+        body: SafeArea(
+          child: isActive
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    BarqodyTitleBar(
+                      title: _titleBarLabel,
+                      onBack: () => _onBack(isActive),
+                    ),
+                    Expanded(
+                      child: _StatusView(
+                        title: context.l10n.premiumActive,
+                        text: widget.fromRegistration
+                            ? '${subscription!.planName} is active. Continue to finish setting up your profile.'
+                            : '${subscription!.planName} is active until ${_date(subscription.endDate)}. Cancel your current subscription before buying another plan.',
+                        actionLabel: widget.fromRegistration
+                            ? context.l10n.continueLabel
+                            : null,
+                        onAction: widget.fromRegistration
+                            ? () async {
+                                final profileProvider =
+                                    Provider.of<ProfileProvider>(
+                                  context,
+                                  listen: false,
+                                );
+                                await profileProvider.fetchProfile();
+                                if (!mounted) return;
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  AppPageRoute(
+                                    builder: (_) =>
+                                        const QuickAddLinksScreen(),
+                                  ),
+                                  (_) => false,
+                                );
+                              }
+                            : null,
                       ),
+                    ),
+                  ],
+                )
+              : subscription?.isPendingPayment == true
+                  ? Column(
+                      children: [
+                        BarqodyTitleBar(
+                          title: 'Payment',
+                          onBack: () => _onBack(false),
+                        ),
+                        Expanded(
+                          child: _StatusView(
+                            title: 'Payment pending',
+                            text:
+                                'Complete payment for ${subscription!.planName} to activate Premium.',
+                            actionLabel: 'Continue to Payment',
+                            onAction: () => setState(() => _step = 3),
+                          ),
+                        ),
+                      ],
                     )
-                  : subscription?.isRejected == true
-                      ? _StatusView(
-                          title: context.l10n.requestRejected,
-                          text:
-                              '${subscription!.rejectionReason.isEmpty ? context.l10n.noReasonProvided : subscription.rejectionReason}\nYou can submit a new request below.',
-                          actionLabel: 'Choose Plan',
-                          onAction: () => setState(() => _step = 1),
+                  : subscription?.isFailed == true
+                      ? Column(
+                          children: [
+                            BarqodyTitleBar(
+                              title: 'Payment',
+                              onBack: () => _onBack(false),
+                            ),
+                            Expanded(
+                              child: _StatusView(
+                                title: 'Payment failed',
+                                text:
+                                    'Your last payment did not go through. Try again with a different card.',
+                                actionLabel: 'Choose Plan',
+                                onAction: () => setState(() => _step = 2),
+                              ),
+                            ),
+                          ],
                         )
-                      : subscription?.isActive == true
-                          ? _StatusView(
-                              title: context.l10n.premiumActive,
-                              text:
-                                  '${subscription!.planName} is active until ${_date(subscription.endDate)}. Cancel your current subscription before buying another plan.',
-                            )
-                          : _step == 0
-                              ? _buildBusinessDetailsStep()
-                              : _step == 1
-                                  ? _buildPlanSelectionStep()
-                                  : _buildPaymentStep(provider),
-            ),
-          ],
+                      : _step == 0
+                          ? _buildConcernStep()
+                          : _step == 1
+                              ? _buildCategoryStep()
+                              : Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    BarqodyTitleBar(
+                                      title: _titleBarLabel,
+                                      onBack: () => _onBack(false),
+                                    ),
+                                    Expanded(
+                                      child: _step == 2
+                                          ? _buildPlanSelectionStep()
+                                          : _buildPaymentStep(provider),
+                                    ),
+                                  ],
+                                ),
         ),
       ),
     );
   }
 
-  Widget _buildBusinessDetailsStep() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        BarqodyChrome.sidePad,
-        16,
-        BarqodyChrome.sidePad,
-        28,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.l10n.businessDetails,
-            style: WaUi.toolsTitleOf(
-              size: 24,
-              weight: FontWeight.w700,
-              color: Colors.black,
-            ),
+  Widget _buildConcernStep() {
+    return BusinessOptionPickerPage(
+      title: 'Your goal',
+      question: 'What brings you to Business?',
+      subtitle: 'Pick the option that fits you best',
+      options: _concernOptions,
+      selectedId: _selectedConcernId,
+      stepIndex: 0,
+      totalSteps: 2,
+      childAspectRatio: 1.28,
+      iconBoxSize: 64,
+      emojiSize: 34,
+      iconSize: 32,
+      cardPadding: const EdgeInsets.fromLTRB(10, 12, 10, 10),
+      labelFontSize: 13,
+      onBack: () => _onBack(false),
+      onSelect: (id) => setState(() => _selectedConcernId = id),
+      onContinue: _selectedConcernId == null
+          ? null
+          : () => setState(() => _step = 1),
+    );
+  }
+
+  Widget _buildCategoryStep() {
+    final options = _categories
+        .map(
+          (c) => BusinessOptionItem(
+            id: c.name,
+            label: c.label.isNotEmpty ? c.label : c.name,
+            icon: _categoryIcon(c.icon),
+            iconUrl: c.iconUrl.isNotEmpty ? c.iconUrl : null,
           ),
-          const SizedBox(height: 8),
-          Text(
-            context.l10n.pleaseProvideYourBusinessDetailsBeforeUpgrading,
-            style: WaUi.body.copyWith(fontSize: 14, color: _muted),
-          ),
-          const SizedBox(height: 24),
-          TextField(
-            controller: _businessNameController,
-            decoration: WaUi.fieldDecoration(
-              labelText: context.l10n.businessName,
-            ),
-          ),
-          const SizedBox(height: 16),
-          RadioPickerField(
-            labelText: context.l10n.businessCategory,
-            valueText: _selectedCategory == null
-                ? null
-                : businessCategoryLabel(context, _selectedCategory!),
-            onTap: _pickBusinessCategory,
-          ),
-          const SizedBox(height: 28),
-          PillButton(
-            label: _isSavingBusinessData ? '…' : context.l10n.next,
-            enabled: !_isSavingBusinessData,
-            onPressed: _handleNext,
-          ),
-        ],
-      ),
+        )
+        .toList();
+
+    return BusinessOptionPickerPage(
+      title: 'Business type',
+      question: 'What type of business is this?',
+      subtitle: () {
+        if (_selectedCategory == null) return 'Choose a category';
+        for (final o in options) {
+          if (o.id == _selectedCategory) return o.label;
+        }
+        return 'Choose a category';
+      }(),
+      options: options,
+      selectedId: _selectedCategory,
+      stepIndex: 1,
+      totalSteps: 2,
+      loading: _loadingCategories || _isSavingBusinessData,
+      onBack: () => _onBack(false),
+      onSelect: (id) => setState(() => _selectedCategory = id),
+      onContinue: (_selectedCategory == null || _isSavingBusinessData)
+          ? null
+          : _saveOnboardingAndGoToPlan,
     );
   }
 
@@ -511,7 +648,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             ),
             child: PillButton(
               label: 'Continue to Payment',
-              onPressed: () => setState(() => _step = 2),
+              onPressed: () => setState(() => _step = 3),
             ),
           ),
         ),
@@ -631,43 +768,35 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     color: _cardBg,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Visa',
-                        style: WaUi.bodyMedium.copyWith(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '•••• 4242',
-                        style: WaUi.caption.copyWith(
-                          fontSize: 13,
-                          color: _muted,
-                        ),
-                      ),
-                      if (_transactionController.text.trim().isNotEmpty ||
-                          _receiptBase64.isNotEmpty) ...[
-                        const SizedBox(height: 10),
-                        Text(
-                          [
-                            if (_transactionController.text.trim().isNotEmpty)
-                              'Ref: ${_transactionController.text.trim()}',
-                            if (_receiptBase64.isNotEmpty) 'Receipt attached',
-                          ].join(' · '),
+                  child: _cardLast4 == null
+                      ? Text(
+                          'No card added yet',
                           style: WaUi.caption.copyWith(
-                            fontSize: 12,
-                            color: _bodyGrey,
+                            fontSize: 13,
+                            color: _muted,
                           ),
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _cardBrand ?? 'Card',
+                              style: WaUi.bodyMedium.copyWith(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '•••• $_cardLast4',
+                              style: WaUi.caption.copyWith(
+                                fontSize: 13,
+                                color: _muted,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ],
-                  ),
                 ),
                 const SizedBox(height: 28),
                 _PriceRow(
@@ -704,34 +833,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 ? '…'
                 : 'Pay SAR ${_money(total)}',
             enabled: !provider.isLoading,
-            onPressed: _submitRequest,
+            onPressed: _pay,
           ),
         ),
       ],
-    );
-  }
-
-  Widget _bankPanel() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: _cardBg,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.l10n.bankAccount,
-            style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          Text(context.l10n.accountTitleTapni, style: WaUi.body),
-          Text(context.l10n.bankAddBankNameHere, style: WaUi.body),
-          Text(context.l10n.accountIBANAddAccountNumberHere, style: WaUi.body),
-        ],
-      ),
     );
   }
 
@@ -739,24 +844,224 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     if (value == null) return '--';
     return '${value.day}/${value.month}/${value.year}';
   }
+}
 
-  Future<void> _pickBusinessCategory() async {
-    final selected = await showRadioOptionPickerSheet(
-      context: context,
-      options: [
-        for (final category in kBusinessCategories)
-          RadioPickerOption(
-            id: category,
-            label: businessCategoryLabel(context, category),
-          ),
-      ],
-      selectedId: _selectedCategory,
-      searchHint: context.l10n.searchCategory,
-      helperText: context.l10n.selectCategoryHelper,
-      emptyText: context.l10n.noCategoriesFound,
+class _SavedCardPreview {
+  final String last4;
+  final String brand;
+
+  const _SavedCardPreview({required this.last4, required this.brand});
+}
+
+class _AddPaymentMethodSheet extends StatefulWidget {
+  const _AddPaymentMethodSheet();
+
+  @override
+  State<_AddPaymentMethodSheet> createState() => _AddPaymentMethodSheetState();
+}
+
+class _AddPaymentMethodSheetState extends State<_AddPaymentMethodSheet> {
+  static const _muted = Color(0xFF8E8E93);
+
+  final _numberController = TextEditingController();
+  final _expiryController = TextEditingController();
+  final _cvcController = TextEditingController();
+  final _nameController = TextEditingController();
+  String? _formError;
+
+  @override
+  void dispose() {
+    _numberController.dispose();
+    _expiryController.dispose();
+    _cvcController.dispose();
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  String _detectBrand(String digits) {
+    if (digits.startsWith('4')) return 'Visa';
+    if (RegExp(r'^5[1-5]').hasMatch(digits) ||
+        RegExp(r'^2[2-7]').hasMatch(digits)) {
+      return 'Mastercard';
+    }
+    if (digits.startsWith('3')) return 'Amex';
+    return 'Card';
+  }
+
+  void _save() {
+    final digits = _numberController.text.replaceAll(RegExp(r'\D'), '');
+    final expiry = _expiryController.text.trim();
+    final cvc = _cvcController.text.trim();
+    final name = _nameController.text.trim();
+
+    if (name.isEmpty) {
+      setState(() => _formError = 'Enter the name on the card');
+      return;
+    }
+    if (digits.length < 13 || digits.length > 19) {
+      setState(() => _formError = 'Enter a valid card number');
+      return;
+    }
+    if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(expiry)) {
+      setState(() => _formError = 'Enter expiry as MM/YY');
+      return;
+    }
+    if (cvc.length < 3) {
+      setState(() => _formError = 'Enter a valid CVC');
+      return;
+    }
+
+    Navigator.pop(
+      context,
+      _SavedCardPreview(
+        last4: digits.substring(digits.length - 4),
+        brand: _detectBrand(digits),
+      ),
     );
-    if (selected == null || !mounted) return;
-    setState(() => _selectedCategory = selected);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 20,
+        top: 12,
+        bottom: MediaQuery.viewInsetsOf(context).bottom + 24,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SheetHeader(
+              title: 'Add Payment Method',
+              onBack: () => Navigator.pop(context),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Card details stay on this device. Real card charging will use Stripe later.',
+              style: WaUi.caption.copyWith(
+                fontSize: 12,
+                color: _muted,
+                height: 1.35,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _nameController,
+              textCapitalization: TextCapitalization.words,
+              decoration: WaUi.fieldDecoration(
+                labelText: 'Name on card',
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _numberController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(19),
+                _CardNumberFormatter(),
+              ],
+              decoration: WaUi.fieldDecoration(
+                labelText: 'Card number',
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _expiryController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(4),
+                      _ExpiryFormatter(),
+                    ],
+                    decoration: WaUi.fieldDecoration(
+                      labelText: 'MM/YY',
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: TextField(
+                    controller: _cvcController,
+                    keyboardType: TextInputType.number,
+                    obscureText: true,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(4),
+                    ],
+                    decoration: WaUi.fieldDecoration(
+                      labelText: 'CVC',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (_formError != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                _formError!,
+                style: WaUi.caption.copyWith(
+                  color: const Color(0xFFD32F2F),
+                  fontSize: 12,
+                ),
+              ),
+            ],
+            const SizedBox(height: 16),
+            PillButton(
+              label: 'Save card',
+              onPressed: _save,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CardNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final buffer = StringBuffer();
+    for (var i = 0; i < digits.length; i++) {
+      if (i > 0 && i % 4 == 0) buffer.write(' ');
+      buffer.write(digits[i]);
+    }
+    final formatted = buffer.toString();
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+}
+
+class _ExpiryFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    var digits = newValue.text.replaceAll(RegExp(r'\D'), '');
+    if (digits.length > 4) digits = digits.substring(0, 4);
+    final buffer = StringBuffer();
+    for (var i = 0; i < digits.length; i++) {
+      if (i == 2) buffer.write('/');
+      buffer.write(digits[i]);
+    }
+    final formatted = buffer.toString();
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
   }
 }
 

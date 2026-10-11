@@ -19,6 +19,7 @@ class UserProfile {
   String? currency;
   String? businessName;
   String? businessCategory;
+  String? businessConcern;
   double? latitude;
   double? longitude;
   String? businessAddress;
@@ -57,6 +58,7 @@ class UserProfile {
     this.currency,
     this.businessName,
     this.businessCategory,
+    this.businessConcern,
     this.latitude,
     this.longitude,
     this.businessAddress,
@@ -109,6 +111,7 @@ class UserProfile {
       currency: json['currency']?.toString(),
       businessName: json['businessName']?.toString(),
       businessCategory: json['businessCategory']?.toString(),
+      businessConcern: json['businessConcern']?.toString(),
       latitude: toDouble(json['latitude']),
       longitude: toDouble(json['longitude']),
       businessAddress: json['businessAddress']?.toString(),
@@ -141,6 +144,7 @@ class UserProfile {
       'isPublic': isPublic,
       if (businessName != null) 'businessName': businessName,
       if (businessCategory != null) 'businessCategory': businessCategory,
+      if (businessConcern != null) 'businessConcern': businessConcern,
       if (latitude != null) 'latitude': latitude,
       if (longitude != null) 'longitude': longitude,
       if (businessAddress != null) 'businessAddress': businessAddress,
@@ -165,6 +169,7 @@ class UserProfile {
     String? currency,
     String? businessName,
     String? businessCategory,
+    String? businessConcern,
     double? latitude,
     double? longitude,
     String? businessAddress,
@@ -206,6 +211,7 @@ class UserProfile {
       currency: currency ?? this.currency,
       businessName: businessName ?? this.businessName,
       businessCategory: businessCategory ?? this.businessCategory,
+      businessConcern: businessConcern ?? this.businessConcern,
       latitude: clearLatitude ? null : (latitude ?? this.latitude),
       longitude: clearLongitude ? null : (longitude ?? this.longitude),
       businessAddress: businessAddress ?? this.businessAddress,

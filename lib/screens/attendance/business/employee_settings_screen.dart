@@ -5,11 +5,19 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/business/map_location_picker_screen.dart';
+import 'package:tapni_app/services/push_notification_service.dart';
 import 'package:tapni_app/utils/api_handler.dart';
+import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/location_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/alert.dart';
+import 'package:tapni_app/widgets/app_map_tiles.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/face_capture_sheet.dart';
+
+/// Must match [AttendanceDashboardScreen.routeName].
+const _kAttendanceDashboardRoute = 'attendance_dashboard';
 
 class EmployeeSettingsScreen extends StatefulWidget {
   final AttendanceEmployee? employee;
@@ -23,31 +31,46 @@ class EmployeeSettingsScreen extends StatefulWidget {
     this.employeeName,
   });
 
+  /// Show save/invite result on a stable scaffold (after this route pops).
+  static void showResultSnack(
+    BuildContext context,
+    String message, {
+    bool isError = false,
+  }) {
+    showSnackBar(context, message, isError: isError);
+  }
+
   @override
   State<EmployeeSettingsScreen> createState() => _EmployeeSettingsScreenState();
 }
 
 class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
-  final _addressController = TextEditingController();
-  final _radiusController = TextEditingController(text: '100');
+  static const _fieldFill = Color(0xFFF5F5F5);
+  static const _labelColor = Color(0xFF8E8E93);
+  static const _fieldRadius = 16.0;
 
-  TimeOfDay _shiftStart = const TimeOfDay(hour: 9, minute: 0);
-  TimeOfDay _shiftEnd = const TimeOfDay(hour: 18, minute: 0);
-  final Set<int> _weekendDays = {0, 6};
+  final _addressController = TextEditingController();
+  final _radiusController = TextEditingController();
+
+  TimeOfDay _shiftStart = const TimeOfDay(hour: 12, minute: 0);
+  TimeOfDay _shiftEnd = const TimeOfDay(hour: 9, minute: 0);
+  final Set<int> _weekendDays = {0, 6}; // Sunday + Saturday
   double? _latitude;
   double? _longitude;
   String? _facePhotoBase64;
   bool _isSaving = false;
   bool _isLoadingLocation = false;
 
-  List<String> _dayNames(BuildContext context) => [
-        context.l10n.sunday,
-        context.l10n.monday,
-        context.l10n.tuesday,
-        context.l10n.wednesday,
-        context.l10n.thursday,
-        context.l10n.friday,
-        context.l10n.saturday,
+  bool get _isAddFlow => widget.employee == null;
+
+  List<String> get _dayNames => const [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
       ];
 
   @override
@@ -63,8 +86,28 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
       _latitude = employee.location.latitude;
       _longitude = employee.location.longitude;
       _addressController.text = employee.location.address;
-      _radiusController.text = employee.location.radiusMeters.toString();
+      final meters = employee.location.radiusMeters;
+      // UI is KM; backend stores meters.
+      final km = meters >= 1000
+          ? (meters / 1000).toStringAsFixed(
+              meters % 1000 == 0 ? 0 : 1,
+            )
+          : (meters / 1000).toString();
+      _radiusController.text = km;
+    } else {
+      // Add Member: load GPS so the map preview is visible (Figma-style).
+      _bootstrapCurrentLocation();
     }
+  }
+
+  Future<void> _bootstrapCurrentLocation() async {
+    final location = await LocationHelper.getCurrentLocation();
+    if (!mounted || location == null) return;
+    if (_latitude != null && _longitude != null) return;
+    setState(() {
+      _latitude = location.latitude;
+      _longitude = location.longitude;
+    });
   }
 
   @override
@@ -74,7 +117,12 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
     super.dispose();
   }
 
-  int get _radiusMeters => int.tryParse(_radiusController.text.trim()) ?? 100;
+  /// Convert KM input → meters for API. Default 1 km when empty.
+  int get _radiusMeters {
+    final km = double.tryParse(_radiusController.text.trim());
+    if (km == null || km <= 0) return 1000;
+    return (km * 1000).round();
+  }
 
   TimeOfDay _parseTime(String value) {
     final parts = value.split(':');
@@ -86,6 +134,11 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
   }
 
   String _formatTime(TimeOfDay time) {
+    final minute = time.minute.toString().padLeft(2, '0');
+    return '${time.hour}:$minute';
+  }
+
+  String _formatTimeApi(TimeOfDay time) {
     final hour = time.hour.toString().padLeft(2, '0');
     final minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
@@ -113,15 +166,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
     setState(() => _isLoadingLocation = false);
 
     if (location == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text(
-            context.l10n.couldNotGetLocationPleaseEnableGPSPermission,
-            style: WaUi.body,
-          ),
-        ),
-      );
+      _showSnack(context.l10n.couldNotGetLocationPleaseEnableGPSPermission);
       return;
     }
 
@@ -140,9 +185,14 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
     );
 
     if (result != null) {
+      final km = result.radiusMeters / 1000.0;
+      final kmText = km == km.roundToDouble()
+          ? km.toStringAsFixed(0)
+          : km.toStringAsFixed(1);
       setState(() {
         _latitude = result.latitude;
         _longitude = result.longitude;
+        _radiusController.text = kmText;
       });
     }
   }
@@ -161,23 +211,15 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
     if (widget.employee == null && widget.employeeUserId == null) return;
 
     if (_latitude == null || _longitude == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text(
-            context.l10n.pleaseSetWorkLocationFirst,
-            style: WaUi.body,
-          ),
-        ),
-      );
+      _showSnack(context.l10n.pleaseSetWorkLocationFirst, isError: true);
       return;
     }
 
     setState(() => _isSaving = true);
 
     final body = <String, dynamic>{
-      'shiftStart': _formatTime(_shiftStart),
-      'shiftEnd': _formatTime(_shiftEnd),
+      'shiftStart': _formatTimeApi(_shiftStart),
+      'shiftEnd': _formatTimeApi(_shiftEnd),
       'weekendDays': _weekendDays.toList()..sort(),
       'location': {
         'latitude': _latitude,
@@ -201,119 +243,186 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
     if (!mounted) return;
     setState(() => _isSaving = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text(
-          res.success
-              ? (widget.employee != null
-                  ? context.l10n.employeeSettingsSaved
-                  : context.l10n
-                      .invitationSentEmployeeWillBeAddedAfterTheyAccept)
-              : (res.message ?? context.l10n.failedToSave),
-          style: WaUi.body,
-        ),
-      ),
-    );
+    if (!res.success) {
+      _showSnack(
+        res.message?.trim().isNotEmpty == true
+            ? res.message!.trim()
+            : context.l10n.failedToSave,
+        isError: true,
+      );
+      return;
+    }
 
-    if (res.success) Navigator.pop(context, true);
+    final message = widget.employee != null
+        ? context.l10n.employeeSettingsSaved
+        : context.l10n.invitationSentEmployeeWillBeAddedAfterTheyAccept;
+
+    if (_isAddFlow) {
+      // Close Add Member → Scan → Scan-to-invite; land on Team dashboard.
+      Navigator.of(context).popUntil(
+        (route) =>
+            route.settings.name == _kAttendanceDashboardRoute || route.isFirst,
+      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = PushNotificationService.navigatorKey.currentContext;
+        if (ctx != null && ctx.mounted) {
+          EmployeeSettingsScreen.showResultSnack(ctx, message);
+        }
+      });
+      return;
+    }
+
+    Navigator.pop(context, message);
+  }
+
+  void _showSnack(String message, {bool isError = false}) {
+    EmployeeSettingsScreen.showResultSnack(
+      context,
+      message,
+      isError: isError,
+    );
   }
 
   String _screenTitle(BuildContext context) {
-    if (widget.employee != null) {
-      return widget.employee!.employee.displayName;
-    }
-    if (widget.employeeName != null && widget.employeeName!.isNotEmpty) {
-      return widget.employeeName!;
-    }
-    return 'Add Member';
+    if (_isAddFlow) return 'Add Member';
+    return widget.employee!.employee.displayName;
   }
 
-  Widget _buildMapPreview() {
-    if (_latitude == null || _longitude == null) {
-      return Container(
-        height: 160,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: BarqodyChrome.fieldFill,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/png/map.png',
-              width: 40,
-              height: 40,
-              color: BarqodyChrome.secondaryText.withValues(alpha: 0.5),
-              errorBuilder: (_, _, _) => Icon(
-                Icons.map_outlined,
-                size: 32,
-                color: BarqodyChrome.secondaryText.withValues(alpha: 0.45),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              context.l10n.locationNotSetYet,
-              style: WaUi.body.copyWith(
-                fontSize: 13,
-                color: BarqodyChrome.secondaryText,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+  static const _fallbackPoint = LatLng(31.5204, 74.3587); // Lahore
 
-    final point = LatLng(_latitude!, _longitude!);
-    return Container(
-      height: 160,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: BarqodyChrome.fieldFill,
-      ),
+  Widget _buildMapPreview() {
+    final hasLocation = _latitude != null && _longitude != null;
+    final point = hasLocation
+        ? LatLng(_latitude!, _longitude!)
+        : _fallbackPoint;
+    final radiusM = _radiusMeters.toDouble();
+
+    return Material(
+      color: _fieldFill,
+      borderRadius: BorderRadius.circular(_fieldRadius),
       clipBehavior: Clip.antiAlias,
-      child: IgnorePointer(
-        child: FlutterMap(
-          options: MapOptions(
-            initialCenter: point,
-            initialZoom: 16,
-            interactionOptions: const InteractionOptions(
-              flags: InteractiveFlag.none,
-            ),
-          ),
-          children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.barqody.tapni_app',
-            ),
-            CircleLayer(
-              circles: [
-                CircleMarker(
-                  point: point,
-                  radius: _radiusMeters.toDouble(),
-                  useRadiusInMeter: true,
-                  color: Colors.black.withValues(alpha: 0.08),
-                  borderColor: Colors.black,
-                  borderStrokeWidth: 1.5,
+      child: InkWell(
+        onTap: _pickOnMap,
+        child: SizedBox(
+          height: 168,
+          width: double.infinity,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              IgnorePointer(
+                child: FlutterMap(
+                  key: ValueKey(
+                    'preview-${point.latitude.toStringAsFixed(5)}-'
+                    '${point.longitude.toStringAsFixed(5)}-$radiusM',
+                  ),
+                  options: MapOptions(
+                    initialCenter: point,
+                    initialZoom: hasLocation ? 15 : 13,
+                    interactionOptions: const InteractionOptions(
+                      flags: InteractiveFlag.none,
+                    ),
+                  ),
+                  children: [
+                    AppMapTiles.street(),
+                    if (hasLocation) ...[
+                      CircleLayer(
+                        circles: [
+                          CircleMarker(
+                            point: point,
+                            radius: radiusM,
+                            useRadiusInMeter: true,
+                            color: const Color(0xFFE53935)
+                                .withValues(alpha: 0.15),
+                            borderColor: const Color(0xFFE53935),
+                            borderStrokeWidth: 2,
+                          ),
+                        ],
+                      ),
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: point,
+                            width: 40,
+                            height: 40,
+                            alignment: Alignment.topCenter,
+                            child: const Icon(
+                              Icons.location_on,
+                              color: Color(0xFFE53935),
+                              size: 36,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
                 ),
-              ],
-            ),
-            MarkerLayer(
-              markers: [
-                Marker(
-                  point: point,
-                  width: 36,
-                  height: 36,
-                  child: const Icon(
-                    Icons.location_on,
-                    color: Colors.black,
-                    size: 32,
+              ),
+              if (!hasLocation)
+                ColoredBox(
+                  color: Colors.white.withValues(alpha: 0.55),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.map_outlined,
+                          size: 28,
+                          color: _labelColor.withValues(alpha: 0.8),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          context.l10n.locationNotSetYet,
+                          style: AppFonts.textStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: _labelColor,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Tap to pick on map',
+                          style: AppFonts.textStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.92),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      'Tap to edit',
+                      style: AppFonts.textStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -321,99 +430,91 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dayNames = _dayNames(context);
+    final m = AuthScale.of(context);
     final hasFace = _facePhotoBase64 != null ||
         widget.employee?.facePhoto.isNotEmpty == true;
-    final saveLabel = widget.employee != null
-        ? context.l10n.saveSettings
-        : context.l10n.sendInvitation;
+    final saveLabel = _isAddFlow ? 'Save' : context.l10n.saveSettings;
 
     return Scaffold(
-      backgroundColor: BarqodyChrome.scaffold,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
             BarqodyTitleBar(title: _screenTitle(context)),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(
-                  BarqodyChrome.sidePad,
-                  12,
-                  BarqodyChrome.sidePad,
-                  24,
-                ),
+                padding: EdgeInsets.fromLTRB(m.s(20), 0, m.s(20), m.v(24)),
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _ShiftTimeField(
-                        label: '${context.l10n.start.toUpperCase()} SHIFT',
-                        value: _formatTime(_shiftStart),
-                        onTap: () => _pickTime(isStart: true),
+                      Expanded(
+                        child: _LabeledTapField(
+                          label: 'START SHIFT',
+                          value: _formatTime(_shiftStart),
+                          onTap: () => _pickTime(isStart: true),
+                        ),
                       ),
-                      const SizedBox(width: 10),
-                      _ShiftTimeField(
-                        label: '${context.l10n.end.toUpperCase()} SHIFT',
-                        value: _formatTime(_shiftEnd),
-                        onTap: () => _pickTime(isStart: false),
+                      SizedBox(width: m.s(12)),
+                      Expanded(
+                        child: _LabeledTapField(
+                          label: 'END SHIFT',
+                          value: _formatTime(_shiftEnd),
+                          onTap: () => _pickTime(isStart: false),
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
-                  _BarqodySectionLabel(context.l10n.workLocation.toUpperCase()),
-                  const SizedBox(height: 10),
+                  SizedBox(height: m.v(22)),
+                  const _SectionLabel('LOCATION'),
+                  SizedBox(height: m.v(10)),
                   _buildMapPreview(),
-                  const SizedBox(height: 12),
+                  SizedBox(height: m.v(12)),
                   Row(
                     children: [
-                      Expanded(
-                        child: _CompactPillButton(
-                          label: context.l10n.pickOnMap,
-                          filled: false,
-                          onPressed: _pickOnMap,
-                        ),
+                      _MapActionButton(
+                        label: 'Pick On Map',
+                        filled: false,
+                        onPressed: _pickOnMap,
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _CompactPillButton(
-                          label: _latitude != null
-                              ? context.l10n.updateGPSLocation
-                              : context.l10n.useMyLocation,
-                          filled: true,
-                          loading: _isLoadingLocation,
-                          onPressed:
-                              _isLoadingLocation ? null : _useCurrentLocation,
-                        ),
+                      SizedBox(width: m.s(8)),
+                      _MapActionButton(
+                        label: 'Current Location',
+                        filled: true,
+                        loading: _isLoadingLocation,
+                        onPressed:
+                            _isLoadingLocation ? null : _useCurrentLocation,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  _BarqodySectionLabel('ADDRESS'),
-                  const SizedBox(height: 8),
-                  _BarqodyFilledField(
+                  SizedBox(height: m.v(18)),
+                  const _SectionLabel('ADDRESS'),
+                  SizedBox(height: m.v(8)),
+                  _FilledTextField(
                     controller: _addressController,
-                    hint: context.l10n.addressOptional,
+                    hint: 'e.g. 123 Main Street, City',
                   ),
-                  const SizedBox(height: 14),
-                  _BarqodySectionLabel('RADIUS (KM)'),
-                  const SizedBox(height: 8),
-                  _BarqodyFilledField(
+                  SizedBox(height: m.v(14)),
+                  const _SectionLabel('RADIUS (KM)'),
+                  SizedBox(height: m.v(8)),
+                  _FilledTextField(
                     controller: _radiusController,
-                    hint: context.l10n.allowedRadiusMeters,
-                    keyboardType: TextInputType.number,
+                    hint: 'e.g. 5',
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     onChanged: (_) => setState(() {}),
                   ),
-                  const SizedBox(height: 24),
-                  _BarqodySectionLabel(
-                    context.l10n.weekendDays.toUpperCase(),
-                  ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: m.v(22)),
+                  const _SectionLabel('WEEKEND DAYS'),
+                  SizedBox(height: m.v(12)),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: List.generate(7, (index) {
                       final selected = _weekendDays.contains(index);
                       return _WeekendDayChip(
-                        label: dayNames[index],
+                        label: _dayNames[index],
                         selected: selected,
                         onTap: () {
                           setState(() {
@@ -427,103 +528,70 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
                       );
                     }),
                   ),
-                  const SizedBox(height: 24),
-                  _BarqodySectionLabel(
-                    context.l10n.employeeFacePhoto.toUpperCase(),
-                  ),
-                  const SizedBox(height: 10),
-                  Material(
-                    color: BarqodyChrome.fieldFill,
-                    borderRadius: BorderRadius.circular(16),
-                    child: InkWell(
-                      onTap: _captureFace,
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              hasFace
-                                  ? 'assets/images/png/check-icon-1.png'
-                                  : 'assets/images/png/person-icon.png',
-                              width: 22,
-                              height: 22,
-                              errorBuilder: (_, _, _) => Icon(
+                  // Face photo only when editing an existing employee.
+                  if (!_isAddFlow) ...[
+                    SizedBox(height: m.v(22)),
+                    const _SectionLabel('EMPLOYEE FACE PHOTO'),
+                    SizedBox(height: m.v(10)),
+                    Material(
+                      color: _fieldFill,
+                      borderRadius: BorderRadius.circular(_fieldRadius),
+                      child: InkWell(
+                        onTap: _captureFace,
+                        borderRadius: BorderRadius.circular(_fieldRadius),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
                                 hasFace
-                                    ? Icons.check_circle_outline_rounded
-                                    : Icons.face_outlined,
-                                size: 22,
-                                color: hasFace
-                                    ? Colors.black
-                                    : BarqodyChrome.secondaryText,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                hasFace
-                                    ? context.l10n.facePhotoAdded
-                                    : context.l10n.addFacePhoto,
-                                style: WaUi.body.copyWith(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
+                                    ? 'assets/images/png/check-icon-1.png'
+                                    : 'assets/images/png/person-icon.png',
+                                width: 22,
+                                height: 22,
+                                errorBuilder: (_, _, _) => Icon(
+                                  hasFace
+                                      ? Icons.check_circle_outline_rounded
+                                      : Icons.person_outline,
+                                  size: 22,
                                   color: Colors.black,
                                 ),
                               ),
-                            ),
-                            Icon(
-                              Icons.chevron_right_rounded,
-                              color: BarqodyChrome.secondaryText
-                                  .withValues(alpha: 0.6),
-                            ),
-                          ],
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  hasFace
+                                      ? context.l10n.facePhotoAdded
+                                      : context.l10n.addFacePhoto,
+                                  style: AppFonts.textStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Icon(
+                                Icons.chevron_right_rounded,
+                                color: _labelColor.withValues(alpha: 0.7),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                BarqodyChrome.sidePad,
-                8,
-                BarqodyChrome.sidePad,
-                12,
-              ),
-              child: SizedBox(
-                width: double.infinity,
-                height: WaUi.primaryButtonHeight,
-                child: ElevatedButton(
-                  onPressed: _isSaving ? null : _save,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor:
-                        Colors.black.withValues(alpha: 0.35),
-                    elevation: 0,
-                    shape: const StadiumBorder(),
-                  ),
-                  child: _isSaving
-                      ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : Text(
-                          saveLabel,
-                          style: WaUi.promoButton.copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                ),
+              padding: EdgeInsets.fromLTRB(m.s(20), m.v(8), m.s(20), m.v(16)),
+              child: PillButton(
+                label: _isSaving ? '…' : saveLabel,
+                enabled: !_isSaving,
+                onPressed: _save,
               ),
             ),
           ],
@@ -533,31 +601,31 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
   }
 }
 
-class _BarqodySectionLabel extends StatelessWidget {
+class _SectionLabel extends StatelessWidget {
   final String text;
 
-  const _BarqodySectionLabel(this.text);
+  const _SectionLabel(this.text);
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: WaUi.label.copyWith(
+      style: AppFonts.textStyle(
         fontSize: 11,
-        letterSpacing: 0.6,
         fontWeight: FontWeight.w600,
-        color: BarqodyChrome.secondaryText,
+        color: _EmployeeSettingsScreenState._labelColor,
+        letterSpacing: 0.7,
       ),
     );
   }
 }
 
-class _ShiftTimeField extends StatelessWidget {
+class _LabeledTapField extends StatelessWidget {
   final String label;
   final String value;
   final VoidCallback onTap;
 
-  const _ShiftTimeField({
+  const _LabeledTapField({
     required this.label,
     required this.value,
     required this.onTap,
@@ -565,52 +633,53 @@ class _ShiftTimeField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Material(
-        color: BarqodyChrome.fieldFill,
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: WaUi.label.copyWith(
-                    fontSize: 10,
-                    letterSpacing: 0.5,
-                    fontWeight: FontWeight.w600,
-                    color: BarqodyChrome.secondaryText,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionLabel(label),
+        const SizedBox(height: 8),
+        Material(
+          color: _EmployeeSettingsScreenState._fieldFill,
+          borderRadius: BorderRadius.circular(
+            _EmployeeSettingsScreenState._fieldRadius,
+          ),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(
+              _EmployeeSettingsScreenState._fieldRadius,
+            ),
+            child: SizedBox(
+              height: 52,
+              width: double.infinity,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    value,
+                    style: AppFonts.textStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF6B7280),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  value,
-                  style: WaUi.toolsTitleOf(
-                    size: 22,
-                    weight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
 
-class _BarqodyFilledField extends StatelessWidget {
+class _FilledTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final TextInputType? keyboardType;
   final ValueChanged<String>? onChanged;
 
-  const _BarqodyFilledField({
+  const _FilledTextField({
     required this.controller,
     required this.hint,
     this.keyboardType,
@@ -623,26 +692,37 @@ class _BarqodyFilledField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       onChanged: onChanged,
-      style: WaUi.body.copyWith(fontSize: 15, color: Colors.black),
+      style: AppFonts.textStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: Colors.black,
+      ),
       cursorColor: Colors.black,
       decoration: InputDecoration(
         filled: true,
-        fillColor: BarqodyChrome.fieldFill,
+        fillColor: _EmployeeSettingsScreenState._fieldFill,
         hintText: hint,
-        hintStyle: WaUi.body.copyWith(
+        hintStyle: AppFonts.textStyle(
           fontSize: 15,
-          color: BarqodyChrome.secondaryText,
+          fontWeight: FontWeight.w400,
+          color: _EmployeeSettingsScreenState._labelColor,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(
+            _EmployeeSettingsScreenState._fieldRadius,
+          ),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(
+            _EmployeeSettingsScreenState._fieldRadius,
+          ),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(
+            _EmployeeSettingsScreenState._fieldRadius,
+          ),
           borderSide: BorderSide.none,
         ),
         contentPadding: const EdgeInsets.symmetric(
@@ -654,13 +734,13 @@ class _BarqodyFilledField extends StatelessWidget {
   }
 }
 
-class _CompactPillButton extends StatelessWidget {
+class _MapActionButton extends StatelessWidget {
   final String label;
   final bool filled;
   final bool loading;
   final VoidCallback? onPressed;
 
-  const _CompactPillButton({
+  const _MapActionButton({
     required this.label,
     required this.filled,
     this.loading = false,
@@ -670,12 +750,12 @@ class _CompactPillButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final child = loading
-        ? const SizedBox(
-            width: 20,
-            height: 20,
+        ? SizedBox(
+            width: 16,
+            height: 16,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              color: Colors.white,
+              color: filled ? Colors.white : Colors.black,
             ),
           )
         : Text(
@@ -683,43 +763,58 @@ class _CompactPillButton extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: WaUi.body.copyWith(
-              fontSize: 13,
+            style: AppFonts.textStyle(
+              fontSize: 12,
               fontWeight: FontWeight.w700,
               color: filled ? Colors.white : Colors.black,
             ),
           );
 
-    if (filled) {
-      return SizedBox(
-        height: 44,
-        child: ElevatedButton(
-          onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            disabledBackgroundColor: Colors.black.withValues(alpha: 0.35),
-            elevation: 0,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            shape: const StadiumBorder(),
-          ),
-          child: child,
-        ),
-      );
-    }
-
-    return SizedBox(
-      height: 44,
-      child: OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: Colors.black,
-          side: const BorderSide(color: Colors.black, width: 1.2),
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          shape: const StadiumBorder(),
-        ),
-        child: child,
+    return Container(
+      height: 34,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        boxShadow: filled
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.14),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ]
+            : null,
       ),
+      child: filled
+          ? ElevatedButton(
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                disabledBackgroundColor: Colors.black.withValues(alpha: 0.35),
+                elevation: 0,
+                shadowColor: Colors.transparent,
+                minimumSize: Size.zero,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
+                shape: const StadiumBorder(),
+              ),
+              child: child,
+            )
+          : OutlinedButton(
+              onPressed: onPressed,
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.white,
+                side: const BorderSide(color: Colors.black, width: 1),
+                minimumSize: Size.zero,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
+                shape: const StadiumBorder(),
+              ),
+              child: child,
+            ),
     );
   }
 }
@@ -776,12 +871,13 @@ class _WeekendDayChip extends StatelessWidget {
                   child: Icon(
                     Icons.check_box_outline_blank,
                     size: 18,
-                    color: BarqodyChrome.secondaryText.withValues(alpha: 0.7),
+                    color: _EmployeeSettingsScreenState._labelColor
+                        .withValues(alpha: 0.7),
                   ),
                 ),
               Text(
                 label,
-                style: WaUi.body.copyWith(
+                style: AppFonts.textStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: selected ? Colors.white : Colors.black,

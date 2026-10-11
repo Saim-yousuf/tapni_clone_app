@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:tapni_app/helper/log_helper.dart';
+import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/services/device_session_guard.dart';
 import 'package:tapni_app/utils/api_error_messages.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
@@ -122,6 +123,9 @@ class ApiHandler {
 
       PrintLog.logMessage("Response Code: ${response.statusCode}");
       PrintLog.logMessage("Response Body: ${response.body}");
+
+      // Any HTTP response means we are reachable — clear false offline state.
+      ConnectivityProvider.instance?.reportApiReachable();
 
       return _handleResponse(response);
     } catch (e) {

@@ -639,24 +639,10 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
               padding: const EdgeInsets.fromLTRB(12, 8, 16, 0),
               child: Row(
                 children: [
-                  Material(
-                    color: isDark
-                        ? const Color(0xFF3A3B3C)
-                        : const Color(0xFFF2F2F7),
-                    shape: const CircleBorder(),
-                    child: InkWell(
-                      customBorder: const CircleBorder(),
-                      onTap: () => Navigator.of(context).pop(),
-                      child: SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          size: 16,
-                          color: primaryText,
-                        ),
-                      ),
-                    ),
+                  CircleBackButton(
+                    color: isDark ? const Color(0xFF3A3B3C) : null,
+                    iconColor: isDark ? Colors.white : null,
+                    onTap: () => Navigator.of(context).pop(),
                   ),
                   const SizedBox(width: 10),
                   Expanded(

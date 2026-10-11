@@ -1,19 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 
-void showSnackBar(context, String message) {
-  final snackBar = SnackBar(
-    backgroundColor: AppTheme.primaryBlack,
-    duration: const Duration(milliseconds: 700),
+/// Canonical app snackbar: success = black + white text; error = red + white.
+SnackBar appSnackBar(
+  String message, {
+  bool isError = false,
+  Duration duration = const Duration(seconds: 3),
+  EdgeInsetsGeometry? margin,
+}) {
+  return SnackBar(
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: isError ? const Color(0xFFC62828) : AppTheme.primaryBlack,
+    duration: duration,
+    margin: margin ?? const EdgeInsets.fromLTRB(16, 0, 16, 24),
     content: Text(
       message,
-      style: TextStyle(
+      style: WaUi.body.copyWith(
         color: AppTheme.secondaryWhite,
         fontWeight: FontWeight.w600,
       ),
     ),
   );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+void showSnackBar(
+  BuildContext context,
+  String message, {
+  bool isError = false,
+  Duration duration = const Duration(seconds: 3),
+}) {
+  final messenger = ScaffoldMessenger.of(context);
+  messenger.clearSnackBars();
+  messenger.showSnackBar(
+    appSnackBar(message, isError: isError, duration: duration),
+  );
 }
 
 class ShowAlert {

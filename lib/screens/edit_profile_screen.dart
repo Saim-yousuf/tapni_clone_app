@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -82,9 +83,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       backgroundColor: isDark ? Colors.black : Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => Navigator.of(context).pop()),
+        leading: Center(
+          child: CircleBackButton(
+            color: isDark ? const Color(0xFF3A3B3C) : null,
+            iconColor: isDark ? Colors.white : null,
+            onTap: () => Navigator.of(context).pop(),
+          ),
+        ),
         title: Text(context.l10n.editProfile),
       ),
       body: SafeArea(

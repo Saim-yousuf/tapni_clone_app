@@ -5,11 +5,15 @@ import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/attendance_report_screen.dart';
 import 'package:tapni_app/screens/attendance/business/employee_list_screen.dart';
+import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
 import 'package:tapni_app/screens/attendance/business/scan_to_invite_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class AttendanceDashboardScreen extends StatefulWidget {
+  static const routeName = 'attendance_dashboard';
+
   const AttendanceDashboardScreen({super.key});
 
   @override
@@ -17,8 +21,9 @@ class AttendanceDashboardScreen extends StatefulWidget {
       _AttendanceDashboardScreenState();
 }
 
-const _teamSectionCardBg = Color(0xFFF5F5F5);
-const _teamStatCardBg = Color(0xFFF2F2F7);
+/// Team dashboard card fill (user-specified).
+const _teamCardBg = Color(0xFFF3F4F6);
+const _teamCardRadius = 18.0;
 
 class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
   List<AttendanceEmployee> _employees = [];
@@ -123,10 +128,14 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
   }
 
   Future<void> _scanToAddMember() async {
-    await Navigator.push(
+    final result = await Navigator.push<String>(
       context,
       MaterialPageRoute(builder: (_) => const ScanToInviteScreen()),
     );
+    if (!mounted) return;
+    if (result != null && result.isNotEmpty) {
+      EmployeeSettingsScreen.showResultSnack(context, result);
+    }
     _load();
   }
 
@@ -197,26 +206,24 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final side = m.s(BarqodyChrome.sidePad);
     final presentEmployees = _presentEmployees;
     final absentEmployees = _absentEmployees;
     final sendInviteCount =
         _pendingInviteCount > 0 ? _pendingInviteCount : 0;
+    // Pending invites count as team activity — don't keep the empty state
+    // after Scan-to-invite succeeds (member is pending until they accept).
+    final showDashboard =
+        _employees.isNotEmpty || _pendingInviteCount > 0;
 
     return Scaffold(
       backgroundColor: BarqodyChrome.scaffold,
       body: SafeArea(
         child: Column(
           children: [
-            BarqodyTitleBar(
-              title: 'Team',
-              trailing: _employees.isEmpty
-                  ? null
-                  : CircleAssetButton(
-                      asset: 'assets/images/png/file-icon.png',
-                      iconSize: 18,
-                      onTap: _showEmployeeReportPicker,
-                    ),
-            ),
+            // Screenshot: back + centered "Team" only (no trailing action).
+            const BarqodyTitleBar(title: 'Team'),
             Expanded(
               child: _isLoading
                   ? const Center(
@@ -229,7 +236,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                       color: Colors.black,
                       backgroundColor: Colors.white,
                       onRefresh: _load,
-                      child: _employees.isEmpty
+                      child: !showDashboard
                           ? LayoutBuilder(
                               builder: (context, constraints) {
                                 return SingleChildScrollView(
@@ -241,7 +248,7 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                                     ),
                                     child: Center(
                                       child: _TeamEmptyState(
-                                        onAdd: _openEmployees,
+                                        onAdd: _scanToAddMember,
                                       ),
                                     ),
                                   ),
@@ -249,11 +256,11 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                               },
                             )
                           : ListView(
-                              padding: const EdgeInsets.fromLTRB(
-                                BarqodyChrome.sidePad,
-                                16,
-                                BarqodyChrome.sidePad,
-                                16,
+                              padding: EdgeInsets.fromLTRB(
+                                side,
+                                0,
+                                side,
+                                m.v(16),
                               ),
                               children: [
                                 Row(
@@ -267,28 +274,30 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                                         onTap: _openEmployees,
                                       ),
                                     ),
-                                    const SizedBox(width: 12),
+                                    SizedBox(width: m.s(12)),
                                     Expanded(
                                       child: _TeamStatCard(
                                         label: 'Send Invite',
                                         count: sendInviteCount,
                                         iconAsset:
                                             'assets/images/png/email-icon-1.png',
-                                        onTap: _openEmployees,
+                                        onTap: _scanToAddMember,
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 16),
+                                SizedBox(height: m.v(14)),
                                 _MemberSectionCard(
                                   title: 'Present Members',
+                                  subtitle: 'Currently active team members',
                                   count: presentEmployees.length,
                                   employees: presentEmployees,
                                   onViewAll: _openEmployees,
                                 ),
-                                const SizedBox(height: 12),
+                                SizedBox(height: m.v(12)),
                                 _MemberSectionCard(
                                   title: 'Absent Members',
+                                  subtitle: 'Currently absent team members',
                                   count: absentEmployees.length,
                                   employees: absentEmployees,
                                   onViewAll: _openEmployees,
@@ -297,37 +306,34 @@ class _AttendanceDashboardScreenState extends State<AttendanceDashboardScreen> {
                             ),
                     ),
             ),
-            if (!_isLoading && _employees.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  BarqodyChrome.sidePad,
-                  4,
-                  BarqodyChrome.sidePad,
-                  12,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 52,
+            if (!_isLoading && showDashboard)
+              ColoredBox(
+                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    side,
+                    m.v(12),
+                    side,
+                    m.v(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
                         child: PillButton(
                           label: 'View Members',
                           filled: false,
                           onPressed: _openEmployees,
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: SizedBox(
-                        height: 52,
+                      SizedBox(width: m.s(12)),
+                      Expanded(
                         child: PillButton(
                           label: 'Add Member',
                           onPressed: _scanToAddMember,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
           ],
@@ -344,44 +350,48 @@ class _TeamEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
+      padding: EdgeInsets.symmetric(
+        horizontal: m.s(32),
+        vertical: m.v(48),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
             'assets/images/png/leadership.png',
-            width: 160,
-            height: 160,
+            width: m.s(160),
+            height: m.s(160),
             fit: BoxFit.contain,
             errorBuilder: (_, _, _) => Icon(
               Icons.groups_outlined,
-              size: 80,
+              size: m.s(80),
               color: BarqodyChrome.secondaryText.withValues(alpha: 0.5),
             ),
           ),
-          const SizedBox(height: 28),
+          SizedBox(height: m.v(28)),
           Text(
             'Build Your Team',
             textAlign: TextAlign.center,
             style: WaUi.toolsTitleOf(
-              size: 22,
+              size: m.s(22),
               weight: FontWeight.w700,
               color: Colors.black,
               height: 1.2,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: m.v(10)),
           Text(
             'No team members have been added yet. Add employees to get your team started',
             textAlign: TextAlign.center,
             style: WaUi.body.copyWith(
-              fontSize: 15,
+              fontSize: m.s(15),
               height: 1.45,
               color: BarqodyChrome.secondaryText,
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: m.v(32)),
           PillButton(
             label: 'Add Team Member',
             onPressed: onAdd,
@@ -407,36 +417,45 @@ class _TeamStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final iconBox = m.s(44);
+    final iconSize = m.s(24);
+    final radius = m.s(_teamCardRadius);
+
     return Material(
-      color: _teamStatCardBg,
-      borderRadius: BorderRadius.circular(18),
+      color: _teamCardBg,
+      borderRadius: BorderRadius.circular(radius),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: AspectRatio(
-          aspectRatio: 1,
+          // Shorter than square — compact stat tiles.
+          aspectRatio: 1.35,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.fromLTRB(m.s(14), m.s(12), m.s(12), m.s(12)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: Colors.black, width: 1.1),
-                  ),
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    iconAsset,
-                    width: 18,
-                    height: 18,
-                    errorBuilder: (_, _, _) => const Icon(
-                      Icons.person_outline,
-                      size: 18,
-                      color: Colors.black,
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    width: iconBox,
+                    height: iconBox,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.transparent,
+                      border: Border.all(color: Colors.black, width: 1.5),
+                    ),
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      iconAsset,
+                      width: iconSize,
+                      height: iconSize,
+                      errorBuilder: (_, _, _) => Icon(
+                        Icons.person_outline,
+                        size: iconSize,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -444,20 +463,20 @@ class _TeamStatCard extends StatelessWidget {
                 Text(
                   '$count',
                   style: WaUi.toolsTitleOf(
-                    size: 28,
+                    size: m.s(28),
                     weight: FontWeight.w700,
                     color: Colors.black,
                     height: 1,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: m.v(2)),
                 Text(
                   label,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: WaUi.body.copyWith(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
+                    fontSize: m.s(12),
+                    fontWeight: FontWeight.w500,
                     color: BarqodyChrome.secondaryText,
                     height: 1.2,
                   ),
@@ -473,12 +492,14 @@ class _TeamStatCard extends StatelessWidget {
 
 class _MemberSectionCard extends StatelessWidget {
   final String title;
+  final String subtitle;
   final int count;
   final List<AttendanceEmployee> employees;
   final VoidCallback onViewAll;
 
   const _MemberSectionCard({
     required this.title,
+    required this.subtitle,
     required this.count,
     required this.employees,
     required this.onViewAll,
@@ -486,14 +507,27 @@ class _MemberSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
     final preview = employees.take(3).toList();
+    final radius = m.s(_teamCardRadius);
+    final pad = m.s(14);
+    final isEmpty = employees.isEmpty;
+    final emptyLabel = title.toLowerCase().contains('absent')
+        ? 'No one is absent'
+        : 'No one is present';
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+      padding: EdgeInsets.all(pad),
       decoration: BoxDecoration(
-        color: _teamSectionCardBg,
-        borderRadius: BorderRadius.circular(18),
+        color: _teamCardBg,
+        borderRadius: BorderRadius.circular(radius),
+        border: isEmpty
+            ? Border.all(
+                color: Colors.black.withValues(alpha: 0.12),
+                width: 1,
+              )
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -504,93 +538,192 @@ class _MemberSectionCard extends StatelessWidget {
                 child: Text(
                   title,
                   style: WaUi.toolsTitleOf(
-                    size: 16,
+                    size: m.s(15),
                     weight: FontWeight.w700,
-                    color: Colors.black,
+                    color: isEmpty
+                        ? BarqodyChrome.secondaryText
+                        : Colors.black,
+                    height: 1.2,
                   ),
                 ),
               ),
               Text(
                 '$count',
                 style: WaUi.toolsTitleOf(
-                  size: 16,
+                  size: m.s(15),
                   weight: FontWeight.w700,
-                  color: Colors.black,
+                  color: isEmpty
+                      ? BarqodyChrome.secondaryText
+                      : Colors.black,
+                  height: 1.2,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              if (preview.isEmpty)
-                Text(
-                  '—',
-                  style: WaUi.body.copyWith(
-                    color: BarqodyChrome.secondaryText,
-                    fontSize: 15,
-                  ),
-                )
-              else
-                SizedBox(
-                  height: 44,
-                  width: 44 + (preview.length - 1) * 24.0,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      for (var i = 0; i < preview.length; i++)
-                        Positioned(
-                          left: i * 24.0,
-                          child: _EmployeeAvatar(
-                            employee: preview[i],
-                            radius: 20,
-                            border: true,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              const Spacer(),
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: onViewAll,
-                  borderRadius: BorderRadius.circular(20),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 6,
+          SizedBox(height: m.v(4)),
+          Text(
+            subtitle,
+            style: WaUi.body.copyWith(
+              fontSize: m.s(12),
+              fontWeight: FontWeight.w400,
+              color: BarqodyChrome.secondaryText,
+              height: 1.3,
+            ),
+          ),
+          SizedBox(height: m.v(isEmpty ? 14 : 16)),
+          if (isEmpty)
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: m.s(12),
+                      vertical: m.v(14),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(m.s(12)),
+                      border: Border.all(
+                        color: Colors.black.withValues(alpha: 0.08),
+                      ),
                     ),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          context.l10n.seeAll,
-                          style: WaUi.body.copyWith(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
+                        Icon(
+                          Icons.person_off_outlined,
+                          size: m.s(20),
+                          color: BarqodyChrome.secondaryText,
                         ),
-                        const SizedBox(width: 6),
-                        Image.asset(
-                          'assets/images/png/multiple-users.png',
-                          width: 18,
-                          height: 18,
-                          errorBuilder: (_, _, _) => const Icon(
-                            Icons.groups_outlined,
-                            size: 18,
-                            color: Colors.black,
+                        SizedBox(width: m.s(10)),
+                        Expanded(
+                          child: Text(
+                            emptyLabel,
+                            style: WaUi.body.copyWith(
+                              fontSize: m.s(13),
+                              fontWeight: FontWeight.w600,
+                              color: BarqodyChrome.secondaryText,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+                SizedBox(width: m.s(10)),
+                _ViewAllItem(onTap: onViewAll),
+              ],
+            )
+          else
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                for (final employee in preview)
+                  Expanded(
+                    child: Center(
+                      child: _MemberAvatarItem(employee: employee),
+                    ),
+                  ),
+                for (var i = preview.length; i < 3; i++)
+                  const Expanded(child: SizedBox.shrink()),
+                Expanded(
+                  child: Center(child: _ViewAllItem(onTap: onViewAll)),
+                ),
+              ],
+            ),
         ],
+      ),
+    );
+  }
+}
+
+class _MemberAvatarItem extends StatelessWidget {
+  final AttendanceEmployee employee;
+
+  const _MemberAvatarItem({required this.employee});
+
+  @override
+  Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final fullName = employee.employee.displayName.trim();
+    final firstName = fullName.isEmpty ? '' : fullName.split(' ').first;
+    final radius = m.s(24);
+    final nameW = m.s(58);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _EmployeeAvatar(employee: employee, radius: radius),
+        SizedBox(height: m.v(6)),
+        SizedBox(
+          width: nameW,
+          child: Text(
+            firstName,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: WaUi.body.copyWith(
+              fontSize: m.s(11),
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+              height: 1.2,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ViewAllItem extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _ViewAllItem({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final box = m.s(48);
+    final icon = m.s(20);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(box / 2),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: box,
+              height: box,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: Image.asset(
+                'assets/images/png/multiple-users.png',
+                width: icon,
+                height: icon,
+                errorBuilder: (_, _, _) => Icon(
+                  Icons.groups_outlined,
+                  size: icon,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            SizedBox(height: m.v(8)),
+            Text(
+              'View All',
+              style: WaUi.body.copyWith(
+                fontSize: m.s(12),
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+                height: 1.2,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -599,12 +732,10 @@ class _MemberSectionCard extends StatelessWidget {
 class _EmployeeAvatar extends StatelessWidget {
   final AttendanceEmployee employee;
   final double radius;
-  final bool border;
 
   const _EmployeeAvatar({
     required this.employee,
     this.radius = 20,
-    this.border = false,
   });
 
   @override
@@ -612,26 +743,18 @@ class _EmployeeAvatar extends StatelessWidget {
     final name = employee.employee.displayName;
     final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
 
-    return Container(
-      decoration: border
-          ? BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 2),
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: Colors.white,
+      backgroundImage: employee.employee.profilePhoto.isNotEmpty
+          ? NetworkImage(employee.employee.profilePhoto)
+          : null,
+      child: employee.employee.profilePhoto.isEmpty
+          ? Text(
+              initial,
+              style: WaUi.avatarInitial.copyWith(fontSize: radius * 0.85),
             )
           : null,
-      child: CircleAvatar(
-        radius: radius,
-        backgroundColor: Colors.white,
-        backgroundImage: employee.employee.profilePhoto.isNotEmpty
-            ? NetworkImage(employee.employee.profilePhoto)
-            : null,
-        child: employee.employee.profilePhoto.isEmpty
-            ? Text(
-                initial,
-                style: WaUi.avatarInitial.copyWith(fontSize: radius * 0.85),
-              )
-            : null,
-      ),
     );
   }
 }

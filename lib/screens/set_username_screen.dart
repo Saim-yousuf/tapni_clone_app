@@ -7,10 +7,11 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/username_policy_models.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
-import 'package:tapni_app/screens/my_username_claims_screen.dart';
 import 'package:tapni_app/screens/username_claim_screen.dart';
+import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class SetUsernameScreen extends StatefulWidget {
@@ -21,6 +22,12 @@ class SetUsernameScreen extends StatefulWidget {
 }
 
 class _SetUsernameScreenState extends State<SetUsernameScreen> {
+  static const _heading = 'Choose a unique username for your profile';
+  static const _hint = 'e.g. your_username';
+  static const _fieldRadius = 12.0;
+  static const _sidePad = 26.0;
+  static const _labelColor = Color(0xFFA3A7B0);
+
   final _formKey = GlobalKey<FormState>();
   final _authRepo = AuthRepo();
   late final TextEditingController _usernameController;
@@ -29,7 +36,6 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
   UsernameCheckResult? _availability;
   bool _checking = false;
   String _lastChecked = '';
-
   @override
   void initState() {
     super.initState();
@@ -290,40 +296,31 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
         .replaceFirst(RegExp(r'^https?://'), '')
         .replaceAll(RegExp(r'/$'), '');
 
+    final fieldBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(_fieldRadius),
+      borderSide: const BorderSide(color: Colors.black, width: 1),
+    );
+
     return Scaffold(
-      backgroundColor: BarqodyChrome.scaffold,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              BarqodyTitleBar(
-                title: context.l10n.username,
-                trailing: CircleAssetButton(
-                  asset: 'assets/images/png/icon-morehoriz.png',
-                  iconSize: 18,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const MyUsernameClaimsScreen(),
-                      ),
-                    );
-                  },
-                ),
-              ),
+              BarqodyTitleBar(title: context.l10n.username),
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+                  padding: const EdgeInsets.fromLTRB(_sidePad, 64, _sidePad, 24),
                   children: [
                     Center(
                       child: Image.asset(
                         'assets/images/png/username-img.png',
-                        width: 140,
-                        height: 140,
-                        fit: BoxFit.contain,
+                        width: 200,
+                        fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => Container(
-                          width: 120,
-                          height: 120,
+                          width: 140,
+                          height: 118,
                           decoration: BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.circular(28),
@@ -336,28 +333,29 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 52),
                     Text(
-                      context.l10n.chooseAUniqueUsernameForYourProfileLink,
+                      _heading,
                       textAlign: TextAlign.center,
-                      style: WaUi.toolsTitleOf(
-                        size: 20,
-                        weight: FontWeight.w700,
+                      style: AppFonts.textStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
                         color: Colors.black,
-                        height: 1.3,
+                        height: 1.25,
                       ),
                     ),
-                    const SizedBox(height: 36),
+                    const SizedBox(height: 52),
                     Text(
                       context.l10n.username.toUpperCase(),
-                      style: WaUi.label.copyWith(
-                        fontSize: 12,
-                        letterSpacing: 0.8,
-                        color: BarqodyChrome.secondaryText,
-                        fontWeight: FontWeight.w500,
+                      style: AppFonts.textStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: _labelColor,
+                        letterSpacing: 0.85,
+                        height: 1.2,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 14),
                     TextFormField(
                       controller: _usernameController,
                       keyboardType: TextInputType.text,
@@ -369,48 +367,41 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
                         ),
                         LengthLimitingTextInputFormatter(30),
                       ],
-                      style: WaUi.body.copyWith(
+                      style: AppFonts.textStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        height: 1.2,
                       ),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: BarqodyChrome.fieldFill,
-                        hintText: 'e.g. your_username',
-                        hintStyle: WaUi.body.copyWith(
-                          color: BarqodyChrome.secondaryText,
-                          fontStyle: FontStyle.italic,
+                        fillColor: AuthUi.fieldFill,
+                        hintText: _hint,
+                        hintStyle: AppFonts.textStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: AuthUi.textMuted,
+                          height: 1.2,
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 16,
+                          horizontal: 18,
+                          vertical: 14,
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                          borderSide: const BorderSide(
-                            color: Colors.black,
-                            width: 1.2,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                          borderSide: const BorderSide(
-                            color: Colors.black,
-                            width: 1.2,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                          borderSide: const BorderSide(
-                            color: Colors.black,
-                            width: 1.4,
-                          ),
-                        ),
+                        border: fieldBorder,
+                        enabledBorder: fieldBorder,
+                        focusedBorder: fieldBorder,
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(_fieldRadius),
                           borderSide: const BorderSide(
                             color: Color(0xFFC62828),
-                            width: 1.2,
+                            width: 1,
+                          ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(_fieldRadius),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFC62828),
+                            width: 1,
                           ),
                         ),
                       ),
@@ -422,13 +413,15 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
                       onFieldSubmitted: (_) => _saveUsername(),
                     ),
                     _buildAvailabilityBanner() ?? const SizedBox.shrink(),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 32),
                     Text(
                       'https://$domain/$previewUsername',
                       textAlign: TextAlign.center,
-                      style: WaUi.body.copyWith(
+                      style: AppFonts.textStyle(
                         fontSize: 14,
+                        fontWeight: FontWeight.w400,
                         color: Colors.black,
+                        height: 1.3,
                       ),
                     ),
                     if (showClaim) ...[

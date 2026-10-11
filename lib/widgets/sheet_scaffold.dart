@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 /// Root wrapper for a modal sheet. Put this **outside** the sheet widget
 /// (in [showModalBottomSheet] builder) so [ScaffoldMessenger.of] from the
@@ -92,11 +93,19 @@ SnackBar sheetSnackBar(
   String message, {
   Color? backgroundColor,
   Duration duration = const Duration(seconds: 3),
+  bool isError = false,
 }) {
   return SnackBar(
-    content: Text(message),
+    content: Text(
+      message,
+      style: WaUi.body.copyWith(
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
     behavior: SnackBarBehavior.floating,
-    backgroundColor: backgroundColor,
+    backgroundColor:
+        backgroundColor ?? (isError ? const Color(0xFFC62828) : Colors.black),
     duration: duration,
     margin: const EdgeInsets.fromLTRB(16, 0, 16, 88),
   );
@@ -107,12 +116,15 @@ void showSheetSnackBar(
   String message, {
   Color? backgroundColor,
   Duration duration = const Duration(seconds: 3),
+  bool isError = false,
 }) {
+  ScaffoldMessenger.of(context).clearSnackBars();
   ScaffoldMessenger.of(context).showSnackBar(
     sheetSnackBar(
       message,
       backgroundColor: backgroundColor,
       duration: duration,
+      isError: isError,
     ),
   );
 }

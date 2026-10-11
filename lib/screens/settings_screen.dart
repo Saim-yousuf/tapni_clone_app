@@ -27,7 +27,6 @@ import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/screens/qr_code_screen.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/screens/set_username_screen.dart';
-import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/screens/workplace_screen.dart';
 import 'package:tapni_app/screens/caller_id_setup_screen.dart';
 import 'package:tapni_app/services/caller_id_service.dart';
@@ -288,18 +287,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                     ),
                     WaToolsListTile(
-                      icon: Icons.link_outlined,
-                      title: context.l10n.links,
-                      subtitle: context.l10n.socialLinksSubtitle,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const SocialLinksScreen(isTab: false),
-                          ),
-                        );
-                      },
-                    ),
-                    WaToolsListTile(
                       icon: Icons.person_search_outlined,
                       title: context.l10n.findUser2,
                       subtitle: context.l10n.findPeopleOnBarQody,
@@ -464,7 +451,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => AttendanceDashboardScreen(),
+                              settings: const RouteSettings(
+                                name: AttendanceDashboardScreen.routeName,
+                              ),
+                              builder: (_) => const AttendanceDashboardScreen(),
                             ),
                           );
                         },

@@ -84,13 +84,13 @@ class _EmployeeBusinessCardsScreenState
                               physics: const AlwaysScrollableScrollPhysics(),
                               padding: const EdgeInsets.fromLTRB(
                                 BarqodyChrome.sidePad,
-                                8,
+                                0,
                                 BarqodyChrome.sidePad,
                                 24,
                               ),
                               children: [
                                 Text(
-                                  l10n.selectCompany,
+                                  'Select a Company',
                                   style: WaUi.toolsTitleOf(
                                     size: 22,
                                     weight: FontWeight.w700,

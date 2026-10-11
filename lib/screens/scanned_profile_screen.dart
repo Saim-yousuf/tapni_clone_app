@@ -646,7 +646,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                 VerifiedName(
                   name: displayName.toUpperCase(),
                   verified: profile.isPro,
-                  badgeSize: 20,
+                  badgeSize: 26,
                   style: WaUi.toolsTitleOf(
                     size: 22,
                     weight: FontWeight.w800,
@@ -929,7 +929,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                                                     name: displayName
                                                         .toUpperCase(),
                                                     verified: profile.isPro,
-                                                    badgeSize: 20,
+                                                    badgeSize: 26,
                                                     style: WaUi.toolsTitleOf(
                                                       size: 22,
                                                       weight: FontWeight.w800,

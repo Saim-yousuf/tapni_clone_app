@@ -34,16 +34,44 @@ class ApiErrorMessages {
       'connection timed out',
       'connection reset',
       'errno =',
-      'request failed:',
       'no address associated with hostname',
       'software caused connection abort',
+      'no internet',
+      'network_error',
     ];
     return needles.any(lower.contains);
   }
 
+  /// True offline / DNS / unreachable — not every ClientException.
+  static bool _looksLikeNoInternet(Object error) {
+    if (error is SocketException) {
+      final msg = (error.message).toLowerCase();
+      // Backend down on LAN is not "no internet".
+      if (msg.contains('connection refused')) return false;
+      return true;
+    }
+    if (error is TimeoutException) return true;
+    if (error is HandshakeException || error is TlsException) return false;
+    if (error is http.ClientException) {
+      final msg = error.message.toLowerCase();
+      return msg.contains('failed host lookup') ||
+          msg.contains('network is unreachable') ||
+          msg.contains('no address associated') ||
+          msg.contains('failed to connect');
+    }
+    return false;
+  }
+
+  static const _serverUnreachable =
+      'Unable to reach server. Please try again.';
+
   static String forException(Object error) {
-    if (_errorLooksLikeNetwork(error)) {
+    if (_looksLikeNoInternet(error)) {
       return l10nOr((l) => l.noInternetConnection, 'No internet connection');
+    }
+    if (_errorLooksLikeNetwork(error)) {
+      // Prefer a clear reachability message over generic "Something went wrong".
+      return _serverUnreachable;
     }
     return l10nOr((l) => l.somethingWentWrong, 'Something went wrong');
   }
@@ -53,6 +81,13 @@ class ApiErrorMessages {
     final generic = fallback ??
         l10nOr((l) => l.somethingWentWrong, 'Something went wrong');
     if (message == null || message.trim().isEmpty) return generic;
+    final lower = message.toLowerCase();
+    // Don't rewrite real API errors that merely mention "connection".
+    if (lower.contains('connection refused') ||
+        lower.contains('failed to connect') ||
+        lower.contains('unable to reach server')) {
+      return _serverUnreachable;
+    }
     if (_textLooksLikeNetwork(message)) {
       return l10nOr((l) => l.noInternetConnection, 'No internet connection');
     }

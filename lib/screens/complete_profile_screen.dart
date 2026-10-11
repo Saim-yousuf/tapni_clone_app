@@ -8,6 +8,7 @@ import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/quick_add_links_screen.dart';
+import 'package:tapni_app/screens/subscription_screen.dart';
 import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/constant.dart';
@@ -20,11 +21,14 @@ class CompleteProfileScreen extends StatefulWidget {
     required this.phone,
     required this.verificationToken,
     this.country,
+    this.isBusiness = false,
   }) : super(key: key);
 
   final String phone;
   final String verificationToken;
   final String? country;
+  /// When true, user must complete subscription payment before onboarding continues.
+  final bool isBusiness;
 
   @override
   State<CompleteProfileScreen> createState() => _CompleteProfileScreenState();
@@ -96,6 +100,18 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       );
       await profileProvider.fetchProfile();
       if (!mounted) return;
+
+      if (widget.isBusiness) {
+        // Business signup → pay for Business/Pro before continuing onboarding.
+        Navigator.of(context).pushAndRemoveUntil(
+          AppPageRoute(
+            builder: (_) => SubscriptionScreen(fromRegistration: true),
+          ),
+          (_) => false,
+        );
+        return;
+      }
+
       Navigator.of(context).pushAndRemoveUntil(
         AppPageRoute(
           builder: (_) => const QuickAddLinksScreen(),

@@ -20,7 +20,7 @@ class VerifiedName extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.badgeColor,
-    this.badgeSize = 20,
+    this.badgeSize = 26,
   });
 
   static const Color defaultBadgeColor = Color(0xFFFFCC00);
@@ -40,6 +40,7 @@ class VerifiedName extends StatelessWidget {
                 'assets/images/png/verified-badge.png',
                 width: badgeSize,
                 height: badgeSize,
+                fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Icon(
                   Icons.verified,
                   size: badgeSize,

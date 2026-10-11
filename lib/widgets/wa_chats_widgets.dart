@@ -364,7 +364,7 @@ class WaChatListTile extends StatelessWidget {
                               child: VerifiedName(
                                 name: name,
                                 verified: verified,
-                                badgeSize: 16,
+                                badgeSize: 20,
                                 textAlign: TextAlign.start,
                                 style: WaUi.chatName.copyWith(
                                   fontWeight: FontWeight.w700,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
 
 class UsernameClaimScreen extends StatefulWidget {
@@ -80,10 +81,11 @@ class _UsernameClaimScreenState extends State<UsernameClaimScreen> {
     return Scaffold(
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-          color: WaUi.primaryText,
-          onPressed: () => Navigator.of(context).pop()),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).pop(),
+          ),
+        ),
         title: Text(context.l10n.claimUsernameTitle),
       ),
       body: SafeArea(

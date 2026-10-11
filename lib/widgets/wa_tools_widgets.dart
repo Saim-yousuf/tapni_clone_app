@@ -25,8 +25,9 @@ class WaToolsHeader extends StatelessWidget {
                 child: Text(
                   title,
                   style: WaUi.toolsTitleOf(
-                    weight: FontWeight.w700,
-                    size: 28,
+                    weight: FontWeight.w600,
+                    size: 24,
+                    color: Colors.black,
                   ),
                 ),
               ),

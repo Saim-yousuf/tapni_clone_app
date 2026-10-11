@@ -287,6 +287,19 @@ class AppTheme {
         unselectedItemColor: primaryBlack,
         type: BottomNavigationBarType.fixed,
       ),
+      // Default snackbars: black bar + white text (readable everywhere).
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: primaryBlack,
+        contentTextStyle: AppFonts.textStyle(
+          fontSize: AppUi.fontBody,
+          fontWeight: FontWeight.w600,
+          color: secondaryWhite,
+          height: height,
+        ),
+        actionTextColor: secondaryWhite,
+        elevation: 0,
+      ),
     );
   }
 
@@ -498,6 +511,18 @@ class AppTheme {
         selectedItemColor: secondaryWhite,
         unselectedItemColor: secondaryWhite,
         type: BottomNavigationBarType.fixed,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: primaryBlack,
+        contentTextStyle: AppFonts.textStyle(
+          fontSize: AppUi.fontBody,
+          fontWeight: FontWeight.w600,
+          color: secondaryWhite,
+          height: height,
+        ),
+        actionTextColor: secondaryWhite,
+        elevation: 0,
       ),
     );
   }

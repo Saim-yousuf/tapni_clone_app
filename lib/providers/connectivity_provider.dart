@@ -3,12 +3,20 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:tapni_app/utils/api_endpoint.dart';
 
-/// Tracks real internet reachability — not just Wi‑Fi / mobile data toggles.
+/// Tracks reachability for this app — Wi‑Fi/mobile plus our API host.
+///
+/// Google captive-portal probes alone are unreliable (blocked regions, LAN
+/// backends with no public internet). Prefer [Api.baseUrl], then public probes.
 class ConnectivityProvider extends ChangeNotifier {
   ConnectivityProvider() {
+    instance = this;
     unawaited(_init());
   }
+
+  /// Latest instance — used by [ApiHandler] when a request succeeds.
+  static ConnectivityProvider? instance;
 
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<List<ConnectivityResult>>? _subscription;
@@ -42,6 +50,11 @@ class ConnectivityProvider extends ChangeNotifier {
     if (!_bannerDismissed || _isOnline) return;
     _bannerDismissed = false;
     notifyListeners();
+  }
+
+  /// App reached the backend — clear false "offline" from probe flakiness.
+  void reportApiReachable() {
+    _setOnline(true);
   }
 
   static const _onlineTypes = <ConnectivityResult>{
@@ -93,6 +106,11 @@ class ConnectivityProvider extends ChangeNotifier {
       _setOnline(false);
       return;
     }
+    // Interface is up — stay optimistic while we verify. Avoid flashing
+    // "No internet" when Google probes fail but our API still works.
+    if (!_initialized) {
+      _setOnline(true);
+    }
     await _verifyInternet();
   }
 
@@ -113,20 +131,52 @@ class ConnectivityProvider extends ChangeNotifier {
   }
 
   Future<bool> _hasRealInternet() async {
+    // 1) Our backend — what the app actually needs (LAN / regional hosts).
+    if (_apiHostReachable()) {
+      final ok = await _probeUri(_apiProbeUri());
+      if (ok) return true;
+    }
+
+    // 2) Public captive-portal probes (optional confirmation).
     for (final url in _probeUrls) {
-      try {
-        final response = await http
-            .head(Uri.parse(url))
-            .timeout(_probeTimeout);
-        if (response.statusCode == 204 ||
-            (response.statusCode >= 200 && response.statusCode < 400)) {
-          return true;
-        }
-      } catch (_) {
-        continue;
+      if (await _probeUri(Uri.parse(url), acceptGenerate204: true)) {
+        return true;
       }
     }
+
     return false;
+  }
+
+  bool _apiHostReachable() {
+    try {
+      final base = Api.baseUrl;
+      return base.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Uri? _apiProbeUri() {
+    try {
+      return Uri.parse(Api.baseUrl);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<bool> _probeUri(
+    Uri? uri, {
+    bool acceptGenerate204 = false,
+  }) async {
+    if (uri == null) return false;
+    try {
+      final response = await http.get(uri).timeout(_probeTimeout);
+      if (acceptGenerate204 && response.statusCode == 204) return true;
+      // Any HTTP response means the host is reachable (even 404/500).
+      return response.statusCode > 0;
+    } catch (_) {
+      return false;
+    }
   }
 
   void _setOnline(bool online) {
@@ -147,6 +197,7 @@ class ConnectivityProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    if (identical(instance, this)) instance = null;
     _checkGeneration++;
     _recheckTimer?.cancel();
     unawaited(_subscription?.cancel());

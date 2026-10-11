@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/models/profile.dart';
+import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
 import 'package:tapni_app/screens/e_invoice_result_screen.dart';
 import 'package:tapni_app/screens/general_qr_result_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
@@ -13,19 +16,19 @@ import 'package:tapni_app/utils/profile_url_validator.dart';
 import 'package:tapni_app/utils/zatca_qr_parser.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-enum ScanMode { paperCard, qrCode, eInvoice, eventBadge }
-
-const _tapniBlue = Color(0xFF2F80ED);
-
+/// Camera QR scanner. Content is detected automatically (profile / e-invoice /
+/// link / general). When [inviteEmployee] is true (Scan to invite flow), a
+/// BarQody profile QR opens [EmployeeSettingsScreen] instead of the profile.
 class ScanScreen extends StatefulWidget {
-  const ScanScreen({super.key});
+  final bool inviteEmployee;
+
+  const ScanScreen({super.key, this.inviteEmployee = false});
 
   @override
   State<ScanScreen> createState() => _ScanScreenState();
 }
 
 class _ScanScreenState extends State<ScanScreen> {
-  ScanMode _selectedMode = ScanMode.qrCode;
   bool _flashOn = false;
   bool _cameraGranted = false;
   bool _permissionChecked = false;
@@ -35,9 +38,6 @@ class _ScanScreenState extends State<ScanScreen> {
   final GlobalKey _frameKey = GlobalKey();
   final GlobalKey _stackKey = GlobalKey();
   late final MobileScannerController _scannerController;
-
-  bool get _isAutoScanMode =>
-      _selectedMode == ScanMode.qrCode || _selectedMode == ScanMode.eInvoice;
 
   @override
   void initState() {
@@ -82,7 +82,6 @@ class _ScanScreenState extends State<ScanScreen> {
 
   @override
   void dispose() {
-    // Release the camera immediately so the OS status-bar indicator clears.
     unawaited(_scannerController.dispose());
     super.dispose();
   }
@@ -115,7 +114,7 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   void _onBarcodeDetect(BarcodeCapture capture) {
-    if (!_isAutoScanMode || _scanHandled) return;
+    if (_scanHandled) return;
 
     for (final barcode in capture.barcodes) {
       final value = barcode.rawValue;
@@ -130,32 +129,42 @@ class _ScanScreenState extends State<ScanScreen> {
   Future<void> _handleScanResult(String value) async {
     if (!mounted) return;
 
-    if (_selectedMode == ScanMode.eInvoice) {
-      await _handleEInvoiceResult(value);
-      return;
-    }
-
-    // QR Code (and gallery from other modes): BarQody profile first,
-    // otherwise show any QR content (website, Wi‑Fi, product, text…).
     final parsed = ProfileUrlValidator.parse(value);
     if (parsed != null) {
-      await _pushAndResumeCamera(
-        ScannedProfileScreen(
-          username: parsed.username,
-          cardId: parsed.cardId,
-        ),
-      );
+      if (widget.inviteEmployee) {
+        await _openInviteMember(parsed.username);
+      } else {
+        await _pushAndResumeCamera(
+          ScannedProfileScreen(
+            username: parsed.username,
+            cardId: parsed.cardId,
+          ),
+        );
+      }
       return;
     }
 
-    // Optional: if content is a ZATCA invoice, open invoice screen.
+    // Invite flow only accepts profile QRs.
+    if (widget.inviteEmployee) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.l10n.scanAnyUserOrBusinessQRToAddEmployee,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      setState(() => _scanHandled = false);
+      return;
+    }
+
     final invoice = ZatcaQrParser.parse(value);
-    if (invoice != null && _selectedMode == ScanMode.qrCode) {
+    if (invoice != null) {
       await _pushAndResumeCamera(EInvoiceResultScreen(invoice: invoice));
       return;
     }
 
-    // Links / email / phone / SMS → open externally (no result page).
     final general = GeneralQrParser.parse(value);
     if (general.canLaunchExternally) {
       final uri = general.launchUri;
@@ -176,22 +185,70 @@ class _ScanScreenState extends State<ScanScreen> {
     await _pushAndResumeCamera(GeneralQrResultScreen(rawValue: value));
   }
 
-  Future<void> _handleEInvoiceResult(String value) async {
-    final invoice = ZatcaQrParser.parse(value);
-    if (invoice == null) {
+  Future<void> _openInviteMember(String username) async {
+    await _stopCamera();
+    if (!mounted) return;
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(
+        child: CircularProgressIndicator(color: Colors.white),
+      ),
+    );
+
+    final response = await AuthRepo().profileByUsername(username: username);
+    if (!mounted) return;
+    Navigator.of(context).pop(); // loading dialog
+
+    if (!response.success || response.data is! Map) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            context.l10n.invalidEInvoiceQRScanAValidZATCAInvoiceQR,
+            response.message ?? context.l10n.profileNotFound,
           ),
           behavior: SnackBarBehavior.floating,
         ),
       );
-      if (mounted) setState(() => _scanHandled = false);
+      await _resumeCamera();
       return;
     }
 
-    await _pushAndResumeCamera(EInvoiceResultScreen(invoice: invoice));
+    final data = Map<String, dynamic>.from(response.data as Map);
+    final userJson = data['user'] is Map
+        ? Map<String, dynamic>.from(data['user'] as Map)
+        : data;
+    final profile = UserProfile.fromApiJson(userJson);
+    final userId = profile.id?.trim() ?? '';
+    if (userId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.profileNotFound),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      await _resumeCamera();
+      return;
+    }
+
+    final saved = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (_) => EmployeeSettingsScreen(
+          employeeUserId: userId,
+          employeeName: profile.name.isNotEmpty
+              ? profile.name
+              : (profile.username ?? username),
+        ),
+      ),
+    );
+
+    if (!mounted) return;
+    if (saved != null) {
+      // Pop scanner so Scan-to-invite can also close back to Team.
+      Navigator.of(context).pop(saved);
+      return;
+    }
+    await _resumeCamera();
   }
 
   Future<void> _pickFromGallery() async {
@@ -220,56 +277,17 @@ class _ScanScreenState extends State<ScanScreen> {
     for (final barcode in capture.barcodes) {
       final value = barcode.rawValue;
       if (value != null && value.isNotEmpty) {
-        if (_selectedMode == ScanMode.eInvoice) {
-          _scanHandled = true;
-          _handleEInvoiceResult(value);
-        } else {
-          // QR / paper / event gallery pick → treat as QR content.
-          _scanHandled = true;
-          _handleScanResult(value);
-        }
+        _scanHandled = true;
+        _handleScanResult(value);
         return;
       }
     }
-  }
-
-  Future<void> _onShutterTap() async {
-    if (_isAutoScanMode) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.l10n.holdTheQRCodeInsideTheFrameItScansAutomatically,
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-      return;
-    }
-
-    final label = _selectedMode == ScanMode.paperCard
-        ? context.l10n.paperCard2
-        : context.l10n.eventBadge2;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.labelCapturedProcessing(label)),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
   }
 
   Future<void> _toggleFlash() async {
     await _scannerController.toggleTorch();
     if (!mounted) return;
     setState(() => _flashOn = !_flashOn);
-  }
-
-  void _selectMode(ScanMode mode) {
-    setState(() {
-      _selectedMode = mode;
-      _scanHandled = false;
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) => _syncFrameRect());
   }
 
   @override
@@ -325,14 +343,12 @@ class _ScanScreenState extends State<ScanScreen> {
                     ),
                   ),
                 ),
-
-                // Frame is centered in remaining space so mask hole matches border.
                 Expanded(
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 28),
                       child: AspectRatio(
-                        aspectRatio: _isAutoScanMode ? 1 : 1.35,
+                        aspectRatio: 1,
                         child: Container(
                           key: _frameKey,
                           decoration: BoxDecoration(
@@ -347,48 +363,6 @@ class _ScanScreenState extends State<ScanScreen> {
                     ),
                   ),
                 ),
-
-                const SizedBox(height: 16),
-
-                SizedBox(
-                  height: 72,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    children: [
-                      _ModeTab(
-                        icon: Icons.badge_outlined,
-                        label: context.l10n.paperCard,
-                        selected: _selectedMode == ScanMode.paperCard,
-                        onTap: () => _selectMode(ScanMode.paperCard),
-                      ),
-                      const SizedBox(width: 8),
-                      _ModeTab(
-                        icon: Icons.qr_code_2_rounded,
-                        label: context.l10n.qrCode,
-                        selected: _selectedMode == ScanMode.qrCode,
-                        onTap: () => _selectMode(ScanMode.qrCode),
-                      ),
-                      const SizedBox(width: 8),
-                      _ModeTab(
-                        icon: Icons.receipt_long_rounded,
-                        label: context.l10n.eInvoice,
-                        selected: _selectedMode == ScanMode.eInvoice,
-                        onTap: () => _selectMode(ScanMode.eInvoice),
-                      ),
-                      const SizedBox(width: 8),
-                      _ModeTab(
-                        icon: Icons.confirmation_number_outlined,
-                        label: context.l10n.eventBadge,
-                        selected: _selectedMode == ScanMode.eventBadge,
-                        onTap: () => _selectMode(ScanMode.eventBadge),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
                 Padding(
                   padding: const EdgeInsets.fromLTRB(28, 0, 28, 28),
                   child: Row(
@@ -397,30 +371,6 @@ class _ScanScreenState extends State<ScanScreen> {
                       _CircleIconButton(
                         icon: Icons.photo_library_outlined,
                         onTap: _pickFromGallery,
-                      ),
-                      GestureDetector(
-                        onTap: _onShutterTap,
-                        child: Container(
-                          width: 72,
-                          height: 72,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 4),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.35),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.camera_alt_rounded,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                        ),
                       ),
                       _CircleIconButton(
                         icon: _flashOn
@@ -500,66 +450,6 @@ class _CameraErrorView extends StatelessWidget {
             child: Text(context.l10n.allowCamera),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ModeTab extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _ModeTab({
-    required this.icon,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 92,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-        decoration: BoxDecoration(
-          color: selected
-              ? _tapniBlue.withValues(alpha: 0.22)
-              : Colors.white.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected
-                ? _tapniBlue
-                : Colors.white.withValues(alpha: 0.15),
-            width: selected ? 2 : 1,
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 22,
-              color: selected ? Colors.white : Colors.white60,
-            ),
-            const SizedBox(height: 5),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 10.5,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                color: selected ? Colors.white : Colors.white60,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
       ),
     );
   }

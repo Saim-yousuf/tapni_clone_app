@@ -565,9 +565,29 @@ class ProfileProvider extends ChangeNotifier {
         .toList();
   }
 
+  /// Mark Business/Pro locally so upgrade gates clear immediately after payment.
+  /// Prefer following with [fetchProfile] to sync dates/plan from the API.
   void upgradeToPro() {
     _isProUser = true;
+    _profile = _profile.copyWith(isPro: true);
     notifyListeners();
+    final userId = _profile.id;
+    if (userId != null && userId.isNotEmpty) {
+      // Keep local cache in sync so restart / restore does not revive free tier.
+      final cached = SharedPrefHelper.getObject(_profileCacheKey(userId));
+      if (cached is Map) {
+        final map = Map<String, dynamic>.from(cached);
+        if (map.containsKey('user') && map['user'] is Map) {
+          final user = Map<String, dynamic>.from(map['user'] as Map);
+          user['isPro'] = true;
+          map['user'] = user;
+          SharedPrefHelper.putObject(_profileCacheKey(userId), map);
+        } else {
+          map['isPro'] = true;
+          SharedPrefHelper.putObject(_profileCacheKey(userId), map);
+        }
+      }
+    }
   }
 
   void setTemplateIndex(int index) {
@@ -612,6 +632,7 @@ class ProfileProvider extends ChangeNotifier {
     String? currency,
     String? businessName,
     String? businessCategory,
+    String? businessConcern,
     required List<SocialLink> links,
     File? profileImage,
     File? coverImage,
@@ -638,6 +659,7 @@ class ProfileProvider extends ChangeNotifier {
       currency: resolvedCurrency,
       businessName: businessName,
       businessCategory: businessCategory,
+      businessConcern: businessConcern,
     );
 
     final json = updatedProfile.toApiJson();

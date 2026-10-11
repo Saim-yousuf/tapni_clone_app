@@ -8,6 +8,7 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/branded_qr_image.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
@@ -65,9 +66,11 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.shareProfile),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => Navigator.of(context).pop()),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).pop(),
+          ),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

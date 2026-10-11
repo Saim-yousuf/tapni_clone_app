@@ -9,11 +9,20 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/attendance_report_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/attendance_success_screen.dart';
-import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
 import 'package:tapni_app/utils/location_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/alert.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
-import 'package:tapni_app/widgets/face_capture_sheet.dart';
+
+/// Figma Check-in tokens (match screenshot).
+const _kSoftCardBg = Color(0xFFF5F5F7);
+const _kCardRadius = 16.0;
+const _kBorderW = 1.0;
+const _kTitleSize = 16.0;
+const _kSubtitleSize = 14.0;
+const _kGreetingSize = 22.0;
+const _kTimeSize = 22.0;
 
 class MarkAttendanceScreen extends StatefulWidget {
   const MarkAttendanceScreen({super.key});
@@ -298,48 +307,29 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
     if (location == null) {
       setState(() => _isMarking = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text(
-            context.l10n.locationPermissionRequiredForAttendance,
-            style: WaUi.body,
-          ),
-        ),
+      showSnackBar(
+        context,
+        context.l10n.locationPermissionRequiredForAttendance,
+        isError: true,
       );
       return;
     }
-
-    final facePhoto = await FaceCaptureSheet.show(
-      context,
-      title: type == 'check_in'
-          ? context.l10n.checkInFace
-          : context.l10n.checkOutFace,
-    );
-
-    if (!mounted) return;
 
     final res = await AttendanceRepo().markAttendance({
       'employeeRefId': employer.id,
       'type': type,
       'latitude': location.latitude,
       'longitude': location.longitude,
-      if (facePhoto != null && facePhoto.isNotEmpty) 'facePhoto': facePhoto,
     });
 
     if (!mounted) return;
     setState(() => _isMarking = false);
 
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text(
-            res.message ?? context.l10n.attendanceFailed,
-            style: WaUi.body.copyWith(color: Colors.white),
-          ),
-          backgroundColor: const Color(0xFFC62828),
-        ),
+      showSnackBar(
+        context,
+        res.message ?? context.l10n.attendanceFailed,
+        isError: true,
       );
       return;
     }
@@ -385,70 +375,67 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final side = m.s(BarqodyChrome.sidePad);
+
     return Scaffold(
-      backgroundColor: BarqodyChrome.scaffold,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            BarqodyTitleBar(
-              title: 'Attendance',
-              trailing: CircleAssetButton(
-                asset: 'assets/images/png/card-icon.png',
-                iconSize: 18,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const EmployeeBusinessCardsScreen(),
-                    ),
-                  );
-                },
-              ),
-            ),
+            // Screenshot: back + "Attendance" only (no trailing).
+            const BarqodyTitleBar(title: 'Attendance'),
             Expanded(
               child: _isLoading
-                  ? const Center(child: CircularProgressIndicator(strokeWidth: 2.5))
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: Colors.black,
+                      ),
+                    )
                   : _employers.isEmpty
                       ? _emptyState()
                       : RefreshIndicator(
-                          color: WaUi.accent,
+                          color: Colors.black,
                           backgroundColor: Colors.white,
                           onRefresh: _loadEmployers,
                           child: ListView(
-                            padding: const EdgeInsets.fromLTRB(
-                              BarqodyChrome.sidePad,
-                              8,
-                              BarqodyChrome.sidePad,
-                              24,
+                            padding: EdgeInsets.fromLTRB(
+                              side,
+                              0,
+                              side,
+                              m.v(24),
                             ),
                             children: [
                               Text(
                                 '${_timeOfDayGreeting()}, ${_greetingFirstName()} 👋',
                                 style: WaUi.toolsTitleOf(
-                                  size: 22,
+                                  size: m.s(_kGreetingSize),
                                   weight: FontWeight.w700,
                                   color: Colors.black,
-                                  height: 1.2,
+                                  height: 1.25,
                                 ),
                               ),
-                              const SizedBox(height: 6),
+                              SizedBox(height: m.v(6)),
                               Text(
                                 'Start your workday',
                                 style: WaUi.body.copyWith(
                                   color: BarqodyChrome.secondaryText,
-                                  fontSize: 15,
+                                  fontSize: m.s(_kSubtitleSize),
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.3,
                                 ),
                               ),
-                              const SizedBox(height: 20),
+                              SizedBox(height: m.v(24)),
                               _CompanyCard(
                                 companyName:
-                                    _selectedEmployer?.business.displayName ?? '',
+                                    _selectedEmployer?.business.displayName ??
+                                        '',
                                 onTap: _showCompanyPicker,
                               ),
-                              const SizedBox(height: 16),
+                              SizedBox(height: m.v(16)),
                               if (_todayStatus != null) _buildStateContent(),
-                              if (_summary != null) const SizedBox(height: 8),
                             ],
                           ),
                         ),
@@ -476,25 +463,24 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       final elapsed = checkIn != null
           ? _formatElapsed(_now.difference(checkIn))
           : '—';
+      final checkInLine = checkIn != null
+          ? '${DateFormat('hh:mm a').format(checkIn)} ${DateFormat('EEEE, MMM d').format(checkIn)}'
+          : '—';
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _InfoCard(
+          _StatusCard(
             title: 'Check In',
-            primary: checkIn != null
-                ? DateFormat('hh:mm a').format(checkIn)
-                : '—',
-            secondary: DateFormat('EEE, MMM d').format(_now),
+            subtitle: checkInLine,
           ),
           const SizedBox(height: 10),
-          _InfoCard(
+          _StatusCard(
             title: 'Working',
-            primary: elapsed,
-            secondary: 'Time elapsed since check-in',
+            subtitle: elapsed,
           ),
           const SizedBox(height: 20),
           PillButton(
-            label: context.l10n.checkOut,
+            label: 'Check Out',
             onPressed: () => _markAttendance('check_out'),
             enabled: !_isMarking,
           ),
@@ -605,6 +591,20 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   }
 }
 
+TextStyle _cardTitleStyle(AuthScale m) => WaUi.body.copyWith(
+      fontWeight: FontWeight.w700,
+      fontSize: m.s(_kTitleSize),
+      color: Colors.black,
+      height: 1.25,
+    );
+
+TextStyle _cardSubtitleStyle(AuthScale m) => WaUi.body.copyWith(
+      fontWeight: FontWeight.w400,
+      fontSize: m.s(_kSubtitleSize),
+      color: BarqodyChrome.secondaryText,
+      height: 1.3,
+    );
+
 class _CompanyCard extends StatelessWidget {
   const _CompanyCard({
     required this.companyName,
@@ -616,17 +616,24 @@ class _CompanyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final radius = m.s(_kCardRadius);
+
     return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
+      color: _kSoftCardBg,
+      borderRadius: BorderRadius.circular(radius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(radius),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: EdgeInsets.symmetric(
+            horizontal: m.s(16),
+            vertical: m.v(16),
+          ),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.black, width: 1),
+            color: _kSoftCardBg,
+            borderRadius: BorderRadius.circular(radius),
+            border: Border.all(color: Colors.black, width: _kBorderW),
           ),
           child: Row(
             children: [
@@ -634,28 +641,19 @@ class _CompanyCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      companyName,
-                      style: WaUi.body.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 17,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
+                    Text(companyName, style: _cardTitleStyle(m)),
+                    SizedBox(height: m.v(8)),
                     Text(
                       'Your selected company',
-                      style: WaUi.body.copyWith(
-                        color: BarqodyChrome.secondaryText,
-                        fontSize: 13,
-                      ),
+                      style: _cardSubtitleStyle(m),
                     ),
                   ],
                 ),
               ),
-              const Icon(
-                Icons.chevron_right_rounded,
+              Icon(
+                Icons.chevron_right,
                 color: Colors.black,
-                size: 26,
+                size: m.s(22),
               ),
             ],
           ),
@@ -672,12 +670,16 @@ class _SoftCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(
+        horizontal: m.s(16),
+        vertical: m.v(16),
+      ),
       decoration: BoxDecoration(
-        color: BarqodyChrome.fieldFill,
-        borderRadius: BorderRadius.circular(16),
+        color: _kSoftCardBg,
+        borderRadius: BorderRadius.circular(m.s(_kCardRadius)),
       ),
       child: child,
     );
@@ -703,6 +705,10 @@ class _ReadyCheckInContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final buttonH = m.buttonH;
+    final buttonSize = Size(double.infinity, buttonH);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -717,86 +723,134 @@ class _ReadyCheckInContent extends StatelessWidget {
                     Text(
                       DateFormat('hh:mm a').format(now),
                       style: WaUi.toolsTitleOf(
-                        size: 28,
+                        size: m.s(_kTimeSize),
                         weight: FontWeight.w700,
                         color: Colors.black,
+                        height: 1.15,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: m.v(8)),
                     Text(
-                      DateFormat('EEE, MMM d').format(now),
-                      style: WaUi.body.copyWith(
-                        color: BarqodyChrome.secondaryText,
-                        fontSize: 14,
-                      ),
+                      DateFormat('EEEE, MMM d').format(now),
+                      style: _cardSubtitleStyle(m),
                     ),
                   ],
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'Time Now',
-                    style: WaUi.body.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      decoration: TextDecoration.underline,
-                      decorationColor: Colors.black,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+              Text(
+                'Time Now',
+                style: WaUi.body.copyWith(
+                  fontSize: m.s(_kSubtitleSize),
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.underline,
+                  decorationThickness: 1,
+                  decorationColor: Colors.black,
+                  color: Colors.black,
+                  height: 1.2,
+                ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: m.v(16)),
         _SoftCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Today Shift',
-                style: WaUi.body.copyWith(
-                  color: BarqodyChrome.secondaryText,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 6),
+              Text('Today Shift', style: _cardTitleStyle(m)),
+              SizedBox(height: m.v(8)),
               Text(
                 AttendanceSuccessScreen.formatShiftRange(shiftStart, shiftEnd),
-                style: WaUi.body.copyWith(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                ),
+                style: _cardSubtitleStyle(m),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: m.v(40)),
         PillButton(
-          label: context.l10n.checkIn,
+          label: 'Check In',
           onPressed: onCheckIn,
           enabled: !isMarking,
         ),
         if (isMarking) ...[
-          const SizedBox(height: 12),
+          SizedBox(height: m.v(12)),
           const Center(
             child: SizedBox(
               width: 24,
               height: 24,
-              child: CircularProgressIndicator(strokeWidth: 2.5),
+              child: CircularProgressIndicator(
+                strokeWidth: 2.5,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
-        const SizedBox(height: 12),
-        PillButton(
-          label: 'Schedules',
-          filled: false,
-          onPressed: onSchedules,
+        SizedBox(height: m.v(14)),
+        // 1px outline; fixedSize = AuthScale.buttonH overrides theme's 54.
+        SizedBox(
+          width: double.infinity,
+          height: buttonH,
+          child: OutlinedButton(
+            onPressed: onSchedules,
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.black,
+              side: const BorderSide(color: Colors.black, width: _kBorderW),
+              shape: const StadiumBorder(),
+              minimumSize: buttonSize,
+              maximumSize: buttonSize,
+              fixedSize: buttonSize,
+              padding: EdgeInsets.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            child: Text(
+              'Schedules',
+              style: WaUi.body.copyWith(
+                fontSize: m.s(AuthUi.buttonLabelSize),
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+                height: 1,
+              ),
+            ),
+          ),
         ),
       ],
+    );
+  }
+}
+
+class _StatusCard extends StatelessWidget {
+  const _StatusCard({
+    required this.title,
+    required this.subtitle,
+  });
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return _SoftCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: WaUi.body.copyWith(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            subtitle,
+            style: WaUi.body.copyWith(
+              color: BarqodyChrome.secondaryText,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -821,25 +875,17 @@ class _InfoCard extends StatelessWidget {
           Text(
             title,
             style: WaUi.body.copyWith(
-              color: BarqodyChrome.secondaryText,
-              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: Colors.black,
             ),
           ),
           const SizedBox(height: 6),
           Text(
-            primary,
-            style: WaUi.toolsTitleOf(
-              size: 22,
-              weight: FontWeight.w700,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            secondary,
+            '$primary $secondary',
             style: WaUi.body.copyWith(
               color: BarqodyChrome.secondaryText,
-              fontSize: 13,
+              fontSize: 14,
             ),
           ),
         ],
@@ -879,17 +925,17 @@ class _WeekendContent extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    DateFormat('EEE, MMM d').format(now),
+                    DateFormat('EEEE, MMM d').format(now),
                     style: WaUi.body.copyWith(
                       color: BarqodyChrome.secondaryText,
                       fontSize: 14,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 28),
                   Text(
                     "You don't have a scheduled shift for today",
                     style: WaUi.body.copyWith(
-                      color: BarqodyChrome.bodyText,
+                      color: BarqodyChrome.secondaryText,
                       fontSize: 14,
                       height: 1.35,
                     ),
@@ -897,18 +943,13 @@ class _WeekendContent extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned(
-              top: 12,
-              right: 12,
-              child: Image.asset(
-                'assets/images/png/cancel-icon.png',
-                width: 22,
-                height: 22,
-                errorBuilder: (_, __, ___) => Icon(
-                  Icons.block_rounded,
-                  size: 22,
-                  color: BarqodyChrome.secondaryText,
-                ),
+            const Positioned(
+              top: 14,
+              right: 14,
+              child: Icon(
+                Icons.block_rounded,
+                size: 26,
+                color: Colors.black,
               ),
             ),
           ],

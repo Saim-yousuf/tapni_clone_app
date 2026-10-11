@@ -20,18 +20,19 @@ class SubscriptionRepo {
     );
   }
 
-  Future<ApiResponse> subscribe({
-    required String planId,
-    String transactionRef = '',
-    String paymentReceipt = '',
-  }) async {
+  Future<ApiResponse> checkout({required String planId}) async {
     return await ApiHandler.request(
-      api: Api.subscription.subscribe,
-      jsonBody: {
-        "planId": planId,
-        "transactionRef": transactionRef,
-        "paymentReceipt": paymentReceipt,
-      },
+      api: Api.subscription.checkout,
+      jsonBody: {"planId": planId},
+      method: ApiMethod.post,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> confirmCheckout({required String checkoutId}) async {
+    return await ApiHandler.request(
+      api: Api.subscription.confirm,
+      jsonBody: {"checkoutId": checkoutId},
       method: ApiMethod.post,
       authorization: true,
     );
