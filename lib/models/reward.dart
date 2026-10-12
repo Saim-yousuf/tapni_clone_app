@@ -183,13 +183,22 @@ class RewardProgram {
 class RewardStats {
   final int totalEnrollments;
   final int totalStampsGiven;
+  final int rewardsGiven;
+  final int visits;
 
-  RewardStats({this.totalEnrollments = 0, this.totalStampsGiven = 0});
+  RewardStats({
+    this.totalEnrollments = 0,
+    this.totalStampsGiven = 0,
+    this.rewardsGiven = 0,
+    this.visits = 0,
+  });
 
   factory RewardStats.fromJson(Map<String, dynamic> json) => RewardStats(
-    totalEnrollments: (json['totalEnrollments'] as num?)?.toInt() ?? 0,
-    totalStampsGiven: (json['totalStampsGiven'] as num?)?.toInt() ?? 0,
-  );
+        totalEnrollments: (json['totalEnrollments'] as num?)?.toInt() ?? 0,
+        totalStampsGiven: (json['totalStampsGiven'] as num?)?.toInt() ?? 0,
+        rewardsGiven: (json['rewardsGiven'] as num?)?.toInt() ?? 0,
+        visits: (json['visits'] as num?)?.toInt() ?? 0,
+      );
 }
 
 class RewardEnrollment {
@@ -201,6 +210,8 @@ class RewardEnrollment {
   final String? customerName;
   final String? customerUsername;
   final String? customerPhoto;
+  /// Figma row meta — e.g. "Enrolled By You" / "Enrolled By Order #1001".
+  final String? enrolledByLabel;
 
   RewardEnrollment({
     required this.id,
@@ -211,6 +222,7 @@ class RewardEnrollment {
     this.customerName,
     this.customerUsername,
     this.customerPhoto,
+    this.enrolledByLabel,
   });
 
   bool get isCompleted => status == 'COMPLETED';
@@ -242,6 +254,8 @@ class RewardEnrollment {
       }
     }
 
+    final enrolledBy = json['enrolledByLabel']?.toString().trim();
+
     return RewardEnrollment(
       id: json['_id']?.toString() ?? json['id']?.toString() ?? '',
       program: prog,
@@ -251,6 +265,8 @@ class RewardEnrollment {
       customerName: customerName,
       customerUsername: customerUsername,
       customerPhoto: customerPhoto,
+      enrolledByLabel:
+          (enrolledBy != null && enrolledBy.isNotEmpty) ? enrolledBy : null,
     );
   }
 
@@ -261,6 +277,7 @@ class RewardEnrollment {
     String? customerName,
     String? customerUsername,
     String? customerPhoto,
+    String? enrolledByLabel,
   }) {
     return RewardEnrollment(
       id: id,
@@ -271,6 +288,7 @@ class RewardEnrollment {
       customerName: customerName ?? this.customerName,
       customerUsername: customerUsername ?? this.customerUsername,
       customerPhoto: customerPhoto ?? this.customerPhoto,
+      enrolledByLabel: enrolledByLabel ?? this.enrolledByLabel,
     );
   }
 }

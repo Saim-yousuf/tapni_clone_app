@@ -36,6 +36,61 @@ Color designColorFromHex(String hex, {Color fallback = Colors.white}) {
   return Color(int.parse(value, radix: 16));
 }
 
+/// Font catalog for design editors (loyalty / invitation). [id] is persisted.
+class DesignFontOption {
+  final String id;
+  final String label;
+  final String group; // elegant | modern | script | arabic
+
+  const DesignFontOption(this.id, this.label, {this.group = 'modern'});
+}
+
+const List<DesignFontOption> kDesignFonts = [
+  // Elegant / serif
+  DesignFontOption('playfair', 'Playfair Display', group: 'elegant'),
+  DesignFontOption('cormorant', 'Cormorant Garamond', group: 'elegant'),
+  DesignFontOption('cinzel', 'Cinzel', group: 'elegant'),
+  DesignFontOption('libre_baskerville', 'Libre Baskerville', group: 'elegant'),
+  DesignFontOption('merriweather', 'Merriweather', group: 'elegant'),
+  DesignFontOption('dm_serif', 'DM Serif Display', group: 'elegant'),
+  DesignFontOption('abril', 'Abril Fatface', group: 'elegant'),
+  DesignFontOption('eb_garamond', 'EB Garamond', group: 'elegant'),
+  // Modern / sans
+  DesignFontOption('montserrat', 'Montserrat', group: 'modern'),
+  DesignFontOption('poppins', 'Poppins', group: 'modern'),
+  DesignFontOption('raleway', 'Raleway', group: 'modern'),
+  DesignFontOption('josefin', 'Josefin Sans', group: 'modern'),
+  DesignFontOption('space_grotesk', 'Space Grotesk', group: 'modern'),
+  DesignFontOption('oswald', 'Oswald', group: 'modern'),
+  DesignFontOption('lato', 'Lato', group: 'modern'),
+  DesignFontOption('roboto', 'Roboto', group: 'modern'),
+  DesignFontOption('bebas', 'Bebas Neue', group: 'modern'),
+  // Script / stylish
+  DesignFontOption('great_vibes', 'Great Vibes', group: 'script'),
+  DesignFontOption('dancing', 'Dancing Script', group: 'script'),
+  DesignFontOption('pacifico', 'Pacifico', group: 'script'),
+  DesignFontOption('satisfy', 'Satisfy', group: 'script'),
+  DesignFontOption('sacramento', 'Sacramento', group: 'script'),
+  DesignFontOption('parisienne', 'Parisienne', group: 'script'),
+  DesignFontOption('lobster', 'Lobster', group: 'script'),
+  DesignFontOption('allura', 'Allura', group: 'script'),
+  // Arabic-friendly
+  DesignFontOption('cairo', 'Cairo', group: 'arabic'),
+  DesignFontOption('amiri', 'Amiri', group: 'arabic'),
+  DesignFontOption('noto_naskh', 'Noto Naskh Arabic', group: 'arabic'),
+  DesignFontOption('tajawal', 'Tajawal', group: 'arabic'),
+  DesignFontOption('almarai', 'Almarai', group: 'arabic'),
+];
+
+String designFontLabel(String id) {
+  for (final f in kDesignFonts) {
+    if (f.id == id) return f.label;
+  }
+  return id;
+}
+
+bool designFontKnown(String id) => kDesignFonts.any((f) => f.id == id);
+
 TextStyle designFontStyle({
   required String family,
   required double fontSize,
@@ -45,56 +100,84 @@ TextStyle designFontStyle({
 }) {
   final weight = bold ? FontWeight.w700 : FontWeight.w400;
   final style = italic ? FontStyle.italic : FontStyle.normal;
+  TextStyle base(TextStyle Function({
+    double? fontSize,
+    Color? color,
+    FontWeight? fontWeight,
+    FontStyle? fontStyle,
+    double? height,
+  }) fn, {double height = 1.25}) {
+    return fn(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: weight,
+      fontStyle: style,
+      height: height,
+    );
+  }
+
   switch (family) {
     case 'playfair':
-      return GoogleFonts.playfairDisplay(
-        fontSize: fontSize,
-        color: color,
-        fontWeight: weight,
-        fontStyle: style,
-        height: 1.2,
-      );
+      return base(GoogleFonts.playfairDisplay, height: 1.2);
     case 'cormorant':
-      return GoogleFonts.cormorantGaramond(
-        fontSize: fontSize,
-        color: color,
-        fontWeight: weight,
-        fontStyle: style,
-        height: 1.25,
-      );
-    case 'amiri':
-      return GoogleFonts.amiri(
-        fontSize: fontSize,
-        color: color,
-        fontWeight: weight,
-        fontStyle: style,
-        height: 1.3,
-      );
-    case 'noto_naskh':
-      return GoogleFonts.notoNaskhArabic(
-        fontSize: fontSize,
-        color: color,
-        fontWeight: weight,
-        fontStyle: style,
-        height: 1.3,
-      );
+      return base(GoogleFonts.cormorantGaramond);
+    case 'cinzel':
+      return base(GoogleFonts.cinzel, height: 1.2);
+    case 'libre_baskerville':
+      return base(GoogleFonts.libreBaskerville);
+    case 'merriweather':
+      return base(GoogleFonts.merriweather);
+    case 'dm_serif':
+      return base(GoogleFonts.dmSerifDisplay, height: 1.15);
+    case 'abril':
+      return base(GoogleFonts.abrilFatface, height: 1.15);
+    case 'eb_garamond':
+      return base(GoogleFonts.ebGaramond);
+    case 'montserrat':
+      return base(GoogleFonts.montserrat);
+    case 'poppins':
+      return base(GoogleFonts.poppins);
+    case 'raleway':
+      return base(GoogleFonts.raleway);
+    case 'josefin':
+      return base(GoogleFonts.josefinSans);
+    case 'space_grotesk':
+      return base(GoogleFonts.spaceGrotesk);
+    case 'oswald':
+      return base(GoogleFonts.oswald, height: 1.15);
+    case 'lato':
+      return base(GoogleFonts.lato);
     case 'roboto':
-      return GoogleFonts.roboto(
-        fontSize: fontSize,
-        color: color,
-        fontWeight: weight,
-        fontStyle: style,
-        height: 1.25,
-      );
+      return base(GoogleFonts.roboto);
+    case 'bebas':
+      return base(GoogleFonts.bebasNeue, height: 1.1);
+    case 'great_vibes':
+      return base(GoogleFonts.greatVibes, height: 1.35);
+    case 'dancing':
+      return base(GoogleFonts.dancingScript, height: 1.3);
+    case 'pacifico':
+      return base(GoogleFonts.pacifico, height: 1.35);
+    case 'satisfy':
+      return base(GoogleFonts.satisfy, height: 1.35);
+    case 'sacramento':
+      return base(GoogleFonts.sacramento, height: 1.35);
+    case 'parisienne':
+      return base(GoogleFonts.parisienne, height: 1.35);
+    case 'lobster':
+      return base(GoogleFonts.lobster, height: 1.25);
+    case 'allura':
+      return base(GoogleFonts.allura, height: 1.35);
+    case 'amiri':
+      return base(GoogleFonts.amiri, height: 1.3);
+    case 'noto_naskh':
+      return base(GoogleFonts.notoNaskhArabic, height: 1.3);
+    case 'tajawal':
+      return base(GoogleFonts.tajawal, height: 1.3);
+    case 'almarai':
+      return base(GoogleFonts.almarai, height: 1.3);
     case 'cairo':
     default:
-      return GoogleFonts.cairo(
-        fontSize: fontSize,
-        color: color,
-        fontWeight: weight,
-        fontStyle: style,
-        height: 1.3,
-      );
+      return base(GoogleFonts.cairo, height: 1.3);
   }
 }
 

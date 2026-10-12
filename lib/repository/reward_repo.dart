@@ -65,6 +65,14 @@ class RewardRepo {
     );
   }
 
+  Future<ApiResponse> getProgramEnrollments(String programId) async {
+    return await ApiHandler.request(
+      api: Api.enrollment.programEnrollments(programId),
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
   Future<ApiResponse> enrollCustomer(
     String programId,
     String customerId,

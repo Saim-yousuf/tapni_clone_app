@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
+import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
 import 'package:tapni_app/screens/e_invoice_result_screen.dart';
 import 'package:tapni_app/screens/general_qr_result_screen.dart';
+import 'package:tapni_app/screens/loyalty_program/business/enroll_customer_flow.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/general_qr_parser.dart';
 import 'package:tapni_app/utils/profile_url_validator.dart';
@@ -19,10 +22,17 @@ import 'package:url_launcher/url_launcher.dart';
 /// Camera QR scanner. Content is detected automatically (profile / e-invoice /
 /// link / general). When [inviteEmployee] is true (Scan to invite flow), a
 /// BarQody profile QR opens [EmployeeSettingsScreen] instead of the profile.
+/// When [enrollInProgram] is set, a profile QR enrolls that customer into the
+/// program and opens the stamp screen.
 class ScanScreen extends StatefulWidget {
   final bool inviteEmployee;
+  final RewardProgram? enrollInProgram;
 
-  const ScanScreen({super.key, this.inviteEmployee = false});
+  const ScanScreen({
+    super.key,
+    this.inviteEmployee = false,
+    this.enrollInProgram,
+  });
 
   @override
   State<ScanScreen> createState() => _ScanScreenState();
@@ -42,10 +52,13 @@ class _ScanScreenState extends State<ScanScreen> {
   @override
   void initState() {
     super.initState();
+    // Web/desktop webcams are usually front-facing; forcing `back` often
+    // prevents detection even when a preview appears.
     _scannerController = MobileScannerController(
-      detectionSpeed: DetectionSpeed.noDuplicates,
-      facing: CameraFacing.back,
+      detectionSpeed: DetectionSpeed.normal,
+      facing: kIsWeb ? CameraFacing.front : CameraFacing.back,
       torchEnabled: false,
+      formats: const [BarcodeFormat.qrCode],
     );
     _requestCameraPermission();
   }
@@ -72,6 +85,17 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future<void> _requestCameraPermission() async {
+    // permission_handler does not drive the browser camera prompt; MobileScanner
+    // requests access via getUserMedia when the widget starts.
+    if (kIsWeb) {
+      if (!mounted) return;
+      setState(() {
+        _cameraGranted = true;
+        _permissionChecked = true;
+      });
+      return;
+    }
+
     final status = await Permission.camera.request();
     if (!mounted) return;
     setState(() {
@@ -99,7 +123,10 @@ class _ScanScreenState extends State<ScanScreen> {
     if (!mounted) return;
     setState(() => _scanHandled = false);
     try {
-      await _scannerController.start();
+      // Avoid "Trying to play video that is already playing" on web.
+      if (!_scannerController.value.isRunning) {
+        await _scannerController.start();
+      }
     } catch (_) {}
   }
 
@@ -113,12 +140,20 @@ class _ScanScreenState extends State<ScanScreen> {
     return result;
   }
 
+  String? _barcodeValue(Barcode barcode) {
+    final raw = barcode.rawValue?.trim();
+    if (raw != null && raw.isNotEmpty) return raw;
+    final display = barcode.displayValue?.trim();
+    if (display != null && display.isNotEmpty) return display;
+    return null;
+  }
+
   void _onBarcodeDetect(BarcodeCapture capture) {
     if (_scanHandled) return;
 
     for (final barcode in capture.barcodes) {
-      final value = barcode.rawValue;
-      if (value == null || value.isEmpty) continue;
+      final value = _barcodeValue(barcode);
+      if (value == null) continue;
 
       _scanHandled = true;
       _handleScanResult(value);
@@ -131,7 +166,9 @@ class _ScanScreenState extends State<ScanScreen> {
 
     final parsed = ProfileUrlValidator.parse(value);
     if (parsed != null) {
-      if (widget.inviteEmployee) {
+      if (widget.enrollInProgram != null) {
+        await _enrollScannedUsername(parsed.username);
+      } else if (widget.inviteEmployee) {
         await _openInviteMember(parsed.username);
       } else {
         await _pushAndResumeCamera(
@@ -144,13 +181,15 @@ class _ScanScreenState extends State<ScanScreen> {
       return;
     }
 
-    // Invite flow only accepts profile QRs.
-    if (widget.inviteEmployee) {
+    // Invite / enroll flows only accept profile QRs.
+    if (widget.inviteEmployee || widget.enrollInProgram != null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            context.l10n.scanAnyUserOrBusinessQRToAddEmployee,
+            widget.enrollInProgram != null
+                ? 'Scan a customer BarQody QR to enroll.'
+                : context.l10n.scanAnyUserOrBusinessQRToAddEmployee,
           ),
           behavior: SnackBarBehavior.floating,
         ),
@@ -183,6 +222,71 @@ class _ScanScreenState extends State<ScanScreen> {
 
     if (!mounted) return;
     await _pushAndResumeCamera(GeneralQrResultScreen(rawValue: value));
+  }
+
+  Future<void> _enrollScannedUsername(String username) async {
+    final program = widget.enrollInProgram;
+    if (program == null) return;
+
+    await _stopCamera();
+    if (!mounted) return;
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(
+        child: CircularProgressIndicator(color: Colors.white),
+      ),
+    );
+
+    final response = await AuthRepo().profileByUsername(username: username);
+    if (!mounted) return;
+    Navigator.of(context).pop(); // loading
+
+    if (!response.success || response.data is! Map) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            response.message ?? context.l10n.profileNotFound,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      await _resumeCamera();
+      return;
+    }
+
+    final data = Map<String, dynamic>.from(response.data as Map);
+    final userJson = data['user'] is Map
+        ? Map<String, dynamic>.from(data['user'] as Map)
+        : data;
+    final profile = UserProfile.fromApiJson(userJson);
+    final userId = profile.id?.trim() ?? '';
+    if (userId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.profileNotFound),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      await _resumeCamera();
+      return;
+    }
+
+    final ok = await enrollCustomerAndOpenStamp(
+      context: context,
+      program: program,
+      customerId: userId,
+      customerName: profile.name.isNotEmpty ? profile.name : null,
+      customerUsername: profile.username ?? username,
+      customerPhoto: profile.profilePhotoUrl,
+    );
+    if (!mounted) return;
+    if (ok) {
+      Navigator.of(context).pop(true);
+      return;
+    }
+    await _resumeCamera();
   }
 
   Future<void> _openInviteMember(String username) async {
@@ -252,6 +356,20 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future<void> _pickFromGallery() async {
+    // mobile_scanner.analyzeImage() is mobile-only; web throws UnsupportedError.
+    if (kIsWeb) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Scanning from gallery is not supported on web. Use the camera instead.',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
     final result = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: false,
@@ -259,9 +377,32 @@ class _ScanScreenState extends State<ScanScreen> {
     if (result == null || result.files.isEmpty) return;
 
     final path = result.files.single.path;
-    if (path == null) return;
+    if (path == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.noQRCodeFoundInThisImage),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
 
-    final capture = await _scannerController.analyzeImage(path);
+    late final BarcodeCapture? capture;
+    try {
+      capture = await _scannerController.analyzeImage(path);
+    } on UnsupportedError {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Scanning from gallery is not supported on this platform.',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
     if (!mounted) return;
 
     if (capture == null || capture.barcodes.isEmpty) {
@@ -275,8 +416,8 @@ class _ScanScreenState extends State<ScanScreen> {
     }
 
     for (final barcode in capture.barcodes) {
-      final value = barcode.rawValue;
-      if (value != null && value.isNotEmpty) {
+      final value = _barcodeValue(barcode);
+      if (value != null) {
         _scanHandled = true;
         _handleScanResult(value);
         return;

@@ -48,7 +48,19 @@ class PublicUserResult {
 
 class FindUserScreen extends StatefulWidget {
   final bool isTab;
-  const FindUserScreen({super.key, this.isTab = false});
+
+  /// When set, selecting a user calls this instead of opening the profile.
+  final Future<void> Function(PublicUserResult user)? onUserSelected;
+
+  /// Title override (e.g. enroll flow).
+  final String? title;
+
+  const FindUserScreen({
+    super.key,
+    this.isTab = false,
+    this.onUserSelected,
+    this.title,
+  });
 
   @override
   State<FindUserScreen> createState() => _FindUserScreenState();
@@ -65,8 +77,12 @@ class _FindUserScreenState extends State<FindUserScreen> {
   String _lastQuery = '';
 
   static const _searchHint = 'Search by name or username';
-  static const _title = 'Search Users';
+  static const _defaultTitle = 'Search Users';
   static const _chevron = Color(0xFFC7C7CC);
+
+  String get _title => widget.title?.trim().isNotEmpty == true
+      ? widget.title!.trim()
+      : _defaultTitle;
 
   @override
   void dispose() {
@@ -133,7 +149,12 @@ class _FindUserScreenState extends State<FindUserScreen> {
     });
   }
 
-  void _openProfile(PublicUserResult user) {
+  Future<void> _openProfile(PublicUserResult user) async {
+    if (widget.onUserSelected != null) {
+      await widget.onUserSelected!(user);
+      return;
+    }
+    if (!mounted) return;
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => ScannedProfileScreen(username: user.username),
@@ -179,7 +200,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
                 ),
               )
             else
-              const BarqodyTitleBar(title: _title),
+              BarqodyTitleBar(title: _title),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
               child: _SearchUsersField(

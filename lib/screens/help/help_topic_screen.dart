@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/help/help_ui.dart';
 import 'package:tapni_app/utils/help_center_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 
 class HelpTopicScreen extends StatelessWidget {
   final HelpTopic topic;
@@ -10,6 +11,7 @@ class HelpTopicScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
     final popular = HelpCenterCatalog.popularArticles.take(4).toList();
 
     return Scaffold(
@@ -18,7 +20,7 @@ class HelpTopicScreen extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              padding: HelpUi.headerPad(m),
               child: Row(
                 children: [
                   const HelpCircleBackButton(),
@@ -26,35 +28,36 @@ class HelpTopicScreen extends StatelessWidget {
                     child: Text(
                       'Help Center',
                       textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: WaUi.toolsTitleOf(
-                        size: 18,
-                        weight: FontWeight.w700,
+                        size: HelpUi.font(m, HelpUi.titleSize, min: 17),
+                        weight: FontWeight.w600,
                         color: Colors.black,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 40),
+                  SizedBox(width: m.s(40)),
                 ],
               ),
             ),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(
-                  HelpUi.sidePad,
-                  24,
-                  HelpUi.sidePad,
-                  32,
-                ),
+                padding: HelpUi.pagePad(m, top: 24, bottom: 32),
                 children: [
-                  HelpSectionTitle(topic.title, fontSize: 26),
-                  const SizedBox(height: 16),
+                  HelpSectionTitle(
+                    topic.title,
+                    fontSize: HelpUi.heroSize,
+                    weight: FontWeight.w600,
+                  ),
+                  SizedBox(height: m.v(16)),
                   HelpArticleAccordion(
                     articles: topic.articles,
                     expandFirst: true,
                   ),
-                  const SizedBox(height: 28),
-                  const HelpSectionTitle('Popular articles', fontSize: 18),
-                  const SizedBox(height: 12),
+                  SizedBox(height: m.v(24)),
+                  const HelpSectionTitle('Popular articles'),
+                  SizedBox(height: m.v(12)),
                   HelpArticleAccordion(
                     articles: popular,
                     expandFirst: true,

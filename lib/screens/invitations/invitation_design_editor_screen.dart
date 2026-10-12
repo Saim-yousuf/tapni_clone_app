@@ -906,14 +906,7 @@ class _LayerStyleSheet extends StatefulWidget {
 class _LayerStyleSheetState extends State<_LayerStyleSheet> {
   late DesignLayer _layer;
 
-  static const _fonts = [
-    'cairo',
-    'amiri',
-    'noto_naskh',
-    'playfair',
-    'cormorant',
-    'roboto',
-  ];
+  static final _fonts = kDesignFonts.map((f) => f.id).toList();
 
   static const _colors = [
     '#FFFFFF',

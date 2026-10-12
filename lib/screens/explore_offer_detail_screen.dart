@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/explore_business.dart';
+import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_enroll_qr_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
@@ -8,7 +9,7 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
-/// Pre-enrollment offer detail matching the Offer mock.
+/// Figma `Offer` — stamp card + Enroll Me / Enrolled CTA + visit business.
 class ExploreOfferDetailScreen extends StatefulWidget {
   final ExploreOffer offer;
 
@@ -20,28 +21,66 @@ class ExploreOfferDetailScreen extends StatefulWidget {
 }
 
 class _ExploreOfferDetailScreenState extends State<ExploreOfferDetailScreen> {
-  bool _enrolling = false;
+  bool _loadingEnrollment = true;
+  RewardEnrollment? _enrollment;
 
   ExploreOffer get offer => widget.offer;
 
-  Future<void> _enrollMe() async {
-    if (_enrolling) return;
-    setState(() => _enrolling = true);
+  bool get _isEnrolled => _enrollment != null;
 
-    // Keep existing self-enroll behavior, then show the Enroll QR screen.
+  int get _filledStamps => _enrollment?.stamps ?? 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEnrollment();
+  }
+
+  Future<void> _loadEnrollment() async {
+    setState(() => _loadingEnrollment = true);
     try {
-      await RewardRepo().selfEnroll(offer.id);
+      final res = await RewardRepo().getMyEnrollments();
+      if (!mounted) return;
+      RewardEnrollment? match;
+      if (res.success && res.data != null) {
+        final raw = res.data is Map ? res.data['data'] ?? res.data : res.data;
+        final list = raw is List ? raw : const [];
+        for (final item in list) {
+          if (item is! Map) continue;
+          final e = RewardEnrollment.fromJson(
+            Map<String, dynamic>.from(item),
+          );
+          final progId = e.programId.isNotEmpty
+              ? e.programId
+              : (e.program?.id ?? '');
+          if (progId == offer.id) {
+            match = e;
+            break;
+          }
+        }
+      }
+      setState(() {
+        _enrollment = match;
+        _loadingEnrollment = false;
+      });
     } catch (_) {
-      // Still open QR so the business can enroll by scanning.
+      if (!mounted) return;
+      setState(() {
+        _enrollment = null;
+        _loadingEnrollment = false;
+      });
     }
-    if (!mounted) return;
-    setState(() => _enrolling = false);
+  }
 
+  Future<void> _onEnrollMe() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => CustomerEnrollQrScreen(offer: offer),
+        builder: (_) => CustomerEnrollQrScreen(
+          businessName: offer.businessName,
+        ),
       ),
     );
+    if (mounted) await _loadEnrollment();
   }
 
   void _openBusiness() {
@@ -85,39 +124,14 @@ class _ExploreOfferDetailScreenState extends State<ExploreOfferDetailScreen> {
                     _OfferStampCard(
                       offer: offer,
                       totalStamps: totalStamps,
+                      filledStamps: _filledStamps,
                       logoUrl: logo,
                     ),
                     const SizedBox(height: 22),
-                    SizedBox(
-                      height: WaUi.primaryButtonHeight,
-                      child: ElevatedButton(
-                        onPressed: _enrolling ? null : _enrollMe,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          disabledBackgroundColor:
-                              Colors.black.withValues(alpha: 0.35),
-                          elevation: 4,
-                          shadowColor: Colors.black.withValues(alpha: 0.28),
-                          shape: const StadiumBorder(),
-                        ),
-                        child: _enrolling
-                            ? const SizedBox(
-                                width: 22,
-                                height: 22,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : Text(
-                                'Enroll Me',
-                                style: WaUi.promoButton.copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                      ),
+                    _EnrollCta(
+                      loading: _loadingEnrollment,
+                      enrolled: _isEnrolled,
+                      onEnroll: _onEnrollMe,
                     ),
                     const SizedBox(height: 28),
                     Text(
@@ -149,7 +163,7 @@ class _ExploreOfferDetailScreenState extends State<ExploreOfferDetailScreen> {
                                     ? Image.network(
                                         logo,
                                         fit: BoxFit.cover,
-                                        errorBuilder: (_, __, ___) =>
+                                        errorBuilder: (_, _, _) =>
                                             _Initial(name: offer.businessName),
                                       )
                                     : _Initial(name: offer.businessName),
@@ -178,8 +192,7 @@ class _ExploreOfferDetailScreenState extends State<ExploreOfferDetailScreen> {
                                         'assets/images/png/verified-badge.png',
                                         width: 16,
                                         height: 16,
-                                        errorBuilder: (_, __, ___) =>
-                                            const Icon(
+                                        errorBuilder: (_, _, _) => const Icon(
                                           Icons.verified,
                                           size: 16,
                                           color: Color(0xFFFFCC00),
@@ -227,14 +240,92 @@ class _ExploreOfferDetailScreenState extends State<ExploreOfferDetailScreen> {
   }
 }
 
+class _EnrollCta extends StatelessWidget {
+  final bool loading;
+  final bool enrolled;
+  final VoidCallback onEnroll;
+
+  const _EnrollCta({
+    required this.loading,
+    required this.enrolled,
+    required this.onEnroll,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (loading) {
+      return const SizedBox(
+        height: WaUi.primaryButtonHeight,
+        child: Center(
+          child: SizedBox(
+            width: 22,
+            height: 22,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.2,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (enrolled) {
+      return SizedBox(
+        height: WaUi.primaryButtonHeight,
+        child: ElevatedButton(
+          onPressed: null,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFBDBDBD),
+            disabledBackgroundColor: const Color(0xFFBDBDBD),
+            disabledForegroundColor: Colors.white,
+            elevation: 0,
+            shape: const StadiumBorder(),
+          ),
+          child: Text(
+            'Enrolled',
+            style: WaUi.promoButton.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: WaUi.primaryButtonHeight,
+      child: ElevatedButton(
+        onPressed: onEnroll,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          elevation: 4,
+          shadowColor: Colors.black.withValues(alpha: 0.28),
+          shape: const StadiumBorder(),
+        ),
+        child: Text(
+          'Enroll Me',
+          style: WaUi.promoButton.copyWith(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _OfferStampCard extends StatelessWidget {
   final ExploreOffer offer;
   final int totalStamps;
+  final int filledStamps;
   final String? logoUrl;
 
   const _OfferStampCard({
     required this.offer,
     required this.totalStamps,
+    required this.filledStamps,
     required this.logoUrl,
   });
 
@@ -260,7 +351,7 @@ class _OfferStampCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           child: LoyaltyCardDesignRenderer(
             design: offer.design!,
-            filledStamps: 0,
+            filledStamps: filledStamps,
             borderRadius: 14,
             shadows: const [],
           ),
@@ -293,7 +384,7 @@ class _OfferStampCard extends StatelessWidget {
                 width: 64,
                 height: 64,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
+                errorBuilder: (_, _, _) =>
                     _Initial(name: offer.businessName, size: 64),
               ),
             )
@@ -327,7 +418,7 @@ class _OfferStampCard extends StatelessWidget {
                   : totalStamps <= 9
                       ? 3
                       : 4;
-              final gap = 10.0;
+              const gap = 10.0;
               final size =
                   ((constraints.maxWidth - gap * (cols - 1)) / cols)
                       .clamp(36.0, 56.0);
@@ -337,7 +428,7 @@ class _OfferStampCard extends StatelessWidget {
                 runSpacing: gap,
                 children: List.generate(totalStamps, (index) {
                   return RewardStampSlot(
-                    filled: false,
+                    filled: index < filledStamps,
                     theme: theme,
                     size: size,
                     stampIconUrl: offer.stampIcon,

@@ -194,7 +194,7 @@ class _LoyaltyTemplateGalleryScreenState
         child: Column(
           children: [
             BarqodyTitleBar(
-              title: context.l10n.template,
+              title: 'Template',
               trailing: CircleAssetButton(
                 asset: 'assets/images/png/settings-sliders.png',
                 iconSize: 18,
@@ -259,7 +259,7 @@ class _LoyaltyTemplateGalleryScreenState
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
               child: PillButton(
-                label: '${context.l10n.create} ${context.l10n.blank}',
+                label: 'Create Blank',
                 onPressed: _startBlank,
               ),
             ),

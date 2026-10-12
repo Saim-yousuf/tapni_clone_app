@@ -3,6 +3,7 @@ import 'package:tapni_app/screens/help/help_topic_screen.dart';
 import 'package:tapni_app/screens/help/help_ui.dart';
 import 'package:tapni_app/utils/help_center_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HelpCenterScreen extends StatefulWidget {
@@ -92,42 +93,50 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
     Navigator.of(context).maybePop();
   }
 
-  Widget _homeContent({required List<HelpTopic> topics}) {
+  void _openTopic(HelpTopic topic) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => HelpTopicScreen(topic: topic),
+      ),
+    );
+  }
+
+  Widget _homeContent({
+    required AuthScale m,
+    required List<HelpTopic> topics,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'How We Can Help You?',
           style: WaUi.toolsTitleOf(
-            size: 26,
-            weight: FontWeight.w700,
+            size: HelpUi.font(m, HelpUi.heroSize, min: 20),
+            weight: FontWeight.w600,
             color: Colors.black,
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: m.v(12)),
         Text(
           'Let us know what category or artist you were searching for. Your suggestion help us bring in more relevant talent.',
           style: WaUi.body.copyWith(
-            fontSize: 14,
-            color: HelpUi.secondaryText,
-            height: 1.45,
+            fontSize: HelpUi.font(m, HelpUi.subtitleSize, min: 12),
+            fontWeight: FontWeight.w600,
+            color: HelpUi.mutedText,
+            height: 1.4,
           ),
         ),
-        const SizedBox(height: 28),
-        const HelpSectionTitle('Help Topics', fontSize: 18),
-        const SizedBox(height: 12),
+        SizedBox(height: m.v(28)),
+        const HelpSectionTitle('Help Topics'),
+        SizedBox(height: m.v(12)),
         HelpTopicListCard(
           topics: topics,
-          onTap: (topic) => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => HelpTopicScreen(topic: topic),
-            ),
-          ),
+          onTap: _openTopic,
         ),
-        const SizedBox(height: 28),
-        const HelpSectionTitle('Popular articles', fontSize: 18),
-        const SizedBox(height: 12),
+        SizedBox(height: m.v(24)),
+        const HelpSectionTitle('Popular articles'),
+        SizedBox(height: m.v(12)),
         HelpArticleAccordion(
           articles: HelpCenterCatalog.popularArticles,
           expandFirst: true,
@@ -138,6 +147,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
     final topics = HelpCenterCatalog.search(_query);
     final articleHits = HelpCenterCatalog.searchArticles(_query);
     final searching = _query.trim().isNotEmpty;
@@ -151,12 +161,12 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              padding: HelpUi.headerPad(m),
               child: showSearchHeader
                   ? Row(
                       children: [
                         HelpCircleBackButton(onTap: _onBack),
-                        const SizedBox(width: 10),
+                        SizedBox(width: m.s(10)),
                         Expanded(
                           child: HelpSearchField(
                             controller: _searchController,
@@ -175,14 +185,16 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                           child: Text(
                             'Help Center',
                             textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: WaUi.toolsTitleOf(
-                              size: 18,
-                              weight: FontWeight.w700,
+                              size: HelpUi.font(m, HelpUi.titleSize, min: 17),
+                              weight: FontWeight.w600,
                               color: Colors.black,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 40),
+                        SizedBox(width: m.s(40)),
                       ],
                     ),
             ),
@@ -190,78 +202,35 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               child: noResults
                   ? const HelpEmptySearch()
                   : ListView(
-                      padding: EdgeInsets.fromLTRB(
-                        HelpUi.sidePad,
-                        showSearchHeader ? 20 : 16,
-                        HelpUi.sidePad,
-                        showSearchHeader ? 28 : 12,
+                      padding: HelpUi.pagePad(
+                        m,
+                        top: showSearchHeader ? 20 : 14,
+                        bottom: showSearchHeader ? 28 : 12,
                       ),
                       children: [
                         if (!showSearchHeader) ...[
-                          _SearchBarTapTarget(onTap: _openSearchUi),
-                          const SizedBox(height: 28),
-                          _homeContent(topics: topics),
+                          HelpSearchBarTapTarget(onTap: _openSearchUi),
+                          SizedBox(height: m.v(24)),
+                          _homeContent(m: m, topics: topics),
                         ] else if (!searching) ...[
-                          _homeContent(topics: topics),
+                          _homeContent(m: m, topics: topics),
                         ] else if (articleHits.isNotEmpty) ...[
                           HelpArticleAccordion(
                             articles: articleHits,
                             expandFirst: true,
                           ),
                         ] else ...[
-                          const HelpSectionTitle('Help Topics', fontSize: 18),
-                          const SizedBox(height: 12),
+                          const HelpSectionTitle('Help Topics'),
+                          SizedBox(height: m.v(12)),
                           HelpTopicListCard(
                             topics: topics,
-                            onTap: (topic) => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => HelpTopicScreen(topic: topic),
-                              ),
-                            ),
+                            onTap: _openTopic,
                           ),
                         ],
                       ],
                     ),
             ),
             if (!showSearchHeader) HelpContactUsBar(onPressed: _contactUs),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Decorative search bar on the home layout; opens the real search field.
-class _SearchBarTapTarget extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const _SearchBarTapTarget({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 44,
-        padding: const EdgeInsets.symmetric(horizontal: 14),
-        decoration: BoxDecoration(
-          color: HelpUi.searchBg,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: const Row(
-          children: [
-            Icon(Icons.search, size: 20, color: HelpUi.secondaryText),
-            SizedBox(width: 8),
-            Text(
-              'Search Help Center',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: HelpUi.secondaryText,
-                height: 1.2,
-              ),
-            ),
           ],
         ),
       ),

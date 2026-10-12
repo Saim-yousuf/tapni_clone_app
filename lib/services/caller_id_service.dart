@@ -1,5 +1,4 @@
-import 'dart:io' show Platform;
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/utils/api_endpoint.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
@@ -12,7 +11,10 @@ class CallerIdService {
   /// Temporary kill switch. Set true to bring Caller ID back.
   static const bool isFeatureEnabled = false;
 
-  static bool get isSupported => isFeatureEnabled && Platform.isAndroid;
+  static bool get _isAndroid =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
+  static bool get isSupported => isFeatureEnabled && _isAndroid;
 
   static bool get isEnabled {
     if (!isFeatureEnabled) return false;
@@ -61,7 +63,7 @@ class CallerIdService {
   }
 
   static Future<void> syncNative({String lang = 'en'}) async {
-    if (!Platform.isAndroid) return;
+    if (!_isAndroid) return;
     if (!isFeatureEnabled) {
       await _disableNative();
       return;
@@ -82,7 +84,7 @@ class CallerIdService {
   }
 
   static Future<void> _disableNative() async {
-    if (!Platform.isAndroid) return;
+    if (!_isAndroid) return;
     await _channel.invokeMethod('syncConfig', {
       'enabled': false,
       'token': '',

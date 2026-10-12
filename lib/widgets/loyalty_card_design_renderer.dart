@@ -205,16 +205,39 @@ class _LoyaltyLayerWidget extends StatelessWidget {
     }
   }
 
+  TextAlign get _textAlign {
+    switch (layer.align) {
+      case DesignTextAlign.left:
+        return TextAlign.left;
+      case DesignTextAlign.right:
+        return TextAlign.right;
+      case DesignTextAlign.center:
+        return TextAlign.center;
+    }
+  }
+
+  Alignment get _boxAlign {
+    switch (layer.align) {
+      case DesignTextAlign.left:
+        return Alignment.centerLeft;
+      case DesignTextAlign.right:
+        return Alignment.centerRight;
+      case DesignTextAlign.center:
+        return Alignment.center;
+    }
+  }
+
   Widget _textBox(double w, double h) {
     final color = designColorFromHex(layer.color);
     final fontSize = layer.fontSize * canvasW;
     return SizedBox(
       width: w,
       height: h,
-      child: Center(
+      child: Align(
+        alignment: _boxAlign,
         child: Text(
           layer.text.isEmpty ? 'Tap to edit' : layer.text,
-          textAlign: TextAlign.center,
+          textAlign: _textAlign,
           textDirection: design.rtl ? TextDirection.rtl : TextDirection.ltr,
           style: designFontStyle(
             family: layer.fontFamily,
@@ -238,6 +261,11 @@ class _LoyaltyLayerWidget extends StatelessWidget {
       height: h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: layer.align == DesignTextAlign.left
+            ? CrossAxisAlignment.start
+            : layer.align == DesignTextAlign.right
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.center,
         children: [
           Icon(
             designIconData(layer.iconName),
@@ -248,7 +276,7 @@ class _LoyaltyLayerWidget extends StatelessWidget {
           Flexible(
             child: Text(
               layer.text.isEmpty ? '—' : layer.text,
-              textAlign: TextAlign.center,
+              textAlign: _textAlign,
               textDirection: design.rtl ? TextDirection.rtl : TextDirection.ltr,
               style: designFontStyle(
                 family: layer.fontFamily,

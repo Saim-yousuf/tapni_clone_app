@@ -3,8 +3,10 @@ import 'package:tapni_app/screens/loyalty_program/business/buy_points_screen.dar
 import 'package:tapni_app/screens/loyalty_program/business/points_activity_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/points_flow_models.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
+/// Figma `Points Rewards` — balance + info lists + View Activity.
 class PointsRewardsScreen extends StatefulWidget {
   const PointsRewardsScreen({super.key});
 
@@ -13,12 +15,16 @@ class PointsRewardsScreen extends StatefulWidget {
 }
 
 class _PointsRewardsScreenState extends State<PointsRewardsScreen> {
+  static const _cardFill = Color(0xFFF5F5F5);
+  static const _divider = Color(0xFFE8E8E8);
+
   final _balanceStore = BusinessPointsBalance.instance;
 
   @override
   void initState() {
     super.initState();
     _balanceStore.addListener(_onBalance);
+    _balanceStore.refresh();
   }
 
   @override
@@ -33,14 +39,23 @@ class _PointsRewardsScreenState extends State<PointsRewardsScreen> {
 
   Future<void> _openBuyPoints() async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const BuyPointsScreen()),
+      MaterialPageRoute(
+        settings: const RouteSettings(name: '/buy_points'),
+        builder: (_) => const BuyPointsScreen(),
+      ),
     );
+    await _balanceStore.refresh();
     if (mounted) setState(() {});
   }
+
+  static double _font(AuthScale m, double pt, {double min = 11}) =>
+      m.s(pt).clamp(min, pt * 1.2);
 
   @override
   Widget build(BuildContext context) {
     final balance = _balanceStore.balance;
+    final m = AuthScale.of(context);
+    final side = m.padH.clamp(20.0, 28.0);
 
     return Scaffold(
       backgroundColor: BarqodyChrome.scaffold,
@@ -51,104 +66,85 @@ class _PointsRewardsScreenState extends State<PointsRewardsScreen> {
             const BarqodyTitleBar(title: 'Points Rewards'),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(
-                  BarqodyChrome.sidePad,
-                  8,
-                  BarqodyChrome.sidePad,
-                  24,
-                ),
+                padding: EdgeInsets.fromLTRB(side, m.v(4), side, m.v(16)),
                 children: [
                   Text(
                     'Manage your points program and customer redemptions',
-                    style: WaUi.body.copyWith(
-                      fontSize: 15,
-                      color: BarqodyChrome.bodyText,
-                      height: 1.35,
-                    ),
-                  ),
-                  const SizedBox(height: 28),
-                  Text(
-                    formatPoints(balance),
-                    textAlign: TextAlign.center,
                     style: WaUi.toolsTitleOf(
-                      size: 44,
+                      size: _font(m, 24, min: 20),
                       weight: FontWeight.w700,
-                      height: 1.05,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'POINTS BALANCE',
-                    textAlign: TextAlign.center,
-                    style: WaUi.caption.copyWith(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.2,
-                      color: BarqodyChrome.secondaryText,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: Material(
                       color: Colors.black,
-                      borderRadius: BorderRadius.circular(999),
-                      child: InkWell(
-                        onTap: _openBuyPoints,
-                        borderRadius: BorderRadius.circular(999),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 28,
-                            vertical: 12,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset(
-                                'assets/images/png/money-icon.png',
-                                width: 18,
-                                height: 18,
-                                errorBuilder: (_, __, ___) => const Icon(
-                                  Icons.payments_outlined,
-                                  size: 18,
-                                  color: Colors.white,
-                                ),
+                      height: 1.2,
+                    ),
+                  ),
+                  SizedBox(height: m.v(28).clamp(20.0, 34.0)),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              formatPoints(balance),
+                              style: WaUi.toolsTitleOf(
+                                size: _font(m, 36, min: 28),
+                                weight: FontWeight.w700,
+                                color: Colors.black,
+                                height: 1.05,
                               ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Buy Points',
-                                style: WaUi.promoButton.copyWith(fontSize: 15),
+                            ),
+                            SizedBox(height: m.v(6).clamp(4.0, 8.0)),
+                            Text(
+                              'Points BALANCE',
+                              style: WaUi.body.copyWith(
+                                fontSize: _font(m, 12, min: 10),
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 0.6,
+                                color: BarqodyChrome.secondaryText,
+                                height: 1.2,
                               ),
-                            ],
-                          ),
+                            ),
+                            SizedBox(height: m.v(10).clamp(8.0, 12.0)),
+                            Container(
+                              width: m.s(140).clamp(110.0, 160.0),
+                              height: 1,
+                              color: _divider,
+                            ),
+                          ],
                         ),
                       ),
-                    ),
+                      SizedBox(width: m.s(12)),
+                      _BuyPointsChip(onTap: _openBuyPoints),
+                    ],
                   ),
-                  const SizedBox(height: 32),
-                  _InfoCard(
+                  SizedBox(height: m.v(28).clamp(20.0, 34.0)),
+                  _ListCard(
                     title: 'Points Rewards',
-                    body:
-                        'Use your balance to fund customer point redemptions across your loyalty programs.',
+                    titleAllCaps: false,
+                    rows: const [
+                      'Customers earn points automatically on eligible purchases.',
+                      'Customers can redeem their points during checkout.',
+                    ],
                   ),
-                  const SizedBox(height: 12),
-                  _InfoCard(
+                  SizedBox(height: m.v(14).clamp(12.0, 18.0)),
+                  _ListCard(
                     title: 'HOW IT WORKS',
-                    body:
-                        'Purchase points packages, assign rewards that cost points, and track activity as customers redeem.',
+                    titleAllCaps: true,
+                    rows: const [
+                      'Customers earn',
+                      'Points are added',
+                      'Customers redeem',
+                      'Points are consumed',
+                    ],
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                BarqodyChrome.sidePad,
-                0,
-                BarqodyChrome.sidePad,
-                16,
-              ),
+              padding: EdgeInsets.fromLTRB(side, 0, side, 16),
               child: PillButton(
                 label: 'View Activity',
-                filled: false,
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -165,40 +161,109 @@ class _PointsRewardsScreenState extends State<PointsRewardsScreen> {
   }
 }
 
-class _InfoCard extends StatelessWidget {
-  final String title;
-  final String body;
+class _BuyPointsChip extends StatelessWidget {
+  final VoidCallback onTap;
 
-  const _InfoCard({required this.title, required this.body});
+  const _BuyPointsChip({required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final h = m.s(40).clamp(36.0, 44.0);
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(h / 2),
+        boxShadow: AuthUi.primaryButtonShadow(m),
+      ),
+      child: Material(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(h / 2),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(h / 2),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: m.s(18).clamp(14.0, 22.0),
+              vertical: m.v(10).clamp(8.0, 12.0),
+            ),
+            child: Text(
+              'Buy Points',
+              style: WaUi.body.copyWith(
+                fontSize: m.s(14).clamp(13.0, 15.0),
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                height: 1.1,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ListCard extends StatelessWidget {
+  final String title;
+  final bool titleAllCaps;
+  final List<String> rows;
+
+  const _ListCard({
+    required this.title,
+    required this.rows,
+    this.titleAllCaps = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final pad = m.s(16).clamp(14.0, 18.0);
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: BarqodyChrome.fieldFill,
-        borderRadius: BorderRadius.circular(16),
+        color: _PointsRewardsScreenState._cardFill,
+        borderRadius: BorderRadius.circular(m.s(18).clamp(16.0, 20.0)),
+        border: Border.all(color: const Color(0xFFE8E8E8)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            title,
-            style: WaUi.bodyMedium.copyWith(
-              fontWeight: FontWeight.w700,
-              fontSize: 14,
+          Padding(
+            padding: EdgeInsets.fromLTRB(pad, pad, pad, m.v(12).clamp(10.0, 14.0)),
+            child: Text(
+              title,
+              style: WaUi.body.copyWith(
+                fontSize: m.s(titleAllCaps ? 13 : 15).clamp(12.0, 16.0),
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+                letterSpacing: titleAllCaps ? 0.4 : 0,
+                height: 1.2,
+              ),
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            body,
-            style: WaUi.body.copyWith(
-              fontSize: 14,
-              color: BarqodyChrome.bodyText,
-              height: 1.4,
+          for (var i = 0; i < rows.length; i++) ...[
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: Colors.black.withValues(alpha: 0.06),
             ),
-          ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: pad,
+                vertical: m.v(14).clamp(12.0, 16.0),
+              ),
+              child: Text(
+                rows[i],
+                style: WaUi.body.copyWith(
+                  fontSize: m.s(14).clamp(13.0, 15.0),
+                  fontWeight: FontWeight.w400,
+                  color: BarqodyChrome.bodyText,
+                  height: 1.35,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

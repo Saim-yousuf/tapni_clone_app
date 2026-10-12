@@ -8,9 +8,9 @@ import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
-import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+
 class CreateRewardScreen extends StatefulWidget {
   final RewardProgram? existing;
   const CreateRewardScreen({super.key, this.existing});
@@ -62,12 +62,6 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
   }
 
   Future<void> _pickLogo() => _pickImage((base64) => _logoBase64 = base64);
-
-  Future<void> _pickStampIcon() =>
-      _pickImage((base64) => _stampIconBase64 = base64);
-
-  Future<void> _pickUnstampIcon() =>
-      _pickImage((base64) => _unstampIconBase64 = base64);
 
   Future<void> _pickImage(void Function(String base64) onPicked) async {
     final picker = ImagePicker();
@@ -151,15 +145,15 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _barqodyLabel('REWARD PROGRAM NAME'),
+                      _barqodyLabel('Reward Program Name'),
                       const SizedBox(height: 8),
                       _buildTextField(
                         _labelController,
-                        context.l10n.egCoffeeClub,
+                        'e.g. Coffee Rewards',
                         required: true,
                       ),
                       const SizedBox(height: 20),
-                      _barqodyLabel('STAMPS REQUIRED'),
+                      _barqodyLabel('Stamps Required'),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _stampsController,
@@ -167,29 +161,29 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
-                        decoration: _barqodyFieldDecoration('e.g. 10'),
+                        decoration: _barqodyFieldDecoration('e.g. 5'),
                         validator: (v) => (v == null || v.isEmpty)
                             ? context.l10n.required
                             : null,
                       ),
                       const SizedBox(height: 20),
-                      _barqodyLabel('REWARD'),
+                      _barqodyLabel('Reward'),
                       const SizedBox(height: 8),
                       _buildTextField(
                         _titleController,
-                        context.l10n.egBuy10Get1Free,
+                        'e.g. Free Coffee',
                         required: true,
                       ),
                       const SizedBox(height: 20),
-                      _barqodyLabel('REWARD SUB TITLE'),
+                      _barqodyLabel('Reward Sub Title'),
                       const SizedBox(height: 8),
                       _buildTextField(
                         _descController,
-                        context.l10n.brieflyDescribeThisReward,
+                        'e.g. Buy 5 Coffes . Get 6 free',
                         maxLines: 3,
                       ),
                       const SizedBox(height: 20),
-                      _barqodyLabel('REWARD ITEM (OPTIONAL)'),
+                      _barqodyLabel('Reward Item (Optional)'),
                       const SizedBox(height: 8),
                       Material(
                         color: BarqodyChrome.fieldFill,
@@ -219,7 +213,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                                             (_existingLogoUrl != null &&
                                                 _existingLogoUrl!.isNotEmpty)
                                         ? context.l10n.tapToChange
-                                        : context.l10n.addLogo,
+                                        : 'Select Item from menu',
                                     style: WaUi.body.copyWith(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w600,
@@ -234,139 +228,6 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                               ],
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 28),
-                      Theme(
-                        data: Theme.of(context).copyWith(
-                          dividerColor: BarqodyChrome.divider,
-                        ),
-                        child: ExpansionTile(
-                          tilePadding: EdgeInsets.zero,
-                          title: Text(
-                            'Theme & icons',
-                            style: WaUi.body.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                            ),
-                          ),
-                          children: [
-                            Text(
-                              context.l10n.stampIconsOptional,
-                              style: WaUi.caption,
-                            ),
-                            const SizedBox(height: 12),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _iconPickerTile(
-                                    label: context.l10n.stampIcon,
-                                    subtitle: context.l10n.filledSlot,
-                                    base64: _stampIconBase64,
-                                    existingUrl: _existingStampIconUrl,
-                                    onTap: _pickStampIcon,
-                                    onClear: () => setState(() {
-                                      _stampIconBase64 = null;
-                                      _existingStampIconUrl = null;
-                                    }),
-                                    preview: RewardStampSlot(
-                                      filled: true,
-                                      theme: _theme,
-                                      size: 32,
-                                      stampIconBase64: _stampIconBase64,
-                                      stampIconUrl: _existingStampIconUrl,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _iconPickerTile(
-                                    label: context.l10n.unstampIcon,
-                                    subtitle: context.l10n.emptySlot,
-                                    base64: _unstampIconBase64,
-                                    existingUrl: _existingUnstampIconUrl,
-                                    onTap: _pickUnstampIcon,
-                                    onClear: () => setState(() {
-                                      _unstampIconBase64 = null;
-                                      _existingUnstampIconUrl = null;
-                                    }),
-                                    preview: RewardStampSlot(
-                                      filled: false,
-                                      theme: _theme,
-                                      size: 32,
-                                      unstampIconBase64: _unstampIconBase64,
-                                      unstampIconUrl: _existingUnstampIconUrl,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            _themeSectionTitle(context.l10n.cardTheme),
-                            const SizedBox(height: 10),
-                            _colorRow(
-                              context.l10n.backgroundColor2,
-                              _theme.cardBackgroundColor,
-                              (c) => setState(
-                                () => _theme = _theme.copyWith(
-                                  cardBackgroundColor: c,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            _colorRow(
-                              context.l10n.textColor,
-                              _theme.cardTextColor,
-                              (c) => setState(
-                                () => _theme =
-                                    _theme.copyWith(cardTextColor: c),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            _colorRow(
-                              context.l10n.stampColor,
-                              _theme.stampColor,
-                              (c) => setState(
-                                () => _theme = _theme.copyWith(stampColor: c),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            _colorRow(
-                              context.l10n.stampBorderColor,
-                              _theme.stampBorderColor,
-                              (c) => setState(
-                                () => _theme = _theme.copyWith(
-                                  stampBorderColor: c,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            _themeSectionTitle(context.l10n.screenTheme),
-                            const SizedBox(height: 10),
-                            _colorRow(
-                              context.l10n.backgroundColor2,
-                              _theme.screenBackgroundColor,
-                              (c) => setState(
-                                () => _theme = _theme.copyWith(
-                                  screenBackgroundColor: c,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            _colorRow(
-                              context.l10n.textColor,
-                              _theme.screenTextColor,
-                              (c) => setState(
-                                () => _theme =
-                                    _theme.copyWith(screenTextColor: c),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            _sectionTitle(context.l10n.cardPreview),
-                            const SizedBox(height: 10),
-                            _buildCardPreview(),
-                            const SizedBox(height: 8),
-                          ],
                         ),
                       ),
                     ],
@@ -423,250 +284,25 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
     return _logoPlaceholder();
   }
 
-  Widget _logoPlaceholder() => Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.add_photo_alternate_outlined, size: 28, color: Colors.grey.shade400),
-      SizedBox(height: 4),
-      Text(context.l10n.addLogo, style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
-    ],
-  );
+  Widget _logoPlaceholder() => Icon(
+        Icons.add_photo_alternate_outlined,
+        size: 22,
+        color: Colors.grey.shade400,
+      );
 
-  Widget _iconPickerTile({
-    required String label,
-    required String subtitle,
-    required VoidCallback onTap,
-    required VoidCallback onClear,
-    required Widget preview,
-    String? base64,
-    String? existingUrl,
+  Widget _buildTextField(
+    TextEditingController ctrl,
+    String hint, {
+    int maxLines = 1,
+    bool required = false,
   }) {
-    final hasImage =
-        (base64 != null && base64.isNotEmpty) ||
-        (existingUrl != null && existingUrl.isNotEmpty);
-
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Column(
-              children: [
-                preview,
-                SizedBox(height: 8),
-                Text(
-                  label,
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
-                ),
-                Text(
-                  subtitle,
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  hasImage ? context.l10n.tapToChange : context.l10n.tapToAddImage,
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade700),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (hasImage)
-          TextButton(
-            onPressed: onClear,
-            child: Text(
-              context.l10n.useDefaultIcon,
-              style: TextStyle(fontSize: 12, color: Colors.red.shade400),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildCardPreview() {
-    final stampCount = int.tryParse(_stampsController.text) ?? 10;
-    return Container(
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: _theme.cardBackgroundColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12, offset: Offset(0, 4))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(children: [
-            if (_existingLogoUrl != null && _existingLogoUrl!.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(_existingLogoUrl!, width: 36, height: 36, fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => SizedBox()),
-              ),
-            if (_existingLogoUrl != null && _existingLogoUrl!.isNotEmpty) SizedBox(width: 10),
-            Text(
-              _labelController.text.isEmpty ? context.l10n.cardLabel : _labelController.text,
-              style: TextStyle(color: _theme.cardTextColor.withOpacity(0.6), fontSize: 12),
-            ),
-          ]),
-          SizedBox(height: 8),
-          Text(
-            _titleController.text.isEmpty ? context.l10n.rewardTitle : _titleController.text,
-            style: TextStyle(color: _theme.cardTextColor, fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: List.generate(stampCount.clamp(1, 12), (i) {
-              return RewardStampSlot(
-                filled: i < 3,
-                theme: _theme,
-                size: 28,
-                stampIconBase64: _stampIconBase64,
-                stampIconUrl: _existingStampIconUrl,
-                unstampIconBase64: _unstampIconBase64,
-                unstampIconUrl: _existingUnstampIconUrl,
-              );
-            }),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _colorRow(String label, Color current, ValueChanged<Color> onChanged) {
-    return Row(
-      children: [
-        Expanded(child: Text(label, style: TextStyle(fontSize: 14))),
-        GestureDetector(
-          onTap: () => _showColorPicker(current, onChanged),
-          child: Container(
-            width: 36, height: 36,
-            decoration: BoxDecoration(
-              color: current,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.shade300),
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        SizedBox(
-          width: 90,
-          child: Text(
-            '#${current.value.toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}',
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade600, fontFamily: 'monospace'),
-          ),
-        ),
-      ],
-    );
-  }
-
-  void _showColorPicker(Color current, ValueChanged<Color> onChanged) {
-    final hexController = TextEditingController(
-      text: current.value.toRadixString(16).padLeft(8, '0').substring(2).toUpperCase(),
-    );
-    final colors = [
-      Colors.black, Colors.white, Color(0xFFFFD700), Color(0xFFFF6B35),
-      Color(0xFF3B82F6), Color(0xFF10B981), Color(0xFFEF4444),
-      Color(0xFF8B5CF6), Color(0xFFF59E0B), Colors.grey.shade200,
-      Color(0xFF1F2937), Color(0xFFF0FDF4),
-    ];
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setS) => Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
-            left: 20, right: 20, top: 20,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SheetHeader(
-                title: context.l10n.pickColor,
-                onBack: () => Navigator.pop(ctx),
-              ),
-              const SizedBox(height: 16),
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: colors.map((c) => GestureDetector(
-                  onTap: () { onChanged(c); Navigator.pop(ctx); },
-                  child: Container(
-                    width: 44, height: 44,
-                    decoration: BoxDecoration(
-                      color: c,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey.shade300, width: 1.5),
-                    ),
-                  ),
-                )).toList(),
-              ),
-              SizedBox(height: 16),
-              Row(children: [
-                Text(context.l10n.hex, style: TextStyle(fontWeight: FontWeight.w600)),
-                SizedBox(width: 6),
-                Expanded(
-                  child: TextField(
-                    controller: hexController,
-                    maxLength: 6,
-                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9A-Fa-f]'))],
-                    decoration: WaUi.fieldDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      radius: 10,
-                    ).copyWith(counterText: ''),
-                  ),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    try {
-                      final c = Color(int.parse('FF${hexController.text}', radix: 16));
-                      onChanged(c);
-                      Navigator.pop(ctx);
-                    } catch (_) {}
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.black, foregroundColor: Colors.white),
-                  child: Text(context.l10n.apply),
-                ),
-              ]),
-              const SizedBox(height: 8),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _sectionTitle(String t) => Text(t, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15));
-
-  Widget _themeSectionTitle(String t) => Row(children: [
-    Container(width: 4, height: 18, decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(2))),
-    const SizedBox(width: 10),
-    Text(t, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-  ]);
-
-  Widget _buildTextField(TextEditingController ctrl, String hint, {int maxLines = 1, bool required = false}) {
     return TextFormField(
       controller: ctrl,
       maxLines: maxLines,
-      decoration: _inputDecoration(hint),
-      validator: required ? (v) => (v == null || v.isEmpty) ? context.l10n.required : null : null,
+      decoration: _barqodyFieldDecoration(hint),
+      validator: required
+          ? (v) => (v == null || v.isEmpty) ? context.l10n.required : null
+          : null,
     );
   }
-
-  InputDecoration _inputDecoration(String hint) => _barqodyFieldDecoration(hint);
 }

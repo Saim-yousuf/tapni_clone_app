@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
-import 'package:tapni_app/screens/loyalty_program/business/customer_detail_screen.dart';
+import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
@@ -207,11 +207,14 @@ class _AddStampScreenState extends State<AddStampScreen> {
                     color: BarqodyChrome.fieldFill,
                     borderRadius: BorderRadius.circular(16),
                     child: InkWell(
-                      onTap: _hasProfile
+                      onTap: _displayUsername?.trim().isNotEmpty == true
                           ? () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => CustomerDetailsScreen(),
+                                  builder: (_) => ScannedProfileScreen(
+                                    username: _displayUsername!
+                                        .replaceFirst(RegExp(r'^@'), ''),
+                                  ),
                                 ),
                               );
                             }

@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:tapni_app/models/stored_account.dart';
 import 'package:tapni_app/utils/phone_utils.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
@@ -220,25 +220,35 @@ class AccountStorage {
   }
 
   static String devicePlatformLabel() {
-    if (Platform.isAndroid) return 'Android';
-    if (Platform.isIOS) return 'iOS';
-    return 'Mobile';
+    if (kIsWeb) return 'Web';
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return 'Android';
+      case TargetPlatform.iOS:
+        return 'iOS';
+      default:
+        return 'Mobile';
+    }
   }
 
   /// Stable id for this install/hardware — one account session per device.
   static Future<String> deviceKey() async {
     try {
       final plugin = DeviceInfoPlugin();
-      if (Platform.isAndroid) {
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
         final info = await plugin.androidInfo;
         final id = info.id.trim();
         if (id.isNotEmpty && id.toLowerCase() != 'unknown') {
           return 'android_$id';
         }
-      } else if (Platform.isIOS) {
+      } else if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
         final info = await plugin.iosInfo;
         final id = (info.identifierForVendor ?? '').trim();
         if (id.isNotEmpty) return 'ios_$id';
+      } else if (kIsWeb) {
+        final info = await plugin.webBrowserInfo;
+        final vendor = (info.vendor ?? info.browserName.name).trim();
+        if (vendor.isNotEmpty) return 'web_${vendor.toLowerCase()}';
       }
     } catch (_) {}
     return '${devicePlatformLabel().toLowerCase()}_fallback';
@@ -292,7 +302,7 @@ class AccountStorage {
   static Future<String> defaultDeviceName() async {
     try {
       final plugin = DeviceInfoPlugin();
-      if (Platform.isAndroid) {
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
         final info = await plugin.androidInfo;
         for (final candidate in [
           _joinBrandModel(info.brand, info.model),
@@ -305,13 +315,23 @@ class AccountStorage {
           final cleaned = _cleanDeviceLabel(candidate);
           if (cleaned != null) return cleaned;
         }
-      } else if (Platform.isIOS) {
+      } else if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
         final info = await plugin.iosInfo;
         for (final candidate in [
           info.modelName,
           info.name,
           info.localizedModel,
           info.model,
+        ]) {
+          final cleaned = _cleanDeviceLabel(candidate);
+          if (cleaned != null) return cleaned;
+        }
+      } else if (kIsWeb) {
+        final info = await plugin.webBrowserInfo;
+        for (final candidate in [
+          info.userAgent,
+          info.browserName.name,
+          info.vendor,
         ]) {
           final cleaned = _cleanDeviceLabel(candidate);
           if (cleaned != null) return cleaned;

@@ -1,17 +1,11 @@
-import 'dart:io' show Platform;
-
 enum Environment { local, live }
 
 class Api {
   static final Api instance = Api._();
   Api._();
 
-  static String get _localBaseUrl {
-    if (Platform.isAndroid) {
-      return "http://192.168.100.203:3000";
-    }
-    return "http://192.168.100.203:3000";
-  }
+  // Same host for all targets; avoid dart:io Platform (unsupported on web).
+  static const String _localBaseUrl = "http://192.168.100.203:3000";
 
   static const String _liveBaseUrl = "https://barqody-backend.vercel.app";
 
@@ -31,6 +25,7 @@ class Api {
   static final contact = _ContactApi();
   static final loyalty = _LoyaltyApi();
   static final enrollment = _EnrollmentApi();
+  static final loyaltyPoints = _LoyaltyPointsApi();
   static final businessEnrollment = _BusinessEnrollmentApi();
   static final catalog = _CatalogApi();
   static final attendance = _AttendanceApi();
@@ -146,10 +141,25 @@ class _EnrollmentApi {
   String get enroll => "${Api.baseUrl}/api/loyalty/enrollments";
   String get selfEnroll => "${Api.baseUrl}/api/loyalty/enrollments/self";
   String get myEnrollments => "${Api.baseUrl}/api/loyalty/enrollments/me";
+  String programEnrollments(String programId) =>
+      "${Api.baseUrl}/api/loyalty/enrollments/program/$programId";
   String customerEnrollments(String customerId) =>
       "${Api.baseUrl}/api/loyalty/enrollments/customer/$customerId";
   String addStamp(String enrollmentId) =>
       "${Api.baseUrl}/api/loyalty/enrollments/$enrollmentId/stamp";
+}
+
+class _LoyaltyPointsApi {
+  String get business => "${Api.baseUrl}/api/loyalty/points/business";
+  String get businessPurchase =>
+      "${Api.baseUrl}/api/loyalty/points/business/purchase";
+  String get businessActivity =>
+      "${Api.baseUrl}/api/loyalty/points/business/activity";
+  String get customer => "${Api.baseUrl}/api/loyalty/points/customer";
+  String get customerActivity =>
+      "${Api.baseUrl}/api/loyalty/points/customer/activity";
+  String stampHistory(String enrollmentId) =>
+      "${Api.baseUrl}/api/loyalty/points/stamp-history/$enrollmentId";
 }
 
 class _BusinessEnrollmentApi {

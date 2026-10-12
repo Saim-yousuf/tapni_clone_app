@@ -12,9 +12,9 @@ class HelpCenterCatalog {
       articles: [
         HelpArticle(
           id: 'create_account',
-          title: 'How to create a Barqody account',
+          title: 'How to create a BarQody Account',
           body:
-              'Open Barqody and sign in with your phone number. Enter the OTP sent to your phone, then complete your profile with your name, photo, and username so people can find and connect with you.',
+              'Open BarQody and sign in with your phone number. Enter the OTP sent to your phone, then complete your profile with your name, photo, and username so people can find and connect with you.',
         ),
         HelpArticle(
           id: 'edit_profile',
@@ -32,12 +32,12 @@ class HelpCenterCatalog {
     ),
     HelpTopic(
       id: 'digital_card',
-      title: 'Digital Business Card',
+      title: 'Digital Business',
       icon: Icons.badge_outlined,
       articles: [
         HelpArticle(
           id: 'share_card',
-          title: 'How to share your digital card',
+          title: 'How to share a Digital Card',
           body:
               'Open your card or QR screen and choose Share. You can send your profile link, show your QR for someone to scan, or download a card image to share on WhatsApp or email.',
         ),
@@ -131,7 +131,7 @@ class HelpCenterCatalog {
       articles: [
         HelpArticle(
           id: 'employee_invite',
-          title: 'How employee invitations work',
+          title: 'How employee invitation work',
           body:
               'A business can invite you by scanning your QR. Open Workplace → Employee Invitations to accept or decline. After you accept, you can check in and get an employee card.',
         ),
@@ -198,19 +198,19 @@ class HelpCenterCatalog {
   static List<HelpArticle> get popularArticles => const [
         HelpArticle(
           id: 'create_account',
-          title: 'How to create a Barqody account',
+          title: 'How to create a BarQody Account',
           body:
-              'Open Barqody and sign in with your phone number. Enter the OTP sent to your phone, then complete your profile with your name, photo, and username so people can find and connect with you.',
+              'Open BarQody and sign in with your phone number. Enter the OTP sent to your phone, then complete your profile with your name, photo, and username so people can find and connect with you.',
         ),
         HelpArticle(
           id: 'share_card',
-          title: 'How to share your digital card',
+          title: 'How to share a Digital Card',
           body:
               'Open your card or QR screen and choose Share. You can send your profile link, show your QR for someone to scan, or download a card image to share on WhatsApp or email.',
         ),
         HelpArticle(
           id: 'employee_invite',
-          title: 'How employee invitations work',
+          title: 'How employee invitation work',
           body:
               'A business can invite you by scanning your QR. Open Workplace → Employee Invitations to accept or decline. After you accept, you can check in and get an employee card.',
         ),

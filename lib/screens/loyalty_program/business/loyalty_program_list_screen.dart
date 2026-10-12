@@ -7,8 +7,8 @@ import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_design_editor_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_details_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_template_gallery_screen.dart';
-import 'package:tapni_app/screens/loyalty_program/business/points_rewards_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/business_completeness_sheet.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
@@ -61,10 +61,13 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen>
   List<RewardProgram> _filtered(int tab) {
     switch (tab) {
       case 0:
+        // Active: Go Live — customers can earn stamps.
         return _programs.where((p) => p.isActive).toList();
       case 1:
-        return _programs.where((p) => !p.isActive).toList();
+        // Inactive: designed but not live (includes Save Draft).
+        return _programs.where((p) => !p.isActive && p.hasDesign).toList();
       case 2:
+        // Draft: incomplete — no card design yet.
         return _programs.where((p) => !p.hasDesign).toList();
       default:
         return _programs;
@@ -124,6 +127,9 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Figma empty: no tabs / no +, just illustration + Create CTA.
+    final showFullEmpty = !_isLoading && _programs.isEmpty;
+
     return Scaffold(
       backgroundColor: BarqodyChrome.scaffold,
       body: SafeArea(
@@ -131,81 +137,79 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen>
           children: [
             BarqodyTitleBar(
               title: 'Stamp Rewards',
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircleAssetButton(
-                    asset: 'assets/images/png/money-icon.png',
-                    iconSize: 18,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          settings: const RouteSettings(name: '/points_rewards'),
-                          builder: (_) => const PointsRewardsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  CircleAssetButton(
-                    asset: 'assets/images/png/plus-icon.png',
-                    iconSize: 16,
-                    onTap: _openCreateModal,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 14),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: AnimatedBuilder(
-                animation: _tabController.animation!,
-                builder: (context, _) {
-                  return _SegmentedTabs(
-                    position: _tabController.animation!.value,
-                    labels: [
-                      context.l10n.active,
-                      context.l10n.inactive,
-                      context.l10n.draft,
-                    ],
-                    onChanged: _selectTab,
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        color: Colors.black,
-                      ),
-                    )
-                  : TabBarView(
-                      controller: _tabController,
-                      children: [
-                        _ProgramListTab(
-                          programs: _filtered(0),
-                          onRefresh: _load,
-                          onOpen: _openDetails,
-                          onCreate: _openCreateModal,
-                        ),
-                        _ProgramListTab(
-                          programs: _filtered(1),
-                          onRefresh: _load,
-                          onOpen: _openDetails,
-                          onCreate: _openCreateModal,
-                        ),
-                        _ProgramListTab(
-                          programs: _filtered(2),
-                          onRefresh: _load,
-                          onOpen: _openDetails,
-                          onCreate: _openCreateModal,
-                        ),
-                      ],
+              trailing: showFullEmpty
+                  ? null
+                  : CircleAssetButton(
+                      asset: 'assets/images/png/plus-icon.png',
+                      iconSize: 16,
+                      onTap: _openCreateModal,
                     ),
             ),
+            if (_isLoading)
+              const Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: Colors.black,
+                  ),
+                ),
+              )
+            else if (showFullEmpty)
+              Expanded(
+                child: RefreshIndicator(
+                  color: Colors.black,
+                  backgroundColor: Colors.white,
+                  onRefresh: _load,
+                  child: _StampEmptyState(onCreate: _openCreateModal),
+                ),
+              )
+            else ...[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+                child: AnimatedBuilder(
+                  animation: _tabController.animation!,
+                  builder: (context, _) {
+                    return _SegmentedTabs(
+                      position: _tabController.animation!.value,
+                      labels: [
+                        context.l10n.active,
+                        context.l10n.inactive,
+                        context.l10n.draft,
+                      ],
+                      onChanged: _selectTab,
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _ProgramListTab(
+                      programs: _filtered(0),
+                      emptyLabel: 'No active stamp cards yet.',
+                      onRefresh: _load,
+                      onOpen: _openDetails,
+                      onCreate: _openCreateModal,
+                    ),
+                    _ProgramListTab(
+                      programs: _filtered(1),
+                      emptyLabel: 'No inactive stamp cards.',
+                      onRefresh: _load,
+                      onOpen: _openDetails,
+                      onCreate: _openCreateModal,
+                    ),
+                    _ProgramListTab(
+                      programs: _filtered(2),
+                      emptyLabel: 'No draft stamp cards.',
+                      onRefresh: _load,
+                      onOpen: _openDetails,
+                      onCreate: _openCreateModal,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -234,8 +238,15 @@ class _SegmentedTabs extends StatelessWidget {
       height: 48,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: BarqodyChrome.fieldFill,
+        color: const Color(0xFFF2F2F7),
         borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -251,6 +262,13 @@ class _SegmentedTabs extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.18),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -290,12 +308,14 @@ class _SegmentedTabs extends StatelessWidget {
 
 class _ProgramListTab extends StatelessWidget {
   final List<RewardProgram> programs;
+  final String emptyLabel;
   final Future<void> Function() onRefresh;
   final void Function(RewardProgram) onOpen;
   final VoidCallback onCreate;
 
   const _ProgramListTab({
     required this.programs,
+    required this.emptyLabel,
     required this.onRefresh,
     required this.onOpen,
     required this.onCreate,
@@ -304,7 +324,31 @@ class _ProgramListTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (programs.isEmpty) {
-      return _StampEmptyState(onCreate: onCreate);
+      return RefreshIndicator(
+        color: Colors.black,
+        backgroundColor: Colors.white,
+        onRefresh: onRefresh,
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(28, 48, 28, 24),
+          children: [
+            Text(
+              emptyLabel,
+              textAlign: TextAlign.center,
+              style: WaUi.body.copyWith(
+                fontSize: 15,
+                color: BarqodyChrome.secondaryText,
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 24),
+            PillButton(
+              label: 'Create Stamp Card',
+              onPressed: onCreate,
+            ),
+          ],
+        ),
+      );
     }
     return RefreshIndicator(
       color: Colors.black,
@@ -314,7 +358,7 @@ class _ProgramListTab extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
         itemCount: programs.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        separatorBuilder: (_, _) => const SizedBox(height: 12),
         itemBuilder: (_, i) {
           return _ProgramListCard(
             program: programs[i],
@@ -326,55 +370,79 @@ class _ProgramListTab extends StatelessWidget {
   }
 }
 
+/// Figma `Stampe Reward Empty` — illustration + copy + Create CTA.
+/// Upper-weighted stack (more empty space below), AuthScale proportions.
 class _StampEmptyState extends StatelessWidget {
   final VoidCallback onCreate;
 
   const _StampEmptyState({required this.onCreate});
 
+  static double _font(AuthScale m, double pt, {double min = 11}) =>
+      m.s(pt).clamp(min, pt * 1.2);
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    final m = AuthScale.of(context);
+    final side = m.padH.clamp(28.0, 36.0);
+    final imageH = m.s(148).clamp(120.0, 168.0);
+    final titleSize = _font(m, 24, min: 20);
+    final bodySize = _font(m, 14, min: 12);
+    final gapAfterImage = m.v(28).clamp(22.0, 34.0);
+    final gapAfterTitle = m.v(10).clamp(8.0, 14.0);
+    final gapAfterBody = m.v(32).clamp(24.0, 40.0);
+    final bottomPad = m.v(16).clamp(12.0, 24.0);
+
+    return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 28),
-      children: [
-        const SizedBox(height: 48),
-        Center(
-          child: Image.asset(
-            'assets/images/png/stamp-img.png',
-            height: 140,
-            fit: BoxFit.contain,
-            errorBuilder: (_, _, _) => Icon(
-              Icons.local_offer_outlined,
-              size: 80,
-              color: BarqodyChrome.secondaryText.withValues(alpha: 0.5),
+      slivers: [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(side, 0, side, bottomPad),
+            child: Column(
+              children: [
+                const Spacer(flex: 2),
+                Image.asset(
+                  'assets/images/png/stamp-img.png',
+                  height: imageH,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, _, _) => Icon(
+                    Icons.local_offer_outlined,
+                    size: imageH * 0.55,
+                    color: BarqodyChrome.secondaryText.withValues(alpha: 0.5),
+                  ),
+                ),
+                SizedBox(height: gapAfterImage),
+                Text(
+                  'Turn Visits Into Purchase',
+                  textAlign: TextAlign.center,
+                  style: WaUi.toolsTitleOf(
+                    size: titleSize,
+                    weight: FontWeight.w700,
+                    color: Colors.black,
+                    height: 1.2,
+                  ),
+                ),
+                SizedBox(height: gapAfterTitle),
+                Text(
+                  'Give customers a reason to come back with simple stamp rewards.',
+                  textAlign: TextAlign.center,
+                  style: WaUi.body.copyWith(
+                    fontSize: bodySize,
+                    color: AuthUi.textSecondary,
+                    height: 1.45,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: gapAfterBody),
+                PillButton(
+                  label: 'Create Stamp Card',
+                  onPressed: onCreate,
+                ),
+                const Spacer(flex: 3),
+              ],
             ),
           ),
-        ),
-        const SizedBox(height: 28),
-        Text(
-          'Turn Visits Into Purchase',
-          textAlign: TextAlign.center,
-          style: WaUi.toolsTitleOf(
-            size: 22,
-            weight: FontWeight.w700,
-            color: Colors.black,
-            height: 1.2,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          context.l10n.createYourFirstRewardCardForCustomers,
-          textAlign: TextAlign.center,
-          style: WaUi.body.copyWith(
-            fontSize: 15,
-            color: BarqodyChrome.secondaryText,
-            height: 1.4,
-          ),
-        ),
-        const SizedBox(height: 32),
-        PillButton(
-          label: 'Create Stamp Card',
-          onPressed: onCreate,
         ),
       ],
     );
@@ -390,26 +458,38 @@ class _ProgramListCard extends StatelessWidget {
     required this.onTap,
   });
 
+  static String _formatCount(int n) {
+    final s = n.toString();
+    final buf = StringBuffer();
+    for (var i = 0; i < s.length; i++) {
+      if (i > 0 && (s.length - i) % 3 == 0) buf.write(',');
+      buf.write(s[i]);
+    }
+    return buf.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     final enrollments = program.stats?.totalEnrollments ?? 0;
-    final showEnrolled = program.stats != null && enrollments > 0;
+    final title = program.title.trim().isNotEmpty
+        ? program.title.trim()
+        : (program.label.trim().isNotEmpty ? program.label.trim() : 'Stamp Card');
 
     return Material(
-      color: BarqodyChrome.fieldFill,
-      borderRadius: BorderRadius.circular(16),
+      color: const Color(0xFFF5F5F5),
+      borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.fromLTRB(12, 12, 10, 12),
           child: Row(
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: SizedBox(
-                  width: 56,
-                  height: 72,
+                  width: 64,
+                  height: 80,
                   child: program.hasDesign
                       ? LoyaltyCardDesignRenderer(
                           design: program.design!,
@@ -425,50 +505,54 @@ class _ProgramListCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      program.title,
-                      maxLines: 1,
+                      title,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: WaUi.toolsTitleOf(
-                        size: 16,
+                        size: 15,
                         weight: FontWeight.w700,
                         color: Colors.black,
+                        height: 1.2,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       '${program.stamps} Stamps',
                       style: WaUi.body.copyWith(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: BarqodyChrome.secondaryText,
+                        height: 1.2,
                       ),
                     ),
-                    if (showEnrolled) ...[
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          '$enrollments Enrolled Customers',
-                          style: WaUi.body.copyWith(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.black, width: 1),
+                      ),
+                      child: Text(
+                        '${_formatCount(enrollments)} Enrolled Customers',
+                        style: WaUi.body.copyWith(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: BarqodyChrome.secondaryText,
+                          height: 1.1,
                         ),
                       ),
-                    ],
+                    ),
                   ],
                 ),
               ),
+              const SizedBox(width: 4),
               const Icon(
                 Icons.chevron_right_rounded,
-                color: BarqodyChrome.secondaryText,
+                color: Colors.black,
+                size: 22,
               ),
             ],
           ),
@@ -551,7 +635,7 @@ class _CreateStampCardDialog extends StatelessWidget {
             Text(
               'Choose a design to start your reward card.',
               style: WaUi.body.copyWith(
-                fontSize: 15,
+                fontSize: 13,
                 color: BarqodyChrome.bodyText,
                 height: 1.4,
               ),

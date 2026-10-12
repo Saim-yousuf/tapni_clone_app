@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -25,7 +26,10 @@ import 'package:tapni_app/widgets/offline_banner.dart';
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // Hold native splash until first frame / route is ready (no white flash).
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // Web has no native splash JS unless `flutter_native_splash:create` was run for web.
+  if (!kIsWeb) {
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  }
   await SharedPrefHelper.getInstance();
   Api.init();
   // Match light theme by default (status + nav bars).
@@ -45,8 +49,10 @@ void main() async {
       ],
       child: const TapniApp(),    ),
   );
-  // FCM setup must not block cold start / splash.
-  unawaited(PushNotificationService.initialize());
+  // FCM + dart:io Platform are not available on web.
+  if (!kIsWeb) {
+    unawaited(PushNotificationService.initialize());
+  }
 }
 
 class TapniApp extends StatelessWidget {

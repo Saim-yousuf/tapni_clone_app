@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/reward.dart';
+import 'package:tapni_app/repository/loyalty_points_repo.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_program_details_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
+import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/api_error_messages.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
@@ -31,6 +33,9 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen>
   static const _muted = Color(0xFF757575);
 
   List<RewardEnrollment> _enrollments = [];
+  int _totalPoints = 0;
+  List<_CustomerPointsCard> _pointsCards = const [];
+  List<_ActivityItem> _activityItems = const [];
   bool _isLoading = true;
   String? _errorMessage;
   late final TabController _tabController;
@@ -57,17 +62,91 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen>
       _errorMessage = null;
     });
 
-    final res = await RewardRepo().getMyEnrollments();
+    final pointsRepo = LoyaltyPointsRepo();
+    final results = await Future.wait([
+      RewardRepo().getMyEnrollments(),
+      pointsRepo.getCustomerPoints(),
+      pointsRepo.getCustomerActivity(),
+    ]);
     if (!mounted) return;
+
+    final res = results[0];
+    final pointsRes = results[1];
+    final activityRes = results[2];
 
     if (res.success && res.data != null) {
       final list = res.data is List
           ? res.data as List
           : (res.data['data'] as List? ?? []);
+      final enrollments = list
+          .map((e) => RewardEnrollment.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+      var totalPoints = 0;
+      var pointsCards = <_CustomerPointsCard>[];
+      if (pointsRes.success && pointsRes.data != null) {
+        final raw =
+            pointsRes.data is Map
+                ? pointsRes.data['data'] ?? pointsRes.data
+                : pointsRes.data;
+        if (raw is Map) {
+          final map = Map<String, dynamic>.from(raw);
+          totalPoints = (map['totalPoints'] as num?)?.toInt() ?? 0;
+          final cards = map['cards'];
+          if (cards is List) {
+            for (final c in cards.whereType<Map>()) {
+              final m = Map<String, dynamic>.from(c);
+              final bizId = m['businessId']?.toString();
+              RewardEnrollment? match;
+              for (final e in enrollments) {
+                if (e.program?.businessId == bizId) {
+                  match = e;
+                  break;
+                }
+              }
+              pointsCards.add(
+                _CustomerPointsCard(
+                  name: m['businessName']?.toString() ?? 'Business',
+                  description: m['subtitle']?.toString() ?? '',
+                  points: (m['points'] as num?)?.toInt() ?? 0,
+                  photoUrl: m['businessPhoto']?.toString() ?? '',
+                  businessId: bizId,
+                  businessUsername: m['businessUsername']?.toString(),
+                  enrollment: match,
+                ),
+              );
+            }
+          }
+        }
+      }
+
+      var activityItems = <_ActivityItem>[];
+      if (activityRes.success && activityRes.data != null) {
+        final raw = activityRes.data is Map
+            ? activityRes.data['data'] ?? activityRes.data
+            : activityRes.data;
+        if (raw is List) {
+          for (final row in raw.whereType<Map>()) {
+            final m = Map<String, dynamic>.from(row);
+            activityItems.add(
+              _ActivityItem(
+                amountLabel: m['amountLabel']?.toString() ?? '',
+                positive: m['positive'] != false,
+                merchant: m['merchant']?.toString() ?? '',
+                orderLabel: m['orderLabel']?.toString() ?? '',
+                at: DateTime.tryParse(m['at']?.toString() ?? '') ??
+                    DateTime.now(),
+              ),
+            );
+          }
+        }
+      }
+
       setState(() {
-        _enrollments = list
-            .map((e) => RewardEnrollment.fromJson(e as Map<String, dynamic>))
-            .toList();
+        _enrollments = enrollments;
+        _totalPoints = totalPoints;
+        _pointsCards = pointsCards;
+        _activityItems = activityItems;
         _isLoading = false;
       });
       return;
@@ -84,36 +163,6 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen>
 
   int get _activeStampCount =>
       _enrollments.where((e) => !e.isCompleted).length;
-
-  int get _totalPoints {
-    // Customer points balance API is not wired yet; surface 0 until then.
-    return 0;
-  }
-
-  List<_CustomerPointsCard> get _pointsCards {
-    // Customer points balance is not available from the API yet.
-    return const [];
-  }
-
-  List<_ActivityItem> get _activityItems {
-    final items = <_ActivityItem>[];
-    for (final e in _enrollments) {
-      final name = e.program?.displayBusinessName ?? 'Business';
-      if (e.stamps > 0) {
-        items.add(
-          _ActivityItem(
-            amountLabel: e.stamps == 1 ? '+1 Stamp' : '+${e.stamps} Stamps',
-            positive: true,
-            merchant: name,
-            orderLabel: 'Enrollment',
-            at: e.program?.createdAt ?? DateTime.now(),
-          ),
-        );
-      }
-    }
-    items.sort((a, b) => b.at.compareTo(a.at));
-    return items;
-  }
 
   void _selectTab(int index) {
     if (_tabController.index == index && !_tabController.indexIsChanging) {
@@ -188,8 +237,8 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen>
                                             Text(
                                               'Your rewards, points, and stamp cards in one place.',
                                               style: WaUi.toolsTitleOf(
-                                                size: 22,
-                                                weight: FontWeight.w700,
+                                                size: 20,
+                                                weight: FontWeight.w600,
                                                 color: Colors.black,
                                                 height: 1.25,
                                               ),
@@ -219,8 +268,8 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen>
                                             Text(
                                               'Earn points and stamps when you shop with participating businesses.',
                                               style: WaUi.body.copyWith(
-                                                fontSize: 13,
-                                                height: 1.4,
+                                                fontSize: 12,
+                                                height: 1.35,
                                                 color: _muted,
                                               ),
                                             ),
@@ -350,7 +399,21 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen>
               cardBorder: _cardBorder,
               muted: _muted,
               formatPoints: _formatInt,
-              onTap: () => _openDetails(card.enrollment),
+              onTap: () {
+                if (card.enrollment != null) {
+                  _openDetails(card.enrollment!);
+                  return;
+                }
+                final username = card.businessUsername?.trim();
+                if (username != null && username.isNotEmpty) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          ScannedProfileScreen(username: username),
+                    ),
+                  );
+                }
+              },
             );
           },
         ),
@@ -940,7 +1003,8 @@ class _CustomerPointsCard {
   final int points;
   final String photoUrl;
   final String? businessId;
-  final RewardEnrollment enrollment;
+  final String? businessUsername;
+  final RewardEnrollment? enrollment;
 
   const _CustomerPointsCard({
     required this.name,
@@ -948,7 +1012,8 @@ class _CustomerPointsCard {
     required this.points,
     required this.photoUrl,
     required this.businessId,
-    required this.enrollment,
+    this.businessUsername,
+    this.enrollment,
   });
 }
 

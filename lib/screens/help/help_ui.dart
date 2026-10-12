@@ -4,19 +4,41 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
-/// Shared Help Center design tokens & widgets (match reference UI).
+/// Shared Help Center tokens & widgets — Figma `Help Center` (271:1735),
+/// scaled with [AuthScale] like the rest of the app.
 class HelpUi {
   HelpUi._();
 
   static const Color scaffold = Colors.white;
-  static const Color container = Color(0xFFF5F5F7);
-  static const Color searchBg = Color(0xFFF2F2F7);
-  static const Color circleBtn = Color(0xFFF2F2F7);
-  static const Color secondaryText = Color(0xFF8E8E93);
-  static const Color bodyText = Color(0xFF707070);
-  static const Color divider = Color(0xFFE8E8E8);
+  static const Color container = Color(0xFFF5F5F5);
+  static const Color containerBorder = Color(0xFFE5E7EB);
+  static const Color searchBg = Color(0xFFF5F5F5);
+  static const Color circleBtn = Color(0xFFF3F4F6);
+  static const Color secondaryText = Color(0xFF6B7280);
+  static const Color mutedText = Color(0xFFB3B3B3);
+  static const Color divider = Color(0xFFE5E7EB);
+
+  /// Design pts @ 390 width (Figma proportions).
+  static const double titleSize = 20;
+  static const double heroSize = 24;
+  static const double subtitleSize = 12;
+  static const double sectionSize = 14;
+  static const double rowSize = 13;
+  static const double articleBodySize = 12;
+  static const double searchHintSize = 16;
   static const double containerRadius = 16;
-  static const double sidePad = 20;
+  static const double searchHeight = 46;
+  static const double searchRadius = 25;
+  static const String searchIconAsset = 'assets/images/png/search-icon.png';
+
+  static double font(AuthScale m, double pt, {double min = 11}) =>
+      m.s(pt).clamp(min, pt * 1.25);
+
+  static EdgeInsets pagePad(AuthScale m, {double top = 14, double bottom = 12}) =>
+      EdgeInsets.fromLTRB(m.padH, m.v(top), m.padH, m.v(bottom));
+
+  static EdgeInsets headerPad(AuthScale m) =>
+      EdgeInsets.fromLTRB(m.padH, m.v(4), m.padH, 0);
 }
 
 /// Alias of [AuthBackButton] (OTP / Verify) for Help Center screens.
@@ -27,7 +49,10 @@ class HelpCircleBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthBackButton(onPressed: onTap);
+    return AuthBackButton(
+      onPressed: onTap,
+      backgroundColor: HelpUi.circleBtn,
+    );
   }
 }
 
@@ -49,16 +74,22 @@ class HelpSearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final h = m.s(HelpUi.searchHeight);
+    final radius = m.s(HelpUi.searchRadius);
+    final icon = m.s(20);
+    final hint = HelpUi.font(m, HelpUi.searchHintSize, min: 14);
+
     return SizedBox(
-      height: 44,
+      height: h,
       child: TextField(
         controller: controller,
         focusNode: focusNode,
         autofocus: autofocus,
         onChanged: onChanged,
         style: WaUi.body.copyWith(
-          fontSize: 15,
-          height: 1.2,
+          fontSize: hint,
+          height: 1.4,
           color: Colors.black,
         ),
         cursorColor: Colors.black,
@@ -67,46 +98,52 @@ class HelpSearchField extends StatelessWidget {
           filled: true,
           fillColor: HelpUi.searchBg,
           hintText: 'Search Help Center',
-          hintStyle: const TextStyle(
-            fontSize: 15,
+          hintStyle: TextStyle(
+            fontSize: hint,
             fontWeight: FontWeight.w400,
             color: HelpUi.secondaryText,
-            height: 1.2,
+            height: 1.4,
           ),
-          prefixIcon: const Padding(
-            padding: EdgeInsets.only(left: 14, right: 6),
-            child: Icon(
-              Icons.search,
-              size: 20,
+          prefixIcon: Padding(
+            padding: EdgeInsets.only(left: m.s(14), right: m.s(8)),
+            child: Image.asset(
+              HelpUi.searchIconAsset,
+              width: icon,
+              height: icon,
               color: HelpUi.secondaryText,
+              errorBuilder: (_, __, ___) => Icon(
+                Icons.search,
+                size: icon,
+                color: HelpUi.secondaryText,
+              ),
             ),
           ),
-          prefixIconConstraints: const BoxConstraints(
-            minWidth: 42,
-            minHeight: 44,
+          prefixIconConstraints: BoxConstraints(
+            minWidth: m.s(46),
+            minHeight: h,
           ),
           suffixIcon: controller.text.isNotEmpty
               ? IconButton(
-                  icon: const Icon(Icons.close, size: 18),
+                  icon: Icon(Icons.close, size: m.s(18)),
                   color: HelpUi.secondaryText,
                   onPressed: onClear,
                 )
               : null,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(radius),
             borderSide: BorderSide.none,
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(radius),
             borderSide: BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(radius),
             borderSide: BorderSide.none,
           ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 4,
-            vertical: 12,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: m.s(4),
+            vertical: m.s(12),
           ),
           isDense: true,
         ),
@@ -118,20 +155,23 @@ class HelpSearchField extends StatelessWidget {
 class HelpSectionTitle extends StatelessWidget {
   final String text;
   final double fontSize;
+  final FontWeight weight;
 
   const HelpSectionTitle(
     this.text, {
     super.key,
-    this.fontSize = 20,
+    this.fontSize = HelpUi.sectionSize,
+    this.weight = FontWeight.w500,
   });
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
     return Text(
       text,
       style: WaUi.toolsTitleOf(
-        size: fontSize,
-        weight: FontWeight.w700,
+        size: HelpUi.font(m, fontSize, min: 13),
+        weight: weight,
         color: Colors.black,
       ),
     );
@@ -150,36 +190,44 @@ class HelpTopicListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final radius = m.s(HelpUi.containerRadius);
+    final rowPadH = m.s(14);
+    final rowPadV = m.s(12);
+    final rowFont = HelpUi.font(m, HelpUi.rowSize, min: 12);
+    final chevron = m.s(18);
+    final dividerInset = m.s(12);
+
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         color: HelpUi.container,
-        borderRadius: BorderRadius.circular(HelpUi.containerRadius),
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: HelpUi.containerBorder),
       ),
       child: Column(
         children: [
           for (var i = 0; i < topics.length; i++) ...[
             if (i > 0)
-              const Divider(
+              Divider(
                 height: 1,
                 thickness: 1,
                 color: HelpUi.divider,
-                indent: 16,
-                endIndent: 16,
+                indent: dividerInset,
+                endIndent: dividerInset,
               ),
             InkWell(
               onTap: () => onTap(topics[i]),
               borderRadius: BorderRadius.vertical(
-                top: i == 0
-                    ? const Radius.circular(HelpUi.containerRadius)
-                    : Radius.zero,
+                top: i == 0 ? Radius.circular(radius) : Radius.zero,
                 bottom: i == topics.length - 1
-                    ? const Radius.circular(HelpUi.containerRadius)
+                    ? Radius.circular(radius)
                     : Radius.zero,
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
+                padding: EdgeInsets.symmetric(
+                  horizontal: rowPadH,
+                  vertical: rowPadV,
                 ),
                 child: Row(
                   children: [
@@ -187,15 +235,16 @@ class HelpTopicListCard extends StatelessWidget {
                       child: Text(
                         topics[i].title,
                         style: WaUi.body.copyWith(
-                          fontSize: 15,
+                          fontSize: rowFont,
                           fontWeight: FontWeight.w500,
                           color: Colors.black,
+                          height: 1.4,
                         ),
                       ),
                     ),
-                    const Icon(
+                    Icon(
                       Icons.chevron_right_rounded,
-                      size: 22,
+                      size: chevron,
                       color: HelpUi.secondaryText,
                     ),
                   ],
@@ -253,27 +302,34 @@ class _HelpArticleAccordionState extends State<HelpArticleAccordion> {
     final articles = widget.articles;
     if (articles.isEmpty) return const SizedBox.shrink();
 
+    final m = AuthScale.of(context);
+    final radius = m.s(HelpUi.containerRadius);
+    final dividerInset = m.s(12);
+
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         color: HelpUi.container,
-        borderRadius: BorderRadius.circular(HelpUi.containerRadius),
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: HelpUi.containerBorder),
       ),
       child: Column(
         children: [
           for (var i = 0; i < articles.length; i++) ...[
             if (i > 0)
-              const Divider(
+              Divider(
                 height: 1,
                 thickness: 1,
                 color: HelpUi.divider,
-                indent: 16,
-                endIndent: 16,
+                indent: dividerInset,
+                endIndent: dividerInset,
               ),
             _AccordionItem(
               article: articles[i],
               expanded: _expandedId == articles[i].id,
               isFirst: i == 0,
               isLast: i == articles.length - 1,
+              radius: radius,
               onTap: () {
                 setState(() {
                   _expandedId =
@@ -293,6 +349,7 @@ class _AccordionItem extends StatelessWidget {
   final bool expanded;
   final bool isFirst;
   final bool isLast;
+  final double radius;
   final VoidCallback onTap;
 
   const _AccordionItem({
@@ -300,25 +357,27 @@ class _AccordionItem extends StatelessWidget {
     required this.expanded,
     required this.isFirst,
     required this.isLast,
+    required this.radius,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final titleSize = HelpUi.font(m, HelpUi.rowSize, min: 12);
+    final bodySize = HelpUi.font(m, HelpUi.articleBodySize, min: 11);
+    final chevron = m.s(18);
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.vertical(
-          top: isFirst
-              ? const Radius.circular(HelpUi.containerRadius)
-              : Radius.zero,
-          bottom: isLast && !expanded
-              ? const Radius.circular(HelpUi.containerRadius)
-              : Radius.zero,
+          top: isFirst ? Radius.circular(radius) : Radius.zero,
+          bottom: isLast && !expanded ? Radius.circular(radius) : Radius.zero,
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 12, 16),
+          padding: EdgeInsets.fromLTRB(m.s(14), m.s(12), m.s(10), m.s(12)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -329,31 +388,31 @@ class _AccordionItem extends StatelessWidget {
                     child: Text(
                       article.title,
                       style: WaUi.body.copyWith(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
+                        fontSize: titleSize,
+                        fontWeight: FontWeight.w500,
                         color: Colors.black,
-                        height: 1.3,
+                        height: 1.4,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: m.s(8)),
                   Icon(
                     expanded
                         ? Icons.keyboard_arrow_up_rounded
                         : Icons.keyboard_arrow_down_rounded,
-                    size: 22,
+                    size: chevron,
                     color: HelpUi.secondaryText,
                   ),
                 ],
               ),
               if (expanded) ...[
-                const SizedBox(height: 10),
+                SizedBox(height: m.v(8)),
                 Text(
                   article.body,
                   style: WaUi.body.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: HelpUi.bodyText,
+                    fontSize: bodySize,
+                    fontWeight: FontWeight.w500,
+                    color: HelpUi.secondaryText,
                     height: 1.45,
                   ),
                 ),
@@ -371,34 +430,37 @@ class HelpEmptySearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final art = m.s(120);
+
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
+        padding: EdgeInsets.symmetric(horizontal: m.padH * 1.2),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
               'assets/images/png/empty-search.png',
-              width: 120,
-              height: 120,
+              width: art,
+              height: art,
               fit: BoxFit.contain,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: m.v(24)),
             Text(
               'No Results Found',
               textAlign: TextAlign.center,
               style: WaUi.toolsTitleOf(
-                size: 20,
-                weight: FontWeight.w700,
+                size: HelpUi.font(m, HelpUi.titleSize, min: 18),
+                weight: FontWeight.w600,
                 color: Colors.black,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: m.v(10)),
             Text(
               'We couldn’t find anything matching your search. Try different keywords or browse the topics below.',
               textAlign: TextAlign.center,
               style: WaUi.body.copyWith(
-                fontSize: 14,
+                fontSize: HelpUi.font(m, 14, min: 13),
                 color: HelpUi.secondaryText,
                 height: 1.4,
               ),
@@ -417,21 +479,89 @@ class HelpContactUsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Divider(height: 1, thickness: 1, color: HelpUi.divider),
-        SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-            child: PillButton(
-              label: 'Contact Us',
-              onPressed: onPressed,
-            ),
+    final m = AuthScale.of(context);
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: HelpUi.containerBorder),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0x40000000),
+            blurRadius: m.s(5),
+            offset: Offset(0, m.s(1)),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(m.padH, m.v(16), m.padH, m.v(16)),
+          child: PillButton(
+            label: 'Contact Us',
+            onPressed: onPressed,
           ),
         ),
-      ],
+      ),
+    );
+  }
+}
+
+/// Decorative search bar on the home layout; opens the real search field.
+class HelpSearchBarTapTarget extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const HelpSearchBarTapTarget({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final h = m.s(HelpUi.searchHeight);
+    final radius = m.s(HelpUi.searchRadius);
+    final icon = m.s(20);
+    final hint = HelpUi.font(m, HelpUi.searchHintSize, min: 14);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: h,
+        padding: EdgeInsets.symmetric(horizontal: m.s(14)),
+        decoration: BoxDecoration(
+          color: HelpUi.searchBg,
+          borderRadius: BorderRadius.circular(radius),
+        ),
+        child: Row(
+          children: [
+            Image.asset(
+              HelpUi.searchIconAsset,
+              width: icon,
+              height: icon,
+              color: HelpUi.secondaryText,
+              errorBuilder: (_, __, ___) => Icon(
+                Icons.search,
+                size: icon,
+                color: HelpUi.secondaryText,
+              ),
+            ),
+            SizedBox(width: m.s(10)),
+            Expanded(
+              child: Text(
+                'Search Help Center',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: WaUi.body.copyWith(
+                  fontSize: hint,
+                  fontWeight: FontWeight.w400,
+                  color: HelpUi.secondaryText,
+                  height: 1.4,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
