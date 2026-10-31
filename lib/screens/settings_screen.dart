@@ -4,22 +4,19 @@ import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
-import 'package:tapni_app/screens/attendance/business/attendance_dashboard_screen.dart';
 import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/models/attendance.dart';
-import 'package:tapni_app/screens/banner_ads/banner_ads_plans_screen.dart';
 import 'package:tapni_app/screens/linked_devices/account_switcher_sheet.dart';
 import 'package:tapni_app/screens/linked_devices/linked_devices_screen.dart';
 import 'package:tapni_app/l10n/app_languages.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/screens/app_language_screen.dart';
-import 'package:tapni_app/screens/business_profile_screen.dart';
+import 'package:tapni_app/screens/business_suite_screen.dart';
 import 'package:tapni_app/screens/find_user_screen.dart';
 import 'package:tapni_app/screens/help/help_center_screen.dart';
 import 'package:tapni_app/screens/invitations/invitations_home_screen.dart';
 import 'package:tapni_app/screens/phone_auth_screen.dart';
-import 'package:tapni_app/screens/loyalty_program/business/loyalty_hub_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/notifications_screen.dart';
@@ -30,12 +27,9 @@ import 'package:tapni_app/screens/set_username_screen.dart';
 import 'package:tapni_app/screens/workplace_screen.dart';
 import 'package:tapni_app/screens/caller_id_setup_screen.dart';
 import 'package:tapni_app/services/caller_id_service.dart';
-import 'package:tapni_app/utils/business_completeness.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
-import 'package:tapni_app/widgets/business_completeness_sheet.dart';
 import 'package:tapni_app/widgets/feedback_dialog.dart';
 import 'package:tapni_app/widgets/logout_confirm_dialog.dart';
-import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/settings_widget.dart';
 import 'package:tapni_app/widgets/wa_tools_widgets.dart';
 
@@ -47,7 +41,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _promoDismissed = false;
   int _pendingInvitationCount = 0;
   bool _updatingVisibility = false;
 
@@ -120,12 +113,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  int _catalogOrderBadge(LeadsProvider leadsProvider) {
-    return leadsProvider.notifications
-        .where((n) => n['type'] == 'catalog_order' && n['isRead'] == false)
-        .length;
-  }
-
   Future<void> _toggleProfileVisibility(bool isPublic) async {
     if (_updatingVisibility) return;
     setState(() => _updatingVisibility = true);
@@ -160,7 +147,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final profile = Provider.of<ProfileProvider>(context).profile;
     final leadsProvider = Provider.of<LeadsProvider>(context);
     final localeProvider = Provider.of<LocaleProvider>(context);
-    final orderBadge = _catalogOrderBadge(leadsProvider);
     final unreadCount = leadsProvider.unreadNotificationsCount;
     final languageSubtitle = localeProvider.isSystemLanguage
         ? context.l10n.phoneLanguage
@@ -232,17 +218,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: ListView(
                   padding: const EdgeInsets.only(bottom: 24),
                   children: [
-                    if (!profile.isPro && !_promoDismissed) ...[
-                      WaSectionHeader(context.l10n.forYou),
-                      WaForYouCard(
-                        title: context.l10n.tryBusinessPro2,
-                        description: context.l10n.unlockBusinessProDescription,
-                        buttonLabel: context.l10n.tryBusinessPro,
-                        onTap: () => SubcriptionSheet.show(context),
-                        onDismiss: () => setState(() => _promoDismissed = true),
-                      ),
-                    ],
-          
+                    const SizedBox(height: 8),
+                    _BusinessSuiteCard(
+                      showBadge: profile.isPro &&
+                          leadsProvider.notifications.any(
+                            (n) =>
+                                n['type'] == 'catalog_order' &&
+                                n['isRead'] == false,
+                          ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const BusinessSuiteScreen(),
+                          ),
+                        );
+                      },
+                    ),
                     WaSectionHeader(context.l10n.yourProfile),
                     WaToolsListTile(
                       icon: Icons.person_outline,
@@ -258,31 +249,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           MaterialPageRoute(
                             builder: (_) => MainShell(currentPage: 'My Card'),
                           ),
-                        );
-                      },
-                    ),
-                    Builder(
-                      builder: (context) {
-                        final completeness = BusinessCompleteness.fromProfile(
-                          profile,
-                        );
-                        return WaToolsListTile(
-                          icon: Icons.storefront_outlined,
-                          title: 'Business Profile',
-                          subtitle: profile.isPro
-                              ? completeness.progressLabel
-                              : 'Name, industry, and public location',
-                          onTap: () {
-                            if (!profile.isPro) {
-                              SubcriptionSheet.show(context);
-                              return;
-                            }
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => const BusinessProfileScreen(),
-                              ),
-                            );
-                          },
                         );
                       },
                     ),
@@ -385,8 +351,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     WaSectionHeader(context.l10n.shoppingRewards),
                     WaToolsListTile(
                       icon: Icons.receipt_long_outlined,
-                      title: context.l10n.myOrders,
-                      subtitle: context.l10n.myOrdersSubtitle,
+                      title: 'My Orders & Bookings',
+                      subtitle: 'Orders, appointments, and stays in one place',
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -425,71 +391,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         _loadPendingInvitations();
                       },
                     ),
-          
-                    if (profile.isPro) ...[
-                      WaSectionHeader(context.l10n.growYourBusiness),
-                      WaToolsListTile(
-                        icon: Icons.storefront_outlined,
-                        title: context.l10n.customerOrders,
-                        subtitle:
-                            context.l10n.viewAndUpdateOrdersFromYourCustomers,
-                        showBadge: orderBadge > 0,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  OrdersListScreen(isBusinessView: true),
-                            ),
-                          );
-                        },
-                      ),
-                      WaToolsListTile(
-                        icon: Icons.groups_outlined,
-                        title: context.l10n.teamAttendance,
-                        subtitle:
-                            context.l10n.inviteEmployeesSetShiftsAndTrackPresence,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              settings: const RouteSettings(
-                                name: AttendanceDashboardScreen.routeName,
-                              ),
-                              builder: (_) => const AttendanceDashboardScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                      WaToolsListTile(
-                        icon: Icons.stars_outlined,
-                        title: context.l10n.loyaltyPrograms,
-                        subtitle:
-                            context.l10n.createStampOrPointsRewardsForCustomers,
-                        onTap: () async {
-                          final ok = await ensureBusinessProfileComplete(context);
-                          if (!ok || !context.mounted) return;
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const LoyaltyHubScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                      WaToolsListTile(
-                        icon: Icons.campaign_outlined,
-                        title: 'Banner Ads',
-                        subtitle:
-                            'Promote your business on the Explore carousel',
-                        onTap: () async {
-                          final ok = await ensureBusinessProfileComplete(context);
-                          if (!ok || !context.mounted) return;
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const BannerAdsPlansScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
           
                     WaSectionHeader(context.l10n.accountsAndDevices),
                     WaToolsListTile(
@@ -579,6 +480,94 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BusinessSuiteCard extends StatelessWidget {
+  final bool showBadge;
+  final VoidCallback onTap;
+
+  const _BusinessSuiteCard({
+    required this.showBadge,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 6, 20, 10),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(18),
+          child: Ink(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            padding: const EdgeInsets.fromLTRB(16, 16, 14, 16),
+            child: Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: const Icon(
+                    Icons.business_center_outlined,
+                    color: Colors.white,
+                    size: 26,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Business Suite',
+                        style: WaUi.listTitle.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 17,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Orders, bookings, team, loyalty, ads & more',
+                        style: WaUi.listSubtitle.copyWith(
+                          color: Colors.white.withValues(alpha: 0.72),
+                          fontSize: 13,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (showBadge)
+                  Container(
+                    width: 10,
+                    height: 10,
+                    margin: const EdgeInsets.only(right: 8),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF34C759),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 24,
+                  color: Colors.white.withValues(alpha: 0.55),
+                ),
+              ],
+            ),
           ),
         ),
       ),

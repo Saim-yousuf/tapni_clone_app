@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -221,16 +222,35 @@ class PushNotificationService {
   static Future<void> syncTokenWithBackend() => _syncTokenWithBackend();
 
   static Future<void> removeTokenFromBackend() async {
-    final token = _currentToken ?? await _messaging.getToken();
-    if (token == null || token.isEmpty) return;
+    // Never block logout if FCM/web Firebase is unavailable.
+    try {
+      String? token = _currentToken;
+      if (token == null || token.isEmpty) {
+        if (kIsWeb) {
+          _currentToken = null;
+          return;
+        }
+        token = await _messaging.getToken();
+      }
+      if (token == null || token.isEmpty) {
+        _currentToken = null;
+        return;
+      }
 
-    final authToken = SharedPrefHelper.getString(
-      SharedPrefHelper.utils.authorizedToken,
-    );
-    if (authToken.isEmpty) return;
+      final authToken = SharedPrefHelper.getString(
+        SharedPrefHelper.utils.authorizedToken,
+      );
+      if (authToken.isEmpty) {
+        _currentToken = null;
+        return;
+      }
 
-    await _authRepo.removeFcmToken(token: token);
-    _currentToken = null;
+      await _authRepo.removeFcmToken(token: token);
+    } catch (e) {
+      debugPrint('PushNotificationService: removeToken failed — $e');
+    } finally {
+      _currentToken = null;
+    }
   }
 
   static Future<void> _syncTokenWithBackend({String? forceToken}) async {

@@ -60,6 +60,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
   String? _facePhotoBase64;
   bool _isSaving = false;
   bool _isLoadingLocation = false;
+  bool _bookableForAppointments = false;
 
   bool get _isAddFlow => widget.employee == null;
 
@@ -94,6 +95,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
             )
           : (meters / 1000).toString();
       _radiusController.text = km;
+      _bookableForAppointments = employee.bookableForAppointments;
     } else {
       // Add Member: load GPS so the map preview is visible (Figma-style).
       _bootstrapCurrentLocation();
@@ -221,6 +223,7 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
       'shiftStart': _formatTimeApi(_shiftStart),
       'shiftEnd': _formatTimeApi(_shiftEnd),
       'weekendDays': _weekendDays.toList()..sort(),
+      'bookableForAppointments': _bookableForAppointments,
       'location': {
         'latitude': _latitude,
         'longitude': _longitude,
@@ -528,6 +531,41 @@ class _EmployeeSettingsScreenState extends State<EmployeeSettingsScreen> {
                       );
                     }),
                   ),
+                  if (!_isAddFlow) ...[
+                    SizedBox(height: m.v(22)),
+                    const _SectionLabel('ONLINE BOOKING'),
+                    SizedBox(height: m.v(10)),
+                    Material(
+                      color: _fieldFill,
+                      borderRadius: BorderRadius.circular(_fieldRadius),
+                      child: SwitchListTile.adaptive(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
+                        title: Text(
+                          'Offer as bookable specialist',
+                          style: AppFonts.textStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                        subtitle: Text(
+                          'Customers can pick this person for appointments (doctor, stylist, etc.). Attendance staff stay off the booking list unless enabled.',
+                          style: AppFonts.textStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: _labelColor,
+                          ),
+                        ),
+                        value: _bookableForAppointments,
+                        activeThumbColor: Colors.black,
+                        onChanged: (v) =>
+                            setState(() => _bookableForAppointments = v),
+                      ),
+                    ),
+                  ],
                   // Face photo only when editing an existing employee.
                   if (!_isAddFlow) ...[
                     SizedBox(height: m.v(22)),

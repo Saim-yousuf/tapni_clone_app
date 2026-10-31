@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:phone_hint_android/phone_hint_android.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
@@ -30,12 +32,17 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   CountryDialCode _country = defaultCountryDialCode;
   bool _alreadyOnDevice = false;
   String? _phoneError;
+  bool _phoneHintShown = false;
 
   @override
   void initState() {
     super.initState();
     _phoneFocus.addListener(() {
-      if (mounted) setState(() {});
+      if (!mounted) return;
+      setState(() {});
+      if (_phoneFocus.hasFocus) {
+        _offerPhoneNumberHint();
+      }
     });
   }
 
@@ -44,6 +51,45 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     _phoneController.dispose();
     _phoneFocus.dispose();
     super.dispose();
+  }
+
+  /// Android Phone Number Hint sheet (SIM numbers) when the field is tapped.
+  Future<void> _offerPhoneNumberHint() async {
+    if (_phoneHintShown) return;
+    if (_phoneController.text.trim().isNotEmpty) return;
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+    _phoneHintShown = true;
+    try {
+      final raw = await PhoneHintAndroid().getPhoneNumber();
+      if (!mounted || raw == null || raw.trim().isEmpty) return;
+      _applyHintPhone(raw.trim());
+    } catch (_) {
+      // Dismissed / unavailable — user can type manually.
+    }
+  }
+
+  void _applyHintPhone(String raw) {
+    final normalized = PhoneUtils.normalize(raw, countryCode: _country.code);
+    if (normalized.isEmpty) return;
+    final matched = findCountryByPhone(normalized) ?? _country;
+    final allDigits = PhoneUtils.digitsOnly(normalized);
+    final cc = matched.code.replaceAll(RegExp(r'\D'), '');
+    var local = allDigits;
+    if (cc.isNotEmpty && local.startsWith(cc)) {
+      local = local.substring(cc.length);
+    }
+    if (local.startsWith('0')) {
+      local = local.substring(1);
+    }
+    setState(() {
+      _country = matched;
+      _phoneController.value = TextEditingValue(
+        text: local,
+        selection: TextSelection.collapsed(offset: local.length),
+      );
+      _phoneError = null;
+    });
+    _checkAlreadyOnDevice();
   }
 
   String _normalizedPhone() {
@@ -170,21 +216,22 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
       body: SafeArea(
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const AuthAppBarTitle('LOGIN'),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.fromLTRB(
-                    m.padH,
-                    m.v(40),
-                    m.padH,
-                    m.v(24),
-                  ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
+          child: AutofillGroup(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const AuthAppBarTitle('LOGIN'),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.fromLTRB(
+                      m.padH,
+                      m.v(40),
+                      m.padH,
+                      m.v(24),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
                               Text(
                                 context.l10n.welcomeBack,
                                 textAlign: TextAlign.left,
@@ -377,11 +424,12 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                                 ),
                                 textAlign: TextAlign.center,
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-            ],
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -516,38 +564,49 @@ class _PhoneField extends StatelessWidget {
             color: AuthUi.border,
           ),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: padH * 0.85),
-              // Theme's InputDecorationTheme draws a nested outline —
-              // fully override so only the outer field border shows.
-              child: TextField(
-                controller: controller,
-                focusNode: focusNode,
-                keyboardType: TextInputType.phone,
-                textInputAction: TextInputAction.done,
-                style: inputStyle,
-                cursorColor: AuthUi.textPrimary,
-                cursorWidth: 1.5,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(15),
-                ],
-                onChanged: onChanged,
-                onSubmitted: onSubmitted,
-                decoration: InputDecoration(
-                  isCollapsed: true,
-                  isDense: true,
-                  filled: false,
-                  fillColor: Colors.transparent,
-                  contentPadding: EdgeInsets.zero,
-                  hintText: '(555) 123-4567',
-                  hintStyle: hintStyle,
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  focusedErrorBorder: InputBorder.none,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => focusNode.requestFocus(),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: padH * 0.85),
+                // Theme's InputDecorationTheme draws a nested outline —
+                // fully override so only the outer field border shows.
+                child: TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.done,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  autofillHints: const [
+                    AutofillHints.telephoneNumber,
+                    AutofillHints.telephoneNumberNational,
+                    AutofillHints.telephoneNumberDevice,
+                  ],
+                  style: inputStyle,
+                  cursorColor: AuthUi.textPrimary,
+                  cursorWidth: 1.5,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(15),
+                  ],
+                  onChanged: onChanged,
+                  onSubmitted: onSubmitted,
+                  decoration: InputDecoration(
+                    isCollapsed: true,
+                    isDense: true,
+                    filled: false,
+                    fillColor: Colors.transparent,
+                    contentPadding: EdgeInsets.zero,
+                    hintText: '(555) 123-4567',
+                    hintStyle: hintStyle,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
+                  ),
                 ),
               ),
             ),

@@ -949,6 +949,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.2"
+  phone_hint_android:
+    dependency: "direct main"
+    description:
+      name: phone_hint_android
+      sha256: "8a3a230d4faf9b373e78e04e181849db859ec0727764cdb81120531d8a4fbe65"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   platform:
     dependency: transitive
     description:
@@ -1378,6 +1386,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.15.1"
+  webview_flutter_web:
+    dependency: "direct main"
+    description:
+      name: webview_flutter_web
+      sha256: "18a7ccc1c31dd9a5c759a1b7217a2a1e04bd8f65712714a4070bfac19a23ca9e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.3+4"
   webview_flutter_wkwebview:
     dependency: transitive
     description:

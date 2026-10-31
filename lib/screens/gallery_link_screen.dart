@@ -38,12 +38,12 @@ class _GalleryLinkScreenState extends State<GalleryLinkScreen> {
     }
 
     final picked = await pickMultiFile();
-    if (picked == null || picked.files.isEmpty || !mounted) return;
+    if (picked == null || picked.bytesList.isEmpty || !mounted) return;
 
     final remaining =
         ProfileProvider.galleryMaxItems - profileProvider.profile.gallery.length;
-    final files = picked.files.take(remaining).toList();
-    final res = await profileProvider.addGalleryPhotos(files);
+    final images = picked.bytesList.take(remaining).toList();
+    final res = await profileProvider.addGalleryPhotos(images);
     if (!mounted) return;
 
     final added = res.data is Map ? res.data['added'] as int? : null;

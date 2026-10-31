@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/helper/link_entries_cache.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/social_link.dart';
@@ -17,8 +17,13 @@ import 'package:tapni_app/widgets/contact_card_sheet.dart' as contact_card;
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:tapni_app/widgets/business_completeness_sheet.dart';
+import 'package:tapni_app/repository/business_website_repo.dart';
+import 'package:tapni_app/screens/business_website/business_website_settings_screen.dart';
+import 'package:tapni_app/screens/business_website/business_website_setup_screen.dart'
+    show BusinessWebsiteSetupScreen, websiteTypeFromCatalogType;
 import 'package:tapni_app/screens/catalog/document_link_form_screen.dart';
 import 'package:tapni_app/screens/gallery_link_screen.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 
@@ -185,29 +190,53 @@ class LinkSheet {
                             );
                             final hasGallery = watchedProvider.profile.socialLinks
                                 .any((link) => link.isGalleryLink);
-                            final withoutDuplicateGallery = hasGallery
-                                ? countryFiltered
-                                    .map(
-                                      (category) => category.copyWith(
-                                        templates: category.templates
-                                            .where(
-                                              (template) =>
-                                                  !isGalleryLinkTemplate(
-                                                    template,
-                                                  ),
-                                            )
-                                            .toList(),
-                                      ),
-                                    )
-                                    .where(
-                                      (category) =>
-                                          category.templates.isNotEmpty,
-                                    )
-                                    .toList()
-                                : countryFiltered;
+                            final hasBusinessWebsite = watchedProvider
+                                .profile.socialLinks
+                                .any((link) => link.isBusinessWebsiteLink);
+                            var dedupedCatalog = countryFiltered;
+                            if (hasGallery) {
+                              dedupedCatalog = dedupedCatalog
+                                  .map(
+                                    (category) => category.copyWith(
+                                      templates: category.templates
+                                          .where(
+                                            (template) =>
+                                                !isGalleryLinkTemplate(
+                                                  template,
+                                                ),
+                                          )
+                                          .toList(),
+                                    ),
+                                  )
+                                  .where(
+                                    (category) =>
+                                        category.templates.isNotEmpty,
+                                  )
+                                  .toList();
+                            }
+                            if (hasBusinessWebsite) {
+                              dedupedCatalog = dedupedCatalog
+                                  .map(
+                                    (category) => category.copyWith(
+                                      templates: category.templates
+                                          .where(
+                                            (template) =>
+                                                !isBusinessWebsiteLinkTemplate(
+                                                  template,
+                                                ),
+                                          )
+                                          .toList(),
+                                    ),
+                                  )
+                                  .where(
+                                    (category) =>
+                                        category.templates.isNotEmpty,
+                                  )
+                                  .toList();
+                            }
                             final catalog = query.isEmpty
-                                ? withoutDuplicateGallery
-                                : withoutDuplicateGallery
+                                ? dedupedCatalog
+                                : dedupedCatalog
                                       .map((category) {
                                         final templates = category.templates
                                             .where(
@@ -495,8 +524,18 @@ class LinkSheet {
                             ),
                           );
                         }
+                      } else if (isBusinessWebsiteLinkTemplate(template) ||
+                          template.actionType == 'business_website') {
+                        // All-in-one Business Website is retired.
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Use Menu, Services, Products, or Portfolio instead',
+                            ),
+                          ),
+                        );
                       } else if (template.actionType == 'menu_catalog') {
-                        _openMenuCatalogFromTemplate(
+                        await _openTypedWebsiteFromCatalogTemplate(
                           context,
                           template,
                           provider,
@@ -625,8 +664,10 @@ class LinkSheet {
     if (template.actionType == 'menu_catalog' ||
         template.actionType == 'gallery' ||
         template.actionType == 'document' ||
+        template.actionType == 'business_website' ||
         isGalleryLinkTemplate(template) ||
-        isDocumentsLinkTemplate(template)) {
+        isDocumentsLinkTemplate(template) ||
+        isBusinessWebsiteLinkTemplate(template)) {
       return null;
     }
 
@@ -642,7 +683,10 @@ class LinkSheet {
     if (label.isEmpty) return null;
 
     for (final link in links) {
-      if (link.isGalleryLink || link.isDocumentLink || link.isCatalogLink) {
+      if (link.isGalleryLink ||
+          link.isDocumentLink ||
+          link.isCatalogLink ||
+          link.isBusinessWebsiteLink) {
         continue;
       }
       final linkLabel = link.platformName.trim().toLowerCase();
@@ -658,8 +702,8 @@ class LinkSheet {
 
   Future<String> _pickLogoBase64() async {
     final file = await pickFile();
-    if (file?.file == null) return '';
-    return fileToBase64(File(file!.file!.path));
+    if (file == null || !file.hasData) return '';
+    return pickedToBase64(file);
   }
 
   void _showCustomTemplateBottomSheet(
@@ -2060,6 +2104,233 @@ class LinkSheet {
     );
   }
 
+  /// Menu / Services / Products / Portfolio → type-specific website setup,
+  /// then manage items with the existing catalog sheet.
+  Future<void> _openTypedWebsiteFromCatalogTemplate(
+    BuildContext context,
+    LinkTemplate template,
+    ProfileProvider provider,
+  ) async {
+    final ok = await ensureBusinessProfileComplete(context);
+    if (!ok || !context.mounted) return;
+
+    final catalogType = _resolveCatalogType(null, template, provider);
+    final websiteType = websiteTypeFromCatalogType(catalogType);
+
+    final repo = BusinessWebsiteRepo();
+    final mineRes = await repo.getMine(websiteType: websiteType);
+    if (!context.mounted) return;
+
+    final website =
+        mineRes.success ? repo.parseWebsite(mineRes.data) : null;
+
+    if (website != null) {
+      await provider.addBusinessWebsiteLink(
+        template: template,
+        publicUrl: website.resolvedPublicUrl,
+        context: context,
+        websiteType: websiteType,
+        catalogType: catalogType,
+      );
+      if (!context.mounted) return;
+      await Navigator.push(
+        context,
+        AppPageRoute(
+          builder: (_) => BusinessWebsiteSettingsScreen(
+            initialWebsite: website,
+            linkTemplate: template,
+          ),
+        ),
+      );
+      return;
+    }
+
+    await Navigator.push(
+      context,
+      AppPageRoute(
+        builder: (_) => BusinessWebsiteSetupScreen(
+          linkTemplate: template,
+          websiteType: websiteType,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openBusinessWebsiteFromTemplate(
+    BuildContext context,
+    LinkTemplate template,
+    ProfileProvider provider,
+  ) async {
+    // Legacy entry — redirect to menu-type flow.
+    await _openTypedWebsiteFromCatalogTemplate(
+      context,
+      template,
+      provider,
+    );
+  }
+
+  void _showBusinessWebsiteLinkBottomSheet(
+    BuildContext context,
+    SocialLink link,
+    ProfileProvider provider,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    bool showLink = link.isPublic;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(ctx).viewInsets.bottom,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF111111) : Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(24),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SheetHeader(
+                      title: link.platformName.isNotEmpty
+                          ? link.platformName
+                          : 'Business Website',
+                      onBack: () => Navigator.pop(ctx),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      height: WaUi.primaryButtonHeight,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                          Launcher.openLink(link, context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.primaryBlack,
+                          elevation: 0,
+                          shape: const StadiumBorder(),
+                        ),
+                        child: const Text(
+                          'Open website',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: WaUi.primaryButtonHeight,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                          Navigator.push(
+                            context,
+                            AppPageRoute(
+                              builder: (_) =>
+                                  const BusinessWebsiteSettingsScreen(),
+                            ),
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppTheme.primaryBlack,
+                          side: const BorderSide(color: AppTheme.primaryBlack),
+                          shape: const StadiumBorder(),
+                        ),
+                        child: const Text(
+                          'Manage website',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(context.l10n.showLink),
+                      value: showLink,
+                      onChanged: (value) {
+                        setState(() => showLink = value);
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        _deleteCircleButton(() async {
+                          await provider.deleteSocialLink(link.id, context);
+                          if (ctx.mounted) Navigator.pop(ctx);
+                        }),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: SizedBox(
+                            height: WaUi.primaryButtonHeight,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final updated = link.copyWith(
+                                  isPublic: showLink,
+                                  isActive: true,
+                                );
+                                final links = List<SocialLink>.from(
+                                  provider.profile.socialLinks,
+                                );
+                                final index = links.indexWhere(
+                                  (item) => item.id == link.id,
+                                );
+                                if (index != -1) {
+                                  links[index] = updated;
+                                  await provider.updateLinks(
+                                    links: links,
+                                    context: context,
+                                  );
+                                }
+                                if (ctx.mounted) Navigator.pop(ctx);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppTheme.primaryBlack,
+                                elevation: 0,
+                                shape: const StadiumBorder(),
+                              ),
+                              child: Text(
+                                context.l10n.save,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   void _showGalleryLinkBottomSheet(
     BuildContext context,
     SocialLink link,
@@ -2224,6 +2495,13 @@ class LinkSheet {
     if (link.isGalleryLink ||
         (catalogTemplate != null && isGalleryLinkTemplate(catalogTemplate))) {
       _showGalleryLinkBottomSheet(context, link, provider);
+      return;
+    }
+
+    if (link.isBusinessWebsiteLink ||
+        (catalogTemplate != null &&
+            isBusinessWebsiteLinkTemplate(catalogTemplate))) {
+      _showBusinessWebsiteLinkBottomSheet(context, link, provider);
       return;
     }
 

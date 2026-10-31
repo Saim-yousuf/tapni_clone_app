@@ -239,6 +239,11 @@ bool isGalleryLinkTemplate(LinkTemplate template) {
       template.label.trim().toLowerCase() == 'gallery';
 }
 
+bool isBusinessWebsiteLinkTemplate(LinkTemplate template) {
+  return template.actionType == 'business_website' ||
+      template.label.trim().toLowerCase() == 'business website';
+}
+
 LinkTemplate galleryLinkTemplate({String categoryId = ''}) {
   return LinkTemplate(
     id: '',

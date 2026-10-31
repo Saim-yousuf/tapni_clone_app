@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tapni_app/models/bookable_resource.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/service_schedule.dart';
+import 'package:tapni_app/repository/booking_repo.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
@@ -12,11 +14,15 @@ class ServiceBookingResult {
   final String bookingDate;
   final String bookingTime;
   final bool bookNow;
+  final String? resourceId;
+  final String? resourceName;
 
   const ServiceBookingResult({
     required this.bookingDate,
     required this.bookingTime,
     required this.bookNow,
+    this.resourceId,
+    this.resourceName,
   });
 }
 
@@ -27,6 +33,7 @@ Future<ServiceBookingResult?> showServiceBookingSheet({
   required String businessLinkId,
   required String businessName,
   String? currency,
+  bool allowLater = true,
 }) {
   return showModalBottomSheet<ServiceBookingResult>(
     context: context,
@@ -40,6 +47,7 @@ Future<ServiceBookingResult?> showServiceBookingSheet({
       businessLinkId: businessLinkId,
       businessName: businessName,
       currency: currency,
+      allowLater: allowLater,
     ),
   );
 }
@@ -50,6 +58,7 @@ class ServiceBookingSheet extends StatefulWidget {
   final String businessLinkId;
   final String businessName;
   final String? currency;
+  final bool allowLater;
 
   const ServiceBookingSheet({
     super.key,
@@ -58,6 +67,7 @@ class ServiceBookingSheet extends StatefulWidget {
     required this.businessLinkId,
     required this.businessName,
     this.currency,
+    this.allowLater = true,
   });
 
   @override
@@ -66,17 +76,36 @@ class ServiceBookingSheet extends StatefulWidget {
 
 class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
   final _repo = CatalogRepo();
+  final _bookingRepo = BookingRepo();
   DateTime _selectedDate = DateTime.now();
   String? _selectedTime;
   List<TimeSlot> _slots = [];
   bool _loadingSlots = false;
+  List<BookableResource> _staff = [];
+  BookableResource? _selectedStaff;
+  bool _loadingStaff = false;
 
   String get _dateStr => DateFormat('yyyy-MM-dd').format(_selectedDate);
 
   @override
   void initState() {
     super.initState();
+    _loadStaff();
     _loadSlots();
+  }
+
+  Future<void> _loadStaff() async {
+    setState(() => _loadingStaff = true);
+    final staff = await _bookingRepo.listResources(
+      businessId: widget.businessId,
+      type: 'staff',
+    );
+    if (!mounted) return;
+    setState(() {
+      _staff = staff;
+      _loadingStaff = false;
+      if (_staff.length == 1) _selectedStaff = _staff.first;
+    });
   }
 
   Future<void> _loadSlots() async {
@@ -88,6 +117,10 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
       businessId: widget.businessId,
       businessLinkId: widget.businessLinkId,
       date: _dateStr,
+      resourceId: _selectedStaff?.id,
+      durationMinutes: widget.item.durationMinutes > 0
+          ? widget.item.durationMinutes
+          : null,
     );
     if (mounted) {
       setState(() {
@@ -122,6 +155,8 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
         bookingDate: _dateStr,
         bookingTime: _selectedTime!,
         bookNow: bookNow,
+        resourceId: _selectedStaff?.id,
+        resourceName: _selectedStaff?.name,
       ),
     );
   }
@@ -162,6 +197,45 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (_loadingStaff)
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 16),
+                          child: Center(
+                            child: SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                          ),
+                        )
+                      else if (_staff.isNotEmpty) ...[
+                        Text(
+                          'SELECT SPECIALIST',
+                          style: WaUi.caption.copyWith(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.6,
+                            color: BarqodyChrome.secondaryText,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: _staff.map((s) {
+                            final selected = _selectedStaff?.id == s.id;
+                            return ChoiceChip(
+                              label: Text(s.name),
+                              selected: selected,
+                              onSelected: (_) {
+                                setState(() => _selectedStaff = s);
+                                _loadSlots();
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 22),
+                      ],
                       Text(
                         'SELECT DATE',
                         style: WaUi.caption.copyWith(
@@ -234,25 +308,32 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: PillButton(
-                        label: 'Later',
-                        filled: false,
-                        onPressed: () => _popResult(bookNow: false),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: PillButton(
-                        label: 'Book Now',
+                child: widget.allowLater
+                    ? Row(
+                        children: [
+                          Expanded(
+                            child: PillButton(
+                              label: 'Add to booking',
+                              filled: false,
+                              enabled: _selectedTime != null,
+                              onPressed: () => _popResult(bookNow: false),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: PillButton(
+                              label: 'Book now',
+                              enabled: _selectedTime != null,
+                              onPressed: () => _popResult(bookNow: true),
+                            ),
+                          ),
+                        ],
+                      )
+                    : PillButton(
+                        label: 'Continue',
                         enabled: _selectedTime != null,
                         onPressed: () => _popResult(bookNow: true),
                       ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),

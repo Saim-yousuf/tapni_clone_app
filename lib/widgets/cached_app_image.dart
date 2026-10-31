@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
@@ -25,10 +27,23 @@ class CachedAppImage extends StatelessWidget {
     this.shimmerBase,
   });
 
+  static MemoryImage? _memoryFromDataUri(String value) {
+    if (!value.startsWith('data:')) return null;
+    final comma = value.indexOf(',');
+    if (comma < 0) return null;
+    try {
+      return MemoryImage(base64Decode(value.substring(comma + 1)));
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Use with [DecorationImage] / [BoxDecoration.image].
   static ImageProvider? provider(String? url) {
     final trimmed = url?.trim() ?? '';
     if (trimmed.isEmpty) return null;
+    final memory = _memoryFromDataUri(trimmed);
+    if (memory != null) return memory;
     return CachedNetworkImageProvider(trimmed);
   }
 
@@ -45,6 +60,21 @@ class CachedAppImage extends StatelessWidget {
         );
 
     if (trimmed.isEmpty) return _wrap(fallback, radius);
+
+    final memory = _memoryFromDataUri(trimmed);
+    if (memory != null) {
+      return _wrap(
+        Image(
+          image: memory,
+          fit: fit,
+          width: width,
+          height: height,
+          gaplessPlayback: true,
+          errorBuilder: (_, _, _) => fallback,
+        ),
+        radius,
+      );
+    }
 
     final loading = placeholder ??
         AppShimmer(

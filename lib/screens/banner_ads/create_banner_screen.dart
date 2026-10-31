@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:tapni_app/helper/image_helper.dart';
@@ -31,7 +31,7 @@ class _CreateBannerScreenState extends State<CreateBannerScreen> {
   bool _saving = false;
   String? _imageDataUri;
   String? _existingImageUrl;
-  File? _pickedFile;
+  Uint8List? _pickedBytes;
 
   /// green | red | amber
   String _colorTheme = 'green';
@@ -89,11 +89,11 @@ class _CreateBannerScreenState extends State<CreateBannerScreen> {
 
   Future<void> _pickImage() async {
     final picked = await pickFile();
-    if (picked?.file == null) return;
-    final file = picked!.file!;
-    final dataUri = await fileToDataUri(file);
+    if (picked == null || !picked.hasData) return;
+    final bytes = await picked.readBytes();
+    final dataUri = await pickedToDataUri(picked);
     setState(() {
-      _pickedFile = file;
+      _pickedBytes = bytes;
       _imageDataUri = dataUri;
       _existingImageUrl = null;
     });
@@ -231,7 +231,7 @@ class _CreateBannerScreenState extends State<CreateBannerScreen> {
                         ),
                         const SizedBox(height: 8),
                         _ImageUploadBox(
-                          file: _pickedFile,
+                          bytes: _pickedBytes,
                           networkUrl: _existingImageUrl,
                           onTap: _pickImage,
                         ),
@@ -508,19 +508,20 @@ class _ShowOnExploreToggle extends StatelessWidget {
 }
 
 class _ImageUploadBox extends StatelessWidget {
-  final File? file;
+  final Uint8List? bytes;
   final String? networkUrl;
   final VoidCallback onTap;
 
   const _ImageUploadBox({
-    required this.file,
+    required this.bytes,
     required this.networkUrl,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final hasImage = file != null || (networkUrl != null && networkUrl!.isNotEmpty);
+    final hasImage =
+        bytes != null || (networkUrl != null && networkUrl!.isNotEmpty);
 
     return Material(
       color: BarqodyChrome.fieldFill,
@@ -534,8 +535,8 @@ class _ImageUploadBox extends StatelessWidget {
           child: hasImage
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: file != null
-                      ? Image.file(file!, fit: BoxFit.cover)
+                  child: bytes != null
+                      ? Image.memory(bytes!, fit: BoxFit.cover)
                       : Image.network(networkUrl!, fit: BoxFit.cover),
                 )
               : Column(

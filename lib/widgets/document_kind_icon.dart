@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/document_file.dart';
 
@@ -9,6 +11,7 @@ class DocumentKindIcon extends StatefulWidget {
   final String? fileExt;
   final String? customLogoUrl;
   final String? localImagePath;
+  final Uint8List? localImageBytes;
   final double size;
   final double radius;
 
@@ -19,6 +22,7 @@ class DocumentKindIcon extends StatefulWidget {
     this.fileExt,
     this.customLogoUrl,
     this.localImagePath,
+    this.localImageBytes,
     this.size = 44,
     this.radius = 10,
   });
@@ -59,8 +63,19 @@ class _DocumentKindIconState extends State<DocumentKindIcon> {
 
   @override
   Widget build(BuildContext context) {
+    final localBytes = widget.localImageBytes;
+    if (localBytes != null && localBytes.isNotEmpty) {
+      return _clip(
+        Image.memory(
+          localBytes,
+          width: widget.size,
+          height: widget.size,
+          fit: BoxFit.cover,
+        ),
+      );
+    }
     final local = widget.localImagePath?.trim() ?? '';
-    if (local.isNotEmpty) {
+    if (!kIsWeb && local.isNotEmpty) {
       return _clip(
         Image.file(File(local), width: widget.size, height: widget.size, fit: BoxFit.cover),
       );

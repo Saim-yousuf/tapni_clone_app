@@ -70,6 +70,8 @@ class AttendanceEmployee {
   final List<int> weekendDays;
   final String facePhoto;
   final bool isActive;
+  /// When true, customer can pick this employee as doctor/stylist on booking.
+  final bool bookableForAppointments;
   final String invitationStatus;
 
   AttendanceEmployee({
@@ -82,6 +84,7 @@ class AttendanceEmployee {
     this.weekendDays = const [0, 6],
     this.facePhoto = '',
     this.isActive = true,
+    this.bookableForAppointments = false,
     this.invitationStatus = 'accepted',
   });
 
@@ -111,6 +114,8 @@ class AttendanceEmployee {
           const [0, 6],
       facePhoto: json['facePhoto'] as String? ?? '',
       isActive: json['isActive'] as bool? ?? true,
+      bookableForAppointments:
+          json['bookableForAppointments'] as bool? ?? false,
       invitationStatus: json['invitationStatus'] as String? ?? 'accepted',
     );
   }

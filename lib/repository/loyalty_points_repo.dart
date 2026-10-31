@@ -27,6 +27,37 @@ class LoyaltyPointsRepo {
     );
   }
 
+  Future<ApiResponse> getBusinessRedemptionSettings() async {
+    return ApiHandler.request(
+      api: Api.loyaltyPoints.businessRedemptionSettings,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> updateBusinessRedemptionSettings({
+    required bool redemptionEnabled,
+    required int minPointsToRedeem,
+    required int maxPointsPerOrder,
+    double? currencyPerPoint,
+    bool clearCurrencyPerPoint = false,
+  }) async {
+    return ApiHandler.request(
+      api: Api.loyaltyPoints.businessRedemptionSettings,
+      method: ApiMethod.put,
+      authorization: true,
+      jsonBody: {
+        'redemptionEnabled': redemptionEnabled,
+        'minPointsToRedeem': minPointsToRedeem,
+        'maxPointsPerOrder': maxPointsPerOrder,
+        if (clearCurrencyPerPoint)
+          'currencyPerPoint': null
+        else if (currencyPerPoint != null)
+          'currencyPerPoint': currencyPerPoint,
+      },
+    );
+  }
+
   Future<ApiResponse> getCustomerPoints() async {
     return ApiHandler.request(
       api: Api.loyaltyPoints.customer,
@@ -40,6 +71,31 @@ class LoyaltyPointsRepo {
       api: Api.loyaltyPoints.customerActivity,
       method: ApiMethod.get,
       authorization: true,
+    );
+  }
+
+  Future<ApiResponse> getCustomerCheckoutPoints(String businessId) async {
+    return ApiHandler.request(
+      api: Api.loyaltyPoints.customerCheckout(businessId),
+      method: ApiMethod.get,
+      authorization: true,
+    );
+  }
+
+  Future<ApiResponse> quoteRedemption({
+    required String businessId,
+    required double subtotalAmount,
+    required int pointsToRedeem,
+  }) async {
+    return ApiHandler.request(
+      api: Api.loyaltyPoints.redemptionQuote,
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: {
+        'businessId': businessId,
+        'subtotalAmount': subtotalAmount,
+        'pointsToRedeem': pointsToRedeem,
+      },
     );
   }
 

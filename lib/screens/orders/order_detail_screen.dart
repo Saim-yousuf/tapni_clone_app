@@ -15,10 +15,14 @@ class OrderDetailScreen extends StatefulWidget {
   final String orderId;
   final bool isBusinessView;
 
+  /// Optional JWT from website WebView shopper session (overrides app token).
+  final String? accessToken;
+
   const OrderDetailScreen({
     super.key,
     required this.orderId,
     required this.isBusinessView,
+    this.accessToken,
   });
 
   @override
@@ -29,6 +33,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   final _repo = CatalogRepo();
   CatalogOrder? _order;
   bool _isLoading = true;
+  bool _loadFailed = false;
   bool _isUpdating = false;
 
   @override
@@ -38,14 +43,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Future<void> _loadOrder() async {
-    setState(() => _isLoading = true);
-    final order = await _repo.getOrderById(widget.orderId);
-    if (mounted) {
-      setState(() {
-        _order = order;
-        _isLoading = false;
-      });
-    }
+    setState(() {
+      _isLoading = true;
+      _loadFailed = false;
+    });
+    final result = await _repo.getOrderById(
+      widget.orderId,
+      accessToken: widget.accessToken,
+    );
+    if (!mounted) return;
+    setState(() {
+      _order = result.order;
+      _loadFailed = result.failed;
+      _isLoading = false;
+    });
   }
 
   Future<void> _updateStatus(OrderStatus status) async {
@@ -91,10 +102,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   String _titleFor(CatalogOrder order) {
-    if (order.hasToken) return 'Booking #BK${order.tokenNumber}';
-    final id = order.id;
-    final short = id.length > 6 ? id.substring(id.length - 6) : id;
-    return 'Booking #$short';
+    final kind = order.kind;
+    final noun = (kind == 'appointment' || kind == 'stay') ? 'Booking' : 'Order';
+    if (order.hasToken) return '$noun #${order.tokenNumber}';
+    return noun;
   }
 
   int _totalItems(CatalogOrder order) =>
@@ -127,6 +138,15 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   String _bookingDateLabel(CatalogOrder order) {
+    if (order.isStay) {
+      final cin = order.checkInDate.trim();
+      if (cin.isEmpty) return _orderDate(order);
+      try {
+        return DateFormat('MMM d, yyyy').format(DateTime.parse(cin));
+      } catch (_) {
+        return cin;
+      }
+    }
     final raw = order.bookingDate;
     if (raw == null || raw.isEmpty) return _orderDate(order);
     try {
@@ -137,9 +157,28 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   String _bookingTimeLabel(CatalogOrder order) {
+    if (order.isStay) {
+      final cout = order.checkOutDate.trim();
+      if (cout.isEmpty) return '—';
+      try {
+        return DateFormat('MMM d, yyyy').format(DateTime.parse(cout));
+      } catch (_) {
+        return cout;
+      }
+    }
     final raw = order.bookingTime;
     if (raw == null || raw.isEmpty) return _orderTime(order);
     return raw;
+  }
+
+  String _prettyDate(String raw) {
+    final v = raw.trim();
+    if (v.isEmpty) return '—';
+    try {
+      return DateFormat('MMM d, yyyy').format(DateTime.parse(v));
+    } catch (_) {
+      return v;
+    }
   }
 
   Color _avatarColor(String seed) {
@@ -153,7 +192,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     final showBusinessPendingActions =
         widget.isBusinessView &&
         order != null &&
-        order.status == OrderStatus.pending;
+        (order.status == OrderStatus.pending ||
+            order.status == OrderStatus.held);
     final showBusinessConfirmedActions =
         widget.isBusinessView &&
         order != null &&
@@ -163,7 +203,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         (order.status == OrderStatus.pending ||
             order.status == OrderStatus.confirmed);
     final showStatusBanner = order != null &&
-        !(widget.isBusinessView && order.status == OrderStatus.pending);
+        !(widget.isBusinessView &&
+            (order.status == OrderStatus.pending ||
+                order.status == OrderStatus.held));
 
     return Scaffold(
       backgroundColor: BarqodyChrome.scaffold,
@@ -179,7 +221,45 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : order == null
-                      ? Center(child: Text(context.l10n.orderNotFound))
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  _loadFailed
+                                      ? 'Couldn’t load this order'
+                                      : context.l10n.orderNotFound,
+                                  textAlign: TextAlign.center,
+                                  style: WaUi.bodyMedium.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  _loadFailed
+                                      ? 'Check your connection and try again.'
+                                      : 'This order may have been removed, or it isn’t linked to your account.',
+                                  textAlign: TextAlign.center,
+                                  style: WaUi.body.copyWith(
+                                    color: BarqodyChrome.secondaryText,
+                                  ),
+                                ),
+                                if (_loadFailed) ...[
+                                  const SizedBox(height: 18),
+                                  SizedBox(
+                                    width: 160,
+                                    child: PillButton(
+                                      label: context.l10n.tryAgain,
+                                      onPressed: _loadOrder,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        )
                       : SingleChildScrollView(
                           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
                           child: Column(
@@ -193,6 +273,15 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                       currency: order.currency,
                                       dateLabel: _bookingDateLabel(order),
                                       timeLabel: _bookingTimeLabel(order),
+                                      dateCaption:
+                                          order.isStay ? 'Check-in' : 'Date',
+                                      timeCaption:
+                                          order.isStay ? 'Check-out' : 'Time',
+                                      showSchedule: order.isStay ||
+                                          order.isAppointment ||
+                                          (order.bookingDate ?? '')
+                                              .trim()
+                                              .isNotEmpty,
                                     ),
                                     const Divider(
                                       height: 1,
@@ -202,11 +291,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 ),
                               ),
                               const SizedBox(height: 16),
+                              if (order.isAppointment || order.isStay) ...[
+                                _WhenCard(
+                                  order: order,
+                                  prettyDate: _prettyDate,
+                                ),
+                                const SizedBox(height: 16),
+                              ],
                               _SummaryCard(
                                 order: order,
                                 totalItems: _totalItems(order),
                                 orderDate: _orderDate(order),
                                 orderTime: _orderTime(order),
+                                // Type already shown in When/Stay card.
+                                showType: !(order.isAppointment || order.isStay),
                               ),
                               const SizedBox(height: 16),
                               const Divider(
@@ -215,27 +313,44 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               ),
                               _PersonRow(
                                 name: widget.isBusinessView
-                                    ? order.customerName
+                                    ? (order.displayCustomerName.isNotEmpty
+                                        ? order.displayCustomerName
+                                        : 'Guest')
                                     : order.businessName,
                                 username: widget.isBusinessView
                                     ? order.customerUsername
                                     : order.businessUsername,
+                                subtitle: widget.isBusinessView &&
+                                        order.guestPhone.trim().isNotEmpty
+                                    ? order.guestPhone.trim()
+                                    : null,
+                                badge: widget.isBusinessView && order.isGuest
+                                    ? 'Guest'
+                                    : null,
                                 photoUrl: widget.isBusinessView
                                     ? order.customerPhoto
                                     : order.businessPhoto,
                                 avatarColor: _avatarColor(
                                   widget.isBusinessView
-                                      ? order.customerName
+                                      ? order.displayCustomerName
                                       : order.businessName,
                                 ),
-                                onTap: () => _viewProfile(
-                                  userId: widget.isBusinessView
+                                onTap: () {
+                                  final id = widget.isBusinessView
                                       ? order.customerId
-                                      : order.businessId,
-                                  username: widget.isBusinessView
+                                      : order.businessId;
+                                  final uname = widget.isBusinessView
                                       ? order.customerUsername
-                                      : order.businessUsername,
-                                ),
+                                      : order.businessUsername;
+                                  if (id.trim().isEmpty &&
+                                      uname.trim().isEmpty) {
+                                    return;
+                                  }
+                                  _viewProfile(
+                                    userId: id.trim().isEmpty ? null : id,
+                                    username: uname,
+                                  );
+                                },
                               ),
                               const Divider(
                                 height: 1,
@@ -323,33 +438,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 top: false,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _OutlineActionButton(
-                          label: 'Cancel',
-                          onPressed: _isUpdating
-                              ? null
-                              : () => _updateStatus(OrderStatus.cancelled),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: PillButton(
-                          label: 'Reschedule',
-                          enabled: !_isUpdating,
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Reschedule is not available yet. Please cancel and book again.',
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+                  child: PillButton(
+                    label: (order!.kind == 'appointment' ||
+                            order.kind == 'stay')
+                        ? 'Cancel booking'
+                        : 'Cancel order',
+                    filled: false,
+                    enabled: !_isUpdating,
+                    onPressed: () => _updateStatus(OrderStatus.cancelled),
                   ),
                 ),
               ),
@@ -365,12 +461,18 @@ class _OrderItemRow extends StatelessWidget {
   final String currency;
   final String dateLabel;
   final String timeLabel;
+  final String dateCaption;
+  final String timeCaption;
+  final bool showSchedule;
 
   const _OrderItemRow({
     required this.item,
     required this.currency,
     required this.dateLabel,
     required this.timeLabel,
+    this.dateCaption = 'Date',
+    this.timeCaption = 'Time',
+    this.showSchedule = true,
   });
 
   @override
@@ -402,7 +504,7 @@ class _OrderItemRow extends StatelessWidget {
                       errorBuilder: (_, _, _) => ColoredBox(
                         color: BarqodyChrome.fieldFill,
                         child: const Icon(
-                          Icons.spa_outlined,
+                          Icons.image_outlined,
                           color: BarqodyChrome.bodyText,
                           size: 24,
                         ),
@@ -411,7 +513,7 @@ class _OrderItemRow extends StatelessWidget {
                   : ColoredBox(
                       color: BarqodyChrome.fieldFill,
                       child: const Icon(
-                        Icons.spa_outlined,
+                        Icons.image_outlined,
                         color: BarqodyChrome.bodyText,
                         size: 24,
                       ),
@@ -430,42 +532,108 @@ class _OrderItemRow extends StatelessWidget {
                   style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 2),
+                if (item.hasDiscountSnapshot) ...[
+                  Text(
+                    formatMoney(item.listPrice!, currency: currency),
+                    style: WaUi.body.copyWith(
+                      fontSize: 12,
+                      color: BarqodyChrome.secondaryText,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                ],
                 Text(
                   formatMoney(item.price, currency: currency),
                   style: WaUi.body.copyWith(fontWeight: FontWeight.w700),
                 ),
-                const SizedBox(height: 4),
-                Text.rich(
-                  TextSpan(
-                    style: WaUi.body.copyWith(
-                      fontSize: 12,
-                      color: BarqodyChrome.secondaryText,
+                if (showSchedule) ...[
+                  const SizedBox(height: 4),
+                  Text.rich(
+                    TextSpan(
+                      style: WaUi.body.copyWith(
+                        fontSize: 12,
+                        color: BarqodyChrome.secondaryText,
+                      ),
+                      children: [
+                        TextSpan(text: '$dateCaption: '),
+                        TextSpan(
+                          text: dateLabel,
+                          style: const TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                        TextSpan(text: '  $timeCaption: '),
+                        TextSpan(
+                          text: timeLabel,
+                          style: const TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ],
                     ),
-                    children: [
-                      const TextSpan(text: 'Date: '),
-                      TextSpan(
-                        text: dateLabel,
-                        style: const TextStyle(
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      const TextSpan(text: '  Time: '),
-                      TextSpan(
-                        text: timeLabel,
-                        style: const TextStyle(
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ],
                   ),
-                ),
+                ],
               ],
             ),
           ),
-          Icon(
-            Icons.chevron_right_rounded,
-            color: BarqodyChrome.secondaryText,
+        ],
+      ),
+    );
+  }
+}
+
+class _WhenCard extends StatelessWidget {
+  final CatalogOrder order;
+  final String Function(String raw) prettyDate;
+
+  const _WhenCard({
+    required this.order,
+    required this.prettyDate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = <(String, String)>[
+      ('Type', order.kindLabel),
+    ];
+    if (order.isStay) {
+      rows.add(('Check-in', prettyDate(order.checkInDate)));
+      rows.add(('Check-out', prettyDate(order.checkOutDate)));
+      if (order.resourceNames.isNotEmpty) {
+        rows.add(('Room', order.resourceNames.join(', ')));
+      }
+    } else if (order.isAppointment) {
+      rows.add(('Date', prettyDate(order.bookingDate ?? '')));
+      rows.add((
+        'Time',
+        (order.bookingTime ?? '').trim().isEmpty
+            ? '—'
+            : order.bookingTime!.trim(),
+      ));
+      if (order.resourceNames.isNotEmpty) {
+        rows.add(('Specialist', order.resourceNames.join(', ')));
+      }
+    }
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      decoration: BoxDecoration(
+        color: BarqodyChrome.fieldFill,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            order.isStay ? 'Stay' : 'When',
+            style: WaUi.listTitle.copyWith(fontWeight: FontWeight.w800),
           ),
+          const SizedBox(height: 12),
+          for (var i = 0; i < rows.length; i++) ...[
+            if (i > 0) const SizedBox(height: 10),
+            _SummaryRow(label: rows[i].$1, value: rows[i].$2),
+          ],
         ],
       ),
     );
@@ -477,16 +645,21 @@ class _SummaryCard extends StatelessWidget {
   final int totalItems;
   final String orderDate;
   final String orderTime;
+  final bool showType;
 
   const _SummaryCard({
     required this.order,
     required this.totalItems,
     required this.orderDate,
     required this.orderTime,
+    this.showType = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final itemsLabel = order.isStay
+        ? 'Rooms'
+        : (order.isAppointment ? 'Services' : 'Total items');
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       decoration: BoxDecoration(
@@ -495,16 +668,33 @@ class _SummaryCard extends StatelessWidget {
       ),
       child: Column(
         children: [
+          if (showType) ...[
+            _SummaryRow(label: 'Type', value: order.kindLabel),
+            const SizedBox(height: 10),
+          ],
           _SummaryRow(
-            label: 'Booking',
-            value: order.hasToken ? '#BK${order.tokenNumber}' : '—',
+            label: (order.kind == 'appointment' || order.kind == 'stay')
+                ? 'Booking number'
+                : 'Order number',
+            value: order.hasToken ? '#${order.tokenNumber}' : '—',
           ),
           const SizedBox(height: 10),
-          _SummaryRow(label: 'Order Date', value: orderDate),
+          _SummaryRow(label: 'Placed on', value: orderDate),
           const SizedBox(height: 10),
-          _SummaryRow(label: 'Order Time', value: orderTime),
+          _SummaryRow(label: 'Placed at', value: orderTime),
           const SizedBox(height: 10),
-          _SummaryRow(label: 'Total services', value: '$totalItems'),
+          _SummaryRow(label: itemsLabel, value: '$totalItems'),
+          if (order.paymentLabel.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            _SummaryRow(label: 'Payment', value: order.paymentLabel),
+          ],
+          if (order.loyaltyReward != null) ...[
+            const SizedBox(height: 10),
+            _SummaryRow(
+              label: 'Rewards',
+              value: order.loyaltyReward!.summaryLabel,
+            ),
+          ],
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 12),
             child: Divider(height: 1, color: BarqodyChrome.divider),
@@ -558,6 +748,8 @@ class _SummaryRow extends StatelessWidget {
 class _PersonRow extends StatelessWidget {
   final String name;
   final String username;
+  final String? subtitle;
+  final String? badge;
   final String? photoUrl;
   final Color avatarColor;
   final VoidCallback onTap;
@@ -565,6 +757,8 @@ class _PersonRow extends StatelessWidget {
   const _PersonRow({
     required this.name,
     required this.username,
+    this.subtitle,
+    this.badge,
     this.photoUrl,
     required this.avatarColor,
     required this.onTap,
@@ -576,11 +770,13 @@ class _PersonRow extends StatelessWidget {
     final initial =
         displayName.isNotEmpty ? displayName[0].toUpperCase() : '?';
     final hasPhoto = photoUrl != null && photoUrl!.isNotEmpty;
+    final phone = (subtitle ?? '').trim();
+    final canOpenProfile = username.trim().isNotEmpty;
 
     return Material(
       color: Colors.white,
       child: InkWell(
-        onTap: onTap,
+        onTap: canOpenProfile ? onTap : null,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 14),
           child: Row(
@@ -598,11 +794,40 @@ class _PersonRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      displayName,
-                      style: WaUi.bodyMedium.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            displayName,
+                            style: WaUi.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        if ((badge ?? '').trim().isNotEmpty) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: BarqodyChrome.scaffold,
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: BarqodyChrome.divider,
+                              ),
+                            ),
+                            child: Text(
+                              badge!.trim(),
+                              style: WaUi.caption.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: BarqodyChrome.secondaryText,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                     if (username.isNotEmpty)
                       Text(
@@ -611,13 +836,21 @@ class _PersonRow extends StatelessWidget {
                           color: BarqodyChrome.secondaryText,
                         ),
                       ),
+                    if (phone.isNotEmpty)
+                      Text(
+                        phone,
+                        style: WaUi.caption.copyWith(
+                          color: BarqodyChrome.secondaryText,
+                        ),
+                      ),
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: BarqodyChrome.secondaryText,
-              ),
+              if (canOpenProfile)
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: BarqodyChrome.secondaryText,
+                ),
             ],
           ),
         ),
@@ -676,11 +909,14 @@ class _StatusBanner extends StatelessWidget {
   ({String title, String description, Widget icon}) _content(
     AppLocalizations l10n,
   ) {
+    final biz = isBusinessView;
     switch (status) {
       case OrderStatus.completed:
         return (
           title: 'Booking Complete',
-          description: 'Your booking has been completed successfully',
+          description: biz
+              ? 'This booking was marked complete'
+              : 'Your booking has been completed successfully',
           icon: _CircleIcon(
             child: Image.asset(
               'assets/images/png/check-icon-1.png',
@@ -698,17 +934,25 @@ class _StatusBanner extends StatelessWidget {
       case OrderStatus.cancelled:
         return (
           title: 'Booking Cancelled',
-          description: 'Your booking has been cancelled',
+          description: biz
+              ? 'This booking was cancelled'
+              : 'Your booking has been cancelled',
           icon: _CircleIcon(
             child: Image.asset(
               'assets/images/png/cancel-icon.png',
               width: 16,
               height: 16,
               color: Colors.white,
-              errorBuilder: (_, _, _) => const Icon(
-                Icons.close_rounded,
+              errorBuilder: (_, _, _) => Image.asset(
+                CircleCloseButton.asset,
+                width: 16,
+                height: 16,
                 color: Colors.white,
-                size: 20,
+                errorBuilder: (_, _, _) => const Icon(
+                  Icons.cancel_outlined,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
             ),
           ),
@@ -716,7 +960,9 @@ class _StatusBanner extends StatelessWidget {
       case OrderStatus.noShow:
         return (
           title: 'Booking Missed',
-          description: "You didn't attend your scheduled appointment",
+          description: biz
+              ? 'Customer did not attend this appointment'
+              : "You didn't attend your scheduled appointment",
           icon: Image.asset(
             'assets/images/png/order-cance.png',
             width: 48,
@@ -734,7 +980,9 @@ class _StatusBanner extends StatelessWidget {
       case OrderStatus.confirmed:
         return (
           title: 'Booking Confirmed',
-          description: 'Your booking has been confirmed by the business',
+          description: biz
+              ? 'You confirmed this booking'
+              : 'Your booking has been confirmed by the business',
           icon: _CircleIcon(
             child: Image.asset(
               'assets/images/png/check-icon-1.png',
@@ -749,15 +997,34 @@ class _StatusBanner extends StatelessWidget {
             ),
           ),
         );
-      case OrderStatus.pending:
+      case OrderStatus.held:
         return (
-          title: 'Booking Pending',
-          description: 'Your booking request is waiting for confirmation',
+          title: 'Request Held',
+          description: biz
+              ? 'Soft request — accept or decline when ready'
+              : 'Your request is held until the business confirms',
           icon: Image.asset(
             'assets/images/png/bag-icon.png',
             width: 56,
             height: 56,
-            errorBuilder: (_, __, ___) => const Icon(
+            errorBuilder: (_, _, _) => const Icon(
+              Icons.hourglass_empty_rounded,
+              size: 56,
+              color: Colors.black,
+            ),
+          ),
+        );
+      case OrderStatus.pending:
+        return (
+          title: 'Booking Pending',
+          description: biz
+              ? 'Waiting for you to confirm this booking'
+              : 'Your booking request is waiting for confirmation',
+          icon: Image.asset(
+            'assets/images/png/bag-icon.png',
+            width: 56,
+            height: 56,
+            errorBuilder: (_, _, _) => const Icon(
               Icons.shopping_bag_outlined,
               size: 56,
               color: Colors.black,

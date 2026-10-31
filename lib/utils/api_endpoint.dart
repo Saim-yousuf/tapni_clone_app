@@ -5,6 +5,8 @@ class Api {
   Api._();
 
   // Same host for all targets; avoid dart:io Platform (unsupported on web).
+  // Use localhost when Flutter runs on Chrome/desktop on this PC.
+  // LAN IP (e.g. 192.168.x.x) is only needed for a physical phone on Wi‑Fi.
   static const String _localBaseUrl = "http://192.168.100.203:3000";
 
   static const String _liveBaseUrl = "https://barqody-backend.vercel.app";
@@ -26,8 +28,11 @@ class Api {
   static final loyalty = _LoyaltyApi();
   static final enrollment = _EnrollmentApi();
   static final loyaltyPoints = _LoyaltyPointsApi();
+  static final offers = _OffersApi();
   static final businessEnrollment = _BusinessEnrollmentApi();
   static final catalog = _CatalogApi();
+  static final booking = _BookingApi();
+  static final pos = _PosApi();
   static final attendance = _AttendanceApi();
   static final wallet = _WalletApi();
   static final invitation = _InvitationApi();
@@ -35,6 +40,7 @@ class Api {
   static final follow = _FollowApi();
   static final explore = _ExploreApi();
   static final reviews = _ReviewsApi();
+  static final businessWebsite = _BusinessWebsiteApi();
 }
 
 class _AuthApi {
@@ -155,11 +161,28 @@ class _LoyaltyPointsApi {
       "${Api.baseUrl}/api/loyalty/points/business/purchase";
   String get businessActivity =>
       "${Api.baseUrl}/api/loyalty/points/business/activity";
+  String get businessRedemptionSettings =>
+      "${Api.baseUrl}/api/loyalty/points/business/redemption-settings";
   String get customer => "${Api.baseUrl}/api/loyalty/points/customer";
   String get customerActivity =>
       "${Api.baseUrl}/api/loyalty/points/customer/activity";
+  String customerCheckout(String businessId) =>
+      "${Api.baseUrl}/api/loyalty/points/customer/checkout/$businessId";
+  String get redemptionQuote =>
+      "${Api.baseUrl}/api/loyalty/points/redemption/quote";
+  String publicCheckout(String businessId) =>
+      "${Api.baseUrl}/api/loyalty/points/public/checkout/$businessId";
   String stampHistory(String enrollmentId) =>
       "${Api.baseUrl}/api/loyalty/points/stamp-history/$enrollmentId";
+}
+
+class _OffersApi {
+  String get business => "${Api.baseUrl}/api/offers/business";
+  String businessOffer(String id) =>
+      "${Api.baseUrl}/api/offers/business/$id";
+  String get publicList => "${Api.baseUrl}/api/offers/public";
+  String publicOffer(String id) => "${Api.baseUrl}/api/offers/public/$id";
+  String get publicQuote => "${Api.baseUrl}/api/offers/public/quote";
 }
 
 class _BusinessEnrollmentApi {
@@ -170,15 +193,35 @@ class _BusinessEnrollmentApi {
 
 class _CatalogApi {
   String get availability => "${Api.baseUrl}/api/catalog/availability";
+  String get publicAvailability =>
+      "${Api.baseUrl}/api/catalog/public/availability";
+  String get stayAvailability =>
+      "${Api.baseUrl}/api/catalog/stay-availability";
   String get orders => "${Api.baseUrl}/api/catalog/orders";
   String get incomingOrders => "${Api.baseUrl}/api/catalog/orders/incoming";
   String get myOrders => "${Api.baseUrl}/api/catalog/orders/my";
+  /// Link a guest web order after phone OTP login (tracking code + phone match).
+  String get claimGuestOrder =>
+      "${Api.baseUrl}/api/catalog/orders/claim-guest";
   String order(String id) => "${Api.baseUrl}/api/catalog/orders/$id";
   String updateStatus(String id) =>
       "${Api.baseUrl}/api/catalog/orders/$id/status";
   String markOrderRead(String id) =>
       "${Api.baseUrl}/api/catalog/orders/$id/read";
   String get markAllRead => "${Api.baseUrl}/api/catalog/orders/read-all";
+  String mockPayment(String id) =>
+      "${Api.baseUrl}/api/catalog/orders/$id/payments/mock";
+}
+
+class _BookingApi {
+  String get resources => "${Api.baseUrl}/api/booking/resources";
+  String resource(String id) => "${Api.baseUrl}/api/booking/resources/$id";
+  String get syncTeam => "${Api.baseUrl}/api/booking/resources/sync-team";
+  String get calendarBusy => "${Api.baseUrl}/api/booking/calendar/busy";
+}
+
+class _PosApi {
+  String get connection => "${Api.baseUrl}/api/pos/connection";
 }
 
 class _AttendanceApi {
@@ -262,4 +305,33 @@ class _ReviewsApi {
       "${Api.baseUrl}/api/reviews/business/$businessId";
   String report(String reviewId) =>
       "${Api.baseUrl}/api/reviews/$reviewId/report";
+}
+
+class _BusinessWebsiteApi {
+  String get catalog => "${Api.baseUrl}/api/business-websites/catalog";
+  String get mine => "${Api.baseUrl}/api/business-websites/mine";
+  String get preview => "${Api.baseUrl}/api/business-websites/mine/preview";
+  String templatePreview(String templateId) =>
+      "${Api.baseUrl}/api/business-websites/templates/${Uri.encodeComponent(templateId)}/preview";
+  String get contentCategories =>
+      "${Api.baseUrl}/api/business-websites/mine/content-categories";
+  String contentCategory(String id) =>
+      "${Api.baseUrl}/api/business-websites/mine/content-categories/${Uri.encodeComponent(id)}";
+  String get content => "${Api.baseUrl}/api/business-websites/mine/content";
+  String contentItem(String id) =>
+      "${Api.baseUrl}/api/business-websites/mine/content/${Uri.encodeComponent(id)}";
+  String publicSite(String slug) =>
+      "${Api.baseUrl}/w/${Uri.encodeComponent(slug)}";
+
+  /// Vanity URL: /{username}/menu | /{username}/service | …
+  String vanitySite(String username, String websiteType) {
+    final user = Uri.encodeComponent(username.replaceFirst(RegExp(r'^@'), ''));
+    final segment = switch (websiteType) {
+      'service' || 'services' => 'service',
+      'products' || 'product' => 'products',
+      'portfolio' => 'portfolio',
+      _ => 'menu',
+    };
+    return "${Api.baseUrl}/$user/$segment";
+  }
 }

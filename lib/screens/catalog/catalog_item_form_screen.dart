@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:tapni_app/helper/image_helper.dart';
@@ -46,7 +46,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
 
   String? _selectedCategory;
   late List<String> _categoryOptions;
-  String? _pickedImagePath;
+  Uint8List? _pickedBytes;
   String? _pickedMimeType;
   String? _pickedFileName;
   String? _savedImageUrl;
@@ -134,9 +134,11 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
         : await pickSingleFile(
             allowedExtensions: const ['png', 'jpg', 'jpeg', 'webp'],
           );
-    if (file?.file == null) return;
+    if (file == null || !file.hasData) return;
+    final bytes = await file.readBytes();
+    if (!mounted) return;
     setState(() {
-      _pickedImagePath = file!.file!.path;
+      _pickedBytes = bytes;
       _pickedMimeType = file.mimeType;
       _pickedFileName = file.name;
       _savedImageUrl = '';
@@ -246,16 +248,39 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       return;
     }
 
+    // Discount allowed for menu / products / services (not documents).
+    // Valid only when discounted > 0 and strictly < base (free items unchanged).
+    if (!widget.isDocument && _offerDiscount) {
+      final base = _priceValue;
+      final sale = _discountedValue;
+      String? discountError;
+      if (base <= 0) {
+        discountError = 'Set a base price before offering a discount';
+      } else if (sale <= 0) {
+        discountError = 'Discounted price must be greater than zero';
+      } else if (sale >= base) {
+        discountError =
+            'Discounted price must be lower than the original price';
+      }
+      if (discountError != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(discountError)),
+        );
+        return;
+      }
+    }
+
     setState(() => _isSaving = true);
 
     var imageValue = _savedImageUrl ?? '';
-    if (_pickedImagePath != null) {
-      imageValue = widget.isDocument
-          ? await fileToDataUri(
-              File(_pickedImagePath!),
-              mimeType: _pickedMimeType,
-            )
-          : await fileToBase64(File(_pickedImagePath!));
+    if (_pickedBytes != null && _pickedBytes!.isNotEmpty) {
+      // Always persist as data-URI so web + API upload + local preview work.
+      final mime = (_pickedMimeType != null &&
+              _pickedMimeType!.isNotEmpty &&
+              _pickedMimeType != 'unknown')
+          ? _pickedMimeType
+          : (widget.isDocument ? 'application/octet-stream' : 'image/jpeg');
+      imageValue = bytesToDataUri(_pickedBytes!, mimeType: mime);
     }
 
     if (widget.isDocument && imageValue.trim().isEmpty) {
@@ -285,8 +310,8 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
         imageUrl: imageValue,
         isActive: _isActive,
         durationMinutes: int.tryParse(_durationCtrl.text.trim()) ?? 0,
-        offerDiscount: widget.isService && _offerDiscount,
-        discountedPrice: widget.isService && _offerDiscount
+        offerDiscount: !widget.isDocument && _offerDiscount,
+        discountedPrice: !widget.isDocument && _offerDiscount
             ? (double.tryParse(_discountedPriceCtrl.text.trim()) ?? 0)
             : 0,
         rewardPoints: widget.isService
@@ -294,6 +319,68 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
             : 0,
         bookingType: widget.isService ? bookingType : 'appointment',
       ),
+    );
+  }
+
+  /// Shared Offer Discount toggle + discounted price fields (menu/products/services).
+  Widget _buildDiscountFields({required String priceHint}) {
+    final saveAmt = _saveAmount;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            const Expanded(child: _FieldLabel('PRICE')),
+            Text(
+              'Offer Discount',
+              style: WaUi.body.copyWith(
+                fontSize: 13,
+                color: BarqodyChrome.secondaryText,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Switch(
+              value: _offerDiscount,
+              activeThumbColor: Colors.white,
+              activeTrackColor: Colors.black,
+              onChanged: (v) => setState(() => _offerDiscount = v),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          controller: _priceCtrl,
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.next,
+          style: WaUi.body.copyWith(fontSize: 15),
+          onChanged: (_) => setState(() {}),
+          decoration: WaUi.fieldDecoration(hintText: priceHint),
+        ),
+        if (_offerDiscount) ...[
+          const SizedBox(height: 20),
+          const _FieldLabel('DISCOUNTED PRICE'),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _discountedPriceCtrl,
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
+            style: WaUi.body.copyWith(fontSize: 15),
+            onChanged: (_) => setState(() {}),
+            decoration: WaUi.fieldDecoration(hintText: 'e.g. 80'),
+          ),
+          if (saveAmt != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              'You save ${saveAmt.toStringAsFixed(0)}',
+              style: WaUi.body.copyWith(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF27AE60),
+              ),
+            ),
+          ],
+        ],
+      ],
     );
   }
 
@@ -308,7 +395,6 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   Widget _buildServiceForm() {
     final title = _isEditing ? 'Edit Service' : 'Add Service';
     final saveLabel = _isEditing ? 'Update Service' : 'Add Service';
-    final saveAmt = _saveAmount;
 
     return Scaffold(
       backgroundColor: BarqodyChrome.scaffold,
@@ -350,60 +436,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                       ).copyWith(alignLabelWithHint: true),
                     ),
                     const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        const Expanded(child: _FieldLabel('PRICE')),
-                        Text(
-                          'Offer Discount',
-                          style: WaUi.body.copyWith(
-                            fontSize: 13,
-                            color: BarqodyChrome.secondaryText,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Switch(
-                          value: _offerDiscount,
-                          activeThumbColor: Colors.white,
-                          activeTrackColor: Colors.black,
-                          onChanged: (v) => setState(() => _offerDiscount = v),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _priceCtrl,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                      style: WaUi.body.copyWith(fontSize: 15),
-                      onChanged: (_) => setState(() {}),
-                      decoration:
-                          WaUi.fieldDecoration(hintText: 'e.g. 100'),
-                    ),
-                    if (_offerDiscount) ...[
-                      const SizedBox(height: 20),
-                      const _FieldLabel('DISCOUNTED PRICE'),
-                      const SizedBox(height: 8),
-                      TextField(
-                        controller: _discountedPriceCtrl,
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                        style: WaUi.body.copyWith(fontSize: 15),
-                        onChanged: (_) => setState(() {}),
-                        decoration:
-                            WaUi.fieldDecoration(hintText: 'e.g. 80'),
-                      ),
-                      if (saveAmt != null) ...[
-                        const SizedBox(height: 8),
-                        Text(
-                          'You save \$${saveAmt.toStringAsFixed(0)}',
-                          style: WaUi.body.copyWith(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF27AE60),
-                          ),
-                        ),
-                      ],
-                    ],
+                    _buildDiscountFields(priceHint: 'e.g. 100'),
                     const SizedBox(height: 20),
                     const _FieldLabel('REWARD POINTS'),
                     const SizedBox(height: 8),
@@ -528,15 +561,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                     ),
                     if (!widget.isDocument) ...[
                       const SizedBox(height: 20),
-                      const _FieldLabel('ORIGINAL PRICE'),
-                      const SizedBox(height: 8),
-                      TextField(
-                        controller: _priceCtrl,
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                        style: WaUi.body.copyWith(fontSize: 15),
-                        decoration: WaUi.fieldDecoration(hintText: '0'),
-                      ),
+                      _buildDiscountFields(priceHint: '0'),
                       const SizedBox(height: 20),
                       const _FieldLabel('CATEGORY'),
                       const SizedBox(height: 8),
@@ -670,22 +695,23 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
 
   Widget _buildImagePicker() {
     const size = 140.0;
-    final pickedIsImage = _pickedImagePath != null &&
-        DocumentFileHelper.isImage(_pickedImagePath!);
+    final pickedName = _pickedFileName ?? '';
+    final pickedIsImage = _pickedBytes != null &&
+        DocumentFileHelper.isImage(pickedName, pickedName);
 
     Widget content;
-    if (_pickedImagePath != null && pickedIsImage) {
+    if (_pickedBytes != null && pickedIsImage) {
       content = ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: Image.file(
-          File(_pickedImagePath!),
+        child: Image.memory(
+          _pickedBytes!,
           width: size,
           height: size,
           fit: BoxFit.cover,
         ),
       );
-    } else if (_pickedImagePath != null) {
-      content = _filePlaceholder(size, _pickedFileName ?? _pickedImagePath!);
+    } else if (_pickedBytes != null) {
+      content = _filePlaceholder(size, _pickedFileName ?? 'Document');
     } else {
       final saved = _savedImageUrl?.trim() ?? '';
       if (saved.isNotEmpty && DocumentFileHelper.isImage(saved)) {
@@ -706,7 +732,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       }
     }
 
-    final hasContent = (_pickedImagePath != null) ||
+    final hasContent = (_pickedBytes != null) ||
         (_savedImageUrl?.trim().isNotEmpty ?? false);
 
     return GestureDetector(

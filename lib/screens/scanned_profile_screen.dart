@@ -1268,8 +1268,16 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   }
 
   Widget _buildLinkSection(UserProfile profile, UserCustomCard? card) {
-    var activeLinks = profile.socialLinks
-        .where((link) => link.isActive && link.isPublic)
+    final allLinks = profile.socialLinks;
+    var activeLinks = allLinks
+        .where(
+          (link) =>
+              link.isActive &&
+              link.isPublic &&
+              !isCatalogInventoryHiddenByWebsite(link, allLinks) &&
+              !isDuplicateBusinessWebsiteLink(link, allLinks) &&
+              !isDuplicateCatalogInventoryLink(link, allLinks),
+        )
         .toList();
 
     if (card != null && card.enabledLinkIds.isNotEmpty) {
@@ -1377,6 +1385,8 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       currency: profile.currency,
       galleryItems: profile.gallery,
       allowedEntryIds: allowedEntryIds,
+      peerLinks: profile.socialLinks,
+      ownerUsername: profile.username,
     );
   }
 

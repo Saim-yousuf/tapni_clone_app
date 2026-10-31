@@ -555,6 +555,7 @@ class LeadsProvider extends ChangeNotifier {
 
     try {
       final orders = await _catalogRepo.getBusinessOrders();
+      if (orders == null) return;
 
       _notifications.removeWhere((n) => n['type'] == 'catalog_order');
 

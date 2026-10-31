@@ -416,6 +416,77 @@ class AuthOutlinedPillButton extends StatelessWidget {
   }
 }
 
+/// Soft fill pill — secondary CTA (Log in / Continue with…).
+/// [elevated] = white fill + soft shadow (Get started auth wall).
+class AuthSoftPillButton extends StatelessWidget {
+  const AuthSoftPillButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.leading,
+    this.elevated = false,
+  });
+
+  final String label;
+  final VoidCallback? onPressed;
+  final Widget? leading;
+  final bool elevated;
+
+  @override
+  Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+    final h = m.buttonH;
+    final bg = elevated ? AuthUi.bg : AuthUi.fieldFill;
+    return Container(
+      width: double.infinity,
+      height: h,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(h / 2),
+        boxShadow: elevated
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: m.s(16),
+                  offset: Offset(0, m.s(6)),
+                ),
+              ]
+            : null,
+      ),
+      child: Material(
+        color: bg,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        borderRadius: BorderRadius.circular(h / 2),
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(h / 2),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (leading != null) ...[
+                  leading!,
+                  SizedBox(width: m.s(10)),
+                ],
+                Text(
+                  label,
+                  style: AppFonts.textStyle(
+                    fontSize: m.s(AuthUi.buttonLabelSize),
+                    fontWeight: FontWeight.w600,
+                    color: AuthUi.textPrimary,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// @Deprecated — use [AuthPrimaryPillButton].
 @Deprecated('Use AuthPrimaryPillButton')
 class AuthPillButton extends StatelessWidget {

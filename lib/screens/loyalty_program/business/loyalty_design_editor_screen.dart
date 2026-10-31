@@ -303,8 +303,8 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
 
   Future<void> _pickImageForLayer(DesignLayer layer) async {
     final picked = await pickSingleFile();
-    if (picked?.file == null) return;
-    final b64 = await fileToBase64(picked!.file!);
+    if (picked == null || !picked.hasData) return;
+    final b64 = await pickedToBase64(picked);
     final mime = picked.mimeType.startsWith('image/')
         ? picked.mimeType
         : 'image/jpeg';
@@ -695,8 +695,8 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
 
   Future<void> _pickBackgroundImage() async {
     final picked = await pickSingleFile();
-    if (picked?.file == null) return;
-    final b64 = await fileToBase64(picked!.file!);
+    if (picked == null || !picked.hasData) return;
+    final b64 = await pickedToBase64(picked);
     final mime = picked.mimeType.startsWith('image/')
         ? picked.mimeType
         : 'image/jpeg';
@@ -825,8 +825,8 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
           },
           onPickStampIcon: (filled) async {
             final picked = await pickSingleFile();
-            if (picked?.file == null) return;
-            final b64 = await fileToBase64(picked!.file!);
+            if (picked == null || !picked.hasData) return;
+            final b64 = await pickedToBase64(picked);
             final mime = picked.mimeType.startsWith('image/')
                 ? picked.mimeType
                 : 'image/jpeg';

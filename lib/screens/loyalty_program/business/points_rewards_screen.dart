@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/loyalty_program/business/buy_points_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/points_activity_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/points_flow_models.dart';
+import 'package:tapni_app/screens/loyalty_program/business/redemption_settings_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
@@ -143,15 +144,31 @@ class _PointsRewardsScreenState extends State<PointsRewardsScreen> {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(side, 0, side, 16),
-              child: PillButton(
-                label: 'View Activity',
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const PointsActivityScreen(),
-                    ),
-                  );
-                },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AuthOutlinedPillButton(
+                    label: 'Redemption Settings',
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const RedemptionSettingsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(height: m.v(12)),
+                  PillButton(
+                    label: 'View Activity',
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const PointsActivityScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ],

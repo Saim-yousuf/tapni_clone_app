@@ -645,10 +645,19 @@ class AuthProvider extends ChangeNotifier {
           ];
 
     // Remove push token while this device session is still valid.
-    await PushNotificationService.removeTokenFromBackend();
+    // Must not block logout (FCM can throw on web / misconfigured Firebase).
+    try {
+      await PushNotificationService.removeTokenFromBackend();
+    } catch (e) {
+      debugPrint('AuthProvider.logout: push token cleanup failed — $e');
+    }
 
     for (final account in accounts) {
-      await _revokeDeviceSessionForAccount(account);
+      try {
+        await _revokeDeviceSessionForAccount(account);
+      } catch (e) {
+        debugPrint('AuthProvider.logout: revoke session failed — $e');
+      }
     }
 
     if (logoutAll) {

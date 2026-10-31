@@ -12,12 +12,16 @@ class ServiceDetailBookingResult {
   final String bookingTime;
   final bool bookNow;
   final int quantity;
+  final String? resourceId;
+  final String? resourceName;
 
   const ServiceDetailBookingResult({
     required this.bookingDate,
     required this.bookingTime,
     required this.bookNow,
     this.quantity = 1,
+    this.resourceId,
+    this.resourceName,
   });
 }
 
@@ -91,6 +95,8 @@ class _ServiceDetailSheet extends StatelessWidget {
         bookingDate: result.bookingDate,
         bookingTime: result.bookingTime,
         bookNow: result.bookNow,
+        resourceId: result.resourceId,
+        resourceName: result.resourceName,
       ),
     );
   }

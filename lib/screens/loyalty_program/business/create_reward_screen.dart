@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -71,10 +70,16 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
       maxWidth: 200,
     );
     if (picked == null) return;
-    final bytes = await File(picked.path).readAsBytes();
+    final bytes = await picked.readAsBytes();
     final base64Str = base64Encode(bytes);
-    final ext = picked.path.split('.').last.toLowerCase();
-    setState(() => onPicked('data:image/$ext;base64,$base64Str'));
+    final name = picked.name.isNotEmpty ? picked.name : picked.path;
+    final ext = name.contains('.')
+        ? name.split('.').last.toLowerCase()
+        : 'jpeg';
+    final safeExt = (ext == 'jpg' || ext == 'jpeg' || ext == 'png' || ext == 'webp')
+        ? (ext == 'jpg' ? 'jpeg' : ext)
+        : 'jpeg';
+    setState(() => onPicked('data:image/$safeExt;base64,$base64Str'));
   }
 
   Future<void> _save() async {

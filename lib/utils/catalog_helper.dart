@@ -2,6 +2,16 @@ import 'package:tapni_app/l10n/app_localizations.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/catalog_order.dart';
 
+/// Treat empty / menu / catalog as the same family for profile tiles.
+bool catalogTypesMatch(String? a, String? b) {
+  final left = (a ?? '').trim().toLowerCase();
+  final right = (b ?? '').trim().toLowerCase();
+  if (left.isEmpty && right.isEmpty) return true;
+  if (left == right) return true;
+  const menuish = {'', 'menu', 'catalog'};
+  return menuish.contains(left) && menuish.contains(right);
+}
+
 class CatalogHelper {
   static String labelForCategory(String? category, AppLocalizations l10n) {
     if (category == 'Food & Beverage') return l10n.menu;
@@ -38,6 +48,8 @@ class CatalogHelper {
         return l10n.documents;
       case 'products':
         return l10n.products;
+      case 'portfolio':
+        return 'Portfolio';
       default:
         return l10n.catalog;
     }
@@ -45,6 +57,8 @@ class CatalogHelper {
 
   static String statusLabel(OrderStatus status, AppLocalizations l10n) {
     switch (status) {
+      case OrderStatus.held:
+        return 'Held';
       case OrderStatus.pending:
         return l10n.pending;
       case OrderStatus.confirmed:
@@ -60,6 +74,8 @@ class CatalogHelper {
 
   static String statusApiValue(OrderStatus status) {
     switch (status) {
+      case OrderStatus.held:
+        return 'held';
       case OrderStatus.pending:
         return 'pending';
       case OrderStatus.confirmed:
@@ -75,6 +91,8 @@ class CatalogHelper {
 
   static OrderStatus statusFromApi(String? value) {
     switch (value) {
+      case 'held':
+        return OrderStatus.held;
       case 'confirmed':
         return OrderStatus.confirmed;
       case 'completed':

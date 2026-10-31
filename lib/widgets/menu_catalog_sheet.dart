@@ -1,29 +1,39 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tapni_app/models/cart_line_item.dart';
 import 'package:tapni_app/models/catalog_item.dart';
-import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/service_schedule.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/screens/catalog/catalog_item_form_screen.dart';
-import 'package:tapni_app/screens/orders/order_detail_screen.dart';
-import 'package:tapni_app/utils/catalog_helper.dart';
+import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
+import 'package:tapni_app/utils/catalog_checkout.dart';
+import 'package:tapni_app/utils/catalog_helper.dart'
+    show CatalogHelper, catalogTypesMatch;
 import 'package:tapni_app/utils/document_file.dart';
 import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/business_completeness_sheet.dart';
+import 'package:tapni_app/widgets/cached_app_image.dart';
 import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
 import 'package:tapni_app/widgets/catalog_product_card.dart';
 import 'package:tapni_app/widgets/document_viewer.dart';
 import 'package:tapni_app/widgets/service_detail_sheet.dart';
+import 'package:tapni_app/widgets/stay_booking_sheet.dart';
+import 'package:tapni_app/widgets/checkout_coupon_card.dart';
+import 'package:tapni_app/widgets/checkout_points_redeem_card.dart';
 import 'package:tapni_app/screens/catalog/service_booking_cart_screen.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 
-void showMenuCatalogSheet({
+/// Owner manage/add → full screen. Customer browse → bottom sheet.
+Future<void> showMenuCatalogSheet({
   required BuildContext context,
   required String catalogLabel,
   required String catalogType,
@@ -36,27 +46,39 @@ void showMenuCatalogSheet({
   String? businessUsername,
   String? currency,
   bool isCustomerView = false,
+  bool embedded = false,
   String? initialItemName,
+  VoidCallback? onSaved,
 }) {
-  showModalBottomSheet(
+  final page = MenuCatalogSheet(
+    catalogLabel: catalogLabel,
+    catalogType: catalogType,
+    provider: provider,
+    existingLink: existingLink,
+    template: template,
+    businessId: businessId,
+    businessName: businessName,
+    businessPhoto: businessPhoto,
+    businessUsername: businessUsername,
+    currency: currency,
+    isCustomerView: isCustomerView,
+    embedded: embedded,
+    initialItemName: initialItemName,
+    onSaved: onSaved,
+  );
+
+  if (!isCustomerView) {
+    return Navigator.of(context).push(
+      AppPageRoute(builder: (_) => page),
+    );
+  }
+
+  return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
     backgroundColor: Colors.transparent,
-    builder: (ctx) => MenuCatalogSheet(
-      catalogLabel: catalogLabel,
-      catalogType: catalogType,
-      provider: provider,
-      existingLink: existingLink,
-      template: template,
-      businessId: businessId,
-      businessName: businessName,
-      businessPhoto: businessPhoto,
-      businessUsername: businessUsername,
-      currency: currency,
-      isCustomerView: isCustomerView,
-      initialItemName: initialItemName,
-    ),
+    builder: (ctx) => page,
   );
 }
 
@@ -72,7 +94,10 @@ class MenuCatalogSheet extends StatefulWidget {
   final String? businessUsername;
   final String? currency;
   final bool isCustomerView;
+  /// When true, render inside a parent scaffold (no back chrome / no Navigator.pop).
+  final bool embedded;
   final String? initialItemName;
+  final VoidCallback? onSaved;
 
   const MenuCatalogSheet({
     super.key,
@@ -87,7 +112,9 @@ class MenuCatalogSheet extends StatefulWidget {
     this.businessUsername,
     this.currency,
     this.isCustomerView = false,
+    this.embedded = false,
     this.initialItemName,
+    this.onSaved,
   });
 
   @override
@@ -99,16 +126,32 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   late List<String> _catalogCategories;
   late ServiceSchedule _serviceSchedule;
   final _newCategoryCtrl = TextEditingController();
-  bool showLink = true;
   bool _isSaving = false;
   bool _isOrdering = false;
   final List<CartLineItem> _cart = [];
+  CheckoutPointsSelection _pointsSelection =
+      CheckoutPointsSelection.none(0);
+  CheckoutCouponSelection _couponSelection = CheckoutCouponSelection.none;
   String? _selectedCategory;
   final Set<String> _expandedCategories = {};
+  /// null/empty = admin template default; otherwise custom icon (url or data-uri).
+  String _customLogo = '';
 
   bool get _isServices => widget.catalogType == 'services';
+  bool get _isProducts => widget.catalogType == 'products';
   bool get _isDocuments => widget.catalogType == 'documents';
   bool _didOpenInitialItem = false;
+
+  String get _templateLogo {
+    final t = widget.template?.logo.trim() ?? '';
+    if (t.startsWith('http://') || t.startsWith('https://')) return t;
+    return '';
+  }
+
+  String get _displayLogo {
+    if (_customLogo.trim().isNotEmpty) return _customLogo.trim();
+    return _templateLogo;
+  }
 
   String get _currency => resolveCurrency(
         currency: widget.currency ?? widget.provider?.profile.currency,
@@ -130,7 +173,17 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     }
     _serviceSchedule =
         widget.existingLink?.serviceSchedule ?? const ServiceSchedule();
-    showLink = widget.existingLink?.isPublic ?? true;
+
+    final existingLogo = widget.existingLink?.logoUrl?.trim() ?? '';
+    final templateLogo = widget.template?.logo.trim() ?? '';
+    // Treat template default as non-custom so admin icon updates still apply.
+    if (existingLogo.isNotEmpty &&
+        existingLogo != templateLogo &&
+        !(templateLogo.isNotEmpty && existingLogo.endsWith(templateLogo))) {
+      _customLogo = existingLogo;
+    } else {
+      _customLogo = '';
+    }
 
     // Auto-expand the first category with items so the accordion isn't empty
     // on first open for the business owner.
@@ -195,19 +248,179 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         return sum + item.displayPrice * line.quantity;
       });
 
+  String get _manageTitle {
+    switch (widget.catalogType) {
+      case 'services':
+        return 'Manage Services';
+      case 'products':
+        return 'Manage Products';
+      case 'portfolio':
+        return 'Manage Portfolio';
+      case 'documents':
+        return 'Manage Documents';
+      default:
+        return 'Manage $_catalogLabel';
+    }
+  }
+
+  Widget _buildHeader({
+    required String title,
+    required Widget trailing,
+    bool showBack = true,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: SizedBox(
+        height: 44,
+        child: Row(
+          children: [
+            if (showBack)
+              CircleBackButton(onTap: () => Navigator.pop(context))
+            else
+              const SizedBox(width: 40),
+            Expanded(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: WaUi.toolsTitleOf(
+                  size: 18,
+                  weight: FontWeight.w700,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            trailing,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _changeCatalogIcon() async {
+    final file = await pickFile();
+    if (file == null || !file.hasData) return;
+    final encoded = await pickedToBase64(file);
+    if (encoded.isEmpty || !mounted) return;
+    setState(() => _customLogo = encoded);
+    await _persistCatalog();
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Icon updated')),
+    );
+  }
+
+  Future<void> _resetCatalogIcon() async {
+    setState(() => _customLogo = '');
+    await _persistCatalog();
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Using default icon')),
+    );
+  }
+
+  Widget _logoPreview(String logo, {double size = 40}) {
+    final placeholder = ColoredBox(
+      color: const Color(0xFFF1F5F9),
+      child: Icon(
+        Icons.add_photo_alternate_outlined,
+        size: size * 0.5,
+        color: Colors.black54,
+      ),
+    );
+    if (logo.isEmpty) return placeholder;
+    if (logo.startsWith('data:image')) {
+      try {
+        final b64 = logo.split(',').last;
+        return Image.memory(
+          base64Decode(b64),
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => placeholder,
+        );
+      } catch (_) {
+        return placeholder;
+      }
+    }
+    return Image.network(
+      logo,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => placeholder,
+    );
+  }
+
+  Widget _ownerIconTrailing() {
+    return PopupMenuButton<String>(
+      tooltip: 'Change icon',
+      onSelected: (value) async {
+        if (value == 'change') await _changeCatalogIcon();
+        if (value == 'reset') await _resetCatalogIcon();
+      },
+      itemBuilder: (_) => [
+        const PopupMenuItem(value: 'change', child: Text('Change icon')),
+        if (_customLogo.trim().isNotEmpty)
+          const PopupMenuItem(value: 'reset', child: Text('Use default icon')),
+      ],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: _logoPreview(_displayLogo),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOwnerBody({bool showBack = true, bool showTitle = true}) {
+    return Column(
+      children: [
+        if (showTitle) ...[
+          const SizedBox(height: 8),
+          _buildHeader(
+            title: _manageTitle,
+            trailing: widget.provider != null
+                ? _ownerIconTrailing()
+                : const SizedBox(width: 40),
+            showBack: showBack,
+          ),
+          const SizedBox(height: 8),
+        ],
+        Expanded(child: _buildBusinessView(null)),
+        SafeArea(top: false, child: _buildBusinessBottomBar()),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Embedded inside Business Presence Menu tab.
+    if (widget.embedded && !widget.isCustomerView) {
+      return ColoredBox(
+        color: Colors.white,
+        child: _buildOwnerBody(showBack: false, showTitle: false),
+      );
+    }
+
+    // Owner manage / add → full screen (menu, services, products, portfolio).
+    if (!widget.isCustomerView) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: _buildOwnerBody(showBack: true, showTitle: true),
+        ),
+      );
+    }
+
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-    final title = widget.isCustomerView
-        ? (_isServices
-            ? 'Services'
-            : (widget.businessName ?? _catalogLabel))
-        : (_isServices ? 'Manage Service' : 'Manage $_catalogLabel');
+    final title = _isServices
+        ? 'Services'
+        : (widget.businessName ?? _catalogLabel);
 
     return Padding(
       padding: EdgeInsets.only(bottom: bottomInset),
       child: DraggableScrollableSheet(
-        initialChildSize: widget.isCustomerView ? 0.85 : 0.9,
+        initialChildSize: 0.85,
         minChildSize: 0.45,
         maxChildSize: 0.95,
         expand: false,
@@ -224,43 +437,15 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 const SizedBox(height: 12),
                 const SheetDragHandle(),
                 const SizedBox(height: 14),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SizedBox(
-                    height: 44,
-                    child: Row(
-                      children: [
-                        CircleBackButton(onTap: () => Navigator.pop(context)),
-                        Expanded(
-                          child: Text(
-                            title,
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: WaUi.toolsTitleOf(
-                              size: 18,
-                              weight: FontWeight.w700,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        if (widget.isCustomerView)
-                          (!_isDocuments)
-                              ? _CartBagIndicator(count: _cartItemCount)
-                              : const SizedBox(width: 40)
-                        else
-                          _buildBusinessActions(),
-                      ],
-                    ),
-                  ),
+                _buildHeader(
+                  title: title,
+                  trailing: !_isDocuments
+                      ? _CartBagIndicator(count: _cartItemCount)
+                      : const SizedBox(width: 40),
                 ),
                 const SizedBox(height: 8),
-                Expanded(
-                  child: widget.isCustomerView
-                      ? _buildCustomerView(scrollController)
-                      : _buildBusinessView(scrollController),
-                ),
-                if (widget.isCustomerView && !_isDocuments)
+                Expanded(child: _buildCustomerView(scrollController)),
+                if (!_isDocuments)
                   SafeArea(
                     top: false,
                     child: _isServices
@@ -269,8 +454,6 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                             : const SizedBox.shrink())
                         : _buildOrderBar(),
                   ),
-                if (!widget.isCustomerView)
-                  SafeArea(top: false, child: _buildBusinessBottomBar()),
               ],
             ),
           );
@@ -283,7 +466,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   // Business — Manage Menu
   // ---------------------------------------------------------------------
 
-  Widget _buildBusinessView(ScrollController scrollController) {
+  Widget _buildBusinessView(ScrollController? scrollController) {
     final grouped = CatalogHelper.groupByCategoryOrdered(
       items: _items,
       catalogCategories: _catalogCategories,
@@ -341,8 +524,6 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           _buildServiceScheduleSettings(),
           const SizedBox(height: 16),
         ],
-        _showPublicToggle(),
-        const SizedBox(height: 8),
       ],
     );
   }
@@ -506,9 +687,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           const SizedBox(width: 8),
           _circleIconButton(
             icon: Image.asset(
-              'assets/images/png/edit-icon.png',
-              width: 14,
-              height: 14,
+              'assets/images/png/edit-icon-1.png',
+              width: 16,
+              height: 16,
+              fit: BoxFit.contain,
               errorBuilder: (_, __, ___) =>
                   const Icon(Icons.edit_outlined, size: 16, color: Colors.black),
             ),
@@ -517,9 +699,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           const SizedBox(width: 8),
           _circleIconButton(
             icon: Image.asset(
-              'assets/images/png/delete-icon.png',
-              width: 14,
-              height: 14,
+              'assets/images/png/trash-bin-icon.png',
+              width: 16,
+              height: 16,
+              fit: BoxFit.contain,
               color: Colors.white,
               errorBuilder: (_, __, ___) => const Icon(
                 Icons.delete_outline,
@@ -529,7 +712,10 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             ),
             bg: const Color(0xFFE53935),
             borderColor: const Color(0xFFE53935),
-            onTap: () => setState(() => _items.removeAt(index)),
+            onTap: () async {
+              setState(() => _items.removeAt(index));
+              await _persistCatalog();
+            },
           ),
         ],
       ),
@@ -553,55 +739,6 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     );
   }
 
-  Widget _buildBusinessActions() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (widget.existingLink != null) ...[
-          _deleteButton(),
-          const SizedBox(width: 8),
-        ],
-        _isSaving
-            ? const SizedBox(
-                width: 40,
-                height: 40,
-                child: Center(
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              )
-            : CircleAssetButton(
-                asset: 'assets/images/png/check-icon-1.png',
-                iconSize: 16,
-                onTap: _saveCatalogLink,
-              ),
-      ],
-    );
-  }
-
-  Widget _deleteButton() {
-    return _circleIconButton(
-      icon: const Icon(
-        Icons.delete_outline,
-        size: 16,
-        color: Color(0xFFE53935),
-      ),
-      bg: const Color(0xFFFDECEC),
-      borderColor: const Color(0xFFF6C9C9),
-      onTap: () async {
-        if (widget.provider == null || widget.existingLink == null) return;
-        await widget.provider!.deleteSocialLink(widget.existingLink!.id, context);
-        if (mounted) Navigator.pop(context);
-      },
-    );
-  }
-
   Widget _buildBusinessBottomBar() {
     if (_isDocuments) {
       return Padding(
@@ -613,11 +750,15 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       );
     }
 
-    final addLabel = _isServices
-        ? 'Add Service'
-        : (_catalogLabel.toLowerCase() == 'menu'
-            ? 'Add Menu'
-            : context.l10n.addCatalogItem(_catalogLabel));
+    final addLabel = switch (widget.catalogType) {
+      'services' => 'Add Service',
+      'products' => 'Add Product',
+      'portfolio' => 'Add Portfolio Item',
+      'documents' => context.l10n.addDocument,
+      _ => _catalogLabel.toLowerCase() == 'menu'
+          ? 'Add Menu Item'
+          : context.l10n.addCatalogItem(_catalogLabel),
+    };
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
@@ -697,10 +838,11 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                       ),
                       child: ReorderableListView.builder(
                         shrinkWrap: true,
+                        buildDefaultDragHandles: false,
                         itemCount: _catalogCategories.length,
-                        onReorder: (oldIndex, newIndex) {
+                        onReorder: (oldIndex, newIndex) async {
                           if (newIndex > oldIndex) newIndex -= 1;
-                          _moveCategory(oldIndex, newIndex);
+                          await _moveCategory(oldIndex, newIndex);
                           setSheetState(() {});
                         },
                         itemBuilder: (ctx, index) {
@@ -713,18 +855,21 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                                     cat.toLowerCase(),
                               )
                               .length;
-                          return _sectionRow(
+                          return ReorderableDelayedDragStartListener(
                             key: ValueKey(cat),
-                            name: cat,
-                            count: count,
-                            onEdit: () async {
-                              await _renameCategorySheet(index);
-                              setSheetState(() {});
-                            },
-                            onDelete: () {
-                              _removeCategory(index);
-                              setSheetState(() {});
-                            },
+                            index: index,
+                            child: _sectionRow(
+                              name: cat,
+                              count: count,
+                              onEdit: () async {
+                                await _renameCategorySheet(index);
+                                setSheetState(() {});
+                              },
+                              onDelete: () async {
+                                await _removeCategory(index);
+                                setSheetState(() {});
+                              },
+                            ),
                           );
                         },
                       ),
@@ -749,14 +894,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   }
 
   Widget _sectionRow({
-    required Key key,
     required String name,
     required int count,
     required VoidCallback onEdit,
     required VoidCallback onDelete,
   }) {
     return Container(
-      key: key,
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
@@ -791,18 +934,32 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             ),
           ),
           _circleIconButton(
-            icon: const Icon(Icons.edit_outlined, size: 16, color: Colors.black),
+            icon: Image.asset(
+              'assets/images/png/edit-icon-1.png',
+              width: 16,
+              height: 16,
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.edit_outlined, size: 16, color: Colors.black),
+            ),
             onTap: onEdit,
           ),
           const SizedBox(width: 8),
           _circleIconButton(
-            icon: const Icon(
-              Icons.delete_outline,
-              size: 16,
-              color: Color(0xFFE53935),
+            icon: Image.asset(
+              'assets/images/png/trash-bin-icon.png',
+              width: 16,
+              height: 16,
+              fit: BoxFit.contain,
+              color: Colors.white,
+              errorBuilder: (_, __, ___) => const Icon(
+                Icons.delete_outline,
+                size: 16,
+                color: Colors.white,
+              ),
             ),
-            bg: const Color(0xFFFDECEC),
-            borderColor: const Color(0xFFF6C9C9),
+            bg: const Color(0xFFE53935),
+            borderColor: const Color(0xFFE53935),
             onTap: onDelete,
           ),
         ],
@@ -952,7 +1109,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     );
   }
 
-  void _addCategory() {
+  Future<void> _addCategory() async {
     final name = _newCategoryCtrl.text.trim();
     if (name.isEmpty) return;
     final exists = _catalogCategories.any(
@@ -968,23 +1125,26 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       _catalogCategories.add(name);
       _newCategoryCtrl.clear();
     });
+    await _persistCatalog();
   }
 
-  void _removeCategory(int index) {
+  Future<void> _removeCategory(int index) async {
     setState(() {
       final removed = _catalogCategories.removeAt(index);
       _expandedCategories.remove(removed);
     });
+    await _persistCatalog();
   }
 
-  void _moveCategory(int from, int to) {
+  Future<void> _moveCategory(int from, int to) async {
     setState(() {
       final item = _catalogCategories.removeAt(from);
       _catalogCategories.insert(to, item);
     });
+    await _persistCatalog();
   }
 
-  void _renameCategory(int index, String newName) {
+  Future<void> _renameCategory(int index, String newName) async {
     final trimmed = newName.trim();
     if (trimmed.isEmpty) return;
     final oldName = _catalogCategories[index];
@@ -1013,6 +1173,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         _expandedCategories.add(trimmed);
       }
     });
+    await _persistCatalog();
   }
 
   void _ensureCategoryOnList(String category) {
@@ -1081,6 +1242,51 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               ),
             ],
           ),
+          const SizedBox(height: 14),
+          Text(
+            'Open days',
+            style: WaUi.body.copyWith(
+              fontSize: 12,
+              color: BarqodyChrome.secondaryText,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: List.generate(7, (day) {
+              const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+              final selected = _serviceSchedule.workingDays.contains(day);
+              return FilterChip(
+                label: Text(labels[day]),
+                selected: selected,
+                onSelected: (on) {
+                  setState(() {
+                    final days = List<int>.from(_serviceSchedule.workingDays);
+                    if (on) {
+                      if (!days.contains(day)) days.add(day);
+                    } else {
+                      days.remove(day);
+                    }
+                    days.sort();
+                    _serviceSchedule =
+                        _serviceSchedule.copyWith(workingDays: days);
+                  });
+                },
+                selectedColor: Colors.black,
+                checkmarkColor: Colors.white,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: selected ? Colors.white : Colors.black87,
+                ),
+                backgroundColor: Colors.white,
+                side: BorderSide(
+                  color: selected ? Colors.black : const Color(0xFFE0E0E0),
+                ),
+              );
+            }),
+          ),
         ],
       ),
     );
@@ -1122,35 +1328,6 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           ],
         ),
       ],
-    );
-  }
-
-  Widget _showPublicToggle() {
-    return Container(
-      decoration: BoxDecoration(
-        color: BarqodyChrome.fieldFill,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            context.l10n.showLink,
-            style: WaUi.toolsTitleOf(
-              size: 15,
-              weight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          ),
-          Switch(
-            value: showLink,
-            activeThumbColor: Colors.white,
-            activeTrackColor: Colors.black,
-            onChanged: (val) => setState(() => showLink = val),
-          ),
-        ],
-      ),
     );
   }
 
@@ -1367,9 +1544,37 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         index: index,
         bookingDate: result.bookingDate,
         bookingTime: result.bookingTime,
+        resourceId: result.resourceId,
+        resourceName: result.resourceName,
       );
       if (result.bookNow && mounted) {
         await _openServiceCart();
+      }
+      return;
+    }
+
+    // Hotel rooms: products + bookable room resources → check-in / check-out sheet.
+    if (_isProducts &&
+        widget.businessId != null &&
+        widget.existingLink != null &&
+        await businessHasRoomResources(widget.businessId!)) {
+      if (!mounted) return;
+      final room = await findRoomResourceForItem(
+        businessId: widget.businessId!,
+        item: item,
+      );
+      final stay = await showStayBookingSheet(
+        context: context,
+        item: item,
+        businessId: widget.businessId!,
+        businessLinkId: widget.existingLink!.id,
+        businessName: widget.businessName ?? 'business',
+        currency: _currency,
+        room: room,
+      );
+      if (stay == null || !mounted) return;
+      if (stay.bookNow) {
+        await _placeStayOrder(item: item, stay: stay);
       }
       return;
     }
@@ -1403,13 +1608,16 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     required int index,
     required String bookingDate,
     required String bookingTime,
+    String? resourceId,
+    String? resourceName,
   }) {
     setState(() {
       final existingIndex = _cart.indexWhere(
         (line) =>
             line.itemIndex == index &&
             line.bookingDate == bookingDate &&
-            line.bookingTime == bookingTime,
+            line.bookingTime == bookingTime &&
+            line.resourceId == resourceId,
       );
       if (existingIndex >= 0) {
         final existing = _cart[existingIndex];
@@ -1422,6 +1630,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             quantity: 1,
             bookingDate: bookingDate,
             bookingTime: bookingTime,
+            resourceId: resourceId,
+            resourceName: resourceName,
           ),
         );
       }
@@ -1530,9 +1740,28 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     );
   }
 
+  List<Map<String, dynamic>> get _checkoutItems => _cart.map((line) {
+        final item = _items[line.itemIndex];
+        return {
+          'name': item.name,
+          'price': item.displayPrice,
+          'quantity': line.quantity,
+          if (item.category.isNotEmpty) 'category': item.category,
+          if (item.imageUrl.isNotEmpty) 'image': item.imageUrl,
+          if (line.notes.isNotEmpty) 'notes': line.notes,
+        };
+      }).toList();
+
   Widget _buildOrderBar() {
     final total = _cartTotal;
     final itemCount = _cartItemCount;
+    final afterCoupon = (total - _couponSelection.discountAmount)
+        .clamp(0.0, double.infinity)
+        .toDouble();
+    final payable = _pointsSelection.usePoints
+        ? _pointsSelection.payableAmount
+        : afterCoupon;
+    final businessId = widget.businessId;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
@@ -1547,62 +1776,146 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  context.l10n.placeOrder,
-                  style: WaUi.body.copyWith(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: BarqodyChrome.secondaryText,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  formatMoney(total, currency: _currency),
-                  style: WaUi.toolsTitleOf(
-                    size: 20,
-                    weight: FontWeight.w800,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
+          if (businessId != null &&
+              businessId.isNotEmpty &&
+              itemCount > 0 &&
+              widget.isCustomerView) ...[
+            CheckoutCouponCard(
+              businessId: businessId,
+              subtotalAmount: total,
+              currency: _currency,
+              catalogType: widget.catalogType,
+              items: _checkoutItems,
+              pointsToRedeem: _pointsSelection.usePoints
+                  ? _pointsSelection.pointsToRedeem
+                  : 0,
+              onChanged: (sel) {
+                if (!mounted) return;
+                setState(() => _couponSelection = sel);
+              },
             ),
-          ),
-          SizedBox(
-            width: 156,
-            height: WaUi.primaryButtonHeight,
-            child: ElevatedButton(
-              onPressed:
-                  itemCount == 0 || _isOrdering ? null : _placeOrder,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                disabledBackgroundColor: Colors.black.withValues(alpha: 0.35),
-                elevation: 0,
-                shadowColor: Colors.transparent,
-                shape: const StadiumBorder(),
-              ),
-              child: _isOrdering
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Text(
+            CheckoutPointsRedeemCard(
+              businessId: businessId,
+              subtotalAmount: afterCoupon,
+              currency: _currency,
+              onChanged: (sel) {
+                if (!mounted) return;
+                setState(() => _pointsSelection = sel);
+              },
+            ),
+          ],
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
                       context.l10n.placeOrder,
-                      style: WaUi.promoButton.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                      style: WaUi.body.copyWith(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: BarqodyChrome.secondaryText,
                       ),
                     ),
-            ),
+                    if (widget.isCustomerView) ...[
+                      Builder(
+                        builder: (ctx) {
+                          String who = '';
+                          try {
+                            who = Provider.of<ProfileProvider>(ctx,
+                                    listen: false)
+                                .profile
+                                .name
+                                .trim();
+                          } catch (_) {}
+                          if (who.isEmpty) return const SizedBox.shrink();
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Text(
+                              'Ordering as $who',
+                              style: WaUi.body.copyWith(
+                                fontSize: 11,
+                                color: BarqodyChrome.secondaryText,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                    const SizedBox(height: 2),
+                    Text(
+                      formatMoney(payable, currency: _currency),
+                      style: WaUi.toolsTitleOf(
+                        size: 20,
+                        weight: FontWeight.w800,
+                        color: Colors.black,
+                      ),
+                    ),
+                    if (_couponSelection.applied &&
+                        _couponSelection.discountAmount > 0)
+                      Text(
+                        'Coupon −${formatMoney(_couponSelection.discountAmount, currency: _currency)}',
+                        style: WaUi.body.copyWith(
+                          fontSize: 11,
+                          color: BarqodyChrome.secondaryText,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    if (_pointsSelection.usePoints &&
+                        _pointsSelection.discountAmount > 0)
+                      Text(
+                        'Includes ${_pointsSelection.pointsToRedeem} pts off',
+                        style: WaUi.body.copyWith(
+                          fontSize: 11,
+                          color: BarqodyChrome.secondaryText,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 156,
+                height: WaUi.primaryButtonHeight,
+                child: ElevatedButton(
+                  onPressed: itemCount == 0 ||
+                          _isOrdering ||
+                          !_pointsSelection.valid ||
+                          !_couponSelection.valid
+                      ? null
+                      : _placeOrder,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    disabledBackgroundColor:
+                        Colors.black.withValues(alpha: 0.35),
+                    elevation: 0,
+                    shadowColor: Colors.transparent,
+                    shape: const StadiumBorder(),
+                  ),
+                  child: _isOrdering
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          context.l10n.placeOrder,
+                          style: WaUi.promoButton.copyWith(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -1614,6 +1927,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   // ---------------------------------------------------------------------
 
   Future<void> _addItem() async {
+    // Full-screen add (menu / service / product / portfolio).
     if (!widget.isCustomerView) {
       final ok = await ensureBusinessProfileComplete(context);
       if (!ok || !mounted) return;
@@ -1626,7 +1940,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     }
     final result = await Navigator.push<CatalogItem>(
       context,
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => CatalogItemFormScreen(
           catalogLabel: _catalogLabel,
           existingCategories: _catalogCategories,
@@ -1643,13 +1957,14 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         final cat = CatalogHelper.categoryOf(result);
         _expandedCategories.add(cat);
       });
+      await _persistCatalog();
     }
   }
 
   Future<void> _editItem(int index) async {
     final result = await Navigator.push<CatalogItem>(
       context,
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => CatalogItemFormScreen(
           catalogLabel: _catalogLabel,
           existingItem: _items[index],
@@ -1665,6 +1980,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         _ensureCategoryOnList(result.category);
         _items[index] = result;
       });
+      await _persistCatalog();
     }
   }
 
@@ -1688,26 +2004,64 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       ),
     );
 
-    if (image.isEmpty || !DocumentFileHelper.isImage(image)) return placeholder;
+    if (image.isEmpty) return placeholder;
+
+    final looksLikeImage = DocumentFileHelper.isImage(image) ||
+        image.startsWith('data:image/') ||
+        (image.length > 100 && !image.contains('/') && !image.startsWith('http'));
+    if (!looksLikeImage && _isDocuments) return placeholder;
+
+    if (image.startsWith('data:image/')) {
+      final comma = image.indexOf(',');
+      if (comma > 0) {
+        try {
+          final bytes = base64Decode(image.substring(comma + 1));
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.memory(
+              bytes,
+              width: size,
+              height: size,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => placeholder,
+            ),
+          );
+        } catch (_) {
+          return placeholder;
+        }
+      }
+    }
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
-      child: Image.network(
-        image,
+      child: CachedAppImage(
+        url: image,
         width: size,
         height: size,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => placeholder,
+        borderRadius: BorderRadius.circular(12),
+        error: placeholder,
       ),
     );
   }
 
-  Future<void> _saveCatalogLink() async {
+  /// Save without leaving the screen (used after add / edit / delete).
+  Future<void> _persistCatalog() async {
+    if (widget.provider == null || _isSaving) return;
+    if (_items.isEmpty && widget.existingLink == null) return;
+    await _saveCatalogLink(quiet: true);
+  }
+
+  Future<void> _saveCatalogLink({bool quiet = false}) async {
     if (widget.provider == null) return;
-    if (_items.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.addAtLeastOneCatalogItem(_catalogLabel))),
-      );
+    if (_items.isEmpty && widget.existingLink == null) {
+      if (!quiet && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.l10n.addAtLeastOneCatalogItem(_catalogLabel)),
+          ),
+        );
+      }
       return;
     }
 
@@ -1720,11 +2074,14 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
 
     final label = widget.template?.label ?? _catalogLabel;
     final templateId = widget.template?.id ?? widget.existingLink?.templateId;
-    final logoUrl = widget.template?.logo ?? widget.existingLink?.logoUrl;
+    // Empty = admin default template icon (resolved on API read).
+    final logoUrl = _customLogo.trim();
+    final isPublic = widget.existingLink?.isPublic ?? true;
     final link = widget.existingLink != null
         ? widget.existingLink!.copyWith(
             customLabel: label,
             fieldType: 'menu_catalog',
+            actionType: 'menu_catalog',
             templateId: templateId,
             logoUrl: logoUrl,
             catalogItems: _items,
@@ -1732,7 +2089,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             catalogType: widget.catalogType,
             serviceSchedule: _isServices ? _serviceSchedule : null,
             value: widget.existingLink!.id,
-            isPublic: showLink,
+            isPublic: isPublic,
           )
         : SocialLink(
             id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -1740,6 +2097,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             templateId: templateId,
             customLabel: label,
             fieldType: 'menu_catalog',
+            actionType: 'menu_catalog',
             logoUrl: logoUrl,
             catalogItems: _items,
             catalogCategories: savedCategories,
@@ -1747,235 +2105,188 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             serviceSchedule: _isServices ? _serviceSchedule : null,
             value: 'catalog',
             isActive: true,
-            isPublic: showLink,
+            isPublic: isPublic,
           );
 
-    final updatedLinks = List<SocialLink>.from(widget.provider!.profile.socialLinks);
+    final updatedLinks =
+        List<SocialLink>.from(widget.provider!.profile.socialLinks);
+
+    int idx = -1;
     if (widget.existingLink != null) {
-      final idx = updatedLinks.indexWhere((l) => l.id == widget.existingLink!.id);
-      if (idx != -1) updatedLinks[idx] = link;
+      idx = updatedLinks.indexWhere((l) => l.id == widget.existingLink!.id);
+    }
+    // Upsert by catalog type so we never create a second Menu/Services tile.
+    if (idx == -1) {
+      idx = updatedLinks.indexWhere(
+        (l) =>
+            l.isCatalogLink &&
+            catalogTypesMatch(l.catalogType, widget.catalogType),
+      );
+    }
+
+    if (idx != -1) {
+      final prev = updatedLinks[idx];
+      updatedLinks[idx] = link.copyWith(id: prev.id);
+      // Drop any extra catalog tiles of the same type.
+      for (var i = updatedLinks.length - 1; i >= 0; i--) {
+        if (i == idx) continue;
+        final other = updatedLinks[i];
+        if (other.isCatalogLink &&
+            catalogTypesMatch(other.catalogType, widget.catalogType)) {
+          updatedLinks.removeAt(i);
+        }
+      }
     } else {
       updatedLinks.add(link);
     }
 
-    await widget.provider!.updateLinks(links: updatedLinks, context: context);
-    if (mounted) {
-      setState(() => _isSaving = false);
-      Navigator.pop(context);
+    final res = await widget.provider!.updateLinks(
+      links: updatedLinks,
+      context: context,
+    );
+    if (!mounted) return;
+    setState(() => _isSaving = false);
+    if (!res.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(res.message ?? 'Could not save menu. Please try again.'),
+        ),
+      );
+      return;
+    }
+    widget.onSaved?.call();
+    // Stay on screen — top save button is gone; changes auto-persist.
+    if (!quiet && !widget.embedded && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('$_catalogLabel saved')),
+      );
     }
   }
 
-  String? _orderIdFromApiData(dynamic data) {
-    if (data is! Map) return null;
-    final payload = data['data'] is Map ? data['data'] : data;
-    if (payload is! Map) return null;
-    final id = payload['id'] ?? payload['_id'];
-    if (id == null) return null;
-    final str = id.toString();
-    return str.isEmpty ? null : str;
+  Future<void> _placeStayOrder({
+    required CatalogItem item,
+    required StayBookingResult stay,
+  }) async {
+    if (widget.businessId == null || widget.existingLink == null) return;
+
+    String customerName = '';
+    String? customerUsername;
+    try {
+      final profile =
+          Provider.of<ProfileProvider>(context, listen: false).profile;
+      customerUsername = profile.username;
+      customerName = profile.name;
+    } catch (_) {}
+
+    setState(() => _isOrdering = true);
+    await CatalogCheckout.placeWithPayment(
+      context: context,
+      totalAmount: item.displayPrice * stay.nights,
+      currency: _currency,
+      customerName: customerName,
+      customerUsername: customerUsername,
+      businessName: widget.businessName,
+      businessUsername: widget.businessUsername,
+      totalItems: 1,
+      bookingKind: 'stay',
+      placeOrder: ({
+        required String paymentMethod,
+        required String idempotencyKey,
+      }) {
+        return CatalogRepo().placeOrder(
+          businessId: widget.businessId!,
+          businessLinkId: widget.existingLink!.id,
+          catalogType: 'products',
+          bookingKind: 'stay',
+          resourceId: stay.resourceId,
+          checkInDate: stay.checkInDate,
+          checkOutDate: stay.checkOutDate,
+          paymentMethod: paymentMethod,
+          idempotencyKey: idempotencyKey,
+          items: [
+            {
+              'name': item.name,
+              'price': item.displayPrice,
+              'quantity': 1,
+              if (item.imageUrl.isNotEmpty) 'image': item.imageUrl,
+              'notes': '${stay.nights} night(s) · ${stay.resourceName}',
+            },
+          ],
+        );
+      },
+    );
+    if (!mounted) return;
+    setState(() => _isOrdering = false);
   }
 
   Future<void> _placeOrder() async {
     if (widget.businessId == null || widget.existingLink == null) return;
 
-    setState(() => _isOrdering = true);
-
-    final orderItems = _cart.map((line) {
-      final item = _items[line.itemIndex];
-      return {
-        'name': item.name,
-        'price': item.displayPrice,
-        'quantity': line.quantity,
-        if (item.imageUrl.isNotEmpty) 'image': item.imageUrl,
-        if (line.notes.isNotEmpty) 'notes': line.notes,
-      };
-    }).toList();
+    final orderItems = _checkoutItems;
 
     final itemCount = _cartItemCount;
     final total = _cartTotal;
 
-    final res = await CatalogRepo().placeOrder(
-      businessId: widget.businessId!,
-      businessLinkId: widget.existingLink!.id,
-      catalogType: widget.catalogType,
-      items: orderItems,
-    );
+    String customerName = '';
+    String? customerUsername;
+    try {
+      final profile =
+          Provider.of<ProfileProvider>(context, listen: false).profile;
+      customerUsername = profile.username;
+      customerName = profile.name;
+    } catch (_) {}
 
-    if (!mounted) return;
-    setState(() => _isOrdering = false);
-
-    if (res.success) {
-      final token = CatalogOrder.tokenFromApi(res.data);
-      final orderId = _orderIdFromApiData(res.data);
-      await _showOrderPlacedDialog(
-        token: token,
-        itemCount: itemCount,
-        total: total,
-        orderId: orderId,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? context.l10n.failedToPlaceOrder)),
-      );
-    }
-  }
-
-  Future<void> _showOrderPlacedDialog({
-    required int token,
-    required int itemCount,
-    required double total,
-    String? orderId,
-  }) async {
-    final navigator = Navigator.of(context);
-    await showModalBottomSheet<void>(
+    setState(() => _isOrdering = true);
+    final pointsToRedeem = _pointsSelection.usePoints
+        ? _pointsSelection.pointsToRedeem
+        : 0;
+    final afterCoupon = (total - _couponSelection.discountAmount)
+        .clamp(0.0, double.infinity)
+        .toDouble();
+    final payable = _pointsSelection.usePoints
+        ? _pointsSelection.payableAmount
+        : afterCoupon;
+    await CatalogCheckout.placeWithPayment(
       context: context,
-      isScrollControlled: true,
-      isDismissible: true,
-      enableDrag: true,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(BarqodyChrome.sheetRadius),
-          ),
-        ),
-        padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 88,
-                height: 88,
-                decoration: const BoxDecoration(
-                  color: Colors.black,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Image.asset(
-                    'assets/images/png/check-icon-1.png',
-                    width: 32,
-                    height: 32,
-                    color: Colors.white,
-                    errorBuilder: (_, __, ___) => const Icon(
-                      Icons.check_rounded,
-                      color: Colors.white,
-                      size: 36,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 22),
-              Text(
-                'Your Order Was Placed!',
-                textAlign: TextAlign.center,
-                style: WaUi.toolsTitleOf(
-                  size: 20,
-                  weight: FontWeight.w700,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                widget.businessName != null
-                    ? 'Your order has been sent to ${widget.businessName}.'
-                    : context.l10n.orderPlacedWith(context.l10n.businessLabel),
-                textAlign: TextAlign.center,
-                style: WaUi.body.copyWith(
-                  fontSize: 14,
-                  color: BarqodyChrome.secondaryText,
-                  height: 1.35,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: BarqodyChrome.fieldFill,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: [
-                    if (token > 0) _orderSummaryRow('Token', '#$token'),
-                    if (widget.businessName != null)
-                      _orderSummaryRow('Business', widget.businessName!),
-                    _orderSummaryRow('Total Items', '$itemCount'),
-                    _orderSummaryRow(
-                      'Total',
-                      formatMoney(total, currency: _currency),
-                      bold: true,
-                      last: true,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              PillButton(
-                label: 'Go Home',
-                onPressed: () {
-                  Navigator.pop(ctx);
-                  navigator.pop();
-                },
-              ),
-              if (orderId != null) ...[
-                const SizedBox(height: 12),
-                PillButton(
-                  label: 'Track Order',
-                  filled: false,
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    navigator.pop();
-                    navigator.push(
-                      MaterialPageRoute(
-                        builder: (_) => OrderDetailScreen(
-                          orderId: orderId,
-                          isBusinessView: false,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
+      totalAmount: payable,
+      currency: _currency,
+      customerName: customerName,
+      customerUsername: customerUsername,
+      businessName: widget.businessName,
+      businessUsername: widget.businessUsername ?? widget.businessName,
+      totalItems: itemCount,
+      bookingKind: 'order',
+      placeOrder: ({
+        required String paymentMethod,
+        required String idempotencyKey,
+      }) {
+        return CatalogRepo().placeOrder(
+          businessId: widget.businessId!,
+          businessLinkId: widget.existingLink!.id,
+          catalogType: widget.catalogType,
+          items: orderItems,
+          paymentMethod: paymentMethod,
+          idempotencyKey: idempotencyKey,
+          pointsToRedeem: pointsToRedeem > 0 ? pointsToRedeem : null,
+          couponCode: _couponSelection.applied &&
+                  _couponSelection.code.isNotEmpty
+              ? _couponSelection.code
+              : null,
+          offerId: _couponSelection.applied &&
+                  _couponSelection.offerId.isNotEmpty
+              ? _couponSelection.offerId
+              : null,
+        );
+      },
     );
+    if (!mounted) return;
+    setState(() {
+      _isOrdering = false;
+      _pointsSelection = CheckoutPointsSelection.none(0);
+      _couponSelection = CheckoutCouponSelection.none;
+    });
   }
 
-  Widget _orderSummaryRow(String label, String value,
-      {bool bold = false, bool last = false}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        border: last
-            ? null
-            : Border(bottom: BorderSide(color: BarqodyChrome.divider)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: WaUi.body.copyWith(
-              fontSize: 14,
-              color: BarqodyChrome.secondaryText,
-            ),
-          ),
-          Text(
-            value,
-            style: WaUi.body.copyWith(
-              fontSize: 14,
-              fontWeight: bold ? FontWeight.w800 : FontWeight.w600,
-              color: Colors.black,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _CartBagIndicator extends StatelessWidget {

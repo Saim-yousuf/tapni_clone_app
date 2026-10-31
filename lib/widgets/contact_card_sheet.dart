@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tapni_app/helper/image_helper.dart';
@@ -364,8 +363,8 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
 
   Future<void> _pickLogo() async {
     final file = await pickFile();
-    if (file?.file == null) return;
-    final encoded = await fileToBase64(File(file!.file!.path));
+    if (file == null || !file.hasData) return;
+    final encoded = await pickedToBase64(file);
     if (encoded.isEmpty || !mounted) return;
     setState(() => _logo = encoded);
   }

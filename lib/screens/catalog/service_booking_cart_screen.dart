@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tapni_app/models/cart_line_item.dart';
 import 'package:tapni_app/models/catalog_item.dart';
-import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
+import 'package:tapni_app/utils/catalog_checkout.dart';
 import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/cached_app_image.dart';
-
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/checkout_coupon_card.dart';
+import 'package:tapni_app/widgets/checkout_points_redeem_card.dart';
 
 class ServiceBookingCartScreen extends StatefulWidget {
   final List<CatalogItem> catalogItems;
@@ -44,6 +44,9 @@ class ServiceBookingCartScreen extends StatefulWidget {
 class _ServiceBookingCartScreenState extends State<ServiceBookingCartScreen> {
   late List<CartLineItem> _cart;
   bool _placing = false;
+  CheckoutPointsSelection _pointsSelection =
+      CheckoutPointsSelection.none(0);
+  CheckoutCouponSelection _couponSelection = CheckoutCouponSelection.none;
 
   @override
   void initState() {
@@ -93,6 +96,7 @@ class _ServiceBookingCartScreenState extends State<ServiceBookingCartScreen> {
         'name': item.name,
         'price': item.displayPrice,
         'quantity': line.quantity,
+        if (item.category.isNotEmpty) 'category': item.category,
         if (item.imageUrl.isNotEmpty) 'image': item.imageUrl,
         if (line.notes.isNotEmpty) 'notes': line.notes,
       };
@@ -104,33 +108,67 @@ class _ServiceBookingCartScreenState extends State<ServiceBookingCartScreen> {
     final bookingTime = _cart
         .map((e) => e.bookingTime)
         .firstWhere((t) => t != null && t.isNotEmpty, orElse: () => null);
+    final resourceId = _cart
+        .map((e) => e.resourceId)
+        .firstWhere((r) => r != null && r.isNotEmpty, orElse: () => null);
 
-    final res = await CatalogRepo().placeOrder(
-      businessId: widget.businessId,
-      businessLinkId: widget.businessLinkId,
-      catalogType: 'services',
-      items: orderItems,
-      bookingDate: bookingDate,
-      bookingTime: bookingTime,
+    final pointsToRedeem = _pointsSelection.usePoints
+        ? _pointsSelection.pointsToRedeem
+        : 0;
+    final afterCoupon = (_total - _couponSelection.discountAmount)
+        .clamp(0.0, double.infinity)
+        .toDouble();
+    final payable = _pointsSelection.usePoints
+        ? _pointsSelection.payableAmount
+        : afterCoupon;
+    final order = await CatalogCheckout.placeWithPayment(
+      context: context,
+      totalAmount: payable,
+      currency: widget.currency ?? 'PKR',
+      customerName: widget.customerUsername ?? '',
+      customerUsername: widget.customerUsername,
+      businessName: widget.businessName,
+      businessUsername: widget.businessUsername ?? widget.businessName,
+      totalItems: _totalQty,
+      bookingKind: 'appointment',
+      pushSuccessScreen: false,
+      placeOrder: ({
+        required String paymentMethod,
+        required String idempotencyKey,
+      }) {
+        return CatalogRepo().placeOrder(
+          businessId: widget.businessId,
+          businessLinkId: widget.businessLinkId,
+          catalogType: 'services',
+          items: orderItems,
+          bookingDate: bookingDate,
+          bookingTime: bookingTime,
+          resourceId: resourceId,
+          bookingKind: 'appointment',
+          paymentMethod: paymentMethod,
+          idempotencyKey: idempotencyKey,
+          pointsToRedeem: pointsToRedeem > 0 ? pointsToRedeem : null,
+          couponCode: _couponSelection.applied &&
+                  _couponSelection.code.isNotEmpty
+              ? _couponSelection.code
+              : null,
+          offerId: _couponSelection.applied &&
+                  _couponSelection.offerId.isNotEmpty
+              ? _couponSelection.offerId
+              : null,
+        );
+      },
     );
 
     if (!mounted) return;
     setState(() => _placing = false);
+    if (order == null) return;
 
-    if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(res.message ?? context.l10n.failedToPlaceOrder),
-        ),
-      );
-      return;
-    }
-
-    final token = CatalogOrder.tokenFromApi(res.data);
-    final orderId = _orderIdFromApi(res.data);
+    final token = order.tokenNumber;
+    final orderId = order.id;
     final bookingCode = token > 0
         ? '#BK$token'
-        : (orderId != null && orderId.length >= 4
+        : (orderId.length >= 4
             ? '#BK${orderId.substring(orderId.length - 4).toUpperCase()}'
             : '#BK----');
 
@@ -146,21 +184,12 @@ class _ServiceBookingCartScreenState extends State<ServiceBookingCartScreen> {
           totalServices: _totalQty,
           totalAmount: _total,
           currency: widget.currency,
+          paymentMethod: order.paymentMethod,
+          paymentStatus: order.paymentStatus,
+          paymentSimulated: order.paymentSimulated,
         ),
       ),
     );
-  }
-
-  String? _orderIdFromApi(dynamic data) {
-    if (data is! Map) return null;
-    final map = Map<String, dynamic>.from(data);
-    final nested = map['data'];
-    if (nested is Map) {
-      final id = nested['id'] ?? nested['_id'];
-      if (id != null) return id.toString();
-    }
-    final id = map['id'] ?? map['_id'];
-    return id?.toString();
   }
 
   @override
@@ -186,10 +215,41 @@ class _ServiceBookingCartScreenState extends State<ServiceBookingCartScreen> {
             Expanded(
               child: _cart.isEmpty
                   ? Center(
-                      child: Text(
-                        'No services selected',
-                        style: WaUi.body.copyWith(
-                          color: BarqodyChrome.secondaryText,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 36),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(
+                              'assets/images/png/order-history.png',
+                              width: 64,
+                              height: 64,
+                              color: BarqodyChrome.secondaryText
+                                  .withValues(alpha: 0.4),
+                              errorBuilder: (_, __, ___) => Icon(
+                                Icons.event_busy_rounded,
+                                size: 56,
+                                color: BarqodyChrome.secondaryText
+                                    .withValues(alpha: 0.45),
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Text(
+                              'No services selected',
+                              textAlign: TextAlign.center,
+                              style: WaUi.bodyMedium.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Go back and pick a service, date, and time.',
+                              textAlign: TextAlign.center,
+                              style: WaUi.body.copyWith(
+                                color: BarqodyChrome.secondaryText,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     )
@@ -223,62 +283,127 @@ class _ServiceBookingCartScreenState extends State<ServiceBookingCartScreen> {
                   top: BorderSide(color: BarqodyChrome.divider),
                 ),
               ),
-              child: Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Get Service',
-                          style: WaUi.body.copyWith(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          formatMoney(_total, currency: widget.currency),
-                          style: WaUi.toolsTitleOf(
-                            size: 20,
-                            weight: FontWeight.w800,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
+                  if (_cart.isNotEmpty) ...[
+                    CheckoutCouponCard(
+                      businessId: widget.businessId,
+                      subtotalAmount: _total,
+                      currency: widget.currency ?? 'PKR',
+                      catalogType: 'services',
+                      items: _cart.map((line) {
+                        final item = widget.catalogItems[line.itemIndex];
+                        return {
+                          'name': item.name,
+                          'price': item.displayPrice,
+                          'quantity': line.quantity,
+                          if (item.category.isNotEmpty)
+                            'category': item.category,
+                        };
+                      }).toList(),
+                      pointsToRedeem: _pointsSelection.usePoints
+                          ? _pointsSelection.pointsToRedeem
+                          : 0,
+                      onChanged: (sel) {
+                        if (!mounted) return;
+                        setState(() => _couponSelection = sel);
+                      },
                     ),
-                  ),
-                  SizedBox(
-                    width: 148,
-                    height: WaUi.primaryButtonHeight,
-                    child: ElevatedButton(
-                      onPressed:
-                          _cart.isEmpty || _placing ? null : _bookNow,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        disabledBackgroundColor:
-                            Colors.black.withValues(alpha: 0.35),
-                        elevation: 0,
-                        shape: const StadiumBorder(),
-                      ),
-                      child: _placing
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text(
-                              'Book Now',
-                              style: WaUi.promoButton.copyWith(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
+                    CheckoutPointsRedeemCard(
+                      businessId: widget.businessId,
+                      subtotalAmount: (_total - _couponSelection.discountAmount)
+                          .clamp(0.0, double.infinity)
+                          .toDouble(),
+                      currency: widget.currency ?? 'PKR',
+                      onChanged: (sel) {
+                        if (!mounted) return;
+                        setState(() => _pointsSelection = sel);
+                      },
+                    ),
+                  ],
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Get Service',
+                              style: WaUi.body.copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
                               ),
                             ),
-                    ),
+                            if ((widget.customerUsername ?? '')
+                                .trim()
+                                .isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2),
+                                child: Text(
+                                  'Ordering as ${widget.customerUsername}',
+                                  style: WaUi.body.copyWith(
+                                    fontSize: 11,
+                                    color: BarqodyChrome.secondaryText,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            const SizedBox(height: 2),
+                            Text(
+                              formatMoney(
+                                _pointsSelection.usePoints
+                                    ? _pointsSelection.payableAmount
+                                    : (_total - _couponSelection.discountAmount)
+                                        .clamp(0.0, double.infinity),
+                                currency: widget.currency,
+                              ),
+                              style: WaUi.toolsTitleOf(
+                                size: 20,
+                                weight: FontWeight.w800,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 148,
+                        height: WaUi.primaryButtonHeight,
+                        child: ElevatedButton(
+                          onPressed: _cart.isEmpty ||
+                                  _placing ||
+                                  !_pointsSelection.valid ||
+                                  !_couponSelection.valid
+                              ? null
+                              : _bookNow,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            disabledBackgroundColor:
+                                Colors.black.withValues(alpha: 0.35),
+                            elevation: 0,
+                            shape: const StadiumBorder(),
+                          ),
+                          child: _placing
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Text(
+                                  'Book Now',
+                                  style: WaUi.promoButton.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -493,6 +618,9 @@ class ServiceBookingSuccessScreen extends StatelessWidget {
   final int totalServices;
   final double totalAmount;
   final String? currency;
+  final String? paymentMethod;
+  final String? paymentStatus;
+  final bool paymentSimulated;
 
   const ServiceBookingSuccessScreen({
     super.key,
@@ -503,7 +631,28 @@ class ServiceBookingSuccessScreen extends StatelessWidget {
     required this.totalServices,
     required this.totalAmount,
     this.currency,
+    this.paymentMethod,
+    this.paymentStatus,
+    this.paymentSimulated = false,
   });
+
+  String get _paymentLabel {
+    final method = (paymentMethod ?? '').trim().toLowerCase();
+    final status = (paymentStatus ?? '').trim().toLowerCase();
+    if (method == 'online') {
+      if (status == 'simulated_paid' || paymentSimulated) {
+        return 'Online · demo payment (not a real charge)';
+      }
+      if (status == 'paid') return 'Online · paid';
+      if (status == 'failed') return 'Online · payment failed';
+      if (status == 'cancelled') return 'Online · cancelled';
+      return 'Online · awaiting payment';
+    }
+    if (method == 'cash_on_delivery' || method == 'cash') {
+      return 'Cash on delivery';
+    }
+    return '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -584,6 +733,8 @@ class ServiceBookingSuccessScreen extends StatelessWidget {
                       label: 'Total Services',
                       value: '$totalServices',
                     ),
+                    if (_paymentLabel.isNotEmpty)
+                      _DetailRow(label: 'Payment', value: _paymentLabel),
                     const Divider(height: 1, color: BarqodyChrome.divider),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 14),
@@ -615,13 +766,14 @@ class ServiceBookingSuccessScreen extends StatelessWidget {
               child: Column(
                 children: [
                   PillButton(
-                    label: 'Done',
-                    onPressed: () => Navigator.of(context).pop(),
+                    label: 'Go Home',
+                    onPressed: () =>
+                        Navigator.of(context).popUntil((r) => r.isFirst),
                   ),
                   if (orderId != null) ...[
                     const SizedBox(height: 12),
                     PillButton(
-                      label: 'View Booking',
+                      label: 'View booking',
                       filled: false,
                       onPressed: () {
                         Navigator.of(context).pushReplacement(

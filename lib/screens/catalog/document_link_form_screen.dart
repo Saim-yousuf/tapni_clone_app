@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:tapni_app/helper/image_helper.dart';
@@ -29,12 +29,12 @@ class DocumentLinkFormScreen extends StatefulWidget {
 
 class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
   late final TextEditingController _nameCtrl;
-  String? _pickedFilePath;
+  Uint8List? _pickedFileBytes;
   String? _pickedMimeType;
   String? _pickedFileName;
   String? _fileExt;
   String? _savedFileUrl;
-  String? _pickedLogoPath;
+  Uint8List? _pickedLogoBytes;
   String? _savedLogoUrl;
   bool _useCustomIcon = false;
   bool _showLink = true;
@@ -79,9 +79,11 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
     final file = await pickDocumentFile(
       allowedExtensions: DocumentFileHelper.allowedExtensions,
     );
-    if (file?.file == null) return;
+    if (file == null || !file.hasData) return;
+    final bytes = await file.readBytes();
+    if (!mounted) return;
     setState(() {
-      _pickedFilePath = file!.file!.path;
+      _pickedFileBytes = bytes;
       _pickedMimeType = file.mimeType;
       _pickedFileName = file.name;
       _fileExt = DocumentFileHelper.normalizeExt(file.extension) ??
@@ -101,9 +103,11 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
     final file = await pickSingleFile(
       allowedExtensions: const ['png', 'jpg', 'jpeg', 'webp'],
     );
-    if (file?.file == null) return;
+    if (file == null || !file.hasData) return;
+    final bytes = await file.readBytes();
+    if (!mounted) return;
     setState(() {
-      _pickedLogoPath = file!.file!.path;
+      _pickedLogoBytes = bytes;
       _savedLogoUrl = '';
       _useCustomIcon = true;
     });
@@ -119,13 +123,13 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
     }
 
     var fileValue = _savedFileUrl ?? '';
-    if (_pickedFilePath != null) {
-      fileValue = await fileToDataUri(
-        File(_pickedFilePath!),
+    if (_pickedFileBytes != null && _pickedFileBytes!.isNotEmpty) {
+      fileValue = bytesToDataUri(
+        _pickedFileBytes!,
         mimeType: DocumentFileHelper.mimeFor(
           mimeType: _pickedMimeType,
           fileName: _pickedFileName,
-          path: _pickedFilePath,
+          path: _pickedFileName,
         ),
       );
     }
@@ -140,8 +144,8 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
 
     var logoValue = '';
     if (_useCustomIcon) {
-      if (_pickedLogoPath != null) {
-        logoValue = await fileToDataUri(File(_pickedLogoPath!));
+      if (_pickedLogoBytes != null && _pickedLogoBytes!.isNotEmpty) {
+        logoValue = bytesToDataUri(_pickedLogoBytes!, mimeType: 'image/jpeg');
       } else {
         logoValue = _savedLogoUrl ?? '';
       }
@@ -210,7 +214,9 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final previewUrl = _pickedFilePath ?? _savedFileUrl ?? '';
+    final previewUrl = _pickedFileBytes != null
+        ? (_pickedFileName ?? 'document')
+        : (_savedFileUrl ?? '');
     final previewName = _pickedFileName ?? _nameCtrl.text;
 
     return Scaffold(
@@ -236,7 +242,7 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
                         fileName: _pickedFileName ?? previewName,
                         fileExt: _fileExt,
                         customLogoUrl: _useCustomIcon ? _savedLogoUrl : null,
-                        localImagePath: _pickedLogoPath,
+                        localImageBytes: _pickedLogoBytes,
                         size: 120,
                         radius: 20,
                       ),
@@ -247,7 +253,7 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
                         onPressed: _pickDocument,
                         icon: const Icon(Icons.upload_file_outlined),
                         label: Text(
-                          (_pickedFilePath != null ||
+                          (_pickedFileBytes != null ||
                                   (_savedFileUrl?.isNotEmpty == true &&
                                       !_savedFileUrl!.startsWith('catalog:')))
                               ? context.l10n.changeDocument
@@ -272,7 +278,7 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
                         onPressed: _useCustomIcon
                             ? () => setState(() {
                                 _useCustomIcon = false;
-                                _pickedLogoPath = null;
+                                _pickedLogoBytes = null;
                                 _savedLogoUrl = '';
                               })
                             : _pickCustomIcon,

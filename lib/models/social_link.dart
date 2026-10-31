@@ -1,3 +1,4 @@
+import 'package:tapni_app/models/business_website/business_website_models.dart';
 import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/service_schedule.dart';
 
@@ -252,23 +253,43 @@ class SocialLink {
           ? 'gallery'
           : isDocumentLink
           ? 'document'
+          : isBusinessWebsiteLink
+          ? 'business_website'
           : (catalogItems != null && catalogItems!.isNotEmpty
                 ? 'menu_catalog'
                 : (fieldType ?? apiType)),
-      'value': isGalleryLink ? 'gallery' : value,
+      if ((actionType != null && actionType!.isNotEmpty) ||
+          (catalogItems != null && catalogItems!.isNotEmpty))
+        'actionType': (catalogItems != null && catalogItems!.isNotEmpty)
+            ? 'menu_catalog'
+            : actionType,
+      'value': isGalleryLink
+          ? 'gallery'
+          : isBusinessWebsiteLink
+          ? fullUrl
+          : value,
       if (logoUrl != null && logoUrl!.isNotEmpty) 'logo': logoUrl,
       if (bankDetails != null) 'bankDetails': bankDetails,
       if (contactCard != null) 'contactCard': contactCard,
-      if (catalogItems != null && catalogItems!.isNotEmpty)
-        'catalogItems': catalogItems!.map((e) => e.toJson()).toList(),
+      // Always send for catalog tiles so the API can clear or keep inventory.
+      if (isCatalogLink ||
+          actionType == 'menu_catalog' ||
+          fieldType == 'menu_catalog' ||
+          (catalogItems != null && catalogItems!.isNotEmpty))
+        'catalogItems':
+            (catalogItems ?? const <CatalogItem>[])
+                .map((e) => e.toJson())
+                .toList(),
       if (entries != null && entries!.isNotEmpty)
         'entries': entries!.map((e) => e.toJson()).toList(),
       if (!isDocumentLink &&
-          catalogCategories != null &&
-          catalogCategories!.isNotEmpty)
-        'catalogCategories': catalogCategories,
+          (isCatalogLink ||
+              (catalogCategories != null && catalogCategories!.isNotEmpty)))
+        'catalogCategories': catalogCategories ?? const <String>[],
       if (isCatalogLink && catalogType != null) 'catalogType': catalogType,
       if (isDocumentLink && catalogType != null) 'catalogType': catalogType,
+      if (isBusinessWebsiteLink && catalogType != null)
+        'catalogType': catalogType,
       if (isDocumentLink && (fileExt?.trim().isNotEmpty ?? false))
         'fileExt': fileExt!.trim().toLowerCase(),
       if (serviceSchedule != null) 'serviceSchedule': serviceSchedule!.toJson(),
@@ -285,6 +306,14 @@ class SocialLink {
     return false;
   }
 
+  bool get isBusinessWebsiteLink {
+    if (actionType == 'business_website' || fieldType == 'business_website') {
+      return true;
+    }
+    if (url?.startsWith('business-website:') == true) return true;
+    return false;
+  }
+
   bool get isDocumentLink {
     if (isGalleryLink) return false;
     if (fieldType == 'document' || actionType == 'document') return true;
@@ -293,10 +322,11 @@ class SocialLink {
   }
 
   bool get isCatalogLink {
-    if (isDocumentLink || isGalleryLink) return false;
+    if (isDocumentLink || isGalleryLink || isBusinessWebsiteLink) return false;
     if (actionType == 'link' ||
         actionType == 'contact_card' ||
-        actionType == 'gallery') {
+        actionType == 'gallery' ||
+        actionType == 'business_website') {
       return false;
     }
     // Real catalogs are tagged by actionType / items / catalog: url.
@@ -338,10 +368,16 @@ class SocialLink {
         type == 'gallery' ||
         actionType == 'gallery' ||
         url.startsWith('gallery:');
+    final isBusinessWebsiteType =
+        type == 'business_website' ||
+        actionType == 'business_website' ||
+        url.startsWith('business-website:');
 
     if (isGalleryType) {
       platform = SocialPlatform.wave;
     } else if (isDocumentType) {
+      platform = SocialPlatform.wave;
+    } else if (isBusinessWebsiteType) {
       platform = SocialPlatform.wave;
     } else if (combined.contains('whatsapp')) {
       platform = SocialPlatform.whatsApp;
@@ -420,17 +456,23 @@ class SocialLink {
       templateId: templateId,
       customLabel: title.isNotEmpty
           ? title
-          : (isGalleryType ? 'Gallery' : null),
+          : (isGalleryType
+                ? 'Gallery'
+                : (isBusinessWebsiteType ? 'Business Website' : null)),
       fieldLabel: fieldLabel,
       fieldType: isGalleryType
           ? 'gallery'
           : isDocumentType
           ? 'document'
+          : isBusinessWebsiteType
+          ? 'business_website'
           : type,
       actionType: isGalleryType
           ? 'gallery'
           : isDocumentType
           ? 'document'
+          : isBusinessWebsiteType
+          ? 'business_website'
           : actionType,
       isCustom: json['isCustom'] as bool? ?? false,
       logoUrl: logo,
@@ -459,6 +501,8 @@ class SocialLink {
         if (raw == null || raw.isEmpty) return null;
         if (isDocumentType) return 'documents';
         if (isGalleryType) return null;
+        // Keep catalogType for typed websites (menu/service/…) and catalogs.
+        if (isBusinessWebsiteType) return raw;
         final isMenu =
             actionType == 'menu_catalog' ||
             type == 'menu_catalog' ||
@@ -750,6 +794,10 @@ class SocialLink {
   String get fullUrl {
     if (isGalleryLink) {
       return url?.isNotEmpty == true ? url! : 'gallery:';
+    }
+    if (isBusinessWebsiteLink) {
+      final raw = (url != null && url!.isNotEmpty) ? url! : value;
+      return resolveBusinessWebsitePublicUrl(raw);
     }
     if (isDocumentLink) {
       if (url != null &&

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +38,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _nameFocus = FocusNode();
-  File? _profileImage;
+  Uint8List? _profileImageBytes;
 
   @override
   void initState() {
@@ -57,8 +57,10 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
 
   Future<void> _pickProfilePhoto() async {
     final picked = await pickSingleFile();
-    if (picked?.file == null) return;
-    setState(() => _profileImage = picked!.file);
+    if (picked == null || !picked.hasData) return;
+    final bytes = await picked.readBytes();
+    if (!mounted) return;
+    setState(() => _profileImageBytes = bytes);
   }
 
   Future<void> _handleContinue() async {
@@ -69,8 +71,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       authProvider.setLoading(true);
 
       String? profilePhotoBase64;
-      if (_profileImage != null) {
-        profilePhotoBase64 = await fileToBase64(_profileImage!);
+      if (_profileImageBytes != null && _profileImageBytes!.isNotEmpty) {
+        profilePhotoBase64 = await bytesToBase64(_profileImageBytes!);
       }
 
       final country = widget.country ??
@@ -191,14 +193,14 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                           decoration: BoxDecoration(
                             color: AuthUi.fieldFill,
                             shape: BoxShape.circle,
-                            image: _profileImage != null
+                            image: _profileImageBytes != null
                                 ? DecorationImage(
-                                    image: FileImage(_profileImage!),
+                                    image: MemoryImage(_profileImageBytes!),
                                     fit: BoxFit.cover,
                                   )
                                 : null,
                           ),
-                          child: _profileImage == null
+                          child: _profileImageBytes == null
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

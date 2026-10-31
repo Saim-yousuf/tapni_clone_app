@@ -1,5 +1,5 @@
-import 'dart:io';
-import 'dart:math';
+import 'dart:math' as math;
+import 'dart:typed_data';
 import 'dart:ui' show ImageFilter;
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -12,9 +12,11 @@ import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
-import 'package:tapni_app/screens/progress_score_card.dart';
+import 'package:tapni_app/screens/business_website/business_website_settings_screen.dart';
+import 'package:tapni_app/screens/business_website/business_website_setup_screen.dart'
+    show websiteTypeFromCatalogType;
 import 'package:tapni_app/screens/qr_code_sheet.dart';
-import 'package:tapni_app/utils/preference_helper.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
@@ -25,6 +27,7 @@ import 'package:tapni_app/widgets/connection_error_state.dart';
 import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
 import 'package:tapni_app/widgets/profile_empty_state.dart';
+import 'package:tapni_app/models/business_website/business_website_models.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class ProfileScreen extends StatefulWidget {
@@ -35,16 +38,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  static const _profileStrengthCardPrefKey = 'profile_strength_card_shown_count';
-  static const _maxProfileStrengthCardShows = 2;
-
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
   late final TextEditingController _bioController;
-  File? profileImageFile;
-  File? coverImageFile;
-  bool _showProfileStrengthCard = false;
-  bool _didResolveStrengthCard = false;
+  Uint8List? profileImageBytes;
+  Uint8List? coverImageBytes;
   bool _isReorderingLink = false;
   int _lastReconnectTick = 0;
   /// 0 = sheet at rest (avatar visible), 1 = sheet fully up.
@@ -79,35 +77,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  void _maybeResolveStrengthCard(ProfileProvider profileProvider) {
-    if (_didResolveStrengthCard || !profileProvider.hasFetchedProfile) {
-      return;
-    }
-    _didResolveStrengthCard = true;
-    _showProfileStrengthCard = _resolveProfileStrengthCardVisibility(
-      profileProvider,
-    );
-  }
-
-  bool _resolveProfileStrengthCardVisibility(
-    ProfileProvider profileProvider,
-  ) {
-    if (profileProvider.score >= 100) {
-      return false;
-    }
-
-    final shownCount = SharedPrefHelper.getInt(_profileStrengthCardPrefKey);
-    if (shownCount >= _maxProfileStrengthCardShows) {
-      return false;
-    }
-
-    final shouldShow = Random().nextDouble() < 0.4;
-    if (shouldShow) {
-      SharedPrefHelper.putInt(_profileStrengthCardPrefKey, shownCount + 1);
-    }
-    return shouldShow;
-  }
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -130,8 +99,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final profile = profileProvider.profile;
     _nameController.text = profile.name;
     _bioController.text = profile.bio;
-    profileImageFile = null;
-    coverImageFile = null;
+    profileImageBytes = null;
+    coverImageBytes = null;
     profileProvider.setEditingProfile(false);
     profileProvider.onSaveTriggered = null;
   }
@@ -150,14 +119,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return;
     }
     final file = await pickFile();
-    if (!mounted || file == null) return;
-    setState(() => coverImageFile = file.file);
+    if (!mounted || file == null || !file.hasData) return;
+    final bytes = await file.readBytes();
+    if (!mounted) return;
+    setState(() => coverImageBytes = bytes);
   }
 
   Future<void> _pickProfilePhoto() async {
     final file = await pickFile();
-    if (!mounted || file == null) return;
-    setState(() => profileImageFile = file.file);
+    if (!mounted || file == null || !file.hasData) return;
+    final bytes = await file.readBytes();
+    if (!mounted) return;
+    setState(() => profileImageBytes = bytes);
   }
 
   static const _editPencilAsset = 'assets/images/png/edit-icon-1.png';
@@ -221,8 +194,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       email: profile.email,
       website: profile.website,
       links: profile.socialLinks,
-      profileImage: profileImageFile,
-      coverImage: coverImageFile,
+      profileImageBytes: profileImageBytes,
+      coverImageBytes: coverImageBytes,
       context: context,
     );
 
@@ -273,7 +246,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (!showShimmer && !showLoadError) {
       _syncControllersFromProfile(profile);
-      _maybeResolveStrengthCard(profileProvider);
     }
 
     // Maintain current save trigger in case provider changes
@@ -446,7 +418,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final h = constraints.maxHeight;
         if (h <= 0) return const SizedBox.shrink();
 
-        final coverH = min(coverHeight, h * 0.48);
+        final coverH = math.min(coverHeight, h * 0.48);
         // Sheet sits on cover bottom.
         final sheetTop = coverH - sheetOverlapOnCover;
         final initial = ((h - sheetTop) / h).clamp(0.40, 0.90).toDouble();
@@ -583,17 +555,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         bottom: 130 + bottomPad,
                                       ),
                                       children: [
-                                        if (_showProfileStrengthCard) ...[
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                              padH,
-                                              0,
-                                              padH,
-                                              12,
-                                            ),
-                                            child: const ProfileScoreCard(),
-                                          ),
-                                        ],
                                         if (showHeader)
                                           Opacity(
                                             opacity: headerOpacity,
@@ -864,8 +825,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap: () => _pickCoverPhoto(profile),
                       child: ColoredBox(
                         color: const Color(0xFFE8F1F8),
-                        child: coverImageFile != null
-                            ? Image.file(coverImageFile!, fit: BoxFit.cover)
+                        child: coverImageBytes != null
+                            ? Image.memory(coverImageBytes!, fit: BoxFit.cover)
                             : profile.coverPhotoUrl != null &&
                                     profile.coverPhotoUrl!.isNotEmpty
                                 ? Image.network(
@@ -958,9 +919,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                                 child: ClipOval(
-                                  child: profileImageFile != null
-                                      ? Image.file(
-                                          profileImageFile!,
+                                  child: profileImageBytes != null
+                                      ? Image.memory(
+                                          profileImageBytes!,
                                           fit: BoxFit.cover,
                                         )
                                       : profile.profilePhotoUrl != null &&
@@ -1287,8 +1248,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required bool isEditable,
     required ProfileProvider profileProvider,
   }) {
-    final activeLinks = profile.socialLinks
-        .where((link) => link.isActive)
+    final allLinks = profile.socialLinks;
+    final activeLinks = allLinks
+        .where(
+          (link) =>
+              link.isActive &&
+              !isCatalogInventoryHiddenByWebsite(link, allLinks) &&
+              !isDuplicateBusinessWebsiteLink(link, allLinks) &&
+              !isDuplicateCatalogInventoryLink(link, allLinks),
+        )
         .toList();
 
     return LayoutBuilder(
@@ -1440,21 +1408,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required bool isEditable,
     required ProfileProvider profileProvider,
   }) {
-    // Screenshot: filled logos edge-to-edge (no grey ring). Tap still edits.
+    // Edit profile: manage menu/website. Public/preview: open template site.
     return GestureDetector(
-      onTap: isEditable
-          ? () => LinkSheet().showExistingLinkBottomSheet(
-              context,
-              link,
-              profileProvider,
-            )
-          : () {
-              Launcher.openLink(
-                link,
-                context,
-                isGalleryOwner: true,
-              );
-            },
+      onTap: () async {
+        if (isEditable) {
+          if (!context.mounted) return;
+          if (link.isBusinessWebsiteLink || link.isCatalogLink) {
+            final websiteType = websiteTypeFromCatalogType(
+              link.catalogType?.isNotEmpty == true
+                  ? link.catalogType
+                  : 'menu',
+            );
+            await Navigator.of(context).push(
+              AppPageRoute(
+                builder: (_) => BusinessWebsiteSettingsScreen(
+                  initialWebsite: BusinessWebsite(
+                    id: '',
+                    slug: '',
+                    name: link.platformName,
+                    websiteType: websiteType,
+                    publicUrl: link.fullUrl,
+                    // Placeholder until Settings loads /mine (do not assume published).
+                    status: 'draft',
+                  ),
+                ),
+              ),
+            );
+            return;
+          }
+          await LinkSheet().showExistingLinkBottomSheet(
+            context,
+            link,
+            profileProvider,
+          );
+          return;
+        }
+        if (link.isBusinessWebsiteLink || link.isCatalogLink) {
+          final p = profileProvider.profile;
+          await Launcher.openLink(
+            link,
+            context,
+            businessId: p.id,
+            businessName: p.businessName ?? p.name,
+            businessCategory: p.businessCategory,
+            currency: p.currency,
+            peerLinks: p.socialLinks,
+            ownerUsername: p.username,
+          );
+          return;
+        }
+        await Launcher.openLink(
+          link,
+          context,
+          isGalleryOwner: true,
+        );
+      },
       child: SizedBox(
         width: cellWidth,
         child: Column(

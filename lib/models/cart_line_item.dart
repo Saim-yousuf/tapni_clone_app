@@ -4,6 +4,8 @@ class CartLineItem {
   final String notes;
   final String? bookingDate;
   final String? bookingTime;
+  final String? resourceId;
+  final String? resourceName;
 
   const CartLineItem({
     required this.itemIndex,
@@ -11,6 +13,8 @@ class CartLineItem {
     this.notes = '',
     this.bookingDate,
     this.bookingTime,
+    this.resourceId,
+    this.resourceName,
   });
 
   CartLineItem copyWith({
@@ -18,6 +22,8 @@ class CartLineItem {
     String? notes,
     String? bookingDate,
     String? bookingTime,
+    String? resourceId,
+    String? resourceName,
   }) {
     return CartLineItem(
       itemIndex: itemIndex,
@@ -25,6 +31,8 @@ class CartLineItem {
       notes: notes ?? this.notes,
       bookingDate: bookingDate ?? this.bookingDate,
       bookingTime: bookingTime ?? this.bookingTime,
+      resourceId: resourceId ?? this.resourceId,
+      resourceName: resourceName ?? this.resourceName,
     );
   }
 }

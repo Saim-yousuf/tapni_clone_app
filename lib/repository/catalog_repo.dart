@@ -19,6 +19,16 @@ class CatalogRepo {
     required List<Map<String, dynamic>> items,
     String? bookingDate,
     String? bookingTime,
+    String? resourceId,
+    String? bookingKind,
+    String? checkInDate,
+    String? checkOutDate,
+    String? tableToken,
+    String? paymentMethod,
+    String? idempotencyKey,
+    int? pointsToRedeem,
+    String? couponCode,
+    String? offerId,
   }) async {
     return ApiHandler.request(
       api: Api.catalog.orders,
@@ -33,6 +43,59 @@ class CatalogRepo {
           'bookingDate': bookingDate,
         if (bookingTime != null && bookingTime.isNotEmpty)
           'bookingTime': bookingTime,
+        if (resourceId != null && resourceId.isNotEmpty)
+          'resourceId': resourceId,
+        if (bookingKind != null && bookingKind.isNotEmpty)
+          'bookingKind': bookingKind,
+        if (checkInDate != null && checkInDate.isNotEmpty)
+          'checkInDate': checkInDate,
+        if (checkOutDate != null && checkOutDate.isNotEmpty)
+          'checkOutDate': checkOutDate,
+        if (tableToken != null && tableToken.isNotEmpty)
+          'fulfillment': {'tableToken': tableToken},
+        if (paymentMethod != null && paymentMethod.isNotEmpty)
+          'paymentMethod': paymentMethod,
+        if (idempotencyKey != null && idempotencyKey.isNotEmpty)
+          'idempotencyKey': idempotencyKey,
+        if (pointsToRedeem != null && pointsToRedeem > 0)
+          'pointsToRedeem': pointsToRedeem,
+        if (couponCode != null && couponCode.isNotEmpty)
+          'couponCode': couponCode,
+        if (offerId != null && offerId.isNotEmpty) 'offerId': offerId,
+      },
+    );
+  }
+
+  /// Link a guest website order to the signed-in account (tracking code + phone match).
+  Future<ApiResponse> claimGuestOrder({required String trackingCode}) async {
+    return ApiHandler.request(
+      api: Api.catalog.claimGuestOrder,
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: {'trackingCode': trackingCode},
+    );
+  }
+
+  /// Demo/mock online payment — never a real gateway charge.
+  Future<ApiResponse> processMockPayment({
+    required String orderId,
+    required String demoOutcome,
+    String? paymentAttemptKey,
+    String? guestPhone,
+    String? paymentSessionToken,
+  }) async {
+    return ApiHandler.request(
+      api: Api.catalog.mockPayment(orderId),
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: {
+        'demoOutcome': demoOutcome,
+        if (paymentAttemptKey != null && paymentAttemptKey.isNotEmpty)
+          'paymentAttemptKey': paymentAttemptKey,
+        if (guestPhone != null && guestPhone.isNotEmpty)
+          'guestPhone': guestPhone,
+        if (paymentSessionToken != null && paymentSessionToken.isNotEmpty)
+          'paymentSessionToken': paymentSessionToken,
       },
     );
   }
@@ -41,6 +104,8 @@ class CatalogRepo {
     required String businessId,
     required String businessLinkId,
     required String date,
+    String? resourceId,
+    int? durationMinutes,
   }) async {
     final res = await ApiHandler.request(
       api: Api.catalog.availability,
@@ -50,6 +115,10 @@ class CatalogRepo {
         'businessId': businessId,
         'businessLinkId': businessLinkId,
         'date': date,
+        if (resourceId != null && resourceId.isNotEmpty)
+          'resourceId': resourceId,
+        if (durationMinutes != null && durationMinutes > 0)
+          'durationMinutes': '$durationMinutes',
       },
     );
     if (!res.success || res.data == null) return [];
@@ -62,39 +131,96 @@ class CatalogRepo {
         .toList();
   }
 
-  Future<List<CatalogOrder>> getBusinessOrders({String? status}) async {
+  Future<Map<String, dynamic>?> getStayAvailability({
+    required String businessId,
+    required String resourceId,
+    required String checkInDate,
+    required String checkOutDate,
+  }) async {
     final res = await ApiHandler.request(
-      api: Api.catalog.incomingOrders,
+      api: Api.catalog.stayAvailability,
       method: ApiMethod.get,
       authorization: true,
-      queryParams: status != null ? {'status': status} : null,
-    );
-    if (!res.success) return [];
-    return _parseOrders(res.data);
-  }
-
-  Future<List<CatalogOrder>> getCustomerOrders({String? status}) async {
-    final res = await ApiHandler.request(
-      api: Api.catalog.myOrders,
-      method: ApiMethod.get,
-      authorization: true,
-      queryParams: status != null ? {'status': status} : null,
-    );
-    if (!res.success) return [];
-    return _parseOrders(res.data);
-  }
-
-  Future<CatalogOrder?> getOrderById(String id) async {
-    final res = await ApiHandler.request(
-      api: Api.catalog.order(id),
-      method: ApiMethod.get,
-      authorization: true,
+      queryParams: {
+        'businessId': businessId,
+        'resourceId': resourceId,
+        'checkInDate': checkInDate,
+        'checkOutDate': checkOutDate,
+      },
     );
     if (!res.success || res.data == null) return null;
     final payload = res.data is Map && res.data['data'] != null
         ? res.data['data'] as Map<String, dynamic>
         : res.data as Map<String, dynamic>;
-    return CatalogOrder.fromJson(payload);
+    return payload;
+  }
+
+  /// Returns null when the request fails (distinct from an empty list).
+  Future<List<CatalogOrder>?> getBusinessOrders({
+    String? status,
+    String? bookingKind,
+  }) async {
+    final params = <String, String>{};
+    if (status != null && status.isNotEmpty) params['status'] = status;
+    if (bookingKind != null && bookingKind.isNotEmpty) {
+      params['bookingKind'] = bookingKind;
+    }
+    final res = await ApiHandler.request(
+      api: Api.catalog.incomingOrders,
+      method: ApiMethod.get,
+      authorization: true,
+      queryParams: params.isEmpty ? null : params,
+    );
+    if (!res.success) return null;
+    return _parseOrders(res.data);
+  }
+
+  /// Returns null when the request fails (distinct from an empty list).
+  Future<List<CatalogOrder>?> getCustomerOrders({
+    String? status,
+    String? bookingKind,
+  }) async {
+    final params = <String, String>{};
+    if (status != null && status.isNotEmpty) params['status'] = status;
+    if (bookingKind != null && bookingKind.isNotEmpty) {
+      params['bookingKind'] = bookingKind;
+    }
+    final res = await ApiHandler.request(
+      api: Api.catalog.myOrders,
+      method: ApiMethod.get,
+      authorization: true,
+      queryParams: params.isEmpty ? null : params,
+    );
+    if (!res.success) return null;
+    return _parseOrders(res.data);
+  }
+
+  /// [failed] is true on network/server errors; false when the order is
+  /// missing or inaccessible (404/403) so UI can show not-found vs retry.
+  ///
+  /// [accessToken] overrides the saved session token (WebView shopper JWT).
+  Future<({CatalogOrder? order, bool failed})> getOrderById(
+    String id, {
+    String? accessToken,
+  }) async {
+    final token = accessToken?.trim();
+    final res = await ApiHandler.request(
+      api: Api.catalog.order(id),
+      method: ApiMethod.get,
+      authorization: true,
+      headers: (token != null && token.isNotEmpty)
+          ? {'Authorization': 'Bearer $token'}
+          : null,
+    );
+    if (!res.success) {
+      final missing = res.statusCode == 404 || res.statusCode == 403;
+      return (order: null, failed: !missing);
+    }
+    if (res.data == null) return (order: null, failed: false);
+    final payload = res.data is Map && res.data['data'] != null
+        ? res.data['data'] as Map<String, dynamic>
+        : res.data as Map<String, dynamic>;
+    return (order: CatalogOrder.fromJson(payload), failed: false);
   }
 
   Future<ApiResponse> updateOrderStatus(String orderId, String status) async {

@@ -23,12 +23,23 @@ class _OrdersListScreenState extends State<OrdersListScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
+  /// empty = All; otherwise order | appointment | stay
+  String _kindFilter = '';
+
   static const _tabs = [
+    OrderStatus.held,
     OrderStatus.pending,
     OrderStatus.confirmed,
     OrderStatus.completed,
     OrderStatus.cancelled,
     OrderStatus.noShow,
+  ];
+
+  static const _kindChips = [
+    ('', 'All'),
+    ('order', 'Orders'),
+    ('appointment', 'Appointments'),
+    ('stay', 'Stays'),
   ];
 
   @override
@@ -51,20 +62,79 @@ class _OrdersListScreenState extends State<OrdersListScreen>
     _tabController.animateTo(index);
   }
 
+  /// Claim a guest website order into this signed-in account (shared commerce API).
+  Future<void> _claimGuestOrder() async {
+    final controller = TextEditingController();
+    final code = await showDialog<String>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const Text('Claim guest order'),
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            textCapitalization: TextCapitalization.characters,
+            decoration: const InputDecoration(
+              labelText: 'Order Tracking Code',
+              hintText: 'BK-XXXX-XXXX',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+              child: const Text('Claim'),
+            ),
+          ],
+        );
+      },
+    );
+    controller.dispose();
+    if (code == null || code.isEmpty || !mounted) return;
+
+    final res = await CatalogRepo().claimGuestOrder(trackingCode: code);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          res.success
+              ? (res.message ?? 'Order claimed')
+              : (res.message ?? 'Could not claim order'),
+        ),
+      ),
+    );
+    if (!res.success) return;
+    final orderId = CatalogOrder.idFromApi(res.data);
+    if (orderId != null && orderId.isNotEmpty && mounted) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => OrderDetailScreen(
+            orderId: orderId,
+            isBusinessView: false,
+          ),
+        ),
+      );
+    }
+  }
+
   List<String> _tabLabels(BuildContext context) {
     final l10n = context.l10n;
     return [
       l10n.pending,
       'Confirmed',
       l10n.completed,
-      'Cancel',
+      'Cancelled',
       'Missed',
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.isBusinessView ? 'Booking' : 'My Booking';
+    final title =
+        widget.isBusinessView ? 'Orders & Bookings' : 'My Orders & Bookings';
 
     return Scaffold(
       backgroundColor: BarqodyChrome.scaffold,
@@ -72,7 +142,16 @@ class _OrdersListScreenState extends State<OrdersListScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            BarqodyTitleBar(title: title),
+            BarqodyTitleBar(
+              title: title,
+              trailing: widget.isBusinessView
+                  ? null
+                  : IconButton(
+                      tooltip: 'Claim guest order',
+                      onPressed: _claimGuestOrder,
+                      icon: const Icon(Icons.link_rounded, color: Colors.black),
+                    ),
+            ),
             const SizedBox(height: 14),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -87,15 +166,61 @@ class _OrdersListScreenState extends State<OrdersListScreen>
                 },
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 36,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                itemCount: _kindChips.length,
+                separatorBuilder: (_, _) => const SizedBox(width: 8),
+                itemBuilder: (context, i) {
+                  final (value, label) = _kindChips[i];
+                  final selected = _kindFilter == value;
+                  return GestureDetector(
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      setState(() => _kindFilter = value);
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 160),
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: selected ? Colors.black : BarqodyChrome.fieldFill,
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(
+                          color: selected
+                              ? Colors.black
+                              : BarqodyChrome.divider,
+                        ),
+                      ),
+                      child: Text(
+                        label,
+                        style: WaUi.label.copyWith(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: selected
+                              ? Colors.white
+                              : BarqodyChrome.secondaryText,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 12),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: _tabs
                     .map(
                       (status) => _OrdersTabPage(
+                        key: ValueKey('$status|$_kindFilter'),
                         status: status,
                         isBusinessView: widget.isBusinessView,
+                        bookingKind: _kindFilter,
                       ),
                     )
                     .toList(),
@@ -186,10 +311,13 @@ class _SegmentedTabs extends StatelessWidget {
 class _OrdersTabPage extends StatefulWidget {
   final OrderStatus status;
   final bool isBusinessView;
+  final String bookingKind;
 
   const _OrdersTabPage({
+    super.key,
     required this.status,
     required this.isBusinessView,
+    this.bookingKind = '',
   });
 
   @override
@@ -200,6 +328,7 @@ class _OrdersTabPageState extends State<_OrdersTabPage>
     with AutomaticKeepAliveClientMixin {
   final _repo = CatalogRepo();
   bool _isLoading = true;
+  bool _loadFailed = false;
   List<CatalogOrder> _orders = [];
 
   @override
@@ -211,15 +340,48 @@ class _OrdersTabPageState extends State<_OrdersTabPage>
     _loadOrders();
   }
 
+  String _emptyTitle(BuildContext context) {
+    final status = CatalogHelper.statusLabel(widget.status, context.l10n)
+        .toLowerCase();
+    switch (widget.bookingKind) {
+      case 'appointment':
+        return 'No $status appointments';
+      case 'stay':
+        return 'No $status stays';
+      case 'order':
+        return 'No $status orders';
+      default:
+        return context.l10n.noStatusOrders(status);
+    }
+  }
+
   Future<void> _loadOrders() async {
-    setState(() => _isLoading = true);
-    final status = CatalogHelper.statusApiValue(widget.status);
-    final orders = widget.isBusinessView
-        ? await _repo.getBusinessOrders(status: status)
-        : await _repo.getCustomerOrders(status: status);
-    if (!mounted) return;
     setState(() {
-      _orders = orders;
+      _isLoading = true;
+      _loadFailed = false;
+    });
+    final status = CatalogHelper.statusApiValue(widget.status);
+    final kind =
+        widget.bookingKind.trim().isEmpty ? null : widget.bookingKind.trim();
+    final orders = widget.isBusinessView
+        ? await _repo.getBusinessOrders(status: status, bookingKind: kind)
+        : await _repo.getCustomerOrders(status: status, bookingKind: kind);
+    if (!mounted) return;
+    if (orders == null) {
+      setState(() {
+        _orders = [];
+        _loadFailed = true;
+        _isLoading = false;
+      });
+      return;
+    }
+    // Client-side fallback for older orders missing bookingKind.
+    final filtered = kind == null
+        ? orders
+        : orders.where((o) => o.kind == kind).toList();
+    setState(() {
+      _orders = filtered;
+      _loadFailed = false;
       _isLoading = false;
     });
   }
@@ -239,24 +401,85 @@ class _OrdersTabPageState extends State<_OrdersTabPage>
                 Center(child: CircularProgressIndicator()),
               ],
             )
+          : _loadFailed
+              ? ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.22),
+                    Image.asset(
+                      'assets/images/png/order-history.png',
+                      width: 64,
+                      height: 64,
+                      color: BarqodyChrome.secondaryText.withValues(alpha: 0.45),
+                      errorBuilder: (_, _, _) => Icon(
+                        Icons.wifi_off_rounded,
+                        size: 56,
+                        color: BarqodyChrome.secondaryText.withValues(alpha: 0.45),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      'Couldn’t load bookings',
+                      textAlign: TextAlign.center,
+                      style: WaUi.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Check your connection and try again.',
+                      textAlign: TextAlign.center,
+                      style: WaUi.body.copyWith(
+                        color: BarqodyChrome.secondaryText,
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    Center(
+                      child: SizedBox(
+                        width: 160,
+                        child: PillButton(
+                          label: context.l10n.tryAgain,
+                          onPressed: _loadOrders,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
           : _orders.isEmpty
               ? ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.25),
-                    Icon(
-                      Icons.receipt_long_rounded,
-                      size: 56,
-                      color: BarqodyChrome.secondaryText.withValues(alpha: 0.45),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      context.l10n.noStatusOrders(
-                        CatalogHelper.statusLabel(widget.status, context.l10n)
-                            .toLowerCase(),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.22),
+                    Image.asset(
+                      'assets/images/png/order-history.png',
+                      width: 72,
+                      height: 72,
+                      color: BarqodyChrome.secondaryText.withValues(alpha: 0.4),
+                      errorBuilder: (_, _, _) => Icon(
+                        Icons.receipt_long_rounded,
+                        size: 56,
+                        color: BarqodyChrome.secondaryText.withValues(alpha: 0.45),
                       ),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      _emptyTitle(context),
                       textAlign: TextAlign.center,
-                      style: WaUi.body.copyWith(color: BarqodyChrome.secondaryText),
+                      style: WaUi.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      widget.isBusinessView
+                          ? 'New bookings will show up here.'
+                          : 'When you place an order or book, it will appear here.',
+                      textAlign: TextAlign.center,
+                      style: WaUi.body.copyWith(
+                        color: BarqodyChrome.secondaryText,
+                      ),
                     ),
                   ],
                 )
@@ -407,26 +630,45 @@ class _CustomerOrderCard extends StatelessWidget {
                         color: BarqodyChrome.bodyText,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    if (order.hasToken)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: Text(
-                          '#BK${order.tokenNumber}',
-                          style: WaUi.label.copyWith(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
+                    if (order.whenLine.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        order.whenLine,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: WaUi.caption.copyWith(
+                          color: BarqodyChrome.secondaryText,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
+                    ],
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: [
+                        _KindChip(label: order.kindLabel),
+                        if (order.hasToken)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Text(
+                              '#${order.tokenNumber}',
+                              style: WaUi.label.copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -460,6 +702,32 @@ class _CustomerOrderCard extends StatelessWidget {
   }
 }
 
+class _KindChip extends StatelessWidget {
+  final String label;
+
+  const _KindChip({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(100),
+        border: Border.all(color: BarqodyChrome.divider),
+      ),
+      child: Text(
+        label,
+        style: WaUi.label.copyWith(
+          fontWeight: FontWeight.w700,
+          fontSize: 11,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+}
+
 class _BusinessOrderCard extends StatelessWidget {
   final CatalogOrder order;
   final VoidCallback onTap;
@@ -477,9 +745,9 @@ class _BusinessOrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = order.customerName.isNotEmpty
-        ? order.customerName
-        : context.l10n.order;
+    final title = order.displayCustomerName.isNotEmpty
+        ? order.displayCustomerName
+        : (order.isGuest ? 'Guest' : context.l10n.order);
     final initial = title.isNotEmpty ? title[0].toUpperCase() : '?';
     final photo = order.customerPhoto;
     final hasPhoto = photo != null && photo.isNotEmpty;
@@ -530,24 +798,13 @@ class _BusinessOrderCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child:                     Text(
+                    child: Text(
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: WaUi.listTitle.copyWith(
                         fontWeight: FontWeight.w700,
-                        decoration: TextDecoration.underline,
                       ),
-                    ),
-                  ),
-                  Image.asset(
-                    'assets/images/png/verified-badge.png',
-                    width: 18,
-                    height: 18,
-                    errorBuilder: (_, _, _) => Icon(
-                      Icons.verified_rounded,
-                      size: 18,
-                      color: BarqodyChrome.star,
                     ),
                   ),
                   Icon(
@@ -563,14 +820,29 @@ class _BusinessOrderCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
               child: Column(
                 children: [
-                  _MetaRow(
-                    label: 'Booking',
-                    value: order.hasToken ? '#BK${order.tokenNumber}' : '—',
+                  Row(
+                    children: [
+                      _KindChip(label: order.kindLabel),
+                      const Spacer(),
+                      Text(
+                        order.hasToken ? '#${order.tokenNumber}' : '—',
+                        style: WaUi.body.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                    ],
                   ),
+                  if (order.whenLine.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    _MetaRow(label: 'When', value: order.whenLine),
+                  ],
                   const SizedBox(height: 8),
-                  _MetaRow(label: 'Order Date', value: orderDate),
+                  _MetaRow(label: 'Placed on', value: orderDate),
                   const SizedBox(height: 8),
-                  _MetaRow(label: 'Total Services', value: '$totalItems'),
+                  _MetaRow(
+                    label: order.isStay
+                        ? 'Rooms'
+                        : (order.isAppointment ? 'Services' : 'Total items'),
+                    value: '$totalItems',
+                  ),
                 ],
               ),
             ),
@@ -617,6 +889,7 @@ class _MetaRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
@@ -625,10 +898,15 @@ class _MetaRow extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        const Spacer(),
-        Text(
-          value,
-          style: WaUi.body.copyWith(fontWeight: FontWeight.w600),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            value,
+            textAlign: TextAlign.right,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: WaUi.body.copyWith(fontWeight: FontWeight.w600),
+          ),
         ),
       ],
     );

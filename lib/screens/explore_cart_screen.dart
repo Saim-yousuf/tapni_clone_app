@@ -5,7 +5,12 @@ import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/models/explore_cart.dart';
 import 'package:tapni_app/providers/explore_cart_provider.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
+import 'package:tapni_app/screens/catalog/checkout_payment_method_sheet.dart';
+import 'package:tapni_app/screens/catalog/order_placed_screen.dart';
+import 'package:tapni_app/screens/orders/orders_list_screen.dart';
+import 'package:tapni_app/utils/catalog_checkout.dart';
 import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
@@ -123,71 +128,156 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
     );
   }
 
+  /// Places one CatalogOrder per vendor via shared [CatalogCheckout]
+  /// (payment method + optional mock online pay). Coupons/points stay on
+  /// single-business checkout — multi-vendor Explore needs per-vendor redeem UI.
   Future<void> _placeOrders() async {
     final cart = context.read<ExploreCartProvider>();
     if (cart.isEmpty) return;
 
+    final profile = context.read<ProfileProvider>().profile;
+    final customerUsername = profile.username ?? '';
+    final customerName = profile.name;
+    final messenger = ScaffoldMessenger.of(context);
+    final nav = Navigator.of(context);
+
+    final vendors = List<ExploreCartVendor>.from(cart.vendors)
+        .where((v) => v.lines.isNotEmpty)
+        .toList();
+    if (vendors.isEmpty) return;
+
+    final grandTotal = vendors.fold<double>(
+      0,
+      (sum, v) =>
+          sum +
+          v.lines.fold<double>(
+            0,
+            (s, line) => s + (line.item.displayPrice * line.quantity),
+          ),
+    );
+    final currency = vendors.first.currency;
+
+    final method = await showCheckoutPaymentMethodSheet(
+      context,
+      totalAmount: grandTotal,
+      currency: currency,
+    );
+    if (method == null || !mounted) return;
+
     setState(() => _placing = true);
     final repo = CatalogRepo();
-    final vendors = List<ExploreCartVendor>.from(cart.vendors);
-    final placed = <String>[];
+    final placed = <_PlacedExploreOrder>[];
     String? lastError;
 
     for (final vendor in vendors) {
-      if (vendor.lines.isEmpty) continue;
       final orderItems = vendor.lines
           .map(
             (line) => {
               'name': line.item.name,
-              'price': line.item.price,
+              'price': line.item.displayPrice,
               'quantity': line.quantity,
               if (line.notes.isNotEmpty) 'notes': line.notes,
+              if (line.item.category.isNotEmpty) 'category': line.item.category,
             },
           )
           .toList();
-
-      final res = await repo.placeOrder(
-        businessId: vendor.businessId,
-        businessLinkId: vendor.businessLinkId,
-        catalogType: vendor.catalogType,
-        items: orderItems,
+      final itemCount = vendor.lines.fold<int>(
+        0,
+        (sum, line) => sum + line.quantity,
+      );
+      final vendorTotal = vendor.lines.fold<double>(
+        0,
+        (sum, line) => sum + (line.item.displayPrice * line.quantity),
       );
 
-      if (res.success) {
-        final token = CatalogOrder.tokenFromApi(res.data);
-        placed.add(
-          token > 0
-              ? '${vendor.businessName} · Token #$token'
-              : vendor.businessName,
-        );
-        cart.removeVendor(vendor.businessLinkId);
-      } else {
-        lastError = res.message ?? context.l10n.failedToPlaceOrder;
+      final order = await CatalogCheckout.placeWithPayment(
+        context: context,
+        presetMethod: method,
+        pushSuccessScreen: false,
+        totalAmount: vendorTotal,
+        currency: vendor.currency,
+        customerName: customerName,
+        customerUsername: customerUsername,
+        businessName: vendor.businessName,
+        totalItems: itemCount,
+        placeOrder: ({
+          required String paymentMethod,
+          required String idempotencyKey,
+        }) {
+          return repo.placeOrder(
+            businessId: vendor.businessId,
+            businessLinkId: vendor.businessLinkId,
+            catalogType: vendor.catalogType,
+            items: orderItems,
+            paymentMethod: paymentMethod,
+            idempotencyKey: idempotencyKey,
+          );
+        },
+      );
+
+      if (order == null) {
+        lastError = 'Could not place order for ${vendor.businessName}';
         break;
       }
+
+      placed.add(
+        _PlacedExploreOrder(
+          businessName: vendor.businessName,
+          businessUsername: '',
+          currency: vendor.currency.isNotEmpty
+              ? vendor.currency
+              : order.currency,
+          token: order.tokenNumber,
+          orderId: order.id,
+          totalItems: itemCount,
+          totalAmount:
+              order.totalAmount > 0 ? order.totalAmount : vendorTotal,
+        ),
+      );
+      cart.removeVendor(vendor.businessLinkId);
     }
 
     if (!mounted) return;
     setState(() => _placing = false);
 
-    final messenger = ScaffoldMessenger.of(context);
-    if (placed.isNotEmpty) {
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            placed.length == 1
-                ? context.l10n.orderPlacedWith(placed.first)
-                : 'Orders placed: ${placed.join(', ')}',
-          ),
-        ),
-      );
-    }
     if (lastError != null) {
       messenger.showSnackBar(SnackBar(content: Text(lastError)));
     }
-    if (cart.isEmpty && mounted) {
-      Navigator.of(context).pop();
+    if (placed.isEmpty) return;
+
+    if (placed.length == 1) {
+      final one = placed.first;
+      await nav.pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => OrderPlacedScreen(
+            token: one.token,
+            customerUsername: customerUsername,
+            customerName: customerName,
+            businessUsername: one.businessUsername.isNotEmpty
+                ? one.businessUsername
+                : one.businessName,
+            totalItems: one.totalItems,
+            totalAmount: one.totalAmount,
+            currency: one.currency,
+            orderId: one.orderId,
+          ),
+        ),
+      );
+      return;
     }
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          '${placed.length} orders placed — view in My Orders & Bookings',
+        ),
+      ),
+    );
+    await nav.pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => const OrdersListScreen(isBusinessView: false),
+      ),
+    );
   }
 
   @override
@@ -215,10 +305,41 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
             Expanded(
               child: cart.isEmpty
                   ? Center(
-                      child: Text(
-                        'Your cart is empty',
-                        style: WaUi.body.copyWith(
-                          color: BarqodyChrome.secondaryText,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(
+                              'assets/images/png/bag-icon.png',
+                              width: 64,
+                              height: 64,
+                              color: BarqodyChrome.secondaryText
+                                  .withValues(alpha: 0.4),
+                              errorBuilder: (_, _, _) => Icon(
+                                Icons.shopping_bag_outlined,
+                                size: 56,
+                                color: BarqodyChrome.secondaryText
+                                    .withValues(alpha: 0.45),
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Text(
+                              'Your cart is empty',
+                              textAlign: TextAlign.center,
+                              style: WaUi.bodyMedium.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Add items from Explore or a business menu to place an order.',
+                              textAlign: TextAlign.center,
+                              style: WaUi.body.copyWith(
+                                color: BarqodyChrome.secondaryText,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     )
@@ -492,10 +613,16 @@ class _CartTile extends StatelessWidget {
                 borderColor: Colors.redAccent,
                 backgroundColor: Colors.redAccent.withValues(alpha: 0.12),
                 onTap: onRemove,
-                child: Icon(
-                  Icons.delete_outline_rounded,
-                  size: 16,
+                child: Image.asset(
+                  'assets/images/png/order-delete.png',
+                  width: 14,
+                  height: 14,
                   color: Colors.redAccent.shade700,
+                  errorBuilder: (_, _, _) => Icon(
+                    Icons.delete_outline_rounded,
+                    size: 16,
+                    color: Colors.redAccent.shade700,
+                  ),
                 ),
               )
             else
@@ -570,4 +697,24 @@ class _QtyCircle extends StatelessWidget {
       ),
     );
   }
+}
+
+class _PlacedExploreOrder {
+  final String businessName;
+  final String businessUsername;
+  final String currency;
+  final int token;
+  final String? orderId;
+  final int totalItems;
+  final double totalAmount;
+
+  const _PlacedExploreOrder({
+    required this.businessName,
+    required this.businessUsername,
+    required this.currency,
+    required this.token,
+    required this.orderId,
+    required this.totalItems,
+    required this.totalAmount,
+  });
 }

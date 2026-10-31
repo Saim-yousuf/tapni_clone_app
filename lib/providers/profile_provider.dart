@@ -1,10 +1,11 @@
 import 'dart:developer';
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/helper/link_entries_cache.dart';
+import 'package:tapni_app/utils/catalog_helper.dart' show catalogTypesMatch;
 import 'package:tapni_app/models/gallery_item.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/business_card_design.dart';
@@ -634,8 +635,8 @@ class ProfileProvider extends ChangeNotifier {
     String? businessCategory,
     String? businessConcern,
     required List<SocialLink> links,
-    File? profileImage,
-    File? coverImage,
+    Uint8List? profileImageBytes,
+    Uint8List? coverImageBytes,
     required BuildContext context,
   }) async {
     _isLoading = true;
@@ -663,14 +664,12 @@ class ProfileProvider extends ChangeNotifier {
     );
 
     final json = updatedProfile.toApiJson();
-    if (profileImage != null) {
-      final profileImageUrl = await fileToBase64(profileImage);
-      json['profilePhoto'] = profileImageUrl;
+    if (profileImageBytes != null && profileImageBytes.isNotEmpty) {
+      json['profilePhoto'] = await bytesToBase64(profileImageBytes);
     }
-    if (coverImage != null) {
+    if (coverImageBytes != null && coverImageBytes.isNotEmpty) {
       log('Converting cover image to base64');
-      final coverImageUrl = await fileToBase64(coverImage);
-      json['coverPhoto'] = coverImageUrl;
+      json['coverPhoto'] = await bytesToBase64(coverImageBytes);
     }
 
     try {
@@ -886,11 +885,21 @@ class ProfileProvider extends ChangeNotifier {
     required List<SocialLink> localLinks,
     required List<SocialLink> remoteLinks,
   }) {
+    bool compatible(SocialLink a, SocialLink b) {
+      // Never pair a website tile with catalog inventory (same template/label).
+      if (a.isBusinessWebsiteLink != b.isBusinessWebsiteLink) return false;
+      if (a.isCatalogLink != b.isCatalogLink) return false;
+      if (a.isGalleryLink != b.isGalleryLink) return false;
+      if (a.isDocumentLink != b.isDocumentLink) return false;
+      return true;
+    }
+
     SocialLink? matchRemote(SocialLink local) {
       for (final remote in remoteLinks) {
-        if (remote.id == local.id) return remote;
+        if (remote.id == local.id && compatible(local, remote)) return remote;
       }
       for (final remote in remoteLinks) {
+        if (!compatible(local, remote)) continue;
         if (local.templateId != null &&
             local.templateId!.isNotEmpty &&
             local.templateId == remote.templateId) {
@@ -898,6 +907,7 @@ class ProfileProvider extends ChangeNotifier {
         }
       }
       for (final remote in remoteLinks) {
+        if (!compatible(local, remote)) continue;
         if (local.platformName.trim().toLowerCase() ==
             remote.platformName.trim().toLowerCase()) {
           return remote;
@@ -926,12 +936,36 @@ class ProfileProvider extends ChangeNotifier {
               remoteEntries.any((e) => e.name.trim().isNotEmpty));
       final entries = remoteUseful ? remoteEntries : localEntries;
 
+      final localItems = local.catalogItems;
+      final remoteItems = remote.catalogItems;
+      final catalogItems =
+          (localItems != null && localItems.isNotEmpty)
+              ? localItems
+              : remoteItems;
+      final catalogCategories =
+          (local.catalogCategories != null &&
+                  local.catalogCategories!.isNotEmpty)
+              ? local.catalogCategories
+              : remote.catalogCategories;
+
       return local.copyWith(
         id: RegExp(r'^[a-fA-F0-9]{24}$').hasMatch(remote.id)
             ? remote.id
             : local.id,
         logoUrl: preferRemoteLogo ? remoteLogo : localLogo,
         entries: entries,
+        catalogItems: catalogItems,
+        catalogCategories: catalogCategories,
+        actionType: (local.actionType != null && local.actionType!.isNotEmpty)
+            ? local.actionType
+            : remote.actionType,
+        fieldType: (local.fieldType != null && local.fieldType!.isNotEmpty)
+            ? local.fieldType
+            : remote.fieldType,
+        catalogType: (local.catalogType != null &&
+                local.catalogType!.trim().isNotEmpty)
+            ? local.catalogType
+            : remote.catalogType,
         value: (entries != null && entries.isNotEmpty)
             ? entries.first.value
             : local.value,
@@ -1115,6 +1149,126 @@ class ProfileProvider extends ChangeNotifier {
     );
     final updatedLinks = List<SocialLink>.from(_profile.socialLinks)
       ..add(newLink);
+    await updateLinks(links: updatedLinks, context: context);
+    notifyListeners();
+  }
+
+  /// Ensures a profile link exists for the owner's business website.
+  Future<void> addBusinessWebsiteLink({
+    LinkTemplate? template,
+    required String publicUrl,
+    required BuildContext context,
+    String websiteType = 'menu',
+    String? catalogType,
+  }) async {
+    final url = publicUrl.trim();
+    if (url.isEmpty) return;
+
+    final resolvedCatalogType = catalogType ??
+        (websiteType == 'service'
+            ? 'services'
+            : websiteType == 'products'
+                ? 'products'
+                : websiteType == 'portfolio'
+                    ? 'portfolio'
+                    : 'menu');
+
+    final label = template?.label.isNotEmpty == true
+        ? template!.label
+        : (websiteType == 'service'
+            ? 'Services'
+            : websiteType == 'products'
+                ? 'Products'
+                : websiteType == 'portfolio'
+                    ? 'Portfolio'
+                    : 'Menu');
+
+    // One public website link per websiteType (menu/catalog/empty treated same).
+    final matchingIndexes = <int>[];
+    for (var i = 0; i < _profile.socialLinks.length; i++) {
+      final link = _profile.socialLinks[i];
+      if (!link.isBusinessWebsiteLink) continue;
+      if (catalogTypesMatch(link.catalogType, resolvedCatalogType)) {
+        matchingIndexes.add(i);
+      }
+    }
+
+    if (matchingIndexes.isNotEmpty) {
+      final existingIndex = matchingIndexes.first;
+      final existing = _profile.socialLinks[existingIndex];
+      final updatedLinks = List<SocialLink>.from(_profile.socialLinks);
+      updatedLinks[existingIndex] = existing.copyWith(
+        url: url,
+        value: url,
+        actionType: 'business_website',
+        fieldType: 'business_website',
+        catalogType: resolvedCatalogType,
+        customLabel: existing.customLabel?.isNotEmpty == true
+            ? existing.customLabel
+            : label,
+        logoUrl: existing.logoUrl?.isNotEmpty == true
+            ? existing.logoUrl
+            : template?.logo,
+        templateId: existing.templateId ??
+            (template != null && template.id.isNotEmpty ? template.id : null),
+      );
+      // Drop accidental duplicate website tiles of the same type.
+      for (final idx in matchingIndexes.skip(1).toList().reversed) {
+        updatedLinks.removeAt(idx);
+      }
+      await updateLinks(links: updatedLinks, context: context);
+      notifyListeners();
+      return;
+    }
+
+    final newLink = SocialLink(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      platform: SocialPlatform.wave,
+      templateId: template != null && template.id.isNotEmpty
+          ? template.id
+          : null,
+      customLabel: label,
+      fieldLabel: template?.fieldLabel,
+      fieldType: 'business_website',
+      actionType: 'business_website',
+      catalogType: resolvedCatalogType,
+      logoUrl: template?.logo,
+      url: url,
+      value: url,
+      isCustom: true,
+      isActive: true,
+      isPublic: true,
+    );
+    final updatedLinks = List<SocialLink>.from(_profile.socialLinks)
+      ..add(newLink);
+    await updateLinks(links: updatedLinks, context: context);
+    notifyListeners();
+  }
+
+  /// Removes profile business_website tile(s) for a typed website.
+  /// Catalog inventory links are kept.
+  Future<void> removeBusinessWebsiteLink({
+    required BuildContext context,
+    String websiteType = 'menu',
+    String? catalogType,
+  }) async {
+    final resolvedCatalogType = catalogType ??
+        (websiteType == 'service'
+            ? 'services'
+            : websiteType == 'products'
+                ? 'products'
+                : websiteType == 'portfolio'
+                    ? 'portfolio'
+                    : 'menu');
+
+    final updatedLinks = _profile.socialLinks
+        .where(
+          (link) =>
+              !(link.isBusinessWebsiteLink &&
+                  catalogTypesMatch(link.catalogType, resolvedCatalogType)),
+        )
+        .toList();
+    if (updatedLinks.length == _profile.socialLinks.length) return;
     await updateLinks(links: updatedLinks, context: context);
     notifyListeners();
   }
@@ -1373,8 +1527,8 @@ class ProfileProvider extends ChangeNotifier {
     return GalleryItem.listFrom(data);
   }
 
-  Future<ApiResponse> addGalleryPhotos(List<File> files) async {
-    if (files.isEmpty) {
+  Future<ApiResponse> addGalleryPhotos(List<Uint8List> images) async {
+    if (images.isEmpty) {
       return ApiResponse(success: false, statusCode: 0, message: 'No photos selected');
     }
 
@@ -1392,12 +1546,12 @@ class ProfileProvider extends ChangeNotifier {
 
     var added = 0;
     String? lastError;
-    final toUpload = files.take(remaining).toList();
+    final toUpload = images.take(remaining).toList();
 
     try {
       final repo = AuthRepo();
-      for (final file in toUpload) {
-        final image = await fileToCompressedDataUri(file);
+      for (final bytes in toUpload) {
+        final image = await bytesToCompressedDataUri(bytes);
         final res = await repo.addGalleryItem(image: image);
         if (res.success) {
           added++;

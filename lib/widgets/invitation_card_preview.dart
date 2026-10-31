@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -89,6 +90,7 @@ class InvitationCardPreview extends StatelessWidget {
   final String themeColor;
   final String? coverImageUrl;
   final File? coverImageFile;
+  final Uint8List? coverImageBytes;
   final String? senderName;
   final String? invitationId;
   final String? guestName;
@@ -106,6 +108,7 @@ class InvitationCardPreview extends StatelessWidget {
     this.themeColor = '#E85D2A',
     this.coverImageUrl,
     this.coverImageFile,
+    this.coverImageBytes,
     this.senderName,
     this.invitationId,
     this.guestName,
@@ -147,6 +150,7 @@ class InvitationCardPreview extends StatelessWidget {
   }
 
   bool get _hasCover =>
+      coverImageBytes != null ||
       coverImageFile != null ||
       (coverImageUrl != null && coverImageUrl!.isNotEmpty);
 
@@ -185,6 +189,7 @@ class InvitationCardPreview extends StatelessWidget {
             Positioned.fill(
               child: _Background(
                 hasCover: _hasCover,
+                bytes: coverImageBytes,
                 file: coverImageFile,
                 url: coverImageUrl,
                 colors: [light, mid, dark],
@@ -439,12 +444,14 @@ class InvitationCardPreview extends StatelessWidget {
 
 class _Background extends StatelessWidget {
   final bool hasCover;
+  final Uint8List? bytes;
   final File? file;
   final String? url;
   final List<Color> colors;
 
   const _Background({
     required this.hasCover,
+    required this.bytes,
     required this.file,
     required this.url,
     required this.colors,
@@ -453,14 +460,19 @@ class _Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (hasCover) {
+      if (bytes != null && bytes!.isNotEmpty) {
+        return Image.memory(bytes!, fit: BoxFit.cover);
+      }
       if (file != null) {
         return Image.file(file!, fit: BoxFit.cover);
       }
-      return Image.network(
-        url!,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => _ThemeBackdrop(colors: colors),
-      );
+      if (url != null && url!.isNotEmpty) {
+        return Image.network(
+          url!,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => _ThemeBackdrop(colors: colors),
+        );
+      }
     }
     return _ThemeBackdrop(colors: colors);
   }

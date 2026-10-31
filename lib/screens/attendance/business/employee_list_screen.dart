@@ -5,9 +5,11 @@ import 'package:tapni_app/repository/attendance_repo.dart';
 import 'package:tapni_app/screens/attendance/business/employee_settings_screen.dart';
 import 'package:tapni_app/screens/attendance/business/scan_to_invite_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/utils/api_error_messages.dart';
 import 'package:tapni_app/widgets/alert.dart';
 import 'package:tapni_app/widgets/attendance_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/connection_error_state.dart';
 
 enum _MemberFilter { active, inactive, pending, declined }
 
@@ -21,6 +23,7 @@ class EmployeeListScreen extends StatefulWidget {
 class _EmployeeListScreenState extends State<EmployeeListScreen> {
   List<AttendanceEmployee> _employees = [];
   bool _isLoading = true;
+  String? _loadError;
   final _searchController = TextEditingController();
   _MemberFilter _filter = _MemberFilter.active;
 
@@ -38,7 +41,10 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   }
 
   Future<void> _load() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _loadError = null;
+    });
     final res = await AttendanceRepo().getBusinessEmployees();
     if (!mounted) return;
     setState(() {
@@ -48,6 +54,12 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
           res.data,
           AttendanceEmployee.fromJson,
         );
+        _loadError = null;
+      } else {
+        _employees = [];
+        _loadError = res.message?.trim().isNotEmpty == true
+            ? res.message!.trim()
+            : 'Could not load team members';
       }
     });
   }
@@ -219,65 +231,82 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                   ? const Center(
                       child: CircularProgressIndicator(strokeWidth: 2.5),
                     )
-                  : RefreshIndicator(
-                      color: WaUi.accent,
-                      backgroundColor: Colors.white,
-                      onRefresh: _load,
-                      child: _employees.isEmpty
-                          ? ListView(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              padding: const EdgeInsets.all(24),
-                              children: [
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.35,
-                                  child: _EmptyMembersState(
-                                    title: l10n.noEmployeesAdded,
-                                    subtitle: l10n
-                                        .scanAnyUserOrBusinessQRToAddEmployee,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : _visibleEmployees.isEmpty
+                  : _loadError != null
+                      ? ConnectionErrorState(
+                          message: ApiErrorMessages.sanitize(_loadError!),
+                          onRetry: _load,
+                        )
+                      : RefreshIndicator(
+                          color: WaUi.accent,
+                          backgroundColor: Colors.white,
+                          onRefresh: _load,
+                          child: _employees.isEmpty
                               ? ListView(
-                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
                                   padding: const EdgeInsets.all(24),
                                   children: [
                                     SizedBox(
                                       height:
-                                          MediaQuery.of(context).size.height * 0.3,
+                                          MediaQuery.of(context).size.height *
+                                              0.35,
                                       child: _EmptyMembersState(
-                                        title: l10n.noEmployeesYet,
-                                        subtitle: l10n.searchByUsername,
+                                        title: l10n.noEmployeesAdded,
+                                        subtitle: l10n
+                                            .scanAnyUserOrBusinessQRToAddEmployee,
                                       ),
                                     ),
                                   ],
                                 )
-                              : ListView.separated(
-                                  physics: const AlwaysScrollableScrollPhysics(),
-                                  padding: const EdgeInsets.fromLTRB(
-                                    BarqodyChrome.sidePad,
-                                    4,
-                                    BarqodyChrome.sidePad,
-                                    8,
-                                  ),
-                                  itemCount: _visibleEmployees.length,
-                                  separatorBuilder: (_, _) => const Divider(
-                                    height: 1,
-                                    thickness: 1,
-                                    color: BarqodyChrome.divider,
-                                  ),
-                                  itemBuilder: (_, i) {
-                                    final employee = _visibleEmployees[i];
-                                    return _EmployeeRow(
-                                      employee: employee,
-                                      onTap: () => _openSettings(employee),
-                                      onEdit: () => _openSettings(employee),
-                                      onRemove: () => _removeEmployee(employee),
-                                    );
-                                  },
-                                ),
-                    ),
+                              : _visibleEmployees.isEmpty
+                                  ? ListView(
+                                      physics:
+                                          const AlwaysScrollableScrollPhysics(),
+                                      padding: const EdgeInsets.all(24),
+                                      children: [
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.3,
+                                          child: _EmptyMembersState(
+                                            title: l10n.noEmployeesYet,
+                                            subtitle: l10n.searchByUsername,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : ListView.separated(
+                                      physics:
+                                          const AlwaysScrollableScrollPhysics(),
+                                      padding: const EdgeInsets.fromLTRB(
+                                        BarqodyChrome.sidePad,
+                                        4,
+                                        BarqodyChrome.sidePad,
+                                        8,
+                                      ),
+                                      itemCount: _visibleEmployees.length,
+                                      separatorBuilder: (_, _) =>
+                                          const Divider(
+                                        height: 1,
+                                        thickness: 1,
+                                        color: BarqodyChrome.divider,
+                                      ),
+                                      itemBuilder: (_, i) {
+                                        final employee =
+                                            _visibleEmployees[i];
+                                        return _EmployeeRow(
+                                          employee: employee,
+                                          onTap: () =>
+                                              _openSettings(employee),
+                                          onEdit: () =>
+                                              _openSettings(employee),
+                                          onRemove: () =>
+                                              _removeEmployee(employee),
+                                        );
+                                      },
+                                    ),
+                        ),
             ),
           ],
         ),
@@ -525,6 +554,33 @@ class _EmployeeRow extends StatelessWidget {
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                    if (employee.isAccepted) ...[
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: employee.bookableForAppointments
+                              ? const Color(0xFFE8F5E9)
+                              : BarqodyChrome.fieldFill,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          employee.bookableForAppointments
+                              ? 'Bookable specialist'
+                              : 'Attendance only',
+                          style: WaUi.body.copyWith(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: employee.bookableForAppointments
+                                ? const Color(0xFF2E7D32)
+                                : BarqodyChrome.secondaryText,
+                          ),
+                        ),
                       ),
                     ],
                   ],

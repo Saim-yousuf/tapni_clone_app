@@ -16,9 +16,14 @@ import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/profile_reviews_section.dart';
 import 'package:tapni_app/models/cart_line_item.dart';
+import 'package:tapni_app/models/catalog_order.dart';
+import 'package:tapni_app/repository/catalog_repo.dart';
+import 'package:tapni_app/screens/catalog/order_placed_screen.dart';
 import 'package:tapni_app/screens/catalog/service_booking_cart_screen.dart';
 import 'package:tapni_app/widgets/service_booking_sheet.dart';
+import 'package:tapni_app/widgets/stay_booking_sheet.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
+import 'package:tapni_app/providers/profile_provider.dart';
 
 class ExploreItemDetailScreen extends StatefulWidget {
   final ExploreItem exploreItem;
@@ -51,6 +56,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
   String? _reviewsError;
 
   bool get _isService => widget.catalogType == 'services';
+  bool get _isProducts => widget.catalogType == 'products';
 
   CatalogItem get _item => widget.catalogItem;
 
@@ -184,6 +190,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
         businessLinkId: widget.catalogLink.id,
         businessName: _businessName,
         currency: _currency,
+        allowLater: false,
       );
       if (result == null || !mounted) return;
 
@@ -203,6 +210,8 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
                 notes: _notesCtrl.text.trim(),
                 bookingDate: result.bookingDate,
                 bookingTime: result.bookingTime,
+                resourceId: result.resourceId,
+                resourceName: result.resourceName,
               ),
             ],
             businessId: businessId,
@@ -214,6 +223,70 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
         ),
       );
       return;
+    }
+
+    if (_isProducts) {
+      final room = await findRoomResourceForItem(
+        businessId: businessId,
+        item: _item,
+      );
+      if (room != null) {
+        final stay = await showStayBookingSheet(
+          context: context,
+          item: _item,
+          businessId: businessId,
+          businessLinkId: widget.catalogLink.id,
+          businessName: _businessName,
+          currency: _currency,
+          room: room,
+        );
+        if (stay == null || !mounted || !stay.bookNow) return;
+
+        final res = await CatalogRepo().placeOrder(
+          businessId: businessId,
+          businessLinkId: widget.catalogLink.id,
+          catalogType: 'products',
+          bookingKind: 'stay',
+          resourceId: stay.resourceId,
+          checkInDate: stay.checkInDate,
+          checkOutDate: stay.checkOutDate,
+          items: [
+            {
+              'name': _item.name,
+              'price': _item.displayPrice,
+              'quantity': 1,
+              if (_item.imageUrl.isNotEmpty) 'image': _item.imageUrl,
+              'notes': '${stay.nights} night(s) · ${stay.resourceName}',
+            },
+          ],
+        );
+        if (!mounted) return;
+        if (!res.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(res.message ?? 'Could not book stay')),
+          );
+          return;
+        }
+        String? customerUsername;
+        try {
+          customerUsername = context.read<ProfileProvider>().profile.username;
+        } catch (_) {}
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => OrderPlacedScreen(
+              token: CatalogOrder.tokenFromApi(res.data),
+              customerUsername: customerUsername,
+              businessUsername: widget.profile.username ?? _businessName,
+              totalItems: 1,
+              totalAmount: _item.displayPrice * stay.nights,
+              currency: _currency,
+              bookingKind: 'stay',
+              orderId: CatalogOrder.idFromApi(res.data),
+            ),
+          ),
+        );
+        return;
+      }
     }
 
     final cart = context.read<ExploreCartProvider>();

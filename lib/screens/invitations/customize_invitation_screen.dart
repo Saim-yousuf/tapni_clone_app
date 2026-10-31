@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,11 +62,15 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
   late String _themeColor;
   DateTime? _eventAt;
   File? _coverFile;
+  Uint8List? _coverBytes;
   bool _picking = false;
   bool _downloading = false;
 
   bool get _hasWallpaper =>
+      _coverBytes != null ||
       _coverFile != null ||
+      (widget.draft.coverImageBase64 != null &&
+          widget.draft.coverImageBase64!.isNotEmpty) ||
       (widget.draft.existingCoverUrl != null &&
           widget.draft.existingCoverUrl!.isNotEmpty);
 
@@ -145,9 +150,11 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
     setState(() => _picking = true);
     try {
       final picked = await pickSingleFile();
-      if (picked?.file == null) return;
-      final base64 = await fileToBase64(picked!.file!);
+      if (picked == null || !picked.hasData) return;
+      final base64 = await pickedToBase64(picked);
+      final bytes = await picked.readBytes();
       setState(() {
+        _coverBytes = bytes;
         _coverFile = picked.file;
         widget.draft.coverImageFile = picked.file;
         widget.draft.coverImageBase64 = base64;
@@ -161,6 +168,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
 
   void _removeWallpaper() {
     setState(() {
+      _coverBytes = null;
       _coverFile = null;
       widget.draft.coverImageFile = null;
       widget.draft.coverImageBase64 = null;
@@ -313,7 +321,8 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
                     eventAt: _eventAt,
                     themeColor: _themeColor,
                     coverImageFile: _coverFile,
-                    coverImageUrl: _coverFile == null
+                    coverImageBytes: _coverBytes,
+                    coverImageUrl: (_coverFile == null && _coverBytes == null)
                         ? widget.draft.existingCoverUrl
                         : null,
                     invitationId: widget.draft.invitationId,
@@ -369,19 +378,24 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
                       _WallpaperTile(
                         hasImage: _hasWallpaper,
                         picking: _picking,
-                        preview: _coverFile != null
-                            ? Image.file(
-                                _coverFile!,
+                        preview: _coverBytes != null
+                            ? Image.memory(
+                                _coverBytes!,
                                 fit: BoxFit.cover,
                               )
-                            : (widget.draft.existingCoverUrl != null
-                                ? Image.network(
-                                    widget.draft.existingCoverUrl!,
+                            : (_coverFile != null
+                                ? Image.file(
+                                    _coverFile!,
                                     fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) =>
-                                        const SizedBox.shrink(),
                                   )
-                                : null),
+                                : (widget.draft.existingCoverUrl != null
+                                    ? Image.network(
+                                        widget.draft.existingCoverUrl!,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) =>
+                                            const SizedBox.shrink(),
+                                      )
+                                    : null)),
                         onPick: _pickCover,
                         onRemove: _hasWallpaper ? _removeWallpaper : null,
                       ),

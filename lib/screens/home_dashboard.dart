@@ -434,8 +434,8 @@ class HomeDashboard extends StatelessWidget {
                   Expanded(
                     child: _QuickOrderCard(
                       icon: Icons.receipt_long_rounded,
-                      title: context.l10n.myOrders,
-                      subtitle: context.l10n.trackYourOrders,
+                      title: 'My Orders & Bookings',
+                      subtitle: 'Orders, appointments & stays',
                       iconBg: const Color(0xFFCBE7F5),
                       iconColor: const Color(0xFF3B82A0),
                       onTap: () {
@@ -453,8 +453,8 @@ class HomeDashboard extends StatelessWidget {
                     Expanded(
                       child: _QuickOrderCard(
                         icon: Icons.storefront_rounded,
-                        title: context.l10n.customerOrders,
-                        subtitle: context.l10n.incomingOrders,
+                        title: 'Orders & Bookings',
+                        subtitle: 'Incoming from customers',
                         iconBg: const Color(0xFFD8F0CB),
                         iconColor: const Color(0xFF4A7C3F),
                         onTap: () {

@@ -1355,8 +1355,8 @@ class _ExploreDrawer extends StatelessWidget {
                   ),
                   _DrawerTile(
                     icon: Icons.receipt_long_rounded,
-                    title: l10n.myOrders,
-                    subtitle: 'Track what you ordered',
+                    title: 'My Orders & Bookings',
+                    subtitle: 'Orders, appointments & stays',
                     colors: colors,
                     cardBg: cardBg,
                     onTap: onOrders,

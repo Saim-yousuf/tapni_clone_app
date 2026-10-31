@@ -6,6 +6,7 @@ import 'package:tapni_app/screens/attendance/attendance_report_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_business_cards_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/mark_attendance_screen.dart';
+import 'package:tapni_app/screens/booking/booking_calendar_screen.dart';
 import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
@@ -117,6 +118,22 @@ class _WorkplaceScreenState extends State<WorkplaceScreen> {
                           MaterialPageRoute(
                             builder: (_) =>
                                 const EmployeeBusinessCardsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    _WorkplaceHubCard(
+                      cardBg: _cardBg,
+                      iconAsset: 'assets/images/png/file-icon.png',
+                      title: 'My calendar',
+                      subtitle: 'Busy times only',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const BookingCalendarScreen(
+                              mineOnly: true,
+                              title: 'My calendar',
+                            ),
                           ),
                         );
                       },

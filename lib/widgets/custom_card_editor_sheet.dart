@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
@@ -235,13 +237,17 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     if (_profilePhotoPath != null &&
         !_profilePhotoPath!.startsWith('http') &&
         !_profilePhotoPath!.startsWith('data:')) {
-      profilePhoto = await fileToBase64(File(_profilePhotoPath!));
+      profilePhoto = _looksLikeFilePath(_profilePhotoPath!)
+          ? await fileToBase64(File(_profilePhotoPath!))
+          : _profilePhotoPath;
     }
     if (!keepPrint &&
         coverPhoto != null &&
         !coverPhoto.startsWith('http') &&
         !coverPhoto.startsWith('data:')) {
-      coverPhoto = await fileToBase64(File(coverPhoto));
+      coverPhoto = _looksLikeFilePath(coverPhoto)
+          ? await fileToBase64(File(coverPhoto))
+          : coverPhoto;
     }
 
     final savedCard = card.copyWith(
@@ -764,9 +770,10 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
                 path: _profilePhotoPath,
                 onPick: () async {
                   final file = await pickFile();
-                  if (file?.file != null) {
-                    setState(() => _profilePhotoPath = file!.file!.path);
-                  }
+                  if (file == null || !file.hasData) return;
+                  final b64 = await pickedToBase64(file);
+                  if (!mounted) return;
+                  setState(() => _profilePhotoPath = b64);
                 },
               ),
               const SizedBox(width: 12),
@@ -775,9 +782,10 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
                 path: _coverPhotoPath,
                 onPick: () async {
                   final file = await pickFile();
-                  if (file?.file != null) {
-                    setState(() => _coverPhotoPath = file!.file!.path);
-                  }
+                  if (file == null || !file.hasData) return;
+                  final b64 = await pickedToBase64(file);
+                  if (!mounted) return;
+                  setState(() => _coverPhotoPath = b64);
                 },
               ),
             ],
@@ -844,11 +852,38 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     );
   }
 
+  bool _looksLikeFilePath(String value) =>
+      !kIsWeb && (value.contains('/') || value.contains(r'\'));
+
+  ImageProvider? _photoProvider(String? path) {
+    if (path == null || path.isEmpty) return null;
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return NetworkImage(path);
+    }
+    if (path.startsWith('data:')) {
+      final comma = path.indexOf(',');
+      if (comma > 0) {
+        try {
+          return MemoryImage(base64Decode(path.substring(comma + 1)));
+        } catch (_) {
+          return null;
+        }
+      }
+    }
+    if (_looksLikeFilePath(path)) return FileImage(File(path));
+    try {
+      return MemoryImage(base64Decode(path));
+    } catch (_) {
+      return null;
+    }
+  }
+
   Widget _photoPicker({
     required String label,
     required String? path,
     required VoidCallback onPick,
   }) {
+    final provider = _photoProvider(path);
     return Expanded(
       child: GestureDetector(
         onTap: onPick,
@@ -857,16 +892,11 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
           decoration: BoxDecoration(
             color: WaUi.scaffold,
             borderRadius: BorderRadius.circular(WaUi.radiusMd),
-            image: path != null && path.isNotEmpty
-                ? DecorationImage(
-                    image: path.startsWith('http') || path.startsWith('data:')
-                        ? NetworkImage(path)
-                        : FileImage(File(path)),
-                    fit: BoxFit.cover,
-                  )
+            image: provider != null
+                ? DecorationImage(image: provider, fit: BoxFit.cover)
                 : null,
           ),
-          child: path == null || path.isEmpty
+          child: provider == null
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
