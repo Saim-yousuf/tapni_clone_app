@@ -58,7 +58,7 @@ class LoyaltyProgramSuccessScreen extends StatelessWidget {
                     ),
                     SizedBox(height: gapAfterTitle),
                     Text(
-                      'Your customers can now earn stamps with eligible purchases and unlock their reward.',
+                      'Link a catalog item for auto-enroll on purchase, or describe how to earn. When the card is full, customers can claim a free reward or redeem in-store.',
                       textAlign: TextAlign.center,
                       style: WaUi.body.copyWith(
                         fontSize: bodySize,

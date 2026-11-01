@@ -13,6 +13,7 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/screens/app_language_screen.dart';
 import 'package:tapni_app/screens/business_suite_screen.dart';
+import 'package:tapni_app/screens/business_website/business_website_setup_guide_sheet.dart';
 import 'package:tapni_app/screens/find_user_screen.dart';
 import 'package:tapni_app/screens/help/help_center_screen.dart';
 import 'package:tapni_app/screens/invitations/invitations_home_screen.dart';
@@ -349,6 +350,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
           
                     WaSectionHeader(context.l10n.shoppingRewards),
+                    WaToolsListTile(
+                      icon: Icons.menu_book_outlined,
+                      title: 'Customer guide',
+                      subtitle:
+                          'How to browse, order, track, and claim stamp rewards',
+                      onTap: () => showCustomerAppGuide(context),
+                    ),
                     WaToolsListTile(
                       icon: Icons.receipt_long_outlined,
                       title: 'My Orders & Bookings',

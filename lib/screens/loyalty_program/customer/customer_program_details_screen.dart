@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/reward.dart';
+import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/customer/stamp_history_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
@@ -9,16 +10,75 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
 
-class CustomerProgramDetailsScreen extends StatelessWidget {
+class CustomerProgramDetailsScreen extends StatefulWidget {
   final RewardEnrollment enrollment;
 
   const CustomerProgramDetailsScreen({super.key, required this.enrollment});
 
+  @override
+  State<CustomerProgramDetailsScreen> createState() =>
+      _CustomerProgramDetailsScreenState();
+}
+
+class _CustomerProgramDetailsScreenState
+    extends State<CustomerProgramDetailsScreen> {
   static const _muted = Color(0xFF6B6B6B);
   static const _howToBg = Color(0xFFF5F5F5);
 
+  late RewardEnrollment _enrollment;
+  bool _claiming = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _enrollment = widget.enrollment;
+  }
+
+  Future<void> _claimReward() async {
+    if (_claiming) return;
+    setState(() => _claiming = true);
+    final res = await RewardRepo().claimReward(_enrollment.id);
+    if (!mounted) return;
+    setState(() => _claiming = false);
+    if (res.success) {
+      final data = res.data;
+      Map<String, dynamic>? enrollmentJson;
+      if (data is Map) {
+        final map = Map<String, dynamic>.from(data);
+        final nested = map['enrollment'] ?? map['data']?['enrollment'] ?? map;
+        if (nested is Map) {
+          enrollmentJson = Map<String, dynamic>.from(nested);
+        }
+      }
+      if (enrollmentJson != null) {
+        final updated = RewardEnrollment.fromJson(enrollmentJson);
+        setState(() {
+          _enrollment = updated.copyWith(
+            program: updated.program ?? _enrollment.program,
+          );
+        });
+      } else {
+        setState(() {
+          _enrollment = _enrollment.copyWith(status: 'CLAIM_PENDING');
+        });
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Claim sent — no charge. Show this to staff or wait for confirmation.',
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(res.message ?? 'Could not claim reward')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final enrollment = _enrollment;
     final program = enrollment.program;
     final theme = program?.theme ?? RewardTheme();
     final totalStamps = program?.stamps ?? 10;
@@ -31,10 +91,11 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
     final avatarUrl = (photo != null && photo.isNotEmpty)
         ? photo
         : (logo != null && logo.isNotEmpty ? logo : null);
-    final rewardName = _rewardNoun(title);
+    final rewardName = _rewardNoun(title, program);
     final howToLines = _howToEarnLines(
       totalStamps: totalStamps,
       rewardName: rewardName,
+      program: program,
     );
 
     return Scaffold(
@@ -116,6 +177,59 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
                       color: Color(0xFFE8E8E8),
                     ),
                     const SizedBox(height: 20),
+                    if (enrollment.canClaim) ...[
+                      PillButton(
+                        label: _claiming ? 'Claiming…' : 'Claim free reward',
+                        enabled: !_claiming,
+                        onPressed: _claimReward,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Creates a no-charge order for the business, or show this screen in-store.',
+                        style: WaUi.body.copyWith(
+                          fontSize: 12,
+                          color: _muted,
+                          height: 1.35,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ] else if (enrollment.isClaimPending) ...[
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF8E8),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Text(
+                          'Claim pending — waiting for the business to confirm your reward.',
+                          style: WaUi.body.copyWith(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ] else if (enrollment.isClaimed) ...[
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE8F8EF),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Text(
+                          'Reward claimed. Enjoy!',
+                          style: WaUi.body.copyWith(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                     PillButton(
                       label: 'View History',
                       filled: false,
@@ -140,7 +254,11 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
     );
   }
 
-  static String _rewardNoun(String title) {
+  static String _rewardNoun(String title, RewardProgram? program) {
+    final rewardTitle = program?.rewardTitle.trim() ?? '';
+    if (rewardTitle.isNotEmpty) return rewardTitle;
+    final item = program?.eligibleCatalogItemName.trim() ?? '';
+    if (item.isNotEmpty) return item;
     final lower = title.toLowerCase();
     if (lower.contains('coffee')) return 'Coffee';
     if (lower.contains('pizza')) return 'Pizza';
@@ -151,9 +269,11 @@ class CustomerProgramDetailsScreen extends StatelessWidget {
   static List<String> _howToEarnLines({
     required int totalStamps,
     required String rewardName,
+    RewardProgram? program,
   }) {
+    final earn = program?.earnRuleLabel ?? 'Make a purchase → Earn 1 Stamp';
     return [
-      'Make a purchase → Earn 1 Stamp',
+      earn,
       'Complete $totalStamps stamps to unlock your free $rewardName.',
     ];
   }

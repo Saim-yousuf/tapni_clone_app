@@ -79,9 +79,10 @@ class BusinessSuiteScreen extends StatelessWidget {
                   if (profile.isPro) ...[
                     WaSectionHeader(context.l10n.growYourBusiness),
                     WaToolsListTile(
-                      icon: Icons.route_outlined,
-                      title: 'Website setup guide',
-                      subtitle: 'Short checklist to create, fill, and publish',
+                      icon: Icons.menu_book_outlined,
+                      title: 'Guides',
+                      subtitle:
+                          'Business guide (your site) + Customer guide (ordering & rewards)',
                       onTap: () => showBusinessWebsiteSetupGuide(context),
                     ),
                     WaToolsListTile(

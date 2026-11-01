@@ -646,6 +646,7 @@ class _BusinessWebsiteSettingsScreenState
     return showBusinessWebsiteSetupGuide(
       context,
       websiteType: _website?.websiteType ?? 'menu',
+      openAudience: GuideAudience.business,
     );
   }
 
@@ -689,7 +690,7 @@ class _BusinessWebsiteSettingsScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Setup guide',
+                          'Business guide',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
@@ -697,7 +698,7 @@ class _BusinessWebsiteSettingsScreenState
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Simple steps to go live — where to tap, what to add',
+                          'How this website works — go live, catalog, orders, stamps',
                           style: TextStyle(
                             fontSize: 13,
                             height: 1.3,

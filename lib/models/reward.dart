@@ -86,6 +86,12 @@ class RewardProgram {
   final String? businessUsername;
   final String? businessPhoto;
   final LoyaltyCardDesign? design;
+  final String eligibleCatalogItemId;
+  final String eligibleCatalogItemName;
+  final String eligibleCatalogType;
+  final String earnDescription;
+  final String rewardCatalogItemId;
+  final String rewardTitle;
 
   RewardProgram({
     required this.id,
@@ -105,9 +111,27 @@ class RewardProgram {
     this.businessUsername,
     this.businessPhoto,
     this.design,
+    this.eligibleCatalogItemId = '',
+    this.eligibleCatalogItemName = '',
+    this.eligibleCatalogType = '',
+    this.earnDescription = '',
+    this.rewardCatalogItemId = '',
+    this.rewardTitle = '',
   });
 
   bool get hasDesign => design != null && design!.hasLayers;
+
+  bool get hasLinkedItem => eligibleCatalogItemId.trim().isNotEmpty;
+
+  String get earnRuleLabel {
+    if (hasLinkedItem) {
+      final name = eligibleCatalogItemName.trim();
+      return name.isNotEmpty ? 'Buy $name to earn stamps' : 'Buy linked item to earn stamps';
+    }
+    final text = earnDescription.trim();
+    if (text.isNotEmpty) return text;
+    return 'Earn stamps with purchases';
+  }
 
   String get displayBusinessName =>
       (businessName?.trim().isNotEmpty == true) ? businessName! : 'Business';
@@ -176,6 +200,14 @@ class RewardProgram {
       businessUsername: businessUsername,
       businessPhoto: businessPhoto,
       design: design,
+      eligibleCatalogItemId:
+          json['eligibleCatalogItemId']?.toString() ?? '',
+      eligibleCatalogItemName:
+          json['eligibleCatalogItemName']?.toString() ?? '',
+      eligibleCatalogType: json['eligibleCatalogType']?.toString() ?? '',
+      earnDescription: json['earnDescription']?.toString() ?? '',
+      rewardCatalogItemId: json['rewardCatalogItemId']?.toString() ?? '',
+      rewardTitle: json['rewardTitle']?.toString() ?? '',
     );
   }
 }
@@ -212,6 +244,9 @@ class RewardEnrollment {
   final String? customerPhoto;
   /// Figma row meta — e.g. "Enrolled By You" / "Enrolled By Order #1001".
   final String? enrolledByLabel;
+  final String? claimMethod;
+  final String? claimOrderId;
+  final DateTime? claimedAt;
 
   RewardEnrollment({
     required this.id,
@@ -223,9 +258,20 @@ class RewardEnrollment {
     this.customerUsername,
     this.customerPhoto,
     this.enrolledByLabel,
+    this.claimMethod,
+    this.claimOrderId,
+    this.claimedAt,
   });
 
-  bool get isCompleted => status == 'COMPLETED';
+  bool get isCompleted =>
+      status == 'COMPLETED' ||
+      status == 'CLAIM_PENDING' ||
+      status == 'CLAIMED';
+  bool get canClaim => status == 'COMPLETED';
+  bool get isClaimPending => status == 'CLAIM_PENDING';
+  bool get isClaimed => status == 'CLAIMED';
+  bool get canMarkClaimed =>
+      status == 'COMPLETED' || status == 'CLAIM_PENDING';
 
   factory RewardEnrollment.fromJson(Map<String, dynamic> json) {
     RewardProgram? prog;
@@ -256,6 +302,7 @@ class RewardEnrollment {
 
     final enrolledBy = json['enrolledByLabel']?.toString().trim();
 
+    final claimedAtRaw = json['claimedAt']?.toString();
     return RewardEnrollment(
       id: json['_id']?.toString() ?? json['id']?.toString() ?? '',
       program: prog,
@@ -267,6 +314,11 @@ class RewardEnrollment {
       customerPhoto: customerPhoto,
       enrolledByLabel:
           (enrolledBy != null && enrolledBy.isNotEmpty) ? enrolledBy : null,
+      claimMethod: json['claimMethod']?.toString(),
+      claimOrderId: json['claimOrderId']?.toString(),
+      claimedAt: claimedAtRaw != null && claimedAtRaw.isNotEmpty
+          ? DateTime.tryParse(claimedAtRaw)
+          : null,
     );
   }
 
@@ -278,6 +330,9 @@ class RewardEnrollment {
     String? customerUsername,
     String? customerPhoto,
     String? enrolledByLabel,
+    String? claimMethod,
+    String? claimOrderId,
+    DateTime? claimedAt,
   }) {
     return RewardEnrollment(
       id: id,
@@ -289,6 +344,9 @@ class RewardEnrollment {
       customerUsername: customerUsername ?? this.customerUsername,
       customerPhoto: customerPhoto ?? this.customerPhoto,
       enrolledByLabel: enrolledByLabel ?? this.enrolledByLabel,
+      claimMethod: claimMethod ?? this.claimMethod,
+      claimOrderId: claimOrderId ?? this.claimOrderId,
+      claimedAt: claimedAt ?? this.claimedAt,
     );
   }
 }

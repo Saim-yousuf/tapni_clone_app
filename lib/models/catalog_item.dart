@@ -1,4 +1,5 @@
 class CatalogItem {
+  final String id;
   final String name;
   final double price;
   final String description;
@@ -16,6 +17,7 @@ class CatalogItem {
   final String bookingType;
 
   CatalogItem({
+    this.id = '',
     required this.name,
     this.price = 0,
     this.description = '',
@@ -46,6 +48,7 @@ class CatalogItem {
 
   factory CatalogItem.fromJson(Map<String, dynamic> json) {
     return CatalogItem(
+      id: json['_id']?.toString() ?? json['id']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
       price: (json['price'] is num) ? (json['price'] as num).toDouble() : 0,
       description: json['description']?.toString() ?? '',
@@ -80,6 +83,7 @@ class CatalogItem {
   }
 
   Map<String, dynamic> toJson() => {
+        if (id.isNotEmpty) '_id': id,
         'name': name,
         'price': price,
         'description': description,
@@ -95,6 +99,7 @@ class CatalogItem {
       };
 
   CatalogItem copyWith({
+    String? id,
     String? name,
     double? price,
     String? description,
@@ -108,6 +113,7 @@ class CatalogItem {
     String? bookingType,
   }) {
     return CatalogItem(
+      id: id ?? this.id,
       name: name ?? this.name,
       price: price ?? this.price,
       description: description ?? this.description,

@@ -213,6 +213,41 @@ class _LoyaltyProgramDetailsScreenState
     if (mounted) _load();
   }
 
+  Future<void> _markClaimed(RewardEnrollment enrollment) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Mark reward claimed?'),
+        content: const Text(
+          'Use this when the customer redeemed their reward in the shop.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Mark claimed'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    final res = await RewardRepo().markRewardClaimed(enrollment.id);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          res.success
+              ? 'Reward marked as claimed'
+              : (res.message ?? 'Could not mark claimed'),
+        ),
+      ),
+    );
+    if (res.success) _load();
+  }
+
   @override
   Widget build(BuildContext context) {
     final m = AuthScale.of(context);
@@ -335,10 +370,30 @@ class _LoyaltyProgramDetailsScreenState
           ],
         ),
         SizedBox(height: m.v(16).clamp(12.0, 20.0)),
+        if (_program != null) ...[
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(m.s(14).clamp(12.0, 16.0)),
+            decoration: BoxDecoration(
+              color: _cardFill,
+              borderRadius: BorderRadius.circular(_cardRadius),
+            ),
+            child: Text(
+              _program!.earnRuleLabel,
+              style: WaUi.body.copyWith(
+                fontSize: m.s(13).clamp(12.0, 14.0),
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          SizedBox(height: m.v(12).clamp(8.0, 16.0)),
+        ],
         _RecentEnrolledCard(
           count: enrolled,
           enrollments: _enrollments,
           onOpen: _openEnrollment,
+          onMarkClaimed: _markClaimed,
         ),
       ],
     );
@@ -513,11 +568,13 @@ class _RecentEnrolledCard extends StatelessWidget {
   final int count;
   final List<RewardEnrollment> enrollments;
   final void Function(RewardEnrollment) onOpen;
+  final void Function(RewardEnrollment)? onMarkClaimed;
 
   const _RecentEnrolledCard({
     required this.count,
     required this.enrollments,
     required this.onOpen,
+    this.onMarkClaimed,
   });
 
   @override
@@ -608,6 +665,9 @@ class _RecentEnrolledCard extends StatelessWidget {
                 _EnrollmentRow(
                   enrollment: enrollments[i],
                   onOpen: () => onOpen(enrollments[i]),
+                  onMarkClaimed: onMarkClaimed == null
+                      ? null
+                      : () => onMarkClaimed!(enrollments[i]),
                 ),
               ],
             ],
@@ -620,10 +680,12 @@ class _RecentEnrolledCard extends StatelessWidget {
 class _EnrollmentRow extends StatelessWidget {
   final RewardEnrollment enrollment;
   final VoidCallback onOpen;
+  final VoidCallback? onMarkClaimed;
 
   const _EnrollmentRow({
     required this.enrollment,
     required this.onOpen,
+    this.onMarkClaimed,
   });
 
   @override
@@ -701,15 +763,37 @@ class _EnrollmentRow extends StatelessWidget {
               ),
               onSelected: (value) {
                 if (value == 'stamp') onOpen();
+                if (value == 'claim') onMarkClaimed?.call();
               },
               itemBuilder: (_) => [
-                PopupMenuItem(
-                  value: 'stamp',
-                  child: Text(
-                    context.l10n.addStamp,
-                    style: WaUi.body.copyWith(fontWeight: FontWeight.w600),
+                if (!enrollment.isCompleted)
+                  PopupMenuItem(
+                    value: 'stamp',
+                    child: Text(
+                      context.l10n.addStamp,
+                      style: WaUi.body.copyWith(fontWeight: FontWeight.w600),
+                    ),
                   ),
-                ),
+                if (enrollment.canMarkClaimed)
+                  PopupMenuItem(
+                    value: 'claim',
+                    child: Text(
+                      'Mark claimed',
+                      style: WaUi.body.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                if (enrollment.isClaimed)
+                  PopupMenuItem(
+                    enabled: false,
+                    value: 'claimed',
+                    child: Text(
+                      'Reward claimed',
+                      style: WaUi.body.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: BarqodyChrome.secondaryText,
+                      ),
+                    ),
+                  ),
               ],
               child: Padding(
                 padding: const EdgeInsets.all(6),

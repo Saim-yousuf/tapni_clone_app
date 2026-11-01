@@ -24,6 +24,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
   final _stampsController = TextEditingController();
+  final _earnDescController = TextEditingController();
   String? _logoBase64;
   String? _existingLogoUrl;
   String? _stampIconBase64;
@@ -42,6 +43,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
       _titleController.text = p.title;
       _descController.text = p.description;
       _stampsController.text = p.stamps.toString();
+      _earnDescController.text = p.earnDescription;
       _theme = p.theme;
       _existingLogoUrl = p.logo;
       _existingStampIconUrl = p.stampIcon;
@@ -57,6 +59,7 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
     _titleController.dispose();
     _descController.dispose();
     _stampsController.dispose();
+    _earnDescController.dispose();
     super.dispose();
   }
 
@@ -90,6 +93,17 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
       return;
     }
 
+    final earnDescription = _earnDescController.text.trim().isNotEmpty
+        ? _earnDescController.text.trim()
+        : _descController.text.trim();
+    if (earnDescription.isEmpty &&
+        (widget.existing?.eligibleCatalogItemId.trim().isEmpty ?? true)) {
+      _showSnack(
+        'Describe how customers earn stamps, or edit in the design editor to link an item.',
+      );
+      return;
+    }
+
     setState(() => _isLoading = true);
 
     final body = {
@@ -98,6 +112,16 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
       'description': _descController.text.trim(),
       'stamps': stamps,
       'theme': _theme.toJson(),
+      'earnDescription': earnDescription,
+      'eligibleCatalogItemId':
+          widget.existing?.eligibleCatalogItemId ?? '',
+      'eligibleCatalogItemName':
+          widget.existing?.eligibleCatalogItemName ?? '',
+      'eligibleCatalogType':
+          widget.existing?.eligibleCatalogType ?? '',
+      'rewardCatalogItemId': widget.existing?.rewardCatalogItemId ?? '',
+      'rewardTitle': widget.existing?.rewardTitle ??
+          _titleController.text.trim(),
       if (_logoBase64 != null) 'logo': _logoBase64,
       if (_logoBase64 == null && _existingLogoUrl != null) 'logo': _existingLogoUrl,
     };
@@ -186,6 +210,14 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
                         _descController,
                         'e.g. Buy 5 Coffes . Get 6 free',
                         maxLines: 3,
+                      ),
+                      const SizedBox(height: 20),
+                      _barqodyLabel('How to earn stamps'),
+                      const SizedBox(height: 8),
+                      _buildTextField(
+                        _earnDescController,
+                        'e.g. Any burger — or link a catalog item in Design',
+                        maxLines: 2,
                       ),
                       const SizedBox(height: 20),
                       _barqodyLabel('Reward Item (Optional)'),

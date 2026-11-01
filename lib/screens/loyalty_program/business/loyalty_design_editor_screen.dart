@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/invitation_design.dart';
 import 'package:tapni_app/models/loyalty_card_design.dart';
 import 'package:tapni_app/models/reward.dart';
+import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
+import 'package:tapni_app/utils/api_endpoint.dart';
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -45,6 +48,10 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
   final _labelCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
   final _stampsCtrl = TextEditingController();
+  final _earnDescCtrl = TextEditingController();
+  String _eligibleItemId = '';
+  String _eligibleItemName = '';
+  String _eligibleCatalogType = '';
 
   DesignLayer? get _selected {
     if (_selectedId == null) return null;
@@ -69,6 +76,10 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
     _labelCtrl.text = existing?.label ?? '';
     _descCtrl.text = existing?.description ?? '';
     _stampsCtrl.text = _design.stamps.toString();
+    _earnDescCtrl.text = existing?.earnDescription ?? '';
+    _eligibleItemId = existing?.eligibleCatalogItemId ?? '';
+    _eligibleItemName = existing?.eligibleCatalogItemName ?? '';
+    _eligibleCatalogType = existing?.eligibleCatalogType ?? '';
   }
 
   @override
@@ -76,6 +87,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
     _labelCtrl.dispose();
     _descCtrl.dispose();
     _stampsCtrl.dispose();
+    _earnDescCtrl.dispose();
     super.dispose();
   }
 
@@ -845,6 +857,90 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
     );
   }
 
+  Future<void> _pickEligibleCatalogItem() async {
+    final res = await ApiHandler.request(
+      api: Api.auth.profile,
+      method: ApiMethod.get,
+      authorization: true,
+    );
+    if (!mounted) return;
+    if (!res.success || res.data is! Map) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not load your catalog items.')),
+      );
+      return;
+    }
+    final map = Map<String, dynamic>.from(res.data as Map);
+    final linksRaw = map['links'] ?? map['data']?['links'];
+    final options = <({String id, String name, String type})>[];
+    if (linksRaw is List) {
+      for (final raw in linksRaw) {
+        if (raw is! Map) continue;
+        final link = SocialLink.fromApiJson(Map<String, dynamic>.from(raw));
+        final type = (link.catalogType ?? '').trim().toLowerCase();
+        if (type != 'menu' && type != 'products' && type != 'services') {
+          continue;
+        }
+        for (final item in link.catalogItems ?? const <CatalogItem>[]) {
+          if (item.id.isEmpty || item.name.trim().isEmpty) continue;
+          if (!item.isActive) continue;
+          options.add((id: item.id, name: item.name, type: type));
+        }
+      }
+    }
+    if (!mounted) return;
+    if (options.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'No catalog items yet. Add menu/products/services first, or describe how to earn.',
+          ),
+        ),
+      );
+      return;
+    }
+    final picked = await showModalBottomSheet<({String id, String name, String type})>(
+      context: context,
+      backgroundColor: BarqodyChrome.scaffold,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(BarqodyChrome.sheetRadius),
+        ),
+      ),
+      builder: (ctx) {
+        return SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
+                child: Text(
+                  'Select item',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              for (final o in options)
+                ListTile(
+                  title: Text(o.name),
+                  subtitle: Text(o.type),
+                  onTap: () => Navigator.pop(ctx, o),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+    if (picked == null || !mounted) return;
+    setState(() {
+      _eligibleItemId = picked.id;
+      _eligibleItemName = picked.name;
+      _eligibleCatalogType = picked.type;
+    });
+  }
+
   Future<void> _showProgramMeta() async {
     _stampsCtrl.text = _design.stamps.toString();
     await showModalBottomSheet<void>(
@@ -964,6 +1060,94 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
                       }
                     },
                   ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'EARN WITH ITEM (OPTIONAL)',
+                    style: WaUi.caption.copyWith(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.6,
+                      color: BarqodyChrome.secondaryText,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  InkWell(
+                    onTap: () async {
+                      Navigator.pop(ctx);
+                      await _pickEligibleCatalogItem();
+                      if (mounted) _showProgramMeta();
+                    },
+                    borderRadius: BorderRadius.circular(14),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 14,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: const Color(0xFFE8E8E8)),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _eligibleItemName.isNotEmpty
+                                  ? _eligibleItemName
+                                  : 'Select catalog item',
+                              style: WaUi.body.copyWith(
+                                fontSize: 15,
+                                color: _eligibleItemName.isNotEmpty
+                                    ? Colors.black
+                                    : BarqodyChrome.secondaryText,
+                              ),
+                            ),
+                          ),
+                          if (_eligibleItemId.isNotEmpty)
+                            IconButton(
+                              visualDensity: VisualDensity.compact,
+                              onPressed: () {
+                                setState(() {
+                                  _eligibleItemId = '';
+                                  _eligibleItemName = '';
+                                  _eligibleCatalogType = '';
+                                });
+                                Navigator.pop(ctx);
+                                _showProgramMeta();
+                              },
+                              icon: const Icon(Icons.close_rounded, size: 18),
+                            )
+                          else
+                            const Icon(
+                              Icons.chevron_right_rounded,
+                              color: Colors.black45,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'OR DESCRIBE HOW TO EARN',
+                    style: WaUi.caption.copyWith(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.6,
+                      color: BarqodyChrome.secondaryText,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _earnDescCtrl,
+                    maxLines: 2,
+                    style: WaUi.body.copyWith(
+                      fontSize: 15,
+                      color: Colors.black,
+                    ),
+                    decoration: WaUi.fieldDecoration(
+                      hintText: 'e.g. Any burger, or any coffee',
+                    ),
+                  ),
                   const SizedBox(height: 24),
                   PillButton(
                     label: ctx.l10n.done,
@@ -1028,6 +1212,16 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
       if (_design.logo.isNotEmpty) 'logo': _design.logo,
       if (_design.stampIcon.isNotEmpty) 'stampIcon': _design.stampIcon,
       if (_design.unstampIcon.isNotEmpty) 'unstampIcon': _design.unstampIcon,
+      'eligibleCatalogItemId': _eligibleItemId,
+      'eligibleCatalogItemName': _eligibleItemName,
+      'eligibleCatalogType': _eligibleCatalogType,
+      'earnDescription': _earnDescCtrl.text.trim(),
+      'rewardCatalogItemId': _eligibleItemId,
+      'rewardTitle': _eligibleItemName.isNotEmpty
+          ? _eligibleItemName
+          : (_earnDescCtrl.text.trim().isNotEmpty
+              ? _earnDescCtrl.text.trim()
+              : title),
     };
   }
 
@@ -1039,6 +1233,17 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
     if (_design.stamps < 1) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.l10n.pleaseEnterAValidNumberOfStamps)),
+      );
+      return;
+    }
+    if (_eligibleItemId.trim().isEmpty &&
+        _earnDescCtrl.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Select a catalog item or describe how customers earn stamps.',
+          ),
+        ),
       );
       return;
     }

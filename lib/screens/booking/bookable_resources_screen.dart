@@ -343,9 +343,12 @@ class _BookableResourcesScreenState extends State<BookableResourcesScreen> {
                   ),
                   const SizedBox(height: 8),
                   GestureDetector(
-                    onTap: () => showBusinessWebsiteSetupGuide(context),
+                    onTap: () => showBusinessWebsiteSetupGuide(
+                      context,
+                      openAudience: GuideAudience.business,
+                    ),
                     child: Text(
-                      'Website setup guide',
+                      'Business guide',
                       style: WaUi.body.copyWith(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,

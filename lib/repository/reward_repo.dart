@@ -129,6 +129,26 @@ class RewardRepo {
     );
   }
 
+  Future<ApiResponse> claimReward(String enrollmentId) async {
+    return await ApiHandler.request(
+      api: Api.enrollment.claimReward(enrollmentId),
+      method: ApiMethod.post,
+      headers: {'Content-Type': 'application/json'},
+      authorization: true,
+      body: {},
+    );
+  }
+
+  Future<ApiResponse> markRewardClaimed(String enrollmentId) async {
+    return await ApiHandler.request(
+      api: Api.enrollment.markClaimed(enrollmentId),
+      method: ApiMethod.post,
+      headers: {'Content-Type': 'application/json'},
+      authorization: true,
+      body: {},
+    );
+  }
+
   Future<ApiResponse> getCommunityTemplates({String? category}) async {
     final q = category != null && category.isNotEmpty
         ? '?category=${Uri.encodeQueryComponent(category)}'

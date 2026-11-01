@@ -153,6 +153,10 @@ class _EnrollmentApi {
       "${Api.baseUrl}/api/loyalty/enrollments/customer/$customerId";
   String addStamp(String enrollmentId) =>
       "${Api.baseUrl}/api/loyalty/enrollments/$enrollmentId/stamp";
+  String claimReward(String enrollmentId) =>
+      "${Api.baseUrl}/api/loyalty/enrollments/$enrollmentId/claim";
+  String markClaimed(String enrollmentId) =>
+      "${Api.baseUrl}/api/loyalty/enrollments/$enrollmentId/mark-claimed";
 }
 
 class _LoyaltyPointsApi {
