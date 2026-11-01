@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tapni_app/models/bookable_resource.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/booking_repo.dart';
+import 'package:tapni_app/screens/business_website/business_website_setup_guide_sheet.dart';
 import 'package:tapni_app/utils/api_error_messages.dart';
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -329,13 +330,32 @@ class _BookableResourcesScreenState extends State<BookableResourcesScreen> {
                 BarqodyChrome.sidePad,
                 8,
               ),
-              child: Text(
-                'Manage what customers can book. Doctors & stylists: Team Attendance → Offer as bookable specialist.',
-                style: WaUi.body.copyWith(
-                  fontSize: 13,
-                  height: 1.35,
-                  color: BarqodyChrome.secondaryText,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Manage what customers can book. Doctors & stylists: Team Attendance → Offer as bookable specialist.',
+                    style: WaUi.body.copyWith(
+                      fontSize: 13,
+                      height: 1.35,
+                      color: BarqodyChrome.secondaryText,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  GestureDetector(
+                    onTap: () => showBusinessWebsiteSetupGuide(context),
+                    child: Text(
+                      'Website setup guide',
+                      style: WaUi.body.copyWith(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.black26,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(

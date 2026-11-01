@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/banner_ads/banner_ads_plans_screen.dart';
 import 'package:tapni_app/screens/booking/bookable_resources_screen.dart';
 import 'package:tapni_app/screens/booking/booking_calendar_screen.dart';
 import 'package:tapni_app/screens/business_profile_screen.dart';
+import 'package:tapni_app/screens/business_website/business_website_setup_guide_sheet.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_hub_screen.dart';
 import 'package:tapni_app/screens/offers/business_offers_screen.dart';
 import 'package:tapni_app/screens/orders/orders_list_screen.dart';
@@ -77,6 +78,12 @@ class BusinessSuiteScreen extends StatelessWidget {
                   ),
                   if (profile.isPro) ...[
                     WaSectionHeader(context.l10n.growYourBusiness),
+                    WaToolsListTile(
+                      icon: Icons.route_outlined,
+                      title: 'Website setup guide',
+                      subtitle: 'Short checklist to create, fill, and publish',
+                      onTap: () => showBusinessWebsiteSetupGuide(context),
+                    ),
                     WaToolsListTile(
                       icon: Icons.receipt_long_outlined,
                       title: 'Orders & Bookings',

@@ -26,6 +26,10 @@ class BwUi {
         n.contains('medical')) {
       return Icons.medical_services_outlined;
     }
+    if (n.contains('hotel') || n.contains('hospitality') || n.contains('stay') ||
+        n.contains('resort')) {
+      return Icons.hotel_outlined;
+    }
     if (n.contains('design') || n.contains('creative') || n.contains('graphic')) {
       return Icons.desktop_windows_outlined;
     }

@@ -9,6 +9,7 @@ import 'package:tapni_app/repository/business_website_repo.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/screens/business_website/business_presence_ui.dart';
 import 'package:tapni_app/screens/business_website/business_website_customize_screen.dart';
+import 'package:tapni_app/screens/business_website/business_website_setup_guide_sheet.dart';
 import 'package:tapni_app/screens/business_website/business_website_setup_screen.dart'
     show catalogTypeFromWebsiteType;
 import 'package:tapni_app/screens/business_website/business_website_webview_screen.dart';
@@ -641,6 +642,13 @@ class _BusinessWebsiteSettingsScreenState
     );
   }
 
+  Future<void> _openSetupGuide() {
+    return showBusinessWebsiteSetupGuide(
+      context,
+      websiteType: _website?.websiteType ?? 'menu',
+    );
+  }
+
   Widget _buildSettingsTab() {
     final w = _website!;
     final isPublic = w.isPublished;
@@ -648,6 +656,65 @@ class _BusinessWebsiteSettingsScreenState
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       children: [
+        Material(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          child: InkWell(
+            onTap: _openSetupGuide,
+            borderRadius: BorderRadius.circular(18),
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(16, 16, 14, 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: BwUi.cardBorder),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: BwUi.iconTileBg,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Icon(
+                      Icons.route_outlined,
+                      color: Colors.black,
+                      size: 22,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Setup guide',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Simple steps to go live — where to tap, what to add',
+                          style: TextStyle(
+                            fontSize: 13,
+                            height: 1.3,
+                            color: AuthUi.textSecondary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.chevron_right_rounded, color: Colors.black54),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
         _sectionCard(
           children: [
             Padding(
