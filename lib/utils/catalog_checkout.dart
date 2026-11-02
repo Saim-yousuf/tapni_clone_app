@@ -42,6 +42,8 @@ class CatalogCheckout {
     String bookingKind = 'order',
     bool pushSuccessScreen = true,
     CheckoutPaymentMethod? presetMethod,
+    /// Use public mock-payment endpoint (guest Flutter checkout).
+    bool publicGuestPayment = false,
   }) async {
     final method = presetMethod ??
         await showCheckoutPaymentMethodSheet(
@@ -102,6 +104,8 @@ class CatalogCheckout {
             businessName: businessName ?? businessUsername,
             paymentAttemptKey: '${idempotencyKey}_pay',
             paymentSessionToken: sessionToken,
+            publicGuest: publicGuestPayment,
+            guestPhone: guestPhone,
           ),
         ),
       );

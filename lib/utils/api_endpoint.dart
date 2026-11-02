@@ -7,7 +7,7 @@ class Api {
   // Same host for all targets; avoid dart:io Platform (unsupported on web).
   // Use localhost when Flutter runs on Chrome/desktop on this PC.
   // LAN IP (e.g. 192.168.x.x) is only needed for a physical phone on Wi‑Fi.
-  static const String _localBaseUrl = "http://192.168.100.203:3000";
+  static const String _localBaseUrl = "http://192.168.100.246:3000";
 
   static const String _liveBaseUrl = "https://barqody-backend.vercel.app";
 
@@ -202,6 +202,8 @@ class _CatalogApi {
   String get stayAvailability =>
       "${Api.baseUrl}/api/catalog/stay-availability";
   String get orders => "${Api.baseUrl}/api/catalog/orders";
+  /// Guest / optional-auth website + Flutter guest checkout.
+  String get publicOrders => "${Api.baseUrl}/api/catalog/public/orders";
   String get incomingOrders => "${Api.baseUrl}/api/catalog/orders/incoming";
   String get myOrders => "${Api.baseUrl}/api/catalog/orders/my";
   /// Link a guest web order after phone OTP login (tracking code + phone match).
@@ -215,6 +217,8 @@ class _CatalogApi {
   String get markAllRead => "${Api.baseUrl}/api/catalog/orders/read-all";
   String mockPayment(String id) =>
       "${Api.baseUrl}/api/catalog/orders/$id/payments/mock";
+  String publicMockPayment(String id) =>
+      "${Api.baseUrl}/api/catalog/public/orders/$id/payments/mock";
 }
 
 class _BookingApi {

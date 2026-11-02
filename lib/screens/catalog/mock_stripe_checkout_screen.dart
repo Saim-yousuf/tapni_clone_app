@@ -35,6 +35,8 @@ class MockStripeCheckoutScreen extends StatefulWidget {
   final String? businessName;
   final String paymentAttemptKey;
   final String? paymentSessionToken;
+  final bool publicGuest;
+  final String? guestPhone;
 
   const MockStripeCheckoutScreen({
     super.key,
@@ -46,6 +48,8 @@ class MockStripeCheckoutScreen extends StatefulWidget {
     this.businessName,
     required this.paymentAttemptKey,
     this.paymentSessionToken,
+    this.publicGuest = false,
+    this.guestPhone,
   });
 
   @override
@@ -120,6 +124,8 @@ class _MockStripeCheckoutScreenState extends State<MockStripeCheckoutScreen> {
       demoOutcome: outcome,
       paymentAttemptKey: '${widget.paymentAttemptKey}_$outcome',
       paymentSessionToken: widget.paymentSessionToken,
+      publicGuest: widget.publicGuest,
+      guestPhone: widget.guestPhone,
     );
 
     if (!mounted) return;

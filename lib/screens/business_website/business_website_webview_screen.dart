@@ -4,10 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/business_website/business_website_models.dart';
+import 'package:tapni_app/providers/explore_cart_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/screens/business_website/bw_flutter_commerce_bridge.dart';
 import 'package:tapni_app/screens/business_website/bw_web_frame.dart';
+import 'package:tapni_app/screens/explore_cart_screen.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/utils/api_endpoint.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -92,6 +96,94 @@ class _BusinessWebsiteWebViewScreenState
     );
   }
 
+  void _openNativeCart() {
+    if (!mounted || widget.sampleDemoPreview) return;
+    Navigator.of(context).push(
+      AppPageRoute(builder: (_) => const ExploreCartScreen()),
+    );
+  }
+
+  void _handleAddToCart(BwBridgeAddToCart payload) {
+    if (!mounted || widget.sampleDemoPreview) return;
+    final cart = context.read<ExploreCartProvider>();
+    cart.addItem(
+      businessId: payload.businessId,
+      businessLinkId: payload.businessLinkId.isNotEmpty
+          ? payload.businessLinkId
+          : payload.businessId,
+      businessName: payload.businessName,
+      catalogType: payload.catalogType,
+      currency: payload.currency,
+      websiteSlug: payload.websiteSlug,
+      catalogItems: [payload.line.item],
+      line: payload.line,
+    );
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text('${payload.line.item.name} added to cart'),
+        action: SnackBarAction(
+          label: 'View cart',
+          onPressed: _openNativeCart,
+        ),
+      ),
+    );
+  }
+
+  void _handleBridgeMessage(String rawMessage) {
+    if (widget.sampleDemoPreview) return;
+    final raw = rawMessage.trim();
+    if (raw.isEmpty) return;
+
+    Map<String, dynamic>? decoded;
+    try {
+      final parsed = jsonDecode(raw);
+      if (parsed is Map) {
+        decoded = Map<String, dynamic>.from(parsed);
+      }
+    } catch (_) {
+      decoded = null;
+    }
+
+    if (decoded != null) {
+      final action = decoded['action']?.toString() ?? '';
+      if (action == 'trackOrder') {
+        final id = decoded['orderId']?.toString() ?? '';
+        final token = decoded['token']?.toString();
+        _openTrackOrder(id, accessToken: token);
+        return;
+      }
+      if (BwFlutterCommerceBridge.isOpenCart(decoded)) {
+        _openNativeCart();
+        return;
+      }
+      final add = BwFlutterCommerceBridge.parseAddToCart(decoded);
+      if (add != null) {
+        _handleAddToCart(add);
+        return;
+      }
+      // Unknown structured action — ignore (do not treat as order id).
+      if (action.isNotEmpty) return;
+    }
+
+    // Plain order id fallback (legacy).
+    _openTrackOrder(raw);
+  }
+
+  Future<void> _injectFlutterAppFlag() async {
+    final controller = _controller;
+    if (controller == null || widget.sampleDemoPreview) return;
+    await controller.runJavaScript('''
+      (function(){
+        window.__BW_FLUTTER_APP=true;
+        try{
+          if(typeof window.__BW_ON_FLUTTER_APP==='function') window.__BW_ON_FLUTTER_APP();
+        }catch(e){}
+      })();
+    ''');
+  }
+
   bool _tryHandleTrackOrderUrl(String url) {
     if (widget.sampleDemoPreview) {
       final uri = Uri.tryParse(url);
@@ -164,6 +256,8 @@ class _BusinessWebsiteWebViewScreenState
       final uri = Uri.parse(url);
       final q = Map<String, String>.from(uri.queryParameters);
       q['bw_chrome'] = '${_chromeTopPx(context)}';
+      // Early signal for commerce runtime before JS injection finishes.
+      if (!widget.sampleDemoPreview) q['bw_app'] = '1';
       return uri.replace(queryParameters: q).toString();
     } catch (_) {
       return url;
@@ -207,6 +301,8 @@ class _BusinessWebsiteWebViewScreenState
     if (shopper.isEmpty) return;
     // Only inject when we have a JWT — name/phone prefill alone must not
     // look like an authenticated session (and must not wipe a real one).
+    // Token stays in JS memory for website checkout identity only; native
+    // Flutter checkout never reads prices/tokens from the WebView for trust.
     if ((shopper['token'] ?? '').trim().isEmpty) return;
     final json = jsonEncode(shopper);
     await controller.runJavaScript('''
@@ -300,23 +396,7 @@ class _BusinessWebsiteWebViewScreenState
       ..addJavaScriptChannel(
         'BarqodyBridge',
         onMessageReceived: (message) {
-          // Sample demos: ignore track/claim bridge messages entirely.
-          if (widget.sampleDemoPreview) return;
-          try {
-            final raw = message.message.trim();
-            if (raw.isEmpty) return;
-            final decoded = jsonDecode(raw);
-            if (decoded is Map && decoded['action'] == 'trackOrder') {
-              final id = decoded['orderId']?.toString() ?? '';
-              final token = decoded['token']?.toString();
-              _openTrackOrder(id, accessToken: token);
-              return;
-            }
-            // Plain order id fallback
-            _openTrackOrder(raw);
-          } catch (_) {
-            _openTrackOrder(message.message);
-          }
+          _handleBridgeMessage(message.message);
         },
       )
       ..setNavigationDelegate(
@@ -326,8 +406,9 @@ class _BusinessWebsiteWebViewScreenState
           },
           onPageFinished: (_) async {
             await _injectChromeInsets();
-            // Do not inject shopper JWT into synthetic sample previews.
+            // Do not inject shopper JWT / flutter flag into synthetic samples.
             if (!widget.sampleDemoPreview) {
+              await _injectFlutterAppFlag();
               await _injectShopper();
             }
             if (mounted) setState(() => _loading = false);
@@ -357,6 +438,15 @@ class _BusinessWebsiteWebViewScreenState
                 base != null &&
                 uri.host.isNotEmpty &&
                 uri.host == base.host;
+
+            // In-app: never open the website shared cart / checkout page.
+            if (!widget.sampleDemoPreview) {
+              final path = uri.path.toLowerCase();
+              if (path.contains('/p/cart') || path.endsWith('/cart')) {
+                _openNativeCart();
+                return NavigationDecision.prevent;
+              }
+            }
 
             // Phase 2B: sample detail/cart pages load via preview API with JWT.
             if (widget.sampleDemoPreview &&
@@ -447,8 +537,11 @@ class _BusinessWebsiteWebViewScreenState
             ? _withShopperQuery(_withPreviewToken(widget.url!))
             : null,
         html: widget.html,
-        shopper: _shopperPayload(),
-        onTrackOrder: _openTrackOrder,
+        shopper: widget.sampleDemoPreview ? null : _shopperPayload(),
+        flutterApp: !widget.sampleDemoPreview,
+        onTrackOrder: widget.sampleDemoPreview ? null : _openTrackOrder,
+        onAddToCart: widget.sampleDemoPreview ? null : _handleAddToCart,
+        onOpenCart: widget.sampleDemoPreview ? null : _openNativeCart,
       );
     }
     if (_controller == null) return const SizedBox.shrink();

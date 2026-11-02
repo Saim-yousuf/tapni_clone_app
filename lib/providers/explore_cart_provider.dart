@@ -25,6 +25,7 @@ class ExploreCartProvider extends ChangeNotifier {
     required String businessName,
     required String catalogType,
     String currency = 'PKR',
+    String websiteSlug = '',
     required List<CatalogItem> catalogItems,
     required ExploreCartLine line,
   }) {
@@ -41,6 +42,7 @@ class ExploreCartProvider extends ChangeNotifier {
           businessName: businessName,
           catalogType: catalogType,
           currency: currency,
+          websiteSlug: websiteSlug,
           catalogItems: List<CatalogItem>.from(catalogItems),
           lines: [line],
         ),
@@ -51,7 +53,7 @@ class ExploreCartProvider extends ChangeNotifier {
 
     final vendor = _vendors[idx];
     final lines = List<ExploreCartLine>.from(vendor.lines);
-    final lineIdx = lines.indexWhere((l) => l.item.name == line.item.name);
+    final lineIdx = lines.indexWhere((l) => l.sameIdentityAs(line));
     if (lineIdx >= 0) {
       final existing = lines[lineIdx];
       lines[lineIdx] = existing.copyWith(
@@ -62,11 +64,28 @@ class ExploreCartProvider extends ChangeNotifier {
       lines.add(line);
     }
 
+    // Merge catalog item snapshots (prefer id match).
+    final mergedCatalog = List<CatalogItem>.from(vendor.catalogItems);
+    for (final ci in catalogItems) {
+      final existingIdx = mergedCatalog.indexWhere(
+        (e) =>
+            (ci.id.isNotEmpty && e.id == ci.id) ||
+            (ci.id.isEmpty && e.name == ci.name),
+      );
+      if (existingIdx < 0) {
+        mergedCatalog.add(ci);
+      } else {
+        mergedCatalog[existingIdx] = ci;
+      }
+    }
+
     _vendors[idx] = vendor.copyWith(
       businessName: businessName,
       catalogType: catalogType,
       currency: currency,
-      catalogItems: List<CatalogItem>.from(catalogItems),
+      websiteSlug:
+          websiteSlug.isNotEmpty ? websiteSlug : vendor.websiteSlug,
+      catalogItems: mergedCatalog,
       lines: lines,
     );
     notifyListeners();

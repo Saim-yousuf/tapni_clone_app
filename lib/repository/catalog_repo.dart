@@ -66,6 +66,71 @@ class CatalogRepo {
     );
   }
 
+  /// Guest / optional-auth place order via public website API.
+  /// Server resolves business from [websiteSlug] and revalidates catalog prices.
+  Future<ApiResponse> placePublicOrder({
+    required String websiteSlug,
+    required List<Map<String, dynamic>> items,
+    required String guestName,
+    required String guestPhone,
+    String? guestAddress,
+    String? notes,
+    String? bookingDate,
+    String? bookingTime,
+    String? resourceId,
+    String? bookingKind,
+    String? checkInDate,
+    String? checkOutDate,
+    String? paymentMethod,
+    String? idempotencyKey,
+    String? couponCode,
+    String? offerId,
+    /// When the shopper is signed in, send Bearer via [authorization].
+    bool authorization = false,
+  }) async {
+    return ApiHandler.request(
+      api: Api.catalog.publicOrders,
+      method: ApiMethod.post,
+      authorization: authorization,
+      jsonBody: {
+        'websiteSlug': websiteSlug,
+        'items': items,
+        'guest': {
+          'name': guestName,
+          'phone': guestPhone,
+          if (guestAddress != null && guestAddress.isNotEmpty)
+            'address': guestAddress,
+          if (notes != null && notes.isNotEmpty) 'notes': notes,
+        },
+        'fulfillment': {
+          if (guestAddress != null && guestAddress.isNotEmpty)
+            'address': guestAddress,
+          if (notes != null && notes.isNotEmpty) 'notes': notes,
+        },
+        if (notes != null && notes.isNotEmpty) 'notes': notes,
+        if (bookingDate != null && bookingDate.isNotEmpty)
+          'bookingDate': bookingDate,
+        if (bookingTime != null && bookingTime.isNotEmpty)
+          'bookingTime': bookingTime,
+        if (resourceId != null && resourceId.isNotEmpty)
+          'resourceId': resourceId,
+        if (bookingKind != null && bookingKind.isNotEmpty)
+          'bookingKind': bookingKind,
+        if (checkInDate != null && checkInDate.isNotEmpty)
+          'checkInDate': checkInDate,
+        if (checkOutDate != null && checkOutDate.isNotEmpty)
+          'checkOutDate': checkOutDate,
+        if (paymentMethod != null && paymentMethod.isNotEmpty)
+          'paymentMethod': paymentMethod,
+        if (idempotencyKey != null && idempotencyKey.isNotEmpty)
+          'idempotencyKey': idempotencyKey,
+        if (couponCode != null && couponCode.isNotEmpty)
+          'couponCode': couponCode,
+        if (offerId != null && offerId.isNotEmpty) 'offerId': offerId,
+      },
+    );
+  }
+
   /// Link a guest website order to the signed-in account (tracking code + phone match).
   Future<ApiResponse> claimGuestOrder({required String trackingCode}) async {
     return ApiHandler.request(
@@ -83,11 +148,14 @@ class CatalogRepo {
     String? paymentAttemptKey,
     String? guestPhone,
     String? paymentSessionToken,
+    bool publicGuest = false,
   }) async {
     return ApiHandler.request(
-      api: Api.catalog.mockPayment(orderId),
+      api: publicGuest
+          ? Api.catalog.publicMockPayment(orderId)
+          : Api.catalog.mockPayment(orderId),
       method: ApiMethod.post,
-      authorization: true,
+      authorization: !publicGuest,
       jsonBody: {
         'demoOutcome': demoOutcome,
         if (paymentAttemptKey != null && paymentAttemptKey.isNotEmpty)

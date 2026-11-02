@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/catalog_item.dart';
-import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/models/explore_cart.dart';
 import 'package:tapni_app/providers/explore_cart_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -12,6 +11,7 @@ import 'package:tapni_app/screens/catalog/order_placed_screen.dart';
 import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/utils/catalog_checkout.dart';
 import 'package:tapni_app/utils/money_format.dart';
+import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
@@ -25,6 +25,216 @@ class ExploreCartScreen extends StatefulWidget {
 
 class _ExploreCartScreenState extends State<ExploreCartScreen> {
   bool _placing = false;
+
+  bool get _isSignedIn {
+    final token = SharedPrefHelper.getString(
+      SharedPrefHelper.utils.authorizedToken,
+    );
+    return token.trim().isNotEmpty;
+  }
+
+  List<Map<String, dynamic>> _orderItems(List<ExploreCartLine> lines) {
+    return lines
+        .map(
+          (line) => {
+            if (line.item.id.isNotEmpty) 'catalogItemId': line.item.id,
+            'name': line.item.name,
+            'price': line.item.displayPrice,
+            'quantity': line.quantity,
+            if (line.notes.isNotEmpty) 'notes': line.notes,
+            if (line.item.category.isNotEmpty) 'category': line.item.category,
+            if (line.item.imageUrl.isNotEmpty) 'image': line.item.imageUrl,
+          },
+        )
+        .toList();
+  }
+
+  /// Split a vendor basket into place-order batches (appointment slots / stays).
+  List<_VendorPlaceBatch> _batchesForVendor(ExploreCartVendor vendor) {
+    final stay = <ExploreCartLine>[];
+    final appt = <ExploreCartLine>[];
+    final order = <ExploreCartLine>[];
+    for (final line in vendor.lines) {
+      if (line.hasStay) {
+        stay.add(line);
+      } else if (line.hasAppointment) {
+        appt.add(line);
+      } else {
+        order.add(line);
+      }
+    }
+
+    final batches = <_VendorPlaceBatch>[];
+    for (final line in stay) {
+      batches.add(
+        _VendorPlaceBatch(
+          lines: [line],
+          bookingKind: 'stay',
+          bookingDate: '',
+          bookingTime: '',
+          resourceId: line.resourceId,
+          checkInDate: line.checkInDate,
+          checkOutDate: line.checkOutDate,
+        ),
+      );
+    }
+
+    final groups = <String, List<ExploreCartLine>>{};
+    for (final line in appt) {
+      final key = [
+        line.resourceId,
+        line.bookingDate,
+        line.bookingTime,
+      ].join('|');
+      groups.putIfAbsent(key, () => []).add(line);
+    }
+    for (final entry in groups.entries) {
+      final first = entry.value.first;
+      batches.add(
+        _VendorPlaceBatch(
+          lines: entry.value,
+          bookingKind: 'appointment',
+          bookingDate: first.bookingDate,
+          bookingTime: first.bookingTime,
+          resourceId: first.resourceId,
+          checkInDate: '',
+          checkOutDate: '',
+        ),
+      );
+    }
+
+    if (order.isNotEmpty) {
+      batches.add(
+        _VendorPlaceBatch(
+          lines: order,
+          bookingKind: 'order',
+          bookingDate: '',
+          bookingTime: '',
+          resourceId: '',
+          checkInDate: '',
+          checkOutDate: '',
+        ),
+      );
+    }
+    return batches;
+  }
+
+  Future<_GuestCheckoutDetails?> _promptGuestDetails() async {
+    final nameCtrl = TextEditingController();
+    final phoneCtrl = TextEditingController();
+    final addressCtrl = TextEditingController();
+    final notesCtrl = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    final result = await showModalBottomSheet<_GuestCheckoutDetails>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        final bottom = MediaQuery.of(ctx).viewInsets.bottom;
+        return Padding(
+          padding: EdgeInsets.fromLTRB(20, 12, 20, 16 + bottom),
+          child: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SheetHeader(
+                    title: 'Continue as guest',
+                    onBack: () => Navigator.pop(ctx),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Enter your details to place the order without creating an account.',
+                    style: WaUi.body.copyWith(
+                      color: BarqodyChrome.secondaryText,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: nameCtrl,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (v) =>
+                        (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: phoneCtrl,
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(
+                      labelText: 'Phone',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (v) =>
+                        (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: addressCtrl,
+                    decoration: const InputDecoration(
+                      labelText: 'Address (optional)',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: notesCtrl,
+                    maxLines: 2,
+                    decoration: const InputDecoration(
+                      labelText: 'Notes (optional)',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: WaUi.primaryButtonHeight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (!(formKey.currentState?.validate() ?? false)) {
+                          return;
+                        }
+                        Navigator.pop(
+                          ctx,
+                          _GuestCheckoutDetails(
+                            name: nameCtrl.text.trim(),
+                            phone: phoneCtrl.text.trim(),
+                            address: addressCtrl.text.trim(),
+                            notes: notesCtrl.text.trim(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: const StadiumBorder(),
+                      ),
+                      child: const Text('Continue'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    nameCtrl.dispose();
+    phoneCtrl.dispose();
+    addressCtrl.dispose();
+    notesCtrl.dispose();
+    return result;
+  }
 
   Future<void> _addMore(ExploreCartVendor vendor) async {
     final cart = context.read<ExploreCartProvider>();
@@ -128,16 +338,31 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
     );
   }
 
-  /// Places one CatalogOrder per vendor via shared [CatalogCheckout]
-  /// (payment method + optional mock online pay). Coupons/points stay on
-  /// single-business checkout — multi-vendor Explore needs per-vendor redeem UI.
+  /// Places CatalogOrder(s) per vendor via shared [CatalogCheckout].
+  /// Signed-in → POST /api/catalog/orders.
+  /// Guest → POST /api/catalog/public/orders (requires websiteSlug).
   Future<void> _placeOrders() async {
     final cart = context.read<ExploreCartProvider>();
     if (cart.isEmpty) return;
 
+    final signedIn = _isSignedIn;
     final profile = context.read<ProfileProvider>().profile;
-    final customerUsername = profile.username ?? '';
-    final customerName = profile.name;
+    var customerUsername = profile.username ?? '';
+    var customerName = profile.name;
+    String? guestPhone;
+    var guestAddress = '';
+    var guestNotes = '';
+
+    if (!signedIn) {
+      final guest = await _promptGuestDetails();
+      if (guest == null || !mounted) return;
+      customerName = guest.name;
+      customerUsername = '';
+      guestPhone = guest.phone;
+      guestAddress = guest.address;
+      guestNotes = guest.notes;
+    }
+
     final messenger = ScaffoldMessenger.of(context);
     final nav = Navigator.of(context);
 
@@ -145,6 +370,20 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
         .where((v) => v.lines.isNotEmpty)
         .toList();
     if (vendors.isEmpty) return;
+
+    if (!signedIn) {
+      final missingSlug = vendors.any((v) => v.websiteSlug.trim().isEmpty);
+      if (missingSlug) {
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Guest checkout needs a website cart. Sign in or add items from a business website.',
+            ),
+          ),
+        );
+        return;
+      }
+    }
 
     final grandTotal = vendors.fold<double>(
       0,
@@ -170,70 +409,109 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
     String? lastError;
 
     for (final vendor in vendors) {
-      final orderItems = vendor.lines
-          .map(
-            (line) => {
-              'name': line.item.name,
-              'price': line.item.displayPrice,
-              'quantity': line.quantity,
-              if (line.notes.isNotEmpty) 'notes': line.notes,
-              if (line.item.category.isNotEmpty) 'category': line.item.category,
-            },
-          )
-          .toList();
-      final itemCount = vendor.lines.fold<int>(
-        0,
-        (sum, line) => sum + line.quantity,
-      );
-      final vendorTotal = vendor.lines.fold<double>(
-        0,
-        (sum, line) => sum + (line.item.displayPrice * line.quantity),
-      );
+      final batches = _batchesForVendor(vendor);
+      var vendorOk = true;
+      for (final batch in batches) {
+        final orderItems = _orderItems(batch.lines);
+        final itemCount = batch.lines.fold<int>(
+          0,
+          (sum, line) => sum + line.quantity,
+        );
+        final batchTotal = batch.lines.fold<double>(
+          0,
+          (sum, line) => sum + (line.item.displayPrice * line.quantity),
+        );
 
-      final order = await CatalogCheckout.placeWithPayment(
-        context: context,
-        presetMethod: method,
-        pushSuccessScreen: false,
-        totalAmount: vendorTotal,
-        currency: vendor.currency,
-        customerName: customerName,
-        customerUsername: customerUsername,
-        businessName: vendor.businessName,
-        totalItems: itemCount,
-        placeOrder: ({
-          required String paymentMethod,
-          required String idempotencyKey,
-        }) {
-          return repo.placeOrder(
-            businessId: vendor.businessId,
-            businessLinkId: vendor.businessLinkId,
-            catalogType: vendor.catalogType,
-            items: orderItems,
-            paymentMethod: paymentMethod,
-            idempotencyKey: idempotencyKey,
-          );
-        },
-      );
-
-      if (order == null) {
-        lastError = 'Could not place order for ${vendor.businessName}';
-        break;
-      }
-
-      placed.add(
-        _PlacedExploreOrder(
+        final order = await CatalogCheckout.placeWithPayment(
+          context: context,
+          presetMethod: method,
+          pushSuccessScreen: false,
+          totalAmount: batchTotal,
+          currency: vendor.currency,
+          customerName: customerName,
+          customerUsername: customerUsername,
+          guestPhone: guestPhone,
           businessName: vendor.businessName,
-          businessUsername: '',
-          currency: vendor.currency.isNotEmpty
-              ? vendor.currency
-              : order.currency,
-          token: order.tokenNumber,
-          orderId: order.id,
           totalItems: itemCount,
-          totalAmount:
-              order.totalAmount > 0 ? order.totalAmount : vendorTotal,
-        ),
-      );
+          bookingKind: batch.bookingKind,
+          publicGuestPayment: !signedIn,
+          placeOrder: ({
+            required String paymentMethod,
+            required String idempotencyKey,
+          }) {
+            if (signedIn) {
+              return repo.placeOrder(
+                businessId: vendor.businessId,
+                businessLinkId: vendor.businessLinkId,
+                catalogType: vendor.catalogType,
+                items: orderItems,
+                bookingDate: batch.bookingDate.isEmpty
+                    ? null
+                    : batch.bookingDate,
+                bookingTime: batch.bookingTime.isEmpty
+                    ? null
+                    : batch.bookingTime,
+                resourceId:
+                    batch.resourceId.isEmpty ? null : batch.resourceId,
+                bookingKind: batch.bookingKind,
+                checkInDate: batch.checkInDate.isEmpty
+                    ? null
+                    : batch.checkInDate,
+                checkOutDate: batch.checkOutDate.isEmpty
+                    ? null
+                    : batch.checkOutDate,
+                paymentMethod: paymentMethod,
+                idempotencyKey: idempotencyKey,
+              );
+            }
+            return repo.placePublicOrder(
+              websiteSlug: vendor.websiteSlug,
+              items: orderItems,
+              guestName: customerName,
+              guestPhone: guestPhone ?? '',
+              guestAddress: guestAddress.isEmpty ? null : guestAddress,
+              notes: guestNotes.isEmpty ? null : guestNotes,
+              bookingDate:
+                  batch.bookingDate.isEmpty ? null : batch.bookingDate,
+              bookingTime:
+                  batch.bookingTime.isEmpty ? null : batch.bookingTime,
+              resourceId:
+                  batch.resourceId.isEmpty ? null : batch.resourceId,
+              bookingKind: batch.bookingKind,
+              checkInDate:
+                  batch.checkInDate.isEmpty ? null : batch.checkInDate,
+              checkOutDate:
+                  batch.checkOutDate.isEmpty ? null : batch.checkOutDate,
+              paymentMethod: paymentMethod,
+              idempotencyKey: idempotencyKey,
+              authorization: false,
+            );
+          },
+        );
+
+        if (order == null) {
+          lastError = 'Could not place order for ${vendor.businessName}';
+          vendorOk = false;
+          break;
+        }
+
+        placed.add(
+          _PlacedExploreOrder(
+            businessName: vendor.businessName,
+            businessUsername: '',
+            currency: vendor.currency.isNotEmpty
+                ? vendor.currency
+                : order.currency,
+            token: order.tokenNumber,
+            orderId: order.id,
+            totalItems: itemCount,
+            totalAmount:
+                order.totalAmount > 0 ? order.totalAmount : batchTotal,
+            bookingKind: batch.bookingKind,
+          ),
+        );
+      }
+      if (!vendorOk) break;
       cart.removeVendor(vendor.businessLinkId);
     }
 
@@ -253,6 +531,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
             token: one.token,
             customerUsername: customerUsername,
             customerName: customerName,
+            guestPhone: guestPhone,
             businessUsername: one.businessUsername.isNotEmpty
                 ? one.businessUsername
                 : one.businessName,
@@ -260,6 +539,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
             totalAmount: one.totalAmount,
             currency: one.currency,
             orderId: one.orderId,
+            bookingKind: one.bookingKind,
           ),
         ),
       );
@@ -333,7 +613,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              'Add items from Explore or a business menu to place an order.',
+                              'Add items from Explore or a business website in the app to place an order.',
                               textAlign: TextAlign.center,
                               style: WaUi.body.copyWith(
                                 color: BarqodyChrome.secondaryText,
@@ -569,6 +849,31 @@ class _CartTile extends StatelessWidget {
                 formatMoney(line.lineTotal, currency: currency),
                 style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w700),
               ),
+              if (line.hasAppointment) ...[
+                const SizedBox(height: 2),
+                Text(
+                  [
+                    if (line.resourceName.isNotEmpty) line.resourceName,
+                    line.bookingDate,
+                    line.bookingTime,
+                  ].where((s) => s.isNotEmpty).join(' · '),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: WaUi.label.copyWith(color: BarqodyChrome.secondaryText),
+                ),
+              ],
+              if (line.hasStay) ...[
+                const SizedBox(height: 2),
+                Text(
+                  [
+                    if (line.resourceName.isNotEmpty) line.resourceName,
+                    '${line.checkInDate} → ${line.checkOutDate}',
+                  ].where((s) => s.isNotEmpty).join(' · '),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: WaUi.label.copyWith(color: BarqodyChrome.secondaryText),
+                ),
+              ],
               if (line.notes.isNotEmpty) ...[
                 const SizedBox(height: 2),
                 Text(
@@ -707,6 +1012,7 @@ class _PlacedExploreOrder {
   final String? orderId;
   final int totalItems;
   final double totalAmount;
+  final String bookingKind;
 
   const _PlacedExploreOrder({
     required this.businessName,
@@ -716,5 +1022,40 @@ class _PlacedExploreOrder {
     required this.orderId,
     required this.totalItems,
     required this.totalAmount,
+    this.bookingKind = 'order',
+  });
+}
+
+class _VendorPlaceBatch {
+  final List<ExploreCartLine> lines;
+  final String bookingKind;
+  final String bookingDate;
+  final String bookingTime;
+  final String resourceId;
+  final String checkInDate;
+  final String checkOutDate;
+
+  const _VendorPlaceBatch({
+    required this.lines,
+    required this.bookingKind,
+    required this.bookingDate,
+    required this.bookingTime,
+    required this.resourceId,
+    required this.checkInDate,
+    required this.checkOutDate,
+  });
+}
+
+class _GuestCheckoutDetails {
+  final String name;
+  final String phone;
+  final String address;
+  final String notes;
+
+  const _GuestCheckoutDetails({
+    required this.name,
+    required this.phone,
+    this.address = '',
+    this.notes = '',
   });
 }
