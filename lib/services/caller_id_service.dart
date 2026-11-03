@@ -9,7 +9,7 @@ class CallerIdService {
   static const _channel = MethodChannel('barqody/caller_id');
 
   /// Temporary kill switch. Set true to bring Caller ID back.
-  static const bool isFeatureEnabled = false;
+  static const bool isFeatureEnabled = true;
 
   static bool get _isAndroid =>
       !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
@@ -52,6 +52,36 @@ class CallerIdService {
     final overlay = await hasOverlayPermission();
     final role = await hasCallScreeningRole();
     return phone && overlay && role;
+  }
+
+  /// Soft requirement (Truecaller-style): keep app alive for incoming calls.
+  static Future<bool> isIgnoringBatteryOptimizations() async {
+    if (!isSupported) return true;
+    final value =
+        await _channel.invokeMethod<bool>('isIgnoringBatteryOptimizations');
+    return value ?? true;
+  }
+
+  static Future<void> requestIgnoreBatteryOptimizations() async {
+    if (!isSupported) return;
+    await _channel.invokeMethod('requestIgnoreBatteryOptimizations');
+  }
+
+  /// True when Barqody is the system default phone app (owns full call UI).
+  static Future<bool> isDefaultDialer() async {
+    if (!isSupported) return false;
+    final value = await _channel.invokeMethod<bool>('isDefaultDialer');
+    return value ?? false;
+  }
+
+  /// Opens the system picker to set Barqody as default phone / dialer app.
+  static Future<bool> requestDefaultDialerRole() async {
+    if (!isSupported) return false;
+    final raw = await _channel.invokeMethod<dynamic>('requestDefaultDialerRole');
+    if (raw is Map) {
+      return raw['opened'] == true || raw['held'] == true;
+    }
+    return true;
   }
 
   static Future<void> setEnabled(bool enabled, {String lang = 'en'}) async {
@@ -121,8 +151,16 @@ class CallerIdService {
     return value ?? false;
   }
 
-  static Future<void> requestCallScreeningRole() async {
-    if (!isSupported) return;
-    await _channel.invokeMethod('requestCallScreeningRole');
+  /// Opens the system Caller ID / spam-app role picker.
+  /// Returns true if a system UI was opened or the role is already held.
+  static Future<bool> requestCallScreeningRole() async {
+    if (!isSupported) return false;
+    final raw = await _channel.invokeMethod<dynamic>('requestCallScreeningRole');
+    if (raw is Map) {
+      final opened = raw['opened'] == true;
+      final held = raw['held'] == true;
+      return opened || held;
+    }
+    return true;
   }
 }

@@ -621,6 +621,32 @@ class ProfileProvider extends ChangeNotifier {
     return false;
   }
 
+  /// Lightweight profile patch (no loading dialog) for setup progress / businessType.
+  Future<ApiResponse> patchProfileFields(Map<String, dynamic> fields) async {
+    try {
+      final repo = AuthRepo();
+      final response = await repo.updateProfile(jsonBody: fields);
+      if (response.success && response.data is Map<String, dynamic>) {
+        final data = response.data as Map<String, dynamic>;
+        final profileData = data['user'] is Map<String, dynamic>
+            ? data['user'] as Map<String, dynamic>
+            : data;
+        try {
+          _profile = UserProfile.fromApiJson(profileData);
+          _isProUser = _profile.isPro;
+          notifyListeners();
+        } catch (_) {}
+      }
+      return response;
+    } catch (e) {
+      return ApiResponse(
+        success: false,
+        statusCode: 0,
+        message: e.toString(),
+      );
+    }
+  }
+
   Future<ApiResponse> updateProfile({
     required String name,
     required String designation,
@@ -634,6 +660,7 @@ class ProfileProvider extends ChangeNotifier {
     String? businessName,
     String? businessCategory,
     String? businessConcern,
+    String? businessType,
     required List<SocialLink> links,
     Uint8List? profileImageBytes,
     Uint8List? coverImageBytes,
@@ -661,6 +688,7 @@ class ProfileProvider extends ChangeNotifier {
       businessName: businessName,
       businessCategory: businessCategory,
       businessConcern: businessConcern,
+      businessType: businessType,
     );
 
     final json = updatedProfile.toApiJson();
@@ -1154,12 +1182,14 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   /// Ensures a profile link exists for the owner's business website.
+  /// [isPublic] must track BusinessWebsite publish status (draft/unpublished = false).
   Future<void> addBusinessWebsiteLink({
     LinkTemplate? template,
     required String publicUrl,
     required BuildContext context,
     String websiteType = 'menu',
     String? catalogType,
+    bool isPublic = true,
   }) async {
     final url = publicUrl.trim();
     if (url.isEmpty) return;
@@ -1211,6 +1241,8 @@ class ProfileProvider extends ChangeNotifier {
             : template?.logo,
         templateId: existing.templateId ??
             (template != null && template.id.isNotEmpty ? template.id : null),
+        isPublic: isPublic,
+        isActive: true,
       );
       // Drop accidental duplicate website tiles of the same type.
       for (final idx in matchingIndexes.skip(1).toList().reversed) {
@@ -1237,7 +1269,7 @@ class ProfileProvider extends ChangeNotifier {
       value: url,
       isCustom: true,
       isActive: true,
-      isPublic: true,
+      isPublic: isPublic,
     );
     final updatedLinks = List<SocialLink>.from(_profile.socialLinks)
       ..add(newLink);

@@ -16,6 +16,7 @@ import 'package:tapni_app/screens/loyalty_program/business/enroll_customer_flow.
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/general_qr_parser.dart';
 import 'package:tapni_app/utils/profile_url_validator.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/zatca_qr_parser.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -163,6 +164,24 @@ class _ScanScreenState extends State<ScanScreen> {
 
   Future<void> _handleScanResult(String value) async {
     if (!mounted) return;
+
+    final loyaltyEnrollBlocked = widget.enrollInProgram != null &&
+        !ReleaseFeatures.canUseShopping &&
+        !ReleaseFeatures.canShowBusinessSuite;
+    final employeeInviteBlocked =
+        widget.inviteEmployee && !ReleaseFeatures.canUseWorkplace;
+
+    if (loyaltyEnrollBlocked || employeeInviteBlocked) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('This scan flow is unavailable in the current release.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      setState(() => _scanHandled = false);
+      return;
+    }
 
     final parsed = ProfileUrlValidator.parse(value);
     if (parsed != null) {

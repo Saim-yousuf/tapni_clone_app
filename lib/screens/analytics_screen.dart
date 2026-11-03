@@ -10,6 +10,7 @@ import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/curved_bottom_nav.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
@@ -212,7 +213,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     final bottomPad = CurvedBottomNav.contentClearance(context) +
         CurvedBottomNav.fabOverhang() +
         24;
-    final isPro = profile.isPro;
+    // Personal release: analytics stay available without Business Pro.
+    // When businessPro is re-enabled, existing isPro paywall applies again.
+    final analyticsUnlocked =
+        profile.isPro || !ReleaseFeatures.canUseBusinessPro;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -227,7 +231,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             ),
             Expanded(
               child: ClipRect(
-                child: !isPro
+                child: !analyticsUnlocked
                   ? _LockedAnalyticsPreview(bottomPad: bottomPad)
                   : _isLoading
                   ? _AnalyticsShimmer(bottomPad: bottomPad)

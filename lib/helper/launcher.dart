@@ -14,6 +14,7 @@ import 'package:tapni_app/screens/gallery_link_screen.dart';
 import 'package:tapni_app/utils/api_endpoint.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/catalog_helper.dart' show catalogTypesMatch;
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/widgets/bank_widgets.dart';
 import 'package:tapni_app/widgets/document_viewer.dart';
 import 'package:tapni_app/widgets/link_entries_sheet.dart';
@@ -127,6 +128,10 @@ Future<bool> openPublishedWebsiteForCatalog(
   /// Own-profile only: call `/mine` when peer links are not supplied.
   bool allowOwnerMineFallback = true,
 }) async {
+  if (!ReleaseFeatures.canOpenPublicWebsite &&
+      !ReleaseFeatures.canUseShopping) {
+    return false;
+  }
   final websiteType = websiteTypeFromCatalogType(
     catalogLink.catalogType?.isNotEmpty == true
         ? catalogLink.catalogType
@@ -288,6 +293,10 @@ class Launcher {
       return;
     }
     if (model.isBusinessWebsiteLink) {
+      if (!ReleaseFeatures.canOpenPublicWebsite &&
+          !ReleaseFeatures.canManageCatalogOrWebsiteLinks) {
+        return;
+      }
       final websiteType = websiteTypeFromCatalogType(
         model.catalogType?.isNotEmpty == true ? model.catalogType : 'menu',
       );
@@ -358,6 +367,11 @@ class Launcher {
       return;
     }
     if (model.isCatalogLink) {
+      if (!ReleaseFeatures.canUseShopping &&
+          !ReleaseFeatures.canOpenPublicWebsite &&
+          !ReleaseFeatures.canManageCatalogOrWebsiteLinks) {
+        return;
+      }
       // Prefer published website template when paired; else native catalog sheet.
       final opened = await openPublishedWebsiteForCatalog(
         context,

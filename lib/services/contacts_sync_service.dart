@@ -20,7 +20,7 @@ class ContactsSyncService {
   ContactsSyncService._();
 
   /// Temporary kill switch. Set true to bring contacts sync back.
-  static const bool isFeatureEnabled = false;
+  static const bool isFeatureEnabled = true;
 
   static const int chunkSize = 500;
   static final DirectoryRepo _repo = DirectoryRepo();

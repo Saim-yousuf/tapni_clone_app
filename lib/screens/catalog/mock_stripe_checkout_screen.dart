@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/utils/money_format.dart';
+import 'package:tapni_app/utils/payment_display.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
@@ -168,7 +169,10 @@ class _MockStripeCheckoutScreenState extends State<MockStripeCheckoutScreen> {
                     ? 'cancelled'
                     : 'failed'),
         paymentMethod: payload['paymentMethod']?.toString() ?? 'online',
-        paymentTransactionId: payload['paymentTransactionId']?.toString(),
+        paymentTransactionId: (payload['publicPaymentRef'] ??
+                payload['publicRef'] ??
+                payload['paymentTransactionId'])
+            ?.toString(),
         simulated: true,
         message: res.message,
       );
@@ -456,10 +460,16 @@ class _MockStripeCheckoutScreenState extends State<MockStripeCheckoutScreen> {
               height: 1.4,
             ),
           ),
-          if ((result.paymentTransactionId ?? '').isNotEmpty) ...[
+          if (() {
+            final ref = PaymentDisplay.friendlyRef(
+              publicRef: result.paymentTransactionId,
+            );
+            return ref.isNotEmpty &&
+                !PaymentDisplay.looksTechnical(result.paymentTransactionId);
+          }()) ...[
             const SizedBox(height: 12),
             Text(
-              'Ref: ${result.paymentTransactionId}',
+              'Ref: ${PaymentDisplay.friendlyRef(publicRef: result.paymentTransactionId)}',
               style: WaUi.body.copyWith(
                 fontSize: 12,
                 color: const Color(0xFF8898AA),

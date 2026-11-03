@@ -91,6 +91,22 @@ class ApiErrorMessages {
     if (_textLooksLikeNetwork(message)) {
       return l10nOr((l) => l.noInternetConnection, 'No internet connection');
     }
+    // Never surface Stripe / gateway / DB internals to users.
+    if (RegExp(r'\b(?:pi|ch|cus|pm|seti|evt|re)_[A-Za-z0-9]+\b')
+            .hasMatch(message) ||
+        lower.contains('payment_intent') ||
+        lower.contains('client_secret') ||
+        lower.contains('idempotency') ||
+        lower.contains('webhook') ||
+        lower.contains('stripeapi') ||
+        lower.contains('mongoose') ||
+        lower.contains('objectid') ||
+        lower.contains('e11000') ||
+        lower.contains('cast to objectid') ||
+        RegExp(r'\bsk_(live|test)_').hasMatch(message) ||
+        RegExp(r'\bwhsec_').hasMatch(message)) {
+      return generic;
+    }
     return message;
   }
 

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/screens/catalog/checkout_payment_method_sheet.dart';
-import 'package:tapni_app/screens/catalog/mock_stripe_checkout_screen.dart';
 import 'package:tapni_app/screens/catalog/order_placed_screen.dart';
+import 'package:tapni_app/screens/catalog/stripe_checkout_screen.dart';
 import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
+import 'package:tapni_app/utils/preference_helper.dart';
+import 'package:tapni_app/utils/stripe_checkout_outcome.dart';
 
-/// Shared place-order + payment selection + mock online checkout.
+/// Shared place-order + payment selection + Stripe online checkout.
 class CatalogCheckout {
   static String newIdempotencyKey(String prefix) {
     final t = DateTime.now().millisecondsSinceEpoch;
@@ -24,6 +26,10 @@ class CatalogCheckout {
   }
 
   /// Returns placed [CatalogOrder] or null on cancel/failure (snackbar shown).
+  ///
+  /// Zero-payable bookings skip the payment sheet and Stripe when the
+  /// **server** total is ≤ 0 (`paymentStatus: not_required`). Client-submitted
+  /// zero cannot bypass payment for paid services.
   static Future<CatalogOrder?> placeWithPayment({
     required BuildContext context,
     required Future<ApiResponse> Function({
@@ -42,16 +48,20 @@ class CatalogCheckout {
     String bookingKind = 'order',
     bool pushSuccessScreen = true,
     CheckoutPaymentMethod? presetMethod,
-    /// Use public mock-payment endpoint (guest Flutter checkout).
+    /// Use public payment endpoints (guest Flutter checkout).
     bool publicGuestPayment = false,
   }) async {
-    final method = presetMethod ??
-        await showCheckoutPaymentMethodSheet(
-          context,
-          totalAmount: totalAmount,
-          currency: currency,
-        );
-    if (method == null) return null;
+    CheckoutPaymentMethod? method = presetMethod;
+    if (method == null && totalAmount > 0) {
+      method = await showCheckoutPaymentMethodSheet(
+        context,
+        totalAmount: totalAmount,
+        currency: currency,
+      );
+      if (method == null) return null;
+    }
+    // Provisional method for client-side free carts; server total decides next.
+    method ??= CheckoutPaymentMethod.cashOnDelivery;
     if (!context.mounted) return null;
 
     final idempotencyKey = newIdempotencyKey('app');
@@ -78,8 +88,34 @@ class CatalogCheckout {
     }
 
     var placed = parsed;
+    final serverTotal = placed.totalAmount;
 
-    if (method == CheckoutPaymentMethod.online && placed.id.isNotEmpty) {
+    // Server priced > 0 but client thought free → require real payment choice.
+    if (serverTotal > 0 && totalAmount <= 0 && presetMethod == null) {
+      final paidMethod = await showCheckoutPaymentMethodSheet(
+        context,
+        totalAmount: serverTotal,
+        currency: placed.currency.isNotEmpty ? placed.currency : currency,
+      );
+      if (!context.mounted) return placed;
+      if (paidMethod == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Payment is required for this booking'),
+          ),
+        );
+        return placed;
+      }
+      method = paidMethod;
+    }
+
+    var onlinePaymentOk = method != CheckoutPaymentMethod.online;
+
+    if (serverTotal <= 0) {
+      // Free booking — payment not required (server sets not_required).
+      onlinePaymentOk = true;
+    } else if (method == CheckoutPaymentMethod.online &&
+        placed.id.isNotEmpty) {
       final sessionToken = () {
         final raw = res.data;
         if (raw is Map) {
@@ -90,11 +126,12 @@ class CatalogCheckout {
         }
         return null;
       }();
-      final serverTotal =
-          placed.totalAmount > 0 ? placed.totalAmount : totalAmount;
-      final payResult = await Navigator.of(context).push<MockPaymentResult>(
+      final signedIn = SharedPrefHelper.getString(
+            SharedPrefHelper.utils.authorizedToken,
+          ).isNotEmpty;
+      final payResult = await Navigator.of(context).push<StripeCheckoutResult>(
         AppPageRoute(
-          builder: (_) => MockStripeCheckoutScreen(
+          builder: (_) => StripeCheckoutScreen(
             orderId: placed.id,
             amount: serverTotal,
             currency:
@@ -106,23 +143,42 @@ class CatalogCheckout {
             paymentSessionToken: sessionToken,
             publicGuest: publicGuestPayment,
             guestPhone: guestPhone,
+            allowSaveCard: signedIn && !publicGuestPayment,
           ),
         ),
       );
       if (!context.mounted) return placed;
-      if (payResult != null) {
-        placed = placed.copyWithPayment(
-          paymentStatus: payResult.paymentStatus,
-          paymentMethod: payResult.paymentMethod,
-          paymentTransactionId: payResult.paymentTransactionId,
-          paymentSimulated: payResult.simulated,
-        );
+
+      if (!StripeCheckoutGuards.shouldShowOrderSuccessAfterOnline(payResult)) {
+        if (payResult != null) {
+          placed = placed.copyWithPayment(
+            paymentStatus: payResult.paymentStatus,
+            paymentMethod: payResult.paymentMethod,
+            paymentTransactionId: payResult.paymentTransactionId,
+            paymentSimulated: payResult.simulated,
+          );
+        }
+        final msg = switch (payResult?.outcome) {
+          StripeCheckoutOutcome.cancelled =>
+            payResult?.message ?? 'Payment cancelled',
+          StripeCheckoutOutcome.failure =>
+            payResult?.message ?? 'Payment was not completed',
+          _ => 'Payment was not completed',
+        };
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+        return placed;
       }
+
+      placed = placed.copyWithPayment(
+        paymentStatus: payResult!.paymentStatus,
+        paymentMethod: payResult.paymentMethod,
+        paymentTransactionId: payResult.paymentTransactionId,
+        paymentSimulated: payResult.simulated,
+      );
+      onlinePaymentOk = true;
     }
 
-    if (pushSuccessScreen && context.mounted) {
-      final confirmTotal =
-          placed.totalAmount > 0 ? placed.totalAmount : totalAmount;
+    if (pushSuccessScreen && onlinePaymentOk && context.mounted) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => OrderPlacedScreen(
@@ -132,7 +188,7 @@ class CatalogCheckout {
             guestPhone: guestPhone,
             businessUsername: businessUsername ?? businessName,
             totalItems: totalItems,
-            totalAmount: confirmTotal,
+            totalAmount: serverTotal >= 0 ? serverTotal : totalAmount,
             currency:
                 placed.currency.isNotEmpty ? placed.currency : currency,
             orderId: placed.id,

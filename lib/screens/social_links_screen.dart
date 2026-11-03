@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/curved_bottom_nav.dart';
@@ -21,9 +22,17 @@ class SocialLinksScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final profileProvider = Provider.of<ProfileProvider>(context);
-    final currentLinks = profileProvider.profile.socialLinks;
-    // Clear the floating center FAB when shown inside MainShell.
-    final addLinkBottom = isTab ? CurvedBottomNav.fabOverhang() + 8 : 24;
+    final currentLinks = profileProvider.profile.socialLinks
+        .where(ReleaseFeatures.isPersonalLinkVisible)
+        .toList();
+    final waitingForProfile =
+        !profileProvider.hasLoadedProfile && profileProvider.isLoading;
+    // Tab mode: clear the scooped nav bar + floating FAB so Add Link stays tappable.
+    final addLinkBottom = isTab
+        ? CurvedBottomNav.contentClearance(context) +
+            CurvedBottomNav.fabOverhang() +
+            8
+        : 24.0;
 
     return Scaffold(
       appBar: AppBar(
@@ -39,56 +48,61 @@ class SocialLinksScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: currentLinks.isEmpty
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 36),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 88,
-                            height: 88,
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? const Color(0xFF222222)
-                                  : WaUi.navPill,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Icons.link_rounded,
-                              size: 40,
-                              color: WaUi.secondaryText.withValues(alpha: 0.7),
-                            ),
+            child: waitingForProfile
+                ? const Center(child: CircularProgressIndicator())
+                : currentLinks.isEmpty
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 36),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 88,
+                                height: 88,
+                                decoration: BoxDecoration(
+                                  color: isDark
+                                      ? const Color(0xFF222222)
+                                      : WaUi.navPill,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.link_rounded,
+                                  size: 40,
+                                  color: WaUi.secondaryText.withValues(
+                                    alpha: 0.7,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                context
+                                    .l10n.noLinksAddedYetNTapAddLinkToGetStarted,
+                                textAlign: TextAlign.center,
+                                style: WaUi.sectionHeader.copyWith(
+                                  color: isDark
+                                      ? Colors.white70
+                                      : WaUi.secondaryText,
+                                  height: 1.4,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 20),
-                          Text(
-                            context.l10n.noLinksAddedYetNTapAddLinkToGetStarted,
-                            textAlign: TextAlign.center,
-                            style: WaUi.sectionHeader.copyWith(
-                              color: isDark
-                                  ? Colors.white70
-                                  : WaUi.secondaryText,
-                              height: 1.4,
-                            ),
-                          ),
-                        ],
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.only(top: 8, bottom: 16),
+                        itemCount: currentLinks.length,
+                        itemBuilder: (context, index) {
+                          final link = currentLinks[index];
+                          return _buildLinkTile(
+                            context,
+                            link,
+                            profileProvider,
+                            isDark,
+                          );
+                        },
                       ),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.only(top: 8, bottom: 16),
-                    itemCount: currentLinks.length,
-                    itemBuilder: (context, index) {
-                      final link = currentLinks[index];
-                      return _buildLinkTile(
-                        context,
-                        link,
-                        profileProvider,
-                        isDark,
-                      );
-                    },
-                  ),
           ),
           Material(
             color: theme.scaffoldBackgroundColor,

@@ -635,7 +635,7 @@ abstract class AppLocalizations {
   /// No description provided for @addAtLeastOneCategoryFirst.
   ///
   /// In en, this message translates to:
-  /// **'Add at least one category first'**
+  /// **'Add at least one section before adding products.'**
   String get addAtLeastOneCategoryFirst;
 
   /// No description provided for @addCategoriesInDisplayOrderEGFastFoodThenDesi.

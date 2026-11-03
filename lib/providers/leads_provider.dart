@@ -189,15 +189,28 @@ class LeadsProvider extends ChangeNotifier {
   }
 
   // ── Fetch Leads ──────────────────────────────────────────────────────────────
-  Future<void> fetchLeads() async {
+  Future<void>? _fetchLeadsInFlight;
+
+  Future<void> fetchLeads() {
+    return _fetchLeadsInFlight ??= _fetchLeadsBody().whenComplete(() {
+      _fetchLeadsInFlight = null;
+    });
+  }
+
+  Future<void> _fetchLeadsBody() async {
     _isLoading = true;
     notifyListeners();
 
     try {
       final res = await _authRepo.getContacts();
       if (res.success && res.data is Map) {
-        final List data = (res.data as Map)['contacts'] ?? [];
-        _leads = data.map((e) => Lead.fromJson(e)).toList();
+        final map = res.data as Map;
+        final raw = map['contacts'] ?? map['data'] ?? map['leads'] ?? [];
+        final List data = raw is List ? raw : [];
+        _leads = data
+            .whereType<Map>()
+            .map((e) => Lead.fromJson(Map<String, dynamic>.from(e)))
+            .toList();
       }
     } catch (e) {
       debugPrint("Error fetching leads: $e");

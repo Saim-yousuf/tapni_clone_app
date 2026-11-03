@@ -4,7 +4,16 @@ class CatalogItem {
   final double price;
   final String description;
   final String imageUrl;
+
+  /// Business website section name (owner-managed). Not a marketplace category.
   final String category;
+
+  /// Global MarketplaceCategory top-level id (optional discovery).
+  final String marketplaceCategoryId;
+
+  /// Global MarketplaceCategory child id (optional; must match parent).
+  final String marketplaceSubcategoryId;
+
   final bool isActive;
 
   /// Service-only fields (persisted with catalog links).
@@ -23,6 +32,8 @@ class CatalogItem {
     this.description = '',
     this.imageUrl = '',
     this.category = '',
+    this.marketplaceCategoryId = '',
+    this.marketplaceSubcategoryId = '',
     this.isActive = true,
     this.durationMinutes = 0,
     this.offerDiscount = false,
@@ -46,6 +57,8 @@ class CatalogItem {
     return '$durationMinutes min';
   }
 
+  bool get isListedOnMarketplace => marketplaceCategoryId.trim().isNotEmpty;
+
   factory CatalogItem.fromJson(Map<String, dynamic> json) {
     return CatalogItem(
       id: json['_id']?.toString() ?? json['id']?.toString() ?? '',
@@ -54,6 +67,10 @@ class CatalogItem {
       description: json['description']?.toString() ?? '',
       imageUrl: json['image']?.toString() ?? json['imageUrl']?.toString() ?? '',
       category: json['category']?.toString() ?? '',
+      marketplaceCategoryId:
+          json['marketplaceCategoryId']?.toString() ?? '',
+      marketplaceSubcategoryId:
+          json['marketplaceSubcategoryId']?.toString() ?? '',
       isActive: json['isActive'] as bool? ?? true,
       durationMinutes: (json['durationMinutes'] is num)
           ? (json['durationMinutes'] as num).toInt()
@@ -88,6 +105,8 @@ class CatalogItem {
         'price': price,
         'description': description,
         if (category.isNotEmpty) 'category': category,
+        'marketplaceCategoryId': marketplaceCategoryId,
+        'marketplaceSubcategoryId': marketplaceSubcategoryId,
         if (imageUrl.isNotEmpty) 'image': imageUrl,
         'isActive': isActive,
         if (durationMinutes > 0) 'durationMinutes': durationMinutes,
@@ -105,6 +124,8 @@ class CatalogItem {
     String? description,
     String? imageUrl,
     String? category,
+    String? marketplaceCategoryId,
+    String? marketplaceSubcategoryId,
     bool? isActive,
     int? durationMinutes,
     bool? offerDiscount,
@@ -119,6 +140,10 @@ class CatalogItem {
       description: description ?? this.description,
       imageUrl: imageUrl ?? this.imageUrl,
       category: category ?? this.category,
+      marketplaceCategoryId:
+          marketplaceCategoryId ?? this.marketplaceCategoryId,
+      marketplaceSubcategoryId:
+          marketplaceSubcategoryId ?? this.marketplaceSubcategoryId,
       isActive: isActive ?? this.isActive,
       durationMinutes: durationMinutes ?? this.durationMinutes,
       offerDiscount: offerDiscount ?? this.offerDiscount,

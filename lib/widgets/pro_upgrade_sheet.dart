@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/subscription_screen.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
+import 'package:tapni_app/utils/release_features.dart';
 
 /// Opens the payment-ready subscription checkout (mock now, Stripe later).
 class SubcriptionSheet {
   static void show(BuildContext context) {
+    if (!ReleaseFeatures.canUseBusinessPro) return;
     Navigator.of(context).push(
       AppPageRoute(builder: (_) => SubscriptionScreen()),
     );
@@ -30,6 +32,7 @@ class _ProUpgradeSheetState extends State<ProUpgradeSheet> {
       if (Navigator.of(context).canPop()) {
         Navigator.of(context).pop();
       }
+      if (!ReleaseFeatures.canUseBusinessPro) return;
       rootNav.push(AppPageRoute(builder: (_) => SubscriptionScreen()));
     });
   }

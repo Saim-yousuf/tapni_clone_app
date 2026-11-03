@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:paddingBottom="8dp"
+        android:text="Barqody Phone"
+        android:textColor="#111B21"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/dial_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:hint="Enter number"
+        android:inputType="phone"
+        android:paddingTop="28dp"
+        android:paddingBottom="28dp"
+        android:textColor="#111B21"
+        android:textColorHint="#8696A0"
+        android:textSize="28sp" />
+
+    <GridLayout
+        android:id="@+id/dial_pad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alignmentMode="alignMargins"
+        android:columnCount="3"
+        android:useDefaultMargins="true" />
+
+    <TextView
+        android:id="@+id/btn_call"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/caller_id_btn_answer"
+        android:gravity="center"
+        android:text="Call"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</LinearLayout>

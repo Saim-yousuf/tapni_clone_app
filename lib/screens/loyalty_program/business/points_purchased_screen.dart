@@ -47,7 +47,13 @@ class PointsPurchasedScreen extends StatelessWidget {
   String get _txnDisplay {
     final t = transactionId.trim();
     if (t.isEmpty) return '—';
-    return t.startsWith('#') ? t : '#$t';
+    if (t.startsWith('BQ-')) return t;
+    if (t.toLowerCase().startsWith('pi_') ||
+        t.toLowerCase().startsWith('ch_') ||
+        RegExp(r'^[a-f0-9]{24}$', caseSensitive: false).hasMatch(t)) {
+      return '—';
+    }
+    return t.startsWith('#') ? t : t;
   }
 
   @override
@@ -138,12 +144,13 @@ class PointsPurchasedScreen extends StatelessWidget {
                     ),
                     SizedBox(height: m.v(40).clamp(28.0, 48.0)),
                     const Divider(height: 1, thickness: 1, color: _divider),
-                    _DetailRow(
-                      label: 'Transaction ID',
-                      value: _txnDisplay,
-                      labelUpper: false,
-                      boldValue: true,
-                    ),
+                    if (_txnDisplay != '—')
+                      _DetailRow(
+                        label: 'Reference',
+                        value: _txnDisplay,
+                        labelUpper: false,
+                        boldValue: true,
+                      ),
                     _DetailRow(
                       label: 'PREVIOUS BALANCE',
                       value: '${formatPoints(balanceBefore)} Points',

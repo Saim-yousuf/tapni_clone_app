@@ -11,7 +11,9 @@ import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/services/push_notification_service.dart';
 
 /// Bootstrap only — native splash stays until the next route is ready (local prefs).
@@ -69,6 +71,10 @@ class _SplashScreenState extends State<SplashScreen> {
           context,
           listen: false,
         );
+        final leadsProvider = Provider.of<LeadsProvider>(
+          context,
+          listen: false,
+        );
         authProvider.refreshAccounts();
 
         Navigator.of(context).pushReplacement(
@@ -81,6 +87,7 @@ class _SplashScreenState extends State<SplashScreen> {
             authProvider: authProvider,
             subProvider: subProvider,
             profileProvider: profileProvider,
+            leadsProvider: leadsProvider,
           ),
         );
       } else {
@@ -101,15 +108,23 @@ class _SplashScreenState extends State<SplashScreen> {
     required AuthProvider authProvider,
     required SubscriptionProvider subProvider,
     required ProfileProvider profileProvider,
+    required LeadsProvider leadsProvider,
   }) async {
     try {
       await authProvider.ensureDeviceSessionRegistered();
-      await Future.wait([
-        subProvider.checkSubscriptionStatus(),
+      final tasks = <Future>[
         profileProvider.fetchProfile(),
         profileProvider.fetchLinkCatalog(),
+        leadsProvider.fetchLeads(),
+        leadsProvider.fetchCategories(),
         PushNotificationService.syncTokenWithBackend(),
-      ]);
+      ];
+      if (ReleaseFeatures.canUseBusinessPro) {
+        tasks.add(subProvider.checkSubscriptionStatus());
+      } else {
+        subProvider.setChecking(false);
+      }
+      await Future.wait(tasks);
     } catch (_) {}
   }
 

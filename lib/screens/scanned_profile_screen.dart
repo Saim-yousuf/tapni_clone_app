@@ -23,6 +23,7 @@ import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
@@ -820,10 +821,20 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                 builder: (_, expand, __) {
                   final t = expand.clamp(0.0, 1.0);
                   final extent = initial + t * (maxSize - initial);
-                  final visibleH = t <= 0.001
-                      ? coverH
+                  // Keep cover under sheet radius so white scaffold is not
+                  // visible through the rounded top corners while scrolling.
+                  final sheetTopY = t <= 0.001
+                      ? sheetTop
                       : (h * (1.0 - extent))
                           .clamp(collapsedCoverVisible, coverH)
+                          .toDouble();
+                  final visibleH = t <= 0.001
+                      ? coverH
+                      : (sheetTopY + BarqodyChrome.sheetRadius)
+                          .clamp(
+                            collapsedCoverVisible + BarqodyChrome.sheetRadius,
+                            coverH,
+                          )
                           .toDouble();
                   final blur = t * 16.0;
                   return Positioned(
@@ -1274,6 +1285,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
           (link) =>
               link.isActive &&
               link.isPublic &&
+              ReleaseFeatures.isPersonalLinkVisible(link) &&
               !isCatalogInventoryHiddenByWebsite(link, allLinks) &&
               !isDuplicateBusinessWebsiteLink(link, allLinks) &&
               !isDuplicateCatalogInventoryLink(link, allLinks),

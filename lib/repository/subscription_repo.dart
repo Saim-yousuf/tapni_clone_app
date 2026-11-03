@@ -29,10 +29,16 @@ class SubscriptionRepo {
     );
   }
 
-  Future<ApiResponse> confirmCheckout({required String checkoutId}) async {
+  Future<ApiResponse> confirmCheckout({
+    required String checkoutId,
+    required String paymentIntentId,
+  }) async {
     return await ApiHandler.request(
       api: Api.subscription.confirm,
-      jsonBody: {"checkoutId": checkoutId},
+      jsonBody: {
+        "checkoutId": checkoutId,
+        "paymentIntentId": paymentIntentId,
+      },
       method: ApiMethod.post,
       authorization: true,
     );

@@ -13,6 +13,8 @@ Future<({int quantity, String notes})?> showCatalogItemDetailSheet({
   String? currency,
   int initialQty = 0,
   String initialNotes = '',
+  bool browseOnly = false,
+  String? title,
 }) {
   return showModalBottomSheet<({int quantity, String notes})>(
     context: context,
@@ -24,6 +26,8 @@ Future<({int quantity, String notes})?> showCatalogItemDetailSheet({
       currency: currency,
       initialQty: initialQty,
       initialNotes: initialNotes,
+      browseOnly: browseOnly,
+      title: title,
     ),
   );
 }
@@ -33,12 +37,16 @@ class _CatalogItemDetailSheet extends StatefulWidget {
   final String? currency;
   final int initialQty;
   final String initialNotes;
+  final bool browseOnly;
+  final String? title;
 
   const _CatalogItemDetailSheet({
     required this.item,
     this.currency,
     required this.initialQty,
     required this.initialNotes,
+    this.browseOnly = false,
+    this.title,
   });
 
   @override
@@ -96,7 +104,8 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
               const SheetDragHandle(),
               const SizedBox(height: 8),
               BarqodyTitleBar(
-                title: l10n.menu,
+                title: widget.title ??
+                    (widget.browseOnly ? 'Project' : l10n.menu),
                 onBack: () => Navigator.pop(context),
               ),
               Flexible(
@@ -121,25 +130,27 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
                           height: 1.15,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        widget.item.price > 0
-                            ? formatMoney(
-                                widget.item.price,
-                                currency: widget.currency,
-                              )
-                            : formatMoney(
-                                0,
-                                currency: widget.currency,
-                                freeLabel: 'Free',
-                              ),
-                        style: WaUi.toolsTitleOf(
-                          size: 20,
-                          weight: FontWeight.w700,
-                          color: Colors.black,
-                          height: 1.2,
+                      if (!widget.browseOnly) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.item.price > 0
+                              ? formatMoney(
+                                  widget.item.price,
+                                  currency: widget.currency,
+                                )
+                              : formatMoney(
+                                  0,
+                                  currency: widget.currency,
+                                  freeLabel: 'Free',
+                                ),
+                          style: WaUi.toolsTitleOf(
+                            size: 20,
+                            weight: FontWeight.w700,
+                            color: Colors.black,
+                            height: 1.2,
+                          ),
                         ),
-                      ),
+                      ],
                       if (widget.item.description.trim().isNotEmpty) ...[
                         const SizedBox(height: 24),
                         Text(
@@ -167,57 +178,59 @@ class _CatalogItemDetailSheetState extends State<_CatalogItemDetailSheet> {
                           ),
                         ),
                       ],
-                      const SizedBox(height: 24),
-                      Text(
-                        l10n.specialInstructions,
-                        style: WaUi.body.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
+                      if (!widget.browseOnly) ...[
+                        const SizedBox(height: 24),
+                        Text(
+                          l10n.specialInstructions,
+                          style: WaUi.body.copyWith(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextField(
-                        controller: _notesCtrl,
-                        maxLines: 3,
-                        style: WaUi.body.copyWith(
-                          fontSize: 15,
-                          color: Colors.black,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: l10n.eGNoSugarExtraHot,
-                          hintStyle: WaUi.body.copyWith(
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: _notesCtrl,
+                          maxLines: 3,
+                          style: WaUi.body.copyWith(
                             fontSize: 15,
-                            color: BarqodyChrome.secondaryText,
+                            color: Colors.black,
                           ),
-                          filled: true,
-                          fillColor: BarqodyChrome.fieldFill,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: const BorderSide(
-                              color: Colors.black,
-                              width: 1,
+                          decoration: InputDecoration(
+                            hintText: l10n.eGNoSugarExtraHot,
+                            hintStyle: WaUi.body.copyWith(
+                              fontSize: 15,
+                              color: BarqodyChrome.secondaryText,
+                            ),
+                            filled: true,
+                            fillColor: BarqodyChrome.fieldFill,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 14,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14),
+                              borderSide: const BorderSide(
+                                color: Colors.black,
+                                width: 1,
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
               ),
-              _buildBottomBar(context),
+              if (!widget.browseOnly) _buildBottomBar(context),
             ],
           ),
         ),

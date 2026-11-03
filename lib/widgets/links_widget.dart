@@ -10,6 +10,7 @@ import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
@@ -25,6 +26,7 @@ import 'package:tapni_app/screens/catalog/document_link_form_screen.dart';
 import 'package:tapni_app/screens/gallery_link_screen.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
+import 'package:tapni_app/utils/business_features.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -221,6 +223,30 @@ class LinkSheet {
                                       templates: category.templates
                                           .where(
                                             (template) =>
+                                                !isBusinessWebsiteLinkTemplate(
+                                                  template,
+                                                ),
+                                          )
+                                          .toList(),
+                                    ),
+                                  )
+                                  .where(
+                                    (category) =>
+                                        category.templates.isNotEmpty,
+                                  )
+                                  .toList();
+                            }
+                            if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) {
+                              dedupedCatalog = dedupedCatalog
+                                  .map(
+                                    (category) => category.copyWith(
+                                      templates: category.templates
+                                          .where(
+                                            (template) =>
+                                                template.actionType !=
+                                                    'menu_catalog' &&
+                                                template.actionType !=
+                                                    'business_website' &&
                                                 !isBusinessWebsiteLinkTemplate(
                                                   template,
                                                 ),
@@ -526,6 +552,9 @@ class LinkSheet {
                         }
                       } else if (isBusinessWebsiteLinkTemplate(template) ||
                           template.actionType == 'business_website') {
+                        if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) {
+                          return;
+                        }
                         // All-in-one Business Website is retired.
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -535,6 +564,9 @@ class LinkSheet {
                           ),
                         );
                       } else if (template.actionType == 'menu_catalog') {
+                        if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) {
+                          return;
+                        }
                         await _openTypedWebsiteFromCatalogTemplate(
                           context,
                           template,
@@ -2131,6 +2163,7 @@ class LinkSheet {
         context: context,
         websiteType: websiteType,
         catalogType: catalogType,
+        isPublic: website.isPublished,
       );
       if (!context.mounted) return;
       await Navigator.push(
@@ -2145,12 +2178,15 @@ class LinkSheet {
       return;
     }
 
+    final explicitType =
+        normalizeBusinessType(provider.profile.businessType);
     await Navigator.push(
       context,
       AppPageRoute(
         builder: (_) => BusinessWebsiteSetupScreen(
           linkTemplate: template,
           websiteType: websiteType,
+          businessType: explicitType.isEmpty ? null : explicitType,
         ),
       ),
     );

@@ -7,7 +7,7 @@ class Api {
   // Same host for all targets; avoid dart:io Platform (unsupported on web).
   // Use localhost when Flutter runs on Chrome/desktop on this PC.
   // LAN IP (e.g. 192.168.x.x) is only needed for a physical phone on Wi‑Fi.
-  static const String _localBaseUrl = "http://192.168.100.246:3000";
+  static const String _localBaseUrl = "http://192.168.100.203:3000";
 
   static const String _liveBaseUrl = "https://barqody-backend.vercel.app";
 
@@ -16,8 +16,8 @@ class Api {
   static void init(
     // Environment env
   ) {
-    baseUrl = _localBaseUrl;
-    // baseUrl = _liveBaseUrl;
+    // baseUrl = _localBaseUrl;
+    baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }
@@ -39,8 +39,20 @@ class Api {
   static final directory = _DirectoryApi();
   static final follow = _FollowApi();
   static final explore = _ExploreApi();
+  static final marketplace = _MarketplaceApi();
   static final reviews = _ReviewsApi();
   static final businessWebsite = _BusinessWebsiteApi();
+  static final businessFeatures = _BusinessFeaturesApi();
+  static final payments = _PaymentsApi();
+}
+
+class _BusinessFeaturesApi {
+  String get mine => "${Api.baseUrl}/api/business/features";
+  String get setup => "${Api.baseUrl}/api/business/features/setup";
+  String get businessType =>
+      "${Api.baseUrl}/api/business/features/business-type";
+  String get activate => "${Api.baseUrl}/api/business/features/activate";
+  String get deactivate => "${Api.baseUrl}/api/business/features/deactivate";
 }
 
 class _AuthApi {
@@ -221,6 +233,35 @@ class _CatalogApi {
       "${Api.baseUrl}/api/catalog/public/orders/$id/payments/mock";
 }
 
+class _PaymentsApi {
+  String get config => "${Api.baseUrl}/api/payments/config";
+  String orderIntent(String id) =>
+      "${Api.baseUrl}/api/payments/orders/$id/intent";
+  String publicOrderIntent(String id) =>
+      "${Api.baseUrl}/api/payments/public/orders/$id/intent";
+  String orderConfirm(String id) =>
+      "${Api.baseUrl}/api/payments/orders/$id/confirm";
+  String publicOrderConfirm(String id) =>
+      "${Api.baseUrl}/api/payments/public/orders/$id/confirm";
+  String orderStatus(String id) =>
+      "${Api.baseUrl}/api/payments/orders/$id/status";
+  String get methods => "${Api.baseUrl}/api/payments/methods";
+  String get setupIntent => "${Api.baseUrl}/api/payments/setup-intent";
+  String methodDefault(String id) =>
+      "${Api.baseUrl}/api/payments/methods/$id/default";
+  String method(String id) => "${Api.baseUrl}/api/payments/methods/$id";
+  String get myPayments => "${Api.baseUrl}/api/payments/my";
+  String myPayment(String id) => "${Api.baseUrl}/api/payments/my/$id";
+  String byOrder(String orderId) =>
+      "${Api.baseUrl}/api/payments/by-order/$orderId";
+  String orderRefund(String id) =>
+      "${Api.baseUrl}/api/payments/orders/$id/refund";
+  String get wallet => "${Api.baseUrl}/api/payments/wallet";
+  String get walletLedger => "${Api.baseUrl}/api/payments/wallet/ledger";
+  String get walletAnalytics =>
+      "${Api.baseUrl}/api/payments/wallet/analytics";
+}
+
 class _BookingApi {
   String get resources => "${Api.baseUrl}/api/booking/resources";
   String resource(String id) => "${Api.baseUrl}/api/booking/resources/$id";
@@ -305,6 +346,11 @@ class _ExploreApi {
   String get bannerPlans => "${Api.baseUrl}/api/explore/banner-plans";
   String get myBanners => "${Api.baseUrl}/api/explore/my-banners";
   String myBanner(String id) => "${Api.baseUrl}/api/explore/my-banners/$id";
+}
+
+class _MarketplaceApi {
+  String get categories => "${Api.baseUrl}/api/marketplace/categories";
+  String get products => "${Api.baseUrl}/api/marketplace/products";
 }
 
 class _ReviewsApi {

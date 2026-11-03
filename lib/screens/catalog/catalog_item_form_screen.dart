@@ -2,12 +2,13 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/marketplace_category.dart';
+import 'package:tapni_app/repository/marketplace_repo.dart';
 import 'package:tapni_app/utils/document_file.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
-
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 
 class CatalogItemFormScreen extends StatefulWidget {
   final String catalogLabel;
@@ -16,6 +17,10 @@ class CatalogItemFormScreen extends StatefulWidget {
   final bool requireCategory;
   final bool isDocument;
   final bool isService;
+  final bool isPortfolio;
+
+  /// Shows Marketplace Classification (global taxonomy) — products only.
+  final bool isProduct;
 
   const CatalogItemFormScreen({
     super.key,
@@ -25,6 +30,8 @@ class CatalogItemFormScreen extends StatefulWidget {
     this.requireCategory = false,
     this.isDocument = false,
     this.isService = false,
+    this.isPortfolio = false,
+    this.isProduct = false,
   });
 
   @override
@@ -53,7 +60,17 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   bool _isActive = true;
   bool _isSaving = false;
 
+  /// Marketplace classification (products only).
+  final _marketplaceRepo = MarketplaceRepo();
+  List<MarketplaceCategory> _marketplaceTree = const [];
+  bool _marketplaceLoading = false;
+  String? _marketplaceError;
+  bool _listOnMarketplace = false;
+  MarketplaceCategory? _marketplaceCategory;
+  MarketplaceCategory? _marketplaceSubcategory;
+
   bool get _isEditing => widget.existingItem != null;
+  bool get _showMarketplace => widget.isProduct && !widget.isDocument;
 
   static const _bookingTypes = ['Appointment', 'Request', 'No Scheduling'];
 
@@ -100,6 +117,56 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
     _selectedCategory = existingCat.isNotEmpty ? existingCat : null;
     _savedImageUrl = existing?.imageUrl ?? '';
     _isActive = existing?.isActive ?? true;
+    _listOnMarketplace =
+        (existing?.marketplaceCategoryId.trim().isNotEmpty ?? false);
+    if (_showMarketplace) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _loadMarketplace());
+    }
+  }
+
+  Future<void> _loadMarketplace() async {
+    setState(() {
+      _marketplaceLoading = true;
+      _marketplaceError = null;
+    });
+    final res = await _marketplaceRepo.getCategories();
+    if (!mounted) return;
+    if (!res.success) {
+      setState(() {
+        _marketplaceLoading = false;
+        _marketplaceError = res.message ?? 'Could not load marketplace categories';
+      });
+      return;
+    }
+    final tree = _marketplaceRepo.parseTree(res.data);
+    final existing = widget.existingItem;
+    MarketplaceCategory? cat;
+    MarketplaceCategory? sub;
+    final catId = existing?.marketplaceCategoryId.trim() ?? '';
+    final subId = existing?.marketplaceSubcategoryId.trim() ?? '';
+    if (catId.isNotEmpty) {
+      for (final c in tree) {
+        if (c.id == catId) {
+          cat = c;
+          if (subId.isNotEmpty) {
+            for (final s in c.children) {
+              if (s.id == subId) {
+                sub = s;
+                break;
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
+    setState(() {
+      _marketplaceTree = tree;
+      _marketplaceCategory = cat;
+      _marketplaceSubcategory = sub;
+      _listOnMarketplace = catId.isNotEmpty;
+      _marketplaceLoading = false;
+    });
   }
 
   @override
@@ -175,18 +242,20 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SheetHeader(
-                title: 'Add Category',
+                title: 'Add Section',
                 onBack: () => Navigator.pop(ctx),
               ),
               const SizedBox(height: 20),
-              const _FieldLabel('CATEGORY NAME'),
+              const _FieldLabel('SECTION NAME'),
               const SizedBox(height: 8),
               TextField(
                 controller: ctrl,
                 autofocus: true,
                 textInputAction: TextInputAction.done,
                 onSubmitted: (v) => Navigator.pop(ctx, v),
-                decoration: WaUi.fieldDecoration(hintText: 'e.g. Burgers'),
+                decoration: WaUi.fieldDecoration(
+                  hintText: 'e.g. New Arrivals',
+                ),
               ),
               const SizedBox(height: 20),
               Row(
@@ -243,9 +312,20 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
     final category = _selectedCategory?.trim() ?? '';
     if (widget.requireCategory && category.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.pleaseSelectACategory)),
+        const SnackBar(content: Text('Please select a business section')),
       );
       return;
+    }
+
+    if (_showMarketplace && _listOnMarketplace) {
+      if (_marketplaceCategory == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Select a marketplace category or turn listing off'),
+          ),
+        );
+        return;
+      }
     }
 
     // Discount allowed for menu / products / services (not documents).
@@ -300,13 +380,19 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       2 => 'none',
       _ => 'appointment',
     };
+    final listOnMarket = _showMarketplace && _listOnMarketplace;
     Navigator.pop(
       context,
       CatalogItem(
+        id: widget.existingItem?.id ?? '',
         name: name,
         price: double.tryParse(_priceCtrl.text.trim()) ?? 0,
         description: _descCtrl.text.trim(),
         category: category,
+        marketplaceCategoryId:
+            listOnMarket ? (_marketplaceCategory?.id ?? '') : '',
+        marketplaceSubcategoryId:
+            listOnMarket ? (_marketplaceSubcategory?.id ?? '') : '',
         imageUrl: imageValue,
         isActive: _isActive,
         durationMinutes: int.tryParse(_durationCtrl.text.trim()) ?? 0,
@@ -420,9 +506,17 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                           WaUi.fieldDecoration(hintText: 'e.g. Haircut'),
                     ),
                     const SizedBox(height: 20),
-                    const _FieldLabel('CATEGORY'),
+                    const _FieldLabel('BUSINESS SECTION'),
                     const SizedBox(height: 8),
-                    _buildCategoryField(hint: 'Select category'),
+                    _buildCategoryField(hint: 'Select section'),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Groups this service on your website.',
+                      style: WaUi.body.copyWith(
+                        fontSize: 12,
+                        color: BarqodyChrome.secondaryText,
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     const _FieldLabel('DESCRIPTION'),
                     const SizedBox(height: 8),
@@ -486,25 +580,6 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                           WaUi.fieldDecoration(hintText: 'e.g. 30'),
                     ),
                     const SizedBox(height: 20),
-                    const _FieldLabel('AVAILABILITY SLOTS'),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _slotsCtrl,
-                      readOnly: true,
-                      style: WaUi.body.copyWith(fontSize: 15),
-                      decoration: WaUi.fieldDecoration(
-                        hintText: 'Select Slots',
-                      ).copyWith(
-                        suffixIcon: const Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          color: BarqodyChrome.secondaryText,
-                        ),
-                      ),
-                      onTap: () {
-                        // Local-only UI — no persistence / schedule picker.
-                      },
-                    ),
-                    const SizedBox(height: 20),
                     _publicToggle(filled: false),
                   ],
                 ),
@@ -526,10 +601,18 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
 
   Widget _buildDefaultForm() {
     final title = _isEditing
-        ? (widget.isDocument ? context.l10n.editItem : 'Edit Item')
+        ? (widget.isDocument
+            ? context.l10n.editItem
+            : widget.isPortfolio
+                ? 'Edit Project'
+                : 'Edit Item')
         : widget.isDocument
             ? context.l10n.addDocument
-            : 'Add Menu';
+            : widget.isPortfolio
+                ? 'Add Project'
+                : widget.catalogLabel.toLowerCase().contains('product')
+                    ? 'Add Product'
+                    : 'Add Item';
 
     return Scaffold(
       backgroundColor: BarqodyChrome.scaffold,
@@ -543,10 +626,20 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    if (widget.isProduct) ...[
+                      _sectionHeading('Product Information'),
+                      const SizedBox(height: 14),
+                    ],
                     Center(child: _buildImagePicker()),
                     const SizedBox(height: 28),
                     _FieldLabel(
-                      widget.isDocument ? 'DOCUMENT NAME' : 'ITEM NAME',
+                      widget.isDocument
+                          ? 'DOCUMENT NAME'
+                          : widget.isPortfolio
+                              ? 'PROJECT NAME'
+                              : widget.isProduct
+                                  ? 'PRODUCT NAME'
+                                  : 'ITEM NAME',
                     ),
                     const SizedBox(height: 8),
                     TextField(
@@ -556,17 +649,13 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                       decoration: WaUi.fieldDecoration(
                         hintText: widget.isDocument
                             ? context.l10n.name
-                            : 'e.g. Cheese Burger',
+                            : widget.isPortfolio
+                                ? 'e.g. Brand Refresh'
+                                : widget.isProduct
+                                    ? 'e.g. Wireless Earbuds'
+                                    : 'e.g. Cheese Burger',
                       ),
                     ),
-                    if (!widget.isDocument) ...[
-                      const SizedBox(height: 20),
-                      _buildDiscountFields(priceHint: '0'),
-                      const SizedBox(height: 20),
-                      const _FieldLabel('CATEGORY'),
-                      const SizedBox(height: 8),
-                      _buildCategoryField(hint: context.l10n.category),
-                    ],
                     const SizedBox(height: 20),
                     const _FieldLabel('DESCRIPTION (OPTIONAL)'),
                     const SizedBox(height: 8),
@@ -579,6 +668,49 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                         hintText: context.l10n.descriptionOptional,
                       ).copyWith(alignLabelWithHint: true),
                     ),
+                    if (!widget.isDocument && !widget.isPortfolio) ...[
+                      const SizedBox(height: 28),
+                      _sectionHeading('Pricing'),
+                      const SizedBox(height: 14),
+                      _buildDiscountFields(priceHint: '0'),
+                      const SizedBox(height: 28),
+                      _sectionHeading('Business Website Organization'),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Sections group products on your own website only.',
+                        style: WaUi.body.copyWith(
+                          fontSize: 12,
+                          color: BarqodyChrome.secondaryText,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      const _FieldLabel('BUSINESS SECTION'),
+                      const SizedBox(height: 8),
+                      _buildCategoryField(hint: 'Select section'),
+                    ],
+                    if (widget.isPortfolio) ...[
+                      const SizedBox(height: 28),
+                      _sectionHeading('Business Website Organization'),
+                      const SizedBox(height: 12),
+                      const _FieldLabel('BUSINESS SECTION'),
+                      const SizedBox(height: 8),
+                      _buildCategoryField(hint: 'e.g. Branding'),
+                    ],
+                    if (_showMarketplace) ...[
+                      const SizedBox(height: 28),
+                      _sectionHeading('Marketplace Classification'),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Help customers discover this product across BarQody Marketplace. Independent of your website section.',
+                        style: WaUi.body.copyWith(
+                          fontSize: 12,
+                          color: BarqodyChrome.secondaryText,
+                          height: 1.35,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _buildMarketplaceBlock(),
+                    ],
                     const SizedBox(height: 20),
                     _publicToggle(),
                   ],
@@ -591,10 +723,14 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                 label: _isEditing
                     ? (widget.isDocument
                         ? context.l10n.updateItem
-                        : 'Update')
+                        : widget.isProduct
+                            ? 'Update Product'
+                            : 'Update')
                     : (widget.isDocument
                         ? context.l10n.addDocument
-                        : 'Add Menu'),
+                        : widget.isProduct
+                            ? 'Add Product'
+                            : 'Add Item'),
                 loading: _isSaving,
                 onPressed: _isSaving ? null : _save,
               ),
@@ -602,6 +738,303 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _sectionHeading(String text) {
+    return Text(
+      text,
+      style: WaUi.toolsTitleOf(
+        size: 16,
+        weight: FontWeight.w800,
+        color: Colors.black,
+      ),
+    );
+  }
+
+  Widget _buildMarketplaceBlock() {
+    if (_marketplaceLoading) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Center(child: CircularProgressIndicator(color: Colors.black)),
+      );
+    }
+    if (_marketplaceError != null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            _marketplaceError!,
+            style: WaUi.body.copyWith(
+              fontSize: 13,
+              color: BarqodyChrome.secondaryText,
+            ),
+          ),
+          TextButton(onPressed: _loadMarketplace, child: const Text('Retry')),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: BarqodyChrome.fieldFill,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'List on Marketplace',
+                  style: WaUi.toolsTitleOf(
+                    size: 15,
+                    weight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Switch(
+                value: _listOnMarketplace,
+                activeThumbColor: Colors.white,
+                activeTrackColor: Colors.black,
+                onChanged: (v) => setState(() {
+                  _listOnMarketplace = v;
+                  if (!v) {
+                    _marketplaceCategory = null;
+                    _marketplaceSubcategory = null;
+                  }
+                }),
+              ),
+            ],
+          ),
+        ),
+        if (_listOnMarketplace) ...[
+          const SizedBox(height: 16),
+          if (_marketplaceTree.isEmpty)
+            Text(
+              'No marketplace categories yet. Ask an admin to add them.',
+              style: WaUi.body.copyWith(
+                fontSize: 13,
+                color: BarqodyChrome.secondaryText,
+              ),
+            )
+          else ...[
+            const _FieldLabel('MARKETPLACE CATEGORY'),
+            const SizedBox(height: 8),
+            _selectorTile(
+              value: _marketplaceCategory?.name,
+              placeholder: 'Select category',
+              onTap: _pickMarketplaceCategory,
+            ),
+            const SizedBox(height: 16),
+            const _FieldLabel('SUBCATEGORY'),
+            const SizedBox(height: 8),
+            _selectorTile(
+              value: _marketplaceSubcategory?.name,
+              placeholder: _marketplaceCategory == null
+                  ? 'Select a category first'
+                  : (_marketplaceCategory!.children.isEmpty
+                      ? 'No subcategories'
+                      : 'Select subcategory (optional)'),
+              enabled: _marketplaceCategory != null &&
+                  _marketplaceCategory!.children.isNotEmpty,
+              onTap: _pickMarketplaceSubcategory,
+            ),
+          ],
+        ],
+      ],
+    );
+  }
+
+  Widget _selectorTile({
+    required String? value,
+    required String placeholder,
+    required VoidCallback onTap,
+    bool enabled = true,
+  }) {
+    return Material(
+      color: BarqodyChrome.fieldFill,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: enabled ? onTap : null,
+        borderRadius: BorderRadius.circular(14),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  (value != null && value.isNotEmpty) ? value : placeholder,
+                  style: WaUi.body.copyWith(
+                    fontSize: 15,
+                    color: (value != null && value.isNotEmpty)
+                        ? Colors.black
+                        : BarqodyChrome.secondaryText,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: enabled
+                    ? Colors.black
+                    : BarqodyChrome.secondaryText,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickMarketplaceCategory() async {
+    final selected = await _showMarketplacePicker(
+      title: 'Marketplace Category',
+      items: _marketplaceTree,
+      selectedId: _marketplaceCategory?.id,
+      allowClear: true,
+      searchHint: 'Search categories',
+    );
+    if (!mounted || selected == null) return;
+    if (selected.id.isEmpty) {
+      setState(() {
+        _marketplaceCategory = null;
+        _marketplaceSubcategory = null;
+      });
+      return;
+    }
+    setState(() {
+      _marketplaceCategory = selected;
+      _marketplaceSubcategory = null;
+    });
+  }
+
+  Future<void> _pickMarketplaceSubcategory() async {
+    final parent = _marketplaceCategory;
+    if (parent == null || parent.children.isEmpty) return;
+    final selected = await _showMarketplacePicker(
+      title: parent.name,
+      items: parent.children,
+      selectedId: _marketplaceSubcategory?.id,
+      allowClear: true,
+      searchHint: 'Search subcategories',
+    );
+    if (!mounted || selected == null) return;
+    setState(() {
+      _marketplaceSubcategory =
+          selected.id.isEmpty ? null : selected;
+    });
+  }
+
+  /// Returns selected category, empty-id sentinel for clear, or null if dismissed.
+  Future<MarketplaceCategory?> _showMarketplacePicker({
+    required String title,
+    required List<MarketplaceCategory> items,
+    String? selectedId,
+    bool allowClear = false,
+    String searchHint = 'Search',
+  }) async {
+    final searchCtrl = TextEditingController();
+    return showModalBottomSheet<MarketplaceCategory>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        var query = '';
+        return StatefulBuilder(
+          builder: (ctx, setSheet) {
+            final filtered = items.where((c) {
+              if (query.isEmpty) return true;
+              return c.name.toLowerCase().contains(query);
+            }).toList();
+            return Container(
+              height: MediaQuery.of(ctx).size.height * 0.72,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(BarqodyChrome.modalRadius),
+                ),
+              ),
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SheetHeader(
+                    title: title,
+                    onBack: () => Navigator.pop(ctx),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: searchCtrl,
+                    onChanged: (v) =>
+                        setSheet(() => query = v.trim().toLowerCase()),
+                    decoration: WaUi.fieldDecoration(hintText: searchHint),
+                  ),
+                  if (allowClear) ...[
+                    const SizedBox(height: 8),
+                    TextButton(
+                      onPressed: () => Navigator.pop(
+                        ctx,
+                        const MarketplaceCategory(id: '', name: ''),
+                      ),
+                      child: const Text('Clear selection'),
+                    ),
+                  ],
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: filtered.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No categories found',
+                              style: WaUi.body.copyWith(
+                                color: BarqodyChrome.secondaryText,
+                              ),
+                            ),
+                          )
+                        : ListView.separated(
+                            itemCount: filtered.length,
+                            separatorBuilder: (_, __) =>
+                                const SizedBox(height: 8),
+                            itemBuilder: (_, i) {
+                              final item = filtered[i];
+                              final selected = item.id == selectedId;
+                              return Material(
+                                color: selected
+                                    ? Colors.black
+                                    : BarqodyChrome.fieldFill,
+                                borderRadius: BorderRadius.circular(14),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(14),
+                                  onTap: () => Navigator.pop(ctx, item),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 14,
+                                    ),
+                                    child: Text(
+                                      item.name,
+                                      style: WaUi.body.copyWith(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: selected
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -638,7 +1071,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       children: [
         Expanded(
           child: Text(
-            context.l10n.addCategoriesInYourCatalogSettingsFirst,
+            'Add a business section first (or tap +).',
             style: WaUi.body.copyWith(
               color: BarqodyChrome.secondaryText,
               fontSize: 13,

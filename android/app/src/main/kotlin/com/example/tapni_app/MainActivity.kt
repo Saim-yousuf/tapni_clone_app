@@ -6,16 +6,34 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
+import android.telecom.TelecomManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.example.tapni_app.callerid.CallerIdStore
-import io.flutter.embedding.android.FlutterActivity
+import com.example.tapni_app.callerid.DialerRoles
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-class MainActivity : FlutterActivity() {
+/** FlutterFragmentActivity required by flutter_stripe PaymentSheet. */
+class MainActivity : FlutterFragmentActivity() {
     private val channelName = "barqody/caller_id"
+
+    // RoleManager.createRequestRoleIntent MUST be launched for-result or the
+    // system chooser often does nothing (plain startActivity is a no-op).
+    private val callScreeningRoleLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            // Flutter CallerIdSetupScreen refreshes on AppLifecycleState.resumed.
+        }
+
+    private val defaultDialerRoleLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            // Flutter refreshes on resume.
+        }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -79,22 +97,119 @@ class MainActivity : FlutterActivity() {
                         }
                     }
                     "requestCallScreeningRole" -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            val roleManager = getSystemService(RoleManager::class.java)
-                            if (roleManager != null &&
-                                roleManager.isRoleAvailable(RoleManager.ROLE_CALL_SCREENING)
-                            ) {
+                        result.success(requestCallScreeningRole())
+                    }
+                    "isIgnoringBatteryOptimizations" -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            val pm = getSystemService(PowerManager::class.java)
+                            result.success(
+                                pm?.isIgnoringBatteryOptimizations(packageName) == true,
+                            )
+                        } else {
+                            result.success(true)
+                        }
+                    }
+                    "requestIgnoreBatteryOptimizations" -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            try {
                                 startActivity(
-                                    roleManager.createRequestRoleIntent(
-                                        RoleManager.ROLE_CALL_SCREENING,
+                                    Intent(
+                                        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                                        "package:$packageName".toUri(),
                                     ),
+                                )
+                            } catch (_: Exception) {
+                                startActivity(
+                                    Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),
                                 )
                             }
                         }
                         result.success(true)
                     }
+                    "isDefaultDialer" -> {
+                        result.success(DialerRoles.isDefaultDialer(this))
+                    }
+                    "requestDefaultDialerRole" -> {
+                        result.success(requestDefaultDialerRole())
+                    }
                     else -> result.notImplemented()
                 }
             }
+    }
+
+    private fun requestDefaultDialerRole(): Map<String, Any?> {
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val roleManager = getSystemService(RoleManager::class.java)
+                if (roleManager != null && roleManager.isRoleAvailable(RoleManager.ROLE_DIALER)) {
+                    if (roleManager.isRoleHeld(RoleManager.ROLE_DIALER)) {
+                        return mapOf("opened" to false, "held" to true, "reason" to "already_held")
+                    }
+                    defaultDialerRoleLauncher.launch(
+                        roleManager.createRequestRoleIntent(RoleManager.ROLE_DIALER),
+                    )
+                    return mapOf("opened" to true, "held" to false, "reason" to "role_intent")
+                }
+            }
+            // Pre-Q / fallback: legacy change-default-dialer intent.
+            val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER).apply {
+                putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, packageName)
+            }
+            startActivity(intent)
+            mapOf("opened" to true, "held" to false, "reason" to "legacy_intent")
+        } catch (e: Exception) {
+            mapOf("opened" to false, "held" to false, "reason" to (e.message ?: "unavailable"))
+        }
+    }
+
+    /**
+     * @return map with opened/held/reason so Flutter can show feedback.
+     */
+    private fun requestCallScreeningRole(): Map<String, Any?> {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            return mapOf("opened" to false, "held" to true, "reason" to "pre_q")
+        }
+
+        val roleManager = getSystemService(RoleManager::class.java)
+            ?: return mapOf("opened" to false, "held" to false, "reason" to "no_role_manager")
+
+        if (roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
+            return mapOf("opened" to false, "held" to true, "reason" to "already_held")
+        }
+
+        if (roleManager.isRoleAvailable(RoleManager.ROLE_CALL_SCREENING)) {
+            return try {
+                val intent =
+                    roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
+                callScreeningRoleLauncher.launch(intent)
+                mapOf("opened" to true, "held" to false, "reason" to "role_intent")
+            } catch (e: Exception) {
+                openDefaultAppsFallback(e.message)
+            }
+        }
+
+        return openDefaultAppsFallback("role_unavailable")
+    }
+
+    private fun openDefaultAppsFallback(reason: String?): Map<String, Any?> {
+        return try {
+            startActivity(Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS))
+            mapOf(
+                "opened" to true,
+                "held" to false,
+                "reason" to (reason ?: "fallback_settings"),
+            )
+        } catch (_: Exception) {
+            try {
+                startActivity(Intent(Settings.ACTION_SETTINGS))
+                mapOf("opened" to true, "held" to false, "reason" to "fallback_settings_root")
+            } catch (e: Exception) {
+                mapOf(
+                    "opened" to false,
+                    "held" to false,
+                    "reason" to (e.message ?: "unavailable"),
+                )
+            }
+        }
     }
 }

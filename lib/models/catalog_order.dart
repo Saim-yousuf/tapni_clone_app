@@ -12,12 +12,18 @@ class CatalogOrder {
   final String? customerPhoto;
   final String guestName;
   final String guestPhone;
+  final String guestEmail;
   final String businessLinkId;
   final String catalogType;
   final String bookingKind;
+  /// takeaway | delivery | dine_in | service | stay
+  final String orderType;
+  final String fulfillmentAddress;
+  final String fulfillmentNotes;
+  final String tableToken;
   final List<CatalogOrderLineItem> items;
   final double totalAmount;
-  /** Subtotal before points discount (falls back to totalAmount). */
+  /// Subtotal before points discount (falls back to totalAmount).
   final double subtotalAmount;
   final String couponCode;
   final String couponTitle;
@@ -27,16 +33,22 @@ class CatalogOrder {
   final String currency;
   final String? bookingDate;
   final String? bookingTime;
+  final String bookingEnd;
   final String checkInDate;
   final String checkOutDate;
   final List<String> resourceNames;
   final OrderStatus status;
+  final List<OrderStatusEvent> statusHistory;
   final bool isRead;
   final int tokenNumber;
   final String paymentStatus;
   final String paymentMethod;
   final String paymentProvider;
   final String paymentTransactionId;
+  /// Friendly payment reference for UI (BQ-TXN-…).
+  final String publicPaymentRef;
+  final String refundStatus;
+  final double refundedAmount;
   final bool paymentSimulated;
   final bool isGenuinelyPaid;
   /// Server-side loyalty grant summary (stamps/points from this order).
@@ -56,9 +68,14 @@ class CatalogOrder {
     this.customerPhoto,
     this.guestName = '',
     this.guestPhone = '',
+    this.guestEmail = '',
     this.businessLinkId = '',
     this.catalogType = 'catalog',
     this.bookingKind = 'order',
+    this.orderType = 'takeaway',
+    this.fulfillmentAddress = '',
+    this.fulfillmentNotes = '',
+    this.tableToken = '',
     required this.items,
     this.totalAmount = 0,
     this.subtotalAmount = 0,
@@ -70,16 +87,21 @@ class CatalogOrder {
     this.currency = 'PKR',
     this.bookingDate,
     this.bookingTime,
+    this.bookingEnd = '',
     this.checkInDate = '',
     this.checkOutDate = '',
     this.resourceNames = const [],
     this.status = OrderStatus.pending,
+    this.statusHistory = const [],
     this.isRead = false,
     this.tokenNumber = 0,
     this.paymentStatus = 'pending',
     this.paymentMethod = '',
     this.paymentProvider = 'none',
     this.paymentTransactionId = '',
+    this.publicPaymentRef = '',
+    this.refundStatus = 'none',
+    this.refundedAmount = 0,
     this.paymentSimulated = false,
     this.isGenuinelyPaid = false,
     this.loyaltyReward,
@@ -98,6 +120,20 @@ class CatalogOrder {
     }
 
     final paymentStatus = json['paymentStatus']?.toString() ?? 'pending';
+    final fulfillment = json['fulfillment'] is Map
+        ? Map<String, dynamic>.from(json['fulfillment'] as Map)
+        : <String, dynamic>{};
+    final historyRaw = json['statusHistory'];
+    final history = <OrderStatusEvent>[];
+    if (historyRaw is List) {
+      for (final h in historyRaw) {
+        if (h is Map) {
+          history.add(
+            OrderStatusEvent.fromJson(Map<String, dynamic>.from(h)),
+          );
+        }
+      }
+    }
 
     return CatalogOrder(
       id: json['id']?.toString() ?? json['_id']?.toString() ?? '',
@@ -111,11 +147,18 @@ class CatalogOrder {
       customerPhoto: json['customerPhoto']?.toString(),
       guestName: json['guestName']?.toString() ?? '',
       guestPhone: json['guestPhone']?.toString() ?? '',
+      guestEmail: json['guestEmail']?.toString() ?? '',
       businessLinkId: json['businessLinkId']?.toString() ?? '',
       catalogType: json['catalogType']?.toString() ?? 'catalog',
       bookingKind: json['bookingKind']?.toString() ?? 'order',
+      orderType: json['orderType']?.toString() ?? 'takeaway',
+      fulfillmentAddress: fulfillment['address']?.toString() ?? '',
+      fulfillmentNotes: fulfillment['notes']?.toString() ?? '',
+      tableToken: fulfillment['tableToken']?.toString() ?? '',
       items: (json['items'] as List<dynamic>? ?? [])
-          .map((e) => CatalogOrderLineItem.fromJson(e as Map<String, dynamic>))
+          .map((e) => CatalogOrderLineItem.fromJson(
+                Map<String, dynamic>.from(e as Map),
+              ))
           .toList(),
       totalAmount: (json['totalAmount'] is num)
           ? (json['totalAmount'] as num).toDouble()
@@ -141,16 +184,23 @@ class CatalogOrder {
           : 'PKR',
       bookingDate: json['bookingDate']?.toString(),
       bookingTime: json['bookingTime']?.toString(),
+      bookingEnd: json['bookingEnd']?.toString() ?? '',
       checkInDate: json['checkInDate']?.toString() ?? '',
       checkOutDate: json['checkOutDate']?.toString() ?? '',
       resourceNames: names,
       status: _parseStatus(json['status']?.toString()),
+      statusHistory: history,
       isRead: json['isRead'] as bool? ?? false,
       tokenNumber: _parseToken(json['tokenNumber']),
       paymentStatus: paymentStatus,
       paymentMethod: json['paymentMethod']?.toString() ?? '',
       paymentProvider: json['paymentProvider']?.toString() ?? 'none',
       paymentTransactionId: json['paymentTransactionId']?.toString() ?? '',
+      publicPaymentRef: json['publicPaymentRef']?.toString() ?? '',
+      refundStatus: json['refundStatus']?.toString() ?? 'none',
+      refundedAmount: (json['refundedAmount'] is num)
+          ? (json['refundedAmount'] as num).toDouble()
+          : 0,
       paymentSimulated: json['paymentSimulated'] as bool? ??
           paymentStatus == 'simulated_paid',
       isGenuinelyPaid: json['isGenuinelyPaid'] as bool? ??
@@ -191,9 +241,14 @@ class CatalogOrder {
       customerPhoto: customerPhoto,
       guestName: guestName,
       guestPhone: guestPhone,
+      guestEmail: guestEmail,
       businessLinkId: businessLinkId,
       catalogType: catalogType,
       bookingKind: bookingKind,
+      orderType: orderType,
+      fulfillmentAddress: fulfillmentAddress,
+      fulfillmentNotes: fulfillmentNotes,
+      tableToken: tableToken,
       items: items,
       totalAmount: totalAmount,
       subtotalAmount: subtotalAmount,
@@ -205,10 +260,12 @@ class CatalogOrder {
       currency: currency,
       bookingDate: bookingDate,
       bookingTime: bookingTime,
+      bookingEnd: bookingEnd,
       checkInDate: checkInDate,
       checkOutDate: checkOutDate,
       resourceNames: resourceNames,
       status: this.status,
+      statusHistory: statusHistory,
       isRead: isRead,
       tokenNumber: tokenNumber,
       paymentStatus: status,
@@ -216,6 +273,9 @@ class CatalogOrder {
       paymentProvider: paymentProvider,
       paymentTransactionId:
           paymentTransactionId ?? this.paymentTransactionId,
+      publicPaymentRef: publicPaymentRef,
+      refundStatus: refundStatus,
+      refundedAmount: refundedAmount,
       loyaltyReward: loyaltyReward,
       paymentSimulated: paymentSimulated ?? this.paymentSimulated,
       isGenuinelyPaid: status == 'paid',
@@ -227,12 +287,19 @@ class CatalogOrder {
   String get paymentLabel {
     final method = paymentMethod.trim().toLowerCase();
     final pStatus = paymentStatus.trim().toLowerCase();
+    if (pStatus == 'not_required') {
+      return 'No payment required';
+    }
     if (method == 'online') {
       switch (pStatus) {
         case 'simulated_paid':
           return 'Online · demo payment (not a real charge)';
         case 'paid':
           return 'Online · paid';
+        case 'refunded':
+          return 'Online · refunded';
+        case 'partially_refunded':
+          return 'Online · partially refunded';
         case 'failed':
           return 'Online · payment failed';
         case 'cancelled':
@@ -254,6 +321,34 @@ class CatalogOrder {
     if (pStatus == 'failed') return 'Payment failed';
     if (pStatus == 'cancelled') return 'Payment cancelled';
     return 'Payment update';
+  }
+
+  /// Compact payment/refund hint for list cards (empty when nothing notable).
+  String get listPaymentHint {
+    final pStatus = paymentStatus.trim().toLowerCase();
+    if (pStatus == 'refunded' || hasRefund) {
+      if (pStatus == 'partially_refunded' ||
+          refundStatus == 'partially_refunded') {
+        return 'Partially refunded';
+      }
+      if (pStatus == 'refunded' || refundStatus == 'refunded') {
+        return 'Refunded';
+      }
+      if (refundStatus == 'processing') return 'Refund processing';
+    }
+    if (pStatus == 'failed') return 'Payment failed';
+    if (pStatus == 'not_required') return 'No payment';
+    if (pStatus == 'pending' || pStatus == 'unpaid' || pStatus.isEmpty) {
+      return 'Unpaid';
+    }
+    if (pStatus == 'simulated_paid') return 'Demo payment';
+    return '';
+  }
+
+  /// Friendly list reference — never Mongo/Stripe IDs.
+  String get listReference {
+    if (hasToken) return '#$tokenNumber';
+    return kindLabel;
   }
 
   /// Normalized kind used for filters and badges.
@@ -298,6 +393,53 @@ class CatalogOrder {
         return 'Order';
     }
   }
+
+  /// "Order" vs "Booking" for titles and banners.
+  String get nounLabel =>
+      (isAppointment || isStay || isTable) ? 'Booking' : 'Order';
+
+  String get catalogTypeLabel {
+    switch (catalogType.trim().toLowerCase()) {
+      case 'menu':
+        return 'Menu';
+      case 'products':
+        return 'Products';
+      case 'services':
+        return 'Services';
+      case 'portfolio':
+        return 'Portfolio';
+      default:
+        return 'Catalog';
+    }
+  }
+
+  String get orderTypeLabel {
+    switch (orderType.trim().toLowerCase()) {
+      case 'delivery':
+        return 'Delivery';
+      case 'dine_in':
+        return 'Dine-in';
+      case 'service':
+        return 'Service';
+      case 'stay':
+        return 'Stay';
+      case 'takeaway':
+        return 'Pickup';
+      default:
+        return orderType.trim().isEmpty ? '' : orderType;
+    }
+  }
+
+  bool get hasRefund =>
+      refundedAmount > 0 ||
+      refundStatus == 'refunded' ||
+      refundStatus == 'partially_refunded' ||
+      refundStatus == 'processing';
+
+  bool get isTerminalStatus =>
+      status == OrderStatus.completed ||
+      status == OrderStatus.cancelled ||
+      status == OrderStatus.noShow;
 
   /// One-line schedule for list cards (empty for plain orders).
   String get whenLine {
@@ -402,6 +544,32 @@ class CatalogOrder {
     final id = payload['id'] ?? payload['_id'];
     final s = id?.toString().trim() ?? '';
     return s.isEmpty ? null : s;
+  }
+}
+
+class OrderStatusEvent {
+  final String from;
+  final String to;
+  final String actorType;
+  final String note;
+  final DateTime? createdAt;
+
+  const OrderStatusEvent({
+    this.from = '',
+    this.to = '',
+    this.actorType = '',
+    this.note = '',
+    this.createdAt,
+  });
+
+  factory OrderStatusEvent.fromJson(Map<String, dynamic> json) {
+    return OrderStatusEvent(
+      from: json['from']?.toString() ?? '',
+      to: json['to']?.toString() ?? '',
+      actorType: json['actorType']?.toString() ?? '',
+      note: json['note']?.toString() ?? '',
+      createdAt: CatalogOrder._parseDate(json['createdAt']),
+    );
   }
 }
 

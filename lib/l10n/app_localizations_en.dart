@@ -215,7 +215,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addAccount => 'Add account';
 
   @override
-  String get addAtLeastOneCategoryFirst => 'Add at least one category first';
+  String get addAtLeastOneCategoryFirst =>
+      'Add at least one section before adding products.';
 
   @override
   String get addCategoriesInDisplayOrderEGFastFoodThenDesi =>

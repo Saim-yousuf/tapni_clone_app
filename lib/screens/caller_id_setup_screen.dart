@@ -23,6 +23,8 @@ class _CallerIdSetupScreenState extends State<CallerIdSetupScreen>
   bool _phoneOk = false;
   bool _overlayOk = false;
   bool _roleOk = false;
+  bool _batteryOk = false;
+  bool _defaultDialerOk = false;
   bool _enabled = false;
   bool _busy = false;
   bool _pendingEnable = false;
@@ -60,6 +62,8 @@ class _CallerIdSetupScreenState extends State<CallerIdSetupScreen>
     final phoneOk = await CallerIdService.hasPhonePermissions();
     final overlayOk = await CallerIdService.hasOverlayPermission();
     final roleOk = await CallerIdService.hasCallScreeningRole();
+    final batteryOk = await CallerIdService.isIgnoringBatteryOptimizations();
+    final defaultDialerOk = await CallerIdService.isDefaultDialer();
     if (_pendingEnable && phoneOk && overlayOk && roleOk) {
       if (!mounted) return;
       await CallerIdService.setEnabled(true, lang: _lang);
@@ -70,6 +74,8 @@ class _CallerIdSetupScreenState extends State<CallerIdSetupScreen>
       _phoneOk = phoneOk;
       _overlayOk = overlayOk;
       _roleOk = roleOk;
+      _batteryOk = batteryOk;
+      _defaultDialerOk = defaultDialerOk;
       _enabled = CallerIdService.isEnabled;
       _loading = false;
     });
@@ -103,18 +109,37 @@ class _CallerIdSetupScreenState extends State<CallerIdSetupScreen>
         return;
       }
       if (!_roleOk) {
-        await CallerIdService.requestCallScreeningRole();
+        final opened = await CallerIdService.requestCallScreeningRole();
+        if (!opened && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(context.l10n.callerIdPermissionNeeded),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
         return;
       }
       await CallerIdService.setEnabled(true, lang: _lang);
       _pendingEnable = false;
+      if (!_batteryOk) {
+        await CallerIdService.requestIgnoreBatteryOptimizations();
+      }
+      if (!_defaultDialerOk) {
+        await CallerIdService.requestDefaultDialerRole();
+      }
       await _refresh();
     } finally {
       if (mounted) setState(() => _busy = false);
     }
   }
 
-  bool get _needsPermissions => !_phoneOk || !_overlayOk || !_roleOk;
+  bool get _needsPermissions =>
+      !_phoneOk ||
+      !_overlayOk ||
+      !_roleOk ||
+      !_batteryOk ||
+      !_defaultDialerOk;
 
   @override
   Widget build(BuildContext context) {
@@ -342,7 +367,40 @@ class _CallerIdSetupScreenState extends State<CallerIdSetupScreen>
           _PermissionRow(
             label: context.l10n.callerIdScreeningRole,
             granted: _roleOk,
-            onGrant: () => CallerIdService.requestCallScreeningRole(),
+            onGrant: () async {
+              final opened =
+                  await CallerIdService.requestCallScreeningRole();
+              if (!opened && mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(context.l10n.callerIdPermissionNeeded),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            },
+          ),
+          _PermissionRow(
+            label: 'Unrestricted battery use',
+            granted: _batteryOk,
+            onGrant: () => CallerIdService.requestIgnoreBatteryOptimizations(),
+          ),
+          _PermissionRow(
+            label: 'Set as default Phone app',
+            granted: _defaultDialerOk,
+            onGrant: () async {
+              final opened = await CallerIdService.requestDefaultDialerRole();
+              if (!opened && mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Could not open default-phone settings. Set Barqody as Phone app in system settings.',
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            },
           ),
         ],
       ],

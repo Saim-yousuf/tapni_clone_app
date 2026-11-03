@@ -37,6 +37,8 @@ class UserSubscription {
   final String currency;
   final String checkoutId;
   final String providerPaymentId;
+  /// Friendly UI reference (BQ-TXN-…); never a Stripe id.
+  final String publicPaymentRef;
   final DateTime? startDate;
   final DateTime? endDate;
   final DateTime? paidAt;
@@ -55,6 +57,7 @@ class UserSubscription {
     this.currency = 'SAR',
     this.checkoutId = '',
     this.providerPaymentId = '',
+    this.publicPaymentRef = '',
     this.startDate,
     this.endDate,
     this.paidAt,
@@ -82,6 +85,7 @@ class UserSubscription {
       currency: json['currency']?.toString() ?? 'SAR',
       checkoutId: json['checkoutId']?.toString() ?? '',
       providerPaymentId: json['providerPaymentId']?.toString() ?? '',
+      publicPaymentRef: json['publicPaymentRef']?.toString() ?? '',
       startDate: json['startDate'] != null
           ? DateTime.tryParse(json['startDate'].toString())
           : null,
@@ -109,6 +113,13 @@ class CheckoutSession {
   final String planId;
   final String planName;
   final String? clientSecret;
+  final String paymentIntentId;
+  final String publishableKey;
+  final String? customerId;
+  final String? ephemeralKey;
+  final String paymentId;
+  final String publicRef;
+  final bool alreadyPaid;
   final UserSubscription? subscription;
 
   CheckoutSession({
@@ -118,6 +129,13 @@ class CheckoutSession {
     required this.planId,
     required this.planName,
     this.clientSecret,
+    this.paymentIntentId = '',
+    this.publishableKey = '',
+    this.customerId,
+    this.ephemeralKey,
+    this.paymentId = '',
+    this.publicRef = '',
+    this.alreadyPaid = false,
     this.subscription,
   });
 
@@ -130,6 +148,13 @@ class CheckoutSession {
       planId: json['planId']?.toString() ?? '',
       planName: json['planName']?.toString() ?? '',
       clientSecret: json['clientSecret']?.toString(),
+      paymentIntentId: json['paymentIntentId']?.toString() ?? '',
+      publishableKey: json['publishableKey']?.toString() ?? '',
+      customerId: json['customerId']?.toString(),
+      ephemeralKey: json['ephemeralKey']?.toString(),
+      paymentId: json['paymentId']?.toString() ?? '',
+      publicRef: json['publicRef']?.toString() ?? '',
+      alreadyPaid: json['alreadyPaid'] == true,
       subscription: subJson is Map<String, dynamic>
           ? UserSubscription.fromJson(subJson)
           : null,

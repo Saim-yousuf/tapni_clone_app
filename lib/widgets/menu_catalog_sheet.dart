@@ -439,13 +439,14 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 const SizedBox(height: 14),
                 _buildHeader(
                   title: title,
-                  trailing: !_isDocuments
+                  trailing: (!_isDocuments &&
+                          widget.catalogType != 'portfolio')
                       ? _CartBagIndicator(count: _cartItemCount)
                       : const SizedBox(width: 40),
                 ),
                 const SizedBox(height: 8),
                 Expanded(child: _buildCustomerView(scrollController)),
-                if (!_isDocuments)
+                if (!_isDocuments && widget.catalogType != 'portfolio')
                   SafeArea(
                     top: false,
                     child: _isServices
@@ -766,7 +767,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         children: [
           Expanded(
             child: PillButton(
-              label: 'Manage Section',
+              label: 'Manage Sections',
               filled: false,
               onPressed: _openCategoryManagerSheet,
             ),
@@ -814,16 +815,27 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SheetHeader(
-                    title: 'Manage Section',
+                    title: 'Website Sections',
                     showHandle: true,
                     onBack: () => Navigator.pop(ctx),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _isProducts
+                        ? 'Sections organize products on your website. Marketplace categories are chosen per product and managed by BarQody admin.'
+                        : 'Sections organize items on your website only.',
+                    style: WaUi.body.copyWith(
+                      fontSize: 13,
+                      color: BarqodyChrome.secondaryText,
+                      height: 1.35,
+                    ),
                   ),
                   const SizedBox(height: 18),
                   if (_catalogCategories.isEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 24),
                       child: Text(
-                        context.l10n.addCategoriesInDisplayOrderEGFastFoodThenDesi,
+                        'Add sections in display order (e.g. New Arrivals, Best Sellers).',
                         textAlign: TextAlign.center,
                         style: WaUi.body.copyWith(
                           fontSize: 13,
@@ -1523,6 +1535,18 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       await openCatalogDocument(context, item);
       return;
     }
+    // Portfolio is browse-only — never enter cart / checkout.
+    if (widget.catalogType == 'portfolio') {
+      await showCatalogItemDetailSheet(
+        context: context,
+        item: item,
+        currency: _currency,
+        initialQty: 0,
+        initialNotes: '',
+        browseOnly: true,
+      );
+      return;
+    }
     if (_isServices) {
       if (widget.businessId == null || widget.existingLink == null) return;
       final businessName = widget.businessName ?? 'business';
@@ -1934,7 +1958,11 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     }
     if (!_isDocuments && _catalogCategories.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.addAtLeastOneCategoryFirst)),
+        const SnackBar(
+          content: Text(
+            'Add at least one section before adding products.',
+          ),
+        ),
       );
       return;
     }
@@ -1947,6 +1975,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           requireCategory: !_isDocuments,
           isDocument: _isDocuments,
           isService: _isServices,
+          isPortfolio: widget.catalogType == 'portfolio',
+          isProduct: _isProducts,
         ),
       ),
     );
@@ -1972,6 +2002,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           requireCategory: !_isDocuments && _catalogCategories.isNotEmpty,
           isDocument: _isDocuments,
           isService: _isServices,
+          isPortfolio: widget.catalogType == 'portfolio',
+          isProduct: _isProducts,
         ),
       ),
     );
@@ -2046,19 +2078,26 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   }
 
   /// Save without leaving the screen (used after add / edit / delete).
+  /// Sections-only catalogs must persist so Add Section survives reopen.
   Future<void> _persistCatalog() async {
     if (widget.provider == null || _isSaving) return;
-    if (_items.isEmpty && widget.existingLink == null) return;
+    final hasSections = _catalogCategories.any((c) => c.trim().isNotEmpty);
+    if (_items.isEmpty && widget.existingLink == null && !hasSections) {
+      return;
+    }
     await _saveCatalogLink(quiet: true);
   }
 
   Future<void> _saveCatalogLink({bool quiet = false}) async {
     if (widget.provider == null) return;
-    if (_items.isEmpty && widget.existingLink == null) {
+    final hasSections = _catalogCategories.any((c) => c.trim().isNotEmpty);
+    if (_items.isEmpty && widget.existingLink == null && !hasSections) {
       if (!quiet && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(context.l10n.addAtLeastOneCatalogItem(_catalogLabel)),
+            content: Text(
+              'Add a section or at least one $_catalogLabel item to save.',
+            ),
           ),
         );
       }
@@ -2219,8 +2258,91 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     setState(() => _isOrdering = false);
   }
 
+  Future<({String orderType, String address})?> _chooseFulfillment() async {
+    // Restaurant/menu: pickup (takeaway) or delivery only.
+    if (widget.catalogType != 'menu' && widget.catalogType != 'catalog') {
+      return (orderType: 'takeaway', address: '');
+    }
+    final choice = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SheetDragHandle(),
+                const SizedBox(height: 12),
+                Text(
+                  'How do you want your order?',
+                  style: WaUi.toolsTitleOf(size: 18, weight: FontWeight.w700),
+                ),
+                const SizedBox(height: 16),
+                ListTile(
+                  leading: const Icon(Icons.storefront_outlined),
+                  title: const Text('Pickup'),
+                  subtitle: const Text('Collect at the restaurant'),
+                  onTap: () => Navigator.pop(ctx, 'takeaway'),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.delivery_dining_outlined),
+                  title: const Text('Delivery'),
+                  subtitle: const Text('Deliver to an address'),
+                  onTap: () => Navigator.pop(ctx, 'delivery'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    if (choice == null || !mounted) return null;
+    if (choice != 'delivery') {
+      return (orderType: 'takeaway', address: '');
+    }
+    final controller = TextEditingController();
+    final address = await showDialog<String>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const Text('Delivery address'),
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            maxLines: 3,
+            decoration: const InputDecoration(
+              hintText: 'Street, area, city',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+              child: const Text('Continue'),
+            ),
+          ],
+        );
+      },
+    );
+    if (address == null || address.isEmpty) return null;
+    return (orderType: 'delivery', address: address);
+  }
+
   Future<void> _placeOrder() async {
     if (widget.businessId == null || widget.existingLink == null) return;
+    if (widget.catalogType == 'portfolio') return;
+
+    final fulfillment = await _chooseFulfillment();
+    if (fulfillment == null || !mounted) return;
 
     final orderItems = _checkoutItems;
 
@@ -2265,6 +2387,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           businessLinkId: widget.existingLink!.id,
           catalogType: widget.catalogType,
           items: orderItems,
+          orderType: fulfillment.orderType,
+          fulfillmentAddress: fulfillment.address,
           paymentMethod: paymentMethod,
           idempotencyKey: idempotencyKey,
           pointsToRedeem: pointsToRedeem > 0 ? pointsToRedeem : null,

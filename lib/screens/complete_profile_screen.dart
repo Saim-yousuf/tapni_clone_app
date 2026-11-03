@@ -13,6 +13,7 @@ import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
@@ -103,7 +104,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       await profileProvider.fetchProfile();
       if (!mounted) return;
 
-      if (widget.isBusiness) {
+      if (widget.isBusiness && ReleaseFeatures.canUseBusinessPro) {
         // Business signup → pay for Business/Pro before continuing onboarding.
         Navigator.of(context).pushAndRemoveUntil(
           AppPageRoute(

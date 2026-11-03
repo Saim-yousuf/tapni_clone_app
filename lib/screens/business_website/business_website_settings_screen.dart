@@ -116,6 +116,8 @@ class _BusinessWebsiteSettingsScreenState
       context: context,
       websiteType: website.websiteType,
       catalogType: website.catalogType,
+      // Draft / unpublished must not appear on public profiles.
+      isPublic: website.isPublished,
     );
   }
 

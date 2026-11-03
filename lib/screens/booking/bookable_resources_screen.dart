@@ -13,8 +13,17 @@ import 'package:tapni_app/widgets/connection_error_state.dart';
 
 /// Owner CRUD for rooms / tables / assets that appear in public booking.
 /// Staff specialists are managed via Team Attendance → bookable toggle.
+/// Restaurant tables are removed from the active product; prefer [allowedTypes].
 class BookableResourcesScreen extends StatefulWidget {
-  const BookableResourcesScreen({super.key});
+  const BookableResourcesScreen({
+    super.key,
+    this.allowedTypes,
+    this.title = 'Resources',
+  });
+
+  /// When set, only these resource types are shown/creatable (e.g. `['room']`).
+  final List<String>? allowedTypes;
+  final String title;
 
   @override
   State<BookableResourcesScreen> createState() =>
@@ -81,18 +90,64 @@ class _BookableResourcesScreenState extends State<BookableResourcesScreen> {
     });
   }
 
+  List<String> get _creatableTypes {
+    final allowed = widget.allowedTypes;
+    // Tables removed from active product; keep historical rows visible only.
+    const defaults = ['room', 'asset'];
+    if (allowed == null || allowed.isEmpty) return defaults;
+    return allowed.where((t) => t != 'table').toList();
+  }
+
+  List<_ResFilter> get _filters {
+    final allowed = widget.allowedTypes;
+    if (allowed != null && allowed.isNotEmpty) {
+      final filters = <_ResFilter>[_ResFilter.all];
+      for (final t in allowed) {
+        switch (t) {
+          case 'room':
+            filters.add(_ResFilter.room);
+            break;
+          case 'asset':
+            filters.add(_ResFilter.asset);
+            break;
+          case 'staff':
+            filters.add(_ResFilter.staff);
+            break;
+          // intentionally skip table
+        }
+      }
+      return filters;
+    }
+    return const [
+      _ResFilter.all,
+      _ResFilter.room,
+      _ResFilter.asset,
+      _ResFilter.staff,
+    ];
+  }
+
+  List<BookableResource> get _scopedItems {
+    final allowed = widget.allowedTypes;
+    if (allowed == null || allowed.isEmpty) {
+      // Hide tables from default UI (historical records remain in DB).
+      return _items.where((e) => e.type != 'table').toList();
+    }
+    return _items.where((e) => allowed.contains(e.type)).toList();
+  }
+
   List<BookableResource> get _visible {
+    final base = _scopedItems;
     switch (_filter) {
       case _ResFilter.all:
-        return _items;
+        return base;
       case _ResFilter.room:
-        return _items.where((e) => e.type == 'room').toList();
+        return base.where((e) => e.type == 'room').toList();
       case _ResFilter.table:
-        return _items.where((e) => e.type == 'table').toList();
+        return base.where((e) => e.type == 'table').toList();
       case _ResFilter.asset:
-        return _items.where((e) => e.type == 'asset').toList();
+        return base.where((e) => e.type == 'asset').toList();
       case _ResFilter.staff:
-        return _items.where((e) => e.type == 'staff').toList();
+        return base.where((e) => e.type == 'staff').toList();
     }
   }
 
@@ -100,9 +155,14 @@ class _BookableResourcesScreenState extends State<BookableResourcesScreen> {
     final isEdit = existing != null;
     final nameCtrl = TextEditingController(text: existing?.name ?? '');
     final tokenCtrl = TextEditingController(text: existing?.tableToken ?? '');
-    var type = existing?.type ?? 'room';
+    var type = existing?.type ??
+        (_creatableTypes.isNotEmpty ? _creatableTypes.first : 'room');
     if (type == 'staff') {
       // Staff rows are attendance-driven; allow rename only.
+    }
+    if (type == 'table') {
+      // Tables are no longer creatable in the product UI.
+      type = _creatableTypes.isNotEmpty ? _creatableTypes.first : 'room';
     }
     final ok = await showModalBottomSheet<bool>(
       context: context,
@@ -143,7 +203,7 @@ class _BookableResourcesScreenState extends State<BookableResourcesScreen> {
                   Text(
                     type == 'staff'
                         ? 'Specialists are toggled from Team Attendance. You can rename here.'
-                        : 'Rooms for hotels, tables for restaurants, assets like chairs.',
+                        : 'Rooms for Stay businesses. Assets are optional bookable items.',
                     style: WaUi.body.copyWith(
                       fontSize: 13,
                       color: BarqodyChrome.secondaryText,
@@ -163,7 +223,7 @@ class _BookableResourcesScreenState extends State<BookableResourcesScreen> {
                     Wrap(
                       spacing: 8,
                       children: [
-                        for (final t in ['room', 'table', 'asset'])
+                        for (final t in _creatableTypes)
                           ChoiceChip(
                             label: Text(t[0].toUpperCase() + t.substring(1)),
                             selected: type == t,
@@ -316,7 +376,7 @@ class _BookableResourcesScreenState extends State<BookableResourcesScreen> {
         child: Column(
           children: [
             BarqodyTitleBar(
-              title: 'Rooms & tables',
+              title: widget.title,
               trailing: CircleAssetButton(
                 asset: 'assets/images/png/plus-icon.png',
                 iconSize: 16,
@@ -334,7 +394,10 @@ class _BookableResourcesScreenState extends State<BookableResourcesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Manage what customers can book. Doctors & stylists: Team Attendance → Offer as bookable specialist.',
+                    widget.allowedTypes?.contains('room') == true &&
+                            (widget.allowedTypes?.length ?? 0) == 1
+                        ? 'Manage rooms customers can book for stays.'
+                        : 'Manage bookable rooms and assets. Specialists: Team Attendance → Offer as bookable specialist.',
                     style: WaUi.body.copyWith(
                       fontSize: 13,
                       height: 1.35,
@@ -361,32 +424,33 @@ class _BookableResourcesScreenState extends State<BookableResourcesScreen> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 36,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: BarqodyChrome.sidePad,
-                ),
-                children: [
-                  for (final f in _ResFilter.values)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: _Chip(
-                        label: switch (f) {
-                          _ResFilter.all => 'All',
-                          _ResFilter.room => 'Rooms',
-                          _ResFilter.table => 'Tables',
-                          _ResFilter.asset => 'Assets',
-                          _ResFilter.staff => 'Staff',
-                        },
-                        selected: _filter == f,
-                        onTap: () => setState(() => _filter = f),
+            if (_filters.length > 1)
+              SizedBox(
+                height: 36,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: BarqodyChrome.sidePad,
+                  ),
+                  children: [
+                    for (final f in _filters)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: _Chip(
+                          label: switch (f) {
+                            _ResFilter.all => 'All',
+                            _ResFilter.room => 'Rooms',
+                            _ResFilter.table => 'Tables',
+                            _ResFilter.asset => 'Assets',
+                            _ResFilter.staff => 'Staff',
+                          },
+                          selected: _filter == f,
+                          onTap: () => setState(() => _filter = f),
+                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
             const SizedBox(height: 8),
             Expanded(child: _buildBody()),
           ],
@@ -420,7 +484,7 @@ class _BookableResourcesScreenState extends State<BookableResourcesScreen> {
               child: const _EmptyState(
                 title: 'Nothing to book yet',
                 subtitle:
-                    'Add hotel rooms or restaurant tables so customers can reserve them on your website.',
+                    'Add rooms so customers can book stays on your website.',
               ),
             ),
           ],

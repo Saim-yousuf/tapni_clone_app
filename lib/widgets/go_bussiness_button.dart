@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -9,6 +10,9 @@ class GoBussinessButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!ReleaseFeatures.canUseBusinessPro) {
+      return const SizedBox.shrink();
+    }
     final profile = Provider.of<ProfileProvider>(context).profile;
     if (profile.isPro == true) {
       return SizedBox.shrink();

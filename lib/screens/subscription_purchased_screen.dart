@@ -44,10 +44,18 @@ class SubscriptionPurchasedScreen extends StatelessWidget {
 
   String get _txnDisplay {
     final raw = transactionId.trim();
-    if (raw.isEmpty) return '--';
+    if (raw.isEmpty) return '—';
+    if (raw.startsWith('BQ-')) return raw;
     if (raw.startsWith('#')) return raw;
-    if (raw.length <= 12) return '#$raw';
-    return '#${raw.substring(raw.length - 10).toUpperCase()}';
+    // Never show Stripe / Mongo / mock provider ids.
+    if (raw.toLowerCase().startsWith('pi_') ||
+        raw.toLowerCase().startsWith('ch_') ||
+        raw.toLowerCase().startsWith('mock_') ||
+        RegExp(r'^[a-f0-9]{24}$', caseSensitive: false).hasMatch(raw)) {
+      return '—';
+    }
+    if (raw.length <= 16) return raw.startsWith('#') ? raw : raw;
+    return '—';
   }
 
   Future<void> _onDone(BuildContext context) async {
@@ -141,7 +149,8 @@ class SubscriptionPurchasedScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 40),
-                      _DetailRow(label: 'Transaction ID', value: _txnDisplay),
+                      if (_txnDisplay != '—')
+                        _DetailRow(label: 'Reference', value: _txnDisplay),
                       const Divider(height: 1, thickness: 1, color: _line),
                       _DetailRow(label: 'Plan', value: planName),
                       const Divider(height: 1, thickness: 1, color: _line),

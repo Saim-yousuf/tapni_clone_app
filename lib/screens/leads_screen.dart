@@ -32,7 +32,11 @@ class _LeadsScreenState extends State<LeadsScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      context.read<LeadsProvider>().fetchCategories();
+      // Always load on open — constructor fetch can race before auth token
+      // is ready, which leaves an empty list until pull-to-refresh.
+      final provider = context.read<LeadsProvider>();
+      provider.fetchCategories();
+      provider.fetchLeads();
     });
   }
 

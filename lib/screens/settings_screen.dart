@@ -22,12 +22,14 @@ import 'package:tapni_app/screens/loyalty_program/customer/customer_loyalty_home
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/notifications_screen.dart';
 import 'package:tapni_app/screens/orders/orders_list_screen.dart';
+import 'package:tapni_app/screens/payments/customer_payment_center_screen.dart';
 import 'package:tapni_app/screens/qr_code_screen.dart';
 import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/screens/set_username_screen.dart';
 import 'package:tapni_app/screens/workplace_screen.dart';
 import 'package:tapni_app/screens/caller_id_setup_screen.dart';
 import 'package:tapni_app/services/caller_id_service.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/feedback_dialog.dart';
 import 'package:tapni_app/widgets/logout_confirm_dialog.dart';
@@ -52,6 +54,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadPendingInvitations() async {
+    if (!ReleaseFeatures.canUseWorkplace) {
+      if (mounted && _pendingInvitationCount != 0) {
+        setState(() => _pendingInvitationCount = 0);
+      }
+      return;
+    }
     final res = await AttendanceRepo().getMyInvitations();
     if (!mounted) return;
     if (res.success) {
@@ -220,21 +228,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   padding: const EdgeInsets.only(bottom: 24),
                   children: [
                     const SizedBox(height: 8),
-                    _BusinessSuiteCard(
-                      showBadge: profile.isPro &&
-                          leadsProvider.notifications.any(
-                            (n) =>
-                                n['type'] == 'catalog_order' &&
-                                n['isRead'] == false,
-                          ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const BusinessSuiteScreen(),
-                          ),
-                        );
-                      },
-                    ),
+                    if (ReleaseFeatures.canShowBusinessSuite)
+                      _BusinessSuiteCard(
+                        showBadge: profile.isPro &&
+                            leadsProvider.notifications.any(
+                              (n) =>
+                                  n['type'] == 'catalog_order' &&
+                                  n['isRead'] == false,
+                            ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const BusinessSuiteScreen(),
+                            ),
+                          );
+                        },
+                      ),
                     WaSectionHeader(context.l10n.yourProfile),
                     WaToolsListTile(
                       icon: Icons.person_outline,
@@ -349,57 +358,75 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                     ),
           
-                    WaSectionHeader(context.l10n.shoppingRewards),
-                    WaToolsListTile(
-                      icon: Icons.menu_book_outlined,
-                      title: 'Customer guide',
-                      subtitle:
-                          'How to browse, order, track, and claim stamp rewards',
-                      onTap: () => showCustomerAppGuide(context),
-                    ),
-                    WaToolsListTile(
-                      icon: Icons.receipt_long_outlined,
-                      title: 'My Orders & Bookings',
-                      subtitle: 'Orders, appointments, and stays in one place',
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                OrdersListScreen(isBusinessView: false),
-                          ),
-                        );
-                      },
-                    ),
-                    WaToolsListTile(
-                      icon: Icons.card_giftcard_outlined,
-                      title: context.l10n.myRewardCards,
-                      subtitle: context.l10n.myRewardCardsSubtitle,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => CustomerLoyaltyHomeScreen(),
-                          ),
-                        );
-                      },
-                    ),
-          
-                    WaSectionHeader(context.l10n.workplace),
-                    WaToolsListTile(
-                      icon: Icons.work_outline,
-                      title: context.l10n.workplace,
-                      subtitle:
-                          '${context.l10n.employeeInvitations}, ${context.l10n.workplaceCheckIn}, ${context.l10n.companyEmployeeCard}',
-                      showBadge: _pendingInvitationCount > 0,
-                      onTap: () async {
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const WorkplaceScreen(),
-                          ),
-                        );
-                        _loadPendingInvitations();
-                      },
-                    ),
-          
+                    if (ReleaseFeatures.canUseShopping) ...[
+                      WaSectionHeader(context.l10n.shoppingRewards),
+                      WaToolsListTile(
+                        icon: Icons.menu_book_outlined,
+                        title: 'Customer guide',
+                        subtitle:
+                            'How to browse, order, track, and claim stamp rewards',
+                        onTap: () => showCustomerAppGuide(context),
+                      ),
+                      WaToolsListTile(
+                        icon: Icons.receipt_long_outlined,
+                        title: 'My Orders & Bookings',
+                        subtitle:
+                            'Orders, appointments, and stays in one place',
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  OrdersListScreen(isBusinessView: false),
+                            ),
+                          );
+                        },
+                      ),
+                      WaToolsListTile(
+                        icon: Icons.payment_outlined,
+                        title: 'Payments',
+                        subtitle: 'Saved cards, payment history, and refunds',
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const CustomerPaymentCenterScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      WaToolsListTile(
+                        icon: Icons.card_giftcard_outlined,
+                        title: context.l10n.myRewardCards,
+                        subtitle: context.l10n.myRewardCardsSubtitle,
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => CustomerLoyaltyHomeScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+
+                    if (ReleaseFeatures.canUseWorkplace) ...[
+                      WaSectionHeader(context.l10n.workplace),
+                      WaToolsListTile(
+                        icon: Icons.work_outline,
+                        title: context.l10n.workplace,
+                        subtitle:
+                            '${context.l10n.employeeInvitations}, ${context.l10n.workplaceCheckIn}, ${context.l10n.companyEmployeeCard}',
+                        showBadge: _pendingInvitationCount > 0,
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const WorkplaceScreen(),
+                            ),
+                          );
+                          _loadPendingInvitations();
+                        },
+                      ),
+                    ],
+
                     WaSectionHeader(context.l10n.accountsAndDevices),
                     WaToolsListTile(
                       icon: Icons.devices_outlined,

@@ -12,17 +12,18 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/screens/analytics_screen.dart';
-import 'package:tapni_app/screens/explore_screen.dart';
 import 'package:tapni_app/screens/find_user_screen.dart';
 import 'package:tapni_app/screens/leads_screen.dart';
 import 'package:tapni_app/screens/profile_screen.dart';
 import 'package:tapni_app/screens/scan_screen.dart';
 import 'package:tapni_app/screens/settings_screen.dart';
+import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/screens/contacts_sync_screen.dart';
 import 'package:tapni_app/services/contacts_sync_service.dart';
 import 'package:tapni_app/services/caller_id_service.dart';
 import 'package:tapni_app/services/device_session_guard.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/curved_bottom_nav.dart';
 
@@ -35,8 +36,9 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  /// Explore = marketplace home. Analytics restored on 4th nav slot (before Settings).
-  static const _navPages = ['Explore', 'Contacts', 'Analytics', 'Settings'];
+  /// Links = SocialLinksScreen (replaces Explore for personal-card release).
+  /// Analytics sits before Settings. CurvedBottomNav requires exactly 4 items.
+  static const _navPages = ['Links', 'Contacts', 'Analytics', 'Settings'];
 
   late String _currentPage;
   int _navIndex = 0;
@@ -49,10 +51,11 @@ class _MainShellState extends State<MainShell> {
   void initState() {
     super.initState();
     final requested = widget.currentPage;
-    if (requested == 'Links') {
-      _currentPage = 'Explore';
+    if (requested == 'Explore') {
+      // Legacy callers still pass Explore; map to Links for this release.
+      _currentPage = ReleaseFeatures.canOpenExplore ? 'Explore' : 'Links';
     } else if (requested == 'Find') {
-      _currentPage = 'Explore';
+      _currentPage = 'Links';
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         Navigator.of(context).push(
@@ -99,6 +102,9 @@ class _MainShellState extends State<MainShell> {
 
   void _loadCatalogNotifications() {
     if (!mounted) return;
+    if (!ReleaseFeatures.canUseShopping && !ReleaseFeatures.canShowBusinessSuite) {
+      return;
+    }
     final profileProvider = Provider.of<ProfileProvider>(
       context,
       listen: false,
@@ -111,8 +117,8 @@ class _MainShellState extends State<MainShell> {
 
   Widget _buildCurrentScreen() {
     switch (_currentPage) {
-      case 'Explore':
-        return const ExploreScreen();
+      case 'Links':
+        return const SocialLinksScreen(isTab: true);
       case 'My Card':
         return const ProfileScreen();
       case 'Contacts':
@@ -122,7 +128,7 @@ class _MainShellState extends State<MainShell> {
       case 'Settings':
         return const SettingsScreen();
       default:
-        return const ExploreScreen();
+        return const ProfileScreen();
     }
   }
 
@@ -377,9 +383,9 @@ class _MainShellState extends State<MainShell> {
                 },
                 items: [
                   _navItem(
-                    icon: Icons.travel_explore_outlined,
-                    selectedIcon: Icons.travel_explore_rounded,
-                    label: l10n.explore,
+                    icon: Icons.link_outlined,
+                    selectedIcon: Icons.link_rounded,
+                    label: l10n.links,
                     selectedColor: selectedColor,
                     unselectedColor: unselectedColor,
                   ),

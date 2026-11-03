@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/business_website/business_presence_ui.dart';
 import 'package:tapni_app/screens/business_website/business_website_settings_screen.dart';
 import 'package:tapni_app/screens/business_website/business_website_webview_screen.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
+import 'package:tapni_app/utils/business_features.dart';
 import 'package:tapni_app/utils/catalog_helper.dart' show catalogTypesMatch;
 import 'package:tapni_app/widgets/auth_ui.dart';
 
@@ -45,14 +46,23 @@ String catalogTypeFromWebsiteType(String websiteType) {
 
 /// Setup: category → subcategory → template (filtered by [websiteType]).
 /// Name, bio, logo, and cover always come from the BarQody profile.
+///
+/// When [businessType] is already known (`products` / `stay`), Retail vs
+/// Hospitality website categories are filtered / auto-selected so My Website
+/// does not re-ask the registration choice. Never writes businessType here.
 class BusinessWebsiteSetupScreen extends StatefulWidget {
   final LinkTemplate? linkTemplate;
   final String websiteType;
+
+  /// User capability pack: restaurant|products|services|stay|portfolio.
+  /// Independent of [websiteType] (menu|products|service|portfolio).
+  final String? businessType;
 
   const BusinessWebsiteSetupScreen({
     super.key,
     this.linkTemplate,
     this.websiteType = 'menu',
+    this.businessType,
   });
 
   @override
@@ -75,6 +85,10 @@ class _BusinessWebsiteSetupScreenState
   WebsiteTemplateSummary? _template;
 
   String get _websiteType => widget.websiteType;
+
+  /// Explicit or empty — never invent a type for write-back.
+  String get _resolvedBusinessType =>
+      normalizeBusinessType(widget.businessType);
 
   @override
   void initState() {
@@ -114,13 +128,42 @@ class _BusinessWebsiteSetupScreenState
           .where((id) => id.isNotEmpty)
           .toSet();
       // Hide categories / subcategories that have no template for this type.
-      final subs = parsed.subcategories
+      var subs = parsed.subcategories
           .where((s) => typedSubIds.contains(s.id))
           .toList();
-      final cats = parsed.categories
+      var cats = parsed.categories
           .where((c) => typedCatIds.contains(c.id))
           .toList();
-      filtered = BusinessWebsiteCatalog(
+
+      // Products websiteType serves both Products and Stay packs.
+      // When businessType is known, keep only the matching industry category.
+      if (_websiteType == 'products' &&
+          (_resolvedBusinessType == 'products' ||
+              _resolvedBusinessType == 'stay')) {
+        final matched = cats
+            .where(
+              (c) => websiteCategoryMatchesBusinessType(
+                c.name,
+                _resolvedBusinessType,
+              ),
+            )
+            .toList();
+        if (matched.isNotEmpty) {
+          final matchedIds = matched.map((c) => c.id).toSet();
+          cats = matched;
+          subs = subs.where((s) => matchedIds.contains(s.categoryId)).toList();
+          final subIds = subs.map((s) => s.id).toSet();
+          filtered = BusinessWebsiteCatalog(
+            categories: cats,
+            subcategories: subs,
+            templates: typed
+                .where((t) => subIds.contains(t.subcategoryId))
+                .toList(),
+          );
+        }
+      }
+
+      filtered ??= BusinessWebsiteCatalog(
         categories: cats,
         subcategories: subs,
         templates: typed,
@@ -129,6 +172,58 @@ class _BusinessWebsiteSetupScreenState
     setState(() {
       _catalog = filtered ?? parsed;
       _loading = false;
+    });
+    _applyKnownBusinessTypeDefaults();
+  }
+
+  /// Skip Retail/Hospitality picker when businessType already resolves it.
+  void _applyKnownBusinessTypeDefaults() {
+    final catalog = _catalog;
+    if (catalog == null) return;
+    if (_websiteType != 'products') return;
+    if (_resolvedBusinessType != 'products' &&
+        _resolvedBusinessType != 'stay') {
+      return;
+    }
+
+    final cats = catalog.categories;
+    if (cats.isEmpty) return;
+
+    WebsiteCategory? category = _category;
+    if (category == null) {
+      if (cats.length == 1) {
+        category = cats.first;
+      } else {
+        final matched = cats
+            .where(
+              (c) => websiteCategoryMatchesBusinessType(
+                c.name,
+                _resolvedBusinessType,
+              ),
+            )
+            .toList();
+        if (matched.length == 1) category = matched.first;
+      }
+    }
+    if (category == null) return;
+
+    final subs = catalog.subcategories
+        .where((s) => s.categoryId == category!.id)
+        .toList();
+    WebsiteSubcategory? subcategory = _subcategory;
+    if (subcategory == null && subs.length == 1) {
+      subcategory = subs.first;
+    }
+
+    setState(() {
+      _category = category;
+      _subcategory = subcategory;
+      // Skip category (and subcategory when unambiguous) → template style.
+      if (subcategory != null) {
+        _step = 2;
+      } else {
+        _step = 1;
+      }
     });
   }
 
@@ -168,7 +263,8 @@ class _BusinessWebsiteSetupScreenState
       case 0:
         return 'Create $_typeLabel';
       case 1:
-        return 'Business type';
+        // Website pack niche — not User.businessType re-selection.
+        return _resolvedBusinessType.isNotEmpty ? 'Choose niche' : 'Business type';
       case 2:
         return 'Choose style';
       default:
@@ -286,6 +382,8 @@ class _BusinessWebsiteSetupScreenState
       context: context,
       websiteType: _websiteType,
       catalogType: catalogType,
+      // New sites start as draft — hide from public profile until published.
+      isPublic: website.isPublished,
     );
     if (!mounted) return;
 
@@ -299,9 +397,21 @@ class _BusinessWebsiteSetupScreenState
     );
   }
 
+  bool get _businessTypeLocksCategory =>
+      _websiteType == 'products' &&
+      (_resolvedBusinessType == 'products' ||
+          _resolvedBusinessType == 'stay');
+
   void _onBack() {
     if (_step > 0) {
-      setState(() => _step -= 1);
+      // Don't re-expose Retail/Hospitality when businessType already decided it.
+      final minStep = _businessTypeLocksCategory && _category != null ? 1 : 0;
+      final next = _step - 1;
+      if (next < minStep) {
+        Navigator.of(context).pop();
+        return;
+      }
+      setState(() => _step = next);
       return;
     }
     Navigator.of(context).pop();
@@ -398,12 +508,15 @@ class _BusinessWebsiteSetupScreenState
 
   Widget _buildTypeStep() {
     final subs = _subsForCategory;
+    final known = _resolvedBusinessType.isNotEmpty;
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       children: [
-        const Text(
-          'What type of business is this?',
-          style: TextStyle(
+        Text(
+          known
+              ? 'Pick a niche for your templates'
+              : 'What type of business is this?',
+          style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w800,
             color: Colors.black,

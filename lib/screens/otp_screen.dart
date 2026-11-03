@@ -8,9 +8,11 @@ import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/screens/choose_profile_type_screen.dart';
+import 'package:tapni_app/screens/complete_profile_screen.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -176,15 +178,30 @@ class _OtpScreenState extends State<OtpScreen> {
           );
           return;
         }
-        Navigator.of(context).push(
-          AppPageRoute(
-            builder: (_) => ChooseProfileTypeScreen(
-              phone: result.phone ?? widget.phone,
-              verificationToken: token,
-              country: widget.country,
+        final phone = result.phone ?? widget.phone;
+        if (!ReleaseFeatures.canUseBusinessPro &&
+            !ReleaseFeatures.canShowBusinessSuite) {
+          Navigator.of(context).push(
+            AppPageRoute(
+              builder: (_) => CompleteProfileScreen(
+                phone: phone,
+                verificationToken: token,
+                country: widget.country,
+                isBusiness: false,
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          Navigator.of(context).push(
+            AppPageRoute(
+              builder: (_) => ChooseProfileTypeScreen(
+                phone: phone,
+                verificationToken: token,
+                country: widget.country,
+              ),
+            ),
+          );
+        }
       }
     } finally {
       _verifying = false;

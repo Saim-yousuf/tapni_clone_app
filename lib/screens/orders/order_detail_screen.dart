@@ -1,12 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
+import 'package:tapni_app/repository/payment_repo.dart';
+import 'package:tapni_app/screens/payments/payment_detail_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/money_format.dart';
+import 'package:tapni_app/utils/payment_display.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/order_ui.dart';
 
 import 'package:tapni_app/l10n/app_localizations.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -57,6 +63,58 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       _loadFailed = result.failed;
       _isLoading = false;
     });
+    // Clear unread badge when a business opens the order.
+    final loaded = result.order;
+    if (widget.isBusinessView &&
+        loaded != null &&
+        !loaded.isRead &&
+        loaded.id.isNotEmpty) {
+      unawaited(_repo.markOrderRead(loaded.id));
+    }
+  }
+
+  Future<void> _refundPaidOrder() async {
+    if (_order == null) return;
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Issue full refund?'),
+        content: const Text(
+          'This refunds the customer to their original payment method via Stripe. Duplicate refunds are blocked.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Refund'),
+          ),
+        ],
+      ),
+    );
+    if (confirm != true) return;
+    setState(() => _isUpdating = true);
+    final res = await PaymentRepo().refundOrder(
+      orderId: _order!.id,
+      idempotencyKey: 'refund_order_${_order!.id}_full',
+    );
+    if (!mounted) return;
+    setState(() => _isUpdating = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          res.success
+              ? (res.message ?? 'Refund submitted')
+              : PaymentDisplay.sanitizeError(
+                  res.message,
+                  fallback: 'Refund failed',
+                ),
+        ),
+      ),
+    );
+    if (res.success) await _loadOrder();
   }
 
   Future<void> _updateStatus(OrderStatus status) async {
@@ -261,105 +319,333 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           ),
                         )
                       : SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+                          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              ...order.items.map(
-                                (item) => Column(
+                              // 1. Reference + status
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: OrderUi.cardDecoration(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _OrderItemRow(
-                                      item: item,
-                                      currency: order.currency,
-                                      dateLabel: _bookingDateLabel(order),
-                                      timeLabel: _bookingTimeLabel(order),
-                                      dateCaption:
-                                          order.isStay ? 'Check-in' : 'Date',
-                                      timeCaption:
-                                          order.isStay ? 'Check-out' : 'Time',
-                                      showSchedule: order.isStay ||
-                                          order.isAppointment ||
-                                          (order.bookingDate ?? '')
-                                              .trim()
-                                              .isNotEmpty,
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            order.hasToken
+                                                ? '${order.nounLabel} #${order.tokenNumber}'
+                                                : order.nounLabel,
+                                            style: WaUi.toolsTitleOf(
+                                              size: 20,
+                                              weight: FontWeight.w800,
+                                            ),
+                                          ),
+                                        ),
+                                        OrderStatusBadgeLabeled(
+                                          label: CatalogHelper.statusLabel(
+                                            order.status,
+                                            context.l10n,
+                                          ),
+                                          status: order.status,
+                                        ),
+                                      ],
                                     ),
-                                    const Divider(
-                                      height: 1,
-                                      color: BarqodyChrome.divider,
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      [
+                                        order.kindLabel,
+                                        if (order.catalogTypeLabel.isNotEmpty)
+                                          order.catalogTypeLabel,
+                                        if (order.orderTypeLabel.isNotEmpty &&
+                                            (order.kind == 'order' ||
+                                                order.kind == 'table'))
+                                          order.orderTypeLabel,
+                                      ].join(' · '),
+                                      style: WaUi.caption.copyWith(
+                                        color: OrderUi.muted,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
+                                    if (order.publicPaymentRef.isNotEmpty) ...[
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        'Payment ref ${order.publicPaymentRef}',
+                                        style: WaUi.caption.copyWith(
+                                          color: OrderUi.muted,
+                                        ),
+                                      ),
+                                    ],
                                   ],
                                 ),
                               ),
-                              const SizedBox(height: 16),
-                              if (order.isAppointment || order.isStay) ...[
+                              const SizedBox(height: 14),
+                              // 2. Business / customer
+                              OrderSectionCard(
+                                title: widget.isBusinessView
+                                    ? 'Customer'
+                                    : 'Business',
+                                child: _PersonRow(
+                                  name: widget.isBusinessView
+                                      ? (order.displayCustomerName.isNotEmpty
+                                          ? order.displayCustomerName
+                                          : 'Guest')
+                                      : order.businessName,
+                                  username: widget.isBusinessView
+                                      ? order.customerUsername
+                                      : order.businessUsername,
+                                  subtitle: widget.isBusinessView &&
+                                          order.guestPhone.trim().isNotEmpty
+                                      ? order.guestPhone.trim()
+                                      : null,
+                                  badge: widget.isBusinessView && order.isGuest
+                                      ? 'Guest'
+                                      : null,
+                                  photoUrl: widget.isBusinessView
+                                      ? order.customerPhoto
+                                      : order.businessPhoto,
+                                  avatarColor: _avatarColor(
+                                    widget.isBusinessView
+                                        ? order.displayCustomerName
+                                        : order.businessName,
+                                  ),
+                                  onTap: () {
+                                    final id = widget.isBusinessView
+                                        ? order.customerId
+                                        : order.businessId;
+                                    final uname = widget.isBusinessView
+                                        ? order.customerUsername
+                                        : order.businessUsername;
+                                    if (id.trim().isEmpty &&
+                                        uname.trim().isEmpty) {
+                                      return;
+                                    }
+                                    _viewProfile(
+                                      userId: id.trim().isEmpty ? null : id,
+                                      username: uname,
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 14),
+                              // 3. Schedule (appointments / stays / tables)
+                              if (order.isAppointment ||
+                                  order.isStay ||
+                                  order.isTable) ...[
                                 _WhenCard(
                                   order: order,
                                   prettyDate: _prettyDate,
                                 ),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: 14),
                               ],
-                              _SummaryCard(
-                                order: order,
-                                totalItems: _totalItems(order),
-                                orderDate: _orderDate(order),
-                                orderTime: _orderTime(order),
-                                // Type already shown in When/Stay card.
-                                showType: !(order.isAppointment || order.isStay),
-                              ),
-                              const SizedBox(height: 16),
-                              const Divider(
-                                height: 1,
-                                color: BarqodyChrome.divider,
-                              ),
-                              _PersonRow(
-                                name: widget.isBusinessView
-                                    ? (order.displayCustomerName.isNotEmpty
-                                        ? order.displayCustomerName
-                                        : 'Guest')
-                                    : order.businessName,
-                                username: widget.isBusinessView
-                                    ? order.customerUsername
-                                    : order.businessUsername,
-                                subtitle: widget.isBusinessView &&
-                                        order.guestPhone.trim().isNotEmpty
-                                    ? order.guestPhone.trim()
-                                    : null,
-                                badge: widget.isBusinessView && order.isGuest
-                                    ? 'Guest'
-                                    : null,
-                                photoUrl: widget.isBusinessView
-                                    ? order.customerPhoto
-                                    : order.businessPhoto,
-                                avatarColor: _avatarColor(
-                                  widget.isBusinessView
-                                      ? order.displayCustomerName
-                                      : order.businessName,
+                              // 4. Items / services
+                              OrderSectionCard(
+                                title: order.isStay
+                                    ? 'Rooms'
+                                    : (order.isAppointment
+                                        ? 'Services'
+                                        : 'Items'),
+                                trailing: Text(
+                                  '${_totalItems(order)}',
+                                  style: WaUi.caption.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: OrderUi.muted,
+                                  ),
                                 ),
-                                onTap: () {
-                                  final id = widget.isBusinessView
-                                      ? order.customerId
-                                      : order.businessId;
-                                  final uname = widget.isBusinessView
-                                      ? order.customerUsername
-                                      : order.businessUsername;
-                                  if (id.trim().isEmpty &&
-                                      uname.trim().isEmpty) {
-                                    return;
-                                  }
-                                  _viewProfile(
-                                    userId: id.trim().isEmpty ? null : id,
-                                    username: uname,
-                                  );
-                                },
+                                child: Column(
+                                  children: [
+                                    for (var i = 0;
+                                        i < order.items.length;
+                                        i++) ...[
+                                      if (i > 0)
+                                        const Divider(
+                                          height: 1,
+                                          color: BarqodyChrome.divider,
+                                        ),
+                                      _OrderItemRow(
+                                        item: order.items[i],
+                                        currency: order.currency,
+                                        dateLabel: _bookingDateLabel(order),
+                                        timeLabel: _bookingTimeLabel(order),
+                                        dateCaption: order.isStay
+                                            ? 'Check-in'
+                                            : 'Date',
+                                        timeCaption: order.isStay
+                                            ? 'Check-out'
+                                            : 'Time',
+                                        showSchedule: false,
+                                      ),
+                                      if (order.items[i].notes
+                                          .trim()
+                                          .isNotEmpty)
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 48,
+                                            bottom: 10,
+                                          ),
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              'Note: ${order.items[i].notes}',
+                                              style: WaUi.caption.copyWith(
+                                                color: OrderUi.muted,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ],
+                                ),
                               ),
-                              const Divider(
-                                height: 1,
-                                color: BarqodyChrome.divider,
+                              const SizedBox(height: 14),
+                              // 5. Fulfillment / delivery / table
+                              if (order.fulfillmentAddress.isNotEmpty ||
+                                  order.fulfillmentNotes.isNotEmpty ||
+                                  order.tableToken.isNotEmpty ||
+                                  order.orderTypeLabel.isNotEmpty) ...[
+                                OrderSectionCard(
+                                  title: order.kind == 'table'
+                                      ? 'Table details'
+                                      : (order.orderType == 'delivery'
+                                          ? 'Delivery'
+                                          : 'Fulfillment'),
+                                  child: Column(
+                                    children: [
+                                      if (order.orderTypeLabel.isNotEmpty)
+                                        OrderDetailRow(
+                                          label: 'Type',
+                                          value: order.orderTypeLabel,
+                                        ),
+                                      if (order.tableToken.isNotEmpty)
+                                        OrderDetailRow(
+                                          label: 'Table',
+                                          value: order.tableToken,
+                                        ),
+                                      if (order.fulfillmentAddress.isNotEmpty)
+                                        OrderDetailRow(
+                                          label: 'Address',
+                                          value: order.fulfillmentAddress,
+                                        ),
+                                      if (order.fulfillmentNotes.isNotEmpty)
+                                        OrderDetailRow(
+                                          label: 'Notes',
+                                          value: order.fulfillmentNotes,
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 14),
+                              ],
+                              // 6. Pricing + payment
+                              OrderSectionCard(
+                                title: 'Payment summary',
+                                child: Column(
+                                  children: [
+                                    OrderDetailRow(
+                                      label: 'Subtotal',
+                                      value: formatMoney(
+                                        order.subtotalAmount,
+                                        currency: order.currency,
+                                      ),
+                                    ),
+                                    if (order.couponDiscountAmount > 0)
+                                      OrderDetailRow(
+                                        label: order.couponCode.isNotEmpty
+                                            ? 'Coupon (${order.couponCode})'
+                                            : 'Coupon',
+                                        value:
+                                            '−${formatMoney(order.couponDiscountAmount, currency: order.currency)}',
+                                      ),
+                                    if (order.pointsDiscountAmount > 0)
+                                      OrderDetailRow(
+                                        label: order.pointsRedeemed > 0
+                                            ? 'Points (${order.pointsRedeemed})'
+                                            : 'Points',
+                                        value:
+                                            '−${formatMoney(order.pointsDiscountAmount, currency: order.currency)}',
+                                      ),
+                                    OrderDetailRow(
+                                      label: 'Total',
+                                      value: formatMoney(
+                                        order.totalAmount,
+                                        currency: order.currency,
+                                      ),
+                                    ),
+                                    OrderDetailRow(
+                                      label: 'Payment',
+                                      value: order.paymentLabel,
+                                    ),
+                                    if (order.hasRefund) ...[
+                                      OrderDetailRow(
+                                        label: 'Refund status',
+                                        value: order.refundStatus
+                                            .replaceAll('_', ' '),
+                                      ),
+                                      if (order.refundedAmount > 0)
+                                        OrderDetailRow(
+                                          label: 'Refunded',
+                                          value: formatMoney(
+                                            order.refundedAmount,
+                                            currency: order.currency,
+                                          ),
+                                        ),
+                                    ],
+                                    if (order.publicPaymentRef.isNotEmpty)
+                                      OrderDetailRow(
+                                        label: 'Reference',
+                                        value: order.publicPaymentRef,
+                                      ),
+                                    OrderDetailRow(
+                                      label: 'Placed',
+                                      value:
+                                          '${_orderDate(order)} · ${_orderTime(order)}',
+                                    ),
+                                    if (order.loyaltyReward != null)
+                                      OrderDetailRow(
+                                        label: 'Rewards',
+                                        value:
+                                            order.loyaltyReward!.summaryLabel,
+                                      ),
+                                    if (order.paymentMethod.toLowerCase() ==
+                                            'online' &&
+                                        order.id.isNotEmpty)
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    PaymentDetailScreen(
+                                                  orderId: order.id,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: const Text(
+                                            'View payment details',
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 14),
+                              // 7. Timeline
+                              if (order.statusHistory.isNotEmpty) ...[
+                                OrderSectionCard(
+                                  title: 'Status timeline',
+                                  child: OrderTimeline(
+                                    events: order.statusHistory,
+                                  ),
+                                ),
+                                const SizedBox(height: 14),
+                              ],
                               if (showStatusBanner)
                                 _StatusBanner(
                                   status: order.status,
+                                  noun: order.nounLabel,
                                   isBusinessView: widget.isBusinessView,
                                 ),
                             ],
@@ -429,6 +715,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         onPressed: () =>
                             _updateStatus(OrderStatus.completed),
                       ),
+                      if (order.isGenuinelyPaid ||
+                          order.paymentStatus == 'paid' ||
+                          order.paymentStatus == 'partially_refunded') ...[
+                        const SizedBox(height: 10),
+                        _OutlineActionButton(
+                          label: 'Issue full refund',
+                          destructive: true,
+                          onPressed: _isUpdating ? null : _refundPaidOrder,
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -439,7 +735,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
                   child: PillButton(
-                    label: (order!.kind == 'appointment' ||
+                    label: (order.kind == 'appointment' ||
                             order.kind == 'stay')
                         ? 'Cancel booking'
                         : 'Cancel order',
@@ -640,87 +936,6 @@ class _WhenCard extends StatelessWidget {
   }
 }
 
-class _SummaryCard extends StatelessWidget {
-  final CatalogOrder order;
-  final int totalItems;
-  final String orderDate;
-  final String orderTime;
-  final bool showType;
-
-  const _SummaryCard({
-    required this.order,
-    required this.totalItems,
-    required this.orderDate,
-    required this.orderTime,
-    this.showType = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final itemsLabel = order.isStay
-        ? 'Rooms'
-        : (order.isAppointment ? 'Services' : 'Total items');
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-      decoration: BoxDecoration(
-        color: BarqodyChrome.fieldFill,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          if (showType) ...[
-            _SummaryRow(label: 'Type', value: order.kindLabel),
-            const SizedBox(height: 10),
-          ],
-          _SummaryRow(
-            label: (order.kind == 'appointment' || order.kind == 'stay')
-                ? 'Booking number'
-                : 'Order number',
-            value: order.hasToken ? '#${order.tokenNumber}' : '—',
-          ),
-          const SizedBox(height: 10),
-          _SummaryRow(label: 'Placed on', value: orderDate),
-          const SizedBox(height: 10),
-          _SummaryRow(label: 'Placed at', value: orderTime),
-          const SizedBox(height: 10),
-          _SummaryRow(label: itemsLabel, value: '$totalItems'),
-          if (order.paymentLabel.isNotEmpty) ...[
-            const SizedBox(height: 10),
-            _SummaryRow(label: 'Payment', value: order.paymentLabel),
-          ],
-          if (order.loyaltyReward != null) ...[
-            const SizedBox(height: 10),
-            _SummaryRow(
-              label: 'Rewards',
-              value: order.loyaltyReward!.summaryLabel,
-            ),
-          ],
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12),
-            child: Divider(height: 1, color: BarqodyChrome.divider),
-          ),
-          Row(
-            children: [
-              Text(
-                'Total amount',
-                style: WaUi.body.copyWith(
-                  color: BarqodyChrome.secondaryText,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                formatMoney(order.totalAmount, currency: order.currency),
-                style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w700),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _SummaryRow extends StatelessWidget {
   final String label;
   final String value;
@@ -899,10 +1114,12 @@ class _OutlineActionButton extends StatelessWidget {
 
 class _StatusBanner extends StatelessWidget {
   final OrderStatus status;
+  final String noun;
   final bool isBusinessView;
 
   const _StatusBanner({
     required this.status,
+    required this.noun,
     required this.isBusinessView,
   });
 
@@ -910,13 +1127,14 @@ class _StatusBanner extends StatelessWidget {
     AppLocalizations l10n,
   ) {
     final biz = isBusinessView;
+    final n = noun;
     switch (status) {
       case OrderStatus.completed:
         return (
-          title: 'Booking Complete',
+          title: '$n complete',
           description: biz
-              ? 'This booking was marked complete'
-              : 'Your booking has been completed successfully',
+              ? 'This $n was marked complete'
+              : 'Your $n has been completed successfully',
           icon: _CircleIcon(
             child: Image.asset(
               'assets/images/png/check-icon-1.png',
@@ -933,10 +1151,10 @@ class _StatusBanner extends StatelessWidget {
         );
       case OrderStatus.cancelled:
         return (
-          title: 'Booking Cancelled',
+          title: '$n cancelled',
           description: biz
-              ? 'This booking was cancelled'
-              : 'Your booking has been cancelled',
+              ? 'This $n was cancelled'
+              : 'Your $n has been cancelled',
           icon: _CircleIcon(
             child: Image.asset(
               'assets/images/png/cancel-icon.png',
@@ -959,7 +1177,7 @@ class _StatusBanner extends StatelessWidget {
         );
       case OrderStatus.noShow:
         return (
-          title: 'Booking Missed',
+          title: '$n missed',
           description: biz
               ? 'Customer did not attend this appointment'
               : "You didn't attend your scheduled appointment",
@@ -979,10 +1197,10 @@ class _StatusBanner extends StatelessWidget {
         );
       case OrderStatus.confirmed:
         return (
-          title: 'Booking Confirmed',
+          title: '$n confirmed',
           description: biz
-              ? 'You confirmed this booking'
-              : 'Your booking has been confirmed by the business',
+              ? 'You confirmed this $n'
+              : 'Your $n has been confirmed by the business',
           icon: _CircleIcon(
             child: Image.asset(
               'assets/images/png/check-icon-1.png',
@@ -999,7 +1217,7 @@ class _StatusBanner extends StatelessWidget {
         );
       case OrderStatus.held:
         return (
-          title: 'Request Held',
+          title: 'Request held',
           description: biz
               ? 'Soft request — accept or decline when ready'
               : 'Your request is held until the business confirms',
@@ -1016,10 +1234,10 @@ class _StatusBanner extends StatelessWidget {
         );
       case OrderStatus.pending:
         return (
-          title: 'Booking Pending',
+          title: '$n pending',
           description: biz
-              ? 'Waiting for you to confirm this booking'
-              : 'Your booking request is waiting for confirmation',
+              ? 'Waiting for you to confirm this $n'
+              : 'Your $n request is waiting for confirmation',
           icon: Image.asset(
             'assets/images/png/bag-icon.png',
             width: 56,

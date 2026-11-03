@@ -24,6 +24,7 @@ import 'package:tapni_app/screens/notifications_screen.dart';
 import 'package:tapni_app/services/account_storage.dart';
 import 'package:tapni_app/services/device_session_guard.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
+import 'package:tapni_app/utils/release_features.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -354,19 +355,26 @@ class PushNotificationService {
 
     switch (type) {
       case 'catalog_order':
+        if (!ReleaseFeatures.canUseShopping &&
+            !ReleaseFeatures.canShowBusinessSuite) {
+          return;
+        }
         final orderId = data['orderId']?.toString();
         if (orderId == null || orderId.isEmpty) return;
         final isBusinessView = data['isBusinessView']?.toString() == 'true';
         _openOrderDetail(context, orderId, isBusinessView);
       case 'profile_scan':
-        _openMainShell(context, 'Explore');
+        _openMainShell(context, 'My Card');
       case 'contact_exchange':
         _openMainShell(context, 'Contacts');
       case 'subscription':
+        if (!ReleaseFeatures.canUseBusinessPro) return;
         _openSubscriptionScreen(context);
       case 'loyalty_stamp':
+        if (!ReleaseFeatures.canUseShopping) return;
         _openLoyaltyHome(context);
       case 'employee_invitation':
+        if (!ReleaseFeatures.canUseWorkplace) return;
         _openEmployeeInvitations(context);
       case 'event_invitation':
         _openEventInvitation(context, data['invitationId']?.toString());
@@ -438,14 +446,18 @@ class PushNotificationService {
 
   static void _refreshInAppState(Map<String, dynamic> data) {
     final type = data['type']?.toString() ?? '';
-    if (type == 'catalog_order') {
+    if (type == 'catalog_order' &&
+        (ReleaseFeatures.canUseShopping ||
+            ReleaseFeatures.canShowBusinessSuite)) {
       onOrderNotification?.call();
     }
 
     final context = navigatorKey.currentContext;
     if (context == null) return;
 
-    if (type == 'catalog_order') {
+    if (type == 'catalog_order' &&
+        (ReleaseFeatures.canUseShopping ||
+            ReleaseFeatures.canShowBusinessSuite)) {
       final profileProvider =
           Provider.of<ProfileProvider>(context, listen: false);
       Provider.of<LeadsProvider>(context, listen: false).refreshNotifications(
@@ -453,7 +465,7 @@ class PushNotificationService {
       );
     }
 
-    if (type == 'employee_invitation') {
+    if (type == 'employee_invitation' && ReleaseFeatures.canUseWorkplace) {
       Provider.of<LeadsProvider>(context, listen: false)
           .fetchEmployeeInvitationNotifications();
     }
@@ -470,7 +482,7 @@ class PushNotificationService {
           .fetchFollowNotifications();
     }
 
-    if (type == 'subscription') {
+    if (type == 'subscription' && ReleaseFeatures.canUseBusinessPro) {
       Provider.of<SubscriptionProvider>(context, listen: false)
           .checkSubscriptionStatus();
     }

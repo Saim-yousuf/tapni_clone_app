@@ -23,13 +23,23 @@ class CatalogRepo {
     String? bookingKind,
     String? checkInDate,
     String? checkOutDate,
-    String? tableToken,
+    /// takeaway (pickup) | delivery — dine_in rejected by backend.
+    String? orderType,
+    String? fulfillmentAddress,
+    String? fulfillmentNotes,
+    @Deprecated('Dine-in removed; token ignored by backend') String? tableToken,
     String? paymentMethod,
     String? idempotencyKey,
     int? pointsToRedeem,
     String? couponCode,
     String? offerId,
   }) async {
+    final fulfillment = <String, dynamic>{
+      if (fulfillmentAddress != null && fulfillmentAddress.isNotEmpty)
+        'address': fulfillmentAddress,
+      if (fulfillmentNotes != null && fulfillmentNotes.isNotEmpty)
+        'notes': fulfillmentNotes,
+    };
     return ApiHandler.request(
       api: Api.catalog.orders,
       method: ApiMethod.post,
@@ -39,6 +49,7 @@ class CatalogRepo {
         'businessLinkId': businessLinkId,
         'catalogType': catalogType,
         'items': items,
+        if (orderType != null && orderType.isNotEmpty) 'orderType': orderType,
         if (bookingDate != null && bookingDate.isNotEmpty)
           'bookingDate': bookingDate,
         if (bookingTime != null && bookingTime.isNotEmpty)
@@ -51,8 +62,7 @@ class CatalogRepo {
           'checkInDate': checkInDate,
         if (checkOutDate != null && checkOutDate.isNotEmpty)
           'checkOutDate': checkOutDate,
-        if (tableToken != null && tableToken.isNotEmpty)
-          'fulfillment': {'tableToken': tableToken},
+        if (fulfillment.isNotEmpty) 'fulfillment': fulfillment,
         if (paymentMethod != null && paymentMethod.isNotEmpty)
           'paymentMethod': paymentMethod,
         if (idempotencyKey != null && idempotencyKey.isNotEmpty)
@@ -81,6 +91,7 @@ class CatalogRepo {
     String? bookingKind,
     String? checkInDate,
     String? checkOutDate,
+    String? orderType,
     String? paymentMethod,
     String? idempotencyKey,
     String? couponCode,
@@ -95,6 +106,7 @@ class CatalogRepo {
       jsonBody: {
         'websiteSlug': websiteSlug,
         'items': items,
+        if (orderType != null && orderType.isNotEmpty) 'orderType': orderType,
         'guest': {
           'name': guestName,
           'phone': guestPhone,
@@ -227,12 +239,23 @@ class CatalogRepo {
   Future<List<CatalogOrder>?> getBusinessOrders({
     String? status,
     String? bookingKind,
+    String? catalogType,
+    String? paymentStatus,
+    String? q,
+    String? from,
+    String? to,
+    String? sort,
   }) async {
-    final params = <String, String>{};
-    if (status != null && status.isNotEmpty) params['status'] = status;
-    if (bookingKind != null && bookingKind.isNotEmpty) {
-      params['bookingKind'] = bookingKind;
-    }
+    final params = _orderListParams(
+      status: status,
+      bookingKind: bookingKind,
+      catalogType: catalogType,
+      paymentStatus: paymentStatus,
+      q: q,
+      from: from,
+      to: to,
+      sort: sort,
+    );
     final res = await ApiHandler.request(
       api: Api.catalog.incomingOrders,
       method: ApiMethod.get,
@@ -247,12 +270,23 @@ class CatalogRepo {
   Future<List<CatalogOrder>?> getCustomerOrders({
     String? status,
     String? bookingKind,
+    String? catalogType,
+    String? paymentStatus,
+    String? q,
+    String? from,
+    String? to,
+    String? sort,
   }) async {
-    final params = <String, String>{};
-    if (status != null && status.isNotEmpty) params['status'] = status;
-    if (bookingKind != null && bookingKind.isNotEmpty) {
-      params['bookingKind'] = bookingKind;
-    }
+    final params = _orderListParams(
+      status: status,
+      bookingKind: bookingKind,
+      catalogType: catalogType,
+      paymentStatus: paymentStatus,
+      q: q,
+      from: from,
+      to: to,
+      sort: sort,
+    );
     final res = await ApiHandler.request(
       api: Api.catalog.myOrders,
       method: ApiMethod.get,
@@ -261,6 +295,34 @@ class CatalogRepo {
     );
     if (!res.success) return null;
     return _parseOrders(res.data);
+  }
+
+  Map<String, String> _orderListParams({
+    String? status,
+    String? bookingKind,
+    String? catalogType,
+    String? paymentStatus,
+    String? q,
+    String? from,
+    String? to,
+    String? sort,
+  }) {
+    final params = <String, String>{};
+    if (status != null && status.isNotEmpty) params['status'] = status;
+    if (bookingKind != null && bookingKind.isNotEmpty) {
+      params['bookingKind'] = bookingKind;
+    }
+    if (catalogType != null && catalogType.isNotEmpty) {
+      params['catalogType'] = catalogType;
+    }
+    if (paymentStatus != null && paymentStatus.isNotEmpty) {
+      params['paymentStatus'] = paymentStatus;
+    }
+    if (q != null && q.isNotEmpty) params['q'] = q;
+    if (from != null && from.isNotEmpty) params['from'] = from;
+    if (to != null && to.isNotEmpty) params['to'] = to;
+    if (sort != null && sort.isNotEmpty) params['sort'] = sort;
+    return params;
   }
 
   /// [failed] is true on network/server errors; false when the order is

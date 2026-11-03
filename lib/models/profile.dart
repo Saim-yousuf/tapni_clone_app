@@ -20,6 +20,13 @@ class UserProfile {
   String? businessName;
   String? businessCategory;
   String? businessConcern;
+  /// Capability pack: restaurant|products|services|stay|portfolio
+  String? businessType;
+  List<String> enabledFeatures;
+  bool featuresInitialized;
+  List<String> setupCompletedSteps;
+  DateTime? setupSkippedAt;
+  DateTime? setupDismissedAt;
   double? latitude;
   double? longitude;
   String? businessAddress;
@@ -59,6 +66,12 @@ class UserProfile {
     this.businessName,
     this.businessCategory,
     this.businessConcern,
+    this.businessType,
+    this.enabledFeatures = const [],
+    this.featuresInitialized = false,
+    this.setupCompletedSteps = const [],
+    this.setupSkippedAt,
+    this.setupDismissedAt,
     this.latitude,
     this.longitude,
     this.businessAddress,
@@ -112,6 +125,29 @@ class UserProfile {
       businessName: json['businessName']?.toString(),
       businessCategory: json['businessCategory']?.toString(),
       businessConcern: json['businessConcern']?.toString(),
+      businessType: json['businessType']?.toString(),
+      enabledFeatures: (json['enabledFeatures'] as List<dynamic>? ?? [])
+          .map((e) => e.toString())
+          .where((e) => e.isNotEmpty)
+          .toList(),
+      featuresInitialized: json['featuresInitialized'] as bool? ?? false,
+      setupCompletedSteps: ((json['setupProgress'] is Map
+                  ? (json['setupProgress'] as Map)['completedSteps']
+                  : null) as List<dynamic>? ??
+              [])
+          .map((e) => e.toString())
+          .where((e) => e.isNotEmpty)
+          .toList(),
+      setupSkippedAt: _parseDate(
+        json['setupProgress'] is Map
+            ? (json['setupProgress'] as Map)['skippedAt']
+            : null,
+      ),
+      setupDismissedAt: _parseDate(
+        json['setupProgress'] is Map
+            ? (json['setupProgress'] as Map)['dismissedAt']
+            : null,
+      ),
       latitude: toDouble(json['latitude']),
       longitude: toDouble(json['longitude']),
       businessAddress: json['businessAddress']?.toString(),
@@ -145,6 +181,15 @@ class UserProfile {
       if (businessName != null) 'businessName': businessName,
       if (businessCategory != null) 'businessCategory': businessCategory,
       if (businessConcern != null) 'businessConcern': businessConcern,
+      if (businessType != null && businessType!.trim().isNotEmpty)
+        'businessType': businessType,
+      'setupProgress': {
+        'completedSteps': setupCompletedSteps,
+        if (setupSkippedAt != null)
+          'skippedAt': setupSkippedAt!.toIso8601String(),
+        if (setupDismissedAt != null)
+          'dismissedAt': setupDismissedAt!.toIso8601String(),
+      },
       if (latitude != null) 'latitude': latitude,
       if (longitude != null) 'longitude': longitude,
       if (businessAddress != null) 'businessAddress': businessAddress,
@@ -155,6 +200,11 @@ class UserProfile {
           .map((l) => l.toApiJson())
           .toList(),
     };
+  }
+
+  static DateTime? _parseDate(dynamic v) {
+    if (v == null) return null;
+    return DateTime.tryParse(v.toString());
   }
 
   UserProfile copyWith({
@@ -170,6 +220,14 @@ class UserProfile {
     String? businessName,
     String? businessCategory,
     String? businessConcern,
+    String? businessType,
+    List<String>? enabledFeatures,
+    bool? featuresInitialized,
+    List<String>? setupCompletedSteps,
+    DateTime? setupSkippedAt,
+    DateTime? setupDismissedAt,
+    bool clearSetupSkippedAt = false,
+    bool clearSetupDismissedAt = false,
     double? latitude,
     double? longitude,
     String? businessAddress,
@@ -212,6 +270,16 @@ class UserProfile {
       businessName: businessName ?? this.businessName,
       businessCategory: businessCategory ?? this.businessCategory,
       businessConcern: businessConcern ?? this.businessConcern,
+      businessType: businessType ?? this.businessType,
+      enabledFeatures: enabledFeatures ?? this.enabledFeatures,
+      featuresInitialized: featuresInitialized ?? this.featuresInitialized,
+      setupCompletedSteps: setupCompletedSteps ?? this.setupCompletedSteps,
+      setupSkippedAt: clearSetupSkippedAt
+          ? null
+          : (setupSkippedAt ?? this.setupSkippedAt),
+      setupDismissedAt: clearSetupDismissedAt
+          ? null
+          : (setupDismissedAt ?? this.setupDismissedAt),
       latitude: clearLatitude ? null : (latitude ?? this.latitude),
       longitude: clearLongitude ? null : (longitude ?? this.longitude),
       businessAddress: businessAddress ?? this.businessAddress,

@@ -9,6 +9,7 @@ import 'package:tapni_app/repository/explore_repo.dart';
 import 'package:tapni_app/screens/quick_add_links_screen.dart';
 import 'package:tapni_app/screens/subscription_purchased_screen.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
+import 'package:tapni_app/utils/business_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/business_option_grid.dart';
@@ -37,10 +38,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   static const _monthlyPrice = 9.99;
 
   bool _isYearlySelected = true;
-
-  /// Local mock card (never sent to backend).
-  String? _cardBrand;
-  String? _cardLast4;
 
   /// 0 = Concern, 1 = Category, 2 = Plan, 3 = Payment
   int _step = 0;
@@ -170,13 +167,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   }
 
   Future<void> _pay() async {
-    if (_cardLast4 == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please add a payment method')),
-      );
-      return;
-    }
-
     final provider = Provider.of<SubscriptionProvider>(context, listen: false);
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
@@ -201,9 +191,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           planLabel: _planLabel,
           amount: sub?.amount != null && sub!.amount > 0 ? sub.amount : amount,
           currency: sub?.currency.isNotEmpty == true ? sub!.currency : 'SAR',
-          transactionId: sub?.providerPaymentId.isNotEmpty == true
-              ? sub!.providerPaymentId
-              : (sub?.checkoutId ?? ''),
+          transactionId: () {
+            final pub = sub?.publicPaymentRef.trim() ?? '';
+            if (pub.isNotEmpty) return pub;
+            // Do not fall back to Stripe/provider/checkout ids in UI.
+            return '';
+          }(),
           startDate: sub?.startDate,
           endDate: sub?.endDate,
           fromRegistration: widget.fromRegistration,
@@ -235,6 +228,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       businessName: displayName,
       businessCategory: _selectedCategory,
       businessConcern: _selectedConcernId,
+      businessType: inferBusinessTypeFromCategory(_selectedCategory),
       links: profile.socialLinks,
       context: context,
     );
@@ -253,24 +247,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         ),
       );
     }
-  }
-
-  Future<void> _openAddPaymentMethod() async {
-    final result = await showModalBottomSheet<_SavedCardPreview>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      builder: (ctx) => const _AddPaymentMethodSheet(),
-    );
-
-    if (!mounted || result == null) return;
-    setState(() {
-      _cardLast4 = result.last4;
-      _cardBrand = result.brand;
-    });
   }
 
   String get _titleBarLabel {
@@ -735,32 +711,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   ),
                 ),
                 const SizedBox(height: 22),
-                Row(
-                  children: [
-                    Text(
-                      'Payment Method',
-                      style: WaUi.bodyMedium.copyWith(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: _openAddPaymentMethod,
-                      child: Text(
-                        '+ Add Payment Method',
-                        style: WaUi.caption.copyWith(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
@@ -768,35 +718,28 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     color: _cardBg,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: _cardLast4 == null
-                      ? Text(
-                          'No card added yet',
-                          style: WaUi.caption.copyWith(
-                            fontSize: 13,
-                            color: _muted,
-                          ),
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _cardBrand ?? 'Card',
-                              style: WaUi.bodyMedium.copyWith(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '•••• $_cardLast4',
-                              style: WaUi.caption.copyWith(
-                                fontSize: 13,
-                                color: _muted,
-                              ),
-                            ),
-                          ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Secure card payment',
+                        style: WaUi.bodyMedium.copyWith(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
                         ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Pay with Stripe. Card details are collected securely — BarQody never stores full card numbers or CVC.',
+                        style: WaUi.caption.copyWith(
+                          fontSize: 13,
+                          color: _muted,
+                          height: 1.35,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 28),
                 _PriceRow(
@@ -843,225 +786,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   String _date(DateTime? value) {
     if (value == null) return '--';
     return '${value.day}/${value.month}/${value.year}';
-  }
-}
-
-class _SavedCardPreview {
-  final String last4;
-  final String brand;
-
-  const _SavedCardPreview({required this.last4, required this.brand});
-}
-
-class _AddPaymentMethodSheet extends StatefulWidget {
-  const _AddPaymentMethodSheet();
-
-  @override
-  State<_AddPaymentMethodSheet> createState() => _AddPaymentMethodSheetState();
-}
-
-class _AddPaymentMethodSheetState extends State<_AddPaymentMethodSheet> {
-  static const _muted = Color(0xFF8E8E93);
-
-  final _numberController = TextEditingController();
-  final _expiryController = TextEditingController();
-  final _cvcController = TextEditingController();
-  final _nameController = TextEditingController();
-  String? _formError;
-
-  @override
-  void dispose() {
-    _numberController.dispose();
-    _expiryController.dispose();
-    _cvcController.dispose();
-    _nameController.dispose();
-    super.dispose();
-  }
-
-  String _detectBrand(String digits) {
-    if (digits.startsWith('4')) return 'Visa';
-    if (RegExp(r'^5[1-5]').hasMatch(digits) ||
-        RegExp(r'^2[2-7]').hasMatch(digits)) {
-      return 'Mastercard';
-    }
-    if (digits.startsWith('3')) return 'Amex';
-    return 'Card';
-  }
-
-  void _save() {
-    final digits = _numberController.text.replaceAll(RegExp(r'\D'), '');
-    final expiry = _expiryController.text.trim();
-    final cvc = _cvcController.text.trim();
-    final name = _nameController.text.trim();
-
-    if (name.isEmpty) {
-      setState(() => _formError = 'Enter the name on the card');
-      return;
-    }
-    if (digits.length < 13 || digits.length > 19) {
-      setState(() => _formError = 'Enter a valid card number');
-      return;
-    }
-    if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(expiry)) {
-      setState(() => _formError = 'Enter expiry as MM/YY');
-      return;
-    }
-    if (cvc.length < 3) {
-      setState(() => _formError = 'Enter a valid CVC');
-      return;
-    }
-
-    Navigator.pop(
-      context,
-      _SavedCardPreview(
-        last4: digits.substring(digits.length - 4),
-        brand: _detectBrand(digits),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 12,
-        bottom: MediaQuery.viewInsetsOf(context).bottom + 24,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SheetHeader(
-              title: 'Add Payment Method',
-              onBack: () => Navigator.pop(context),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Card details stay on this device. Real card charging will use Stripe later.',
-              style: WaUi.caption.copyWith(
-                fontSize: 12,
-                color: _muted,
-                height: 1.35,
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _nameController,
-              textCapitalization: TextCapitalization.words,
-              decoration: WaUi.fieldDecoration(
-                labelText: 'Name on card',
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _numberController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(19),
-                _CardNumberFormatter(),
-              ],
-              decoration: WaUi.fieldDecoration(
-                labelText: 'Card number',
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _expiryController,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(4),
-                      _ExpiryFormatter(),
-                    ],
-                    decoration: WaUi.fieldDecoration(
-                      labelText: 'MM/YY',
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: TextField(
-                    controller: _cvcController,
-                    keyboardType: TextInputType.number,
-                    obscureText: true,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(4),
-                    ],
-                    decoration: WaUi.fieldDecoration(
-                      labelText: 'CVC',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            if (_formError != null) ...[
-              const SizedBox(height: 12),
-              Text(
-                _formError!,
-                style: WaUi.caption.copyWith(
-                  color: const Color(0xFFD32F2F),
-                  fontSize: 12,
-                ),
-              ),
-            ],
-            const SizedBox(height: 16),
-            PillButton(
-              label: 'Save card',
-              onPressed: _save,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CardNumberFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
-    final buffer = StringBuffer();
-    for (var i = 0; i < digits.length; i++) {
-      if (i > 0 && i % 4 == 0) buffer.write(' ');
-      buffer.write(digits[i]);
-    }
-    final formatted = buffer.toString();
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
-  }
-}
-
-class _ExpiryFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    var digits = newValue.text.replaceAll(RegExp(r'\D'), '');
-    if (digits.length > 4) digits = digits.substring(0, 4);
-    final buffer = StringBuffer();
-    for (var i = 0; i < digits.length; i++) {
-      if (i == 2) buffer.write('/');
-      buffer.write(digits[i]);
-    }
-    final formatted = buffer.toString();
-    return TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
-    );
   }
 }
 

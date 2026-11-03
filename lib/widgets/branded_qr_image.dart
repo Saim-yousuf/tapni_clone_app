@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tapni_app/utils/branded_qr.dart';
 
-/// Starbucks-style branded QR: circular modules, circular eyes, and a
+/// Starbucks-style branded QR: sparse circular modules, circular eyes, and a
 /// circular white center plate with the Barqody logo. High ECC recovers the
 /// covered center.
 class BrandedQrImage extends StatelessWidget {
@@ -31,62 +31,78 @@ class BrandedQrImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final resolvedEye =
-        eyeStyle ?? BrandedQr.eyeStyleFor(foregroundColor);
-    final resolvedModules =
-        dataModuleStyle ?? BrandedQr.moduleStyleFor(foregroundColor);
+    // Retained for call-site compatibility; paint style is fixed centrally.
+    assert(() {
+      gapless;
+      eyeStyle;
+      dataModuleStyle;
+      return true;
+    }());
 
-    final qr = QrImageView(
-      data: data,
-      version: QrVersions.auto,
-      size: size,
-      padding: padding,
-      gapless: gapless,
-      backgroundColor: backgroundColor,
-      errorCorrectionLevel: BrandedQr.errorCorrectionLevel,
-      eyeStyle: resolvedEye,
-      dataModuleStyle: resolvedModules,
-    );
+    Widget qrPaint(double innerSide) {
+      return CustomPaint(
+        size: Size.square(innerSide),
+        painter: BrandedQrPainter(
+          data: data,
+          foreground: foregroundColor,
+          background: backgroundColor,
+        ),
+      );
+    }
 
-    if (!showLogo) return qr;
+    Widget framed(double side) {
+      final inner =
+          (side - padding.horizontal).clamp(1.0, side).toDouble();
+      return SizedBox(
+        width: side,
+        height: side,
+        child: Padding(
+          padding: padding,
+          child: qrPaint(inner),
+        ),
+      );
+    }
 
     Widget stackFor(double side) {
-      final inner = (side - padding.horizontal).clamp(1.0, side);
+      final inner =
+          (side - padding.horizontal).clamp(1.0, side).toDouble();
       final plate = BrandedQr.plateSizeFor(inner).width;
       final inset = plate * BrandedQr.logoInsetFraction;
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          qr,
-          IgnorePointer(
-            child: Container(
-              width: plate,
-              height: plate,
-              padding: EdgeInsets.all(inset),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              child: ClipOval(
-                child: Image.asset(
-                  BrandedQr.logoAsset,
-                  fit: BoxFit.cover,
-                  filterQuality: FilterQuality.high,
+      return SizedBox(
+        width: side,
+        height: side,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Padding(padding: padding, child: qrPaint(inner)),
+            if (showLogo)
+              IgnorePointer(
+                child: Container(
+                  width: plate,
+                  height: plate,
+                  padding: EdgeInsets.all(inset),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    child: Image.asset(
+                      BrandedQr.logoAsset,
+                      fit: BoxFit.cover,
+                      filterQuality: FilterQuality.high,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ],
+          ],
+        ),
       );
     }
 
-    if (size != null) {
-      return SizedBox(
-        width: size,
-        height: size,
-        child: stackFor(size!),
-      );
-    }
+    Widget buildFor(double side) =>
+        showLogo ? stackFor(side) : framed(side);
+
+    if (size != null) return buildFor(size!);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -95,7 +111,7 @@ class BrandedQrImage extends StatelessWidget {
         final double side = (w.isFinite && h.isFinite)
             ? (w < h ? w : h)
             : (w.isFinite ? w : (h.isFinite ? h : 160.0));
-        return stackFor(side);
+        return buildFor(side);
       },
     );
   }

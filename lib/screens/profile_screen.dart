@@ -17,6 +17,7 @@ import 'package:tapni_app/screens/business_website/business_website_setup_screen
     show websiteTypeFromCatalogType;
 import 'package:tapni_app/screens/qr_code_sheet.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
+import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
@@ -114,7 +115,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _pickCoverPhoto(UserProfile profile) async {
-    if (profile.isPro == false) {
+    // Personal release: cover photo is part of the digital card.
+    // When businessPro is re-enabled, keep the existing Pro restriction.
+    if (profile.isPro == false && ReleaseFeatures.canUseBusinessPro) {
       SubcriptionSheet.show(context);
       return;
     }
@@ -449,10 +452,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 builder: (_, expand, __) {
                   final t = expand.clamp(0.0, 1.0);
                   final extent = initial + t * (maxSize - initial);
-                  final visibleH = t <= 0.001
-                      ? coverH
+                  // Sheet top Y; keep cover tucked under rounded corners so
+                  // scaffold white does not show through the radius cutouts.
+                  final sheetTopY = t <= 0.001
+                      ? sheetTop
                       : (h * (1.0 - extent))
                           .clamp(collapsedCoverVisible, coverH)
+                          .toDouble();
+                  final visibleH = t <= 0.001
+                      ? coverH
+                      : (sheetTopY + BarqodyChrome.sheetRadius)
+                          .clamp(
+                            collapsedCoverVisible + BarqodyChrome.sheetRadius,
+                            coverH,
+                          )
                           .toDouble();
                   // Keep cover visible — only light blur on scroll (no white wash).
                   final blur = t * 16.0;
@@ -1253,6 +1266,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         .where(
           (link) =>
               link.isActive &&
+              ReleaseFeatures.isPersonalLinkVisible(link) &&
               !isCatalogInventoryHiddenByWebsite(link, allLinks) &&
               !isDuplicateBusinessWebsiteLink(link, allLinks) &&
               !isDuplicateCatalogInventoryLink(link, allLinks),
