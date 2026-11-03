@@ -101,7 +101,7 @@ object CallController {
         return try {
             Log.i(TAG, "reject() state=${call.state}")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                call.reject(Call.RejectReason.DECLINED)
+                call.reject(Call.REJECT_REASON_DECLINED)
             } else {
                 @Suppress("DEPRECATION")
                 call.reject(false, null)
