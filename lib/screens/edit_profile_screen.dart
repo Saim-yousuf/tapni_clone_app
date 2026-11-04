@@ -4,6 +4,7 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
+import 'package:tapni_app/widgets/profile_photo_avatar.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class EditProfileScreen extends StatefulWidget {
@@ -112,22 +113,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(26),
-                        child: profile.coverPhotoUrl != null && profile.coverPhotoUrl!.isNotEmpty
+                        child: profile.coverPhotoUrl != null &&
+                                profile.coverPhotoUrl!.trim().isNotEmpty
                             ? Image.network(
-                                profile.coverPhotoUrl!,
+                                profile.coverPhotoUrl!.trim(),
                                 fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => Container(color: Colors.grey.shade300),
+                                errorBuilder: (_, __, ___) =>
+                                    const ProfileCoverPlaceholder(),
                               )
-                            : Container(
-                                color: Colors.grey.shade300,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.photo_size_select_large_outlined,
-                                    size: 54,
-                                    color: Colors.white54,
-                                  ),
-                                ),
-                              ),
+                            : const ProfileCoverPlaceholder(height: 220),
                       ),
                     ),
                     Positioned(
@@ -147,22 +141,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         children: [
                           CircleAvatar(
                             radius: 44,
-                            backgroundColor: Color(0xFF1E2022),
-                            backgroundImage: profile.profilePhotoUrl != null && profile.profilePhotoUrl!.isNotEmpty
-                                ? NetworkImage(profile.profilePhotoUrl!) as ImageProvider
-                                : null,
-                            child: profile.profilePhotoUrl == null || profile.profilePhotoUrl!.isEmpty
-                                ? Text(
-                                    profile.name.isNotEmpty
-                                        ? profile.name[0].toUpperCase()
-                                        : '?',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                : null,
+                            backgroundColor: const Color(0xFFEEF2F5),
+                            backgroundImage: profile.profilePhotoUrl != null &&
+                                    profile.profilePhotoUrl!.trim().isNotEmpty
+                                ? NetworkImage(profile.profilePhotoUrl!.trim())
+                                : BarqodyProfilePhoto.provider,
                           ),
                           Positioned(
                             bottom: 0,

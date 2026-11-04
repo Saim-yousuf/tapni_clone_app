@@ -1,3 +1,5 @@
+import 'dart:ui' show PlatformDispatcher;
+
 /// Country dial codes for phone auth (E.164 country calling codes).
 class CountryDialCode {
   final String name;
@@ -254,8 +256,28 @@ CountryDialCode? findCountryByCode(String code) {
   return null;
 }
 
-CountryDialCode get defaultCountryDialCode {
+CountryDialCode? findCountryByIso(String? iso) {
+  if (iso == null) return null;
+  final code = iso.trim().toUpperCase();
+  if (code.length != 2) return null;
+  for (final c in kCountryDialCodes) {
+    if (c.iso.toUpperCase() == code) return c;
+  }
+  return null;
+}
+
+/// Product fallback when device region cannot be resolved.
+CountryDialCode get defaultCountryDialCodeFallback {
   return findCountryByCode('+92') ?? kCountryDialCodes.first;
+}
+
+/// Sync default — prefers device locale ISO, else [defaultCountryDialCodeFallback].
+/// Prefer [DeviceCountry.detect] on login for SIM/network accuracy.
+CountryDialCode get defaultCountryDialCode {
+  return findCountryByIso(
+        PlatformDispatcher.instance.locale.countryCode,
+      ) ??
+      defaultCountryDialCodeFallback;
 }
 
 /// Longest dial-code prefix match for an E.164 phone (e.g. +92300...).

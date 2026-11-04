@@ -389,6 +389,7 @@ class AssetIcon extends StatelessWidget {
 }
 
 /// Soft branded stand-in when a profile has no cover photo.
+/// Flat neutral field only — logo stays in the header.
 class ProfileCoverPlaceholder extends StatelessWidget {
   const ProfileCoverPlaceholder({super.key, this.height});
 
@@ -399,54 +400,21 @@ class ProfileCoverPlaceholder extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: height ?? double.infinity,
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFD6E0E8),
-              Color(0xFFE8EEF2),
-              Color(0xFFB8C6D1),
-            ],
-            stops: [0.0, 0.48, 1.0],
+      child: ColoredBox(
+        color: const Color(0xFFEEF2F5),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.white.withValues(alpha: 0.35),
+                Colors.transparent,
+                Colors.black.withValues(alpha: 0.03),
+              ],
+              stops: const [0.0, 0.4, 1.0],
+            ),
           ),
-        ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            // Soft vignette so the sheet edge reads cleaner.
-            DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.white.withValues(alpha: 0.18),
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.06),
-                  ],
-                  stops: const [0.0, 0.45, 1.0],
-                ),
-              ),
-            ),
-            Center(
-              child: Opacity(
-                opacity: 0.14,
-                child: Image.asset(
-                  'assets/images/png/app_icon.png',
-                  width: 72,
-                  height: 72,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => const Icon(
-                    Icons.image_outlined,
-                    size: 56,
-                    color: Color(0xFF6B7280),
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

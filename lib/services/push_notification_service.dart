@@ -34,6 +34,13 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   final type = message.data['type']?.toString() ?? '';
   final action = message.data['action']?.toString() ?? '';
+
+  // Persist lead pushes so they appear in the in-app Notifications list.
+  if (type == 'profile_scan' || type == 'contact_exchange') {
+    await _persistLeadPushFromBackground(message);
+    return;
+  }
+
   if (type != 'device_session' || action != 'logged_out') return;
 
   final sessionId = message.data['deviceSessionId']?.toString() ?? '';
@@ -61,6 +68,47 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final active = AccountStorage.getActiveAccount();
   if (active != null) {
     await AccountStorage.removeActive();
+  }
+}
+
+Future<void> _persistLeadPushFromBackground(RemoteMessage message) async {
+  final data = message.data;
+  final type = data['type']?.toString() ?? '';
+  if (type != 'profile_scan' && type != 'contact_exchange') return;
+
+  final title = data['title']?.toString() ??
+      message.notification?.title ??
+      (type == 'profile_scan' ? 'New Card Scan' : 'Contact Update');
+  final body = data['body']?.toString() ??
+      message.notification?.body ??
+      '';
+  final id =
+      '${type}_${DateTime.now().millisecondsSinceEpoch}';
+
+  try {
+    final key = SharedPrefHelper.utils.leadPushNotifications;
+    final raw = SharedPrefHelper.getString(key);
+    final List<dynamic> list =
+        raw.isEmpty ? <dynamic>[] : (jsonDecode(raw) as List? ?? <dynamic>[]);
+    list.insert(0, {
+      'id': id,
+      'type': type,
+      'title': title,
+      'body': body,
+      'time': 'Just now',
+      'isRead': false,
+      if ((data['action']?.toString() ?? '').isNotEmpty)
+        'action': data['action'].toString(),
+      if ((data['actorName']?.toString() ?? '').isNotEmpty)
+        'actorName': data['actorName'].toString(),
+      'createdAt': DateTime.now().toIso8601String(),
+    });
+    while (list.length > 50) {
+      list.removeLast();
+    }
+    await SharedPrefHelper.putString(key, jsonEncode(list));
+  } catch (e) {
+    debugPrint('FCM background: failed to persist lead push — $e');
   }
 }
 
@@ -206,7 +254,11 @@ class PushNotificationService {
         return;
       }
       await _showLocalNotification(message);
-      _refreshInAppState(data);
+      _refreshInAppState(
+        data,
+        title: message.notification?.title ?? data['title']?.toString(),
+        body: message.notification?.body ?? data['body']?.toString(),
+      );
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
@@ -345,7 +397,11 @@ class PushNotificationService {
       return;
     }
     _routeNotification(data);
-    _refreshInAppState(data);
+    _refreshInAppState(
+      data,
+      title: message.notification?.title ?? data['title']?.toString(),
+      body: message.notification?.body ?? data['body']?.toString(),
+    );
   }
 
   static void _routeNotification(Map<String, dynamic> data) {
@@ -444,7 +500,11 @@ class PushNotificationService {
     );
   }
 
-  static void _refreshInAppState(Map<String, dynamic> data) {
+  static void _refreshInAppState(
+    Map<String, dynamic> data, {
+    String? title,
+    String? body,
+  }) {
     final type = data['type']?.toString() ?? '';
     if (type == 'catalog_order' &&
         (ReleaseFeatures.canUseShopping ||
@@ -454,6 +514,25 @@ class PushNotificationService {
 
     final context = navigatorKey.currentContext;
     if (context == null) return;
+
+    if (type == 'profile_scan' || type == 'contact_exchange') {
+      final resolvedTitle = (title != null && title.trim().isNotEmpty)
+          ? title.trim()
+          : (data['title']?.toString().trim().isNotEmpty == true
+              ? data['title'].toString().trim()
+              : (type == 'profile_scan' ? 'New Card Scan' : 'Contact Update'));
+      final resolvedBody = (body != null && body.trim().isNotEmpty)
+          ? body.trim()
+          : (data['body']?.toString() ?? '');
+      Provider.of<LeadsProvider>(context, listen: false)
+          .upsertPushLeadNotification(
+        type: type,
+        title: resolvedTitle,
+        body: resolvedBody,
+        action: data['action']?.toString(),
+        actorName: data['actorName']?.toString(),
+      );
+    }
 
     if (type == 'catalog_order' &&
         (ReleaseFeatures.canUseShopping ||

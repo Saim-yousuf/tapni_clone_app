@@ -21,7 +21,8 @@ class SetUsernameScreen extends StatefulWidget {
   State<SetUsernameScreen> createState() => _SetUsernameScreenState();
 }
 
-class _SetUsernameScreenState extends State<SetUsernameScreen> {
+class _SetUsernameScreenState extends State<SetUsernameScreen>
+    with SingleTickerProviderStateMixin {
   static const _heading = 'Choose a unique username for your profile';
   static const _hint = 'e.g. your_username';
   static const _fieldRadius = 12.0;
@@ -32,6 +33,8 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
   final _authRepo = AuthRepo();
   late final TextEditingController _usernameController;
   late final String _initialUsername;
+  late final AnimationController _floatCtrl;
+  late final Animation<double> _float;
   Timer? _debounce;
   UsernameCheckResult? _availability;
   bool _checking = false;
@@ -42,11 +45,19 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
     final profile = Provider.of<ProfileProvider>(context, listen: false).profile;
     _initialUsername = (profile.username ?? '').toLowerCase();
     _usernameController = TextEditingController(text: _initialUsername);
+    _floatCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    )..repeat(reverse: true);
+    _float = Tween<double>(begin: 0, end: -8).animate(
+      CurvedAnimation(parent: _floatCtrl, curve: Curves.easeInOut),
+    );
   }
 
   @override
   void dispose() {
     _debounce?.cancel();
+    _floatCtrl.dispose();
     _usernameController.dispose();
     super.dispose();
   }
@@ -314,21 +325,30 @@ class _SetUsernameScreenState extends State<SetUsernameScreen> {
                   padding: const EdgeInsets.fromLTRB(_sidePad, 64, _sidePad, 24),
                   children: [
                     Center(
-                      child: Image.asset(
-                        'assets/images/png/username-img.png',
-                        width: 200,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          width: 140,
-                          height: 118,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(28),
-                          ),
-                          child: const Icon(
-                            Icons.person_outline,
-                            color: Colors.white,
-                            size: 56,
+                      child: AnimatedBuilder(
+                        animation: _floatCtrl,
+                        builder: (context, child) {
+                          return Transform.translate(
+                            offset: Offset(0, _float.value),
+                            child: child,
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/images/png/username-img.png',
+                          width: 200,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            width: 140,
+                            height: 118,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(28),
+                            ),
+                            child: const Icon(
+                              Icons.person_outline,
+                              color: Colors.white,
+                              size: 56,
+                            ),
                           ),
                         ),
                       ),

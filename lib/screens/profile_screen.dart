@@ -10,6 +10,7 @@ import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/helper/launcher.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/social_link.dart';
+import 'package:tapni_app/providers/auth_provider.dart';
 import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/business_website/business_website_settings_screen.dart';
@@ -20,6 +21,7 @@ import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/barqody_avatar_welcome.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
@@ -28,6 +30,7 @@ import 'package:tapni_app/widgets/connection_error_state.dart';
 import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
 import 'package:tapni_app/widgets/profile_empty_state.dart';
+import 'package:tapni_app/widgets/profile_photo_avatar.dart';
 import 'package:tapni_app/models/business_website/business_website_models.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -555,107 +558,195 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   SizedBox(height: headerBlockHeight),
                                   Expanded(
-                                    child: ListView(
-                                      controller: scrollController,
-                                      // Needed so sheet can expand even when
-                                      // content is shorter than the viewport.
-                                      physics:
-                                          const AlwaysScrollableScrollPhysics(
-                                        parent: ClampingScrollPhysics(),
-                                      ),
-                                      // Clear curved bottom nav + center FAB (~74).
-                                      padding: EdgeInsets.only(
-                                        bottom: 130 + bottomPad,
-                                      ),
-                                      children: [
-                                        if (showHeader)
-                                          Opacity(
-                                            opacity: headerOpacity,
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: padH,
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  VerifiedName(
-                                                    name: profile.name
-                                                        .toUpperCase(),
-                                                    verified: profile.isPro,
-                                                    badgeSize: 20,
-                                                    style: WaUi.toolsTitleOf(
-                                                      size: 22,
-                                                      weight: FontWeight.w800,
-                                                      color: Colors.black,
-                                                      letterSpacing: 0.15,
-                                                    ),
+                                    child: Builder(
+                                      builder: (context) {
+                                        final linksEmpty =
+                                            !_hasVisibleActiveLinks(profile);
+                                        final bottomInset = 130 + bottomPad;
+
+                                        Widget headerBlock() {
+                                          if (!showHeader) {
+                                            return SizedBox(
+                                              height: 28 * headerOpacity,
+                                            );
+                                          }
+                                          return Column(
+                                            children: [
+                                              Opacity(
+                                                opacity: headerOpacity,
+                                                child: Padding(
+                                                  padding:
+                                                      EdgeInsets.symmetric(
+                                                    horizontal: padH,
                                                   ),
-                                                  if (bio.isNotEmpty) ...[
-                                                    const SizedBox(height: 8),
-                                                    Text(
-                                                      bio,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style:
-                                                          WaUi.body.copyWith(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        height: 1.35,
-                                                        color: const Color(
-                                                          0xFF6B7280,
+                                                  child: Column(
+                                                    children: [
+                                                      VerifiedName(
+                                                        name: profile.name
+                                                            .toUpperCase(),
+                                                        verified:
+                                                            profile.isPro,
+                                                        badgeSize: 20,
+                                                        style:
+                                                            WaUi.toolsTitleOf(
+                                                          size: 22,
+                                                          weight:
+                                                              FontWeight.w800,
+                                                          color: Colors.black,
+                                                          letterSpacing: 0.15,
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        SizedBox(height: 28 * headerOpacity),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: padH,
-                                          ),
-                                          child: _buildLinkSection(
-                                            profile,
-                                            isEditable: false,
-                                            profileProvider: profileProvider,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                            padH,
-                                            32,
-                                            padH,
-                                            16,
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: _ProfileActionPill(
-                                                  label: context.l10n.shareCard,
-                                                  filled: false,
-                                                  onTap: () =>
-                                                      SharingProfileSheet.show(
-                                                    context,
+                                                      if (bio.isNotEmpty) ...[
+                                                        const SizedBox(
+                                                          height: 8,
+                                                        ),
+                                                        Text(
+                                                          bio,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: WaUi.body
+                                                              .copyWith(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400,
+                                                            height: 1.35,
+                                                            color:
+                                                                const Color(
+                                                              0xFF6B7280,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ],
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(width: 12),
-                                              Expanded(
-                                                child: _ProfileActionPill(
-                                                  label:
-                                                      context.l10n.editProfile2,
-                                                  filled: true,
-                                                  onTap: () => _enterEditMode(
-                                                    profileProvider,
+                                              SizedBox(
+                                                height: 28 * headerOpacity,
+                                              ),
+                                            ],
+                                          );
+                                        }
+
+                                        Widget actionButtons({
+                                          double top = 32,
+                                        }) {
+                                          return Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                              padH,
+                                              top,
+                                              padH,
+                                              16,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: _ProfileActionPill(
+                                                    label:
+                                                        context.l10n.shareCard,
+                                                    filled: false,
+                                                    onTap: () =>
+                                                        SharingProfileSheet
+                                                            .show(
+                                                      context,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Expanded(
+                                                  child: _ProfileActionPill(
+                                                    label: context
+                                                        .l10n.editProfile2,
+                                                    filled: true,
+                                                    onTap: () =>
+                                                        _enterEditMode(
+                                                      profileProvider,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }
+
+                                        // Empty: center copy, keep Share/Edit near bottom.
+                                        if (linksEmpty) {
+                                          return CustomScrollView(
+                                            controller: scrollController,
+                                            physics:
+                                                const AlwaysScrollableScrollPhysics(
+                                              parent: ClampingScrollPhysics(),
+                                            ),
+                                            slivers: [
+                                              SliverToBoxAdapter(
+                                                child: headerBlock(),
+                                              ),
+                                              SliverFillRemaining(
+                                                hasScrollBody: false,
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                    bottom: bottomInset,
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Center(
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsets
+                                                                    .symmetric(
+                                                              horizontal: padH,
+                                                            ),
+                                                            child:
+                                                                ProfileEmptyState(
+                                                              icon: Icons
+                                                                  .add_link_rounded,
+                                                              title: context
+                                                                  .l10n
+                                                                  .appsEmpty,
+                                                              subtitle: context
+                                                                  .l10n
+                                                                  .appsEmptySubtitle,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      actionButtons(top: 8),
+                                                    ],
                                                   ),
                                                 ),
                                               ),
                                             ],
+                                          );
+                                        }
+
+                                        return ListView(
+                                          controller: scrollController,
+                                          physics:
+                                              const AlwaysScrollableScrollPhysics(
+                                            parent: ClampingScrollPhysics(),
                                           ),
-                                        ),
-                                      ],
+                                          padding: EdgeInsets.only(
+                                            bottom: bottomInset,
+                                          ),
+                                          children: [
+                                            headerBlock(),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: padH,
+                                              ),
+                                              child: _buildLinkSection(
+                                                profile,
+                                                isEditable: false,
+                                                profileProvider:
+                                                    profileProvider,
+                                              ),
+                                            ),
+                                            actionButtons(),
+                                          ],
+                                        );
+                                      },
                                     ),
                                   ),
                                 ],
@@ -772,37 +863,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildAvatarCircle(UserProfile profile, {required double size}) {
-    final hasPhoto = profile.profilePhotoUrl != null &&
-        profile.profilePhotoUrl!.trim().isNotEmpty;
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white,
-        border: Border.all(color: Colors.white, width: 4),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.10),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
+    final photoUrl = profile.profilePhotoUrl?.trim();
+    final hasPhoto = photoUrl != null && photoUrl.isNotEmpty;
+    final accountId =
+        Provider.of<AuthProvider>(context, listen: false).activeAccount?.userId;
+
+    return BarqodyAvatarWelcome(
+      enabled: !hasPhoto,
+      accountId: accountId,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          border: Border.all(color: Colors.white, width: 4),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.10),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: ClipOval(
+          child: BarqodyProfilePhoto.networkOrPlaceholder(
+            photoUrl: profile.profilePhotoUrl,
           ),
-        ],
-      ),
-      child: ClipOval(
-        child: hasPhoto
-            ? CachedNetworkImage(
-                imageUrl: profile.profilePhotoUrl!.trim(),
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-                errorWidget: (_, _, _) => _avatarInitials(profile, true),
-                placeholder: (_, _) => _avatarInitials(profile, true),
-              )
-            : ColoredBox(
-                color: const Color(0xFF1E2022),
-                child: _avatarInitials(profile, true),
-              ),
+        ),
       ),
     );
   }
@@ -836,22 +924,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () => _pickCoverPhoto(profile),
-                      child: ColoredBox(
-                        color: const Color(0xFFE8F1F8),
-                        child: coverImageBytes != null
-                            ? Image.memory(coverImageBytes!, fit: BoxFit.cover)
-                            : profile.coverPhotoUrl != null &&
-                                    profile.coverPhotoUrl!.isNotEmpty
-                                ? Image.network(
-                                    profile.coverPhotoUrl!,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) =>
-                                        const ColoredBox(
-                                      color: Color(0xFFE8F1F8),
-                                    ),
-                                  )
-                                : null,
-                      ),
+                      child: coverImageBytes != null
+                          ? Image.memory(
+                              coverImageBytes!,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: coverHeight,
+                            )
+                          : profile.coverPhotoUrl != null &&
+                                  profile.coverPhotoUrl!.trim().isNotEmpty
+                              ? Image.network(
+                                  profile.coverPhotoUrl!.trim(),
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: coverHeight,
+                                  errorBuilder: (_, __, ___) =>
+                                      const ProfileCoverPlaceholder(),
+                                )
+                              : const ProfileCoverPlaceholder(
+                                  height: coverHeight,
+                                ),
                     ),
                   ),
                   Positioned(
@@ -937,26 +1029,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           profileImageBytes!,
                                           fit: BoxFit.cover,
                                         )
-                                      : profile.profilePhotoUrl != null &&
-                                              profile.profilePhotoUrl!
-                                                  .isNotEmpty
-                                          ? Image.network(
-                                              profile.profilePhotoUrl!,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Center(
-                                              child: Text(
-                                                profile.name.isNotEmpty
-                                                    ? profile.name[0]
-                                                        .toUpperCase()
-                                                    : '?',
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 40,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
+                                      : BarqodyProfilePhoto
+                                          .networkOrPlaceholder(
+                                          photoUrl: profile.profilePhotoUrl,
+                                        ),
                                 ),
                               ),
                               Positioned(
@@ -1135,29 +1211,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _avatarInitials(UserProfile profile, bool compact) {
-    final name = profile.name.trim();
-    if (name.isEmpty) {
-      return Center(
-        child: Icon(
-          Icons.person_rounded,
-          size: compact ? 44 : 52,
-          color: Colors.white,
-        ),
-      );
-    }
-    return Center(
-      child: Text(
-        name[0].toUpperCase(),
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: compact ? 36 : 40,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
   Widget _buildProfileAvatar(UserProfile profile, {Widget? topBar}) {
     final isCover =
         (profile.coverPhotoUrl != null &&
@@ -1181,20 +1234,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       child: ClipOval(
-        child: profile.profilePhotoUrl != null &&
-                profile.profilePhotoUrl!.trim().isNotEmpty
-            ? CachedNetworkImage(
-                imageUrl: profile.profilePhotoUrl!.trim(),
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-                errorWidget: (_, _, _) => _avatarInitials(profile, isCover),
-                placeholder: (_, _) => _avatarInitials(profile, isCover),
-              )
-            : ColoredBox(
-                color: const Color(0xFF1E2022),
-                child: _avatarInitials(profile, isCover),
-              ),
+        child: BarqodyProfilePhoto.networkOrPlaceholder(
+          photoUrl: profile.profilePhotoUrl,
+        ),
       ),
     );
 
@@ -1256,6 +1298,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  bool _hasVisibleActiveLinks(UserProfile profile) {
+    final allLinks = profile.socialLinks;
+    return allLinks.any(
+      (link) =>
+          link.isActive &&
+          ReleaseFeatures.isPersonalLinkVisible(link) &&
+          !isCatalogInventoryHiddenByWebsite(link, allLinks) &&
+          !isDuplicateBusinessWebsiteLink(link, allLinks) &&
+          !isDuplicateCatalogInventoryLink(link, allLinks),
+    );
+  }
+
   Widget _buildLinkSection(
     UserProfile profile, {
     required bool isEditable,
@@ -1276,18 +1330,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         const columns = 3;
-        // Screenshot: equal 3-col tiles, gap 21 / row 41, radius 16.
+        // Equal 3-col tiles; corner radius matches Add Link catalog (130→24).
         const spacing = 21.0;
         const runSpacing = 41.0;
-        const radius = 16.0;
         final cellWidth =
             (constraints.maxWidth - spacing * (columns - 1)) / columns;
         // Fill cell so every app tile is identical size (no 112 cap).
         final iconSize = cellWidth;
+        final radius = LinkPlatformIcon.cornerRadius(iconSize);
 
         if (activeLinks.isEmpty && !isEditable) {
           return ProfileEmptyState(
-            icon: Icons.apps_outlined,
+            icon: Icons.add_link_rounded,
             title: context.l10n.appsEmpty,
             subtitle: context.l10n.appsEmptySubtitle,
           );

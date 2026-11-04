@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.telecom.TelecomManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -22,6 +23,7 @@ import io.flutter.plugin.common.MethodChannel
 /** FlutterFragmentActivity required by flutter_stripe PaymentSheet. */
 class MainActivity : FlutterFragmentActivity() {
     private val channelName = "barqody/caller_id"
+    private val deviceCountryChannel = "barqody/device_country"
 
     // RoleManager.createRequestRoleIntent MUST be launched for-result or the
     // system chooser often does nothing (plain startActivity is a no-op).
@@ -37,6 +39,13 @@ class MainActivity : FlutterFragmentActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, deviceCountryChannel)
+            .setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "getCountryIso" -> result.success(resolveDeviceCountryIso())
+                    else -> result.notImplemented()
+                }
+            }
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName)
             .setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -135,6 +144,43 @@ class MainActivity : FlutterFragmentActivity() {
                     else -> result.notImplemented()
                 }
             }
+    }
+
+    /**
+     * SIM country first (most accurate for phone OTP), then network MCC country.
+     * Emulators almost always fake "us" — skip so Flutter uses product fallback.
+     * No runtime permission required for these TelephonyManager getters.
+     */
+    private fun resolveDeviceCountryIso(): String? {
+        if (isProbablyEmulator()) return null
+        return try {
+            val tm = getSystemService(TELEPHONY_SERVICE) as? TelephonyManager
+                ?: return null
+            val sim = tm.simCountryIso?.trim().orEmpty()
+            if (sim.length == 2) return sim.uppercase()
+            val network = tm.networkCountryIso?.trim().orEmpty()
+            if (network.length == 2) return network.uppercase()
+            null
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun isProbablyEmulator(): Boolean {
+        val fp = Build.FINGERPRINT.lowercase()
+        val model = Build.MODEL.lowercase()
+        val product = Build.PRODUCT.lowercase()
+        val manufacturer = Build.MANUFACTURER.lowercase()
+        return fp.contains("generic") ||
+            fp.contains("emulator") ||
+            fp.contains("unknown") ||
+            model.contains("google_sdk") ||
+            model.contains("emulator") ||
+            model.contains("android sdk built for") ||
+            product.contains("sdk") ||
+            product.contains("emulator") ||
+            product.contains("google_sdk") ||
+            manufacturer.contains("genymotion")
     }
 
     private fun requestDefaultDialerRole(): Map<String, Any?> {

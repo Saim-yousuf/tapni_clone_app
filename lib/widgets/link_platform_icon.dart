@@ -17,6 +17,14 @@ class LinkPlatformIcon extends StatelessWidget {
   final double size;
   final BoxFit fit;
 
+  /// Add Link catalog tiles use size `130` / radius `24` — keep that ratio
+  /// on Profile / Scanned / Edit so icons match.
+  static const double catalogTileSize = 130;
+  static const double catalogTileRadius = 24;
+
+  static double cornerRadius(double size) =>
+      size * (catalogTileRadius / catalogTileSize);
+
   String? _networkLogo(String? value) {
     final logo = value?.trim() ?? '';
     if (logo.startsWith('http://') || logo.startsWith('https://')) {

@@ -2099,7 +2099,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newLabel => 'New ';
 
   @override
-  String get noContactsYet => 'No contacts yet';
+  String get noContactsYet => 'Start networking';
+
+  @override
+  String get contactsEmptyStepAdd => 'Tap + to add someone';
+
+  @override
+  String get contactsEmptyStepScan => 'Or scan their QR to connect';
+
+  @override
+  String get contactsEmptyTip =>
+      'Use + to add a contact, or scan their QR from the center button.';
 
   @override
   String get noDetailsYet => 'No details yet';
@@ -2258,7 +2268,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'Scan a QR code or add someone you met to build your network.';
+      'Scan a QR or add people you meet to grow your circle.';
 
   @override
   String get scannedViaQR => 'Scanned via QR';
@@ -3754,19 +3764,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quickAddLinksSubtitle =>
-      'Add the links from your catalog so people can reach you quickly. You can skip this and add more later.';
+      'Add your social and contact links so people can connect with you easily. You can always add more later.';
 
   @override
-  String get quickAddWhatsAppHint => 'WhatsApp number';
+  String get quickAddAddAnotherLink => 'Add another link';
 
   @override
-  String get quickAddInstagramHint => 'Instagram username';
+  String get quickAddEmptyCatalog =>
+      'No quick links available yet. You can skip and add them later from Links.';
 
   @override
-  String get quickAddTiktokHint => 'TikTok username';
+  String get quickAddCatalogError =>
+      'We couldn’t load your links. Check your connection and try again.';
 
   @override
-  String get quickAddSnapchatHint => 'Snapchat username';
+  String get quickAddSaveFailed =>
+      'We couldn’t save your links. Please try again.';
+
+  @override
+  String get pleaseEnterAValidUrl => 'Please enter a valid URL';
 
   @override
   String get documents => 'Documents';
@@ -3856,10 +3872,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileTabGallery => 'Gallery';
 
   @override
-  String get appsEmpty => 'No apps yet';
+  String get appsEmpty => 'Start your digital card';
 
   @override
-  String get appsEmptySubtitle => 'Links and apps will appear here when added.';
+  String get appsEmptySubtitle =>
+      'Add WhatsApp, Instagram, and more — all on your card.';
+
+  @override
+  String get appsEmptyVisitor => 'No links yet';
+
+  @override
+  String get appsEmptyVisitorSubtitle =>
+      'This profile hasn’t added any apps or links.';
 
   @override
   String get galleryEmpty => 'No photos yet';

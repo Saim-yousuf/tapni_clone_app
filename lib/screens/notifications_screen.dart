@@ -6,6 +6,7 @@ import 'package:tapni_app/providers/theme_provider.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/screens/attendance/employee/employee_invitations_screen.dart';
 import 'package:tapni_app/screens/invitations/invitation_detail_screen.dart';
+import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
@@ -190,6 +191,22 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             );
                           } else if (item['type'] == 'follow_accepted') {
                             _openFollowUser(item);
+                          } else if (item['type'] == 'profile_scan') {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    const MainShell(currentPage: 'My Card'),
+                              ),
+                              (route) => false,
+                            );
+                          } else if (item['type'] == 'contact_exchange') {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    const MainShell(currentPage: 'Contacts'),
+                              ),
+                              (route) => false,
+                            );
                           }
                         },
                         child: GlassCard(

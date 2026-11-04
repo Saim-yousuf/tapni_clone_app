@@ -26,6 +26,7 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/curved_bottom_nav.dart';
+import 'package:tapni_app/widgets/profile_photo_avatar.dart';
 
 class MainShell extends StatefulWidget {
   final String? currentPage;
@@ -234,8 +235,8 @@ class _MainShellState extends State<MainShell> {
       );
     } else {
       child = KeyedSubtree(
-        key: const ValueKey('fab-initials'),
-        child: _fabInitials(name, fabFg),
+        key: const ValueKey('fab-avatar'),
+        child: BarqodyProfilePhoto.placeholder(),
       );
     }
 

@@ -1,3 +1,4 @@
+import CoreTelephony
 import Flutter
 import UIKit
 
@@ -13,5 +14,31 @@ import UIKit
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+
+    let channel = FlutterMethodChannel(
+      name: "barqody/device_country",
+      binaryMessenger: engineBridge.applicationRegistrar.messenger()
+    )
+    channel.setMethodCallHandler { call, result in
+      switch call.method {
+      case "getCountryIso":
+        result(Self.resolveCellularCountryIso())
+      default:
+        result(FlutterMethodNotImplemented)
+      }
+    }
+  }
+
+  /// Carrier ISO when a SIM / eSIM is present; nil on Wi‑Fi-only devices.
+  private static func resolveCellularCountryIso() -> String? {
+    let info = CTTelephonyNetworkInfo()
+    let carriers = info.serviceSubscriberCellularProviders?.values ?? []
+    for carrier in carriers {
+      if let iso = carrier.isoCountryCode?.trimmingCharacters(in: .whitespacesAndNewlines),
+         iso.count == 2 {
+        return iso.uppercased()
+      }
+    }
+    return nil
   }
 }

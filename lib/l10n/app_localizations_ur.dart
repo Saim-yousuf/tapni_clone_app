@@ -2111,7 +2111,17 @@ class AppLocalizationsUr extends AppLocalizations {
   String get newLabel => 'نیا';
 
   @override
-  String get noContactsYet => 'ابھی تک کوئی رابطہ نہیں ہے۔';
+  String get noContactsYet => 'نیٹ ورکنگ شروع کریں';
+
+  @override
+  String get contactsEmptyStepAdd => '+ دبا کر کسی کو شامل کریں';
+
+  @override
+  String get contactsEmptyStepScan => 'یا ان کا QR اسکین کر کے جڑیں';
+
+  @override
+  String get contactsEmptyTip =>
+      '+ سے رابطہ شامل کریں، یا بیچ والے بٹن سے QR اسکین کریں۔';
 
   @override
   String get noDetailsYet => 'ابھی تک کوئی تفصیلات نہیں ہیں۔';
@@ -2272,7 +2282,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork =>
-      'ایک QR کوڈ اسکین کریں یا اپنا نیٹ ورک بنانے کے لیے کسی ایسے شخص کو شامل کریں جس سے آپ ملاقات کریں۔';
+      'QR اسکین کریں یا جن سے ملتے ہیں انہیں شامل کر کے اپنا سرکل بڑھائیں۔';
 
   @override
   String get scannedViaQR => 'QR کے ذریعے اسکین کیا گیا۔';
@@ -3770,19 +3780,25 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get quickAddLinksSubtitle =>
-      'اپنے کیٹلاگ سے لنکس شامل کریں تاکہ لوگ جلدی آپ تک پہنچ سکیں۔ آپ اسے چھوڑ بھی سکتے ہیں اور بعد میں مزید شامل کر سکتے ہیں۔';
+      'اپنے سوشل اور رابطہ لنکس شامل کریں تاکہ لوگ آسانی سے آپ سے جڑ سکیں۔ آپ بعد میں بھی مزید شامل کر سکتے ہیں۔';
 
   @override
-  String get quickAddWhatsAppHint => 'WhatsApp نمبر';
+  String get quickAddAddAnotherLink => 'ایک اور لنک شامل کریں';
 
   @override
-  String get quickAddInstagramHint => 'Instagram یوزرنیم';
+  String get quickAddEmptyCatalog =>
+      'ابھی کوئی کوئک لنکس دستیاب نہیں۔ آپ چھوڑ کر بعد میں لنکس سے شامل کر سکتے ہیں۔';
 
   @override
-  String get quickAddTiktokHint => 'TikTok یوزرنیم';
+  String get quickAddCatalogError =>
+      'ہم آپ کے لنکس لوڈ نہیں کر سکے۔ کنکشن چیک کر کے دوبارہ کوشش کریں۔';
 
   @override
-  String get quickAddSnapchatHint => 'Snapchat یوزرنیم';
+  String get quickAddSaveFailed =>
+      'ہم آپ کے لنکس محفوظ نہیں کر سکے۔ براہ کرم دوبارہ کوشش کریں۔';
+
+  @override
+  String get pleaseEnterAValidUrl => 'براہ کرم درست URL درج کریں';
 
   @override
   String get documents => 'دستاویزات';
@@ -3872,11 +3888,18 @@ class AppLocalizationsUr extends AppLocalizations {
   String get profileTabGallery => 'گیلری';
 
   @override
-  String get appsEmpty => 'ابھی کوئی ایپ نہیں';
+  String get appsEmpty => 'اپنا ڈیجیٹل کارڈ شروع کریں';
 
   @override
   String get appsEmptySubtitle =>
-      'لنکس اور ایپس شامل ہونے پر یہاں نظر آئیں گی۔';
+      'WhatsApp، Instagram اور مزید شامل کریں — سب آپ کے کارڈ پر۔';
+
+  @override
+  String get appsEmptyVisitor => 'ابھی کوئی لنکس نہیں';
+
+  @override
+  String get appsEmptyVisitorSubtitle =>
+      'اس پروفائل نے ابھی کوئی ایپس یا لنکس شامل نہیں کیے۔';
 
   @override
   String get galleryEmpty => 'ابھی کوئی تصویر نہیں';

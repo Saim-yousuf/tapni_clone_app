@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/lead.dart';
 import 'package:tapni_app/models/contact_category.dart';
@@ -9,6 +11,8 @@ import 'package:tapni_app/repository/invitation_repo.dart';
 import 'package:tapni_app/repository/follow_repo.dart';
 import 'package:tapni_app/models/attendance.dart';
 import 'package:tapni_app/models/invitation.dart';
+import 'package:tapni_app/utils/preference_helper.dart';
+
 class LeadsProvider extends ChangeNotifier {
   final AuthRepo _authRepo = AuthRepo();
   final CatalogRepo _catalogRepo = CatalogRepo();
@@ -16,9 +20,13 @@ class LeadsProvider extends ChangeNotifier {
   final InvitationRepo _invitationRepo = InvitationRepo();
   final FollowRepo _followRepo = FollowRepo();
 
+  static const _pushLeadTypes = {'profile_scan', 'contact_exchange'};
+  static const _maxPushLeadNotifications = 50;
+
   List<Lead> _leads = [];
   List<ContactCategory> _categories = [];
   bool _isLoading = false;
+  bool _hasLoadedLeads = false;
   String _searchQuery = '';
   String? _activeCategoryId; // null means 'All'
 
@@ -30,7 +38,7 @@ class LeadsProvider extends ChangeNotifier {
   DateTime? _endDate;
   List<String> _activeMarkers = [];
 
-  // ── Notifications (local mock state) ────────────────────────────────────────
+  // ── Notifications (API + local push inbox) ─────────────────────────────────
   final List<Map<String, dynamic>> _notifications = [];
 
   // ── Activities (local mock state) ───────────────────────────────────────────
@@ -98,6 +106,7 @@ class LeadsProvider extends ChangeNotifier {
 
   List<ContactCategory> get categories => List.unmodifiable(_categories);
   bool get isLoading => _isLoading;
+  bool get hasLoadedLeads => _hasLoadedLeads;
   String? get activeCategoryId => _activeCategoryId;
 
   // Filter Getters
@@ -117,6 +126,7 @@ class LeadsProvider extends ChangeNotifier {
   List<Activity> get activities => _activities;
 
   LeadsProvider() {
+    _loadPushLeadNotifications();
     fetchCategories();
     fetchLeads();
   }
@@ -191,15 +201,21 @@ class LeadsProvider extends ChangeNotifier {
   // ── Fetch Leads ──────────────────────────────────────────────────────────────
   Future<void>? _fetchLeadsInFlight;
 
-  Future<void> fetchLeads() {
-    return _fetchLeadsInFlight ??= _fetchLeadsBody().whenComplete(() {
+  /// [silent] keeps the current list on screen (no shimmer). Defaults to silent
+  /// after the first successful/attempted load so tab revisits don't flash.
+  Future<void> fetchLeads({bool? silent}) {
+    final effectiveSilent = silent ?? _hasLoadedLeads;
+    return _fetchLeadsInFlight ??=
+        _fetchLeadsBody(silent: effectiveSilent).whenComplete(() {
       _fetchLeadsInFlight = null;
     });
   }
 
-  Future<void> _fetchLeadsBody() async {
-    _isLoading = true;
-    notifyListeners();
+  Future<void> _fetchLeadsBody({required bool silent}) async {
+    if (!silent) {
+      _isLoading = true;
+      notifyListeners();
+    }
 
     try {
       final res = await _authRepo.getContacts();
@@ -215,7 +231,8 @@ class LeadsProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint("Error fetching leads: $e");
     } finally {
-      _isLoading = false;
+      _hasLoadedLeads = true;
+      if (_isLoading) _isLoading = false;
       notifyListeners();
     }
   }
@@ -226,6 +243,8 @@ class LeadsProvider extends ChangeNotifier {
     _categories.clear();
     _notifications.clear();
     _activities.clear();
+    _isLoading = false;
+    _hasLoadedLeads = false;
     _activeSource = 'All';
     _sortBy = 'Creation Date';
     _sortOrder = 'Descending';
@@ -234,6 +253,7 @@ class LeadsProvider extends ChangeNotifier {
     _activeMarkers = [];
     _activeCategoryId = null;
     _searchQuery = '';
+    _persistPushLeadNotifications();
     notifyListeners();
   }
 
@@ -406,11 +426,131 @@ class LeadsProvider extends ChangeNotifier {
 
   // ── Notifications management ─────────────────────────────────────────────────
   Future<void> refreshNotifications({required bool isBusinessUser}) async {
+    _loadPushLeadNotifications();
     await fetchEmployeeInvitationNotifications();
     await fetchEventInvitationNotifications();
     await fetchFollowNotifications();
     if (isBusinessUser) {
       await fetchCatalogOrderNotifications(isBusinessUser: true);
+    }
+  }
+
+  /// Inserts / updates a push-only lead notification so it appears in-app.
+  void upsertPushLeadNotification({
+    required String type,
+    required String title,
+    required String body,
+    String? id,
+    String? action,
+    String? actorName,
+  }) {
+    if (!_pushLeadTypes.contains(type)) return;
+
+    final notifId = (id != null && id.isNotEmpty)
+        ? id
+        : '${type}_${DateTime.now().millisecondsSinceEpoch}';
+
+    _notifications.removeWhere((n) => n['id'] == notifId);
+    _notifications.insert(0, {
+      'id': notifId,
+      'type': type,
+      'title': title,
+      'body': body,
+      'time': 'Just now',
+      'isRead': false,
+      if (action != null && action.isNotEmpty) 'action': action,
+      if (actorName != null && actorName.isNotEmpty) 'actorName': actorName,
+      'createdAt': DateTime.now().toIso8601String(),
+    });
+
+    // Cap persisted push inbox size.
+    final pushItems =
+        _notifications.where((n) => _pushLeadTypes.contains(n['type'])).toList();
+    if (pushItems.length > _maxPushLeadNotifications) {
+      for (final extra in pushItems.skip(_maxPushLeadNotifications)) {
+        _notifications.removeWhere((n) => n['id'] == extra['id']);
+      }
+    }
+
+    _sortNotifications();
+    _persistPushLeadNotifications();
+    notifyListeners();
+  }
+
+  void _loadPushLeadNotifications() {
+    try {
+      final raw = SharedPrefHelper.getString(
+        SharedPrefHelper.utils.leadPushNotifications,
+      );
+      if (raw.isEmpty) return;
+
+      final decoded = jsonDecode(raw);
+      if (decoded is! List) return;
+
+      _notifications.removeWhere((n) => _pushLeadTypes.contains(n['type']));
+
+      for (final item in decoded.whereType<Map>()) {
+        final map = Map<String, dynamic>.from(item);
+        final type = map['type']?.toString() ?? '';
+        if (!_pushLeadTypes.contains(type)) continue;
+        _notifications.add({
+          'id': map['id']?.toString() ??
+              '${type}_${DateTime.now().millisecondsSinceEpoch}',
+          'type': type,
+          'title': map['title']?.toString() ?? _defaultPushTitle(type),
+          'body': map['body']?.toString() ?? '',
+          'time': map['time']?.toString() ??
+              _formatOrderTime(map['createdAt']?.toString()),
+          'isRead': map['isRead'] == true,
+          if (map['action'] != null) 'action': map['action'].toString(),
+          if (map['actorName'] != null)
+            'actorName': map['actorName'].toString(),
+          if (map['createdAt'] != null)
+            'createdAt': map['createdAt'].toString(),
+        });
+      }
+      _sortNotifications();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error loading push lead notifications: $e');
+    }
+  }
+
+  void _persistPushLeadNotifications() {
+    try {
+      final pushItems = _notifications
+          .where((n) => _pushLeadTypes.contains(n['type']))
+          .map(
+            (n) => {
+              'id': n['id'],
+              'type': n['type'],
+              'title': n['title'],
+              'body': n['body'],
+              'time': n['time'],
+              'isRead': n['isRead'] == true,
+              if (n['action'] != null) 'action': n['action'],
+              if (n['actorName'] != null) 'actorName': n['actorName'],
+              if (n['createdAt'] != null) 'createdAt': n['createdAt'],
+            },
+          )
+          .toList();
+      SharedPrefHelper.putString(
+        SharedPrefHelper.utils.leadPushNotifications,
+        jsonEncode(pushItems),
+      );
+    } catch (e) {
+      debugPrint('Error persisting push lead notifications: $e');
+    }
+  }
+
+  String _defaultPushTitle(String type) {
+    switch (type) {
+      case 'profile_scan':
+        return 'New Card Scan';
+      case 'contact_exchange':
+        return 'Contact Update';
+      default:
+        return 'Notification';
     }
   }
 
@@ -615,6 +755,7 @@ class LeadsProvider extends ChangeNotifier {
     }
     _catalogRepo.markAllOrdersRead();
     _followRepo.markAllRead();
+    _persistPushLeadNotifications();
     notifyListeners();
   }
 
@@ -627,6 +768,9 @@ class LeadsProvider extends ChangeNotifier {
       _catalogRepo.markOrderRead(id);
     }
     _notifications.removeWhere((n) => n['id'] == id);
+    if (_pushLeadTypes.contains(item['type'])) {
+      _persistPushLeadNotifications();
+    }
     notifyListeners();
   }
 
@@ -643,6 +787,9 @@ class LeadsProvider extends ChangeNotifier {
               _notifications[idx]['type'] == 'follow_accepted')) {
         _followRepo.markRead(followId: id);
       }
+      if (_pushLeadTypes.contains(_notifications[idx]['type'])) {
+        _persistPushLeadNotifications();
+      }
       notifyListeners();
     }
   }
@@ -651,13 +798,24 @@ class LeadsProvider extends ChangeNotifier {
     required String title,
     required String body,
     String? time,
+    String? type,
   }) {
+    final resolvedType = type?.trim() ?? '';
+    if (_pushLeadTypes.contains(resolvedType)) {
+      upsertPushLeadNotification(
+        type: resolvedType,
+        title: title,
+        body: body,
+      );
+      return;
+    }
     _notifications.insert(0, {
       'id': DateTime.now().millisecondsSinceEpoch.toString(),
       'title': title,
       'body': body,
       'time': time ?? 'Just now',
       'isRead': false,
+      if (resolvedType.isNotEmpty) 'type': resolvedType,
     });
     notifyListeners();
   }

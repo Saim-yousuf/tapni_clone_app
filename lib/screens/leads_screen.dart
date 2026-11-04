@@ -49,7 +49,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
 
   Future<void> _refreshContacts() {
     final provider = context.read<LeadsProvider>();
-    return Future.wait([provider.fetchLeads(), provider.fetchCategories()]);
+    return Future.wait([
+      provider.fetchLeads(silent: true),
+      provider.fetchCategories(),
+    ]);
   }
 
   void _dismissKeyboard() {
@@ -104,6 +107,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
   Widget build(BuildContext context) {
     final leadsProvider = Provider.of<LeadsProvider>(context);
     final leadsList = leadsProvider.leads;
+    final hasAnyContacts = leadsProvider.allLeads.isNotEmpty;
     final isFiltering = leadsProvider.activeCategoryId != null;
 
     return Scaffold(
@@ -150,108 +154,107 @@ class _LeadsScreenState extends State<LeadsScreen> {
                 ],
               ),
               Expanded(
-                child: leadsProvider.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : RefreshIndicator(
-                        color: Colors.black,
-                        onRefresh: _refreshContacts,
-                        child: CustomScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          slivers: [
-                            SliverToBoxAdapter(
-                              child: WaChatSearchBar(
-                                controller: _searchController,
-                                focusNode: _searchFocus,
-                                hintText: 'Search contact',
-                                readOnly: true,
-                                padding: const EdgeInsets.fromLTRB(
-                                  25,
-                                  10,
-                                  25,
-                                  12,
-                                ),
-                                onTap: () {
-                                  _dismissKeyboard();
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          const ContactsSearchScreen(),
-                                    ),
-                                  );
-                                },
-                                trailing: Material(
-                                  color: Colors.black,
-                                  shape: const CircleBorder(),
-                                  child: InkWell(
-                                    customBorder: const CircleBorder(),
-                                    onTap: () => _showAddContactOptions(
-                                      context,
-                                      leadsProvider,
-                                    ),
-                                    child: const SizedBox(
-                                      width: 42,
-                                      height: 42,
-                                      child: Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                        size: 24,
-                                      ),
-                                    ),
-                                  ),
+                child: RefreshIndicator(
+                  color: Colors.black,
+                  onRefresh: _refreshContacts,
+                  child: CustomScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: WaChatSearchBar(
+                          controller: _searchController,
+                          focusNode: _searchFocus,
+                          hintText: 'Search contact',
+                          readOnly: true,
+                          padding: const EdgeInsets.fromLTRB(
+                            25,
+                            10,
+                            25,
+                            12,
+                          ),
+                          onTap: () {
+                            _dismissKeyboard();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    const ContactsSearchScreen(),
+                              ),
+                            );
+                          },
+                          trailing: Material(
+                            color: Colors.black,
+                            shape: const CircleBorder(),
+                            child: InkWell(
+                              customBorder: const CircleBorder(),
+                              onTap: () => _showAddContactOptions(
+                                context,
+                                leadsProvider,
+                              ),
+                              child: const SizedBox(
+                                width: 42,
+                                height: 42,
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: 24,
                                 ),
                               ),
                             ),
-                            SliverToBoxAdapter(
-                              child: WaContactFilterChips(
-                                key: ValueKey(
-                                  leadsProvider.categories
-                                      .map((c) => c.id)
-                                      .join(','),
-                                ),
-                                categories: List.of(leadsProvider.categories),
-                                activeCategoryId:
-                                    leadsProvider.activeCategoryId,
-                                onAllTap: () =>
-                                    leadsProvider.setActiveCategory(null),
-                                onCategoryTap: (id) =>
-                                    leadsProvider.setActiveCategory(id),
-                                onAddCategory: () => _showAddCategoryDialog(
-                                  context,
-                                  leadsProvider,
-                                ),
-                              ),
-                            ),
-                            if (leadsList.isEmpty)
-                              SliverFillRemaining(
-                                hasScrollBody: false,
-                                child: WaContactEmptyState(
-                                  isSearching: isFiltering,
-                                  onScan: _openScan,
-                                  onAdd: () => _showAddContactOptions(
-                                    context,
-                                    leadsProvider,
-                                  ),
-                                ),
-                              )
-                            else
-                              SliverPadding(
-                                padding: const EdgeInsets.only(bottom: 120),
-                                sliver: SliverList(
-                                  delegate: SliverChildBuilderDelegate((
-                                    context,
-                                    index,
-                                  ) {
-                                    return _buildContactRow(
-                                      context,
-                                      leadsList[index],
-                                      leadsProvider,
-                                    );
-                                  }, childCount: leadsList.length),
-                                ),
-                              ),
-                          ],
+                          ),
                         ),
                       ),
+                      if (!leadsProvider.isLoading && hasAnyContacts)
+                        SliverToBoxAdapter(
+                          child: WaContactFilterChips(
+                            key: ValueKey(
+                              leadsProvider.categories
+                                  .map((c) => c.id)
+                                  .join(','),
+                            ),
+                            categories: List.of(leadsProvider.categories),
+                            activeCategoryId:
+                                leadsProvider.activeCategoryId,
+                            onAllTap: () =>
+                                leadsProvider.setActiveCategory(null),
+                            onCategoryTap: (id) =>
+                                leadsProvider.setActiveCategory(id),
+                            onAddCategory: () => _showAddCategoryDialog(
+                              context,
+                              leadsProvider,
+                            ),
+                          ),
+                        ),
+                      if (leadsProvider.isLoading && !hasAnyContacts)
+                        const SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: ContactsListShimmer(),
+                        )
+                      else if (leadsList.isEmpty)
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: WaContactEmptyState(
+                            isSearching: isFiltering,
+                          ),
+                        )
+                      else
+                        SliverPadding(
+                          padding: const EdgeInsets.only(bottom: 120),
+                          sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate((
+                              context,
+                              index,
+                            ) {
+                              return _buildContactRow(
+                                context,
+                                leadsList[index],
+                                leadsProvider,
+                              );
+                            }, childCount: leadsList.length),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ),
             const SizedBox(height: 70),
             ],
@@ -1345,7 +1348,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
         categoryColor: null,
         highlightDate: false,
         previewIcon: null,
-        verified: lead.isScannedContact,
+        verified: lead.isVerifiedContact,
         showDivider: true,
         onTap: () {
           if (lead.contactUser != null) {

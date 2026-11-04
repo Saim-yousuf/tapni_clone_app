@@ -1,11 +1,9 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
-/// White bottom bar with a circular cut-out so the center button is never
-/// covered by the bar — same cradle as a docked FAB.
+/// White bottom bar whose top edge dips in a soft center wave (not a round hole)
+/// so the floating center button sits in the trough.
 class CurvedBottomNav extends StatelessWidget {
   const CurvedBottomNav({
     super.key,
@@ -28,7 +26,7 @@ class CurvedBottomNav extends StatelessWidget {
   final double fabSize;
   final double notchMargin;
 
-  /// FAB is centered on the bar top so the cut-out wraps its lower half.
+  /// FAB is centered on the bar top so the wave trough clears its lower half.
   static double fabOverhang([double fabSize = 74]) => fabSize * 0.5;
 
   /// Space the shell must keep clear so tab content sits above the white bar.
@@ -46,8 +44,10 @@ class CurvedBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(items.length == 4, 'CurvedBottomNav expects exactly 4 side items.');
     final bottomInset = MediaQuery.paddingOf(context).bottom;
-    final notchRadius = fabSize / 2 + notchMargin;
-    const lip = _ScoopedBarPainter.lip;
+    final wave = _WaveBarPainter.metrics(
+      fabSize: fabSize,
+      notchMargin: notchMargin,
+    );
     final fabOverhang = CurvedBottomNav.fabOverhang(fabSize);
     final totalHeight = height + bottomInset + fabOverhang;
 
@@ -62,9 +62,10 @@ class CurvedBottomNav extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: CustomPaint(
-              painter: _ScoopedBarPainter(
+              painter: _WaveBarPainter(
                 color: backgroundColor,
-                notchRadius: notchRadius,
+                waveHalfWidth: wave.halfWidth,
+                waveDepth: wave.depth,
               ),
               child: SizedBox(
                 height: height + bottomInset,
@@ -86,7 +87,7 @@ class CurvedBottomNav extends StatelessWidget {
                           onTap: () => onTap(1),
                         ),
                       ),
-                      SizedBox(width: (notchRadius + lip) * 2),
+                      SizedBox(width: wave.halfWidth * 2),
                       Expanded(
                         child: _NavIconButton(
                           item: items[2],
@@ -315,19 +316,36 @@ class _NavIconButtonState extends State<_NavIconButton>
   }
 }
 
-/// Circular cut-out around the FAB so the bar never draws behind the button.
-/// Rounded lips join the flat top to the arc (Material [CircularNotchedRectangle]).
-class _ScoopedBarPainter extends CustomPainter {
-  _ScoopedBarPainter({required this.color, required this.notchRadius});
+class _WaveMetrics {
+  const _WaveMetrics({required this.halfWidth, required this.depth});
+  final double halfWidth;
+  final double depth;
+}
+
+/// Soft center wave on the bar top — wide trough, not a circular hole.
+class _WaveBarPainter extends CustomPainter {
+  _WaveBarPainter({
+    required this.color,
+    required this.waveHalfWidth,
+    required this.waveDepth,
+  });
 
   final Color color;
-  final double notchRadius;
+  final double waveHalfWidth;
+  final double waveDepth;
 
-  /// Outward rounded corner where the flat top meets the circular well.
-  static const double lip = 16.0;
-
-  /// Top-left / top-right outer corners of the bar.
   static const double cornerRadius = 16.0;
+
+  /// Wider than a round notch so the silhouette reads as a wave / lehr.
+  static _WaveMetrics metrics({
+    required double fabSize,
+    required double notchMargin,
+  }) {
+    final depth = fabSize * 0.5 + notchMargin;
+    // Spread past the FAB so sides slope gently instead of wrapping tight.
+    final halfWidth = fabSize * 0.5 + notchMargin + 28;
+    return _WaveMetrics(halfWidth: halfWidth, depth: depth);
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -355,55 +373,45 @@ class _ScoopedBarPainter extends CustomPainter {
     );
   }
 
+  /// Flat → soft dip → flat. Two cubics form one continuous wave trough.
   Path _topEdgePath(Size size) {
-    final host = Offset.zero & size;
-    final guest = Rect.fromCircle(
-      center: Offset(size.width / 2, 0),
-      radius: notchRadius,
-    );
-
-    final r = notchRadius;
-    const s1 = lip;
-    const s2 = 1.0;
-
-    final a = -r - s2;
-    final b = host.top - guest.center.dy;
-    final denom = a * a + b * b;
-    final n2 = math.sqrt(b * b * r * r * (denom - r * r));
-    final p2xA = ((a * r * r) - n2) / denom;
-    final p2xB = ((a * r * r) + n2) / denom;
-    final p2yA = math.sqrt(r * r - p2xA * p2xA);
-    final p2yB = math.sqrt(r * r - p2xB * p2xB);
-
-    final p = List<Offset>.filled(6, Offset.zero);
-    p[0] = Offset(a - s1, b);
-    p[1] = Offset(a, b);
-    final cmp = b < 0 ? -1.0 : 1.0;
-    p[2] = cmp * p2yA > cmp * p2yB ? Offset(p2xA, p2yA) : Offset(p2xB, p2yB);
-    p[3] = Offset(-p[2].dx, p[2].dy);
-    p[4] = Offset(-p[1].dx, p[1].dy);
-    p[5] = Offset(-p[0].dx, p[0].dy);
-
-    for (var i = 0; i < p.length; i++) {
-      p[i] += guest.center;
-    }
-
+    final w = size.width;
+    final cx = w / 2;
+    final hw = waveHalfWidth;
+    final d = waveDepth;
     const cr = cornerRadius;
 
+    // Control points pull the curve down early / up late so it feels like a
+    // wave valley, not a punched circular well around the FAB.
     return Path()
-      ..moveTo(host.left, cr)
-      ..quadraticBezierTo(host.left, host.top, host.left + cr, host.top)
-      ..lineTo(p[0].dx, p[0].dy)
-      ..quadraticBezierTo(p[1].dx, p[1].dy, p[2].dx, p[2].dy)
-      ..arcToPoint(p[3], radius: Radius.circular(r), clockwise: false)
-      ..quadraticBezierTo(p[4].dx, p[4].dy, p[5].dx, p[5].dy)
-      ..lineTo(host.right - cr, host.top)
-      ..quadraticBezierTo(host.right, host.top, host.right, cr);
+      ..moveTo(0, cr)
+      ..quadraticBezierTo(0, 0, cr, 0)
+      ..lineTo(cx - hw, 0)
+      ..cubicTo(
+        cx - hw * 0.45,
+        0,
+        cx - hw * 0.55,
+        d,
+        cx,
+        d,
+      )
+      ..cubicTo(
+        cx + hw * 0.55,
+        d,
+        cx + hw * 0.45,
+        0,
+        cx + hw,
+        0,
+      )
+      ..lineTo(w - cr, 0)
+      ..quadraticBezierTo(w, 0, w, cr);
   }
 
   @override
-  bool shouldRepaint(covariant _ScoopedBarPainter oldDelegate) {
-    return oldDelegate.color != color || oldDelegate.notchRadius != notchRadius;
+  bool shouldRepaint(covariant _WaveBarPainter oldDelegate) {
+    return oldDelegate.color != color ||
+        oldDelegate.waveHalfWidth != waveHalfWidth ||
+        oldDelegate.waveDepth != waveDepth;
   }
 }
 

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/models/card_template.dart';
 import 'package:tapni_app/utils/branded_qr.dart';
 import 'package:tapni_app/widgets/branded_qr_image.dart';
+import 'package:tapni_app/widgets/profile_photo_avatar.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -215,17 +216,13 @@ class TemplateBusinessCardPreview extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: template.isDark
-            ? Colors.white.withValues(alpha: 0.15)
-            : Colors.black.withValues(alpha: 0.08),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        userInitial.toUpperCase(),
-        style: TextStyle(
-          color: template.textColor,
-          fontSize: size * 0.33,
-          fontWeight: FontWeight.w600,
+        border: Border.all(
+          color: template.textColor.withValues(alpha: 0.2),
+          width: 2,
+        ),
+        image: const DecorationImage(
+          image: AssetImage(BarqodyProfilePhoto.assetPath),
+          fit: BoxFit.cover,
         ),
       ),
     );

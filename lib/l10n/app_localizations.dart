@@ -4233,8 +4233,26 @@ abstract class AppLocalizations {
   /// No description provided for @noContactsYet.
   ///
   /// In en, this message translates to:
-  /// **'No contacts yet'**
+  /// **'Start networking'**
   String get noContactsYet;
+
+  /// No description provided for @contactsEmptyStepAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to add someone'**
+  String get contactsEmptyStepAdd;
+
+  /// No description provided for @contactsEmptyStepScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Or scan their QR to connect'**
+  String get contactsEmptyStepScan;
+
+  /// No description provided for @contactsEmptyTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Use + to add a contact, or scan their QR from the center button.'**
+  String get contactsEmptyTip;
 
   /// No description provided for @noDetailsYet.
   ///
@@ -4528,7 +4546,7 @@ abstract class AppLocalizations {
   /// No description provided for @scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork.
   ///
   /// In en, this message translates to:
-  /// **'Scan a QR code or add someone you met to build your network.'**
+  /// **'Scan a QR or add people you meet to grow your circle.'**
   String get scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork;
 
   /// No description provided for @scannedViaQR.
@@ -7168,32 +7186,38 @@ abstract class AppLocalizations {
   /// No description provided for @quickAddLinksSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Add the links from your catalog so people can reach you quickly. You can skip this and add more later.'**
+  /// **'Add your social and contact links so people can connect with you easily. You can always add more later.'**
   String get quickAddLinksSubtitle;
 
-  /// No description provided for @quickAddWhatsAppHint.
+  /// No description provided for @quickAddAddAnotherLink.
   ///
   /// In en, this message translates to:
-  /// **'WhatsApp number'**
-  String get quickAddWhatsAppHint;
+  /// **'Add another link'**
+  String get quickAddAddAnotherLink;
 
-  /// No description provided for @quickAddInstagramHint.
+  /// No description provided for @quickAddEmptyCatalog.
   ///
   /// In en, this message translates to:
-  /// **'Instagram username'**
-  String get quickAddInstagramHint;
+  /// **'No quick links available yet. You can skip and add them later from Links.'**
+  String get quickAddEmptyCatalog;
 
-  /// No description provided for @quickAddTiktokHint.
+  /// No description provided for @quickAddCatalogError.
   ///
   /// In en, this message translates to:
-  /// **'TikTok username'**
-  String get quickAddTiktokHint;
+  /// **'We couldn’t load your links. Check your connection and try again.'**
+  String get quickAddCatalogError;
 
-  /// No description provided for @quickAddSnapchatHint.
+  /// No description provided for @quickAddSaveFailed.
   ///
   /// In en, this message translates to:
-  /// **'Snapchat username'**
-  String get quickAddSnapchatHint;
+  /// **'We couldn’t save your links. Please try again.'**
+  String get quickAddSaveFailed;
+
+  /// No description provided for @pleaseEnterAValidUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid URL'**
+  String get pleaseEnterAValidUrl;
 
   /// No description provided for @documents.
   ///
@@ -7360,14 +7384,26 @@ abstract class AppLocalizations {
   /// No description provided for @appsEmpty.
   ///
   /// In en, this message translates to:
-  /// **'No apps yet'**
+  /// **'Start your digital card'**
   String get appsEmpty;
 
   /// No description provided for @appsEmptySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Links and apps will appear here when added.'**
+  /// **'Add WhatsApp, Instagram, and more — all on your card.'**
   String get appsEmptySubtitle;
+
+  /// No description provided for @appsEmptyVisitor.
+  ///
+  /// In en, this message translates to:
+  /// **'No links yet'**
+  String get appsEmptyVisitor;
+
+  /// No description provided for @appsEmptyVisitorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This profile hasn’t added any apps or links.'**
+  String get appsEmptyVisitorSubtitle;
 
   /// No description provided for @galleryEmpty.
   ///

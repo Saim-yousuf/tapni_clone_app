@@ -1,30 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/contact_category.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/profile_photo_avatar.dart';
+import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class WaChatsHeader extends StatelessWidget {
   final String title;
   final String? subtitle;
+  final Widget? leading;
   final List<Widget> actions;
 
   const WaChatsHeader({
     super.key,
     required this.title,
     this.subtitle,
+    this.leading,
     this.actions = const [],
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(25, 8, 17, 4),
+      padding: EdgeInsets.fromLTRB(leading != null ? 17 : 25, 8, 17, 4),
       child: SizedBox(
         height: 52,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            if (leading != null) ...[
+              leading!,
+              const SizedBox(width: 10),
+            ],
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -476,10 +486,7 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasImage = imageUrl != null && imageUrl!.isNotEmpty;
-    final letter = (initial != null && initial!.isNotEmpty)
-        ? initial!.substring(0, 1).toUpperCase()
-        : '?';
+    final hasImage = imageUrl != null && imageUrl!.trim().isNotEmpty;
 
     return Container(
       width: 56,
@@ -493,10 +500,9 @@ class _Avatar extends StatelessWidget {
       child: CircleAvatar(
         radius: 28,
         backgroundColor: color ?? WaUi.navPill,
-        backgroundImage: hasImage ? NetworkImage(imageUrl!) : null,
-        child: !hasImage
-            ? Text(letter, style: WaUi.avatarInitial)
-            : null,
+        backgroundImage: hasImage
+            ? NetworkImage(imageUrl!.trim())
+            : BarqodyProfilePhoto.provider,
       ),
     );
   }
@@ -504,186 +510,147 @@ class _Avatar extends StatelessWidget {
 
 class WaContactEmptyState extends StatelessWidget {
   final bool isSearching;
-  final VoidCallback onScan;
-  final VoidCallback onAdd;
 
-  WaContactEmptyState({
+  const WaContactEmptyState({
     super.key,
     required this.isSearching,
-    required this.onScan,
-    required this.onAdd,
   });
 
   @override
   Widget build(BuildContext context) {
+    final m = AuthScale.of(context);
+
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(28, 24, 28, 100),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _EmptyIllustration(isSearching: isSearching),
-            const SizedBox(height: 28),
-            Text(
-              isSearching ? context.l10n.noMatches : context.l10n.noContactsYet,
-              style: WaUi.headline.copyWith(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
+        padding: EdgeInsets.fromLTRB(
+          BarqodyChrome.sidePad,
+          m.v(24),
+          BarqodyChrome.sidePad,
+          100,
+        ),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 320),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _EmptyIllustration(isSearching: isSearching),
+              SizedBox(height: m.v(24)),
+              Text(
+                isSearching
+                    ? context.l10n.noMatches
+                    : context.l10n.noContactsYet,
+                textAlign: TextAlign.center,
+                style: WaUi.toolsTitleOf(
+                  size: 22,
+                  weight: FontWeight.w700,
+                  color: Colors.black,
+                  height: 1.15,
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              isSearching
-                  ? context.l10n.tryADifferentNameEmailOrCompany
-                  : context.l10n.scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork,
-              style: WaUi.caption.copyWith(
-                height: 1.45,
-                fontSize: 14.5,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            if (!isSearching) ...[
-              const SizedBox(height: 28),
-              Row(
-                children: [
-                  Expanded(
-                    child: FilledButton.icon(
-                      onPressed: onScan,
-                      icon: const Icon(Icons.qr_code_scanner_rounded, size: 18),
-                      label: Text(
-                        context.l10n.scanQR,
-                        overflow: TextOverflow.ellipsis,
-                        style: WaUi.promoButton.copyWith(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      style: FilledButton.styleFrom(
-                        backgroundColor: WaUi.buttonDark,
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size.fromHeight(
-                          WaUi.primaryButtonHeight,
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        shape: const StadiumBorder(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: onAdd,
-                      icon: const Icon(
-                        Icons.person_add_alt_1_rounded,
-                        size: 18,
-                        color: WaUi.primaryText,
-                      ),
-                      label: Text(
-                        context.l10n.add,
-                        overflow: TextOverflow.ellipsis,
-                        style: WaUi.promoButton.copyWith(
-                          color: WaUi.primaryText,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: WaUi.primaryText,
-                        side: const BorderSide(
-                          color: WaUi.chipBorder,
-                          width: 1.2,
-                        ),
-                        minimumSize: const Size.fromHeight(
-                          WaUi.primaryButtonHeight,
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        shape: const StadiumBorder(),
-                      ),
-                    ),
-                  ),
-                ],
+              SizedBox(height: m.v(10)),
+              Text(
+                isSearching
+                    ? context.l10n.tryADifferentNameEmailOrCompany
+                    : context.l10n
+                        .scanAQRCodeOrAddSomeoneYouMetToBuildYourNetwork,
+                textAlign: TextAlign.center,
+                style: WaUi.body.copyWith(
+                  fontSize: m.s(15),
+                  height: 1.35,
+                  color: BarqodyChrome.bodyText,
+                ),
               ),
             ],
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _EmptyIllustration extends StatelessWidget {
+class _EmptyIllustration extends StatefulWidget {
   final bool isSearching;
 
   const _EmptyIllustration({required this.isSearching});
 
   @override
+  State<_EmptyIllustration> createState() => _EmptyIllustrationState();
+}
+
+class _EmptyIllustrationState extends State<_EmptyIllustration>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _floatCtrl;
+  late final Animation<double> _float;
+
+  @override
+  void initState() {
+    super.initState();
+    _floatCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    );
+    _float = Tween<double>(begin: 0, end: -8).animate(
+      CurvedAnimation(parent: _floatCtrl, curve: Curves.easeInOut),
+    );
+    _startIfNeeded();
+  }
+
+  void _startIfNeeded() {
+    if (widget.isSearching) {
+      _floatCtrl.stop();
+      return;
+    }
+    _floatCtrl.repeat(reverse: true);
+  }
+
+  @override
+  void didUpdateWidget(covariant _EmptyIllustration oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isSearching != widget.isSearching) {
+      if (widget.isSearching) {
+        _floatCtrl.stop();
+      } else {
+        _startIfNeeded();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _floatCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 128,
-      height: 128,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            width: 128,
-            height: 128,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: WaUi.searchBg,
-              border: Border.all(color: WaUi.divider, width: 1),
-            ),
-          ),
-          Container(
-            width: 96,
-            height: 96,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x14000000),
-                  blurRadius: 16,
-                  offset: Offset(0, 6),
-                ),
-              ],
-            ),
-            child: Icon(
-              isSearching
-                  ? Icons.search_off_rounded
-                  : Icons.people_alt_outlined,
-              size: 42,
-              color: WaUi.buttonDark.withValues(alpha: 0.78),
-            ),
-          ),
-          if (!isSearching)
-            Positioned(
-              right: 6,
-              bottom: 10,
-              child: Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: WaUi.buttonDark,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x22000000),
-                      blurRadius: 8,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.qr_code_2_rounded,
-                  size: 16,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-        ],
+    final m = AuthScale.of(context);
+
+    if (widget.isSearching) {
+      return Icon(
+        Icons.search_off_rounded,
+        size: m.s(120),
+        color: BarqodyChrome.secondaryText.withValues(alpha: 0.35),
+      );
+    }
+
+    return AnimatedBuilder(
+      animation: _floatCtrl,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, _float.value),
+          child: child,
+        );
+      },
+      child: Image.asset(
+        'assets/images/png/notebook-of-contacts.png',
+        width: m.s(140),
+        height: m.s(140),
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Icon(
+          Icons.people_alt_outlined,
+          size: m.s(80),
+          color: BarqodyChrome.secondaryText.withValues(alpha: 0.35),
+        ),
       ),
     );
   }
@@ -817,4 +784,73 @@ String waFormatContactDate(DateTime date, [BuildContext? context]) {
   final dd = date.day.toString().padLeft(2, '0');
   final mm = date.month.toString().padLeft(2, '0');
   return '$dd/$mm/${date.year}';
+}
+
+/// Contacts list loading placeholder — matches [WaChatListTile] rows.
+/// Uses a [Column] (not [ListView]) so it can sit in [SliverFillRemaining].
+class ContactsListShimmer extends StatelessWidget {
+  final int itemCount;
+
+  const ContactsListShimmer({super.key, this.itemCount = 8});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppShimmer(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(itemCount, (index) {
+            final nameWidth = 120.0 + (index % 3) * 28;
+            final previewWidth = 160.0 + (index % 4) * 24;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 12, 21, 12),
+                  child: Row(
+                    children: [
+                      const ShimmerBox(
+                        width: 56,
+                        height: 56,
+                        shape: BoxShape.circle,
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ShimmerBox(
+                              width: nameWidth,
+                              height: 16,
+                              borderRadius: 6,
+                            ),
+                            const SizedBox(height: 10),
+                            ShimmerBox(
+                              width: previewWidth,
+                              height: 13,
+                              borderRadius: 6,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (index != itemCount - 1)
+                  const Padding(
+                    padding: EdgeInsets.only(left: 95),
+                    child: Divider(
+                      height: 1,
+                      thickness: 0.6,
+                      color: Color(0xFFE8E8E8),
+                    ),
+                  ),
+              ],
+            );
+          }),
+        ),
+      ),
+    );
+  }
 }

@@ -9,6 +9,7 @@ import 'package:tapni_app/services/push_notification_service.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/alert.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/profile_photo_avatar.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 
@@ -445,21 +446,13 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final photo = account.profilePhoto;
-    if (photo != null && photo.isNotEmpty) {
-      return CircleAvatar(
-        radius: 22,
-        backgroundImage: NetworkImage(photo),
-        backgroundColor: BarqodyChrome.circleBtn,
-      );
-    }
+    final photo = account.profilePhoto?.trim();
     return CircleAvatar(
       radius: 22,
       backgroundColor: BarqodyChrome.circleBtn,
-      child: Text(
-        account.initials,
-        style: WaUi.avatarInitial.copyWith(fontWeight: FontWeight.w700),
-      ),
+      backgroundImage: photo != null && photo.isNotEmpty
+          ? NetworkImage(photo)
+          : BarqodyProfilePhoto.provider,
     );
   }
 }

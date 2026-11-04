@@ -11,6 +11,7 @@ import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
+import 'package:tapni_app/utils/device_country.dart';
 import 'package:tapni_app/utils/phone_utils.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/country_picker_sheet.dart';
@@ -29,7 +30,9 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
   final _phoneFocus = FocusNode();
-  CountryDialCode _country = defaultCountryDialCode;
+  /// Instant locale-based default; refined by SIM/network in [_detectCountry].
+  CountryDialCode _country = DeviceCountry.syncDefault();
+  bool _countryLockedByUser = false;
   bool _alreadyOnDevice = false;
   String? _phoneError;
   bool _phoneHintShown = false;
@@ -44,6 +47,15 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
         _offerPhoneNumberHint();
       }
     });
+    _detectCountry();
+  }
+
+  /// SIM → network → locale → fallback. Never overrides a manual pick / hint.
+  Future<void> _detectCountry() async {
+    final detected = await DeviceCountry.detect();
+    if (!mounted || _countryLockedByUser) return;
+    if (detected.iso.toUpperCase() == _country.iso.toUpperCase()) return;
+    setState(() => _country = detected);
   }
 
   @override
@@ -83,6 +95,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     }
     setState(() {
       _country = matched;
+      _countryLockedByUser = true;
       _phoneController.value = TextEditingValue(
         text: local,
         selection: TextSelection.collapsed(offset: local.length),
@@ -178,7 +191,10 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
       selectedIso: _country.iso,
     );
     if (selected != null) {
-      setState(() => _country = selected);
+      setState(() {
+        _country = selected;
+        _countryLockedByUser = true;
+      });
       _checkAlreadyOnDevice();
     }
   }
@@ -273,7 +289,16 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                                 height: m.fieldH,
                                 radius: m.radius,
                                 country: _country,
-                                textStyle: _text(m, size: 15),
+                                nameStyle: _text(
+                                  m,
+                                  size: 15,
+                                  weight: FontWeight.w500,
+                                ),
+                                codeStyle: _text(
+                                  m,
+                                  size: 13,
+                                  color: AuthUi.textSecondary,
+                                ),
                                 onTap: _pickCountry,
                                 flagSize: m.s(22),
                                 chevronSize: m.s(20),
@@ -442,7 +467,8 @@ class _CountryField extends StatelessWidget {
     required this.height,
     required this.radius,
     required this.country,
-    required this.textStyle,
+    required this.nameStyle,
+    required this.codeStyle,
     required this.onTap,
     required this.flagSize,
     required this.chevronSize,
@@ -452,7 +478,8 @@ class _CountryField extends StatelessWidget {
   final double height;
   final double radius;
   final CountryDialCode country;
-  final TextStyle textStyle;
+  final TextStyle nameStyle;
+  final TextStyle codeStyle;
   final VoidCallback onTap;
   final double flagSize;
   final double chevronSize;
@@ -481,11 +508,15 @@ class _CountryField extends StatelessWidget {
               ),
               SizedBox(width: padH * 0.7),
               Expanded(
-                child: Text(
-                  '${country.name} (${country.code})',
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: country.name, style: nameStyle),
+                      TextSpan(text: '  ${country.code}', style: codeStyle),
+                    ],
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: textStyle,
                 ),
               ),
               Icon(

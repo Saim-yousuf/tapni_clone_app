@@ -2088,6 +2088,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noContactsYet => 'لا جهات اتصال بعد';
 
   @override
+  String get contactsEmptyStepAdd => 'Tap + to add someone';
+
+  @override
+  String get contactsEmptyStepScan => 'Or scan their QR to connect';
+
+  @override
+  String get contactsEmptyTip =>
+      'Use + to add a contact, or scan their QR from the center button.';
+
+  @override
   String get noDetailsYet => 'لا تفاصيل بعد';
 
   @override
@@ -3729,16 +3739,22 @@ class AppLocalizationsAr extends AppLocalizations {
       'أضف واتساب وإنستغرام وتيك توك وسناب شات ليصلك الآخرون بسرعة. يمكنك التخطي وإضافة المزيد لاحقًا.';
 
   @override
-  String get quickAddWhatsAppHint => 'رقم واتساب';
+  String get quickAddAddAnotherLink => 'Add another link';
 
   @override
-  String get quickAddInstagramHint => 'اسم مستخدم إنستغرام';
+  String get quickAddEmptyCatalog =>
+      'No quick links available yet. You can skip and add them later from Links.';
 
   @override
-  String get quickAddTiktokHint => 'اسم مستخدم تيك توك';
+  String get quickAddCatalogError =>
+      'We couldn’t load your links. Check your connection and try again.';
 
   @override
-  String get quickAddSnapchatHint => 'اسم مستخدم سناب شات';
+  String get quickAddSaveFailed =>
+      'We couldn’t save your links. Please try again.';
+
+  @override
+  String get pleaseEnterAValidUrl => 'Please enter a valid URL';
 
   @override
   String get documents => 'المستندات';
@@ -3828,10 +3844,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileTabGallery => 'Gallery';
 
   @override
-  String get appsEmpty => 'No apps yet';
+  String get appsEmpty => 'Start your digital card';
 
   @override
-  String get appsEmptySubtitle => 'Links and apps will appear here when added.';
+  String get appsEmptySubtitle =>
+      'Add WhatsApp, Instagram, and more — all on your card.';
+
+  @override
+  String get appsEmptyVisitor => 'No links yet';
+
+  @override
+  String get appsEmptyVisitorSubtitle =>
+      'This profile hasn’t added any apps or links.';
 
   @override
   String get galleryEmpty => 'No photos yet';

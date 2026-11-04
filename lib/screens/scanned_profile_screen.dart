@@ -29,6 +29,7 @@ import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/profile_reviews_section.dart';
 import 'package:tapni_app/widgets/profile_empty_state.dart';
+import 'package:tapni_app/widgets/profile_photo_avatar.dart';
 import 'package:tapni_app/widgets/explore_detail_shimmers.dart';
 import 'package:tapni_app/widgets/user_cards_sheet.dart';
 
@@ -639,7 +640,6 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             child: Column(
               children: [
                 _buildAvatarCircle(
-                  displayName: displayName,
                   photoUrl: photoUrl,
                   size: 118,
                 ),
@@ -917,182 +917,213 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                                   ),
                                   SizedBox(height: headerBlockHeight),
                                   Expanded(
-                                    child: ListView(
-                                      controller: scrollController,
-                                      physics:
-                                          const AlwaysScrollableScrollPhysics(
-                                        parent: ClampingScrollPhysics(),
-                                      ),
-                                      padding: EdgeInsets.only(
-                                        bottom: 32 + bottomPad,
-                                      ),
-                                      children: [
-                                        if (showHeader)
-                                          Opacity(
-                                            opacity: headerOpacity,
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: padH,
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  VerifiedName(
-                                                    name: displayName
-                                                        .toUpperCase(),
-                                                    verified: profile.isPro,
-                                                    badgeSize: 26,
-                                                    style: WaUi.toolsTitleOf(
-                                                      size: 22,
-                                                      weight: FontWeight.w800,
-                                                      color: Colors.black,
-                                                      letterSpacing: 0.15,
-                                                    ),
+                                    child: Builder(
+                                      builder: (context) {
+                                        final linksEmpty =
+                                            !_hasVisibleActiveLinks(
+                                          profile,
+                                          card,
+                                        );
+                                        final bottomInset = 32 + bottomPad;
+
+                                        Widget headerBlock() {
+                                          if (!showHeader) {
+                                            return SizedBox(
+                                              height: 28 * headerOpacity,
+                                            );
+                                          }
+                                          return Column(
+                                            children: [
+                                              Opacity(
+                                                opacity: headerOpacity,
+                                                child: Padding(
+                                                  padding:
+                                                      EdgeInsets.symmetric(
+                                                    horizontal: padH,
                                                   ),
-                                                  if (Constants
-                                                          .reviewsEnabled &&
-                                                      profile.reviewCount >
-                                                          0) ...[
-                                                    const SizedBox(height: 6),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        const Icon(
-                                                          Icons.star_rounded,
-                                                          size: 18,
-                                                          color: Color(
-                                                            0xFFF5A623,
-                                                          ),
+                                                  child: Column(
+                                                    children: [
+                                                      VerifiedName(
+                                                        name: displayName
+                                                            .toUpperCase(),
+                                                        verified:
+                                                            profile.isPro,
+                                                        badgeSize: 26,
+                                                        style:
+                                                            WaUi.toolsTitleOf(
+                                                          size: 22,
+                                                          weight:
+                                                              FontWeight.w800,
+                                                          color: Colors.black,
+                                                          letterSpacing: 0.15,
                                                         ),
+                                                      ),
+                                                      if (Constants
+                                                              .reviewsEnabled &&
+                                                          profile.reviewCount >
+                                                              0) ...[
                                                         const SizedBox(
-                                                          width: 4,
+                                                          height: 6,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            const Icon(
+                                                              Icons
+                                                                  .star_rounded,
+                                                              size: 18,
+                                                              color: Color(
+                                                                0xFFF5A623,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 4,
+                                                            ),
+                                                            Text(
+                                                              '${profile.avgRating.toStringAsFixed(1)} (${profile.reviewCount})',
+                                                              style: WaUi.body
+                                                                  .copyWith(
+                                                                fontSize: 13,
+                                                                color:
+                                                                    const Color(
+                                                                  0xFF6B7280,
+                                                                ),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                      if (bio.isNotEmpty) ...[
+                                                        const SizedBox(
+                                                          height: 8,
                                                         ),
                                                         Text(
-                                                          '${profile.avgRating.toStringAsFixed(1)} (${profile.reviewCount})',
+                                                          bio,
+                                                          textAlign: TextAlign
+                                                              .center,
                                                           style: WaUi.body
                                                               .copyWith(
-                                                            fontSize: 13,
-                                                            color: const Color(
-                                                              0xFF6B7280,
-                                                            ),
+                                                            fontSize: 15,
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .w600,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                  if (bio.isNotEmpty) ...[
-                                                    const SizedBox(height: 8),
-                                                    Text(
-                                                      bio,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: WaUi.body.copyWith(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        height: 1.35,
-                                                        color: const Color(
-                                                          0xFF6B7280,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        SizedBox(height: 28 * headerOpacity),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: padH,
-                                          ),
-                                          child: _buildLinkSection(
-                                            profile,
-                                            card,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                            padH,
-                                            32,
-                                            padH,
-                                            8,
-                                          ),
-                                          child: isOwn
-                                              ? Column(
-                                                  children: [
-                                                    Text(
-                                                      context.l10n.thisIsYou,
-                                                      style:
-                                                          WaUi.toolsTitleOf(
-                                                        size: 16,
-                                                        weight: FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 4),
-                                                    Text(
-                                                      context.l10n
-                                                          .viewingOwnProfile,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: WaUi.body.copyWith(
-                                                        fontSize: 13,
-                                                        color: const Color(
-                                                          0xFF6B7280,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 16),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child:
-                                                              _ScannedActionPill(
-                                                            label: context
-                                                                .l10n
-                                                                .shareCard,
-                                                            filled: false,
-                                                            onTap: () =>
-                                                                _shareProfile(
-                                                              profile,
+                                                                    .w400,
+                                                            height: 1.35,
+                                                            color:
+                                                                const Color(
+                                                              0xFF6B7280,
                                                             ),
                                                           ),
                                                         ),
-                                                        const SizedBox(
-                                                          width: 12,
+                                                      ],
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 28 * headerOpacity,
+                                              ),
+                                            ],
+                                          );
+                                        }
+
+                                        Widget actionButtons({
+                                          double top = 32,
+                                        }) {
+                                          return Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                              padH,
+                                              top,
+                                              padH,
+                                              8,
+                                            ),
+                                            child: isOwn
+                                                ? Column(
+                                                    children: [
+                                                      Text(
+                                                        context.l10n.thisIsYou,
+                                                        style:
+                                                            WaUi.toolsTitleOf(
+                                                          size: 16,
+                                                          weight:
+                                                              FontWeight.w700,
                                                         ),
-                                                        Expanded(
-                                                          child:
-                                                              _ScannedActionPill(
-                                                            label: context
-                                                                .l10n
-                                                                .openMyCard,
-                                                            filled: true,
-                                                            onTap: _openMyCard,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 4,
+                                                      ),
+                                                      Text(
+                                                        context.l10n
+                                                            .viewingOwnProfile,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: WaUi.body
+                                                            .copyWith(
+                                                          fontSize: 13,
+                                                          color: const Color(
+                                                            0xFF6B7280,
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                )
-                                              : _ScannedActionPill(
-                                                  label: context
-                                                      .l10n.exchangeContact,
-                                                  filled: true,
-                                                  onTap: _exchangeContact,
-                                                ),
-                                        ),
-                                        if (Constants.reviewsEnabled &&
-                                            ((profile.businessName ?? '')
-                                                    .trim()
-                                                    .isNotEmpty ||
-                                                profile.reviewCount > 0 ||
-                                                !isOwn))
-                                          Padding(
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 16,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child:
+                                                                _ScannedActionPill(
+                                                              label: context
+                                                                  .l10n
+                                                                  .shareCard,
+                                                              filled: false,
+                                                              onTap: () =>
+                                                                  _shareProfile(
+                                                                profile,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 12,
+                                                          ),
+                                                          Expanded(
+                                                            child:
+                                                                _ScannedActionPill(
+                                                              label: context
+                                                                  .l10n
+                                                                  .openMyCard,
+                                                              filled: true,
+                                                              onTap:
+                                                                  _openMyCard,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  )
+                                                : _ScannedActionPill(
+                                                    label: context.l10n
+                                                        .exchangeContact,
+                                                    filled: true,
+                                                    onTap: _exchangeContact,
+                                                  ),
+                                          );
+                                        }
+
+                                        Widget? reviewsBlock() {
+                                          if (!Constants.reviewsEnabled ||
+                                              ((profile.businessName ?? '')
+                                                      .trim()
+                                                      .isEmpty &&
+                                                  profile.reviewCount <= 0 &&
+                                                  isOwn)) {
+                                            return null;
+                                          }
+                                          return Padding(
                                             padding: EdgeInsets.fromLTRB(
                                               padH,
                                               16,
@@ -1110,8 +1141,95 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                                                   )
                                                   .toList(),
                                             ),
+                                          );
+                                        }
+
+                                        if (linksEmpty) {
+                                          final reviews = reviewsBlock();
+                                          return CustomScrollView(
+                                            controller: scrollController,
+                                            physics:
+                                                const AlwaysScrollableScrollPhysics(
+                                              parent: ClampingScrollPhysics(),
+                                            ),
+                                            slivers: [
+                                              SliverToBoxAdapter(
+                                                child: headerBlock(),
+                                              ),
+                                              SliverFillRemaining(
+                                                hasScrollBody: false,
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                    bottom: bottomInset,
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Center(
+                                                          child: Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                              horizontal: padH,
+                                                            ),
+                                                            child:
+                                                                ProfileEmptyState(
+                                                              icon: Icons
+                                                                  .link_off_rounded,
+                                                              title: isOwn
+                                                                  ? context
+                                                                      .l10n
+                                                                      .appsEmpty
+                                                                  : context
+                                                                      .l10n
+                                                                      .appsEmptyVisitor,
+                                                              subtitle: isOwn
+                                                                  ? context
+                                                                      .l10n
+                                                                      .appsEmptySubtitle
+                                                                  : context
+                                                                      .l10n
+                                                                      .appsEmptyVisitorSubtitle,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      actionButtons(top: 8),
+                                                      if (reviews != null)
+                                                        reviews,
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }
+
+                                        final reviews = reviewsBlock();
+                                        return ListView(
+                                          controller: scrollController,
+                                          physics:
+                                              const AlwaysScrollableScrollPhysics(
+                                            parent: ClampingScrollPhysics(),
                                           ),
-                                      ],
+                                          padding: EdgeInsets.only(
+                                            bottom: bottomInset,
+                                          ),
+                                          children: [
+                                            headerBlock(),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: padH,
+                                              ),
+                                              child: _buildLinkSection(
+                                                profile,
+                                                card,
+                                              ),
+                                            ),
+                                            actionButtons(),
+                                            if (reviews != null) reviews,
+                                          ],
+                                        );
+                                      },
                                     ),
                                   ),
                                 ],
@@ -1126,7 +1244,6 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                                       opacity: headerOpacity,
                                       child: Center(
                                         child: _buildAvatarCircle(
-                                          displayName: displayName,
                                           photoUrl: displayPhoto,
                                           size: avatarSize,
                                         ),
@@ -1225,11 +1342,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   }
 
   Widget _buildAvatarCircle({
-    required String displayName,
     required String? photoUrl,
     required double size,
   }) {
-    final hasPhoto = photoUrl != null && photoUrl.trim().isNotEmpty;
     return Container(
       width: size,
       height: size,
@@ -1246,36 +1361,40 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         ],
       ),
       child: ClipOval(
-        child: hasPhoto
-            ? CachedNetworkImage(
-                imageUrl: photoUrl.trim(),
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-                errorWidget: (_, _, _) =>
-                    _avatarInitials(displayName, true),
-                placeholder: (_, _) => _avatarInitials(displayName, true),
-              )
-            : ColoredBox(
-                color: const Color(0xFF1E2022),
-                child: _avatarInitials(displayName, true),
-              ),
+        child: BarqodyProfilePhoto.networkOrPlaceholder(photoUrl: photoUrl),
       ),
     );
   }
 
-  Widget _avatarInitials(String name, bool light) {
-    final initial = name.trim().isNotEmpty ? name.trim()[0].toUpperCase() : '?';
-    return Center(
-      child: Text(
-        initial,
-        style: TextStyle(
-          color: light ? Colors.white : Colors.black87,
-          fontSize: 36,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
+  bool _hasVisibleActiveLinks(UserProfile profile, UserCustomCard? card) {
+    final allLinks = profile.socialLinks;
+    var activeLinks = allLinks
+        .where(
+          (link) =>
+              link.isActive &&
+              link.isPublic &&
+              ReleaseFeatures.isPersonalLinkVisible(link) &&
+              !isCatalogInventoryHiddenByWebsite(link, allLinks) &&
+              !isDuplicateBusinessWebsiteLink(link, allLinks) &&
+              !isDuplicateCatalogInventoryLink(link, allLinks),
+        )
+        .toList();
+
+    if (card != null && card.enabledLinkIds.isNotEmpty) {
+      final enabled = card.enabledLinkIds.toSet();
+      activeLinks = activeLinks
+          .where((l) => enabled.contains(l.id))
+          .map(card.filterLinkEntries)
+          .where((l) {
+            if (l.value.trim().isEmpty && l.effectiveEntries.isEmpty) {
+              return false;
+            }
+            return true;
+          })
+          .toList();
+    }
+
+    return activeLinks.isNotEmpty;
   }
 
   Widget _buildLinkSection(UserProfile profile, UserCustomCard? card) {
@@ -1307,10 +1426,15 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     }
 
     if (activeLinks.isEmpty) {
+      final isOwn = _isOwnProfile(profile);
       return ProfileEmptyState(
-        icon: Icons.apps_outlined,
-        title: context.l10n.appsEmpty,
-        subtitle: context.l10n.appsEmptySubtitle,
+        icon: isOwn ? Icons.add_link_rounded : Icons.link_off_rounded,
+        title: isOwn
+            ? context.l10n.appsEmpty
+            : context.l10n.appsEmptyVisitor,
+        subtitle: isOwn
+            ? context.l10n.appsEmptySubtitle
+            : context.l10n.appsEmptyVisitorSubtitle,
       );
     }
 
@@ -1319,10 +1443,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         const columns = 3;
         const spacing = 21.0;
         const runSpacing = 41.0;
-        const radius = 16.0;
         final cellWidth =
             (constraints.maxWidth - spacing * (columns - 1)) / columns;
         final iconSize = cellWidth;
+        final radius = LinkPlatformIcon.cornerRadius(iconSize);
 
         return Wrap(
           spacing: spacing,

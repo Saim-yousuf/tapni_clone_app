@@ -9,6 +9,7 @@ class ContactUserData {
   final String jobTitle;
   final String? profilePhoto;
   final String? username;
+  final bool isPro;
 
   ContactUserData({
     required this.id,
@@ -19,6 +20,7 @@ class ContactUserData {
     required this.jobTitle,
     this.profilePhoto,
     this.username,
+    this.isPro = false,
   });
 
   factory ContactUserData.fromJson(Map<String, dynamic> json) {
@@ -31,6 +33,7 @@ class ContactUserData {
       jobTitle: json['jobTitle'] ?? '',
       profilePhoto: json['profilePhoto'],
       username: json['username'],
+      isPro: json['isPro'] as bool? ?? json['IsPro'] as bool? ?? false,
     );
   }
 }
@@ -91,6 +94,9 @@ class Lead {
       contactUserData != null ? contactUserData!.profilePhoto : null;
 
   bool get isScannedContact => contactUser != null;
+
+  /// Pro / verified badge — only for BarQody Business contacts.
+  bool get isVerifiedContact => contactUserData?.isPro == true;
 
   factory Lead.fromJson(Map<String, dynamic> json) {
     ContactUserData? userData;

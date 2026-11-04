@@ -13,8 +13,12 @@ class PrefUtils {
   String pendingRemoteLogout = "pending_remote_logout";
   String pendingRemoteLogoutSessionId = "pending_remote_logout_session_id";
   String contactsSyncPromptedPrefix = "contacts_sync_prompted_";
+  String profileAvatarWelcomeSeenPrefix = "profile_avatar_welcome_seen_";
+  String profileAvatarWelcomePending = "profile_avatar_welcome_pending";
   String callerIdEnabled = "caller_id_enabled";
   String callerIdPermissionPrompted = "caller_id_permission_prompted";
+  /// Local inbox for push-only lead notifs (`profile_scan`, `contact_exchange`).
+  String leadPushNotifications = "lead_push_notifications";
 }
 
 class SharedPrefHelper {

@@ -33,7 +33,7 @@ import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/feedback_dialog.dart';
 import 'package:tapni_app/widgets/logout_confirm_dialog.dart';
-import 'package:tapni_app/widgets/settings_widget.dart';
+import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/wa_tools_widgets.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -183,44 +183,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ).push(MaterialPageRoute(builder: (_) => QrCodeScreen()));
                     },
                   ),
-                  PopupMenuButton<String>(
-                    icon: Icon(
-                      Icons.more_vert,
-                      size: 24,
-                      color: WaUi.primaryText,
-                    ),
-                    color: WaUi.surface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                    ),
-                    onSelected: (value) {
-                      switch (value) {
-                        case 'account':
-                          SettingWidgets.showSettingSheet(context);
-                          break;
-                        case 'notifications':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => NotificationsScreen(),
-                            ),
-                          );
-                          break;
-                      }
-                    },
-                    itemBuilder: (_) => [
-                      PopupMenuItem(
-                        value: 'account',
-                        child: Text(
-                          context.l10n.accountSettings,
-                          style: WaUi.body,
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 'notifications',
-                        child: Text(context.l10n.notifications, style: WaUi.body),
-                      ),
-                    ],
-                  ),
+                  NotificationIconButton(),
                 ],
               ),
               Expanded(
