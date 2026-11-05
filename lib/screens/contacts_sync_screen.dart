@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +36,7 @@ class _ContactsSyncScreenState extends State<ContactsSyncScreen> {
     if (!mounted) return;
     if (widget.isOnboarding) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const MainShell()),
+        AppPageRoute(builder: (_) => const MainShell()),
         (_) => false,
       );
       return;

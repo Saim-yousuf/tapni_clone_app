@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/reward.dart';
@@ -210,7 +211,7 @@ class _AddStampScreenState extends State<AddStampScreen> {
                       onTap: _displayUsername?.trim().isNotEmpty == true
                           ? () {
                               Navigator.of(context).push(
-                                MaterialPageRoute(
+                                AppPageRoute(
                                   builder: (_) => ScannedProfileScreen(
                                     username: _displayUsername!
                                         .replaceFirst(RegExp(r'^@'), ''),

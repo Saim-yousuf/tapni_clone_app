@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -155,7 +156,7 @@ class _BusinessSetupChecklistScreenState
     final website = res.success ? websiteRepo.parseWebsite(res.data) : null;
     if (website != null) {
       await Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) =>
               BusinessWebsiteSettingsScreen(initialWebsite: website),
         ),
@@ -164,7 +165,7 @@ class _BusinessSetupChecklistScreenState
     }
     final explicit = normalizeBusinessType(_businessType);
     await Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => BusinessWebsiteSetupScreen(
           websiteType: websiteType,
           businessType: explicit.isEmpty ? null : explicit,
@@ -182,7 +183,7 @@ class _BusinessSetupChecklistScreenState
     switch (step.id) {
       case 'profile':
         await Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const BusinessProfileScreen()),
+          AppPageRoute(builder: (_) => const BusinessProfileScreen()),
         );
         break;
       case 'website':
@@ -195,7 +196,7 @@ class _BusinessSetupChecklistScreenState
         break;
       case 'rooms':
         await Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => const BookableResourcesScreen(
               allowedTypes: ['room'],
               title: 'Rooms',

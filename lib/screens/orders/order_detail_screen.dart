@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -150,7 +151,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     if (userId == null && (username == null || username.isEmpty)) return;
     Navigator.push(
       context,
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => ScannedProfileScreen(
           user: userId,
           username: username,
@@ -615,7 +616,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                         child: TextButton(
                                           onPressed: () {
                                             Navigator.of(context).push(
-                                              MaterialPageRoute(
+                                              AppPageRoute(
                                                 builder: (_) =>
                                                     PaymentDetailScreen(
                                                   orderId: order.id,

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -17,6 +18,7 @@ import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/filter_contacts_sheet.dart';
 import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 class ContactsSearchScreen extends StatefulWidget {
   const ContactsSearchScreen({super.key});
@@ -218,7 +220,7 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
   void _openLead(Lead lead) {
     if (lead.contactUser != null) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => ScannedProfileScreen(user: lead.contactUser),
         ),
       );
@@ -228,13 +230,13 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
   void _openMatched(MatchedPhoneUser user) {
     if (user.username.isNotEmpty) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => ScannedProfileScreen(username: user.username),
         ),
       );
     } else if (user.userId.isNotEmpty) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => ScannedProfileScreen(user: user.userId),
         ),
       );
@@ -279,7 +281,7 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
                         child: InkWell(
                           customBorder: const CircleBorder(),
                           onTap: () {
-                            showModalBottomSheet(
+                            showAppModalBottomSheet(
                               context: context,
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,

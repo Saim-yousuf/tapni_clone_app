@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -1149,7 +1150,7 @@ class _BusinessList extends StatelessWidget {
             onTap: () {
               if (biz.username.isEmpty) return;
               Navigator.of(context).push(
-                MaterialPageRoute(
+                AppPageRoute(
                   builder: (_) => ScannedProfileScreen(username: biz.username),
                 ),
               );

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -190,7 +191,7 @@ class _AttendanceReportScreenState extends State<AttendanceReportScreen> {
                       onTap: () async {
                         final result = await Navigator.push<String>(
                           context,
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) =>
                                 EmployeeSettingsScreen(employee: selected),
                           ),

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:tapni_app/repository/payment_repo.dart';
@@ -478,7 +479,7 @@ class _CustomerPaymentCenterScreenState
                               : Icons.north_east_rounded,
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => PaymentDetailScreen(
                               paymentId: p['id']?.toString() ?? '',
                               orderId: p['orderId']?.toString(),

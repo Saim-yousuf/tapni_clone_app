@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
@@ -110,14 +111,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
       await profileProvider.fetchProfile();
       if (!context.mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const MainShell()),
+        AppPageRoute(builder: (_) => const MainShell()),
         (route) => false,
       );
       return;
     }
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const PhoneAuthScreen()),
+      AppPageRoute(builder: (_) => const PhoneAuthScreen()),
       (route) => false,
     );
   }
@@ -180,7 +181,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onPressed: () {
                       Navigator.of(
                         context,
-                      ).push(MaterialPageRoute(builder: (_) => QrCodeScreen()));
+                      ).push(AppPageRoute(builder: (_) => QrCodeScreen()));
                     },
                   ),
                   NotificationIconButton(),
@@ -201,7 +202,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                         onTap: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
+                            AppPageRoute(
                               builder: (_) => const BusinessSuiteScreen(),
                             ),
                           );
@@ -219,7 +220,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         );
                         profileProvider.setEditingProfile(true);
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => MainShell(currentPage: 'My Card'),
                           ),
                         );
@@ -231,7 +232,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       subtitle: context.l10n.findPeopleOnBarQody,
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => const FindUserScreen(isTab: false),
                           ),
                         );
@@ -246,7 +247,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           : context.l10n.setUsernameSubtitle,
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => SetUsernameScreen()),
+                          AppPageRoute(builder: (_) => SetUsernameScreen()),
                         );
                       },
                     ),
@@ -287,7 +288,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         subtitle: context.l10n.callerIdSubtitle,
                         onTap: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
+                            AppPageRoute(
                               builder: (_) => const CallerIdSetupScreen(),
                             ),
                           );
@@ -299,7 +300,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       subtitle: context.l10n.invitationsSubtitle,
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => const InvitationsHomeScreen(),
                           ),
                         );
@@ -314,7 +315,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       showBadge: unreadCount > 0,
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => const NotificationsScreen(),
                           ),
                         );
@@ -337,7 +338,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             'Orders, appointments, and stays in one place',
                         onTap: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
+                            AppPageRoute(
                               builder: (_) =>
                                   OrdersListScreen(isBusinessView: false),
                             ),
@@ -350,7 +351,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         subtitle: 'Saved cards, payment history, and refunds',
                         onTap: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
+                            AppPageRoute(
                               builder: (_) =>
                                   const CustomerPaymentCenterScreen(),
                             ),
@@ -363,7 +364,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         subtitle: context.l10n.myRewardCardsSubtitle,
                         onTap: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
+                            AppPageRoute(
                               builder: (_) => CustomerLoyaltyHomeScreen(),
                             ),
                           );
@@ -381,7 +382,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         showBadge: _pendingInvitationCount > 0,
                         onTap: () async {
                           await Navigator.of(context).push(
-                            MaterialPageRoute(
+                            AppPageRoute(
                               builder: (_) => const WorkplaceScreen(),
                             ),
                           );
@@ -397,7 +398,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       subtitle: context.l10n.linkedDevicesSubtitle,
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => LinkedDevicesScreen(),
                           ),
                         );
@@ -422,7 +423,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       subtitle: languageSubtitle,
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => AppLanguageScreen()),
+                          AppPageRoute(builder: (_) => AppLanguageScreen()),
                         );
                       },
                     ),
@@ -432,7 +433,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       subtitle: context.l10n.helpFaqsSubtitle,
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => const HelpCenterScreen(),
                           ),
                         );

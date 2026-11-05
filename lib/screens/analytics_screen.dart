@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -10,6 +11,7 @@ import 'package:tapni_app/providers/connectivity_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/curved_bottom_nav.dart';
@@ -231,11 +233,19 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             ),
             Expanded(
               child: ClipRect(
-                child: !analyticsUnlocked
-                  ? _LockedAnalyticsPreview(bottomPad: bottomPad)
+                child: AppContentSwitcher(
+                  child: !analyticsUnlocked
+                  ? KeyedSubtree(
+                      key: const ValueKey('analytics-locked'),
+                      child: _LockedAnalyticsPreview(bottomPad: bottomPad),
+                    )
                   : _isLoading
-                  ? _AnalyticsShimmer(bottomPad: bottomPad)
+                  ? KeyedSubtree(
+                      key: const ValueKey('analytics-shimmer'),
+                      child: _AnalyticsShimmer(bottomPad: bottomPad),
+                    )
                   : RefreshIndicator(
+                      key: const ValueKey('analytics-content'),
                       color: WaUi.buttonDark,
                       onRefresh: _fetchAnalytics,
                       child: ListView(
@@ -325,6 +335,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                         ],
                       ),
                     ),
+                ),
               ),
             ),
           ],
@@ -393,22 +404,25 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           ((username != null && username.isNotEmpty) ||
               (userId != null && userId.isNotEmpty));
 
-      return _ViewerTile(
-        title: title,
-        subtitle: subtitle,
-        isGuest: isGuest,
-        photoUrl: photoUrl,
-        onTap: canOpen
-            ? () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => username != null && username!.isNotEmpty
-                        ? ScannedProfileScreen(username: username)
-                        : ScannedProfileScreen(user: userId),
-                  ),
-                );
-              }
-            : null,
+      return AppAppear(
+        index: index,
+        child: _ViewerTile(
+          title: title,
+          subtitle: subtitle,
+          isGuest: isGuest,
+          photoUrl: photoUrl,
+          onTap: canOpen
+              ? () {
+                  Navigator.of(context).push(
+                    AppPageRoute(
+                      builder: (_) => username != null && username!.isNotEmpty
+                          ? ScannedProfileScreen(username: username)
+                          : ScannedProfileScreen(user: userId),
+                    ),
+                  );
+                }
+              : null,
+        ),
       );
     });
   }

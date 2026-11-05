@@ -43,8 +43,12 @@ class BarqodyProfilePhoto {
       fit: fit,
       width: width ?? double.infinity,
       height: height ?? double.infinity,
+      fadeInDuration: Duration.zero,
+      fadeOutDuration: Duration.zero,
+      useOldImageOnUrlChange: true,
+      // Soft tile while loading — not the default avatar (avoids face flash).
       errorWidget: (_, __, ___) => placeholder(fit: fit),
-      placeholder: (_, __) => placeholder(fit: fit),
+      placeholder: (_, __) => const ColoredBox(color: Color(0xFFEEF2F5)),
     );
   }
 }

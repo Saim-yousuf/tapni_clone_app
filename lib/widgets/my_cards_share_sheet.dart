@@ -17,12 +17,13 @@ import 'package:tapni_app/widgets/wallet_brand_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 class MyCardsShareSheet extends StatefulWidget {
   const MyCardsShareSheet({super.key});
 
   static void show(BuildContext context) {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// Soft slide + fade — premium, smooth feel for the whole app.
+/// Clear slide + fade — intentionally noticeable on every push/pop.
 ///
-/// Incoming page: gentle slide from the right + fade in.
-/// Outgoing page: slight drift left (parallax).
-/// Curve: easeOutCubic / easeInCubic · duration via [AppPageRoute].
+/// Incoming: slides in from the right (~full card width feel).
+/// Outgoing: drifts left (parallax).
 class PremiumPageTransitionsBuilder extends PageTransitionsBuilder {
   const PremiumPageTransitionsBuilder();
 
-  static const Duration duration = Duration(milliseconds: 340);
+  static const Duration duration = Duration(milliseconds: 480);
 
   @override
   Widget buildTransitions<T>(
@@ -30,7 +29,7 @@ class PremiumPageTransitionsBuilder extends PageTransitionsBuilder {
     );
 
     final slideIn = Tween<Offset>(
-      begin: const Offset(0.08, 0),
+      begin: const Offset(1.0, 0),
       end: Offset.zero,
     ).animate(primary);
 
@@ -38,7 +37,7 @@ class PremiumPageTransitionsBuilder extends PageTransitionsBuilder {
 
     final slideOut = Tween<Offset>(
       begin: Offset.zero,
-      end: const Offset(-0.05, 0),
+      end: const Offset(-0.28, 0),
     ).animate(secondary);
 
     return SlideTransition(
@@ -66,8 +65,7 @@ const PageTransitionsTheme kAppPageTransitionsTheme = PageTransitionsTheme(
   },
 );
 
-/// Prefer this over [MaterialPageRoute] for new pushes — same premium
-/// transition with a slightly longer, smoother duration.
+/// Prefer this for pushes — noticeable 480ms slide + fade.
 class AppPageRoute<T> extends MaterialPageRoute<T> {
   AppPageRoute({
     required WidgetBuilder builder,

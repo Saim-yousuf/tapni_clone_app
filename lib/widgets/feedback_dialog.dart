@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 
 /// Feedback modal matching Tools redesign. Submission stays mock-only.
 class FeedbackDialog extends StatefulWidget {
@@ -14,7 +15,7 @@ class FeedbackDialog extends StatefulWidget {
     BuildContext context, {
     required VoidCallback onSubmitted,
   }) {
-    return showDialog(
+    return showAppDialog(
       context: context,
       barrierColor: Colors.black.withValues(alpha: 0.45),
       builder: (_) => FeedbackDialog(onSubmitted: onSubmitted),

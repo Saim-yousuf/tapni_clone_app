@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_list_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/points_rewards_screen.dart';
@@ -57,7 +58,7 @@ class LoyaltyHubScreen extends StatelessWidget {
                           'Reward customers with stamps on eligible purchases.',
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => const LoyaltyProgramListScreen(),
                           ),
                         );
@@ -74,7 +75,7 @@ class LoyaltyHubScreen extends StatelessWidget {
                           'Let customers earn points and use them toward future orders.',
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             settings:
                                 const RouteSettings(name: '/points_rewards'),
                             builder: (_) => const PointsRewardsScreen(),

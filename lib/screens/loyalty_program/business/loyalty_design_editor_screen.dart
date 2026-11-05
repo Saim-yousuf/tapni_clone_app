@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/helper/image_helper.dart';
@@ -17,6 +18,7 @@ import 'package:tapni_app/screens/loyalty_program/business/loyalty_program_succe
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/design_color_picker_sheet.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 /// Full Canva-style loyalty stamp-card editor (same tools as invitations).
 class LoyaltyDesignEditorScreen extends StatefulWidget {
@@ -386,7 +388,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
   }
 
   void _showBackgroundMenu() {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       backgroundColor: BarqodyChrome.scaffold,
       shape: const RoundedRectangleBorder(
@@ -445,7 +447,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
   }
 
   void _showMoreMenu() {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       backgroundColor: BarqodyChrome.scaffold,
       shape: const RoundedRectangleBorder(
@@ -504,7 +506,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
   }
 
   void _showArrangeMenu() {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       backgroundColor: BarqodyChrome.scaffold,
       shape: const RoundedRectangleBorder(
@@ -717,7 +719,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
   }
 
   void _showAddMenu() {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       backgroundColor: BarqodyChrome.scaffold,
       shape: const RoundedRectangleBorder(
@@ -809,7 +811,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
   void _showLayerStyleSheet() {
     final layer = _selected;
     if (layer == null) return;
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: BarqodyChrome.scaffold,
@@ -1265,7 +1267,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
           widget.existingProgramId == null || widget.existingProgramId!.isEmpty;
       if (isNewProgram && !asDraft) {
         final share = await Navigator.of(context).push<bool>(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => const LoyaltyProgramSuccessScreen(),
           ),
         );

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/loyalty_program/business/points_flow_models.dart';
 import 'package:tapni_app/screens/loyalty_program/business/points_payment_screen.dart';
@@ -176,7 +177,7 @@ class _BuyPointsScreenState extends State<BuyPointsScreen> {
                       onPressed: () {
                         if (selected == null) return;
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => PaymentScreen(package: selected),
                           ),
                         );

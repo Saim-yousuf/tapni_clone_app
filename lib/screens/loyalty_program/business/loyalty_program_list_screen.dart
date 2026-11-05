@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -85,7 +86,7 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen>
           Navigator.of(ctx).pop();
           final created = await Navigator.push<bool>(
             context,
-            MaterialPageRoute(
+            AppPageRoute(
               builder: (_) => const LoyaltyTemplateGalleryScreen(),
             ),
           );
@@ -95,7 +96,7 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen>
           Navigator.of(ctx).pop();
           final created = await Navigator.push<bool>(
             context,
-            MaterialPageRoute(
+            AppPageRoute(
               builder: (_) => LoyaltyDesignEditorScreen(
                 design: LoyaltyCardDesign.blank(),
               ),
@@ -110,7 +111,7 @@ class _LoyaltyProgramListScreenState extends State<LoyaltyProgramListScreen>
   Future<void> _openDetails(RewardProgram program) async {
     final changed = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => LoyaltyProgramDetailsScreen(programId: program.id),
       ),
     );

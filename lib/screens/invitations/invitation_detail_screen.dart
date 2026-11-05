@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -99,7 +100,7 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
         .toSet();
 
     final updated = await Navigator.of(context).push<EventInvitation>(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => InviteContactsScreen(
           draft: draft,
           addMoreMode: true,
@@ -173,7 +174,7 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
   void _openSender(InvitationUserSummary sender) {
     if (sender.username.trim().isNotEmpty) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => ScannedProfileScreen(username: sender.username.trim()),
         ),
       );
@@ -181,7 +182,7 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
     }
     if (sender.id.trim().isNotEmpty) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => ScannedProfileScreen(user: sender.id.trim()),
         ),
       );

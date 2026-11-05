@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -14,6 +15,7 @@ import 'package:tapni_app/widgets/templates_sheet.dart';
 import 'package:tapni_app/widgets/business_card_share_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 class DigitalCardScreen extends StatelessWidget {
   DigitalCardScreen({Key? key}) : super(key: key);
 
@@ -33,7 +35,7 @@ class DigitalCardScreen extends StatelessWidget {
             icon: Icon(Icons.palette_outlined),
             tooltip: context.l10n.chooseTemplate,
             onPressed: () {
-              showModalBottomSheet(
+              showAppModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
@@ -49,7 +51,7 @@ class DigitalCardScreen extends StatelessWidget {
             icon: const Icon(Icons.qr_code_2_rounded),
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const QrCodeScreen()));
+                AppPageRoute(builder: (_) => const QrCodeScreen()));
             }),
         ],
       ),
@@ -255,7 +257,7 @@ class DigitalCardScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => EditProfileScreen()),
+                        AppPageRoute(builder: (_) => EditProfileScreen()),
                       );
                     },
                     icon: Icon(Icons.edit_outlined, size: 18),
@@ -272,7 +274,7 @@ class DigitalCardScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => SocialLinksScreen()),
+                        AppPageRoute(builder: (_) => SocialLinksScreen()),
                       );
                     },
                     icon: Icon(Icons.add_link_rounded, size: 18),

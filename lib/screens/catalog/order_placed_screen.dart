@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
@@ -253,7 +254,7 @@ class OrderPlacedScreen extends StatelessWidget {
                       filled: false,
                       onPressed: () {
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => OrderDetailScreen(
                               orderId: orderId!,
                               isBusinessView: false,

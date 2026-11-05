@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
@@ -20,7 +21,7 @@ class NotificationIconButton extends StatelessWidget {
           tooltip: context.l10n.notifications,
           onPressed: () {
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+              AppPageRoute(builder: (_) => const NotificationsScreen()),
             );
           },
         ),

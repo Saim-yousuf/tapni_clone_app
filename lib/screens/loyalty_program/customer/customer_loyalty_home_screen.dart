@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -174,7 +175,7 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen>
 
   void _openDetails(RewardEnrollment enrollment) {
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => CustomerProgramDetailsScreen(enrollment: enrollment),
       ),
     );
@@ -182,7 +183,7 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen>
 
   void _openScan() {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ScanScreen()),
+      AppPageRoute(builder: (_) => const ScanScreen()),
     );
   }
 
@@ -407,7 +408,7 @@ class _CustomerLoyaltyHomeScreenState extends State<CustomerLoyaltyHomeScreen>
                 final username = card.businessUsername?.trim();
                 if (username != null && username.isNotEmpty) {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
+                    AppPageRoute(
                       builder: (_) =>
                           ScannedProfileScreen(username: username),
                     ),

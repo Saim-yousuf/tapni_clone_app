@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/help/help_topic_screen.dart';
 import 'package:tapni_app/screens/help/help_ui.dart';
@@ -96,7 +97,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
   void _openTopic(HelpTopic topic) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => HelpTopicScreen(topic: topic),
       ),
     );

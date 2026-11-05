@@ -98,19 +98,18 @@ class TapniApp extends StatelessWidget {
         builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
           value: AppTheme.systemUiFor(Theme.of(context).brightness),
           child: OfflineBannerHost(
+            // Phone/tablet: resize only (no global scale — avoids soft text + jank).
+            // Desktop/wide: autoScale for large canvases only.
             child: ResponsiveWrapper.builder(
-              BouncingScrollWrapper.builder(context, child!),
+              child!,
               maxWidth: double.infinity,
-              minWidth: 450,
-              defaultScale: true,
+              minWidth: 360,
+              defaultScale: false,
               breakpoints: [
-                const ResponsiveBreakpoint.resize(450, name: MOBILE),
+                const ResponsiveBreakpoint.resize(480, name: MOBILE),
                 const ResponsiveBreakpoint.resize(800, name: TABLET),
-                const ResponsiveBreakpoint.resize(1000, name: TABLET),
-                const ResponsiveBreakpoint.autoScale(
-                  double.infinity,
-                  name: DESKTOP,
-                ),
+                const ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+                const ResponsiveBreakpoint.autoScale(1200, name: '4K'),
               ],
             ),
           ),

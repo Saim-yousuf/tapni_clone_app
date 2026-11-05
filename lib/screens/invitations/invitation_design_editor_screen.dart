@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
@@ -11,6 +12,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 /// Canva-like invitation design editor: select, drag, add/remove layers,
 /// edit text, upload logo, toggle RTL, change colors.
@@ -415,7 +417,7 @@ class _InvitationDesignEditorScreenState
   void _continue() {
     final draft = _toDraft();
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => InviteContactsScreen(draft: draft),
       ),
     );
@@ -606,7 +608,7 @@ class _InvitationDesignEditorScreenState
   }
 
   void _showAddMenu() {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       backgroundColor: WaUi.surface,
       shape: const RoundedRectangleBorder(
@@ -673,7 +675,7 @@ class _InvitationDesignEditorScreenState
   void _showLayerStyleSheet() {
     final layer = _selected;
     if (layer == null) return;
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: WaUi.surface,

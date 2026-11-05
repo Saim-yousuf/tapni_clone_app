@@ -102,6 +102,7 @@ class AppTheme {
       cardColor: secondaryWhite,
       fontFamily: AppFonts.fontFamily,
       pageTransitionsTheme: kAppPageTransitionsTheme,
+      splashFactory: InkRipple.splashFactory,
       colorScheme: const ColorScheme.light(
         primary: primaryBlack,
         secondary: primaryBlack,
@@ -316,6 +317,7 @@ class AppTheme {
       primaryColor: secondaryWhite,
       scaffoldBackgroundColor: primaryBlack,
       pageTransitionsTheme: kAppPageTransitionsTheme,
+      splashFactory: InkRipple.splashFactory,
       cardColor: primaryBlack,
       fontFamily: AppFonts.fontFamily,
       colorScheme: const ColorScheme.dark(

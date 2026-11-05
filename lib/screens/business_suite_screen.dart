@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -64,7 +65,7 @@ class BusinessSuiteScreen extends StatelessWidget {
     final website = res.success ? repo.parseWebsite(res.data) : null;
     if (website != null) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) =>
               BusinessWebsiteSettingsScreen(initialWebsite: website),
         ),
@@ -73,7 +74,7 @@ class BusinessSuiteScreen extends StatelessWidget {
     }
     final explicit = normalizeBusinessType(businessType);
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => BusinessWebsiteSetupScreen(
           websiteType: websiteType,
           businessType: explicit.isEmpty ? null : explicit,
@@ -141,7 +142,7 @@ class BusinessSuiteScreen extends StatelessWidget {
     switch (item.id) {
       case 'orders':
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => const OrdersListScreen(isBusinessView: true),
           ),
         );
@@ -155,7 +156,7 @@ class BusinessSuiteScreen extends StatelessWidget {
         return;
       case 'earnings':
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => const BusinessEarningsWalletScreen(),
           ),
         );
@@ -163,7 +164,7 @@ class BusinessSuiteScreen extends StatelessWidget {
       case 'calendar':
         final id = (profile.id as String?) ?? '';
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => BookingCalendarScreen(
               businessId: id.isEmpty ? null : id,
               title: 'Business calendar',
@@ -173,7 +174,7 @@ class BusinessSuiteScreen extends StatelessWidget {
         return;
       case 'rooms':
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => const BookableResourcesScreen(
               allowedTypes: ['room'],
               title: 'Rooms',
@@ -183,7 +184,7 @@ class BusinessSuiteScreen extends StatelessWidget {
         return;
       case 'staff':
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => const StaffManagementHubScreen(),
           ),
         );
@@ -192,31 +193,31 @@ class BusinessSuiteScreen extends StatelessWidget {
         final ok = await ensureBusinessProfileComplete(context);
         if (!ok || !context.mounted) return;
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const LoyaltyHubScreen()),
+          AppPageRoute(builder: (_) => const LoyaltyHubScreen()),
         );
         return;
       case 'offers':
         final ok = await ensureBusinessProfileComplete(context);
         if (!ok || !context.mounted) return;
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const BusinessOffersScreen()),
+          AppPageRoute(builder: (_) => const BusinessOffersScreen()),
         );
         return;
       case 'ads':
         final ok = await ensureBusinessProfileComplete(context);
         if (!ok || !context.mounted) return;
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const BannerAdsPlansScreen()),
+          AppPageRoute(builder: (_) => const BannerAdsPlansScreen()),
         );
         return;
       case 'pos':
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const PosConnectionScreen()),
+          AppPageRoute(builder: (_) => const PosConnectionScreen()),
         );
         return;
       case 'features':
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => const BusinessFeaturesScreen(),
           ),
         );
@@ -269,7 +270,7 @@ class BusinessSuiteScreen extends StatelessWidget {
                         return;
                       }
                       Navigator.of(context).push(
-                        MaterialPageRoute(
+                        AppPageRoute(
                           builder: (_) =>
                               const BusinessSetupChecklistScreen(),
                         ),
@@ -288,7 +289,7 @@ class BusinessSuiteScreen extends StatelessWidget {
                         return;
                       }
                       Navigator.of(context).push(
-                        MaterialPageRoute(
+                        AppPageRoute(
                           builder: (_) => const BusinessProfileScreen(),
                         ),
                       );
@@ -334,7 +335,7 @@ class BusinessSuiteScreen extends StatelessWidget {
                         return;
                       }
                       Navigator.of(context).push(
-                        MaterialPageRoute(
+                        AppPageRoute(
                           builder: (_) => BusinessFeatureMoreScreen(
                             businessType: access.businessType,
                             onOpenItem: (item) => _openHubItem(

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/attendance.dart';
@@ -67,7 +68,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   Future<void> _scanToInvite() async {
     final result = await Navigator.push<String>(
       context,
-      MaterialPageRoute(builder: (_) => const ScanToInviteScreen()),
+      AppPageRoute(builder: (_) => const ScanToInviteScreen()),
     );
     if (!mounted) return;
     if (result != null && result.isNotEmpty) {
@@ -79,7 +80,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   Future<void> _openSettings(AttendanceEmployee employee) async {
     final result = await Navigator.push<String>(
       context,
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => EmployeeSettingsScreen(employee: employee),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +51,7 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
       final draft = InvitationDraft.fromInvitation(inv);
       if (inv.hasDesign && inv.design != null) {
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => InvitationDesignEditorScreen(
               design: inv.design!,
               existingDraft: draft,
@@ -59,7 +60,7 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
         );
       } else {
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => CustomizeInvitationScreen(
               draft: draft,
               fromDraftList: true,
@@ -70,7 +71,7 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
       return;
     }
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => InvitationDetailScreen(
           invitationId: inv.id,
           invitation: inv,
@@ -81,7 +82,7 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
 
   void _openReceived(EventInvitation inv) {
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => InvitationDetailScreen(
           invitationId: inv.id,
           invitation: inv,
@@ -92,7 +93,7 @@ class _InvitationsHomeScreenState extends State<InvitationsHomeScreen>
 
   void _openGallery() {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const TemplateGalleryScreen()),
+      AppPageRoute(builder: (_) => const TemplateGalleryScreen()),
     );
   }
 

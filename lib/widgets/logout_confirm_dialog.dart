@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 
 /// Logout confirmation modal matching Tools redesign.
 class LogoutConfirmDialog extends StatelessWidget {
@@ -22,7 +23,7 @@ class LogoutConfirmDialog extends StatelessWidget {
     required VoidCallback onLogoutThis,
     VoidCallback? onLogoutAll,
   }) {
-    return showDialog(
+    return showAppDialog(
       context: context,
       barrierColor: Colors.black.withValues(alpha: 0.45),
       builder: (_) => LogoutConfirmDialog(

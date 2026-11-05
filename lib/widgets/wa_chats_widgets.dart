@@ -208,7 +208,9 @@ class WaPillFilterChip extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(WaUi.radiusPill),
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 320),
+            curve: Curves.easeOutCubic,
             height: 34,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
@@ -223,13 +225,15 @@ class WaPillFilterChip extends StatelessWidget {
                   leading!,
                   const SizedBox(width: 6),
                 ],
-                Text(
-                  label,
+                AnimatedDefaultTextStyle(
+                  duration: const Duration(milliseconds: 320),
+                  curve: Curves.easeOutCubic,
                   style: WaUi.body.copyWith(
                     fontSize: 14,
                     fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                     color: textColor,
                   ),
+                  child: Text(label),
                 ),
               ],
             ),

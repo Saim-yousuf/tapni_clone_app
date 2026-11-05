@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
@@ -135,7 +136,7 @@ class _ScanScreenState extends State<ScanScreen> {
     await _stopCamera();
     if (!mounted) return null;
     final result = await Navigator.of(context).push<T>(
-      MaterialPageRoute(builder: (_) => page),
+      AppPageRoute(builder: (_) => page),
     );
     await _resumeCamera();
     return result;
@@ -355,7 +356,7 @@ class _ScanScreenState extends State<ScanScreen> {
     }
 
     final saved = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => EmployeeSettingsScreen(
           employeeUserId: userId,
           employeeName: profile.name.isNotEmpty

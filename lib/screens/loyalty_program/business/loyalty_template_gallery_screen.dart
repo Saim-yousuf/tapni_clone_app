@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/loyalty_card_design.dart';
@@ -89,7 +90,7 @@ class _LoyaltyTemplateGalleryScreenState
 
   void _openDesign(LoyaltyCardDesign design, {String? programId}) async {
     final saved = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => LoyaltyDesignEditorScreen(
           design: design,
           existingProgramId: programId ?? widget.existing?.id,

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -437,7 +438,7 @@ class PushNotificationService {
       case 'follow_request':
       case 'follow_accepted':
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+          AppPageRoute(builder: (_) => const NotificationsScreen()),
         );
       default:
         break;
@@ -450,7 +451,7 @@ class PushNotificationService {
     bool isBusinessView,
   ) {
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => OrderDetailScreen(
           orderId: orderId,
           isBusinessView: isBusinessView,
@@ -461,7 +462,7 @@ class PushNotificationService {
 
   static void _openMainShell(BuildContext context, String page) {
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => MainShell(currentPage: page)),
+      AppPageRoute(builder: (_) => MainShell(currentPage: page)),
       (route) => false,
     );
   }
@@ -470,33 +471,33 @@ class PushNotificationService {
     Provider.of<SubscriptionProvider>(context, listen: false)
         .checkSubscriptionStatus();
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) =>  SubscriptionScreen()),
+      AppPageRoute(builder: (_) =>  SubscriptionScreen()),
     );
   }
 
   static void _openLoyaltyHome(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const CustomerLoyaltyHomeScreen()),
+      AppPageRoute(builder: (_) => const CustomerLoyaltyHomeScreen()),
     );
   }
 
   static void _openEmployeeInvitations(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const EmployeeInvitationsScreen()),
+      AppPageRoute(builder: (_) => const EmployeeInvitationsScreen()),
     );
   }
 
   static void _openEventInvitation(BuildContext context, String? invitationId) {
     if (invitationId != null && invitationId.isNotEmpty) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => InvitationDetailScreen(invitationId: invitationId),
         ),
       );
       return;
     }
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const InvitationsHomeScreen()),
+      AppPageRoute(builder: (_) => const InvitationsHomeScreen()),
     );
   }
 

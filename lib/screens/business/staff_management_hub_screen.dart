@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/screens/attendance/business/attendance_dashboard_screen.dart';
@@ -31,7 +32,7 @@ class StaffManagementHubScreen extends StatelessWidget {
                         .l10n.inviteEmployeesSetShiftsAndTrackPresence,
                     onTap: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
+                        AppPageRoute(
                           settings: const RouteSettings(
                             name: AttendanceDashboardScreen.routeName,
                           ),
@@ -48,7 +49,7 @@ class StaffManagementHubScreen extends StatelessWidget {
                         'Staff who can be assigned to appointments and bookings',
                     onTap: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
+                        AppPageRoute(
                           builder: (_) => const BookableResourcesScreen(
                             allowedTypes: ['staff'],
                             title: 'Specialists',

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/gallery_item.dart';
@@ -31,7 +32,7 @@ class ProfileGalleryGrid extends StatelessWidget {
 
   void _openViewer(BuildContext context, int index) {
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => GalleryViewerScreen(
           items: items,
           initialIndex: index,

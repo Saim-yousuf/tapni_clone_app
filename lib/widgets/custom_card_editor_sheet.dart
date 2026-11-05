@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -21,6 +22,7 @@ import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/template_business_card_preview.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 enum _CardSetupMode { pick, template, customize }
 
 class CustomCardEditorSheet extends StatefulWidget {
@@ -289,7 +291,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
 
     if (design == null || !design.hasLayers) {
       await navigator.push<String>(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => BusinessCardTemplateGalleryScreen(
             cardId: existing.id,
             existingDesign: design,
@@ -298,7 +300,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
       );
     } else {
       await navigator.push<String>(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => BusinessCardDesignEditorScreen(
             design: design.copy(),
             cardId: existing.id,
@@ -432,7 +434,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
                 Provider.of<ProfileProvider>(context, listen: false);
             Navigator.pop(context); // close New Card sheet
             final cardId = await navigator.push<String>(
-              MaterialPageRoute(
+              AppPageRoute(
                 builder: (_) => const BusinessCardTemplateGalleryScreen(
                   createNewCard: true,
                 ),
@@ -547,7 +549,7 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
               return GestureDetector(
                 onTap: () {
                   if (template.isPro && !provider.isProUser) {
-                    showModalBottomSheet(
+                    showAppModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,

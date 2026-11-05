@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
@@ -24,12 +25,14 @@ import 'package:tapni_app/screens/business_website/business_website_setup_screen
     show BusinessWebsiteSetupScreen, websiteTypeFromCatalogType;
 import 'package:tapni_app/screens/catalog/document_link_form_screen.dart';
 import 'package:tapni_app/screens/gallery_link_screen.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/utils/business_features.dart';
 import 'package:tapni_app/utils/catalog_helper.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 class _LinkEntryDraft {
   _LinkEntryDraft({
@@ -68,14 +71,29 @@ class LinkSheet {
   Future<void> showAddLinkBottomSheet(
     BuildContext context,
     ProfileProvider provider,
-  ) {
-    final parentContext = context;
+  ) async {
     if (provider.linkCatalog.isEmpty && !provider.isLinkCatalogLoading) {
       provider.fetchLinkCatalog();
     }
 
+    // Close Add Links → run template flow → reopen until user dismisses.
+    while (context.mounted) {
+      final selected = await _presentAddLinkPicker(context, provider);
+      if (!context.mounted || selected == null) return;
+      // Sheet Future can resolve before reverse animation finishes — wait it out
+      // so the next modal isn't pushed on a still-dismissing route.
+      await Future<void>.delayed(AppMotion.sheetReverse);
+      if (!context.mounted) return;
+      await _openSelectedTemplate(context, selected, provider);
+    }
+  }
+
+  Future<LinkTemplate?> _presentAddLinkPicker(
+    BuildContext parentContext,
+    ProfileProvider provider,
+  ) {
     bool isSearching = false;
-    return showModalBottomSheet(
+    return showAppModalBottomSheet<LinkTemplate>(
       context: parentContext,
       isScrollControlled: true,
       backgroundColor: BarqodyChrome.scaffold,
@@ -335,6 +353,99 @@ class LinkSheet {
     );
   }
 
+  Future<void> _openSelectedTemplate(
+    BuildContext context,
+    LinkTemplate template,
+    ProfileProvider provider,
+  ) async {
+    final isProUser = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).isProUser;
+
+    if (template.isPro && !isProUser) {
+      await showAppModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (_) => const ProUpgradeSheet(),
+      );
+      return;
+    }
+    if (isDocumentsLinkTemplate(template) ||
+        template.actionType == 'document') {
+      await Navigator.push(
+        context,
+        AppPageRoute(
+          builder: (_) => DocumentLinkFormScreen(
+            provider: provider,
+            template: template,
+          ),
+        ),
+      );
+    } else if (isGalleryLinkTemplate(template) ||
+        template.actionType == 'gallery') {
+      if (provider.profile.socialLinks.any((link) => link.isGalleryLink)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.profileTabGallery)),
+        );
+        return;
+      }
+      await provider.addGalleryLink(template: template, context: context);
+      if (context.mounted) {
+        await Navigator.push(
+          context,
+          AppPageRoute(
+            builder: (_) => GalleryLinkScreen(
+              items: provider.profile.gallery,
+              isOwner: true,
+            ),
+          ),
+        );
+      }
+    } else if (isBusinessWebsiteLinkTemplate(template) ||
+        template.actionType == 'business_website') {
+      if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Use Menu, Services, Products, or Portfolio instead',
+          ),
+        ),
+      );
+    } else if (template.actionType == 'menu_catalog') {
+      if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) return;
+      await _openTypedWebsiteFromCatalogTemplate(context, template, provider);
+    } else if (template.actionType == 'contact_card') {
+      final existing = _findExistingLinkForTemplate(provider, template);
+      if (existing != null) {
+        await showExistingLinkBottomSheet(context, existing, provider);
+      } else {
+        await contact_card.showContactCardBottomSheet(
+          context,
+          template,
+          provider,
+        );
+      }
+    } else if (_isCustomTemplate(template)) {
+      await _showCustomTemplateBottomSheet(context, template, provider);
+    } else if (template.fieldType == 'bank') {
+      final existing = _findExistingLinkForTemplate(provider, template);
+      if (existing != null) {
+        await showExistingLinkBottomSheet(context, existing, provider);
+      } else {
+        await _showBankTemplateBottomSheet(context, template, provider);
+      }
+    } else {
+      final existing = _findExistingLinkForTemplate(provider, template);
+      if (existing != null) {
+        await showExistingLinkBottomSheet(context, existing, provider);
+      } else {
+        await _showNewTemplateLinkBottomSheet(context, template, provider);
+      }
+    }
+  }
+
   void _openMenuCatalogFromTemplate(
     BuildContext context,
     LinkTemplate template,
@@ -354,7 +465,7 @@ class LinkSheet {
             ? template
             : (_findCatalogTemplateByType(catalogType, provider) ?? template);
 
-    showMenuCatalogSheet(
+    await showMenuCatalogSheet(
       context: context,
       catalogLabel: catalogLabel,
       catalogType: catalogType,
@@ -457,7 +568,7 @@ class LinkSheet {
         ? template
         : _findCatalogTemplateByType(catalogType, provider);
 
-    showMenuCatalogSheet(
+    await showMenuCatalogSheet(
       context: context,
       catalogLabel: catalogLabel,
       catalogType: catalogType,
@@ -494,171 +605,41 @@ class LinkSheet {
                 final template = category.templates[index];
                 return Padding(
                   padding: const EdgeInsets.only(right: 12),
-                  child: GestureDetector(
-                    onTap: () async {
-                      Navigator.pop(sheetContext);
-                      final isProUser = Provider.of<ProfileProvider>(
-                        context,
-                        listen: false,
-                      ).isProUser;
-
-                      if (template.isPro && !isProUser) {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => const ProUpgradeSheet(),
-                        );
-                        return;
-                      }
-                      if (isDocumentsLinkTemplate(template) ||
-                          template.actionType == 'document') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => DocumentLinkFormScreen(
-                              provider: provider,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(24),
+                      onTap: () {
+                        if (Navigator.of(sheetContext).canPop()) {
+                          Navigator.of(sheetContext).pop(template);
+                        }
+                      },
+                      child: SizedBox(
+                        width: 130,
+                        child: Column(
+                          children: [
+                            _buildTemplateLogo(
+                              template.logo,
+                              size: 130,
+                              radius: 24,
+                              isPro: template.isPro,
+                              context: context,
                               template: template,
                             ),
-                          ),
-                        );
-                      } else if (isGalleryLinkTemplate(template) ||
-                          template.actionType == 'gallery') {
-                        if (provider.profile.socialLinks
-                            .any((link) => link.isGalleryLink)) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                context.l10n.profileTabGallery,
+                            const SizedBox(height: 6),
+                            Text(
+                              template.label,
+                              style: WaUi.body.copyWith(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
                               ),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          );
-                          return;
-                        }
-                        await provider.addGalleryLink(
-                          template: template,
-                          context: context,
-                        );
-                        if (context.mounted) {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => GalleryLinkScreen(
-                                items: provider.profile.gallery,
-                                isOwner: true,
-                              ),
-                            ),
-                          );
-                        }
-                      } else if (isBusinessWebsiteLinkTemplate(template) ||
-                          template.actionType == 'business_website') {
-                        if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) {
-                          return;
-                        }
-                        // All-in-one Business Website is retired.
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Use Menu, Services, Products, or Portfolio instead',
-                            ),
-                          ),
-                        );
-                      } else if (template.actionType == 'menu_catalog') {
-                        if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) {
-                          return;
-                        }
-                        await _openTypedWebsiteFromCatalogTemplate(
-                          context,
-                          template,
-                          provider,
-                        );
-                      } else if (template.actionType == 'contact_card') {
-                        final existing = _findExistingLinkForTemplate(
-                          provider,
-                          template,
-                        );
-                        if (existing != null) {
-                          await showExistingLinkBottomSheet(
-                            context,
-                            existing,
-                            provider,
-                          );
-                        } else {
-                          contact_card.showContactCardBottomSheet(
-                            context,
-                            template,
-                            provider,
-                          );
-                        }
-                      } else if (_isCustomTemplate(template)) {
-                        _showCustomTemplateBottomSheet(
-                          context,
-                          template,
-                          provider,
-                        );
-                      } else if (template.fieldType == 'bank') {
-                        final existing = _findExistingLinkForTemplate(
-                          provider,
-                          template,
-                        );
-                        if (existing != null) {
-                          await showExistingLinkBottomSheet(
-                            context,
-                            existing,
-                            provider,
-                          );
-                        } else {
-                          _showBankTemplateBottomSheet(
-                            context,
-                            template,
-                            provider,
-                          );
-                        }
-                      } else {
-                        final existing = _findExistingLinkForTemplate(
-                          provider,
-                          template,
-                        );
-                        if (existing != null) {
-                          await showExistingLinkBottomSheet(
-                            context,
-                            existing,
-                            provider,
-                          );
-                        } else {
-                          _showNewTemplateLinkBottomSheet(
-                            context,
-                            template,
-                            provider,
-                          );
-                        }
-                      }
-                    },
-                    child: SizedBox(
-                      width: 130,
-                      child: Column(
-                        children: [
-                          _buildTemplateLogo(
-                            template.logo,
-                            size: 130,
-                            radius: 24,
-                            isPro: template.isPro,
-                            context: context,
-                            template: template,
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            template.label,
-                            style: WaUi.body.copyWith(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -738,21 +719,20 @@ class LinkSheet {
     return pickedToBase64(file);
   }
 
-  void _showCustomTemplateBottomSheet(
+  Future<void> _showCustomTemplateBottomSheet(
     BuildContext context,
     LinkTemplate template,
     ProfileProvider provider, {
     SocialLink? existingLink,
   }) {
     if (template.fieldType == 'bank') {
-      _showBankTemplateBottomSheet(
+      return _showBankTemplateBottomSheet(
         context,
         template,
         provider,
         allowCustomMeta: true,
         existingLink: existingLink,
       );
-      return;
     }
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -763,7 +743,7 @@ class LinkSheet {
     String logo = existingLink?.logoUrl ?? '';
     bool showLink = existingLink?.isPublic ?? true;
 
-    showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -899,12 +879,16 @@ class LinkSheet {
       if (logo.startsWith('http://') || logo.startsWith('https://')) {
         image = ClipRRect(
           borderRadius: BorderRadius.circular(14),
-          child: Image.network(
-            logo,
+          child: CachedNetworkImage(
+            imageUrl: logo,
             width: 60,
             height: 60,
             fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => _logoPlaceholder(true),
+            fadeInDuration: Duration.zero,
+            fadeOutDuration: Duration.zero,
+            useOldImageOnUrlChange: true,
+            errorWidget: (_, __, ___) => _logoPlaceholder(true),
+            placeholder: (_, __) => const ColoredBox(color: Color(0xFFF5F5F5)),
           ),
         );
       } else {
@@ -1000,7 +984,7 @@ class LinkSheet {
     );
   }
 
-  void _showBankTemplateBottomSheet(
+  Future<void> _showBankTemplateBottomSheet(
     BuildContext context,
     LinkTemplate template,
     ProfileProvider provider, {
@@ -1025,7 +1009,7 @@ class LinkSheet {
     String logo = existingLink?.logoUrl ?? '';
     bool showLink = existingLink?.isPublic ?? true;
 
-    showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -1361,13 +1345,18 @@ class LinkSheet {
               ? errorWidget
               : Padding(
                   padding: EdgeInsets.all(logoPadding),
-                  child: Image.network(
-                    logo.replaceAll(" ", ""),
+                  child: CachedNetworkImage(
+                    imageUrl: logo.replaceAll(" ", ""),
                     width: size,
                     height: size,
                     fit: fit,
                     alignment: Alignment.center,
-                    errorBuilder: (_, __, ___) => errorWidget,
+                    fadeInDuration: Duration.zero,
+                    fadeOutDuration: Duration.zero,
+                    useOldImageOnUrlChange: true,
+                    errorWidget: (_, __, ___) => errorWidget,
+                    placeholder: (_, __) =>
+                        const ColoredBox(color: Color(0xFFF5F5F5)),
                   ),
                 ),
         ),
@@ -1713,13 +1702,17 @@ class LinkSheet {
         ),
       );
     } else if (logo.startsWith('http://') || logo.startsWith('https://')) {
-      content = Image.network(
-        logo,
+      content = CachedNetworkImage(
+        imageUrl: logo,
         width: size,
         height: size,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) =>
+        fadeInDuration: Duration.zero,
+        fadeOutDuration: Duration.zero,
+        useOldImageOnUrlChange: true,
+        errorWidget: (_, __, ___) =>
             Container(color: const Color(0xFF3A3A3C)),
+        placeholder: (_, __) => Container(color: const Color(0xFF3A3A3C)),
       );
     } else {
       try {
@@ -1742,14 +1735,14 @@ class LinkSheet {
     );
   }
 
-  void _showNewTemplateLinkBottomSheet(
+  Future<void> _showNewTemplateLinkBottomSheet(
     BuildContext context,
     LinkTemplate template,
     ProfileProvider provider,
   ) {
     final drafts = <_LinkEntryDraft>[_LinkEntryDraft()];
 
-    showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -1963,7 +1956,7 @@ class LinkSheet {
     final usernameController = TextEditingController();
     bool showLink = true;
 
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -2205,7 +2198,7 @@ class LinkSheet {
     );
   }
 
-  void _showBusinessWebsiteLinkBottomSheet(
+  Future<void> _showBusinessWebsiteLinkBottomSheet(
     BuildContext context,
     SocialLink link,
     ProfileProvider provider,
@@ -2213,7 +2206,7 @@ class LinkSheet {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     bool showLink = link.isPublic;
 
-    showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -2367,7 +2360,7 @@ class LinkSheet {
     );
   }
 
-  void _showGalleryLinkBottomSheet(
+  Future<void> _showGalleryLinkBottomSheet(
     BuildContext context,
     SocialLink link,
     ProfileProvider provider,
@@ -2375,7 +2368,7 @@ class LinkSheet {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     bool showLink = link.isPublic;
 
-    showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -2413,7 +2406,7 @@ class LinkSheet {
                           Navigator.pop(ctx);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
+                            AppPageRoute(
                               builder: (_) => GalleryLinkScreen(
                                 items: provider.profile.gallery,
                                 isOwner: true,
@@ -2530,14 +2523,14 @@ class LinkSheet {
 
     if (link.isGalleryLink ||
         (catalogTemplate != null && isGalleryLinkTemplate(catalogTemplate))) {
-      _showGalleryLinkBottomSheet(context, link, provider);
+      await _showGalleryLinkBottomSheet(context, link, provider);
       return;
     }
 
     if (link.isBusinessWebsiteLink ||
         (catalogTemplate != null &&
             isBusinessWebsiteLinkTemplate(catalogTemplate))) {
-      _showBusinessWebsiteLinkBottomSheet(context, link, provider);
+      await _showBusinessWebsiteLinkBottomSheet(context, link, provider);
       return;
     }
 
@@ -2548,9 +2541,9 @@ class LinkSheet {
     if (link.isDocumentLink ||
         (catalogTemplate != null &&
             isDocumentsLinkTemplate(catalogTemplate))) {
-      Navigator.push(
+      await Navigator.push(
         context,
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => DocumentLinkFormScreen(
             provider: provider,
             template: catalogTemplate ?? documentsLinkTemplate(),
@@ -2599,7 +2592,7 @@ class LinkSheet {
     );
 
     if (template.actionType == 'contact_card') {
-      contact_card.showContactCardBottomSheet(
+      await contact_card.showContactCardBottomSheet(
         context,
         template,
         provider,
@@ -2609,7 +2602,7 @@ class LinkSheet {
     }
 
     if (template.fieldType == 'bank') {
-      _showBankTemplateBottomSheet(
+      await _showBankTemplateBottomSheet(
         context,
         template,
         provider,
@@ -2620,7 +2613,7 @@ class LinkSheet {
     }
 
     if (isCustomLink) {
-      _showCustomTemplateBottomSheet(
+      await _showCustomTemplateBottomSheet(
         context,
         template,
         provider,
@@ -2631,7 +2624,7 @@ class LinkSheet {
 
     final drafts = _draftsFromLink(link);
 
-    showModalBottomSheet(
+    await showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,

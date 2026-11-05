@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/reward.dart';
@@ -127,14 +128,14 @@ class _LoyaltyProgramDetailsScreenState
     if (choice == 'scan') {
       await Navigator.push<void>(
         context,
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => ScanScreen(enrollInProgram: program),
         ),
       );
     } else if (choice == 'username') {
       await Navigator.push<void>(
         context,
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => FindUserScreen(
             title: 'Enroll by Username',
             onUserSelected: (user) async {
@@ -163,7 +164,7 @@ class _LoyaltyProgramDetailsScreenState
     final p = _program!;
     final changed = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => CreateRewardScreen(existing: p),
       ),
     );
@@ -176,7 +177,7 @@ class _LoyaltyProgramDetailsScreenState
     if (p.hasDesign) {
       changed = await Navigator.push<bool>(
         context,
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => LoyaltyDesignEditorScreen(
             design: p.design!.copy(),
             existingProgramId: p.id,
@@ -187,7 +188,7 @@ class _LoyaltyProgramDetailsScreenState
     } else {
       changed = await Navigator.push<bool>(
         context,
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => LoyaltyTemplateGalleryScreen(existing: p),
         ),
       );
@@ -201,7 +202,7 @@ class _LoyaltyProgramDetailsScreenState
         : enrollment.copyWith(program: _program);
     await Navigator.push(
       context,
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => AddStampScreen(
           enrollment: withProgram,
           customerName: enrollment.customerName,

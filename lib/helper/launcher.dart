@@ -283,7 +283,7 @@ class Launcher {
                     .gallery
               : const <GalleryItem>[]);
       await Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => GalleryLinkScreen(
             items: items,
             isOwner: isGalleryOwner,

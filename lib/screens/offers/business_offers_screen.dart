@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/business_offer.dart';
 import 'package:tapni_app/repository/offer_repo.dart';
@@ -54,7 +55,7 @@ class _BusinessOffersScreenState extends State<BusinessOffersScreen> {
 
   Future<void> _openForm([BusinessOffer? existing]) async {
     final changed = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => BusinessOfferFormScreen(existing: existing),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -78,7 +79,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
 
   Future<void> _linkDevice() async {
     final linked = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(builder: (_) => LinkDeviceScanScreen()),
+      AppPageRoute(builder: (_) => LinkDeviceScanScreen()),
     );
     if (linked == true) _load();
   }

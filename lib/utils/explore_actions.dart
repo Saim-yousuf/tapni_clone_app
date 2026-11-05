@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/explore_business.dart';
 import 'package:tapni_app/screens/explore_item_detail_loader_screen.dart';
@@ -12,7 +13,7 @@ class ExploreActions {
     if (offer.id.isEmpty) return;
 
     await Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => ExploreOfferDetailScreen(offer: offer),
       ),
     );
@@ -25,7 +26,7 @@ class ExploreActions {
     if (item.businessUsername.isEmpty) return;
 
     await Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => ExploreItemDetailLoaderScreen(item: item),
       ),
     );

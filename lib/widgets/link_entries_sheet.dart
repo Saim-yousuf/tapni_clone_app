@@ -7,12 +7,13 @@ import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 Future<void> showLinkEntriesSheet({
   required BuildContext context,
   required SocialLink link,
 }) {
-  return showModalBottomSheet(
+  return showAppModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,

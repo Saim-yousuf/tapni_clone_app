@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -71,7 +72,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
   void _openTemplate(InvitationTemplate template) {
     final design = template.build();
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => InvitationDesignEditorScreen(design: design),
       ),
     );
@@ -83,7 +84,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
     if (!mounted) return;
     final toEdit = design ?? t.designCopy();
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => InvitationDesignEditorScreen(design: toEdit),
       ),
     );
@@ -97,7 +98,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> {
       rtl: InvitationTemplateCatalog.isRtlCountry(_country),
     );
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => InvitationDesignEditorScreen(design: design),
       ),
     );

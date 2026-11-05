@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/stored_account.dart';
@@ -12,10 +13,11 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/profile_photo_avatar.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 class AccountSwitcherSheet {
   static Future<void> show(BuildContext context) {
-    return showModalBottomSheet(
+    return showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -119,7 +121,7 @@ class _AccountSwitcherBody extends StatelessWidget {
 
     if (ok) {
       (nav ?? Navigator.of(ctx)).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const SplashScreen()),
+        AppPageRoute(builder: (_) => const SplashScreen()),
         (_) => false,
       );
       return;
@@ -137,7 +139,7 @@ class _AccountSwitcherBody extends StatelessWidget {
     Navigator.pop(sheetContext);
     if (!hostContext.mounted) return;
 
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: hostContext,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withValues(alpha: 0.45),
@@ -195,7 +197,7 @@ class _AddAccountOptionsSheet extends StatelessWidget {
                   Navigator.pop(context);
                   if (!hostContext.mounted) return;
                   Navigator.of(hostContext).push(
-                    MaterialPageRoute(
+                    AppPageRoute(
                       builder: (_) => QrLoginScreen(addAccount: true),
                     ),
                   );
@@ -208,7 +210,7 @@ class _AddAccountOptionsSheet extends StatelessWidget {
                   Navigator.pop(context);
                   if (!hostContext.mounted) return;
                   Navigator.of(hostContext).push(
-                    MaterialPageRoute(
+                    AppPageRoute(
                       builder: (_) => const PhoneAuthScreen(addAccount: true),
                     ),
                   );

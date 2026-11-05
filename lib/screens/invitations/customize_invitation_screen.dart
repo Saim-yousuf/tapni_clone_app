@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -181,7 +182,7 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
     if (!_requireTitle()) return;
     _syncDraft();
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => InviteContactsScreen(draft: widget.draft),
       ),
     );

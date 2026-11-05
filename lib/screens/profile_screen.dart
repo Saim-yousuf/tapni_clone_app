@@ -17,6 +17,7 @@ import 'package:tapni_app/screens/business_website/business_website_settings_scr
 import 'package:tapni_app/screens/business_website/business_website_setup_screen.dart'
     show websiteTypeFromCatalogType;
 import 'package:tapni_app/screens/qr_code_sheet.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -35,7 +36,11 @@ import 'package:tapni_app/models/business_website/business_website_models.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  /// Incremented by [MainShell] when My Card is opened so the sheet enter
+  /// animation can replay (PageView keep-alive would otherwise skip it).
+  final int sheetEnterNonce;
+
+  const ProfileScreen({super.key, this.sheetEnterNonce = 0});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -56,6 +61,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       DraggableScrollableController();
   double _sheetInitialSize = 0.6;
   double _sheetMaxSize = 0.92;
+  /// Skip sheet enter when returning from edit mode only.
+  bool _skipSheetEnterOnce = false;
+  int _sheetEnterPlayId = 0;
 
   @override
   void initState() {
@@ -105,6 +113,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _bioController.text = profile.bio;
     profileImageBytes = null;
     coverImageBytes = null;
+    // Next view build should not re-run sheet enter.
+    _skipSheetEnterOnce = true;
     profileProvider.setEditingProfile(false);
     profileProvider.onSaveTriggered = null;
   }
@@ -113,8 +123,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final profile = profileProvider.profile;
     _nameController.text = profile.name;
     _bioController.text = profile.bio;
+    _skipSheetEnterOnce = true;
     profileProvider.setEditingProfile(true);
     profileProvider.onSaveTriggered = () => _saveProfile(profileProvider);
+  }
+
+  @override
+  void didUpdateWidget(covariant ProfileScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Hot reload can briefly yield a mismatched widget shape — be defensive.
+    final next = widget.sheetEnterNonce;
+    final prev = oldWidget.sheetEnterNonce;
+    if (next == prev) return;
+    final editing =
+        Provider.of<ProfileProvider>(context, listen: false).isEditingProfile;
+    if (editing) return;
+    // My Card opened from shell — replay sheet enter (no DSS remount).
+    setState(() {
+      _skipSheetEnterOnce = false;
+      _sheetEnterPlayId = next;
+    });
   }
 
   Future<void> _pickCoverPhoto(UserProfile profile) async {
@@ -257,6 +285,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Maintain current save trigger in case provider changes
     if (isEditing) {
       profileProvider.onSaveTriggered = () => _saveProfile(profileProvider);
+    } else if (_skipSheetEnterOnce) {
+      // Clear after edit→view so the next FAB open can animate again.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _skipSheetEnterOnce = false;
+      });
     }
 
     return PopScope(
@@ -275,6 +308,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (!isEditing && (showShimmer || showLoadError))
                 _buildProfileTopBar(profileProvider),
               Expanded(
+                // No AnimatedSwitcher here: stacking edit/view briefly double-
+                // attaches [_sheetController] on the draggable sheet.
                 child: showShimmer
                     ? const ProfileScreenShimmer()
                     : showLoadError
@@ -492,7 +527,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 },
               ),
-              DraggableScrollableSheet(
+              AppSheetEnter(
+                play: widget.sheetEnterNonce > 0 && !_skipSheetEnterOnce,
+                replayToken: _sheetEnterPlayId,
+                startDelay: Duration.zero,
+                child: DraggableScrollableSheet(
                 controller: _sheetController,
                 initialChildSize: initial,
                 minChildSize: minSize,
@@ -776,6 +815,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 },
               ),
+              ),
             ],
           ),
         );
@@ -933,12 +973,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )
                           : profile.coverPhotoUrl != null &&
                                   profile.coverPhotoUrl!.trim().isNotEmpty
-                              ? Image.network(
-                                  profile.coverPhotoUrl!.trim(),
+                              ? CachedNetworkImage(
+                                  imageUrl: profile.coverPhotoUrl!.trim(),
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                   height: coverHeight,
-                                  errorBuilder: (_, __, ___) =>
+                                  fadeInDuration:
+                                      const Duration(milliseconds: 150),
+                                  errorWidget: (_, __, ___) =>
+                                      const ProfileCoverPlaceholder(),
+                                  placeholder: (_, __) =>
                                       const ProfileCoverPlaceholder(),
                                 )
                               : const ProfileCoverPlaceholder(

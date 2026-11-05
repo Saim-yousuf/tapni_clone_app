@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -263,7 +264,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
     final orderId = CatalogOrder.idFromApi(res.data);
     if (orderId != null && orderId.isNotEmpty && mounted) {
       await Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => OrderDetailScreen(
             orderId: orderId,
             isBusinessView: false,
@@ -463,7 +464,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
                                     onTap: () async {
                                       await Navigator.push(
                                         context,
-                                        MaterialPageRoute(
+                                        AppPageRoute(
                                           builder: (_) => OrderDetailScreen(
                                             orderId: order.id,
                                             isBusinessView:

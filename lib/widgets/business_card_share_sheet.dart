@@ -20,6 +20,7 @@ import 'package:tapni_app/widgets/template_business_card_preview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 class BusinessCardShareSheet extends StatefulWidget {
   final String profileUrl;
   final String displayName;
@@ -86,7 +87,7 @@ class BusinessCardShareSheet extends StatefulWidget {
     CompanyBusinessCard? companyCard,
     ValueChanged<CompanyBusinessCard>? onTemplateChanged,
   }) {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,

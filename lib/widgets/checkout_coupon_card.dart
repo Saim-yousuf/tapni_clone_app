@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/models/business_offer.dart';
@@ -171,7 +172,7 @@ class _CheckoutCouponCardState extends State<CheckoutCouponCard> {
 
   Future<void> _browseOffers() async {
     final picked = await Navigator.of(context).push<BusinessOffer>(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => CustomerOffersScreen(
           businessId: widget.businessId,
           catalogType: widget.catalogType,

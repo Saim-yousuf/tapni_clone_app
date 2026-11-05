@@ -31,6 +31,7 @@ import 'package:tapni_app/widgets/checkout_points_redeem_card.dart';
 import 'package:tapni_app/screens/catalog/service_booking_cart_screen.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 /// Owner manage/add → full screen. Customer browse → bottom sheet.
 Future<void> showMenuCatalogSheet({
@@ -73,7 +74,7 @@ Future<void> showMenuCatalogSheet({
     );
   }
 
-  return showModalBottomSheet(
+  return showAppModalBottomSheet(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
@@ -1667,7 +1668,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     if (_cart.isEmpty) return;
 
     final updated = await Navigator.of(context).push<List<CartLineItem>>(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => ServiceBookingCartScreen(
           catalogItems: _items,
           initialCart: List<CartLineItem>.from(_cart),

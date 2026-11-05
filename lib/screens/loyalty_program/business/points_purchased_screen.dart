@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/loyalty_program/business/points_flow_models.dart';
 import 'package:tapni_app/screens/loyalty_program/business/points_rewards_screen.dart';
@@ -36,7 +37,7 @@ class PointsPurchasedScreen extends StatelessWidget {
     });
     if (!foundRewards) {
       nav.pushReplacement(
-        MaterialPageRoute(
+        AppPageRoute(
           settings: const RouteSettings(name: '/points_rewards'),
           builder: (_) => const PointsRewardsScreen(),
         ),

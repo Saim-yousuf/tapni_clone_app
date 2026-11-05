@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -16,7 +17,7 @@ class ProfileScoreCard extends StatelessWidget {
       onTap: () {
         Navigator.of(
           context,
-        ).push(MaterialPageRoute(builder: (_) => CheckingPointsScreen()));
+        ).push(AppPageRoute(builder: (_) => CheckingPointsScreen()));
       },
       child: Container(
         padding: EdgeInsets.all(16),

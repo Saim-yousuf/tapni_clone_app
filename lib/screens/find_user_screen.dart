@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -156,7 +157,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
     }
     if (!mounted) return;
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => ScannedProfileScreen(username: user.username),
       ),
     );

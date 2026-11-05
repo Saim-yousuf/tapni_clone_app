@@ -1,3 +1,5 @@
+import 'package:tapni_app/utils/app_motion.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:math';
 import 'dart:ui' show ImageFilter;
 
@@ -76,6 +78,8 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       DraggableScrollableController();
   double _sheetInitialSize = 0.6;
   double _sheetMaxSize = 0.92;
+  /// Sheet enter once when profile content first appears.
+  bool _profileSheetEntered = false;
 
   @override
   void initState() {
@@ -136,7 +140,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
 
   void _openMyCard() {
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const MainShell()),
+      AppPageRoute(builder: (_) => const MainShell()),
       (route) => false,
     );
   }
@@ -857,7 +861,11 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                   );
                 },
               ),
-              DraggableScrollableSheet(
+              AppSheetEnter(
+                play: !_profileSheetEntered,
+                startDelay: Duration.zero,
+                onCompleted: () => _profileSheetEntered = true,
+                child: DraggableScrollableSheet(
                 controller: _sheetController,
                 initialChildSize: initial,
                 minChildSize: minSize,
@@ -1258,6 +1266,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                     ),
                   );
                 },
+              ),
               ),
             ],
           ),
@@ -1948,7 +1957,7 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => AddStampScreen(
               enrollment: e,
               customerName: widget.customer.name,
@@ -1970,12 +1979,14 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
             if (prog?.logo.isNotEmpty == true)
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  prog!.logo,
+                child: CachedNetworkImage(
+                  imageUrl: prog!.logo,
                   width: 36,
                   height: 36,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const SizedBox(),
+                  fadeInDuration: const Duration(milliseconds: 150),
+                  errorWidget: (_, __, ___) => const SizedBox(),
+                  placeholder: (_, __) => const SizedBox(),
                 ),
               ),
             if (prog?.logo.isNotEmpty == true) const SizedBox(width: 10),
@@ -2031,12 +2042,14 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
           if (program.logo.isNotEmpty)
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                program.logo,
+              child: CachedNetworkImage(
+                imageUrl: program.logo,
                 width: 36,
                 height: 36,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const SizedBox(),
+                fadeInDuration: const Duration(milliseconds: 150),
+                errorWidget: (_, __, ___) => const SizedBox(),
+                placeholder: (_, __) => const SizedBox(),
               ),
             ),
           if (program.logo.isNotEmpty) const SizedBox(width: 10),

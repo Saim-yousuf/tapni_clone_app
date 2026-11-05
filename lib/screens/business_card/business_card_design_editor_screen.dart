@@ -12,6 +12,7 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/business_card_design_renderer.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 /// Canva-style business card design editor (invitation-style tools).
 class BusinessCardDesignEditorScreen extends StatefulWidget {
@@ -434,7 +435,7 @@ class _BusinessCardDesignEditorScreenState
   }
 
   void _showBackgroundMenu() {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       backgroundColor: WaUi.surface,
       shape: const RoundedRectangleBorder(
@@ -477,7 +478,7 @@ class _BusinessCardDesignEditorScreenState
   }
 
   void _showAddMenu() {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       backgroundColor: WaUi.surface,
       shape: const RoundedRectangleBorder(

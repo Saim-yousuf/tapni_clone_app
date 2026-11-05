@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 class WaToolsHeader extends StatelessWidget {
@@ -146,11 +147,13 @@ class WaToolsListTile extends StatelessWidget {
       ),
     );
 
-    return Material(
-      color: WaUi.toolsScaffold,
-      child: onTap == null
-          ? content
-          : InkWell(onTap: onTap, child: content),
+    return AppAppear(
+      child: Material(
+        color: WaUi.toolsScaffold,
+        child: onTap == null
+            ? content
+            : InkWell(onTap: onTap, child: content),
+      ),
     );
   }
 }

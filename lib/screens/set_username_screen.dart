@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -146,7 +147,7 @@ class _SetUsernameScreenState extends State<SetUsernameScreen>
     if (_validateUsername(username) != null) return;
 
     await Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => UsernameClaimScreen(username: username),
       ),
     );

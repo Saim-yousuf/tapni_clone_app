@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -165,7 +166,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   Future<void> _openSchedules() async {
     await Navigator.push(
       context,
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => AttendanceReportScreen(
           employee: _selectedEmployer,
         ),
@@ -340,7 +341,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     if (type == 'check_in') {
       await Navigator.push<void>(
         context,
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => AttendanceSuccessScreen(
             kind: AttendanceSuccessKind.checkIn,
             companyName: companyName,
@@ -356,7 +357,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     } else {
       await Navigator.push<void>(
         context,
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => AttendanceSuccessScreen(
             kind: AttendanceSuccessKind.checkOut,
             companyName: companyName,

@@ -180,7 +180,7 @@ class CatalogCheckout {
 
     if (pushSuccessScreen && onlinePaymentOk && context.mounted) {
       await Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => OrderPlacedScreen(
             token: placed.tokenNumber,
             customerUsername: customerUsername,

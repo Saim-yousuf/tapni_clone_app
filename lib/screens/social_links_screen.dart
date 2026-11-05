@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -59,29 +60,44 @@ class SocialLinksScreen extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: waitingForProfile
-                  ? const _LinksListShimmer()
-                  : currentLinks.isEmpty
-                      ? Center(
-                          child: ProfileEmptyState(
-                            imageAsset: _linkVector,
-                            title: context.l10n.appsEmpty,
-                            subtitle: context.l10n.appsEmptySubtitle,
+              child: AppContentSwitcher(
+                child: waitingForProfile
+                    ? const KeyedSubtree(
+                        key: ValueKey('links-shimmer'),
+                        child: _LinksListShimmer(),
+                      )
+                    : currentLinks.isEmpty
+                        ? KeyedSubtree(
+                            key: const ValueKey('links-empty'),
+                            child: Center(
+                              child: ProfileEmptyState(
+                                imageAsset: _linkVector,
+                                title: context.l10n.appsEmpty,
+                                subtitle: context.l10n.appsEmptySubtitle,
+                              ),
+                            ),
+                          )
+                        : KeyedSubtree(
+                            key: ValueKey('links-${currentLinks.length}'),
+                            child: ListView.builder(
+                              padding:
+                                  const EdgeInsets.only(top: 8, bottom: 16),
+                              itemCount: currentLinks.length,
+                              itemBuilder: (context, index) {
+                                final link = currentLinks[index];
+                                return AppAppear(
+                                  index: index,
+                                  child: _buildLinkTile(
+                                    context,
+                                    link,
+                                    profileProvider,
+                                    isDark,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.only(top: 8, bottom: 16),
-                          itemCount: currentLinks.length,
-                          itemBuilder: (context, index) {
-                            final link = currentLinks[index];
-                            return _buildLinkTile(
-                              context,
-                              link,
-                              profileProvider,
-                              isDark,
-                            );
-                          },
-                        ),
+              ),
             ),
             Material(
               color: WaUi.toolsScaffold,

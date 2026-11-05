@@ -149,7 +149,7 @@ class _NavIconButton extends StatefulWidget {
 /// WhatsApp Business–style tab select: pill pops in, icon bounces once.
 class _NavIconButtonState extends State<_NavIconButton>
     with SingleTickerProviderStateMixin {
-  static const _duration = Duration(milliseconds: 280);
+  static const _duration = Duration(milliseconds: 360);
 
   late final AnimationController _controller;
   late final Animation<double> _pillScale;
@@ -168,24 +168,24 @@ class _NavIconButtonState extends State<_NavIconButton>
     _controller = AnimationController(vsync: this, duration: _duration);
     _pillScale = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween(begin: 0.55, end: 1.08)
+        tween: Tween(begin: 0.4, end: 1.16)
             .chain(CurveTween(curve: Curves.easeOutCubic)),
         weight: 65,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 1.08, end: 1.0)
+        tween: Tween(begin: 1.16, end: 1.0)
             .chain(CurveTween(curve: Curves.easeOut)),
         weight: 35,
       ),
     ]).animate(_controller);
     _iconScale = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween(begin: 0.88, end: 1.14)
+        tween: Tween(begin: 0.75, end: 1.22)
             .chain(CurveTween(curve: Curves.easeOutCubic)),
         weight: 55,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 1.14, end: 1.0)
+        tween: Tween(begin: 1.22, end: 1.0)
             .chain(CurveTween(curve: Curves.easeOut)),
         weight: 45,
       ),
@@ -268,7 +268,7 @@ class _NavIconButtonState extends State<_NavIconButton>
                       Transform.scale(
                         scale: iconScale,
                         child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 180),
+                          duration: const Duration(milliseconds: 280),
                           switchInCurve: Curves.easeOut,
                           switchOutCurve: Curves.easeIn,
                           transitionBuilder: (child, animation) {
@@ -459,7 +459,7 @@ class CurvedNavCenterButton extends StatelessWidget {
               child: DefaultTextStyle.merge(
                 style: TextStyle(color: foregroundColor),
                 child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 240),
+                  duration: const Duration(milliseconds: 320),
                   switchInCurve: Curves.easeOutCubic,
                   switchOutCurve: Curves.easeIn,
                   transitionBuilder: (child, animation) {

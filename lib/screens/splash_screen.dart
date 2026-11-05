@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -78,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
         authProvider.refreshAccounts();
 
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const MainShell()),
+          AppPageRoute(builder: (_) => const MainShell()),
         );
 
         // Network bootstrap after UI is shown (WhatsApp / IG style).
@@ -92,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       } else {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+          AppPageRoute(builder: (_) => const OnboardingScreen()),
         );
       }
     } finally {

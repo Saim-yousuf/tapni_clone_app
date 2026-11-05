@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/l10n_lookup.dart';
@@ -620,7 +621,7 @@ class AuthProvider extends ChangeNotifier {
         context: context,
       );
       nav.pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const MainShell()),
+        AppPageRoute(builder: (_) => const MainShell()),
         (_) => false,
       );
     } else {
@@ -629,7 +630,7 @@ class AuthProvider extends ChangeNotifier {
         context: context,
       );
       nav.pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const PhoneAuthScreen()),
+        AppPageRoute(builder: (_) => const PhoneAuthScreen()),
         (_) => false,
       );
     }

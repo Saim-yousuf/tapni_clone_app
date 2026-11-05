@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/explore_business.dart';
 import 'package:tapni_app/repository/explore_repo.dart';
@@ -51,14 +52,14 @@ class _BannerAdsPlansScreenState extends State<BannerAdsPlansScreen> {
 
   Future<void> _choosePlan(BannerAdPlan plan) async {
     final created = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => CreateBannerScreen(plan: plan),
       ),
     );
     if (!mounted) return;
     if (created == true) {
       await Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const BannerListScreen()),
+        AppPageRoute(builder: (_) => const BannerListScreen()),
       );
     } else {
       _load();
@@ -67,7 +68,7 @@ class _BannerAdsPlansScreenState extends State<BannerAdsPlansScreen> {
 
   void _openList() {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const BannerListScreen()),
+      AppPageRoute(builder: (_) => const BannerListScreen()),
     ).then((_) => _load());
   }
 

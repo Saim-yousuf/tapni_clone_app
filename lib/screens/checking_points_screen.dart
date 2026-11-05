@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/profile.dart';
@@ -62,7 +63,7 @@ class CheckingPointsScreen extends StatelessWidget {
         );
         profileProvider.setEditingProfile(true);
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
+          AppPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
         );
         break;
 
@@ -74,7 +75,7 @@ class CheckingPointsScreen extends StatelessWidget {
         );
         profileProvider.setEditingProfile(true);
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
+          AppPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
         );
         break;
 
@@ -86,7 +87,7 @@ class CheckingPointsScreen extends StatelessWidget {
         );
         profileProvider.setEditingProfile(true);
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
+          AppPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
         );
         break;
 
@@ -98,14 +99,14 @@ class CheckingPointsScreen extends StatelessWidget {
         );
         profileProvider.setEditingProfile(true);
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
+          AppPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
         );
         break;
 
       case "social":
         debugPrint("Open Social Links Editor");
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => MainShell(currentPage: "Links")),
+          AppPageRoute(builder: (_) => MainShell(currentPage: "Links")),
         );
         break;
 
@@ -117,7 +118,7 @@ class CheckingPointsScreen extends StatelessWidget {
         );
         profileProvider.setEditingProfile(true);
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
+          AppPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
         );
         break;
 
@@ -128,7 +129,7 @@ class CheckingPointsScreen extends StatelessWidget {
         );
         profileProvider.setEditingProfile(true);
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
+          AppPageRoute(builder: (_) => MainShell(currentPage: "My Card")),
         );
         break;
 

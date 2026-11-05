@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -570,7 +571,7 @@ class _BusinessEarningsWalletScreenState
                                         return;
                                       }
                                       Navigator.of(context).push(
-                                        MaterialPageRoute(
+                                        AppPageRoute(
                                           builder: (_) => PaymentDetailScreen(
                                             paymentId: paymentId,
                                             orderId: orderId,

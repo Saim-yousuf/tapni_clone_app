@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/business_card_design.dart';
@@ -44,7 +45,7 @@ class BusinessCardTemplateGalleryScreen extends StatelessWidget {
         : cardId;
 
     Navigator.of(context).push<String>(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => BusinessCardDesignEditorScreen(
           design: seeded,
           cardId: newId,
@@ -72,7 +73,7 @@ class BusinessCardTemplateGalleryScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.of(context).push<String>(
-                  MaterialPageRoute(
+                  AppPageRoute(
                     builder: (_) => BusinessCardDesignEditorScreen(
                       design: existingDesign!.copy(),
                       cardId: cardId,

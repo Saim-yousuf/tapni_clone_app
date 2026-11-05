@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/lead.dart';
@@ -15,6 +16,8 @@ import 'package:tapni_app/widgets/filter_contacts_sheet.dart';
 import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 
 class LeadsScreen extends StatefulWidget {
   const LeadsScreen({Key? key}) : super(key: key);
@@ -64,7 +67,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     _dismissKeyboard();
     await Navigator.of(
       context,
-    ).push(MaterialPageRoute(builder: (_) => ScanScreen()));
+    ).push(AppPageRoute(builder: (_) => ScanScreen()));
     if (!mounted) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _dismissKeyboard();
@@ -75,7 +78,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     _dismissKeyboard();
     Navigator.of(
       context,
-    ).push(MaterialPageRoute(builder: (_) => FindUserScreen()));
+    ).push(AppPageRoute(builder: (_) => FindUserScreen()));
   }
 
   void _showAddContactOptions(
@@ -175,7 +178,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                           onTap: () {
                             _dismissKeyboard();
                             Navigator.of(context).push(
-                              MaterialPageRoute(
+                              AppPageRoute(
                                 builder: (_) =>
                                     const ContactsSearchScreen(),
                               ),
@@ -227,13 +230,23 @@ class _LeadsScreenState extends State<LeadsScreen> {
                       if (leadsProvider.isLoading && !hasAnyContacts)
                         const SliverFillRemaining(
                           hasScrollBody: false,
-                          child: ContactsListShimmer(),
+                          child: AppContentSwitcher(
+                            child: KeyedSubtree(
+                              key: ValueKey('contacts-shimmer'),
+                              child: ContactsListShimmer(),
+                            ),
+                          ),
                         )
                       else if (leadsList.isEmpty)
                         SliverFillRemaining(
                           hasScrollBody: false,
-                          child: WaContactEmptyState(
-                            isSearching: isFiltering,
+                          child: AppContentSwitcher(
+                            child: KeyedSubtree(
+                              key: ValueKey('contacts-empty'),
+                              child: WaContactEmptyState(
+                                isSearching: isFiltering,
+                              ),
+                            ),
                           ),
                         )
                       else
@@ -244,10 +257,13 @@ class _LeadsScreenState extends State<LeadsScreen> {
                               context,
                               index,
                             ) {
-                              return _buildContactRow(
-                                context,
-                                leadsList[index],
-                                leadsProvider,
+                              return AppAppear(
+                                index: index,
+                                child: _buildContactRow(
+                                  context,
+                                  leadsList[index],
+                                  leadsProvider,
+                                ),
                               );
                             }, childCount: leadsList.length),
                           ),
@@ -271,7 +287,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
   ) {
     switch (value) {
       case 'filter':
-        showModalBottomSheet(
+        showAppModalBottomSheet(
           context: context,
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
@@ -285,7 +301,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
   }
 
   void _showCategoriesSheet(BuildContext context, LeadsProvider provider) {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       backgroundColor: WaUi.surface,
       shape: RoundedRectangleBorder(
@@ -334,7 +350,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                         },
                         onLongPress: () {
                           Navigator.pop(ctx);
-                          showDialog(
+                          showAppDialog(
                             context: context,
                             builder: (dialogCtx) => AlertDialog(
                               title: Text(
@@ -427,7 +443,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     final noteController = TextEditingController();
     final addressController = TextEditingController();
 
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -628,7 +644,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     final noteController = TextEditingController(text: lead.note);
     bool isEditing = false;
     bool isSaving = false;
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -1131,7 +1147,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
     Lead lead,
     LeadsProvider provider,
   ) {
-    showDialog(
+    showAppDialog(
       context: context,
       builder: (ctx) {
         return AlertDialog(
@@ -1186,7 +1202,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
       '#800080',
     ];
 
-    showDialog(
+    showAppDialog(
       context: context,
       builder: (ctx) {
         return StatefulBuilder(
@@ -1353,7 +1369,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
         onTap: () {
           if (lead.contactUser != null) {
             Navigator.of(context).push(
-              MaterialPageRoute(
+              AppPageRoute(
                 builder: (_) => ScannedProfileScreen(user: lead.contactUser),
               ),
             );

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
@@ -172,7 +173,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
     final username = widget.profile.username ?? _explore.businessUsername;
     if (username == null || username.isEmpty) return;
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => ScannedProfileScreen(username: username),
       ),
     );
@@ -200,7 +201,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
       final items = itemIndex >= 0 ? cartItems : [_item];
 
       await Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => ServiceBookingCartScreen(
             catalogItems: items,
             initialCart: [
@@ -272,7 +273,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
           customerUsername = context.read<ProfileProvider>().profile.username;
         } catch (_) {}
         await Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => OrderPlacedScreen(
               token: CatalogOrder.tokenFromApi(res.data),
               customerUsername: customerUsername,
@@ -356,7 +357,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
                           return;
                         }
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => const ExploreCartScreen(),
                           ),
                         );

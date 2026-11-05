@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tapni_app/models/cart_line_item.dart';
@@ -175,7 +176,7 @@ class _ServiceBookingCartScreenState extends State<ServiceBookingCartScreen> {
     widget.onBookedSuccess?.call();
 
     await Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => ServiceBookingSuccessScreen(
           bookingCode: bookingCode,
           orderId: orderId,
@@ -777,7 +778,7 @@ class ServiceBookingSuccessScreen extends StatelessWidget {
                       filled: false,
                       onPressed: () {
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) => OrderDetailScreen(
                               orderId: orderId!,
                               isBusinessView: false,

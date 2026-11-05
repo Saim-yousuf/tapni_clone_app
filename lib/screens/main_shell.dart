@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/utils/theme.dart';
-import 'package:tapni_app/models/stored_account.dart';
-import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/providers/auth_provider.dart';
@@ -23,6 +21,8 @@ import 'package:tapni_app/services/contacts_sync_service.dart';
 import 'package:tapni_app/services/caller_id_service.dart';
 import 'package:tapni_app/services/device_session_guard.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/utils/app_motion.dart';
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/curved_bottom_nav.dart';
@@ -41,12 +41,20 @@ class _MainShellState extends State<MainShell> {
   /// Analytics sits before Settings. CurvedBottomNav requires exactly 4 items.
   static const _navPages = ['Links', 'Contacts', 'Analytics', 'Settings'];
 
+  /// IndexedStack order: nav tabs (0–3) + My Card (4).
+  static const _profileStackIndex = 4;
+
   late String _currentPage;
   int _navIndex = 0;
   bool _contactsPromptShown = false;
   int _lastReconnectTick = 0;
+  late final PageController _pageController;
+  /// Bumped whenever My Card becomes the active page so sheet enter replays.
+  int _profileSheetEnterNonce = 0;
 
   bool get _onProfile => _currentPage == 'My Card';
+
+  int get _stackIndex => _onProfile ? _profileStackIndex : _navIndex;
 
   @override
   void initState() {
@@ -60,7 +68,7 @@ class _MainShellState extends State<MainShell> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const FindUserScreen(isTab: false)),
+          AppPageRoute(builder: (_) => const FindUserScreen(isTab: false)),
         );
       });
     } else {
@@ -68,9 +76,14 @@ class _MainShellState extends State<MainShell> {
     }
     final index = _navPages.indexOf(_currentPage);
     _navIndex = index >= 0 ? index : 0;
+    _pageController = PageController(initialPage: _stackIndex);
     DeviceSessionGuard.instance.start();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
+      // First landing on My Card — trigger sheet enter after shell is visible.
+      if (_onProfile) {
+        setState(() => _profileSheetEnterNonce++);
+      }
       final profileProvider = Provider.of<ProfileProvider>(
         context,
         listen: false,
@@ -98,7 +111,7 @@ class _MainShellState extends State<MainShell> {
     _contactsPromptShown = true;
     await Navigator.of(
       context,
-    ).push(MaterialPageRoute(builder: (_) => const ContactsSyncScreen()));
+    ).push(AppPageRoute(builder: (_) => const ContactsSyncScreen()));
   }
 
   void _loadCatalogNotifications() {
@@ -116,21 +129,28 @@ class _MainShellState extends State<MainShell> {
     );
   }
 
-  Widget _buildCurrentScreen() {
-    switch (_currentPage) {
-      case 'Links':
-        return const SocialLinksScreen(isTab: true);
-      case 'My Card':
-        return const ProfileScreen();
-      case 'Contacts':
-        return const LeadsScreen();
-      case 'Analytics':
-        return const AnalyticsScreen();
-      case 'Settings':
-        return const SettingsScreen();
-      default:
-        return const ProfileScreen();
+  Widget _wrapTab(Widget child, {required bool coverUnderStatusBar}) {
+    return _KeepAliveTab(
+      child: SafeArea(
+        top: !coverUnderStatusBar,
+        bottom: false,
+        child: child,
+      ),
+    );
+  }
+
+  void _animateToPage(int page) {
+    if (!_pageController.hasClients) return;
+    if ((_pageController.page ?? _pageController.initialPage).round() == page) {
+      return;
     }
+    unawaited(
+      _pageController.animateToPage(
+        page,
+        duration: AppMotion.tab,
+        curve: Curves.easeOutCubic,
+      ),
+    );
   }
 
   void _switchTab(String page) {
@@ -138,11 +158,12 @@ class _MainShellState extends State<MainShell> {
       context,
       listen: false,
     ).resetBannerForRoute();
+    final index = _navPages.indexOf(page);
     setState(() {
       _currentPage = page;
-      final index = _navPages.indexOf(page);
       if (index >= 0) _navIndex = index;
     });
+    if (index >= 0) _animateToPage(index);
     Provider.of<ProfileProvider>(
       context,
       listen: false,
@@ -154,11 +175,21 @@ class _MainShellState extends State<MainShell> {
       context,
       listen: false,
     ).resetBannerForRoute();
-    setState(() => _currentPage = 'My Card');
+    setState(() {
+      _currentPage = 'My Card';
+      _profileSheetEnterNonce++;
+    });
+    _animateToPage(_profileStackIndex);
     Provider.of<ProfileProvider>(
       context,
       listen: false,
     ).setEditingProfile(false);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   void _onCenterButtonTap() {
@@ -173,7 +204,7 @@ class _MainShellState extends State<MainShell> {
     if (_onProfile) {
       Navigator.of(
         context,
-      ).push(MaterialPageRoute(builder: (_) => const ScanScreen()));
+      ).push(AppPageRoute(builder: (_) => const ScanScreen()));
       return;
     }
     _goToProfile();
@@ -228,9 +259,11 @@ class _MainShellState extends State<MainShell> {
           imageUrl: photoUrl,
           fit: BoxFit.cover,
           alignment: Alignment.center,
-          fadeInDuration: const Duration(milliseconds: 200),
+          fadeInDuration: Duration.zero,
+          fadeOutDuration: Duration.zero,
+          useOldImageOnUrlChange: true,
           errorWidget: (_, _, _) => _fabInitials(name, fabFg),
-          placeholder: (_, _) => _fabInitials(name, fabFg),
+          placeholder: (_, _) => const ColoredBox(color: Color(0xFF2C2C2E)),
         ),
       );
     } else {
@@ -272,27 +305,34 @@ class _MainShellState extends State<MainShell> {
     );
   }
 
-  String _fabDisplayName(UserProfile profile, StoredAccount? account) {
+  String _fabDisplayName({
+    required String profileName,
+    required String profileEmail,
+    String? profileUsername,
+    String? accountName,
+    String? accountUsername,
+    String? accountEmail,
+  }) {
     for (final candidate in [
-      profile.name,
-      account?.name ?? '',
-      profile.username ?? '',
-      account?.username ?? '',
+      profileName,
+      accountName ?? '',
+      profileUsername ?? '',
+      accountUsername ?? '',
     ]) {
       final trimmed = candidate.trim();
       if (trimmed.isNotEmpty) return trimmed;
     }
-    final email = profile.email.trim().isNotEmpty
-        ? profile.email.trim()
-        : (account?.email.trim() ?? '');
+    final email = profileEmail.trim().isNotEmpty
+        ? profileEmail.trim()
+        : (accountEmail?.trim() ?? '');
     if (email.isNotEmpty) return email.split('@').first;
     return '';
   }
 
-  String? _fabPhotoUrl(UserProfile profile, StoredAccount? account) {
-    final fromProfile = profile.profilePhotoUrl?.trim() ?? '';
+  String? _fabPhotoUrl(String? profilePhoto, String? accountPhoto) {
+    final fromProfile = profilePhoto?.trim() ?? '';
     if (fromProfile.isNotEmpty) return fromProfile;
-    final fromAccount = account?.profilePhoto?.trim() ?? '';
+    final fromAccount = accountPhoto?.trim() ?? '';
     return fromAccount.isNotEmpty ? fromAccount : null;
   }
 
@@ -316,21 +356,48 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final connectivity = context.watch<ConnectivityProvider>();
-    if (connectivity.reconnectTick != _lastReconnectTick) {
-      _lastReconnectTick = connectivity.reconnectTick;
+    final reconnectTick =
+        context.select<ConnectivityProvider, int>((c) => c.reconnectTick);
+    if (reconnectTick != _lastReconnectTick) {
+      _lastReconnectTick = reconnectTick;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unawaited(_refreshAfterReconnect());
       });
     }
 
-    final profileProvider = Provider.of<ProfileProvider>(context);
-    final authProvider = Provider.of<AuthProvider>(context);
-    final isEditing = profileProvider.isEditingProfile;
-    final profile = profileProvider.profile;
-    final account = authProvider.activeAccount;
-    final fabName = _fabDisplayName(profile, account);
-    final fabPhoto = _fabPhotoUrl(profile, account);
+    // Primitive selects — shell chrome rebuilds only when FAB-relevant data changes.
+    final isEditing =
+        context.select<ProfileProvider, bool>((p) => p.isEditingProfile);
+    final profileName =
+        context.select<ProfileProvider, String>((p) => p.profile.name);
+    final profilePhoto = context.select<ProfileProvider, String?>(
+      (p) => p.profile.profilePhotoUrl,
+    );
+    final profileEmail =
+        context.select<ProfileProvider, String>((p) => p.profile.email);
+    final profileUsername = context.select<ProfileProvider, String?>(
+      (p) => p.profile.username,
+    );
+    final accountName =
+        context.select<AuthProvider, String?>((a) => a.activeAccount?.name);
+    final accountPhoto = context.select<AuthProvider, String?>(
+      (a) => a.activeAccount?.profilePhoto,
+    );
+    final accountUsername = context.select<AuthProvider, String?>(
+      (a) => a.activeAccount?.username,
+    );
+    final accountEmail =
+        context.select<AuthProvider, String?>((a) => a.activeAccount?.email);
+
+    final fabName = _fabDisplayName(
+      profileName: profileName,
+      profileEmail: profileEmail,
+      profileUsername: profileUsername,
+      accountName: accountName,
+      accountUsername: accountUsername,
+      accountEmail: accountEmail,
+    );
+    final fabPhoto = _fabPhotoUrl(profilePhoto, accountPhoto);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final selectedColor = isDark ? Colors.white : Colors.black;
     final unselectedColor = const Color(0xFF8E8E93);
@@ -338,7 +405,6 @@ class _MainShellState extends State<MainShell> {
     final fabBg = isDark ? Colors.white : Colors.black;
     final fabFg = isDark ? Colors.black : Colors.white;
     final l10n = context.l10n;
-    final navClearance = CurvedBottomNav.contentClearance(context);
 
     // My Card (view + edit): cover draws under the status bar.
     final coverUnderStatusBar = _onProfile;
@@ -350,81 +416,131 @@ class _MainShellState extends State<MainShell> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: overlayStyle,
       child: PopScope(
-      canPop: _onProfile && !isEditing,
-      onPopInvokedWithResult: (didPop, _) {
-        if (didPop) return;
-        if (isEditing) {
-          profileProvider.setEditingProfile(false);
-          profileProvider.onSaveTriggered = null;
-          return;
-        }
-        if (_onProfile) return;
-        _goToProfile();
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: WaUi.toolsScaffold,
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: SafeArea(
-                top: !coverUnderStatusBar,
-                bottom: false,
-                child: _buildCurrentScreen(),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: CurvedBottomNav(
-                backgroundColor: barColor,
-                currentIndex: _navIndex,
-                onTap: (index) {
-                  if (index < 0 || index >= _navPages.length) return;
-                  _switchTab(_navPages[index]);
-                },
-                items: [
-                  _navItem(
-                    icon: Icons.link_outlined,
-                    selectedIcon: Icons.link_rounded,
-                    label: l10n.links,
-                    selectedColor: selectedColor,
-                    unselectedColor: unselectedColor,
-                  ),
-                  _navItem(
-                    icon: Icons.people_outline,
-                    selectedIcon: Icons.people,
-                    label: l10n.contacts,
-                    selectedColor: selectedColor,
-                    unselectedColor: unselectedColor,
-                  ),
-                  _navItem(
-                    icon: Icons.insights_outlined,
-                    selectedIcon: Icons.insights,
-                    label: 'Analytics',
-                    selectedColor: selectedColor,
-                    unselectedColor: unselectedColor,
-                  ),
-                  _navItem(
-                    icon: Icons.storefront_outlined,
-                    selectedIcon: Icons.storefront,
-                    label: l10n.tools,
-                    selectedColor: selectedColor,
-                    unselectedColor: unselectedColor,
-                  ),
-                ],
-                centerButton: _buildCenterFab(
-                  isEditing: isEditing,
-                  fabBg: fabBg,
-                  fabFg: fabFg,
-                  name: fabName,
-                  photoUrl: fabPhoto,
+        canPop: _onProfile && !isEditing,
+        onPopInvokedWithResult: (didPop, _) {
+          if (didPop) return;
+          if (isEditing) {
+            final profileProvider = Provider.of<ProfileProvider>(
+              context,
+              listen: false,
+            );
+            profileProvider.setEditingProfile(false);
+            profileProvider.onSaveTriggered = null;
+            return;
+          }
+          if (_onProfile) return;
+          _goToProfile();
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: WaUi.toolsScaffold,
+          body: Stack(
+            children: [
+              Positioned.fill(
+                // Visible horizontal slide between tabs (PageView).
+                child: PageView(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  allowImplicitScrolling: true,
+                  children: [
+                    _wrapTab(
+                      const SocialLinksScreen(isTab: true),
+                      coverUnderStatusBar: false,
+                    ),
+                    _wrapTab(
+                      const LeadsScreen(),
+                      coverUnderStatusBar: false,
+                    ),
+                    _wrapTab(
+                      const AnalyticsScreen(),
+                      coverUnderStatusBar: false,
+                    ),
+                    _wrapTab(
+                      const SettingsScreen(),
+                      coverUnderStatusBar: false,
+                    ),
+                    _wrapTab(
+                      ProfileScreen(
+                        sheetEnterNonce: _profileSheetEnterNonce,
+                      ),
+                      coverUnderStatusBar: true,
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: CurvedBottomNav(
+                  backgroundColor: barColor,
+                  currentIndex: _navIndex,
+                  onTap: (index) {
+                    if (index < 0 || index >= _navPages.length) return;
+                    _switchTab(_navPages[index]);
+                  },
+                  items: [
+                    _navItem(
+                      icon: Icons.link_outlined,
+                      selectedIcon: Icons.link_rounded,
+                      label: l10n.links,
+                      selectedColor: selectedColor,
+                      unselectedColor: unselectedColor,
+                    ),
+                    _navItem(
+                      icon: Icons.people_outline,
+                      selectedIcon: Icons.people,
+                      label: l10n.contacts,
+                      selectedColor: selectedColor,
+                      unselectedColor: unselectedColor,
+                    ),
+                    _navItem(
+                      icon: Icons.insights_outlined,
+                      selectedIcon: Icons.insights,
+                      label: 'Analytics',
+                      selectedColor: selectedColor,
+                      unselectedColor: unselectedColor,
+                    ),
+                    _navItem(
+                      icon: Icons.storefront_outlined,
+                      selectedIcon: Icons.storefront,
+                      label: l10n.tools,
+                      selectedColor: selectedColor,
+                      unselectedColor: unselectedColor,
+                    ),
+                  ],
+                  centerButton: _buildCenterFab(
+                    isEditing: isEditing,
+                    fabBg: fabBg,
+                    fabFg: fabFg,
+                    name: fabName,
+                    photoUrl: fabPhoto,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      ),
     );
+  }
+}
+
+/// Keeps each PageView tab alive so switching doesn't reload content.
+class _KeepAliveTab extends StatefulWidget {
+  const _KeepAliveTab({required this.child});
+  final Widget child;
+
+  @override
+  State<_KeepAliveTab> createState() => _KeepAliveTabState();
+}
+
+class _KeepAliveTabState extends State<_KeepAliveTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.child;
   }
 }

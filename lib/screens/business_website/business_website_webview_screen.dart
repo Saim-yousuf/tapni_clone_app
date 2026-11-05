@@ -86,7 +86,7 @@ class _BusinessWebsiteWebViewScreenState
     if (id.isEmpty || !mounted) return;
     final token = (accessToken ?? '').trim();
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => OrderDetailScreen(
           orderId: id,
           isBusinessView: false,

@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/models/business_review.dart';
@@ -95,7 +96,7 @@ class _ProfileReviewsSectionState extends State<ProfileReviewsSection> {
 
   Future<void> _openReviewsList() async {
     await Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => ReviewsListScreen(
           profile: widget.profile,
           isOwnProfile: widget.isOwnProfile,

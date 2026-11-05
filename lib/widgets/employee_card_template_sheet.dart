@@ -92,7 +92,7 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
     final isPro = Provider.of<ProfileProvider>(context, listen: false).isProUser;
 
     if (selected.isPro && !isPro) {
-      showModalBottomSheet(
+      showAppModalBottomSheet(
         context: context,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,

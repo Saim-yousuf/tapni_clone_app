@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -23,7 +24,7 @@ Future<void> openCatalogDocument(
 
   await Navigator.push(
     context,
-    MaterialPageRoute(
+    AppPageRoute(
       builder: (_) => InAppDocumentScreen(
         title: item.name,
         fileUrl: url,

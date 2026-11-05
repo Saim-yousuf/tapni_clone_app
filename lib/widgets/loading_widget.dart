@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/theme.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 
 class CustomDialog {
   static showDailog({
@@ -16,16 +17,27 @@ class CustomDialog {
       barrierDismissible: barrierDismissible,
       barrierLabel: "Dismiss",
       barrierColor: Colors.transparent, // transparent for blur visibility
-      transitionDuration: const Duration(milliseconds: 200),
+      transitionDuration: AppMotion.dialog,
       pageBuilder: (_, __, ___) => BlurredDialog(child: child),
       transitionBuilder: (_, animation, __, child) {
-        return FadeTransition(opacity: animation, child: child);
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: AppMotion.easeOut,
+          reverseCurve: AppMotion.easeIn,
+        );
+        return FadeTransition(
+          opacity: curved,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.96, end: 1).animate(curved),
+            child: child,
+          ),
+        );
       },
     );
   }
 
   static loadingDialog(context) {
-    showDialog(
+    showAppDialog(
       barrierDismissible: false,
       context: context,
       useRootNavigator: true,

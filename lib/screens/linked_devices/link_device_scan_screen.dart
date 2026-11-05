@@ -7,6 +7,7 @@ import 'package:tapni_app/widgets/alert.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 class LinkDeviceScanScreen extends StatefulWidget {
   const LinkDeviceScanScreen({super.key});
 
@@ -123,7 +124,7 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
   }
 
   void _showManualEntry() {
-    showModalBottomSheet(
+    showAppModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: WaUi.surface,

@@ -9,6 +9,7 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 class TemplatesSheet extends StatefulWidget {
   const TemplatesSheet({Key? key}) : super(key: key);
 
@@ -144,7 +145,7 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                         final selectedTemplate = templates[_activePage];
                         if (selectedTemplate.isPro &&
                             !profileProvider.isProUser) {
-                          showModalBottomSheet(
+                          showAppModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,

@@ -10,13 +10,14 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
-void showContactCardBottomSheet(
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
+Future<void> showContactCardBottomSheet(
   BuildContext context,
   LinkTemplate template,
   ProfileProvider provider, {
   SocialLink? existingLink,
 }) {
-  showModalBottomSheet(
+  return showAppModalBottomSheet(
     context: context,
     isScrollControlled: true,
     useSafeArea: false,

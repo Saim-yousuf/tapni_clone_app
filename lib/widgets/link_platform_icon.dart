@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/social_link.dart';
@@ -5,6 +6,9 @@ import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/widgets/document_kind_icon.dart';
 
 /// Same catalog brand tiles as Add Link. Falls back to bundled assets.
+///
+/// Loading state is a neutral tile — never another brand/asset icon — so
+/// Profile / Edit / Scanned / Add Link don't flash "wrong icon → real icon".
 class LinkPlatformIcon extends StatelessWidget {
   const LinkPlatformIcon({
     super.key,
@@ -49,8 +53,32 @@ class LinkPlatformIcon extends StatelessWidget {
     );
   }
 
+  Widget _softTile() {
+    return ColoredBox(
+      color: const Color(0xFFF5F5F5),
+      child: SizedBox(width: size, height: size),
+    );
+  }
+
+  Widget _cachedNet(
+    String logo, {
+    required Widget Function() onError,
+  }) {
+    return CachedNetworkImage(
+      imageUrl: logo,
+      width: size,
+      height: size,
+      fit: fit,
+      alignment: Alignment.center,
+      fadeInDuration: Duration.zero,
+      fadeOutDuration: Duration.zero,
+      useOldImageOnUrlChange: true,
+      errorWidget: (_, __, ___) => onError(),
+      placeholder: (_, __) => _softTile(),
+    );
+  }
+
   Widget _assetFallback() {
-    // BoxFit.cover: fill the tile so radius/size match network logos.
     if (fit == BoxFit.cover) {
       return _edgeFill(
         Image.asset(
@@ -59,10 +87,8 @@ class LinkPlatformIcon extends StatelessWidget {
           height: size,
           fit: BoxFit.cover,
           alignment: Alignment.center,
-          errorBuilder: (_, __, ___) => ColoredBox(
-            color: const Color(0xFFF5F5F5),
-            child: Icon(Icons.link, size: size * 0.4),
-          ),
+          gaplessPlayback: true,
+          errorBuilder: (_, __, ___) => _softTile(),
         ),
       );
     }
@@ -73,6 +99,7 @@ class LinkPlatformIcon extends StatelessWidget {
         width: size,
         height: size,
         fit: BoxFit.contain,
+        gaplessPlayback: true,
         errorBuilder: (_, __, ___) => Icon(
           Icons.link,
           size: size * 0.4,
@@ -89,14 +116,7 @@ class LinkPlatformIcon extends StatelessWidget {
           _networkLogo(provider.catalogLogoFor(link));
       if (logo != null) {
         return _edgeFill(
-          Image.network(
-            logo,
-            width: size,
-            height: size,
-            fit: fit,
-            alignment: Alignment.center,
-            errorBuilder: (_, __, ___) => _galleryFallback(),
-          ),
+          _cachedNet(logo, onError: _galleryFallback),
         );
       }
       return _galleryFallback();
@@ -114,21 +134,32 @@ class LinkPlatformIcon extends StatelessWidget {
     }
 
     final provider = Provider.of<ProfileProvider>(context);
-    final logo = _networkLogo(link.logoUrl) ??
-        _networkLogo(provider.catalogLogoFor(link));
+    final explicitLogo = _networkLogo(link.logoUrl);
+    final catalogLogo = _networkLogo(provider.catalogLogoFor(link));
+    final hasAsset = link.assetPath.trim().isNotEmpty;
 
-    if (logo == null) return _assetFallback();
+    // User/custom logo from API — load network with soft tile (no other icon).
+    if (explicitLogo != null) {
+      return _edgeFill(
+        _cachedNet(
+          explicitLogo,
+          onError: () => hasAsset ? _assetFallback() : _softTile(),
+        ),
+      );
+    }
 
-    return _edgeFill(
-      Image.network(
-        logo,
-        width: size,
-        height: size,
-        fit: fit,
-        alignment: Alignment.center,
-        errorBuilder: (_, __, ___) => _assetFallback(),
-      ),
-    );
+    // Bundled platform icons stay on local assets — avoids catalog-load
+    // flicker (asset WhatsApp → network WhatsApp).
+    if (hasAsset) return _assetFallback();
+
+    // Catalog-only platforms with no bundled asset.
+    if (catalogLogo != null) {
+      return _edgeFill(
+        _cachedNet(catalogLogo, onError: _softTile),
+      );
+    }
+
+    return _softTile();
   }
 
   Widget _galleryFallback() {

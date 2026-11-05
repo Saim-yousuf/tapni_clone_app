@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/screens/loyalty_program/business/buy_points_screen.dart';
 import 'package:tapni_app/screens/loyalty_program/business/points_activity_screen.dart';
@@ -40,7 +41,7 @@ class _PointsRewardsScreenState extends State<PointsRewardsScreen> {
 
   Future<void> _openBuyPoints() async {
     await Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         settings: const RouteSettings(name: '/buy_points'),
         builder: (_) => const BuyPointsScreen(),
       ),
@@ -151,7 +152,7 @@ class _PointsRewardsScreenState extends State<PointsRewardsScreen> {
                     label: 'Redemption Settings',
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
+                        AppPageRoute(
                           builder: (_) => const RedemptionSettingsScreen(),
                         ),
                       );
@@ -162,7 +163,7 @@ class _PointsRewardsScreenState extends State<PointsRewardsScreen> {
                     label: 'View Activity',
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
+                        AppPageRoute(
                           builder: (_) => const PointsActivityScreen(),
                         ),
                       );

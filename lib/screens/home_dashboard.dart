@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
@@ -15,6 +16,8 @@ import 'package:tapni_app/widgets/stat_card.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 class HomeDashboard extends StatelessWidget {
   const HomeDashboard({Key? key}) : super(key: key);
 
@@ -110,7 +113,7 @@ class HomeDashboard extends StatelessWidget {
                         ),
                         onPressed: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
+                            AppPageRoute(
                               builder: (_) => const NotificationsScreen(),
                             ),
                           );
@@ -183,7 +186,7 @@ class HomeDashboard extends StatelessWidget {
                       IconButton(
                         icon: Icon(Icons.info_outline, color: Colors.red),
                         onPressed: () {
-                          showDialog(
+                          showAppDialog(
                             context: context,
                             builder: (context) => AlertDialog(
                               shape: RoundedRectangleBorder(
@@ -216,7 +219,7 @@ class HomeDashboard extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    showModalBottomSheet(
+                                    showAppModalBottomSheet(
                                       context: context,
                                       isScrollControlled: true,
                                       backgroundColor: Colors.transparent,
@@ -343,7 +346,7 @@ class HomeDashboard extends StatelessWidget {
                 const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
-                    showModalBottomSheet(
+                    showAppModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
@@ -440,7 +443,7 @@ class HomeDashboard extends StatelessWidget {
                       iconColor: const Color(0xFF3B82A0),
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          AppPageRoute(
                             builder: (_) =>
                                 OrdersListScreen(isBusinessView: false),
                           ),
@@ -459,7 +462,7 @@ class HomeDashboard extends StatelessWidget {
                         iconColor: const Color(0xFF4A7C3F),
                         onTap: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
+                            AppPageRoute(
                               builder: (_) =>
                                   OrdersListScreen(isBusinessView: true),
                             ),

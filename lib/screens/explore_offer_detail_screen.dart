@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/explore_business.dart';
 import 'package:tapni_app/models/reward.dart';
@@ -74,7 +75,7 @@ class _ExploreOfferDetailScreenState extends State<ExploreOfferDetailScreen> {
 
   Future<void> _onEnrollMe() async {
     await Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => CustomerEnrollQrScreen(
           businessName: offer.businessName,
         ),
@@ -86,7 +87,7 @@ class _ExploreOfferDetailScreenState extends State<ExploreOfferDetailScreen> {
   void _openBusiness() {
     if (offer.businessUsername.isNotEmpty) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) =>
               ScannedProfileScreen(username: offer.businessUsername),
         ),
@@ -95,7 +96,7 @@ class _ExploreOfferDetailScreenState extends State<ExploreOfferDetailScreen> {
     }
     if (offer.businessId.isNotEmpty) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => ScannedProfileScreen(user: offer.businessId),
         ),
       );

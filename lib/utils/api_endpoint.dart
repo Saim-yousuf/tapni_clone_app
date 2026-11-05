@@ -17,7 +17,7 @@ class Api {
     // Environment env
   ) {
     // baseUrl = _localBaseUrl;
-    baseUrl = _localBaseUrl;
+    baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }

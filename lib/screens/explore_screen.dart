@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -357,7 +358,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         final username = banner.actionUrl.trim().replaceFirst(RegExp(r'^@'), '');
         if (username.isEmpty) return;
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => ScannedProfileScreen(username: username),
           ),
         );
@@ -393,7 +394,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     bool autofocus = true,
   }) {
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => ExploreSearchScreen(
           offers: _offers,
           items: _items,
@@ -421,7 +422,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   void _openBusiness(ExploreBusiness business) {
     if (business.username.isEmpty) return;
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => ScannedProfileScreen(username: business.username),
       ),
     );
@@ -455,7 +456,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         return;
       case ExploreSeeAllKind.offers:
         Navigator.of(context).push(
-          MaterialPageRoute(
+          AppPageRoute(
             builder: (_) => ExploreSeeAllScreen(
               kind: kind,
               offers: offers,
@@ -508,7 +509,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         onOrders: () {
           Navigator.of(context).pop();
           Navigator.of(context).push(
-            MaterialPageRoute(
+            AppPageRoute(
               builder: (_) => const OrdersListScreen(isBusinessView: false),
             ),
           );
@@ -516,7 +517,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         onNotifications: () {
           Navigator.of(context).pop();
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+            AppPageRoute(builder: (_) => const NotificationsScreen()),
           );
         },
         onBecomeBusiness: () {
@@ -567,7 +568,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       return;
     }
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ExploreCartScreen()),
+      AppPageRoute(builder: (_) => const ExploreCartScreen()),
     );
   }
 
@@ -646,7 +647,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               customBorder: const CircleBorder(),
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
+                  AppPageRoute(
                     builder: (_) => const NotificationsScreen(),
                   ),
                 );

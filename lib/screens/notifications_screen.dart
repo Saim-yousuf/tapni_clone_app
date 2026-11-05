@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/providers/leads_provider.dart';
@@ -44,7 +45,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final userId = (item['userId'] as String?)?.trim() ?? '';
     if (username.isNotEmpty) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => ScannedProfileScreen(username: username),
         ),
       );
@@ -52,7 +53,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }
     if (userId.isNotEmpty) {
       Navigator.of(context).push(
-        MaterialPageRoute(
+        AppPageRoute(
           builder: (_) => ScannedProfileScreen(user: userId),
         ),
       );
@@ -164,7 +165,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           if (item['type'] == 'catalog_order' &&
                               profileProvider.isProUser) {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
+                              AppPageRoute(
                                 builder: (_) => OrderDetailScreen(
                                   orderId: item['id'],
                                   isBusinessView: true,
@@ -173,14 +174,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             );
                           } else if (item['type'] == 'employee_invitation') {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
+                              AppPageRoute(
                                 builder: (_) =>
                                     const EmployeeInvitationsScreen(),
                               ),
                             );
                           } else if (item['type'] == 'event_invitation') {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
+                              AppPageRoute(
                                 builder: (_) => InvitationDetailScreen(
                                   invitationId: item['id'] as String,
                                   invitation: item['invitation'] is EventInvitation
@@ -193,7 +194,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             _openFollowUser(item);
                           } else if (item['type'] == 'profile_scan') {
                             Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
+                              AppPageRoute(
                                 builder: (_) =>
                                     const MainShell(currentPage: 'My Card'),
                               ),
@@ -201,7 +202,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             );
                           } else if (item['type'] == 'contact_exchange') {
                             Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
+                              AppPageRoute(
                                 builder: (_) =>
                                     const MainShell(currentPage: 'Contacts'),
                               ),

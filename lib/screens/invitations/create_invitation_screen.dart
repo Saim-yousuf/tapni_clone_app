@@ -1,3 +1,4 @@
+import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/invitation.dart';
@@ -79,7 +80,7 @@ class _CreateInvitationScreenState extends State<CreateInvitationScreen> {
     );
 
     Navigator.of(context).push(
-      MaterialPageRoute(
+      AppPageRoute(
         builder: (_) => CustomizeInvitationScreen(draft: draft),
       ),
     );

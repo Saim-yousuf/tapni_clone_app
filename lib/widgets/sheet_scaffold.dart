@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 
 /// Root wrapper for a modal sheet. Put this **outside** the sheet widget
@@ -55,6 +56,7 @@ class SheetScaffold extends StatelessWidget {
               ),
             ),
           // Painted above the barrier detector — sheet content keeps its taps.
+          // Enter motion comes from [showAppModalBottomSheet] → [AppSheetPanelMotion].
           Align(
             alignment: Alignment.bottomCenter,
             child: body,
@@ -65,27 +67,46 @@ class SheetScaffold extends StatelessWidget {
   }
 }
 
-/// App-wide bottom sheet: always dismissible by barrier tap + drag.
+/// App-wide bottom sheet: noticeable slide + fade + scale on every open.
 Future<T?> showAppModalBottomSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   bool isScrollControlled = true,
+  bool isDismissible = true,
   bool useSafeArea = false,
+  bool useRootNavigator = false,
   Color? backgroundColor,
   Color? barrierColor,
   ShapeBorder? shape,
+  Clip? clipBehavior,
+  double? elevation,
   bool enableDrag = true,
+  bool? showDragHandle,
+  BoxConstraints? constraints,
+  AnimationController? transitionAnimationController,
+  Offset? anchorPoint,
+  String? barrierLabel,
+  AnimationStyle? sheetAnimationStyle,
 }) {
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: isScrollControlled,
-    isDismissible: true,
+    isDismissible: isDismissible,
     enableDrag: enableDrag,
     useSafeArea: useSafeArea,
+    useRootNavigator: useRootNavigator,
     backgroundColor: backgroundColor,
-    barrierColor: barrierColor,
+    barrierColor: barrierColor ?? Colors.black.withValues(alpha: 0.45),
     shape: shape,
-    builder: builder,
+    clipBehavior: clipBehavior,
+    elevation: elevation,
+    showDragHandle: showDragHandle,
+    constraints: constraints,
+    transitionAnimationController: transitionAnimationController,
+    anchorPoint: anchorPoint,
+    barrierLabel: barrierLabel,
+    sheetAnimationStyle: sheetAnimationStyle ?? AppMotion.sheetStyle,
+    builder: (ctx) => AppSheetPanelMotion(child: builder(ctx)),
   );
 }
 
