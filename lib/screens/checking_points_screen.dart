@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/social_links_screen.dart';
 import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 class CheckingPointsScreen extends StatelessWidget {
   CheckingPointsScreen({super.key});
 
@@ -165,6 +166,11 @@ class CheckingPointsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.profileCheck),
         foregroundColor: Colors.black,
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
       ),
 
       body: Padding(

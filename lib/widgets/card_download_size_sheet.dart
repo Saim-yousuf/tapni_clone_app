@@ -10,6 +10,7 @@ import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Bottom sheet: download full business card or QR-only PNG at selectable sizes.
 /// Size options are shown for business (pro) users only; individuals get a
@@ -84,13 +85,11 @@ class CardDownloadSizeSheet extends StatefulWidget {
     );
 
     if (!context.mounted || saved != true) return;
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(l10n.savedToGallery),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.green,
-      ),
-    );
+    showAppToastMessenger(
+          messenger,
+          l10n.savedToGallery,
+          kind: AppToastKind.success,
+        );
   }
 
   static Future<void> _saveSimple(
@@ -127,12 +126,10 @@ class CardDownloadSizeSheet extends StatefulWidget {
     if (inSheet && Navigator.of(context).canPop()) {
       Navigator.of(context).pop();
     }
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(ok ? l10n.savedToGallery : l10n.couldNotSave),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: ok ? Colors.green : Colors.red,
-      ),
+    showAppToastMessenger(
+      messenger,
+      ok ? l10n.savedToGallery : l10n.couldNotSave,
+      kind: ok ? AppToastKind.success : AppToastKind.error,
     );
   }
 

@@ -257,7 +257,7 @@ class _ContactsSearchScreenState extends State<ContactsSearchScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 6, 25, 0),
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
               child: Row(
                 children: [
                   AuthBackButton(

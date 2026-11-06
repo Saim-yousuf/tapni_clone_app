@@ -18,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class MyCardsShareSheet extends StatefulWidget {
   const MyCardsShareSheet({super.key});
@@ -61,12 +62,10 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
   }
 
   void _snack(String message, {Color color = WaUi.accent}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message, style: const TextStyle(fontSize: 14)),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: color == WaUi.accent ? WaUi.primaryText : color,
-      ),
+    showAppToast(
+      context,
+      message,
+      kind: appToastKindFrom(color: color),
     );
   }
 
@@ -221,73 +220,66 @@ class _MyCardsShareSheetState extends State<MyCardsShareSheet> {
             top: false,
             child: ListView(
               controller: scrollController,
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
               children: [
-                const SheetDragHandle(),
-                const SizedBox(height: 14),
-                SizedBox(
-                  height: 44,
-                  child: Row(
+                SheetHeader(
+                  title: 'Card',
+                  onBack: () => Navigator.pop(context),
+                  trailing: CircleAssetButton(
+                    asset: 'assets/images/png/plus-icon.png',
+                    iconSize: 16,
+                    onTap: () => _openEditor(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
                     children: [
-                      CircleBackButton(
-                        onTap: () => Navigator.pop(context),
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Card',
-                          textAlign: TextAlign.center,
-                          style: WaUi.toolsTitleOf(
-                            size: 18,
-                            weight: FontWeight.w700,
-                            color: Colors.black,
-                          ),
+                      QrCardStackCarousel(
+                        key: ValueKey(cards.length),
+                        cards: cards,
+                        initialIndex: stackIndex.clamp(
+                          0,
+                          cards.isEmpty ? 0 : cards.length - 1,
                         ),
+                        cardKey: _cardKey,
+                        onPageChanged: (i) => _onPageChanged(i, provider),
+                        onAddCard: () => _openEditor(),
+                        onEditCard: card != null && !card.isPrimary
+                            ? () {
+                                final custom =
+                                    provider.customCardById(card.id);
+                                if (custom != null) {
+                                  _openEditor(existing: custom);
+                                }
+                              }
+                            : null,
+                        onDeleteCard: card != null &&
+                                !card.isPrimary &&
+                                cards.length > 1
+                            ? _deleteCurrentCard
+                            : null,
+                        onDownload: card != null ? _openDownloadSheet : null,
+                        onShare: card != null ? _shareCard : null,
                       ),
-                      CircleAssetButton(
-                        asset: 'assets/images/png/plus-icon.png',
-                        iconSize: 16,
-                        onTap: () => _openEditor(),
+                      const SizedBox(height: 20),
+                      WalletBrandButton.apple(
+                        loading: _appleWalletLoading,
+                        onPressed:
+                            (_googleWalletLoading || _appleWalletLoading)
+                                ? null
+                                : _addToAppleWallet,
+                      ),
+                      const SizedBox(height: 10),
+                      WalletBrandButton.google(
+                        loading: _googleWalletLoading,
+                        onPressed:
+                            (_googleWalletLoading || _appleWalletLoading)
+                                ? null
+                                : _addToGoogleWallet,
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 12),
-                QrCardStackCarousel(
-                  key: ValueKey(cards.length),
-                  cards: cards,
-                  initialIndex: stackIndex.clamp(
-                    0,
-                    cards.isEmpty ? 0 : cards.length - 1,
-                  ),
-                  cardKey: _cardKey,
-                  onPageChanged: (i) => _onPageChanged(i, provider),
-                  onAddCard: () => _openEditor(),
-                  onEditCard: card != null && !card.isPrimary
-                      ? () {
-                          final custom = provider.customCardById(card.id);
-                          if (custom != null) _openEditor(existing: custom);
-                        }
-                      : null,
-                  onDeleteCard:
-                      card != null && !card.isPrimary && cards.length > 1
-                          ? _deleteCurrentCard
-                          : null,
-                  onDownload: card != null ? _openDownloadSheet : null,
-                  onShare: card != null ? _shareCard : null,
-                ),
-                const SizedBox(height: 20),
-                WalletBrandButton.apple(
-                  loading: _appleWalletLoading,
-                  onPressed: (_googleWalletLoading || _appleWalletLoading)
-                      ? null
-                      : _addToAppleWallet,
-                ),
-                const SizedBox(height: 10),
-                WalletBrandButton.google(
-                  loading: _googleWalletLoading,
-                  onPressed: (_googleWalletLoading || _appleWalletLoading)
-                      ? null
-                      : _addToGoogleWallet,
                 ),
               ],
             ),

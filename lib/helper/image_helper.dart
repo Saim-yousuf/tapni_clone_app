@@ -4,7 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show compute, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:mime/mime.dart';
@@ -206,6 +206,26 @@ Future<String> fileToCompressedDataUri(
   return bytesToCompressedDataUri(bytes, maxSide: maxSide, quality: quality);
 }
 
+/// Runs off the UI isolate — full-res phone photos freeze the app if decoded
+/// on the main thread.
+Uint8List? compressJpegBytes(List<Object?> args) {
+  final bytes = args[0] as Uint8List;
+  final maxSide = args[1] as int;
+  final quality = args[2] as int;
+  final decoded = img.decodeImage(bytes);
+  if (decoded == null) return null;
+
+  var out = decoded;
+  if (decoded.width > maxSide || decoded.height > maxSide) {
+    out = img.copyResize(
+      decoded,
+      width: decoded.width >= decoded.height ? maxSide : null,
+      height: decoded.height > decoded.width ? maxSide : null,
+    );
+  }
+  return Uint8List.fromList(img.encodeJpg(out, quality: quality));
+}
+
 Future<String> bytesToCompressedDataUri(
   Uint8List bytes, {
   int maxSide = 1600,
@@ -213,20 +233,10 @@ Future<String> bytesToCompressedDataUri(
   String? mimeType,
 }) async {
   try {
-    final decoded = img.decodeImage(bytes);
-    if (decoded == null) {
+    final jpg = await compute(compressJpegBytes, <Object?>[bytes, maxSide, quality]);
+    if (jpg == null || jpg.isEmpty) {
       return bytesToDataUri(bytes, mimeType: mimeType);
     }
-
-    img.Image out = decoded;
-    if (decoded.width > maxSide || decoded.height > maxSide) {
-      out = img.copyResize(
-        decoded,
-        width: decoded.width >= decoded.height ? maxSide : null,
-        height: decoded.height > decoded.width ? maxSide : null,
-      );
-    }
-    final jpg = img.encodeJpg(out, quality: quality);
     return 'data:image/jpeg;base64,${base64Encode(jpg)}';
   } catch (e) {
     log('Error compressing image: $e');

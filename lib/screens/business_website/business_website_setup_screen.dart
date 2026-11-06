@@ -11,6 +11,7 @@ import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/business_features.dart';
 import 'package:tapni_app/utils/catalog_helper.dart' show catalogTypesMatch;
 import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Maps Links catalogType → websiteType.
 String websiteTypeFromCatalogType(String? catalogType) {
@@ -305,16 +306,20 @@ class _BusinessWebsiteSetupScreenState
     );
     if (!mounted) return;
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not open sample')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not open sample',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final preview = _repo.parsePreview(res.data);
     if (preview == null || preview.html.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sample preview was empty')),
-      );
+      showAppToast(
+            context,
+            'Sample preview was empty',
+            kind: AppToastKind.warning,
+          );
       return;
     }
     await Navigator.of(context).push(
@@ -362,17 +367,21 @@ class _BusinessWebsiteSetupScreenState
     setState(() => _creating = false);
 
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not create website')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not create website',
+            kind: AppToastKind.error,
+          );
       return;
     }
 
     final website = _repo.parseWebsite(res.data);
     if (website == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Website created but failed to load')),
-      );
+      showAppToast(
+            context,
+            'Website created but failed to load',
+            kind: AppToastKind.error,
+          );
       return;
     }
 

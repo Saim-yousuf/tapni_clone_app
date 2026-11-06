@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/payment_display.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/finance_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Customer Payment Center: saved cards + payment/refund history.
 class CustomerPaymentCenterScreen extends StatefulWidget {
@@ -110,22 +111,22 @@ class _CustomerPaymentCenterScreenState
     final ready = await StripePaymentService.instance.ensureInitialized();
     if (!ready) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             StripePaymentService.instance.nativeError ??
-                'Stripe is not ready',
-          ),
-        ),
-      );
+                      'Stripe is not ready',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final res = await _repo.createSetupIntent();
     if (!res.success) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not start card setup')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not start card setup',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final data = res.data is Map && res.data['data'] is Map
@@ -140,17 +141,19 @@ class _CustomerPaymentCenterScreenState
       );
       await _loadCards();
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Card saved')),
-      );
+      showAppToast(
+            context,
+            'Card saved',
+            kind: AppToastKind.success,
+          );
     } on StripeException catch (e) {
       if (e.error.code == FailureCode.Canceled) return;
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.error.localizedMessage ?? 'Could not save card'),
-        ),
-      );
+      showAppToast(
+            context,
+            e.error.localizedMessage ?? 'Could not save card',
+            kind: AppToastKind.error,
+          );
     }
   }
 
@@ -189,9 +192,11 @@ class _CustomerPaymentCenterScreenState
     if (res.success) {
       await _loadCards();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not remove card')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not remove card',
+            kind: AppToastKind.error,
+          );
     }
   }
 

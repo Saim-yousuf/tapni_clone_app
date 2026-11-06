@@ -12,6 +12,7 @@ import 'package:tapni_app/utils/document_file.dart';
 import 'package:tapni_app/utils/docx_preview.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 Future<void> openCatalogDocument(
   BuildContext context,
@@ -156,7 +157,14 @@ class _InAppDocumentScreenState extends State<InAppDocumentScreen> {
         backgroundColor: bg,
         appBar: AppBar(
           title: Text(widget.title),
-          automaticallyImplyLeading: true,
+          automaticallyImplyLeading: false,
+          leading: Center(
+            child: CircleBackButton(
+              color: isDark ? const Color(0xFF2A2A2A) : null,
+              iconColor: isDark ? Colors.white : null,
+              onTap: () => Navigator.of(context).maybePop(),
+            ),
+          ),
           backgroundColor: bar,
           foregroundColor: fg,
           actions: [

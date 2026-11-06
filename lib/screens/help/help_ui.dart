@@ -13,7 +13,7 @@ class HelpUi {
   static const Color container = Color(0xFFF5F5F5);
   static const Color containerBorder = Color(0xFFE5E7EB);
   static const Color searchBg = Color(0xFFF5F5F5);
-  static const Color circleBtn = Color(0xFFF3F4F6);
+  static const Color circleBtn = Color(0xFFF2F2F7);
   static const Color secondaryText = Color(0xFF6B7280);
   static const Color mutedText = Color(0xFFB3B3B3);
   static const Color divider = Color(0xFFE5E7EB);
@@ -37,11 +37,12 @@ class HelpUi {
   static EdgeInsets pagePad(AuthScale m, {double top = 14, double bottom = 12}) =>
       EdgeInsets.fromLTRB(m.padH, m.v(top), m.padH, m.v(bottom));
 
+  /// Match [BarqodyTitleBar] insets (not [AuthScale.padH] ~24–40).
   static EdgeInsets headerPad(AuthScale m) =>
-      EdgeInsets.fromLTRB(m.padH, m.v(4), m.padH, 0);
+      const EdgeInsets.fromLTRB(16, 6, 16, 0);
 }
 
-/// Alias of [AuthBackButton] (OTP / Verify) for Help Center screens.
+/// Alias of [CircleBackButton] / [AuthBackButton] for Help Center screens.
 class HelpCircleBackButton extends StatelessWidget {
   final VoidCallback? onTap;
 
@@ -49,10 +50,7 @@ class HelpCircleBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthBackButton(
-      onPressed: onTap,
-      backgroundColor: HelpUi.circleBtn,
-    );
+    return CircleBackButton(onTap: onTap);
   }
 }
 

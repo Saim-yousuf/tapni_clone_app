@@ -13,6 +13,7 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Canva-like invitation design editor: select, drag, add/remove layers,
 /// edit text, upload logo, toggle RTL, change colors.
@@ -499,9 +500,11 @@ class _InvitationDesignEditorScreenState
     if (confirmed != true || !mounted) return;
     final name = nameCtrl.text.trim();
     if (name.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.nameIsRequired)),
-      );
+      showAppToast(
+            context,
+            context.l10n.nameIsRequired,
+            kind: AppToastKind.warning,
+          );
       return;
     }
     await context.read<InvitationProvider>().publishTemplate(
@@ -523,14 +526,11 @@ class _InvitationDesignEditorScreenState
         fileName: name,
       );
       if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToastMessenger(
+            messenger,
             ok ? context.l10n.savedToGallery : context.l10n.couldNotSave,
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+            kind: ok ? AppToastKind.success : AppToastKind.error,
+          );
     } finally {
       if (mounted) setState(() => _downloading = false);
     }
@@ -704,6 +704,11 @@ class _InvitationDesignEditorScreenState
       backgroundColor: const Color(0xFFE8EAED),
       appBar: AppBar(
         title: Text(context.l10n.designInvitation),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
         actions: [
           IconButton(
             tooltip: context.l10n.publishForOthers,

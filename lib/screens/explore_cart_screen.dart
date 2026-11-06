@@ -16,6 +16,7 @@ import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class ExploreCartScreen extends StatefulWidget {
   const ExploreCartScreen({super.key});
@@ -137,7 +138,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
       builder: (ctx) {
         final bottom = MediaQuery.of(ctx).viewInsets.bottom;
         return Padding(
-          padding: EdgeInsets.fromLTRB(20, 12, 20, 16 + bottom),
+          padding: EdgeInsets.fromLTRB(16, 12, 16, 16 + bottom),
           child: Form(
             key: formKey,
             child: SingleChildScrollView(
@@ -147,6 +148,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
                 children: [
                   SheetHeader(
                     title: 'Continue as guest',
+                    padHorizontal: false,
                     onBack: () => Navigator.pop(ctx),
                   ),
                   const SizedBox(height: 8),
@@ -375,13 +377,11 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
     if (!signedIn) {
       final missingSlug = vendors.any((v) => v.websiteSlug.trim().isEmpty);
       if (missingSlug) {
-        messenger.showSnackBar(
-          const SnackBar(
-            content: Text(
+        showAppToastMessenger(
+              messenger,
               'Guest checkout needs a website cart. Sign in or add items from a business website.',
-            ),
-          ),
-        );
+              kind: AppToastKind.warning,
+            );
         return;
       }
     }
@@ -520,7 +520,11 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
     setState(() => _placing = false);
 
     if (lastError != null) {
-      messenger.showSnackBar(SnackBar(content: Text(lastError)));
+      showAppToastMessenger(
+            messenger,
+            lastError,
+            kind: AppToastKind.error,
+          );
     }
     if (placed.isEmpty) return;
 
@@ -547,13 +551,11 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
       return;
     }
 
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToastMessenger(
+          messenger,
           '${placed.length} orders placed — view in My Orders & Bookings',
-        ),
-      ),
-    );
+          kind: AppToastKind.success,
+        );
     await nav.pushReplacement(
       AppPageRoute(
         builder: (_) => const OrdersListScreen(isBusinessView: false),

@@ -16,6 +16,7 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
 
@@ -91,10 +92,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             TextButton(
               onPressed: () {
                 leadsProvider.markAllNotificationsAsRead();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(context.l10n.allNotificationsMarkedAsRead),
-                    behavior: SnackBarBehavior.floating));
+                showAppToast(
+                      context,
+                      context.l10n.allNotificationsMarkedAsRead,
+                      kind: AppToastKind.success,
+                    );
               },
               child: Text(context.l10n.readAll,
                 style: TextStyle(color: AppTheme.accentGold, fontWeight: FontWeight.bold))),
@@ -150,12 +152,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     ),
                     onDismissed: (direction) {
                       leadsProvider.clearNotification(item['id']);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(context.l10n.notificationCleared),
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
+                      showAppToast(
+                            context,
+                            context.l10n.notificationCleared,
+                            kind: AppToastKind.info,
+                          );
                     },
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 12),
@@ -329,15 +330,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                     );
                                                     if (!mounted) return;
                                                     setState(() => _busyId = null);
-                                                    messenger.showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
+                                                    showAppToastMessenger(
+                                                          messenger,
                                                           ok
-                                                              ? l10n.requestAccepted
-                                                              : l10n.somethingWentWrong,
-                                                        ),
-                                                      ),
-                                                    );
+                                                                                                                  ? l10n.requestAccepted
+                                                                                                                  : l10n.somethingWentWrong,
+                                                          kind: ok ? AppToastKind.success : AppToastKind.error,
+                                                        );
                                                   },
                                             style: _compactFilledStyle,
                                             child: Text(context.l10n.accept),

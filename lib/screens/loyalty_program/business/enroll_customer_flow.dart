@@ -5,6 +5,7 @@ import 'package:tapni_app/models/reward.dart';
 import 'package:tapni_app/repository/reward_repo.dart';
 import 'package:tapni_app/screens/loyalty_program/business/add_stamp_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Enrolls [customerId] in [program], then opens [AddStampScreen].
 /// Returns `true` when enroll succeeded (stamp screen may still be open/closed).
@@ -17,16 +18,11 @@ Future<bool> enrollCustomerAndOpenStamp({
   String? customerPhoto,
 }) async {
   if (customerId.trim().isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text(
+    showAppToast(
+          context,
           context.l10n.profileNotFound,
-          style: WaUi.body.copyWith(color: Colors.white),
-        ),
-        backgroundColor: Colors.black,
-      ),
-    );
+          kind: AppToastKind.info,
+        );
     return false;
   }
 
@@ -43,16 +39,11 @@ Future<bool> enrollCustomerAndOpenStamp({
   Navigator.of(context).pop(); // loading
 
   if (!res.success || res.data == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text(
+    showAppToast(
+          context,
           res.message ?? context.l10n.failedToEnrollCustomer,
-          style: WaUi.body.copyWith(color: Colors.white),
-        ),
-        backgroundColor: Colors.black,
-      ),
-    );
+          kind: AppToastKind.error,
+        );
     return false;
   }
 

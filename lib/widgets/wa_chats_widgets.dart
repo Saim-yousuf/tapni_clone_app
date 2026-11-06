@@ -25,7 +25,7 @@ class WaChatsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(leading != null ? 17 : 25, 8, 17, 4),
+      padding: EdgeInsets.fromLTRB(leading != null ? 16 : 25, 8, 16, 4),
       child: SizedBox(
         height: 52,
         child: Row(

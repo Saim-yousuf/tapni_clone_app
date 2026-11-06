@@ -681,12 +681,15 @@ class _AuthWallState extends State<_AuthWall> with TickerProviderStateMixin {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: pad),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: FadeTransition(
-                opacity: fade,
-                child: CircleBackButton(onTap: widget.onBack),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            child: SizedBox(
+              height: 44,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: FadeTransition(
+                  opacity: fade,
+                  child: CircleBackButton(onTap: widget.onBack),
+                ),
               ),
             ),
           ),

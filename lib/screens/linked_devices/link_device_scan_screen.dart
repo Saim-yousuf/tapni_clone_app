@@ -134,9 +134,6 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
       builder: (ctx) {
         return Padding(
           padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 20,
             bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
           ),
           child: Column(
@@ -147,35 +144,46 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
                 title: ctx.l10n.enterCodeInstead,
                 onBack: () => Navigator.pop(ctx),
               ),
-              const SizedBox(height: 8),
-              Text(
-                ctx.l10n.typeThe8CharacterCodeShownUnderTheQR,
-                style: WaUi.caption,
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: _manualController,
-                textCapitalization: TextCapitalization.characters,
-                decoration: WaUi.fieldDecoration(
-                  hintText: ctx.l10n.aabbccdd,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      ctx.l10n.typeThe8CharacterCodeShownUnderTheQR,
+                      style: WaUi.caption,
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _manualController,
+                      textCapitalization: TextCapitalization.characters,
+                      decoration: WaUi.fieldDecoration(
+                        hintText: ctx.l10n.aabbccdd,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: WaUi.buttonDark,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(WaUi.radiusMd),
+                        ),
+                      ),
+                      onPressed: () {
+                        final code = _manualController.text.trim();
+                        Navigator.pop(ctx);
+                        _handleRaw(code);
+                      },
+                      child: Text(
+                        context.l10n.continueLabel,
+                        style: WaUi.bodyMedium.copyWith(color: Colors.white),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: WaUi.buttonDark,
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(WaUi.radiusMd),
-                  ),
-                ),
-                onPressed: () {
-                  final code = _manualController.text.trim();
-                  Navigator.pop(ctx);
-                  _handleRaw(code);
-                },
-                child: Text(context.l10n.continueLabel, style: WaUi.bodyMedium.copyWith(color: Colors.white)),
               ),
             ],
           ),
@@ -192,6 +200,13 @@ class _LinkDeviceScanScreenState extends State<LinkDeviceScanScreen> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         title: Text(context.l10n.linkADevice),
+        leading: Center(
+          child: CircleBackButton(
+            color: const Color(0xFF2A2A2A),
+            iconColor: Colors.white,
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.keyboard_alt_outlined),

@@ -8,6 +8,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 Future<void> showLinkEntriesSheet({
   required BuildContext context,
@@ -100,9 +101,11 @@ class LinkEntriesSheet extends StatelessWidget {
   void _copyValue(BuildContext context, String value) {
     if (value.trim().isEmpty) return;
     Clipboard.setData(ClipboardData(text: value));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.l10n.copied)),
-    );
+    showAppToast(
+          context,
+          context.l10n.copied,
+          kind: AppToastKind.success,
+        );
   }
 
   @override
@@ -128,37 +131,10 @@ class LinkEntriesSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 10),
-              const SheetDragHandle(),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SizedBox(
-                  height: 44,
-                  child: Row(
-                    children: [
-                      CircleBackButton(
-                        onTap: () => Navigator.pop(context),
-                      ),
-                      Expanded(
-                        child: Text(
-                          link.platformName,
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: WaUi.toolsTitleOf(
-                            size: 18,
-                            weight: FontWeight.w700,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 40),
-                    ],
-                  ),
-                ),
+              SheetHeader(
+                title: link.platformName,
+                onBack: () => Navigator.pop(context),
               ),
-              const SizedBox(height: 4),
               Flexible(
                 child: ListView.separated(
                   shrinkWrap: true,

@@ -6,6 +6,7 @@ import 'package:tapni_app/models/gallery_item.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/profile_gallery_grid.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Full-screen gallery opened from a Gallery app/link tile.
 class GalleryLinkScreen extends StatefulWidget {
@@ -27,13 +28,11 @@ class _GalleryLinkScreenState extends State<GalleryLinkScreen> {
     if (profileProvider.isGalleryUploading) return;
     if (profileProvider.profile.gallery.length >=
         ProfileProvider.galleryMaxItems) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             context.l10n.galleryMaxReached(ProfileProvider.galleryMaxItems),
-          ),
-        ),
-      );
+            kind: AppToastKind.info,
+          );
       return;
     }
 
@@ -47,17 +46,15 @@ class _GalleryLinkScreenState extends State<GalleryLinkScreen> {
     if (!mounted) return;
 
     final added = res.data is Map ? res.data['added'] as int? : null;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           res.success
-              ? (added != null && added > 1
-                    ? context.l10n.photosAdded(added)
-                    : context.l10n.photoAdded)
-              : (res.message ?? context.l10n.couldNotAddPhotos),
-        ),
-      ),
-    );
+                  ? (added != null && added > 1
+                        ? context.l10n.photosAdded(added)
+                        : context.l10n.photoAdded)
+                  : (res.message ?? context.l10n.couldNotAddPhotos),
+          kind: res.success ? AppToastKind.success : AppToastKind.error,
+        );
   }
 
   Future<bool> _deletePhoto(

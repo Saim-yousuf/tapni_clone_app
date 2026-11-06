@@ -565,7 +565,7 @@ class _QuickAddLinksScreenState extends State<QuickAddLinksScreen> {
     return SizedBox(
       height: m.appBarH,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: m.padH),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Stack(
           alignment: Alignment.center,
           children: [

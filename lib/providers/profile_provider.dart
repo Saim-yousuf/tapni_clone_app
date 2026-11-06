@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/helper/image_helper.dart';
+import 'package:tapni_app/helper/link_catalog_cache.dart';
 import 'package:tapni_app/helper/link_entries_cache.dart';
 import 'package:tapni_app/utils/catalog_helper.dart' show catalogTypesMatch;
 import 'package:tapni_app/models/gallery_item.dart';
@@ -72,6 +73,13 @@ class ProfileProvider extends ChangeNotifier {
   ProfileProvider() {
     _profile = MockDataService.getInitialProfile();
     _restoreCachedProfile();
+    _restoreCachedLinkCatalog();
+  }
+
+  void _restoreCachedLinkCatalog() {
+    final cached = LinkCatalogCache.loadSync();
+    if (cached.isEmpty) return;
+    _linkCatalog = cached;
   }
 
   void _restoreCachedProfile() {
@@ -226,8 +234,22 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   Future<void> fetchLinkCatalog() async {
-    _isLinkCatalogLoading = true;
-    notifyListeners();
+    // Disk cache → memory before network so cold start shows admin logos.
+    if (_linkCatalog.isEmpty) {
+      final cached = LinkCatalogCache.loadSync();
+      if (cached.isNotEmpty) {
+        _linkCatalog = cached;
+        notifyListeners();
+      }
+    }
+
+    // Keep existing logos visible on background refresh — only show loading
+    // shimmer when we have nothing cached yet.
+    final hadCatalog = _linkCatalog.isNotEmpty;
+    if (!hadCatalog) {
+      _isLinkCatalogLoading = true;
+      notifyListeners();
+    }
 
     try {
       final repo = AuthRepo();
@@ -240,6 +262,7 @@ class ProfileProvider extends ChangeNotifier {
             .map((item) => LinkCategory.fromJson(item as Map<String, dynamic>))
             .where((category) => category.templates.isNotEmpty)
             .toList();
+        await LinkCatalogCache.save(_linkCatalog);
       }
     } finally {
       _isLinkCatalogLoading = false;
@@ -1124,11 +1147,7 @@ class ProfileProvider extends ChangeNotifier {
   }) async {
     final primaryValue =
         (entries != null && entries.isNotEmpty) ? entries.first.value : value;
-    final primaryLogo = (entries != null &&
-            entries.isNotEmpty &&
-            (entries.first.logo?.isNotEmpty ?? false))
-        ? entries.first.logo
-        : template.logo;
+    // Keep brand/template logo on the link; entry photos stay on entries only.
     final newLink = SocialLink(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       platform: SocialPlatform.wave,
@@ -1137,7 +1156,7 @@ class ProfileProvider extends ChangeNotifier {
       fieldLabel: template.fieldLabel,
       fieldType: template.fieldType,
       actionType: template.actionType,
-      logoUrl: primaryLogo,
+      logoUrl: template.logo,
       value: primaryValue,
       entries: entries,
       isActive: true,
@@ -1406,14 +1425,10 @@ class ProfileProvider extends ChangeNotifier {
     if (existingIndex != -1) {
       final primaryValue =
           (entries != null && entries.isNotEmpty) ? entries.first.value : value;
-      final primaryLogo = (entries != null &&
-              entries.isNotEmpty &&
-              (entries.first.logo?.isNotEmpty ?? false))
-          ? entries.first.logo
-          : link.logoUrl;
+      // Do not promote entry photos onto logoUrl — profile keeps brand icon.
       updatedLinks[existingIndex] = link.copyWith(
         value: primaryValue,
-        logoUrl: primaryLogo,
+        logoUrl: link.logoUrl,
         entries: entries ?? link.entries,
         url: '',
         isActive: true,
@@ -1431,9 +1446,6 @@ class ProfileProvider extends ChangeNotifier {
       if (fallbackIndex != -1) {
         updatedLinks[fallbackIndex] = updatedLinks[fallbackIndex].copyWith(
           value: entries.first.value,
-          logoUrl: (entries.first.logo?.isNotEmpty ?? false)
-              ? entries.first.logo
-              : updatedLinks[fallbackIndex].logoUrl,
           entries: entries,
           url: '',
           isActive: true,

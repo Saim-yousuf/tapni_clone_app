@@ -14,6 +14,7 @@ import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class SetUsernameScreen extends StatefulWidget {
   SetUsernameScreen({super.key});
@@ -159,29 +160,19 @@ class _SetUsernameScreenState extends State<SetUsernameScreen>
 
     final username = _usernameController.text.trim().toLowerCase();
     if (username == _initialUsername) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.l10n.thisIsAlreadyYourUsername,
-            style: WaUi.body.copyWith(color: Colors.white),
-          ),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: WaUi.primaryText,
-        ),
+      showAppToast(
+        context,
+        context.l10n.thisIsAlreadyYourUsername,
+        kind: AppToastKind.warning,
       );
       return;
     }
 
     if (_availability != null && !_availability!.canSave) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _availabilityMessage(_availability!),
-            style: WaUi.body.copyWith(color: Colors.white),
-          ),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: WaUi.primaryText,
-        ),
+      showAppToast(
+        context,
+        _availabilityMessage(_availability!),
+        kind: AppToastKind.warning,
       );
       return;
     }
@@ -194,17 +185,12 @@ class _SetUsernameScreenState extends State<SetUsernameScreen>
 
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          response.success
-              ? context.l10n.usernameUpdatedSuccessfully
-              : response.message ?? context.l10n.unableToUpdateUsernameTryAgain,
-          style: WaUi.body.copyWith(color: Colors.white),
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: WaUi.primaryText,
-      ),
+    showAppToast(
+      context,
+      response.success
+          ? context.l10n.usernameUpdatedSuccessfully
+          : response.message ?? context.l10n.unableToUpdateUsernameTryAgain,
+      kind: response.success ? AppToastKind.success : AppToastKind.error,
     );
 
     if (response.success) {

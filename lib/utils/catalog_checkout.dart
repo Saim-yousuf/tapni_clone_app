@@ -7,6 +7,7 @@ import 'package:tapni_app/utils/api_handler.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/stripe_checkout_outcome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Shared place-order + payment selection + Stripe online checkout.
 class CatalogCheckout {
@@ -73,17 +74,21 @@ class CatalogCheckout {
     if (!context.mounted) return null;
 
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not place order')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not place order',
+            kind: AppToastKind.error,
+          );
       return null;
     }
 
     final parsed = CatalogOrder.tryFromApi(res.data);
     if (parsed == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Order created but response was invalid')),
-      );
+      showAppToast(
+            context,
+            'Order created but response was invalid',
+            kind: AppToastKind.error,
+          );
       return null;
     }
 
@@ -99,11 +104,11 @@ class CatalogCheckout {
       );
       if (!context.mounted) return placed;
       if (paidMethod == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Payment is required for this booking'),
-          ),
-        );
+        showAppToast(
+              context,
+              'Payment is required for this booking',
+              kind: AppToastKind.warning,
+            );
         return placed;
       }
       method = paidMethod;
@@ -165,7 +170,11 @@ class CatalogCheckout {
             payResult?.message ?? 'Payment was not completed',
           _ => 'Payment was not completed',
         };
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+        showAppToast(
+              context,
+              msg,
+              kind: AppToastKind.info,
+            );
         return placed;
       }
 

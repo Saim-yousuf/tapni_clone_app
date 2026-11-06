@@ -18,6 +18,7 @@ import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 import 'package:tapni_app/utils/app_motion.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 class HomeDashboard extends StatelessWidget {
   const HomeDashboard({Key? key}) : super(key: key);
 
@@ -533,14 +534,11 @@ class HomeDashboard extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
+                      showAppToast(
+                            context,
                             context.l10n.seeAllActivityIsMockedNewActivitiesWillAppearAsLeadsAreAdded,
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
+                            kind: AppToastKind.info,
+                          );
                     },
                     child: Text(context.l10n.seeAll,
                       style: TextStyle(

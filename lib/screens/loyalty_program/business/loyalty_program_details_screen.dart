@@ -14,6 +14,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Figma `Program Detail` — stats grid, Recent Enrolled list, bottom actions.
 class LoyaltyProgramDetailsScreen extends StatefulWidget {
@@ -237,15 +238,13 @@ class _LoyaltyProgramDetailsScreenState
     if (ok != true || !mounted) return;
     final res = await RewardRepo().markRewardClaimed(enrollment.id);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           res.success
-              ? 'Reward marked as claimed'
-              : (res.message ?? 'Could not mark claimed'),
-        ),
-      ),
-    );
+                  ? 'Reward marked as claimed'
+                  : (res.message ?? 'Could not mark claimed'),
+          kind: res.success ? AppToastKind.success : AppToastKind.error,
+        );
     if (res.success) _load();
   }
 

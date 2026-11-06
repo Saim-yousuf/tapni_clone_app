@@ -23,6 +23,7 @@ import 'package:tapni_app/widgets/template_business_card_preview.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 enum _CardSetupMode { pick, template, customize }
 
 class CustomCardEditorSheet extends StatefulWidget {
@@ -267,18 +268,13 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     if (!mounted) return;
     setState(() => _saving = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           ok
-              ? (_isEditing ? context.l10n.cardUpdated : context.l10n.cardCreated)
-              : context.l10n.savedLocallySyncMayHaveFailed,
-          style: WaUi.body.copyWith(color: Colors.white),
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: WaUi.primaryText,
-      ),
-    );
+                  ? (_isEditing ? context.l10n.cardUpdated : context.l10n.cardCreated)
+                  : context.l10n.savedLocallySyncMayHaveFailed,
+          kind: ok ? AppToastKind.success : AppToastKind.error,
+        );
     if (ok || !_isEditing) Navigator.pop(context);
   }
 
@@ -320,16 +316,11 @@ class _CustomCardEditorSheetState extends State<CustomCardEditorSheet> {
     if (widget.existing == null) return;
     final provider = Provider.of<ProfileProvider>(context, listen: false);
     if (provider.allCardDisplays.length <= 1) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             'Last card cannot be deleted',
-            style: WaUi.body.copyWith(color: Colors.white),
-          ),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.red,
-        ),
-      );
+            kind: AppToastKind.error,
+          );
       return;
     }
 

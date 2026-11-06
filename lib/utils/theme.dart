@@ -288,7 +288,7 @@ class AppTheme {
         unselectedItemColor: primaryBlack,
         type: BottomNavigationBarType.fixed,
       ),
-      // Default snackbars: black bar + white text (readable everywhere).
+      // Legacy fallback. New code should use [showAppToast] / [AppToastCard].
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: primaryBlack,
@@ -514,6 +514,7 @@ class AppTheme {
         unselectedItemColor: secondaryWhite,
         type: BottomNavigationBarType.fixed,
       ),
+      // Legacy fallback. New code should use [showAppToast] / [AppToastCard].
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: primaryBlack,

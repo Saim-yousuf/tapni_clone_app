@@ -5,6 +5,7 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class AppLanguageScreen extends StatefulWidget {
   const AppLanguageScreen({super.key});
@@ -54,16 +55,11 @@ class _AppLanguageScreenState extends State<AppLanguageScreen> {
   }
 
   void _showUpdatedSnack() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           context.l10n.languageUpdated,
-          style: WaUi.body.copyWith(color: Colors.white),
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: WaUi.primaryText,
-      ),
-    );
+          kind: AppToastKind.success,
+        );
   }
 
   String _selectedLabel(LocaleProvider provider) {
@@ -84,28 +80,9 @@ class _AppLanguageScreenState extends State<AppLanguageScreen> {
       body: SafeArea(
         child: Column(
           children: [
+            BarqodyTitleBar(title: context.l10n.appLanguage),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: Row(
-                children: [
-                  const CircleBackButton(),
-                  Expanded(
-                    child: Text(
-                      context.l10n.appLanguage,
-                      textAlign: TextAlign.center,
-                      style: WaUi.toolsTitleOf(
-                        size: 18,
-                        weight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 40),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: _LanguageSearchField(
                 controller: _searchController,
                 hintText: context.l10n.searchLanguage,

@@ -6,6 +6,7 @@ import 'package:tapni_app/screens/business_website/business_presence_ui.dart';
 import 'package:tapni_app/screens/business_website/business_website_webview_screen.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Curated accents that complement existing template packs (bg/ink stay pack-owned).
 const List<Color> kWebsiteThemePalette = [
@@ -170,11 +171,11 @@ class _BusinessWebsiteCustomizeScreenState
     if (_previewing || _saving) return;
     final hex = normalizeHexColorInput(_hexCtrl.text);
     if (hex == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Enter a valid color like #E4572E'),
-        ),
-      );
+      showAppToast(
+            context,
+            'Enter a valid color like #E4572E',
+            kind: AppToastKind.info,
+          );
       return;
     }
     setState(() {
@@ -189,16 +190,20 @@ class _BusinessWebsiteCustomizeScreenState
     if (!mounted) return;
     setState(() => _previewing = false);
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not load preview')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not load preview',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final preview = _repo.parsePreview(res.data);
     if (preview == null || preview.html.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Preview was empty')),
-      );
+      showAppToast(
+            context,
+            'Preview was empty',
+            kind: AppToastKind.warning,
+          );
       return;
     }
     await Navigator.of(context).push(
@@ -216,11 +221,11 @@ class _BusinessWebsiteCustomizeScreenState
     if (_saving || _previewing) return;
     final hex = normalizeHexColorInput(_hexCtrl.text);
     if (hex == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Enter a valid color like #E4572E'),
-        ),
-      );
+      showAppToast(
+            context,
+            'Enter a valid color like #E4572E',
+            kind: AppToastKind.info,
+          );
       return;
     }
     setState(() {
@@ -236,15 +241,19 @@ class _BusinessWebsiteCustomizeScreenState
     if (!mounted) return;
     setState(() => _saving = false);
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not save')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not save',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final updated = _repo.parseWebsite(res.data);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Customization saved')),
-    );
+    showAppToast(
+          context,
+          'Customization saved',
+          kind: AppToastKind.success,
+        );
     Navigator.of(context).pop(updated ?? widget.website.copyWith(design: draft));
   }
 
@@ -355,13 +364,11 @@ class _BusinessWebsiteCustomizeScreenState
                           onEditingComplete: () {
                             final n = normalizeHexColorInput(_hexCtrl.text);
                             if (n == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
+                              showAppToast(
+                                    context,
                                     'Enter a valid color like #E4572E',
-                                  ),
-                                ),
-                              );
+                                    kind: AppToastKind.info,
+                                  );
                               _hexCtrl.text = _themeColor.toUpperCase();
                               return;
                             }

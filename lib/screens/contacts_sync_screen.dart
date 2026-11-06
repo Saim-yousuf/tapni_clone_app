@@ -8,6 +8,8 @@ import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/services/contacts_sync_service.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class ContactsSyncScreen extends StatefulWidget {
   const ContactsSyncScreen({
@@ -83,12 +85,11 @@ class _ContactsSyncScreenState extends State<ContactsSyncScreen> {
 
     await ContactsSyncService.markPrompted(_userId);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.contactsSyncedCount(result.uploaded)),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    showAppToast(
+          context,
+          context.l10n.contactsSyncedCount(result.uploaded),
+          kind: AppToastKind.success,
+        );
     await _finish(synced: true);
   }
 
@@ -100,9 +101,15 @@ class _ContactsSyncScreenState extends State<ContactsSyncScreen> {
         automaticallyImplyLeading: !widget.isOnboarding,
         leading: widget.isOnboarding
             ? null
-            : IconButton(
-                icon: const Icon(Icons.close, size: 22),
-                onPressed: _syncing ? null : () => _finish()),
+            : Center(
+                child: IgnorePointer(
+                  ignoring: _syncing,
+                  child: Opacity(
+                    opacity: _syncing ? 0.4 : 1,
+                    child: CircleCloseButton(onTap: () => _finish()),
+                  ),
+                ),
+              ),
       ),
       body: SafeArea(
         child: Padding(

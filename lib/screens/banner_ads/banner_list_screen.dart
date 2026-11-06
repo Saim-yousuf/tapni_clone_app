@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/banner_ads/create_banner_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/banner_delete_dialog.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class BannerListScreen extends StatefulWidget {
   const BannerListScreen({super.key});
@@ -63,15 +64,13 @@ class _BannerListScreenState extends State<BannerListScreen> {
     if (!ok || !mounted) return;
     final res = await _repo.deleteMyBanner(banner.id);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           res.success
-              ? 'Banner deleted'
-              : (res.message ?? 'Could not delete banner'),
-        ),
-      ),
-    );
+                  ? 'Banner deleted'
+                  : (res.message ?? 'Could not delete banner'),
+          kind: res.success ? AppToastKind.success : AppToastKind.error,
+        );
     if (res.success) _load();
   }
 

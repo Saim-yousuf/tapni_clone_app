@@ -5,6 +5,7 @@ import 'package:tapni_app/models/invitation.dart';
 import 'package:tapni_app/screens/invitations/customize_invitation_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class CreateInvitationScreen extends StatefulWidget {
   const CreateInvitationScreen({super.key});
@@ -92,6 +93,11 @@ class _CreateInvitationScreenState extends State<CreateInvitationScreen> {
       backgroundColor: WaUi.scaffold,
       appBar: AppBar(
         title: Text(context.l10n.newInvitation),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
       ),
       body: Form(
         key: _formKey,

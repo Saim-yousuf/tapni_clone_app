@@ -7,6 +7,7 @@ import 'package:tapni_app/repository/catalog_repo.dart';
 import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class StayBookingResult {
   final String checkInDate;
@@ -207,9 +208,11 @@ class _StayBookingSheetState extends State<StayBookingSheet> {
 
   void _confirm({required bool bookNow}) {
     if (_room == null || _available != true || _nights < 1) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Select available dates to continue')),
-      );
+      showAppToast(
+            context,
+            'Select available dates to continue',
+            kind: AppToastKind.info,
+          );
       return;
     }
     Navigator.of(context, rootNavigator: true).pop(

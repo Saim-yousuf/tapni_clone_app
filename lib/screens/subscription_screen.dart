@@ -13,6 +13,7 @@ import 'package:tapni_app/utils/business_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/business_option_grid.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   SubscriptionScreen({
@@ -239,13 +240,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     if (response.success) {
       setState(() => _step = 2);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             response.message ?? context.l10n.failedToSaveBusinessDetails,
-          ),
-        ),
-      );
+            kind: AppToastKind.error,
+          );
     }
   }
 
@@ -293,13 +292,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       return;
     }
     if (widget.fromRegistration && !isActive) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             'Complete payment to activate your Business profile.',
-          ),
-        ),
-      );
+            kind: AppToastKind.info,
+          );
       return;
     }
     Navigator.of(context).maybePop();

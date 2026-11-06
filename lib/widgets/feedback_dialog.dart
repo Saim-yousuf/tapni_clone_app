@@ -50,7 +50,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 22),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(22, 14, 14, 22),
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 22),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(BarqodyChrome.modalRadius),
@@ -73,7 +73,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(top: 15),
               child: Text(
                 'How has your experience been with BarQody?',
                 style: WaUi.toolsTitleOf(
@@ -84,104 +84,92 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
               ),
             ),
             const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE5E5EA)),
-                ),
-                child: Center(
-                  child: RatingBar.builder(
-                    initialRating: _rating,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    glow: false,
-                    unratedColor: const Color(0xFFD1D1D6),
-                    itemSize: 42,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 4),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star_rounded,
-                      color: Color(0xFFFFCC00),
-                    ),
-                    onRatingUpdate: (rating) {
-                      setState(() => _rating = rating);
-                    },
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFE5E5EA)),
+              ),
+              child: Center(
+                child: RatingBar.builder(
+                  initialRating: _rating,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  glow: false,
+                  unratedColor: const Color(0xFFD1D1D6),
+                  itemSize: 42,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 4),
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star_rounded,
+                    color: Color(0xFFFFCC00),
                   ),
+                  onRatingUpdate: (rating) {
+                    setState(() => _rating = rating);
+                  },
                 ),
               ),
             ),
             const SizedBox(height: 18),
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Text(
-                'What ideas, features, or issues would you like to share with us?',
-                style: WaUi.body.copyWith(
-                  fontSize: 14,
-                  color: BarqodyChrome.bodyText,
-                  height: 1.4,
-                ),
+            Text(
+              'What ideas, features, or issues would you like to share with us?',
+              style: WaUi.body.copyWith(
+                fontSize: 14,
+                color: BarqodyChrome.bodyText,
+                height: 1.4,
               ),
             ),
             const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Container(
-                height: 120,
-                decoration: BoxDecoration(
-                  color: BarqodyChrome.fieldFill,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Stack(
-                  children: [
-                    TextField(
-                      controller: _controller,
-                      maxLength: _maxLen,
-                      maxLines: null,
-                      expands: true,
-                      onChanged: (_) => setState(() {}),
-                      style: WaUi.body.copyWith(
+            Container(
+              height: 120,
+              decoration: BoxDecoration(
+                color: BarqodyChrome.fieldFill,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Stack(
+                children: [
+                  TextField(
+                    controller: _controller,
+                    maxLength: _maxLen,
+                    maxLines: null,
+                    expands: true,
+                    onChanged: (_) => setState(() {}),
+                    style: WaUi.body.copyWith(
+                      fontSize: 15,
+                      color: Colors.black,
+                    ),
+                    cursorColor: Colors.black,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your thought...',
+                      hintStyle: TextStyle(
                         fontSize: 15,
-                        color: Colors.black,
+                        color: BarqodyChrome.secondaryText,
                       ),
-                      cursorColor: Colors.black,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter your thought...',
-                        hintStyle: TextStyle(
-                          fontSize: 15,
-                          color: BarqodyChrome.secondaryText,
-                        ),
-                        border: InputBorder.none,
-                        counterText: '',
-                        contentPadding: EdgeInsets.fromLTRB(16, 14, 16, 28),
+                      border: InputBorder.none,
+                      counterText: '',
+                      contentPadding: EdgeInsets.fromLTRB(16, 14, 16, 28),
+                    ),
+                  ),
+                  Positioned(
+                    right: 12,
+                    bottom: 10,
+                    child: Text(
+                      '$len/$_maxLen',
+                      style: WaUi.caption.copyWith(
+                        fontSize: 12,
+                        color: BarqodyChrome.secondaryText,
                       ),
                     ),
-                    Positioned(
-                      right: 12,
-                      bottom: 10,
-                      child: Text(
-                        '$len/$_maxLen',
-                        style: WaUi.caption.copyWith(
-                          fontSize: 12,
-                          color: BarqodyChrome.secondaryText,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 18),
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: PillButton(
-                label: context.l10n.sendFeedback,
-                onPressed: _submit,
-              ),
+            PillButton(
+              label: context.l10n.sendFeedback,
+              onPressed: _submit,
             ),
           ],
         ),

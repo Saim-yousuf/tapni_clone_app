@@ -13,6 +13,7 @@ import 'package:tapni_app/widgets/branded_qr_image.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/glass_card.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 class QrCodeScreen extends StatefulWidget {
   const QrCodeScreen({Key? key}) : super(key: key);
 
@@ -34,14 +35,10 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
         fileName: fileName,
       );
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            ok ? context.l10n.savedToGallery : context.l10n.couldNotSave,
-          ),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: ok ? Colors.green : Colors.red,
-        ),
+      showAppToast(
+        context,
+        ok ? context.l10n.savedToGallery : context.l10n.couldNotSave,
+        kind: ok ? AppToastKind.success : AppToastKind.error,
       );
       return;
     }
@@ -188,12 +185,11 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                               Clipboard.setData(
                                 ClipboardData(text: profileLink),
                               );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(context.l10n.linkCopiedToClipboard),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
+                              showAppToast(
+                                    context,
+                                    context.l10n.linkCopiedToClipboard,
+                                    kind: AppToastKind.success,
+                                  );
                             },
                             child: Icon(
                               Icons.copy_rounded,

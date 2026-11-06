@@ -19,6 +19,12 @@ class LinkCategory {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'templates': templates.map((t) => t.toJson()).toList(),
+      };
+
   LinkCategory copyWith({
     String? id,
     String? name,
@@ -80,6 +86,22 @@ class LinkTemplate {
       country: json['country']?.toString() ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'categoryId': categoryId,
+        'label': label,
+        'fieldType': fieldType,
+        'fieldLabel': fieldLabel,
+        'prefix': prefix,
+        'logo': logo,
+        'isPro': isPro,
+        'isFeatured': isFeatured,
+        'isSystem': isSystem,
+        'actionType': actionType,
+        if (catalogType != null) 'catalogType': catalogType,
+        'country': country,
+      };
 }
 
 bool isBankVisibleToUser(LinkTemplate template, String? userCountry) {
@@ -128,14 +150,15 @@ LinkTemplate documentsLinkTemplate({String categoryId = ''}) {
     prefix: '',
     logo: '',
     isPro: false,
-    isFeatured: false,
+    isFeatured: true,
     isSystem: true,
     actionType: 'document',
     catalogType: 'documents',
   );
 }
 
-/// Always show Documents next to Catalog, even if the API has not seeded it yet.
+/// Always show Documents in Featured with Custom Link / Gallery, even if the
+/// API has not seeded it yet.
 List<LinkCategory> ensureDocumentsCatalogTemplate(List<LinkCategory> catalog) {
   if (catalog.any(
     (category) => category.templates.any(_isDocumentsTemplate),
@@ -143,33 +166,27 @@ List<LinkCategory> ensureDocumentsCatalogTemplate(List<LinkCategory> catalog) {
     return catalog;
   }
 
-  final documents = documentsLinkTemplate();
-  final businessIndex = catalog.indexWhere(
-    (category) => category.name.trim().toLowerCase() == 'business',
+  final featuredIndex = catalog.indexWhere(
+    (category) => category.name.trim().toLowerCase() == 'featured',
   );
 
-  if (businessIndex == -1) {
+  if (featuredIndex == -1) {
     return [
+      LinkCategory(
+        id: 'featured',
+        name: 'Featured',
+        templates: [documentsLinkTemplate(categoryId: 'featured')],
+      ),
       ...catalog,
-      LinkCategory(id: 'documents', name: 'Documents', templates: [documents]),
     ];
   }
 
-  final business = catalog[businessIndex];
-  final templates = List<LinkTemplate>.from(business.templates);
-  final catalogIndex = templates.indexWhere(
-    (template) =>
-        template.catalogType == 'catalog' ||
-        template.label.trim().toLowerCase() == 'catalog',
-  );
-  final insertAt = catalogIndex >= 0 ? catalogIndex + 1 : templates.length;
-  templates.insert(
-    insertAt,
-    documentsLinkTemplate(categoryId: business.id),
-  );
+  final featured = catalog[featuredIndex];
+  final templates = List<LinkTemplate>.from(featured.templates)
+    ..add(documentsLinkTemplate(categoryId: featured.id));
 
   final updated = List<LinkCategory>.from(catalog);
-  updated[businessIndex] = business.copyWith(templates: templates);
+  updated[featuredIndex] = featured.copyWith(templates: templates);
   return updated;
 }
 

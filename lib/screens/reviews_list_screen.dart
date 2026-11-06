@@ -7,6 +7,7 @@ import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/review_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Full-screen Reviews list matching the Barqody mock.
 class ReviewsListScreen extends StatefulWidget {
@@ -70,9 +71,11 @@ class _ReviewsListScreenState extends State<ReviewsListScreen> {
   Future<void> _report(String id) async {
     await _repo.reportReview(id);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Review reported')),
-    );
+    showAppToast(
+          context,
+          'Review reported',
+          kind: AppToastKind.info,
+        );
   }
 
   Future<void> _write() async {
@@ -95,15 +98,13 @@ class _ReviewsListScreenState extends State<ReviewsListScreen> {
     );
 
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           res.success
-              ? 'Review saved'
-              : (res.message ?? 'Could not save review'),
-        ),
-      ),
-    );
+                  ? 'Review saved'
+                  : (res.message ?? 'Could not save review'),
+          kind: res.success ? AppToastKind.success : AppToastKind.error,
+        );
     if (res.success) _load();
   }
 

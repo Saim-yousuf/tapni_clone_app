@@ -18,6 +18,7 @@ import 'package:tapni_app/widgets/wa_chats_widgets.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 import 'package:tapni_app/utils/app_motion.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class LeadsScreen extends StatefulWidget {
   const LeadsScreen({Key? key}) : super(key: key);
@@ -311,16 +312,20 @@ class _LeadsScreenState extends State<LeadsScreen> {
       ),
       builder: (ctx) {
         return SafeArea(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 12, 20, 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SheetHeader(
-                  title: ctx.l10n.categories,
-                  onBack: () => Navigator.pop(ctx),
-                ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SheetHeader(
+                title: ctx.l10n.categories,
+                onBack: () => Navigator.pop(ctx),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                 const SizedBox(height: 12),
                 Wrap(
                   spacing: 8,
@@ -397,8 +402,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     ),
                   ],
                 ),
-              ],
-            ),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -466,7 +473,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     : AppTheme.greyBorderLight,
               ),
             ),
-            padding: EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(16),
             child: Form(
               key: formKey,
               child: SingleChildScrollView(
@@ -476,6 +483,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                   children: [
                     SheetHeader(
                       title: ctx.l10n.captureNewContact,
+                      padHorizontal: false,
                       onBack: () => Navigator.pop(ctx),
                     ),
                     const SizedBox(height: 4),
@@ -602,14 +610,11 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                   address: addressController.text.trim(),
                                 );
                                 Navigator.of(ctx).pop();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
+                                showAppToast(
+                                      context,
                                       context.l10n.contactAddedSuccessfully,
-                                    ),
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
+                                      kind: AppToastKind.success,
+                                    );
                               }
                             },
                             isGold: true,
@@ -673,7 +678,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                         : AppTheme.greyBorderLight,
                   ),
                 ),
-                padding: EdgeInsets.fromLTRB(24, 16, 24, 24),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -681,6 +686,7 @@ class _LeadsScreenState extends State<LeadsScreen> {
                     children: [
                       SheetHeader(
                         title: ctx.l10n.manageContact,
+                        padHorizontal: false,
                         onBack: () => Navigator.pop(ctx),
                         trailing: !isEditing
                             ? Container(
@@ -939,16 +945,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                         if (nameController.text
                                             .trim()
                                             .isEmpty) {
-                                          ScaffoldMessenger.of(
+                                          showAppToast(
                                             context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                context.l10n.nameIsRequired,
-                                              ),
-                                              behavior:
-                                                  SnackBarBehavior.floating,
-                                            ),
+                                            context.l10n.nameIsRequired,
+                                            kind: AppToastKind.warning,
                                           );
                                           return;
                                         }
@@ -981,34 +981,22 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                             Navigator.of(navCtx).pop();
                                           }
                                           if (scaffoldCtx.mounted) {
-                                            ScaffoldMessenger.of(
+                                            showAppToast(
                                               scaffoldCtx,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  context
-                                                      .l10n
-                                                      .contactUpdatedSuccessfully,
-                                                ),
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                              ),
+                                              scaffoldCtx
+                                                  .l10n
+                                                  .contactUpdatedSuccessfully,
+                                              kind: AppToastKind.success,
                                             );
                                           }
                                         } else {
                                           if (scaffoldCtx.mounted) {
-                                            ScaffoldMessenger.of(
+                                            showAppToast(
                                               scaffoldCtx,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  context
-                                                      .l10n
-                                                      .failedToUpdateContact,
-                                                ),
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                              ),
+                                              scaffoldCtx
+                                                  .l10n
+                                                  .failedToUpdateContact,
+                                              kind: AppToastKind.error,
                                             );
                                           }
                                         }
@@ -1331,16 +1319,13 @@ class _LeadsScreenState extends State<LeadsScreen> {
       onDismissed: (_) async {
         final success = await provider.deleteLead(lead.id);
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
+        showAppToast(
+              context,
               success
-                  ? l10n.contactRemoved(lead.name)
-                  : l10n.somethingWentWrong,
-            ),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+                          ? l10n.contactRemoved(lead.name)
+                          : l10n.somethingWentWrong,
+              kind: success ? AppToastKind.success : AppToastKind.error,
+            );
       },
       background: _swipeActionBackground(
         alignment: Alignment.centerLeft,

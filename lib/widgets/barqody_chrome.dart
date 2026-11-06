@@ -27,20 +27,27 @@ class BarqodyTitleBar extends StatelessWidget {
   final Widget? trailing;
   final VoidCallback? onBack;
 
+  /// When true (default), applies the canonical 16px side inset.
+  /// Set false when a parent already pads horizontally to **16** so the back
+  /// button is not double-inset (~32).
+  final bool padHorizontal;
+
   const BarqodyTitleBar({
     super.key,
     required this.title,
     this.trailing,
     this.onBack,
+    this.padHorizontal = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final side = padHorizontal ? 16.0 : 0.0;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        16,
+      padding: EdgeInsets.fromLTRB(
+        side,
         6,
-        16,
+        side,
         BarqodyChrome.titleContentGap,
       ),
       child: SizedBox(
@@ -111,12 +118,17 @@ class SheetHeader extends StatelessWidget {
   final VoidCallback? onBack;
   final bool showHandle;
 
+  /// See [BarqodyTitleBar.padHorizontal]. Use false when the sheet body already
+  /// applies a **16** horizontal pad around this header.
+  final bool padHorizontal;
+
   const SheetHeader({
     super.key,
     required this.title,
     this.trailing,
     this.onBack,
     this.showHandle = true,
+    this.padHorizontal = true,
   });
 
   @override
@@ -127,6 +139,7 @@ class SheetHeader extends StatelessWidget {
       child: BarqodyTitleBar(
         title: title,
         trailing: trailing,
+        padHorizontal: padHorizontal,
         onBack: onBack ?? () => Navigator.of(context).maybePop(),
       ),
     );
@@ -283,6 +296,7 @@ class PillButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool filled;
   final bool enabled;
+  final bool loading;
 
   const PillButton({
     super.key,
@@ -290,17 +304,27 @@ class PillButton extends StatelessWidget {
     required this.onPressed,
     this.filled = true,
     this.enabled = true,
+    this.loading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final m = AuthScale.of(context);
     final h = m.buttonH;
+    final canTap = enabled && !loading;
     final labelStyle = WaUi.body.copyWith(
       fontSize: m.s(AuthUi.buttonLabelSize),
       fontWeight: FontWeight.w700,
       color: filled ? Colors.white : Colors.black,
       height: 1,
+    );
+    final spinner = SizedBox(
+      width: m.s(22),
+      height: m.s(22),
+      child: CircularProgressIndicator(
+        strokeWidth: 2.2,
+        color: filled ? Colors.white : Colors.black,
+      ),
     );
 
     // Override theme fixedSize (54) so AuthScale.buttonH never conflicts
@@ -316,11 +340,13 @@ class PillButton extends StatelessWidget {
           boxShadow: AuthUi.primaryButtonShadow(m),
         ),
         child: ElevatedButton(
-          onPressed: enabled ? onPressed : null,
+          onPressed: canTap ? onPressed : null,
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
-            disabledBackgroundColor: Colors.black.withValues(alpha: 0.35),
+            disabledBackgroundColor: loading
+                ? Colors.black
+                : Colors.black.withValues(alpha: 0.35),
             disabledForegroundColor: Colors.white70,
             elevation: 0,
             shadowColor: Colors.transparent,
@@ -331,7 +357,7 @@ class PillButton extends StatelessWidget {
             padding: EdgeInsets.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          child: Text(label, style: labelStyle),
+          child: loading ? spinner : Text(label, style: labelStyle),
         ),
       );
     }
@@ -340,11 +366,12 @@ class PillButton extends StatelessWidget {
       width: double.infinity,
       height: h,
       child: OutlinedButton(
-        onPressed: enabled ? onPressed : null,
+        onPressed: canTap ? onPressed : null,
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.black,
-          side: const BorderSide(
-            color: Colors.black,
+          disabledForegroundColor: Colors.black.withValues(alpha: 0.35),
+          side: BorderSide(
+            color: Colors.black.withValues(alpha: canTap || loading ? 1 : 0.35),
             width: AuthUi.outlineBorderWidth,
           ),
           shape: const StadiumBorder(),
@@ -354,7 +381,7 @@ class PillButton extends StatelessWidget {
           padding: EdgeInsets.zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
-        child: Text(label, style: labelStyle),
+        child: loading ? spinner : Text(label, style: labelStyle),
       ),
     );
   }

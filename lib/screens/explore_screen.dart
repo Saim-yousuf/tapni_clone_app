@@ -23,6 +23,7 @@ import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/models/reward.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 import 'package:tapni_app/widgets/cached_app_image.dart';
 import 'package:tapni_app/widgets/connection_error_state.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
@@ -527,15 +528,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
         onRewardOffers: () {
           Navigator.of(context).pop();
           if (_offers.isEmpty) {
-            ScaffoldMessenger.of(context)
-              ..clearSnackBars()
-              ..showSnackBar(
-                const SnackBar(
-                  content: Text('No reward offers nearby yet'),
-                  behavior: SnackBarBehavior.floating,
-                  margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                ),
-              );
+            showAppToast(
+              context,
+              'No reward offers nearby yet',
+              kind: AppToastKind.warning,
+              margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            );
             return;
           }
           _openSeeAll(kind: ExploreSeeAllKind.offers, offers: _offers);
@@ -555,16 +553,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
   void _openCart() {
     final cart = context.read<ExploreCartProvider>();
     if (cart.isEmpty) {
-      ScaffoldMessenger.of(context)
-        ..clearSnackBars()
-        ..showSnackBar(
-          const SnackBar(
-            content: Text('Your cart is empty'),
-            duration: Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
-          ),
-        );
+      showAppToast(
+        context,
+        'Your cart is empty',
+        kind: AppToastKind.warning,
+        duration: const Duration(seconds: 2),
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      );
       return;
     }
     Navigator.of(context).push(

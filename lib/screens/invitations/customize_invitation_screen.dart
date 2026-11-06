@@ -13,6 +13,8 @@ import 'package:tapni_app/screens/invitations/invitation_nav.dart';
 import 'package:tapni_app/utils/business_card_export_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class CustomizeInvitationScreen extends StatefulWidget {
   final InvitationDraft draft;
@@ -112,9 +114,11 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
 
   bool _requireTitle() {
     if (_titleController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.titleIsRequired)),
-      );
+      showAppToast(
+            context,
+            context.l10n.titleIsRequired,
+            kind: AppToastKind.warning,
+          );
       return false;
     }
     return true;
@@ -226,16 +230,13 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
           ? await BusinessCardExportHelper.saveJpg(_cardKey, fileName: name)
           : await BusinessCardExportHelper.savePng(_cardKey, fileName: name);
       if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToastMessenger(
+            messenger,
             ok
-                ? context.l10n.cardSavedToGallery
-                : context.l10n.couldNotSaveCheckGalleryPermission,
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+                      ? context.l10n.cardSavedToGallery
+                      : context.l10n.couldNotSaveCheckGalleryPermission,
+            kind: ok ? AppToastKind.success : AppToastKind.error,
+          );
     } finally {
       if (mounted) setState(() => _downloading = false);
     }
@@ -290,6 +291,11 @@ class _CustomizeInvitationScreenState extends State<CustomizeInvitationScreen> {
               ? context.l10n.editInvitation
               : context.l10n.customizeCardTitle,
           style: WaUi.sectionHeader),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
         actions: [
           IconButton(
             tooltip: context.l10n.download,

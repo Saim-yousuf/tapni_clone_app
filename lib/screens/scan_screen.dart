@@ -20,6 +20,8 @@ import 'package:tapni_app/utils/profile_url_validator.dart';
 import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/zatca_qr_parser.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 /// Camera QR scanner. Content is detected automatically (profile / e-invoice /
 /// link / general). When [inviteEmployee] is true (Scan to invite flow), a
@@ -174,12 +176,11 @@ class _ScanScreenState extends State<ScanScreen> {
 
     if (loyaltyEnrollBlocked || employeeInviteBlocked) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('This scan flow is unavailable in the current release.'),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      showAppToast(
+            context,
+            'This scan flow is unavailable in the current release.',
+            kind: AppToastKind.error,
+          );
       setState(() => _scanHandled = false);
       return;
     }
@@ -204,16 +205,13 @@ class _ScanScreenState extends State<ScanScreen> {
     // Invite / enroll flows only accept profile QRs.
     if (widget.inviteEmployee || widget.enrollInProgram != null) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             widget.enrollInProgram != null
-                ? 'Scan a customer BarQody QR to enroll.'
-                : context.l10n.scanAnyUserOrBusinessQRToAddEmployee,
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+                      ? 'Scan a customer BarQody QR to enroll.'
+                      : context.l10n.scanAnyUserOrBusinessQRToAddEmployee,
+            kind: AppToastKind.info,
+          );
       setState(() => _scanHandled = false);
       return;
     }
@@ -264,14 +262,11 @@ class _ScanScreenState extends State<ScanScreen> {
     Navigator.of(context).pop(); // loading
 
     if (!response.success || response.data is! Map) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             response.message ?? context.l10n.profileNotFound,
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+            kind: AppToastKind.error,
+          );
       await _resumeCamera();
       return;
     }
@@ -283,12 +278,11 @@ class _ScanScreenState extends State<ScanScreen> {
     final profile = UserProfile.fromApiJson(userJson);
     final userId = profile.id?.trim() ?? '';
     if (userId.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.profileNotFound),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      showAppToast(
+            context,
+            context.l10n.profileNotFound,
+            kind: AppToastKind.info,
+          );
       await _resumeCamera();
       return;
     }
@@ -326,14 +320,11 @@ class _ScanScreenState extends State<ScanScreen> {
     Navigator.of(context).pop(); // loading dialog
 
     if (!response.success || response.data is! Map) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             response.message ?? context.l10n.profileNotFound,
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+            kind: AppToastKind.error,
+          );
       await _resumeCamera();
       return;
     }
@@ -345,12 +336,11 @@ class _ScanScreenState extends State<ScanScreen> {
     final profile = UserProfile.fromApiJson(userJson);
     final userId = profile.id?.trim() ?? '';
     if (userId.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.profileNotFound),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      showAppToast(
+            context,
+            context.l10n.profileNotFound,
+            kind: AppToastKind.info,
+          );
       await _resumeCamera();
       return;
     }
@@ -379,14 +369,11 @@ class _ScanScreenState extends State<ScanScreen> {
     // mobile_scanner.analyzeImage() is mobile-only; web throws UnsupportedError.
     if (kIsWeb) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             'Scanning from gallery is not supported on web. Use the camera instead.',
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+            kind: AppToastKind.info,
+          );
       return;
     }
 
@@ -399,12 +386,11 @@ class _ScanScreenState extends State<ScanScreen> {
     final path = result.files.single.path;
     if (path == null) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.noQRCodeFoundInThisImage),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      showAppToast(
+            context,
+            context.l10n.noQRCodeFoundInThisImage,
+            kind: AppToastKind.info,
+          );
       return;
     }
 
@@ -413,25 +399,21 @@ class _ScanScreenState extends State<ScanScreen> {
       capture = await _scannerController.analyzeImage(path);
     } on UnsupportedError {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             'Scanning from gallery is not supported on this platform.',
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+            kind: AppToastKind.info,
+          );
       return;
     }
     if (!mounted) return;
 
     if (capture == null || capture.barcodes.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.noQRCodeFoundInThisImage),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      showAppToast(
+            context,
+            context.l10n.noQRCodeFoundInThisImage,
+            kind: AppToastKind.info,
+          );
       return;
     }
 
@@ -493,14 +475,9 @@ class _ScanScreenState extends State<ScanScreen> {
                 Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: GestureDetector(
+                    padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+                    child: CircleCloseButton(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 28,
-                      ),
                     ),
                   ),
                 ),

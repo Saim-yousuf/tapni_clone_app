@@ -3,6 +3,7 @@ import 'package:tapni_app/screens/help/help_ui.dart';
 import 'package:tapni_app/utils/help_center_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class HelpArticleScreen extends StatelessWidget {
   final HelpArticle article;
@@ -18,29 +19,10 @@ class HelpArticleScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: HelpUi.headerPad(m),
-              child: Row(
-                children: [
-                  const HelpCircleBackButton(),
-                  Expanded(
-                    child: Text(
-                      'Help Center',
-                      textAlign: TextAlign.center,
-                      style: WaUi.toolsTitleOf(
-                        size: HelpUi.font(m, 18, min: 16),
-                        weight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 40),
-                ],
-              ),
-            ),
+            const BarqodyTitleBar(title: 'Help Center'),
             Expanded(
               child: ListView(
-                padding: HelpUi.pagePad(m, top: 24, bottom: 32),
+                padding: HelpUi.pagePad(m, top: 0, bottom: 32),
                 children: [
                   Text(
                     article.title,

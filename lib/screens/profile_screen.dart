@@ -35,6 +35,8 @@ import 'package:tapni_app/widgets/profile_photo_avatar.dart';
 import 'package:tapni_app/models/business_website/business_website_models.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
+
 class ProfileScreen extends StatefulWidget {
   /// Incremented by [MainShell] when My Card is opened so the sheet enter
   /// animation can replay (PageView keep-alive would otherwise skip it).
@@ -242,15 +244,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          response.success
-              ? context.l10n.profileUpdatedSuccessfully
-              : response.message ?? context.l10n.unableToSaveProfileTryAgain,
-        ),
-        behavior: SnackBarBehavior.floating,
-      ),
+    showAppToast(
+      context,
+      response.success
+          ? context.l10n.profileUpdatedSuccessfully
+          : response.message ?? context.l10n.unableToSaveProfileTryAgain,
+      kind: response.success ? AppToastKind.success : AppToastKind.error,
     );
   }
 
@@ -340,12 +339,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     VoidCallback? onClose,
   }) {
     final topInset = overlayOnCover ? MediaQuery.paddingOf(context).top : 0.0;
-    const padH = 25.0;
     return Padding(
       padding: EdgeInsets.fromLTRB(
-        padH,
+        16,
         topInset + 6,
-        padH - 8,
+        16,
         overlayOnCover ? 0 : 4,
       ),
       child: SizedBox(
@@ -383,16 +381,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             if (showClose)
-              IconButton(
-                onPressed: onClose,
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
-                icon: const Icon(
-                  Icons.close_rounded,
-                  size: 24,
-                  color: Colors.black,
-                ),
-              )
+              CircleCloseButton(onTap: onClose)
             else
               PopupMenuButton<String>(
                 padding: EdgeInsets.zero,
@@ -857,8 +846,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     final t = expandProgress.clamp(0.0, 1.0);
-    // Thin top gradient only (keeps BARQODY readable) — not a full white sheet.
-    final topScrim = 0.18 + t * 0.22;
+    // Light wash + stronger top gradient so BARQODY / menu stay readable.
+    final topScrim = 0.42 + t * 0.18;
 
     return ClipRect(
       child: Stack(
@@ -875,6 +864,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             )
           else
             coverImage,
+          if (hasCoverUrl)
+            const IgnorePointer(
+              child: ColoredBox(color: Color(0x55FFFFFF)),
+            ),
           Positioned(
             top: 0,
             left: 0,
@@ -964,30 +957,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () => _pickCoverPhoto(profile),
-                      child: coverImageBytes != null
-                          ? Image.memory(
-                              coverImageBytes!,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: coverHeight,
-                            )
-                          : profile.coverPhotoUrl != null &&
-                                  profile.coverPhotoUrl!.trim().isNotEmpty
-                              ? CachedNetworkImage(
-                                  imageUrl: profile.coverPhotoUrl!.trim(),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          coverImageBytes != null
+                              ? Image.memory(
+                                  coverImageBytes!,
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                   height: coverHeight,
-                                  fadeInDuration:
-                                      const Duration(milliseconds: 150),
-                                  errorWidget: (_, __, ___) =>
-                                      const ProfileCoverPlaceholder(),
-                                  placeholder: (_, __) =>
-                                      const ProfileCoverPlaceholder(),
                                 )
-                              : const ProfileCoverPlaceholder(
-                                  height: coverHeight,
-                                ),
+                              : profile.coverPhotoUrl != null &&
+                                      profile.coverPhotoUrl!.trim().isNotEmpty
+                                  ? CachedNetworkImage(
+                                      imageUrl:
+                                          profile.coverPhotoUrl!.trim(),
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: coverHeight,
+                                      fadeInDuration: const Duration(
+                                        milliseconds: 150,
+                                      ),
+                                      errorWidget: (_, __, ___) =>
+                                          const ProfileCoverPlaceholder(),
+                                      placeholder: (_, __) =>
+                                          const ProfileCoverPlaceholder(),
+                                    )
+                                  : const ProfileCoverPlaceholder(
+                                      height: coverHeight,
+                                    ),
+                          // Soft wash so Edit title / header controls stay readable.
+                          if (coverImageBytes != null ||
+                              (profile.coverPhotoUrl != null &&
+                                  profile.coverPhotoUrl!.trim().isNotEmpty))
+                            const ColoredBox(color: Color(0x66FFFFFF)),
+                        ],
+                      ),
                     ),
                   ),
                   Positioned(
@@ -1419,13 +1424,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         child: Center(
                           child: Image.asset(
-                            'assets/images/png/add.png',
-                            width: iconSize * 0.75,
-                            height: iconSize * 0.75,
-                            fit: BoxFit.cover,
+                            'assets/images/png/plus-sign.png',
+                            width: iconSize * 0.36,
+                            height: iconSize * 0.36,
+                            fit: BoxFit.contain,
                             errorBuilder: (_, __, ___) => Icon(
                               Icons.add,
-                              size: iconSize * 0.72,
+                              size: iconSize * 0.36,
                               color: Colors.black,
                             ),
                           ),
@@ -1585,6 +1590,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(radius),
+              ),
+              foregroundDecoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(radius),
+                border: Border.all(
+                  color: const Color(0xFFE5E7EB),
+                  width: 1,
+                ),
               ),
               clipBehavior: Clip.antiAlias,
               child: ClipRRect(

@@ -9,6 +9,7 @@ import 'package:tapni_app/repository/marketplace_repo.dart';
 import 'package:tapni_app/utils/document_file.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class CatalogItemFormScreen extends StatefulWidget {
   final String catalogLabel;
@@ -297,33 +298,33 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   Future<void> _save() async {
     final name = _nameCtrl.text.trim();
     if (name.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             widget.isDocument
-                ? context.l10n.pleaseEnterDocumentName
-                : context.l10n.pleaseEnterItemName,
-          ),
-        ),
-      );
+                      ? context.l10n.pleaseEnterDocumentName
+                      : context.l10n.pleaseEnterItemName,
+            kind: AppToastKind.info,
+          );
       return;
     }
 
     final category = _selectedCategory?.trim() ?? '';
     if (widget.requireCategory && category.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a business section')),
-      );
+      showAppToast(
+            context,
+            'Please select a business section',
+            kind: AppToastKind.warning,
+          );
       return;
     }
 
     if (_showMarketplace && _listOnMarketplace) {
       if (_marketplaceCategory == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Select a marketplace category or turn listing off'),
-          ),
-        );
+        showAppToast(
+              context,
+              'Select a marketplace category or turn listing off',
+              kind: AppToastKind.info,
+            );
         return;
       }
     }
@@ -343,9 +344,11 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
             'Discounted price must be lower than the original price';
       }
       if (discountError != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(discountError)),
-        );
+        showAppToast(
+              context,
+              discountError,
+              kind: AppToastKind.error,
+            );
         return;
       }
     }
@@ -366,9 +369,11 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
     if (widget.isDocument && imageValue.trim().isEmpty) {
       if (!mounted) return;
       setState(() => _isSaving = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.pleaseUploadADocument)),
-      );
+      showAppToast(
+            context,
+            context.l10n.pleaseUploadADocument,
+            kind: AppToastKind.info,
+          );
       return;
     }
 

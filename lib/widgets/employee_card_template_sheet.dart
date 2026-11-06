@@ -12,6 +12,7 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 class EmployeeCardTemplateSheet extends StatefulWidget {
   final CompanyBusinessCard card;
   final ValueChanged<CompanyBusinessCard>? onApplied;
@@ -111,13 +112,11 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
 
     final messenger = sheetMessenger(context);
     if (!res.success) {
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(res.message ?? context.l10n.couldNotSaveCardDesign),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.red,
-        ),
-      );
+      showAppToastMessenger(
+            messenger,
+            res.message ?? context.l10n.couldNotSaveCardDesign,
+            kind: AppToastKind.error,
+          );
       return;
     }
 
@@ -127,13 +126,11 @@ class _EmployeeCardTemplateSheetState extends State<EmployeeCardTemplateSheet> {
     );
     widget.onApplied?.call(updated);
 
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.appliedDesign(selected.name)),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.green,
-      ),
-    );
+    showAppToastMessenger(
+          messenger,
+          context.l10n.appliedDesign(selected.name),
+          kind: AppToastKind.success,
+        );
     Navigator.pop(context);
   }
 

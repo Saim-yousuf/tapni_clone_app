@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/widgets/cached_app_image.dart';
 import 'package:tapni_app/widgets/document_kind_icon.dart';
 
 /// Same catalog brand tiles as Add Link. Falls back to bundled assets.
 ///
-/// Loading state is a neutral tile — never another brand/asset icon — so
+/// Loading uses shimmer — never another brand/entry photo — so
 /// Profile / Edit / Scanned / Add Link don't flash "wrong icon → real icon".
 class LinkPlatformIcon extends StatelessWidget {
   const LinkPlatformIcon({
@@ -37,26 +38,21 @@ class LinkPlatformIcon extends StatelessWidget {
     return null;
   }
 
-  /// Brand tiles (e.g. TikTok) often ship with padded + pre-rounded corners.
-  /// Scale slightly so BoxFit.cover tiles fill edge-to-edge under ClipRRect.
-  Widget _edgeFill(Widget image) {
-    if (fit != BoxFit.cover) return image;
-    return SizedBox(
-      width: size,
-      height: size,
-      child: ClipRect(
-        child: Transform.scale(
-          scale: 1.16,
-          child: image,
-        ),
-      ),
-    );
-  }
+  /// Add Link shows the catalog image with [BoxFit.cover] and no extra scale.
+  /// Keep the same framing on profile / scanned / edit tiles.
+  Widget _edgeFill(Widget image) => image;
 
   Widget _softTile() {
     return ColoredBox(
       color: const Color(0xFFF5F5F5),
       child: SizedBox(width: size, height: size),
+    );
+  }
+
+  Widget _loadingTile() {
+    return ImageShimmerPlaceholder(
+      width: size,
+      height: size,
     );
   }
 
@@ -74,6 +70,8 @@ class LinkPlatformIcon extends StatelessWidget {
       fadeOutDuration: Duration.zero,
       useOldImageOnUrlChange: true,
       errorWidget: (_, __, ___) => onError(),
+      // Soft tile only — image is disk-cached; shimmer here flashes on every
+      // rebuild even when the file is already local.
       placeholder: (_, __) => _softTile(),
     );
   }
@@ -138,26 +136,46 @@ class LinkPlatformIcon extends StatelessWidget {
     final catalogLogo = _networkLogo(provider.catalogLogoFor(link));
     final hasAsset = link.assetPath.trim().isNotEmpty;
 
-    // User/custom logo from API — load network with soft tile (no other icon).
-    if (explicitLogo != null) {
+    // Link-level custom logo (Custom Link / catalog / website) — show on profile.
+    final allowLinkLogo = link.isCustom ||
+        link.isCatalogLink ||
+        link.isBusinessWebsiteLink;
+    if (allowLinkLogo && explicitLogo != null) {
       return _edgeFill(
         _cachedNet(
           explicitLogo,
+          onError: () {
+            if (catalogLogo != null) {
+              return _cachedNet(
+                catalogLogo,
+                onError: () => hasAsset ? _assetFallback() : _softTile(),
+              );
+            }
+            return hasAsset ? _assetFallback() : _softTile();
+          },
+        ),
+      );
+    }
+
+    // Admin / catalog brand icon only — never link.logoUrl here.
+    // logoUrl is often a polluted entry photo and caused a flash
+    // (number-1 image → WhatsApp) while the catalog was still loading.
+    if (catalogLogo != null) {
+      return _edgeFill(
+        _cachedNet(
+          catalogLogo,
           onError: () => hasAsset ? _assetFallback() : _softTile(),
         ),
       );
     }
 
-    // Bundled platform icons stay on local assets — avoids catalog-load
-    // flicker (asset WhatsApp → network WhatsApp).
-    if (hasAsset) return _assetFallback();
-
-    // Catalog-only platforms with no bundled asset.
-    if (catalogLogo != null) {
-      return _edgeFill(
-        _cachedNet(catalogLogo, onError: _softTile),
-      );
+    // Shimmer only on first catalog fetch (no logos in memory yet).
+    // Refetch keeps existing catalogLogo above — image stays cached.
+    if (provider.isLinkCatalogLoading && provider.linkCatalog.isEmpty) {
+      return _loadingTile();
     }
+
+    if (hasAsset) return _assetFallback();
 
     return _softTile();
   }

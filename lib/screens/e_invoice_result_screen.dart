@@ -6,6 +6,8 @@ import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/utils/zatca_qr_parser.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class EInvoiceResultScreen extends StatelessWidget {
   final ZatcaInvoice invoice;
@@ -27,12 +29,11 @@ class EInvoiceResultScreen extends StatelessWidget {
   Future<void> _copy(BuildContext context, String value) async {
     await Clipboard.setData(ClipboardData(text: value));
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.copiedToClipboard),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    showAppToast(
+          context,
+          context.l10n.copiedToClipboard,
+          kind: AppToastKind.success,
+        );
   }
 
   Future<void> _openUrl(String url) async {
@@ -131,9 +132,11 @@ class EInvoiceResultScreen extends StatelessWidget {
             size: 16,
             weight: FontWeight.w500)),
         foregroundColor: Colors.black87,
-        leading: IconButton(
-          icon: const Icon(Icons.close_rounded),
-          onPressed: () => Navigator.of(context).maybePop()),
+        leading: Center(
+          child: CircleCloseButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),

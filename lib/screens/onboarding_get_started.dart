@@ -102,9 +102,9 @@ class _OnboardingGetStartedState extends State<OnboardingGetStarted>
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(pad, 8, pad, 0),
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
               child: SizedBox(
-                height: 48,
+                height: 44,
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: FadeTransition(

@@ -16,6 +16,8 @@ import 'package:tapni_app/widgets/business_card_share_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 class DigitalCardScreen extends StatelessWidget {
   DigitalCardScreen({Key? key}) : super(key: key);
 
@@ -30,6 +32,11 @@ class DigitalCardScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('tapni.com/${profile.name.replaceAll(' ', '').toLowerCase()}'),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.palette_outlined),
@@ -343,14 +350,11 @@ class DigitalCardScreen extends StatelessWidget {
                         socialLink: link,
                         showLabel: true,
                         onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
+                          showAppToast(
+                                context,
                                 context.l10n.openingMockLink(link.fullUrl),
-                              ),
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
+                                kind: AppToastKind.info,
+                              );
                         },
                       );
                     },
@@ -398,11 +402,10 @@ class DigitalCardScreen extends StatelessWidget {
   }
 
   void _copyToClipboard(BuildContext context, String text, String type) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.copiedTypeToClipboard(type)),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    showAppToast(
+          context,
+          context.l10n.copiedTypeToClipboard(type),
+          kind: AppToastKind.success,
+        );
   }
 }

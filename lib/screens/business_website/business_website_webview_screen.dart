@@ -15,6 +15,7 @@ import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Loads a business website public URL or preview HTML.
 /// Full-bleed website with a Flutter-only close strip (iframe cannot steal taps).
@@ -118,16 +119,12 @@ class _BusinessWebsiteWebViewScreenState
       catalogItems: [payload.line.item],
       line: payload.line,
     );
-    final messenger = ScaffoldMessenger.of(context);
-    messenger.hideCurrentSnackBar();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text('${payload.line.item.name} added to cart'),
-        action: SnackBarAction(
-          label: 'View cart',
-          onPressed: _openNativeCart,
-        ),
-      ),
+    showAppToast(
+      context,
+      '${payload.line.item.name} added to cart',
+      kind: AppToastKind.success,
+      actionLabel: 'View cart',
+      onAction: _openNativeCart,
     );
   }
 
@@ -369,9 +366,11 @@ class _BusinessWebsiteWebViewScreenState
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setOnJavaScriptAlertDialog((request) async {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(request.message)),
-        );
+        showAppToast(
+              context,
+              request.message,
+              kind: AppToastKind.info,
+            );
       })
       ..setOnJavaScriptConfirmDialog((request) async {
         if (!mounted) return false;
@@ -575,7 +574,7 @@ class _BusinessWebsiteWebViewScreenState
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 16),
                         child: CircleCloseButton(onTap: _close),
                       ),
                     ),

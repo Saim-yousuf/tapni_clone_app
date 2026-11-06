@@ -5,7 +5,9 @@ import 'package:tapni_app/screens/help/help_ui.dart';
 import 'package:tapni_app/utils/help_center_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class HelpCenterScreen extends StatefulWidget {
   const HelpCenterScreen({super.key});
@@ -58,16 +60,11 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
     }
 
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text(
+    showAppToast(
+          context,
           'Email: support@barqody.com',
-          style: WaUi.body.copyWith(color: Colors.white),
-        ),
-        backgroundColor: WaUi.buttonDark,
-      ),
-    );
+          kind: AppToastKind.info,
+        );
   }
 
   void _openSearchUi() {
@@ -161,51 +158,40 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
         bottom: false,
         child: Column(
           children: [
-            Padding(
-              padding: HelpUi.headerPad(m),
-              child: showSearchHeader
-                  ? Row(
-                      children: [
-                        HelpCircleBackButton(onTap: _onBack),
-                        SizedBox(width: m.s(10)),
-                        Expanded(
-                          child: HelpSearchField(
-                            controller: _searchController,
-                            focusNode: _searchFocus,
-                            autofocus: true,
-                            onChanged: (v) => setState(() => _query = v),
-                            onClear: _clearSearch,
-                          ),
+            if (showSearchHeader)
+              Padding(
+                padding: HelpUi.headerPad(m),
+                child: SizedBox(
+                  height: 44,
+                  child: Row(
+                    children: [
+                      CircleBackButton(onTap: _onBack),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: HelpSearchField(
+                          controller: _searchController,
+                          focusNode: _searchFocus,
+                          autofocus: true,
+                          onChanged: (v) => setState(() => _query = v),
+                          onClear: _clearSearch,
                         ),
-                      ],
-                    )
-                  : Row(
-                      children: [
-                        HelpCircleBackButton(onTap: _onBack),
-                        Expanded(
-                          child: Text(
-                            'Help Center',
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: WaUi.toolsTitleOf(
-                              size: HelpUi.font(m, HelpUi.titleSize, min: 17),
-                              weight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: m.s(40)),
-                      ],
-                    ),
-            ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            else
+              BarqodyTitleBar(
+                title: 'Help Center',
+                onBack: _onBack,
+              ),
             Expanded(
               child: noResults
                   ? const HelpEmptySearch()
                   : ListView(
                       padding: HelpUi.pagePad(
                         m,
-                        top: showSearchHeader ? 20 : 14,
+                        top: showSearchHeader ? 20 : 0,
                         bottom: showSearchHeader ? 28 : 12,
                       ),
                       children: [

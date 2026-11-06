@@ -6,7 +6,6 @@ import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
-import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/qr_card_stack_carousel.dart';
@@ -100,37 +99,10 @@ class _UserCardsSheetState extends State<UserCardsSheet> {
               top: false,
               child: Column(
                 children: [
-                  const SizedBox(height: 10),
-                  const SheetDragHandle(),
-                  const SizedBox(height: 14),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SizedBox(
-                      height: 44,
-                      child: Row(
-                        children: [
-                          CircleBackButton(
-                            onTap: () => Navigator.of(context).pop(),
-                          ),
-                          Expanded(
-                            child: Text(
-                              context.l10n.digitalBusinessCard,
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: WaUi.toolsTitleOf(
-                                size: 18,
-                                weight: FontWeight.w700,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 40),
-                        ],
-                      ),
-                    ),
+                  SheetHeader(
+                    title: context.l10n.digitalBusinessCard,
+                    onBack: () => Navigator.of(context).pop(),
                   ),
-                  const SizedBox(height: 8),
                   Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),

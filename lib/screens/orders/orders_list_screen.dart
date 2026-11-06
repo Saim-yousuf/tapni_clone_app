@@ -12,6 +12,7 @@ import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/order_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Primary status groups shown as tabs (backend statuses unchanged).
 enum _StatusGroup { all, active, completed, cancelled }
@@ -251,15 +252,13 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
 
     final res = await CatalogRepo().claimGuestOrder(trackingCode: code);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           res.success
-              ? (res.message ?? 'Order claimed')
-              : (res.message ?? 'Could not claim order'),
-        ),
-      ),
-    );
+                  ? (res.message ?? 'Order claimed')
+                  : (res.message ?? 'Could not claim order'),
+          kind: res.success ? AppToastKind.success : AppToastKind.error,
+        );
     if (!res.success) return;
     final orderId = CatalogOrder.idFromApi(res.data);
     if (orderId != null && orderId.isNotEmpty && mounted) {
@@ -726,23 +725,27 @@ class _OrdersFiltersSheetState extends State<_OrdersFiltersSheet> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SheetHandleThen(
+              afterHandleGap: 8,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 12, 8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Filters',
-                        style: WaUi.toolsTitleOf(
-                          size: 20,
-                          weight: FontWeight.w700,
+                padding: const EdgeInsets.fromLTRB(16, 6, 16, 8),
+                child: SizedBox(
+                  height: 44,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Filters',
+                          style: WaUi.toolsTitleOf(
+                            size: 20,
+                            weight: FontWeight.w700,
+                          ),
                         ),
                       ),
-                    ),
-                    CircleCloseButton(
-                      onTap: () => Navigator.pop(context),
-                    ),
-                  ],
+                      CircleCloseButton(
+                        onTap: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

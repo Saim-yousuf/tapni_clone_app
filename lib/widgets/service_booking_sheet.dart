@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class ServiceBookingResult {
   final String bookingDate;
@@ -145,9 +146,11 @@ class _ServiceBookingSheetState extends State<ServiceBookingSheet> {
 
   void _popResult({required bool bookNow}) {
     if (_selectedTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.pleaseSelectATimeSlot)),
-      );
+      showAppToast(
+            context,
+            context.l10n.pleaseSelectATimeSlot,
+            kind: AppToastKind.info,
+          );
       return;
     }
     Navigator.of(context, rootNavigator: true).pop(

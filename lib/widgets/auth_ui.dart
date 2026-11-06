@@ -214,10 +214,12 @@ class AuthAppBarTitle extends StatelessWidget {
       );
     }
 
+    // Back chrome inset matches [BarqodyTitleBar] / tools (16) — one app-wide pattern.
+    // Form body content still uses [AuthScale.padH].
     return SizedBox(
       height: m.appBarH,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: m.padH),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Stack(
           alignment: Alignment.center,
           children: [

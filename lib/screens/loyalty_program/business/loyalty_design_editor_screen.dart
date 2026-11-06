@@ -19,6 +19,7 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/design_color_picker_sheet.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Full Canva-style loyalty stamp-card editor (same tools as invitations).
 class LoyaltyDesignEditorScreen extends StatefulWidget {
@@ -196,7 +197,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
           ),
           child: SheetHandleThen(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -266,7 +267,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
           ),
           child: SheetHandleThen(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -867,9 +868,11 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
     );
     if (!mounted) return;
     if (!res.success || res.data is! Map) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not load your catalog items.')),
-      );
+      showAppToast(
+            context,
+            'Could not load your catalog items.',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final map = Map<String, dynamic>.from(res.data as Map);
@@ -892,13 +895,11 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
     }
     if (!mounted) return;
     if (options.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             'No catalog items yet. Add menu/products/services first, or describe how to earn.',
-          ),
-        ),
-      );
+            kind: AppToastKind.warning,
+          );
       return;
     }
     final picked = await showModalBottomSheet<({String id, String name, String type})>(
@@ -961,7 +962,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
           ),
           child: SheetHandleThen(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1176,13 +1177,11 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
         fileName: name,
       );
       if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToastMessenger(
+            messenger,
             ok ? context.l10n.savedToGallery : context.l10n.couldNotSave,
-          ),
-        ),
-      );
+            kind: ok ? AppToastKind.success : AppToastKind.error,
+          );
     } finally {
       if (mounted) setState(() => _downloading = false);
     }
@@ -1233,20 +1232,20 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
   Future<void> _saveProgram({bool asDraft = false}) async {
     if (_saving || _publishing) return;
     if (_design.stamps < 1) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.pleaseEnterAValidNumberOfStamps)),
-      );
+      showAppToast(
+            context,
+            context.l10n.pleaseEnterAValidNumberOfStamps,
+            kind: AppToastKind.info,
+          );
       return;
     }
     if (_eligibleItemId.trim().isEmpty &&
         _earnDescCtrl.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             'Select a catalog item or describe how customers earn stamps.',
-          ),
-        ),
-      );
+            kind: AppToastKind.info,
+          );
       return;
     }
     setState(() => _saving = true);
@@ -1275,21 +1274,21 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
           await _publishTemplate();
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
+        showAppToast(
+              context,
               asDraft
-                  ? 'Saved as draft. Find it under Inactive.'
-                  : 'Program is live for your customers.',
-            ),
-          ),
-        );
+                          ? 'Saved as draft. Find it under Inactive.'
+                          : 'Program is live for your customers.',
+              kind: AppToastKind.success,
+            );
       }
       if (mounted) Navigator.of(context).pop(true);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? context.l10n.failedToSave)),
-      );
+      showAppToast(
+            context,
+            res.message ?? context.l10n.failedToSave,
+            kind: AppToastKind.error,
+          );
     }
   }
 
@@ -1316,7 +1315,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
           ),
           child: SheetHandleThen(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1389,9 +1388,11 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
     if (confirmed != true || !mounted) return;
     final name = nameCtrl.text.trim();
     if (name.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.nameIsRequired)),
-      );
+      showAppToast(
+            context,
+            context.l10n.nameIsRequired,
+            kind: AppToastKind.warning,
+          );
       return;
     }
     setState(() => _publishing = true);
@@ -1407,15 +1408,13 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
     });
     if (!mounted) return;
     setState(() => _publishing = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           res.success
-              ? context.l10n.templatePublishedOthersCanUse
-              : (res.message ?? context.l10n.failedToSave),
-        ),
-      ),
-    );
+                  ? context.l10n.templatePublishedOthersCanUse
+                  : (res.message ?? context.l10n.failedToSave),
+          kind: res.success ? AppToastKind.success : AppToastKind.error,
+        );
   }
 
   @override
@@ -1430,7 +1429,12 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 6, 16, 8),
+              padding: const EdgeInsets.fromLTRB(
+                16,
+                6,
+                16,
+                BarqodyChrome.titleContentGap,
+              ),
               child: SizedBox(
                 height: 44,
                 child: Stack(
@@ -1440,7 +1444,7 @@ class _LoyaltyDesignEditorScreenState extends State<LoyaltyDesignEditorScreen> {
                       'Customize Card',
                       textAlign: TextAlign.center,
                       style: WaUi.toolsTitleOf(
-                        size: 18,
+                        size: 20,
                         weight: FontWeight.w700,
                         color: Colors.black,
                         height: 1.1,

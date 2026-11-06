@@ -14,6 +14,7 @@ import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({
@@ -133,16 +134,11 @@ class _OtpScreenState extends State<OtpScreen> {
     if (_verifying) return;
     final code = _otpCode;
     if (code.length != _otpLength) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             context.l10n.pleaseEnter6DigitCode,
-            style: AppFonts.textStyle(fontSize: 14, color: Colors.white),
-          ),
-          backgroundColor: AuthUi.textPrimary,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+            kind: AppToastKind.info,
+          );
       return;
     }
 
@@ -166,16 +162,11 @@ class _OtpScreenState extends State<OtpScreen> {
       if (result.success && result.isNewUser) {
         final token = result.verificationToken;
         if (token == null || token.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
+          showAppToast(
+                context,
                 context.l10n.verificationTokenMissing,
-                style: AppFonts.textStyle(fontSize: 14, color: Colors.white),
-              ),
-              backgroundColor: AuthUi.textPrimary,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
+                kind: AppToastKind.error,
+              );
           return;
         }
         final phone = result.phone ?? widget.phone;

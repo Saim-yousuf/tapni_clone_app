@@ -8,6 +8,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class AddStampScreen extends StatefulWidget {
   final RewardEnrollment enrollment;
@@ -55,9 +56,11 @@ class _AddStampScreenState extends State<AddStampScreen> {
         _justCompleted = updated.isCompleted;
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? context.l10n.failedToAddStamp)),
-      );
+      showAppToast(
+            context,
+            res.message ?? context.l10n.failedToAddStamp,
+            kind: AppToastKind.error,
+          );
     }
   }
 

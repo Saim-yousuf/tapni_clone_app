@@ -186,26 +186,7 @@ class _LinkedDevicesScreenState extends State<LinkedDevicesScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: Row(
-                children: [
-                  const CircleBackButton(),
-                  Expanded(
-                    child: Text(
-                      context.l10n.linkedDevices,
-                      textAlign: TextAlign.center,
-                      style: WaUi.toolsTitleOf(
-                        size: 18,
-                        weight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 40),
-                ],
-              ),
-            ),
+            BarqodyTitleBar(title: context.l10n.linkedDevices),
             Expanded(
               child: _loading
                   ? const Center(

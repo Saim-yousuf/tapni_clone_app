@@ -8,6 +8,7 @@ import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/business_card_design_renderer.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
@@ -565,13 +566,11 @@ class _BusinessCardDesignEditorScreenState
     }
     final provider = context.read<ProfileProvider>();
     if (provider.allCardDisplays.length <= 1) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Last card cannot be deleted'),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.red,
-        ),
-      );
+      showAppToast(
+            context,
+            'Last card cannot be deleted',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final confirmed = await showDialog<bool>(
@@ -613,18 +612,12 @@ class _BusinessCardDesignEditorScreenState
     );
     if (!mounted) return;
     setState(() => _saving = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          ok
-              ? (widget.createNewCard
-                  ? 'Card created'
-                  : 'Design saved')
-              : 'Could not save design',
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: ok ? Colors.green : Colors.red,
-      ),
+    showAppToast(
+      context,
+      ok
+          ? (widget.createNewCard ? 'Card created' : 'Design saved')
+          : 'Could not save design',
+      kind: ok ? AppToastKind.success : AppToastKind.error,
     );
     if (ok) {
       if (!mounted) return;
@@ -657,6 +650,11 @@ class _BusinessCardDesignEditorScreenState
       backgroundColor: WaUi.scaffold,
       appBar: AppBar(
         title: Text(widget.createNewCard ? 'Customize card' : 'Edit card design'),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
         actions: [
           if (!widget.createNewCard &&
               widget.cardId != null &&

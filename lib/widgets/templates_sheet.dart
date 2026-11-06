@@ -10,6 +10,7 @@ import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 class TemplatesSheet extends StatefulWidget {
   const TemplatesSheet({Key? key}) : super(key: key);
 
@@ -167,19 +168,15 @@ class _TemplatesSheetState extends State<TemplatesSheet> {
                         }
                         if (!context.mounted) return;
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
+                        showAppToast(
+                              context,
                               saved
-                                  ? context.l10n.appliedTemplate(
-                                      selectedTemplate.name,
-                                    )
-                                  : context.l10n.templateAppliedLocallySyncFailed,
-                            ),
-                            duration: Duration(seconds: 2),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
+                                                          ? context.l10n.appliedTemplate(
+                                                              selectedTemplate.name,
+                                                            )
+                                                          : context.l10n.templateAppliedLocallySyncFailed,
+                              kind: saved ? AppToastKind.success : AppToastKind.error, duration: Duration(seconds: 2),
+                            );
                         Navigator.pop(context);
                       },
                 child: _isApplying

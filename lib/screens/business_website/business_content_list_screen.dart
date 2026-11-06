@@ -6,6 +6,7 @@ import 'package:tapni_app/screens/business_website/content_item_form_screen.dart
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class BusinessContentListScreen extends StatefulWidget {
   final String contentType;
@@ -91,9 +92,11 @@ class _BusinessContentListScreenState extends State<BusinessContentListScreen> {
     final res = await _repo.deleteContent(item.id);
     if (!mounted) return;
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Delete failed')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Delete failed',
+            kind: AppToastKind.error,
+          );
       return;
     }
     _load();

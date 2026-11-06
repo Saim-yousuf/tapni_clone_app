@@ -10,6 +10,8 @@ import 'package:tapni_app/utils/document_file.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/document_kind_icon.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class DocumentLinkFormScreen extends StatefulWidget {
   final ProfileProvider provider;
@@ -116,9 +118,11 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
   Future<void> _save() async {
     final name = _nameCtrl.text.trim();
     if (name.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.pleaseEnterDocumentName)),
-      );
+      showAppToast(
+            context,
+            context.l10n.pleaseEnterDocumentName,
+            kind: AppToastKind.info,
+          );
       return;
     }
 
@@ -134,9 +138,11 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
       );
     }
     if (fileValue.trim().isEmpty || fileValue.startsWith('catalog:')) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.pleaseUploadADocument)),
-      );
+      showAppToast(
+            context,
+            context.l10n.pleaseUploadADocument,
+            kind: AppToastKind.info,
+          );
       return;
     }
 
@@ -226,6 +232,11 @@ class _DocumentLinkFormScreenState extends State<DocumentLinkFormScreen> {
         title: Text(
           _isEditing ? context.l10n.editItem : context.l10n.addDocument,
           style: const TextStyle(fontWeight: FontWeight.w700)),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
       ),
       body: SafeArea(
         child: Column(

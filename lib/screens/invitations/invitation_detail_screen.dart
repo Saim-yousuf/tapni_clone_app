@@ -13,6 +13,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
 import 'package:tapni_app/widgets/invitation_design_renderer.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class InvitationDetailScreen extends StatefulWidget {
   final String invitationId;
@@ -112,13 +113,11 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
     if (!mounted) return;
     if (updated != null) {
       setState(() => _invitation = updated);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.invitationSentSuccessfully),
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      showAppToast(
+            context,
+            context.l10n.invitationSentSuccessfully,
+            kind: AppToastKind.success, duration: const Duration(seconds: 2),
+          );
     } else {
       await _load(silent: true);
     }
@@ -146,26 +145,20 @@ class _InvitationDetailScreenState extends State<InvitationDetailScreen> {
           : await BusinessCardExportHelper.savePng(_cardKey, fileName: fileName);
 
       if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            ok
-                ? context.l10n.cardSavedToGallery
-                : context.l10n.couldNotSaveCheckGalleryPermission,
-          ),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: ok ? null : Colors.redAccent,
-        ),
+      showAppToastMessenger(
+        messenger,
+        ok
+            ? context.l10n.cardSavedToGallery
+            : context.l10n.couldNotSaveCheckGalleryPermission,
+        kind: ok ? AppToastKind.success : AppToastKind.error,
       );
     } catch (_) {
       if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.failedToDownloadInvitationCard),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.redAccent,
-        ),
-      );
+      showAppToastMessenger(
+            messenger,
+            context.l10n.failedToDownloadInvitationCard,
+            kind: AppToastKind.error,
+          );
     } finally {
       if (mounted) setState(() => _downloading = false);
     }

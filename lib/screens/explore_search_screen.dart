@@ -637,7 +637,7 @@ class _ExploreSearchScreenState extends State<ExploreSearchScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 16, 0),
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
               child: Row(
                 children: [
                   CircleBackButton(

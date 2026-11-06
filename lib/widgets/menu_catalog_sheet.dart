@@ -32,6 +32,7 @@ import 'package:tapni_app/screens/catalog/service_booking_cart_screen.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Owner manage/add → full screen. Customer browse → bottom sheet.
 Future<void> showMenuCatalogSheet({
@@ -286,7 +287,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: WaUi.toolsTitleOf(
-                  size: 18,
+                  size: 20,
                   weight: FontWeight.w700,
                   color: Colors.black,
                 ),
@@ -307,18 +308,22 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     setState(() => _customLogo = encoded);
     await _persistCatalog();
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Icon updated')),
-    );
+    showAppToast(
+          context,
+          'Icon updated',
+          kind: AppToastKind.success,
+        );
   }
 
   Future<void> _resetCatalogIcon() async {
     setState(() => _customLogo = '');
     await _persistCatalog();
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Using default icon')),
-    );
+    showAppToast(
+          context,
+          'Using default icon',
+          kind: AppToastKind.info,
+        );
   }
 
   Widget _logoPreview(String logo, {double size = 40}) {
@@ -808,7 +813,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 top: Radius.circular(BarqodyChrome.modalRadius),
               ),
             ),
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+            padding: const EdgeInsets.only(bottom: 20),
             child: SafeArea(
               top: false,
               child: Column(
@@ -820,7 +825,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                     showHandle: true,
                     onBack: () => Navigator.pop(ctx),
                   ),
-                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
                   Text(
                     _isProducts
                         ? 'Sections organize products on your website. Marketplace categories are chosen per product and managed by BarQody admin.'
@@ -895,6 +905,9 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                       await _openAddSectionSheet();
                       setSheetState(() {});
                     },
+                  ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -995,7 +1008,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               top: Radius.circular(BarqodyChrome.modalRadius),
             ),
           ),
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+          padding: const EdgeInsets.only(bottom: 20),
           child: SafeArea(
             top: false,
             child: Column(
@@ -1006,7 +1019,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                   title: 'Add Section',
                   onBack: () => Navigator.pop(ctx),
                 ),
-                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                 _capsLabel('SECTION NAME'),
                 const SizedBox(height: 8),
                 TextField(
@@ -1043,6 +1061,9 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                     ),
                   ],
                 ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -1066,7 +1087,7 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
               top: Radius.circular(BarqodyChrome.modalRadius),
             ),
           ),
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+          padding: const EdgeInsets.only(bottom: 20),
           child: SafeArea(
             top: false,
             child: Column(
@@ -1077,7 +1098,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                   title: 'Rename Section',
                   onBack: () => Navigator.pop(ctx),
                 ),
-                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                 _capsLabel('SECTION NAME'),
                 const SizedBox(height: 8),
                 TextField(
@@ -1114,6 +1140,9 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                     ),
                   ],
                 ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -1129,9 +1158,11 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       (c) => c.toLowerCase() == name.toLowerCase(),
     );
     if (exists) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.categoryAlreadyExists)),
-      );
+      showAppToast(
+            context,
+            context.l10n.categoryAlreadyExists,
+            kind: AppToastKind.warning,
+          );
       return;
     }
     setState(() {
@@ -1169,9 +1200,11 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       (c) => c.toLowerCase() == trimmed.toLowerCase(),
     );
     if (exists) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.categoryAlreadyExists)),
-      );
+      showAppToast(
+            context,
+            context.l10n.categoryAlreadyExists,
+            kind: AppToastKind.warning,
+          );
       return;
     }
     setState(() {
@@ -1958,13 +1991,11 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       if (!ok || !mounted) return;
     }
     if (!_isDocuments && _catalogCategories.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             'Add at least one section before adding products.',
-          ),
-        ),
-      );
+            kind: AppToastKind.info,
+          );
       return;
     }
     final result = await Navigator.push<CatalogItem>(
@@ -2094,13 +2125,11 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     final hasSections = _catalogCategories.any((c) => c.trim().isNotEmpty);
     if (_items.isEmpty && widget.existingLink == null && !hasSections) {
       if (!quiet && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
+        showAppToast(
+              context,
               'Add a section or at least one $_catalogLabel item to save.',
-            ),
-          ),
-        );
+              kind: AppToastKind.info,
+            );
       }
       return;
     }
@@ -2187,19 +2216,21 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
     if (!mounted) return;
     setState(() => _isSaving = false);
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(res.message ?? 'Could not save menu. Please try again.'),
-        ),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not save menu. Please try again.',
+            kind: AppToastKind.error,
+          );
       return;
     }
     widget.onSaved?.call();
     // Stay on screen — top save button is gone; changes auto-persist.
     if (!quiet && !widget.embedded && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$_catalogLabel saved')),
-      );
+      showAppToast(
+            context,
+            '$_catalogLabel saved',
+            kind: AppToastKind.success,
+          );
     }
   }
 

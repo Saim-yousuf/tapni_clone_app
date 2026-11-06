@@ -12,6 +12,7 @@ import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/print_export_sizes.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/card_download_size_sheet.dart';
 import 'package:tapni_app/widgets/employee_card_template_sheet.dart';
@@ -198,12 +199,10 @@ class _BusinessCardShareSheetState extends State<BusinessCardShareSheet> {
     String message, {
     Color color = Colors.green,
   }) {
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(message),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: color,
-      ),
+    showAppToastMessenger(
+      messenger,
+      message,
+      kind: appToastKindFrom(color: color),
     );
   }
 

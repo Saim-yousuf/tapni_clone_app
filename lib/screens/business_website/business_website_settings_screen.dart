@@ -19,6 +19,7 @@ import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 // ignore_for_file: deprecated_member_use
 
@@ -253,16 +254,20 @@ class _BusinessWebsiteSettingsScreenState
     );
     if (!mounted) return;
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not load preview')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not load preview',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final preview = _repo.parsePreview(res.data);
     if (preview == null || preview.html.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Preview was empty')),
-      );
+      showAppToast(
+            context,
+            'Preview was empty',
+            kind: AppToastKind.warning,
+          );
       return;
     }
     await Navigator.of(context).push(
@@ -323,11 +328,11 @@ class _BusinessWebsiteSettingsScreenState
     final website = _website;
     if (website == null) return;
     if (!website.isPublished) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Turn Status on so the public link works in any browser'),
-        ),
-      );
+      showAppToast(
+            context,
+            'Turn Status on so the public link works in any browser',
+            kind: AppToastKind.info,
+          );
       return;
     }
     final uri = Uri.tryParse(website.resolvedPublicUrl);
@@ -346,9 +351,11 @@ class _BusinessWebsiteSettingsScreenState
     if (!mounted) return;
     setState(() => _togglingStatus = false);
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not update status')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not update status',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final website = _repo.parseWebsite(res.data);
@@ -393,9 +400,11 @@ class _BusinessWebsiteSettingsScreenState
     );
     if (!mounted) return;
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not delete website')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not delete website',
+            kind: AppToastKind.error,
+          );
       return;
     }
 
@@ -413,9 +422,11 @@ class _BusinessWebsiteSettingsScreenState
       await provider.updateLinks(links: cleaned, context: context);
     }
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$_tabMenuLabel deleted')),
-    );
+    showAppToast(
+          context,
+          '$_tabMenuLabel deleted',
+          kind: AppToastKind.success,
+        );
     Navigator.of(context).pop();
   }
 
@@ -478,11 +489,11 @@ class _BusinessWebsiteSettingsScreenState
       }
     }
     if (templates.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No templates for this business type'),
-        ),
-      );
+      showAppToast(
+            context,
+            'No templates for this business type',
+            kind: AppToastKind.info,
+          );
       return;
     }
 
@@ -505,9 +516,11 @@ class _BusinessWebsiteSettingsScreenState
     );
     if (!mounted) return;
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not switch template')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not switch template',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final updated = _repo.parseWebsite(res.data);
@@ -521,16 +534,20 @@ class _BusinessWebsiteSettingsScreenState
     );
     if (!mounted) return;
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not open sample')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not open sample',
+            kind: AppToastKind.error,
+          );
       return;
     }
     final preview = _repo.parsePreview(res.data);
     if (preview == null || preview.html.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sample preview was empty')),
-      );
+      showAppToast(
+            context,
+            'Sample preview was empty',
+            kind: AppToastKind.warning,
+          );
       return;
     }
     await Navigator.of(context).push(
@@ -785,9 +802,11 @@ class _BusinessWebsiteSettingsScreenState
                   ClipboardData(text: w.resolvedPublicUrl),
                 );
                 if (!mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Public URL copied')),
-                );
+                showAppToast(
+                      context,
+                      'Public URL copied',
+                      kind: AppToastKind.success,
+                    );
               },
             ),
           ],

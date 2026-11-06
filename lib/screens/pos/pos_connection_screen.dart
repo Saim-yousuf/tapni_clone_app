@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/repository/pos_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Connect Barqody orders to an external POS (Foodics/Dinevo).
 /// Public menu templates stay on Barqody — POS only receives order push.
@@ -60,22 +61,22 @@ class _PosConnectionScreenState extends State<PosConnectionScreen> {
     if (!mounted) return;
     setState(() => _saving = false);
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not save')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not save',
+            kind: AppToastKind.error,
+          );
       return;
     }
     await _load();
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           status == 'active'
-              ? 'POS connected — new Barqody orders will push'
-              : 'Saved',
-        ),
-      ),
-    );
+                  ? 'POS connected — new Barqody orders will push'
+                  : 'Saved',
+          kind: AppToastKind.success,
+        );
   }
 
   Future<void> _disconnect() async {
@@ -85,9 +86,11 @@ class _PosConnectionScreenState extends State<PosConnectionScreen> {
     await _load();
     if (!mounted) return;
     setState(() => _saving = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('POS disconnected')),
-    );
+    showAppToast(
+          context,
+          'POS disconnected',
+          kind: AppToastKind.success,
+        );
   }
 
   @override

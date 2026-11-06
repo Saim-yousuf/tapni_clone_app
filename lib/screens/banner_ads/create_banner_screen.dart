@@ -6,6 +6,7 @@ import 'package:tapni_app/models/explore_business.dart';
 import 'package:tapni_app/repository/explore_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class CreateBannerScreen extends StatefulWidget {
   final BannerAdPlan plan;
@@ -105,9 +106,11 @@ class _CreateBannerScreenState extends State<CreateBannerScreen> {
         (_imageDataUri != null && _imageDataUri!.isNotEmpty) ||
         (_existingImageUrl != null && _existingImageUrl!.isNotEmpty);
     if (title.isEmpty && !hasImage) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Add a banner image or a title')),
-      );
+      showAppToast(
+            context,
+            'Add a banner image or a title',
+            kind: AppToastKind.info,
+          );
       return;
     }
 
@@ -131,15 +134,13 @@ class _CreateBannerScreenState extends State<CreateBannerScreen> {
     if (!mounted) return;
     setState(() => _saving = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           res.success
-              ? (_isEdit ? 'Banner updated' : 'Banner created')
-              : (res.message ?? 'Could not save banner'),
-        ),
-      ),
-    );
+                  ? (_isEdit ? 'Banner updated' : 'Banner created')
+                  : (res.message ?? 'Could not save banner'),
+          kind: res.success ? AppToastKind.success : AppToastKind.error,
+        );
     if (res.success) Navigator.pop(context, true);
   }
 

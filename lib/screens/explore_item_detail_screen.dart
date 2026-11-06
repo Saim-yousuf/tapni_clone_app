@@ -23,8 +23,10 @@ import 'package:tapni_app/screens/catalog/order_placed_screen.dart';
 import 'package:tapni_app/screens/catalog/service_booking_cart_screen.dart';
 import 'package:tapni_app/widgets/service_booking_sheet.dart';
 import 'package:tapni_app/widgets/stay_booking_sheet.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class ExploreItemDetailScreen extends StatefulWidget {
   final ExploreItem exploreItem;
@@ -154,18 +156,13 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
     if (!mounted) return;
     final messenger = ScaffoldMessenger.of(context);
     messenger.clearSnackBars();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToastMessenger(
+          messenger,
           res.success
-              ? 'Review saved'
-              : (res.message ?? 'Could not save review'),
-        ),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      ),
-    );
+                  ? 'Review saved'
+                  : (res.message ?? 'Could not save review'),
+          kind: res.success ? AppToastKind.success : AppToastKind.error, duration: const Duration(seconds: 2),
+        );
     if (res.success) _loadReviews();
   }
 
@@ -263,9 +260,11 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
         );
         if (!mounted) return;
         if (!res.success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(res.message ?? 'Could not book stay')),
-          );
+          showAppToast(
+                context,
+                res.message ?? 'Could not book stay',
+                kind: AppToastKind.error,
+              );
           return;
         }
         String? customerUsername;
@@ -309,14 +308,11 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
     if (!mounted) return;
     final messenger = ScaffoldMessenger.of(context);
     messenger.clearSnackBars();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text('${_item.name} added to cart'),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 88),
-      ),
-    );
+    showAppToastMessenger(
+          messenger,
+          '${_item.name} added to cart',
+          kind: AppToastKind.success, duration: const Duration(seconds: 2),
+        );
   }
 
   @override
@@ -337,6 +333,11 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
                   pinned: true,
                   backgroundColor: Colors.white,
                   foregroundColor: WaUi.primaryText,
+                  leading: Center(
+                    child: CircleBackButton(
+                      onTap: () => Navigator.of(context).maybePop(),
+                    ),
+                  ),
                   actions: [
                     IconButton(
                       tooltip: 'Cart',
@@ -346,14 +347,11 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
                         final cart = context.read<ExploreCartProvider>();
                         if (cart.isEmpty) {
                           messenger.clearSnackBars();
-                          messenger.showSnackBar(
-                            const SnackBar(
-                              content: Text('Your cart is empty'),
-                              duration: Duration(seconds: 2),
-                              behavior: SnackBarBehavior.floating,
-                              margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                            ),
-                          );
+                          showAppToastMessenger(
+                                messenger,
+                                'Your cart is empty',
+                                kind: AppToastKind.warning, duration: Duration(seconds: 2),
+                              );
                           return;
                         }
                         Navigator.of(context).push(

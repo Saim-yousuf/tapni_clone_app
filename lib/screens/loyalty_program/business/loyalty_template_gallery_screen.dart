@@ -146,13 +146,14 @@ class _LoyaltyTemplateGalleryScreenState
         return StatefulBuilder(
           builder: (sheetContext, setSheet) {
             return Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SheetHeader(
                     title: context.l10n.template,
+                    padHorizontal: false,
                     onBack: () => Navigator.pop(sheetContext),
                   ),
                   const SizedBox(height: 16),

@@ -4,6 +4,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/general_qr_parser.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class GeneralQrResultScreen extends StatelessWidget {
   final String rawValue;
@@ -15,12 +17,11 @@ class GeneralQrResultScreen extends StatelessWidget {
   Future<void> _copy(BuildContext context, String value) async {
     await Clipboard.setData(ClipboardData(text: value));
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.copiedToClipboard),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    showAppToast(
+          context,
+          context.l10n.copiedToClipboard,
+          kind: AppToastKind.success,
+        );
   }
 
   Future<void> _launchResult(BuildContext context, GeneralQrResult result) async {
@@ -28,12 +29,11 @@ class GeneralQrResultScreen extends StatelessWidget {
     if (uri == null) return;
     final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!ok && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.couldNotOpenLink),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      showAppToast(
+            context,
+            context.l10n.couldNotOpenLink,
+            kind: AppToastKind.error,
+          );
     }
   }
 
@@ -82,6 +82,11 @@ class GeneralQrResultScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.scannedQr),
         foregroundColor: Colors.black,
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),

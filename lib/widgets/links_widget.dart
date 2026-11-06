@@ -11,11 +11,13 @@ import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/country_dial_codes.dart';
+import 'package:tapni_app/utils/phone_utils.dart';
 import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/contact_card_sheet.dart' as contact_card;
+import 'package:tapni_app/widgets/country_picker_sheet.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/menu_catalog_sheet.dart';
 import 'package:tapni_app/widgets/business_completeness_sheet.dart';
@@ -33,6 +35,7 @@ import 'package:tapni_app/utils/catalog_helper.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class _LinkEntryDraft {
   _LinkEntryDraft({
@@ -40,7 +43,8 @@ class _LinkEntryDraft {
     String name = '',
     String value = '',
     this.logo = '',
-    this.isPublic = false,
+    this.isPublic = true,
+    this.dialCountry,
   }) : id = id ?? DateTime.now().microsecondsSinceEpoch.toString(),
        nameController = TextEditingController(text: name),
        valueController = TextEditingController(text: value);
@@ -50,17 +54,24 @@ class _LinkEntryDraft {
   final TextEditingController valueController;
   String logo;
   bool isPublic;
+  /// Selected dial country for phone-type entries (login picker sheet).
+  CountryDialCode? dialCountry;
 
   void dispose() {
     nameController.dispose();
     valueController.dispose();
   }
 
-  LinkEntry toEntry() {
+  LinkEntry toEntry({bool isPhone = false}) {
+    var value = valueController.text.trim();
+    if (isPhone && value.isNotEmpty) {
+      final dial = dialCountry ?? defaultCountryDialCodeFallback;
+      value = PhoneUtils.normalize(value, countryCode: dial.code);
+    }
     return LinkEntry(
       id: id,
       name: nameController.text.trim(),
-      value: valueController.text.trim(),
+      value: value,
       logo: logo.isNotEmpty ? logo : null,
       isPublic: isPublic,
     );
@@ -119,71 +130,80 @@ class LinkSheet {
                     const SheetDragHandle(),
                     //Header Open
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                      child: Row(
-                        children: [
-                          CircleBackButton(onTap: () => Navigator.pop(ctx)),
-                          Expanded(
-                            child: isSearching
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
-                                    child: TextField(
-                                      controller: searchController,
-                                      autofocus: true,
-                                      style: const TextStyle(
-                                        fontSize: 16,
+                      padding: const EdgeInsets.fromLTRB(16, 6, 16, 24),
+                      child: SizedBox(
+                        height: 44,
+                        child: Row(
+                          children: [
+                            CircleBackButton(onTap: () => Navigator.pop(ctx)),
+                            Expanded(
+                              child: isSearching
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child: TextField(
+                                        controller: searchController,
+                                        autofocus: true,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                        ),
+                                        decoration: InputDecoration(
+                                          hintText: ctx.l10n.searchLinks,
+                                          hintStyle: const TextStyle(
+                                            color: BarqodyChrome.secondaryText,
+                                          ),
+                                          filled: true,
+                                          fillColor: BarqodyChrome.fieldFill,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                        onChanged: (_) => setSheetState(() {}),
+                                      ),
+                                    )
+                                  : Text(
+                                      ctx.l10n.addLink,
+                                      textAlign: TextAlign.center,
+                                      style: WaUi.toolsTitleOf(
+                                        size: 20,
+                                        weight: FontWeight.w700,
                                         color: Colors.black,
                                       ),
-                                      decoration: InputDecoration(
-                                        hintText: ctx.l10n.searchLinks,
-                                        hintStyle: const TextStyle(
-                                          color: BarqodyChrome.secondaryText,
-                                        ),
-                                        filled: true,
-                                        fillColor: BarqodyChrome.fieldFill,
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                      ),
-                                      onChanged: (_) => setSheetState(() {}),
                                     ),
-                                  )
-                                : Text(
-                                    ctx.l10n.addLink,
-                                    textAlign: TextAlign.center,
-                                    style: WaUi.toolsTitleOf(
-                                      size: 20,
-                                      weight: FontWeight.w700,
+                            ),
+                            CircleAssetButton(
+                              asset: 'assets/images/png/search-icon.png',
+                              iconSize: 16,
+                              child: isSearching
+                                  ? Image.asset(
+                                      CircleCloseButton.asset,
+                                      width: 18,
+                                      height: 18,
                                       color: Colors.black,
-                                    ),
-                                  ),
-                          ),
-                          CircleAssetButton(
-                            asset: 'assets/images/png/search-icon.png',
-                            iconSize: 16,
-                            child: isSearching
-                                ? const Icon(
-                                    Icons.close_rounded,
-                                    size: 18,
-                                    color: Colors.black,
-                                  )
-                                : null,
-                            onTap: () {
-                              setSheetState(() {
-                                isSearching = !isSearching;
-                                if (!isSearching) searchController.clear();
-                              });
-                            },
-                          ),
-                        ],
+                                      errorBuilder: (_, _, _) => const Icon(
+                                        Icons.close_rounded,
+                                        size: 18,
+                                        color: Colors.black,
+                                      ),
+                                    )
+                                  : null,
+                              onTap: () {
+                                setSheetState(() {
+                                  isSearching = !isSearching;
+                                  if (!isSearching) searchController.clear();
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     //Header Close
@@ -307,12 +327,10 @@ class LinkSheet {
 
                             return SingleChildScrollView(
                               controller: scrollController,
-                              padding: const EdgeInsets.fromLTRB(
-                                BarqodyChrome.sidePad,
-                                4,
-                                BarqodyChrome.sidePad,
-                                12,
-                              ),
+                              // Horizontal inset lives on category titles +
+                              // each row's scroll padding so cards aren't
+                              // clipped mid-card at the padded edges.
+                              padding: const EdgeInsets.fromLTRB(0, 4, 0, 12),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -386,9 +404,11 @@ class LinkSheet {
     } else if (isGalleryLinkTemplate(template) ||
         template.actionType == 'gallery') {
       if (provider.profile.socialLinks.any((link) => link.isGalleryLink)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.profileTabGallery)),
-        );
+        showAppToast(
+              context,
+              context.l10n.profileTabGallery,
+              kind: AppToastKind.info,
+            );
         return;
       }
       await provider.addGalleryLink(template: template, context: context);
@@ -406,13 +426,11 @@ class LinkSheet {
     } else if (isBusinessWebsiteLinkTemplate(template) ||
         template.actionType == 'business_website') {
       if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             'Use Menu, Services, Products, or Portfolio instead',
-          ),
-        ),
-      );
+            kind: AppToastKind.info,
+          );
     } else if (template.actionType == 'menu_catalog') {
       if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) return;
       await _openTypedWebsiteFromCatalogTemplate(context, template, provider);
@@ -584,67 +602,90 @@ class LinkSheet {
     LinkCategory category,
     ProfileProvider provider,
   ) {
+    final templates = category.templates;
+    const gap = 12.0;
+    const labelSlot = 28.0;
+    // Fit 3 full tiles between side pads so edges aren't mid-card clipped;
+    // remaining tiles stay reachable by scrolling to the true end.
+    final screenW = MediaQuery.sizeOf(context).width;
+    final tile = ((screenW - BarqodyChrome.sidePad * 2 - gap * 2) / 3)
+        .clamp(100.0, LinkPlatformIcon.catalogTileSize);
+    final radius = LinkPlatformIcon.cornerRadius(tile);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            category.name,
-            style: WaUi.toolsTitleOf(
-              size: 16,
-              weight: FontWeight.w700,
-              color: Colors.black,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: BarqodyChrome.sidePad,
+            ),
+            child: Text(
+              category.name,
+              style: WaUi.toolsTitleOf(
+                size: 16,
+                weight: FontWeight.w700,
+                color: Colors.black,
+              ),
             ),
           ),
           const SizedBox(height: 20),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(category.templates.length, (index) {
-                final template = category.templates[index];
-                return Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(24),
-                      onTap: () {
-                        if (Navigator.of(sheetContext).canPop()) {
-                          Navigator.of(sheetContext).pop(template);
-                        }
-                      },
-                      child: SizedBox(
-                        width: 130,
-                        child: Column(
-                          children: [
-                            _buildTemplateLogo(
-                              template.logo,
-                              size: 130,
-                              radius: 24,
-                              isPro: template.isPro,
-                              context: context,
-                              template: template,
+          SizedBox(
+            height: tile + 6 + labelSlot,
+            width: double.infinity,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              primary: false,
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: BarqodyChrome.sidePad,
+              ),
+              itemCount: templates.length,
+              separatorBuilder: (_, __) => const SizedBox(width: gap),
+              itemBuilder: (context, index) {
+                final template = templates[index];
+                return Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(radius),
+                    onTap: () {
+                      if (Navigator.of(sheetContext).canPop()) {
+                        Navigator.of(sheetContext).pop(template);
+                      }
+                    },
+                    child: SizedBox(
+                      width: tile,
+                      child: Column(
+                        children: [
+                          _buildTemplateLogo(
+                            template.logo,
+                            size: tile,
+                            radius: radius,
+                            isPro: template.isPro,
+                            context: context,
+                            template: template,
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            template.label,
+                            style: WaUi.body.copyWith(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
                             ),
-                            const SizedBox(height: 6),
-                            Text(
-                              template.label,
-                              style: WaUi.body.copyWith(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 );
-              }),
+              },
             ),
           ),
         ],
@@ -764,10 +805,7 @@ class LinkSheet {
                     top: Radius.circular(24),
                   ),
                 ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 14,
-                ),
+                padding: const EdgeInsets.only(top: 14, bottom: 14),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -776,92 +814,104 @@ class LinkSheet {
                         title: ctx.l10n.customLink,
                         onBack: () => Navigator.pop(ctx),
                       ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              final pickedLogo = await _pickLogoBase64();
-                              if (pickedLogo.isNotEmpty) {
-                                setState(() => logo = pickedLogo);
-                              }
-                            },
-                            child: _selectedLogoTile(logo),
-                          ),
-                          SizedBox(width: 14),
-                          Expanded(
-                            child: _sheetTextField(
-                              labelController,
-                              context.l10n.label,
-                              TextInputType.text,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    final pickedLogo = await _pickLogoBase64();
+                                    if (pickedLogo.isNotEmpty) {
+                                      setState(() => logo = pickedLogo);
+                                    }
+                                  },
+                                  child: _selectedLogoTile(logo),
+                                ),
+                                const SizedBox(width: 14),
+                                Expanded(
+                                  child: _sheetTextField(
+                                    labelController,
+                                    context.l10n.label,
+                                    TextInputType.text,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 14),
-                      _buildMultiEntryEditors(
-                        context: context,
-                        drafts: drafts,
-                        valueHint: context.l10n.link,
-                        keyboardType: TextInputType.url,
-                        onChanged: () => setState(() {}),
-                      ),
-                      const SizedBox(height: 14),
-                      _showPublicToggle(
-                        context: context,
-                        isDark: isDark,
-                        value: showLink,
-                        onChanged: (value) =>
-                            setState(() => showLink = value),
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
-                        children: [
-                          if (existingLink != null) ...[
-                            _deleteCircleButton(() async {
-                              await provider.deleteSocialLink(
-                                existingLink.id,
-                                context,
-                              );
-                              Navigator.pop(ctx);
-                            }),
-                            const SizedBox(width: 12),
-                          ],
-                          Expanded(
-                            child: _saveButton(
+                            const SizedBox(height: 14),
+                            _buildMultiEntryEditors(
                               context: context,
-                              onPressed: () async {
-                                final label = labelController.text.trim();
-                                final entries = _entriesFromDrafts(drafts);
-                                if (label.isEmpty || entries.isEmpty) return;
-                                if (existingLink == null) {
-                                  await provider.addCustomTemplateLink(
-                                    template: template,
-                                    label: label,
-                                    value: entries.first.value,
-                                    showLink: showLink,
-                                    context: context,
-                                    logo: logo,
-                                    entries: entries,
-                                  );
-                                } else {
-                                  await provider.updateCustomTemplateLink(
-                                    link: existingLink,
-                                    label: label,
-                                    value: entries.first.value,
-                                    showLink: showLink,
-                                    context: context,
-                                    logo: logo,
-                                    entries: entries,
-                                  );
-                                }
-                                Navigator.pop(ctx);
-                              },
+                              drafts: drafts,
+                              valueHint: context.l10n.link,
+                              keyboardType: TextInputType.url,
+                              onChanged: () => setState(() {}),
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 14),
+                            _showPublicToggle(
+                              context: context,
+                              isDark: isDark,
+                              value: showLink,
+                              onChanged: (value) =>
+                                  setState(() => showLink = value),
+                            ),
+                            const SizedBox(height: 24),
+                            Row(
+                              children: [
+                                if (existingLink != null) ...[
+                                  _deleteCircleButton(() async {
+                                    await provider.deleteSocialLink(
+                                      existingLink.id,
+                                      context,
+                                    );
+                                    Navigator.pop(ctx);
+                                  }),
+                                  const SizedBox(width: 12),
+                                ],
+                                Expanded(
+                                  child: _saveButton(
+                                    context: context,
+                                    onPressed: () async {
+                                      final label =
+                                          labelController.text.trim();
+                                      final entries =
+                                          _entriesFromDrafts(drafts);
+                                      if (label.isEmpty || entries.isEmpty) {
+                                        return;
+                                      }
+                                      if (existingLink == null) {
+                                        await provider.addCustomTemplateLink(
+                                          template: template,
+                                          label: label,
+                                          value: entries.first.value,
+                                          showLink: showLink,
+                                          context: context,
+                                          logo: logo,
+                                          entries: entries,
+                                        );
+                                      } else {
+                                        await provider
+                                            .updateCustomTemplateLink(
+                                          link: existingLink,
+                                          label: label,
+                                          value: entries.first.value,
+                                          showLink: showLink,
+                                          context: context,
+                                          logo: logo,
+                                          entries: entries,
+                                        );
+                                      }
+                                      Navigator.pop(ctx);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
@@ -1027,8 +1077,8 @@ class LinkSheet {
                     top: Radius.circular(24),
                   ),
                 ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
                   vertical: 14,
                 ),
                 child: Column(
@@ -1038,6 +1088,7 @@ class LinkSheet {
                       title: allowCustomMeta
                           ? context.l10n.customBank
                           : template.label,
+                      padHorizontal: false,
                       onBack: () => Navigator.pop(ctx),
                     ),
                     const SizedBox(height: 20),
@@ -1440,25 +1491,90 @@ class LinkSheet {
     return image;
   }
 
-  List<_LinkEntryDraft> _draftsFromLink(SocialLink? link) {
+  CountryDialCode _defaultDialCountry(BuildContext context) {
+    try {
+      final profile =
+          Provider.of<ProfileProvider>(context, listen: false).profile;
+      final fromIso = findCountryByIso(isoCodeFromUserCountry(profile.country));
+      if (fromIso != null) return fromIso;
+      final fromPhone = findCountryByPhone(profile.phone);
+      if (fromPhone != null) return fromPhone;
+    } catch (_) {}
+    return defaultCountryDialCodeFallback;
+  }
+
+  _LinkEntryDraft _phoneDraftFromValue({
+    required String id,
+    required String name,
+    required String value,
+    required String logo,
+    required bool isPublic,
+    required CountryDialCode defaultDial,
+  }) {
+    final matched = findCountryByPhone(value);
+    final dial = matched ?? defaultDial;
+    var local = value.trim();
+    if (matched != null) {
+      final digits = PhoneUtils.digitsOnly(local);
+      final cc = PhoneUtils.digitsOnly(matched.code);
+      if (digits.startsWith(cc) && digits.length > cc.length) {
+        local = digits.substring(cc.length);
+      }
+    }
+    return _LinkEntryDraft(
+      id: id,
+      name: name,
+      value: local,
+      logo: logo,
+      isPublic: isPublic,
+      dialCountry: dial,
+    );
+  }
+
+  List<_LinkEntryDraft> _draftsFromLink(
+    SocialLink? link, {
+    bool isPhone = false,
+    CountryDialCode? defaultDial,
+  }) {
+    final fallback = defaultDial ?? defaultCountryDialCodeFallback;
     if (link == null) {
-      return [_LinkEntryDraft()];
+      return [_LinkEntryDraft(dialCountry: isPhone ? fallback : null)];
     }
     final existing = link.entries
         ?.where((e) => e.value.trim().isNotEmpty)
         .toList();
     if (existing != null && existing.isNotEmpty) {
-      return existing
-          .map(
-            (e) => _LinkEntryDraft(
-              id: e.id,
-              name: e.name,
-              value: e.value,
-              logo: e.logo ?? '',
-              isPublic: e.isPublic,
-            ),
-          )
-          .toList();
+      return existing.map((e) {
+        if (!isPhone) {
+          return _LinkEntryDraft(
+            id: e.id,
+            name: e.name,
+            value: e.value,
+            logo: e.logo ?? '',
+            isPublic: e.isPublic,
+          );
+        }
+        return _phoneDraftFromValue(
+          id: e.id,
+          name: e.name,
+          value: e.value,
+          logo: e.logo ?? '',
+          isPublic: e.isPublic,
+          defaultDial: fallback,
+        );
+      }).toList();
+    }
+    if (isPhone) {
+      return [
+        _phoneDraftFromValue(
+          id: link.id,
+          name: '',
+          value: link.value,
+          logo: '',
+          isPublic: link.isPublic,
+          defaultDial: fallback,
+        ),
+      ];
     }
     return [
       _LinkEntryDraft(
@@ -1471,9 +1587,12 @@ class LinkSheet {
     ];
   }
 
-  List<LinkEntry> _entriesFromDrafts(List<_LinkEntryDraft> drafts) {
+  List<LinkEntry> _entriesFromDrafts(
+    List<_LinkEntryDraft> drafts, {
+    bool isPhone = false,
+  }) {
     return drafts
-        .map((d) => d.toEntry())
+        .map((d) => d.toEntry(isPhone: isPhone))
         .where((e) => e.value.isNotEmpty)
         .map(
           (e) => LinkEntry(
@@ -1498,8 +1617,24 @@ class LinkSheet {
     required TextInputType keyboardType,
     required VoidCallback onChanged,
   }) {
+    final isPhone = keyboardType == TextInputType.phone;
+    final defaultDial = isPhone ? _defaultDialCountry(context) : null;
+    if (isPhone && defaultDial != null) {
+      for (final d in drafts) {
+        d.dialCountry ??= defaultDial;
+      }
+    }
+
     void addEntry() {
-      drafts.add(_LinkEntryDraft());
+      drafts.add(
+        _LinkEntryDraft(
+          dialCountry: isPhone
+              ? (drafts.isNotEmpty
+                    ? (drafts.last.dialCountry ?? defaultDial)
+                    : defaultDial)
+              : null,
+        ),
+      );
       onChanged();
     }
 
@@ -1536,7 +1671,11 @@ class LinkSheet {
             onRemove: () {
               drafts[i].dispose();
               drafts.removeAt(i);
-              if (drafts.isEmpty) drafts.add(_LinkEntryDraft());
+              if (drafts.isEmpty) {
+                drafts.add(
+                  _LinkEntryDraft(dialCountry: isPhone ? defaultDial : null),
+                );
+              }
               onChanged();
             },
             onChanged: onChanged,
@@ -1544,24 +1683,6 @@ class LinkSheet {
         ],
       ],
     );
-  }
-
-  /// Dial code for phone fields (Figma shows `+1 |`). Defaults to `+1`.
-  String? _dialPrefixFor(BuildContext context, TextInputType keyboardType) {
-    if (keyboardType != TextInputType.phone) return null;
-    try {
-      final country = Provider.of<ProfileProvider>(context, listen: false)
-          .profile
-          .country
-          ?.trim()
-          .toLowerCase();
-      if (country != null && country.isNotEmpty) {
-        for (final dial in kCountryDialCodes) {
-          if (dial.name.toLowerCase() == country) return dial.code;
-        }
-      }
-    } catch (_) {}
-    return '+1';
   }
 
   Widget _buildEntryEditorRow({
@@ -1577,8 +1698,11 @@ class LinkSheet {
     // Figma: entry cards use person silhouette unless user picks a photo —
     // never fall back to the platform (WhatsApp/Facebook) logo.
     final displayLogo = draft.logo;
-    final dialPrefix = _dialPrefixFor(context, keyboardType);
-    final phoneHint = keyboardType == TextInputType.phone
+    final isPhone = keyboardType == TextInputType.phone;
+    final dial = isPhone
+        ? (draft.dialCountry ?? _defaultDialCountry(context))
+        : null;
+    final phoneHint = isPhone
         ? (valueHint.trim().isEmpty ? '202 555 0147' : valueHint)
         : valueHint;
     return Container(
@@ -1614,39 +1738,86 @@ class LinkSheet {
             ],
           ),
           const SizedBox(height: 10),
-          TextField(
-            controller: draft.valueController,
-            keyboardType: keyboardType,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-              color: Colors.black,
-            ),
-            decoration: _barqodyFieldDecoration(
-              hintText: phoneHint,
-              prefix: dialPrefix == null
-                  ? null
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          dialPrefix,
-                          style: WaUi.body.copyWith(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 18,
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          color: const Color(0xFFD1D1D6),
-                        ),
-                      ],
+          if (isPhone && dial != null)
+            Container(
+              height: 48,
+              decoration: BoxDecoration(
+                color: BarqodyChrome.fieldFill,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      final selected = await showCountryPickerSheet(
+                        context,
+                        selectedIso: dial.iso,
+                      );
+                      if (selected != null) {
+                        draft.dialCountry = selected;
+                        onChanged();
+                      }
+                    },
+                    borderRadius: const BorderRadius.horizontal(
+                      left: Radius.circular(14),
                     ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 14, right: 10),
+                      child: Text(
+                        dial.code,
+                        style: WaUi.body.copyWith(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 1,
+                    height: 18,
+                    color: const Color(0xFFD1D1D6),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: draft.valueController,
+                      keyboardType: TextInputType.phone,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: phoneHint,
+                        hintStyle: const TextStyle(
+                          fontSize: 15,
+                          color: BarqodyChrome.secondaryText,
+                        ),
+                        filled: false,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12),
+                        isDense: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+            TextField(
+              controller: draft.valueController,
+              keyboardType: keyboardType,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
+              decoration: _barqodyFieldDecoration(hintText: phoneHint),
             ),
-          ),
           const SizedBox(height: 10),
           Row(
             children: [
@@ -1740,7 +1911,12 @@ class LinkSheet {
     LinkTemplate template,
     ProfileProvider provider,
   ) {
-    final drafts = <_LinkEntryDraft>[_LinkEntryDraft()];
+    final isPhone = _keyboardTypeFor(template.fieldType) == TextInputType.phone;
+    final drafts = <_LinkEntryDraft>[
+      _LinkEntryDraft(
+        dialCountry: isPhone ? _defaultDialCountry(context) : null,
+      ),
+    ];
 
     return showAppModalBottomSheet(
       context: context,
@@ -1750,7 +1926,7 @@ class LinkSheet {
         return StatefulBuilder(
           builder: (context, setState) {
             Future<void> doSave() async {
-              final entries = _entriesFromDrafts(drafts);
+              final entries = _entriesFromDrafts(drafts, isPhone: isPhone);
               if (entries.isEmpty) return;
               await provider.addTemplateLink(
                 template,
@@ -1776,97 +1952,84 @@ class LinkSheet {
                     top: Radius.circular(BarqodyChrome.sheetRadius),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 14,
-                ),
+                padding: const EdgeInsets.only(top: 10, bottom: 14),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SheetDragHandle(),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        height: 44,
-                        child: Row(
+                      SheetHeader(
+                        title: ctx.l10n.createNewLink,
+                        onBack: () => Navigator.pop(ctx),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            CircleBackButton(onTap: () => Navigator.pop(ctx)),
-                            Expanded(
-                              child: Text(
-                                ctx.l10n.createNewLink,
-                                textAlign: TextAlign.center,
-                                style: WaUi.toolsTitleOf(
-                                  size: 20,
-                                  weight: FontWeight.w700,
-                                  color: Colors.black,
+                            Row(
+                              children: [
+                                _buildTemplateLogo(
+                                  template.logo,
+                                  size: 48,
+                                  isPro: template.isPro,
+                                  context: context,
                                 ),
-                              ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Container(
+                                    height: 48,
+                                    alignment: Alignment.centerLeft,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: BarqodyChrome.fieldFill,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: Text(
+                                      template.label,
+                                      style: WaUi.body.copyWith(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            // Balance back button; save is bottom Cancel/Save.
-                            const SizedBox(width: 40),
+                            const SizedBox(height: 16),
+                            _buildMultiEntryEditors(
+                              context: context,
+                              drafts: drafts,
+                              valueHint: template.fieldLabel,
+                              keyboardType:
+                                  _keyboardTypeFor(template.fieldType),
+                              onChanged: () => setState(() {}),
+                            ),
+                            const SizedBox(height: 24),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: PillButton(
+                                    label: context.l10n.cancel,
+                                    filled: false,
+                                    onPressed: () => Navigator.pop(ctx),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: PillButton(
+                                    label: context.l10n.save,
+                                    onPressed: doSave,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 18),
-                      Row(
-                        children: [
-                          _buildTemplateLogo(
-                            template.logo,
-                            size: 48,
-                            isPro: template.isPro,
-                            context: context,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Container(
-                              height: 48,
-                              alignment: Alignment.centerLeft,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              decoration: BoxDecoration(
-                                color: BarqodyChrome.fieldFill,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: Text(
-                                template.label,
-                                style: WaUi.body.copyWith(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      _buildMultiEntryEditors(
-                        context: context,
-                        drafts: drafts,
-                        valueHint: template.fieldLabel,
-                        keyboardType: _keyboardTypeFor(template.fieldType),
-                        onChanged: () => setState(() {}),
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: PillButton(
-                              label: context.l10n.cancel,
-                              filled: false,
-                              onPressed: () => Navigator.pop(ctx),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: PillButton(
-                              label: context.l10n.save,
-                              onPressed: doSave,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
@@ -1982,14 +2145,14 @@ class LinkSheet {
                   ),
                 ),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
+                  horizontal: 16,
                   vertical: 14,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SheetDragHandle(),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     SizedBox(
                       height: 44,
                       child: Row(
@@ -2225,7 +2388,7 @@ class LinkSheet {
                   ),
                 ),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
+                  horizontal: 16,
                   vertical: 14,
                 ),
                 child: Column(
@@ -2235,6 +2398,7 @@ class LinkSheet {
                       title: link.platformName.isNotEmpty
                           ? link.platformName
                           : 'Business Website',
+                      padHorizontal: false,
                       onBack: () => Navigator.pop(ctx),
                     ),
                     const SizedBox(height: 16),
@@ -2387,7 +2551,7 @@ class LinkSheet {
                   ),
                 ),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
+                  horizontal: 16,
                   vertical: 14,
                 ),
                 child: Column(
@@ -2395,6 +2559,7 @@ class LinkSheet {
                   children: [
                     SheetHeader(
                       title: context.l10n.profileTabGallery,
+                      padHorizontal: false,
                       onBack: () => Navigator.pop(ctx),
                     ),
                     const SizedBox(height: 16),
@@ -2622,7 +2787,13 @@ class LinkSheet {
       return;
     }
 
-    final drafts = _draftsFromLink(link);
+    final isPhone =
+        _keyboardTypeFor(link.fieldType ?? 'text') == TextInputType.phone;
+    final drafts = _draftsFromLink(
+      link,
+      isPhone: isPhone,
+      defaultDial: _defaultDialCountry(context),
+    );
 
     await showAppModalBottomSheet(
       context: context,
@@ -2632,7 +2803,7 @@ class LinkSheet {
         return StatefulBuilder(
           builder: (context, setState) {
             Future<void> doSave() async {
-              final entries = _entriesFromDrafts(drafts);
+              final entries = _entriesFromDrafts(drafts, isPhone: isPhone);
               if (entries.isEmpty) return;
               final showLink = _linkPublicFromEntries(entries);
               if (link.templateId?.isNotEmpty == true) {
@@ -2684,7 +2855,7 @@ class LinkSheet {
                   ),
                 ),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
+                  horizontal: 16,
                   vertical: 14,
                 ),
                 child: SingleChildScrollView(
@@ -2692,7 +2863,7 @@ class LinkSheet {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const SheetDragHandle(),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 8),
                       SizedBox(
                         height: 44,
                         child: Row(

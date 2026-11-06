@@ -48,54 +48,36 @@ class _AccountSwitcherBody extends StatelessWidget {
       ),
       child: SafeArea(
         top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SheetDragHandle(),
-              const SizedBox(height: 16),
-              Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SheetHeader(
+              title: context.l10n.accounts,
+              onBack: () => Navigator.pop(context),
+            ),
+            Flexible(
+              child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                 children: [
-                  CircleBackButton(onTap: () => Navigator.pop(context)),
-                  Expanded(
-                    child: Text(
-                      context.l10n.accounts,
-                      textAlign: TextAlign.center,
-                      style: WaUi.toolsTitleOf(
-                        size: 18,
-                        weight: FontWeight.w700,
-                        color: Colors.black,
+                  ...accounts.map((account) {
+                    final selected = account.userId == activeId;
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: _AccountCard(
+                        account: account,
+                        selected: selected,
+                        onTap: selected
+                            ? () => Navigator.pop(context)
+                            : () => _switch(context, account),
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 40),
+                    );
+                  }),
+                  _AddAccountCard(onTap: () => _addAccount(context)),
                 ],
               ),
-              const SizedBox(height: 20),
-              Flexible(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    ...accounts.map((account) {
-                      final selected = account.userId == activeId;
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: _AccountCard(
-                          account: account,
-                          selected: selected,
-                          onTap: selected
-                              ? () => Navigator.pop(context)
-                              : () => _switch(context, account),
-                        ),
-                      );
-                    }),
-                    _AddAccountCard(onTap: () => _addAccount(context)),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -164,60 +146,50 @@ class _AddAccountOptionsSheet extends StatelessWidget {
       ),
       child: SafeArea(
         top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SheetDragHandle(),
-              const SizedBox(height: 16),
-              Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SheetHeader(
+              title: hostContext.l10n.accounts,
+              onBack: () => Navigator.pop(context),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircleBackButton(onTap: () => Navigator.pop(context)),
-                  Expanded(
-                    child: Text(
-                      hostContext.l10n.accounts,
-                      textAlign: TextAlign.center,
-                      style: WaUi.toolsTitleOf(
-                        size: 18,
-                        weight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
+                  _SheetOptionTile(
+                    asset: 'assets/images/png/qr-code-icon.png',
+                    title: hostContext.l10n.scanQRShowQR,
+                    subtitle: hostContext.l10n.linkByQROnAnotherPhone,
+                    onTap: () {
+                      Navigator.pop(context);
+                      if (!hostContext.mounted) return;
+                      Navigator.of(hostContext).push(
+                        AppPageRoute(
+                          builder: (_) => QrLoginScreen(addAccount: true),
+                        ),
+                      );
+                    },
                   ),
-                  const SizedBox(width: 40),
+                  _SheetOptionTile(
+                    asset: 'assets/images/png/phone-icon.png',
+                    title: hostContext.l10n.phoneNumber2,
+                    onTap: () {
+                      Navigator.pop(context);
+                      if (!hostContext.mounted) return;
+                      Navigator.of(hostContext).push(
+                        AppPageRoute(
+                          builder: (_) =>
+                              const PhoneAuthScreen(addAccount: true),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
-              const SizedBox(height: 8),
-              _SheetOptionTile(
-                asset: 'assets/images/png/qr-code-icon.png',
-                title: hostContext.l10n.scanQRShowQR,
-                subtitle: hostContext.l10n.linkByQROnAnotherPhone,
-                onTap: () {
-                  Navigator.pop(context);
-                  if (!hostContext.mounted) return;
-                  Navigator.of(hostContext).push(
-                    AppPageRoute(
-                      builder: (_) => QrLoginScreen(addAccount: true),
-                    ),
-                  );
-                },
-              ),
-              _SheetOptionTile(
-                asset: 'assets/images/png/phone-icon.png',
-                title: hostContext.l10n.phoneNumber2,
-                onTap: () {
-                  Navigator.pop(context);
-                  if (!hostContext.mounted) return;
-                  Navigator.of(hostContext).push(
-                    AppPageRoute(
-                      builder: (_) => const PhoneAuthScreen(addAccount: true),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

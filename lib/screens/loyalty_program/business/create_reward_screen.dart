@@ -9,6 +9,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class CreateRewardScreen extends StatefulWidget {
   final RewardProgram? existing;
@@ -153,7 +154,11 @@ class _CreateRewardScreenState extends State<CreateRewardScreen> {
   }
 
   void _showSnack(String msg) =>
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+      showAppToast(
+            context,
+            msg,
+            kind: AppToastKind.info,
+          );
 
   @override
   Widget build(BuildContext context) {

@@ -4,12 +4,13 @@ import 'package:tapni_app/utils/country_dial_codes.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
 Future<CountryDialCode?> showCountryPickerSheet(
   BuildContext context, {
   String? selectedIso,
 }) {
-  return showModalBottomSheet<CountryDialCode>(
+  return showAppModalBottomSheet<CountryDialCode>(
     context: context,
     isScrollControlled: true,
     useRootNavigator: true,
@@ -78,33 +79,35 @@ class _CountryPickerSheetState extends State<CountryPickerSheet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 10),
-                const SheetDragHandle(),
-                const SizedBox(height: 14),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          context.l10n.chooseACountry,
-                          style: WaUi.toolsTitleOf(
-                            size: 20,
-                            weight: FontWeight.w700,
-                            color: AuthUi.textPrimary,
-                            height: 1.1,
+                SheetHandleThen(
+                  afterHandleGap: 8,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 6, 16, 8),
+                    child: SizedBox(
+                      height: 44,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              context.l10n.chooseACountry,
+                              style: WaUi.toolsTitleOf(
+                                size: 20,
+                                weight: FontWeight.w700,
+                                color: AuthUi.textPrimary,
+                                height: 1.1,
+                              ),
+                            ),
                           ),
-                        ),
+                          CircleCloseButton(
+                            onTap: () => Navigator.pop(context),
+                          ),
+                        ],
                       ),
-                      CircleCloseButton(
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 8),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     context.l10n.selectCountryHelper,
                     style: WaUi.body.copyWith(

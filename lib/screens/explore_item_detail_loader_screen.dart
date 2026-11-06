@@ -8,6 +8,7 @@ import 'package:tapni_app/screens/explore_item_detail_screen.dart';
 import 'package:tapni_app/utils/theme.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/explore_detail_shimmers.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class ExploreItemDetailLoaderScreen extends StatefulWidget {
   final ExploreItem item;
@@ -148,6 +149,13 @@ class _ExploreItemDetailLoaderScreenState
           backgroundColor:
               isDark ? AppTheme.primaryBlack : WaUi.toolsScaffold,
           foregroundColor: isDark ? Colors.white : WaUi.primaryText,
+          leading: Center(
+            child: CircleBackButton(
+              color: isDark ? const Color(0xFF2A2A2A) : null,
+              iconColor: isDark ? Colors.white : null,
+              onTap: () => Navigator.of(context).maybePop(),
+            ),
+          ),
         ),
         body: Center(
           child: Padding(

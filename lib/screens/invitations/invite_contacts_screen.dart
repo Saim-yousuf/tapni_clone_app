@@ -13,6 +13,7 @@ import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/utils/phone_utils.dart';
 import 'package:tapni_app/widgets/invitation_card_preview.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InviteContactsScreen extends StatefulWidget {
@@ -398,6 +399,11 @@ class _InviteContactsScreenState extends State<InviteContactsScreen> {
       appBar: AppBar(
         backgroundColor: surface,
         foregroundColor: onSurface,
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

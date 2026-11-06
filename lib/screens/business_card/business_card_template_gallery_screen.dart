@@ -7,6 +7,7 @@ import 'package:tapni_app/screens/business_card/business_card_design_editor_scre
 import 'package:tapni_app/utils/business_card_design_catalog.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/business_card_design_renderer.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 /// Starter designs → full Canva-style business card editor.
 class BusinessCardTemplateGalleryScreen extends StatelessWidget {
@@ -68,6 +69,11 @@ class BusinessCardTemplateGalleryScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           createNewCard ? 'Choose a starting design' : 'Card designs'),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
         actions: [
           if (existingDesign != null && existingDesign!.hasLayers)
             TextButton(

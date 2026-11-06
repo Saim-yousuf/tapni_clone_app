@@ -7,6 +7,7 @@ import 'package:tapni_app/utils/money_format.dart';
 import 'package:tapni_app/utils/payment_display.dart';
 import 'package:tapni_app/utils/stripe_checkout_outcome.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 export 'package:tapni_app/utils/stripe_checkout_outcome.dart'
     show StripeCheckoutOutcome, StripeCheckoutResult;
@@ -262,9 +263,11 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
           _busy = false;
           _error = null;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Payment cancelled')),
-        );
+        showAppToast(
+              context,
+              'Payment cancelled',
+              kind: AppToastKind.info,
+            );
         return;
       }
       setState(() {
@@ -378,9 +381,11 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
         }
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not remove card')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not remove card',
+            kind: AppToastKind.error,
+          );
     }
   }
 
@@ -407,7 +412,9 @@ class _StripeCheckoutScreenState extends State<StripeCheckoutScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         // Explicit null result — catalog checkout must not treat as paid.
-        leading: CircleBackButton(onTap: () => Navigator.pop(context)),
+        leading: Center(
+          child: CircleBackButton(onTap: () => Navigator.pop(context)),
+        ),
         title: const Text(
           'Checkout',
           style: TextStyle(

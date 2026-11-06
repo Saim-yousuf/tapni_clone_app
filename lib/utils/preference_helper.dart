@@ -19,6 +19,8 @@ class PrefUtils {
   String callerIdPermissionPrompted = "caller_id_permission_prompted";
   /// Local inbox for push-only lead notifs (`profile_scan`, `contact_exchange`).
   String leadPushNotifications = "lead_push_notifications";
+  /// Peer user ids we've successfully exchanged contact with (per account).
+  String contactExchangedIdsPrefix = "contact_exchanged_ids_";
 }
 
 class SharedPrefHelper {

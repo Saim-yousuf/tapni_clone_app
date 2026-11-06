@@ -5,6 +5,7 @@ import 'package:tapni_app/repository/offer_repo.dart';
 import 'package:tapni_app/screens/offers/business_offer_form_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Business Suite — list and manage special offers / coupons.
 class BusinessOffersScreen extends StatefulWidget {
@@ -86,9 +87,11 @@ class _BusinessOffersScreenState extends State<BusinessOffersScreen> {
     if (res.success) {
       _load();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Update failed')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Update failed',
+            kind: AppToastKind.error,
+          );
     }
   }
 
@@ -116,9 +119,11 @@ class _BusinessOffersScreenState extends State<BusinessOffersScreen> {
     if (res.success) {
       _load();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Delete failed')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Delete failed',
+            kind: AppToastKind.error,
+          );
     }
   }
 

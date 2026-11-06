@@ -10,6 +10,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class CustomerProgramDetailsScreen extends StatefulWidget {
   final RewardEnrollment enrollment;
@@ -63,17 +64,17 @@ class _CustomerProgramDetailsScreenState
           _enrollment = _enrollment.copyWith(status: 'CLAIM_PENDING');
         });
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             'Claim sent — no charge. Show this to staff or wait for confirmation.',
-          ),
-        ),
-      );
+            kind: AppToastKind.success,
+          );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not claim reward')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not claim reward',
+            kind: AppToastKind.error,
+          );
     }
   }
 

@@ -7,6 +7,7 @@ import 'package:tapni_app/utils/app_fonts.dart';
 import 'package:tapni_app/utils/location_helper.dart';
 import 'package:tapni_app/widgets/app_map_tiles.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class MapLocationResult {
   final double latitude;
@@ -132,12 +133,11 @@ class _MapLocationPickerScreenState extends State<MapLocationPickerScreen> {
     setState(() => _isLocating = false);
 
     if (location == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text(context.l10n.locationPermissionRequired),
-        ),
-      );
+      showAppToast(
+            context,
+            context.l10n.locationPermissionRequired,
+            kind: AppToastKind.warning,
+          );
       return;
     }
 

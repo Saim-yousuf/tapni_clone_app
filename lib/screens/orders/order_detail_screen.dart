@@ -17,6 +17,7 @@ import 'package:tapni_app/widgets/order_ui.dart';
 
 import 'package:tapni_app/l10n/app_localizations.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final String orderId;
@@ -103,18 +104,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     );
     if (!mounted) return;
     setState(() => _isUpdating = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           res.success
-              ? (res.message ?? 'Refund submitted')
-              : PaymentDisplay.sanitizeError(
-                  res.message,
-                  fallback: 'Refund failed',
-                ),
-        ),
-      ),
-    );
+                  ? (res.message ?? 'Refund submitted')
+                  : PaymentDisplay.sanitizeError(
+                      res.message,
+                      fallback: 'Refund failed',
+                    ),
+          kind: res.success ? AppToastKind.success : AppToastKind.error,
+        );
     if (res.success) await _loadOrder();
   }
 
@@ -130,20 +129,20 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     if (res.success) {
       await _loadOrder();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
+        showAppToast(
+              context,
               context.l10n.statusUpdatedTo(
-                CatalogHelper.statusLabel(status, context.l10n),
-              ),
-            ),
-          ),
-        );
+                        CatalogHelper.statusLabel(status, context.l10n),
+                      ),
+              kind: AppToastKind.success,
+            );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? context.l10n.failedToUpdateStatus)),
-      );
+      showAppToast(
+            context,
+            res.message ?? context.l10n.failedToUpdateStatus,
+            kind: AppToastKind.error,
+          );
     }
   }
 

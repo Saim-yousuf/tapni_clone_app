@@ -16,6 +16,7 @@ import 'package:tapni_app/utils/phone_utils.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/country_picker_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class PhoneAuthScreen extends StatefulWidget {
   const PhoneAuthScreen({Key? key, this.addAccount = false}) : super(key: key);
@@ -143,16 +144,11 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     final phone = _normalizedPhone();
 
     if (!PhoneUtils.isValid(phone)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             context.l10n.pleaseEnterValidPhoneNumber,
-            style: AppFonts.textStyle(fontSize: 14, color: Colors.white),
-          ),
-          backgroundColor: AuthUi.textPrimary,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+            kind: AppToastKind.info,
+          );
       return;
     }
 

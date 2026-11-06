@@ -5,6 +5,7 @@ import 'package:tapni_app/utils/explore_actions.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/loyalty_card_design_renderer.dart';
 import 'package:tapni_app/widgets/reward_stamp_slot.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 enum ExploreSeeAllKind { offers, items, services, businesses }
 
@@ -35,6 +36,11 @@ class ExploreSeeAllScreen extends StatelessWidget {
         backgroundColor: scaffold,
         foregroundColor: primaryText,
         title: Text('Reward Offers'),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
       ),
       body: offers.isEmpty
           ? Center(

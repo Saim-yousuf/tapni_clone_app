@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/gallery_item.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 /// Full-screen gallery: left/right swipe between photos, pinch-to-zoom,
 /// close (X) in the top corner, delete for owner.
@@ -79,9 +81,11 @@ class _GalleryViewerScreenState extends State<GalleryViewerScreen> {
     if (!mounted) return;
     setState(() => _busy = false);
     if (!ok) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.couldNotDeletePhoto)),
-      );
+      showAppToast(
+            context,
+            context.l10n.couldNotDeletePhoto,
+            kind: AppToastKind.error,
+          );
       return;
     }
 
@@ -154,19 +158,12 @@ class _GalleryViewerScreenState extends State<GalleryViewerScreen> {
             },
           ),
 
-          // Close (X) — always top-right corner
+          // Close (X) — always top-right corner (40×40, inset 16)
           Positioned(
-            top: topPad + 4,
-            right: 8,
-            child: Material(
-              color: Colors.black.withValues(alpha: 0.35),
-              shape: const CircleBorder(),
-              child: IconButton(
-                icon: const Icon(Icons.close_rounded, size: 22),
-                color: Colors.white,
-                tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-                onPressed: () => Navigator.pop(context),
-              ),
+            top: topPad + 6,
+            right: 16,
+            child: CircleCloseButton(
+              onTap: () => Navigator.pop(context),
             ),
           ),
 

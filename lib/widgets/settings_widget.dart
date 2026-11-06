@@ -11,6 +11,7 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class SettingWidgets {
   static void showSettingSheet(BuildContext context) {
@@ -83,23 +84,27 @@ void _generalBottomSheet(BuildContext context) {
               key: formKey,
               child: Column(
               children: [
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 const SheetDragHandle(),
+                const SizedBox(height: 8),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                  child: Row(
-                    children: [
-                      CircleBackButton(onTap: () => Navigator.pop(context)),
-                      Expanded(
-                        child: Center(
-                          child: Image.asset(
-                            'assets/images/png/barqody_name.png',
-                            height: 70,
+                  padding: const EdgeInsets.fromLTRB(16, 6, 16, 8),
+                  child: SizedBox(
+                    height: 44,
+                    child: Row(
+                      children: [
+                        CircleBackButton(onTap: () => Navigator.pop(context)),
+                        Expanded(
+                          child: Center(
+                            child: Image.asset(
+                              'assets/images/png/barqody_name.png',
+                              height: 70,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 40),
-                    ],
+                        const SizedBox(width: 40),
+                      ],
+                    ),
                   ),
                 ),
                 Text(context.l10n.general, style: WaUi.headline),
@@ -217,23 +222,16 @@ void _generalBottomSheet(BuildContext context) {
                               }
                               if (!context.mounted) return;
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
+                              showAppToast(
+                                    context,
                                     response.success
-                                        ? context
-                                            .l10n.profileUpdatedSuccessfully
-                                        : response.message ??
-                                            context.l10n
-                                                .unableToSaveProfileTryAgain,
-                                    style: WaUi.body.copyWith(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  backgroundColor: AppTheme.primaryBlack,
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
+                                                                      ? context
+                                                                          .l10n.profileUpdatedSuccessfully
+                                                                      : response.message ??
+                                                                          context.l10n
+                                                                              .unableToSaveProfileTryAgain,
+                                    kind: response.success ? AppToastKind.success : AppToastKind.error,
+                                  );
                             },
                             child: Text(
                               context.l10n.save2,

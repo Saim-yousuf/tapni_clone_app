@@ -6,6 +6,7 @@ import 'package:tapni_app/screens/loyalty_program/business/points_purchased_scre
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Figma `Payment` — order summary + payment methods + Pay CTA.
 class PaymentScreen extends StatefulWidget {
@@ -36,16 +37,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
     setState(() => _paying = false);
 
     if (!res.success || res.data == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text(
+      showAppToast(
+            context,
             res.message ?? 'Purchase failed',
-            style: WaUi.body.copyWith(color: Colors.white),
-          ),
-          backgroundColor: Colors.black,
-        ),
-      );
+            kind: AppToastKind.error,
+          );
       return;
     }
 

@@ -49,6 +49,8 @@ class UserProfile {
   final BusinessCardDesign? cardPrintDesign;
   final bool canView;
   final String followStatus;
+  /// True when the viewer has already exchanged contact with this profile.
+  final bool contactExchanged;
   final List<GalleryItem> gallery;
 
   UserProfile({
@@ -92,6 +94,7 @@ class UserProfile {
     this.cardPrintDesign,
     this.canView = true,
     this.followStatus = 'none',
+    this.contactExchanged = false,
     this.gallery = const [],
   });
 
@@ -107,6 +110,13 @@ class UserProfile {
       return double.tryParse(v.toString());
     }
 
+    bool _readBool(dynamic v) {
+      if (v is bool) return v;
+      if (v is num) return v != 0;
+      final s = v?.toString().trim().toLowerCase();
+      return s == 'true' || s == '1' || s == 'yes';
+    }
+
     return UserProfile(
       id: json['_id']?.toString() ?? json['id']?.toString(),
       username: json['username']?.toString(),
@@ -116,6 +126,7 @@ class UserProfile {
       isPublic: json['isPublic'] as bool? ?? true,
       canView: json['canView'] as bool? ?? true,
       followStatus: json['followStatus']?.toString() ?? 'none',
+      contactExchanged: _readBool(json['contactExchanged']),
       name: json['name']?.toString() ?? '',
       email: json['email']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
@@ -251,6 +262,7 @@ class UserProfile {
     bool clearCardPrintDesign = false,
     bool? canView,
     String? followStatus,
+    bool? contactExchanged,
     List<GalleryItem>? gallery,
     bool clearLatitude = false,
     bool clearLongitude = false,
@@ -302,6 +314,7 @@ class UserProfile {
           : (cardPrintDesign ?? this.cardPrintDesign),
       canView: canView ?? this.canView,
       followStatus: followStatus ?? this.followStatus,
+      contactExchanged: contactExchanged ?? this.contactExchanged,
       gallery: gallery ?? this.gallery,
     );
   }

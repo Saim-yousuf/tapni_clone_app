@@ -4,6 +4,7 @@ import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/custom_button.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class UsernameClaimScreen extends StatefulWidget {
   final String username;
@@ -58,18 +59,13 @@ class _UsernameClaimScreenState extends State<UsernameClaimScreen> {
     if (!mounted) return;
     setState(() => _submitting = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           response.success
-              ? context.l10n.claimSubmittedSuccess
-              : response.message ?? context.l10n.tryAgain,
-          style: WaUi.body.copyWith(color: Colors.white),
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: WaUi.primaryText,
-      ),
-    );
+                  ? context.l10n.claimSubmittedSuccess
+                  : response.message ?? context.l10n.tryAgain,
+          kind: response.success ? AppToastKind.success : AppToastKind.error,
+        );
 
     if (response.success) {
       Navigator.of(context).pop(true);

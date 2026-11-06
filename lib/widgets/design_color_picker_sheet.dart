@@ -133,28 +133,41 @@ class _DesignColorPickerSheetState extends State<DesignColorPickerSheet> {
       padding: EdgeInsets.only(bottom: bottom),
       child: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SheetDragHandle(),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.title,
-                      style: WaUi.toolsTitleOf(
-                        size: 18,
-                        weight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
+              SheetHandleThen(
+                afterHandleGap: 8,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 6, 16, 8),
+                  child: SizedBox(
+                    height: 44,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            widget.title,
+                            style: WaUi.toolsTitleOf(
+                              size: 20,
+                              weight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        CircleCloseButton(
+                          onTap: () => Navigator.pop(context),
+                        ),
+                      ],
                     ),
                   ),
-                  CircleCloseButton(onTap: () => Navigator.pop(context)),
-                ],
+                ),
               ),
-              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
               // Live preview
               Row(
                 children: [
@@ -265,6 +278,9 @@ class _DesignColorPickerSheetState extends State<DesignColorPickerSheet> {
                 label: 'Apply color',
                 onPressed: () =>
                     Navigator.pop(context, designColorToHex(_color)),
+              ),
+                  ],
+                ),
               ),
             ],
           ),

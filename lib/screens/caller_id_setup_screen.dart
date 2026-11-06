@@ -5,6 +5,7 @@ import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/services/caller_id_service.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class CallerIdSetupScreen extends StatefulWidget {
   const CallerIdSetupScreen({super.key});
@@ -111,12 +112,11 @@ class _CallerIdSetupScreenState extends State<CallerIdSetupScreen>
       if (!_roleOk) {
         final opened = await CallerIdService.requestCallScreeningRole();
         if (!opened && mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(context.l10n.callerIdPermissionNeeded),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
+          showAppToast(
+                context,
+                context.l10n.callerIdPermissionNeeded,
+                kind: AppToastKind.info,
+              );
         }
         return;
       }
@@ -371,12 +371,11 @@ class _CallerIdSetupScreenState extends State<CallerIdSetupScreen>
               final opened =
                   await CallerIdService.requestCallScreeningRole();
               if (!opened && mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(context.l10n.callerIdPermissionNeeded),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+                showAppToast(
+                      context,
+                      context.l10n.callerIdPermissionNeeded,
+                      kind: AppToastKind.info,
+                    );
               }
             },
           ),
@@ -391,14 +390,11 @@ class _CallerIdSetupScreenState extends State<CallerIdSetupScreen>
             onGrant: () async {
               final opened = await CallerIdService.requestDefaultDialerRole();
               if (!opened && mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
+                showAppToast(
+                      context,
                       'Could not open default-phone settings. Set Barqody as Phone app in system settings.',
-                    ),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+                      kind: AppToastKind.error,
+                    );
               }
             },
           ),

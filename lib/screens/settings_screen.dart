@@ -36,6 +36,7 @@ import 'package:tapni_app/widgets/feedback_dialog.dart';
 import 'package:tapni_app/widgets/logout_confirm_dialog.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
 import 'package:tapni_app/widgets/wa_tools_widgets.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -110,14 +111,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       );
       await profileProvider.fetchProfile();
       if (!context.mounted) return;
-      Navigator.of(context).pushAndRemoveUntil(
+      // Root navigator clears the logout confirm dialog too.
+      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
         AppPageRoute(builder: (_) => const MainShell()),
         (route) => false,
       );
       return;
     }
 
-    Navigator.of(context).pushAndRemoveUntil(
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
       AppPageRoute(builder: (_) => const PhoneAuthScreen()),
       (route) => false,
     );
@@ -137,18 +139,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     if (!response.success) {
       final errorMessage = (response.message ?? '').trim();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
+      showAppToast(
+            context,
             errorMessage.isNotEmpty
-                ? errorMessage
-                : context.l10n.couldNotUpdateProfileVisibility,
-            style: WaUi.body.copyWith(color: Colors.white),
-          ),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: WaUi.primaryText,
-        ),
-      );
+                      ? errorMessage
+                      : context.l10n.couldNotUpdateProfileVisibility,
+            kind: AppToastKind.error,
+          );
     }
   }
 
@@ -447,17 +444,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         FeedbackDialog.show(
                           context,
                           onSubmitted: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
+                            showAppToast(
+                                  context,
                                   context.l10n
-                                      .thankYouFeedbackSubmissionsAreMockOnly,
-                                  style: WaUi.body.copyWith(color: Colors.white),
-                                ),
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor: WaUi.primaryText,
-                              ),
-                            );
+                                                                  .thankYouFeedbackSubmissionsAreMockOnly,
+                                  kind: AppToastKind.info,
+                                );
                           },
                         );
                       },

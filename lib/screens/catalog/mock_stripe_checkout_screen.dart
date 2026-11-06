@@ -206,13 +206,15 @@ class _MockStripeCheckoutScreenState extends State<MockStripeCheckoutScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(8, 4, 12, 0),
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
               child: Row(
                 children: [
-                  IconButton(
-                    onPressed: _busy ? null : _cancel,
-                    icon: const Icon(Icons.close_rounded),
-                    color: const Color(0xFF425466),
+                  IgnorePointer(
+                    ignoring: _busy,
+                    child: Opacity(
+                      opacity: _busy ? 0.4 : 1,
+                      child: CircleCloseButton(onTap: _cancel),
+                    ),
                   ),
                   const Spacer(),
                   Container(

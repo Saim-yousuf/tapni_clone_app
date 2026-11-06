@@ -11,6 +11,8 @@ import 'package:tapni_app/utils/business_completeness.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/radio_option_picker_sheet.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 class BusinessProfileScreen extends StatefulWidget {
   const BusinessProfileScreen({super.key});
@@ -184,13 +186,11 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
   }
 
   void _toast(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message, style: WaUi.body.copyWith(color: Colors.white)),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: WaUi.primaryText,
-      ),
-    );
+    showAppToast(
+          context,
+          message,
+          kind: AppToastKind.info,
+        );
   }
 
   @override
@@ -205,6 +205,11 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
       backgroundColor: WaUi.toolsScaffold,
       appBar: AppBar(
         title: Text('Business Profile'),
+        leading: Center(
+          child: CircleBackButton(
+            onTap: () => Navigator.of(context).maybePop(),
+          ),
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),

@@ -4,6 +4,7 @@ import 'package:tapni_app/repository/loyalty_points_repo.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// P2 — business owner configures points redemption rules.
 class RedemptionSettingsScreen extends StatefulWidget {
@@ -122,9 +123,11 @@ class _RedemptionSettingsScreenState extends State<RedemptionSettingsScreen> {
       setState(() => _error = res.message ?? 'Save failed');
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Redemption settings saved')),
-    );
+    showAppToast(
+          context,
+          'Redemption settings saved',
+          kind: AppToastKind.success,
+        );
     await _load();
   }
 

@@ -6,6 +6,7 @@ import 'package:tapni_app/models/business_website/business_website_models.dart';
 import 'package:tapni_app/repository/business_website_repo.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class ContentItemFormScreen extends StatefulWidget {
   final String contentType;
@@ -80,9 +81,11 @@ class _ContentItemFormScreenState extends State<ContentItemFormScreen> {
   Future<void> _save() async {
     final name = _nameCtrl.text.trim();
     if (name.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Name is required')),
-      );
+      showAppToast(
+            context,
+            'Name is required',
+            kind: AppToastKind.warning,
+          );
       return;
     }
 
@@ -111,9 +114,11 @@ class _ContentItemFormScreenState extends State<ContentItemFormScreen> {
     setState(() => _saving = false);
 
     if (!res.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? 'Could not save')),
-      );
+      showAppToast(
+            context,
+            res.message ?? 'Could not save',
+            kind: AppToastKind.error,
+          );
       return;
     }
     Navigator.of(context).pop(true);

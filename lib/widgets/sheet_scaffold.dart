@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/utils/app_motion.dart';
-import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 /// Root wrapper for a modal sheet. Put this **outside** the sheet widget
 /// (in [showModalBottomSheet] builder) so [ScaffoldMessenger.of] from the
@@ -115,19 +115,21 @@ SnackBar sheetSnackBar(
   Color? backgroundColor,
   Duration duration = const Duration(seconds: 3),
   bool isError = false,
+  bool isSuccess = false,
+  bool isWarning = false,
+  AppToastKind? kind,
 }) {
-  return SnackBar(
-    content: Text(
-      message,
-      style: WaUi.body.copyWith(
-        color: Colors.white,
-        fontWeight: FontWeight.w600,
-      ),
-    ),
-    behavior: SnackBarBehavior.floating,
-    backgroundColor:
-        backgroundColor ?? (isError ? const Color(0xFFC62828) : Colors.black),
+  return appToastSnackBar(
+    message,
+    kind: kind ??
+        appToastKindFrom(
+          isError: isError,
+          isSuccess: isSuccess,
+          isWarning: isWarning,
+          color: backgroundColor,
+        ),
     duration: duration,
+    // Clear of bottom nav / sheet CTAs.
     margin: const EdgeInsets.fromLTRB(16, 0, 16, 88),
   );
 }
@@ -138,15 +140,22 @@ void showSheetSnackBar(
   Color? backgroundColor,
   Duration duration = const Duration(seconds: 3),
   bool isError = false,
+  bool isSuccess = false,
+  bool isWarning = false,
+  AppToastKind? kind,
 }) {
-  ScaffoldMessenger.of(context).clearSnackBars();
-  ScaffoldMessenger.of(context).showSnackBar(
-    sheetSnackBar(
-      message,
-      backgroundColor: backgroundColor,
-      duration: duration,
-      isError: isError,
-    ),
+  showAppToast(
+    context,
+    message,
+    kind: kind ??
+        appToastKindFrom(
+          isError: isError,
+          isSuccess: isSuccess,
+          isWarning: isWarning,
+          color: backgroundColor,
+        ),
+    duration: duration,
+    margin: const EdgeInsets.fromLTRB(16, 0, 16, 88),
   );
 }
 

@@ -25,6 +25,7 @@ import 'package:tapni_app/providers/leads_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/main_shell.dart';
 import 'package:tapni_app/utils/constant.dart';
+import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/utils/release_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
@@ -36,6 +37,7 @@ import 'package:tapni_app/widgets/explore_detail_shimmers.dart';
 import 'package:tapni_app/widgets/user_cards_sheet.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 Map<String, dynamic> _unwrapApiPayload(dynamic data) {
   if (data is Map<String, dynamic>) {
@@ -73,6 +75,8 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   bool _enrollmentStatusChecked = false;
   List<RewardEnrollment> _customerProgramEnrollments = [];
   bool _followBusy = false;
+  /// Local override after a successful exchange on this screen.
+  bool? _contactExchangedOverride;
   final ValueNotifier<double> _sheetExpandProgress = ValueNotifier<double>(0);
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
@@ -93,6 +97,48 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     _sheetExpandProgress.dispose();
     _sheetController.dispose();
     super.dispose();
+  }
+
+  String _exchangedPrefsKey() {
+    final me =
+        SharedPrefHelper.getString(SharedPrefHelper.utils.activeAccountId).trim();
+    final account = me.isNotEmpty ? me : 'default';
+    return '${SharedPrefHelper.utils.contactExchangedIdsPrefix}$account';
+  }
+
+  bool _locallyExchangedWith(UserProfile profile) {
+    final keys = <String>{
+      if ((profile.id ?? '').trim().isNotEmpty) profile.id!.trim(),
+      if ((profile.username ?? '').trim().isNotEmpty)
+        profile.username!.trim().toLowerCase(),
+      if ((widget.user ?? '').trim().isNotEmpty) widget.user!.trim(),
+      if ((widget.username ?? '').trim().isNotEmpty)
+        widget.username!.trim().toLowerCase(),
+    };
+    if (keys.isEmpty) return false;
+    final saved = SharedPrefHelper.getStringList(_exchangedPrefsKey());
+    return keys.any(saved.contains);
+  }
+
+  Future<void> _rememberExchanged(UserProfile? profile) async {
+    final keys = <String>{
+      if ((profile?.id ?? '').trim().isNotEmpty) profile!.id!.trim(),
+      if ((profile?.username ?? '').trim().isNotEmpty)
+        profile!.username!.trim().toLowerCase(),
+      if ((widget.user ?? '').trim().isNotEmpty) widget.user!.trim(),
+      if ((widget.username ?? '').trim().isNotEmpty)
+        widget.username!.trim().toLowerCase(),
+    };
+    if (keys.isEmpty) return;
+    final prefKey = _exchangedPrefsKey();
+    final saved = SharedPrefHelper.getStringList(prefKey).toSet()..addAll(keys);
+    await SharedPrefHelper.putStringList(prefKey, saved.toList());
+  }
+
+  bool _hasExchangedContact(UserProfile profile) {
+    return _contactExchangedOverride == true ||
+        profile.contactExchanged ||
+        _locallyExchangedWith(profile);
   }
 
   bool _isOwnProfile(UserProfile profile) {
@@ -235,6 +281,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         userJson['canView'] = data['canView'] ?? userJson['canView'] ?? true;
         userJson['followStatus'] =
             data['followStatus'] ?? userJson['followStatus'] ?? 'none';
+        userJson['contactExchanged'] = data['contactExchanged'] ??
+            userJson['contactExchanged'] ??
+            false;
         final profile = UserProfile.fromApiJson(userJson);
         UserCustomCard? scannedCard;
         if (widget.cardId != null && widget.cardId!.isNotEmpty) {
@@ -319,14 +368,14 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     );
   }
 
-  /// Matches Contacts (`WaChatsHeader` / search) horizontal inset.
+  /// Content inset (profile body). Title-bar back uses 16 — see chrome below.
   static const double _padH = 25.0;
 
   Widget _buildSimpleTopBar() {
     final m = AuthScale.of(context);
     final title = (widget.username ?? context.l10n.profile).trim();
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: _padH, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: SizedBox(
         height: m.appBarH,
         child: Stack(
@@ -431,15 +480,16 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             ),
           ),
         ),
-        _menuRow(
-          value: 'exchange',
-          label: context.l10n.exchangeContact,
-          icon: const Icon(
-            Icons.sync_alt_rounded,
-            size: 20,
-            color: Colors.black,
+        if (!_hasExchangedContact(profile))
+          _menuRow(
+            value: 'exchange',
+            label: context.l10n.exchangeContact,
+            icon: const Icon(
+              Icons.sync_alt_rounded,
+              size: 20,
+              color: Colors.black,
+            ),
           ),
-        ),
         _menuRow(
           value: 'business_card',
           label: 'Business Card',
@@ -510,16 +560,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
 
     Widget? trailing;
     if (showClose) {
-      trailing = IconButton(
-        onPressed: onClose,
-        padding: EdgeInsets.zero,
-        constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
-        icon: const Icon(
-          Icons.close_rounded,
-          size: 24,
-          color: Colors.black,
-        ),
-      );
+      trailing = CircleCloseButton(onTap: onClose);
     } else if (menuItems.isNotEmpty) {
       trailing = PopupMenuButton<String>(
         padding: EdgeInsets.zero,
@@ -549,9 +590,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
-        _padH,
+        16,
         topInset + 6,
-        _padH,
+        16,
         overlayOnCover ? 0 : 4,
       ),
       child: SizedBox(
@@ -598,15 +639,13 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
         _profile = profile.copyWith(followStatus: status ?? 'requested');
       }
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
+    showAppToast(
+          context,
           res.success
-              ? context.l10n.followRequestSent
-              : (res.message ?? context.l10n.couldNotSendFollowRequest),
-        ),
-      ),
-    );
+                  ? context.l10n.followRequestSent
+                  : (res.message ?? context.l10n.couldNotSendFollowRequest),
+          kind: res.success ? AppToastKind.success : AppToastKind.error,
+        );
   }
 
   Future<void> _cancelFollowRequest(UserProfile profile) async {
@@ -747,22 +786,38 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
   }
 
   Future<void> _exchangeContact() async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.l10n.exchangingContact)),
+    final profile = _profile;
+    if (profile != null && _hasExchangedContact(profile)) {
+      showAppToast(
+        context,
+        context.l10n.contactExchangedSuccessfully,
+        kind: AppToastKind.success,
+      );
+      return;
+    }
+
+    showAppToast(
+      context,
+      context.l10n.exchangingContact,
+      kind: AppToastKind.info,
     );
     final res = await AuthRepo().exchangeContact(
       username: widget.username,
       id: widget.user,
     );
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          res.success
-              ? context.l10n.contactExchangedSuccessfully
-              : (res.message ?? context.l10n.failedToExchangeContact),
-        ),
-      ),
+
+    if (res.success) {
+      setState(() => _contactExchangedOverride = true);
+      await _rememberExchanged(_profile);
+    }
+    if (!mounted) return;
+    showAppToast(
+      context,
+      res.success
+          ? context.l10n.contactExchangedSuccessfully
+          : (res.message ?? context.l10n.failedToExchangeContact),
+      kind: res.success ? AppToastKind.success : AppToastKind.error,
     );
   }
 
@@ -1114,10 +1169,16 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                                                     ],
                                                   )
                                                 : _ScannedActionPill(
-                                                    label: context.l10n
-                                                        .exchangeContact,
-                                                    filled: true,
-                                                    onTap: _exchangeContact,
+                                                    label: context
+                                                        .l10n.exchangeContact,
+                                                    filled:
+                                                        !_hasExchangedContact(
+                                                      profile,
+                                                    ),
+                                                    onTap: _hasExchangedContact(
+                                                            profile)
+                                                        ? null
+                                                        : _exchangeContact,
                                                   ),
                                           );
                                         }
@@ -1306,7 +1367,7 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
     );
 
     final t = expandProgress.clamp(0.0, 1.0);
-    final topScrim = 0.18 + t * 0.22;
+    final topScrim = 0.42 + t * 0.18;
 
     return ClipRect(
       child: Stack(
@@ -1323,6 +1384,10 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
             )
           else
             coverImage,
+          if (hasCoverUrl)
+            const IgnorePointer(
+              child: ColoredBox(color: Color(0x55FFFFFF)),
+            ),
           Positioned(
             top: 0,
             left: 0,
@@ -1474,6 +1539,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(radius),
+                      ),
+                      foregroundDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(radius),
                         border: Border.all(
                           color: const Color(0xFFE5E7EB),
                           width: 1,
@@ -1621,16 +1689,17 @@ class _ScannedActionPill extends StatelessWidget {
   const _ScannedActionPill({
     required this.label,
     required this.filled,
-    required this.onTap,
+    this.onTap,
   });
 
   final String label;
   final bool filled;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final h = AuthScale.of(context).buttonH;
+    final enabled = onTap != null;
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -1639,31 +1708,62 @@ class _ScannedActionPill extends StatelessWidget {
         child: Ink(
           height: h,
           decoration: BoxDecoration(
-            color: filled ? Colors.black : Colors.white,
+            color: !enabled
+                ? const Color(0xFFF3F4F6)
+                : filled
+                    ? Colors.black
+                    : Colors.white,
             borderRadius: BorderRadius.circular(h / 2),
-            border: filled
+            border: filled && enabled
                 ? null
-                : Border.all(color: Colors.black, width: 1.5),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: filled ? 0.18 : 0.10),
-                blurRadius: filled ? 10 : 8,
-                offset: const Offset(0, 3),
-              ),
-            ],
+                : Border.all(
+                    color: enabled ? Colors.black : const Color(0xFFE5E7EB),
+                    width: 1.5,
+                  ),
+            boxShadow: enabled
+                ? [
+                    BoxShadow(
+                      color: Colors.black
+                          .withValues(alpha: filled ? 0.18 : 0.10),
+                      blurRadius: filled ? 10 : 8,
+                      offset: const Offset(0, 3),
+                    ),
+                  ]
+                : null,
           ),
           child: Center(
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: WaUi.body.copyWith(
-                fontSize: AuthScale.of(context).s(AuthUi.buttonLabelSize),
-                fontWeight: FontWeight.w700,
-                color: filled ? Colors.white : Colors.black,
-                height: 1,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!enabled) ...[
+                  const Icon(
+                    Icons.check_rounded,
+                    size: 18,
+                    color: Color(0xFF111827),
+                  ),
+                  const SizedBox(width: 6),
+                ],
+                Flexible(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: WaUi.body.copyWith(
+                      fontSize:
+                          AuthScale.of(context).s(AuthUi.buttonLabelSize),
+                      fontWeight: FontWeight.w700,
+                      color: !enabled
+                          ? const Color(0xFF111827)
+                          : filled
+                              ? Colors.white
+                              : Colors.black,
+                      height: 1,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -1722,16 +1822,18 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
       setState(() => _isBusinessEnrolled = true);
       widget.onEnrollmentUpdated?.call(true, _enrollments);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.customerEnrolledSuccessfully)),
-        );
+        showAppToast(
+              context,
+              context.l10n.customerEnrolledSuccessfully,
+              kind: AppToastKind.success,
+            );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(res.message ?? context.l10n.failedToEnrollCustomer),
-        ),
-      );
+      showAppToast(
+            context,
+            res.message ?? context.l10n.failedToEnrollCustomer,
+            kind: AppToastKind.error,
+          );
     }
   }
 
@@ -1762,9 +1864,11 @@ class _RewardSheetContentState extends State<_RewardSheetContent> {
       });
       widget.onEnrollmentUpdated?.call(true, _enrollments);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(res.message ?? context.l10n.failedToAddProgram)),
-      );
+      showAppToast(
+            context,
+            res.message ?? context.l10n.failedToAddProgram,
+            kind: AppToastKind.error,
+          );
     }
   }
 

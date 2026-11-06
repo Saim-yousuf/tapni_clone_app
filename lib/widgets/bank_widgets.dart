@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/app_toast.dart';
 
 class BankDetailDialog extends StatelessWidget {
   final Map<String, dynamic> bankDetails;
@@ -34,9 +35,11 @@ class BankDetailDialog extends StatelessWidget {
   void _copy(BuildContext context, String value) {
     if (value.trim().isEmpty) return;
     Clipboard.setData(ClipboardData(text: value));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.l10n.copied)),
-    );
+    showAppToast(
+          context,
+          context.l10n.copied,
+          kind: AppToastKind.success,
+        );
   }
 
   void _copyAll(BuildContext context) {
@@ -50,9 +53,11 @@ class BankDetailDialog extends StatelessWidget {
     final text = buffer.toString().trim();
     if (text.isEmpty) return;
     Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.l10n.copied)),
-    );
+    showAppToast(
+          context,
+          context.l10n.copied,
+          kind: AppToastKind.success,
+        );
   }
 
   Widget _buildRow(BuildContext context, String label, String value) {
@@ -137,37 +142,10 @@ class BankDetailDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 10),
-              const SheetDragHandle(),
-              const SizedBox(height: 14),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SizedBox(
-                  height: 44,
-                  child: Row(
-                    children: [
-                      CircleBackButton(
-                        onTap: () => Navigator.pop(context),
-                      ),
-                      Expanded(
-                        child: Text(
-                          sheetTitle,
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: WaUi.toolsTitleOf(
-                            size: 18,
-                            weight: FontWeight.w700,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 40),
-                    ],
-                  ),
-                ),
+              SheetHeader(
+                title: sheetTitle,
+                onBack: () => Navigator.pop(context),
               ),
-              const SizedBox(height: 8),
               _divider,
               _buildRow(
                 context,
