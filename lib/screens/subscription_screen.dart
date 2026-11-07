@@ -8,6 +8,7 @@ import 'package:tapni_app/providers/subscription_provider.dart';
 import 'package:tapni_app/repository/explore_repo.dart';
 import 'package:tapni_app/screens/quick_add_links_screen.dart';
 import 'package:tapni_app/screens/subscription_purchased_screen.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/business_features.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -217,6 +218,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         ? profile.businessName!.trim()
         : profile.name;
 
+    final resolvedType = resolvePersistedBusinessType(
+      businessCategory: _selectedCategory,
+    );
     final response = await profileProvider.updateProfile(
       name: profile.name,
       designation: profile.designation,
@@ -229,7 +233,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       businessName: displayName,
       businessCategory: _selectedCategory,
       businessConcern: _selectedConcernId,
-      businessType: inferBusinessTypeFromCategory(_selectedCategory),
+      businessType: resolvedType,
       links: profile.socialLinks,
       context: context,
     );
@@ -392,28 +396,58 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                             ),
                           ],
                         )
-                      : _step == 0
-                          ? _buildConcernStep()
-                          : _step == 1
-                              ? _buildCategoryStep()
-                              : Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    BarqodyTitleBar(
-                                      title: _titleBarLabel,
-                                      onBack: () => _onBack(false),
-                                    ),
-                                    Expanded(
-                                      child: _step == 2
-                                          ? _buildPlanSelectionStep()
-                                          : _buildPaymentStep(provider),
-                                    ),
-                                  ],
-                                ),
+                      : AppContentSwitcher(
+                          child: KeyedSubtree(
+                            key: ValueKey<int>(_step),
+                            child: _step == 0
+                                ? _buildConcernStep()
+                                : _step == 1
+                                    ? _buildCategoryStep()
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          BarqodyTitleBar(
+                                            title: _titleBarLabel,
+                                            onBack: () => _onBack(false),
+                                          ),
+                                          Expanded(
+                                            child: _step == 2
+                                                ? _buildPlanSelectionStep()
+                                                : _buildPaymentStep(provider),
+                                          ),
+                                        ],
+                                      ),
+                          ),
+                        ),
         ),
       ),
     );
+  }
+
+  String _categoryEmoji(String name) {
+    switch (name.trim()) {
+      case 'Technology':
+        return '💻';
+      case 'Retail':
+        return '🛍️';
+      case 'Health':
+        return '🩺';
+      case 'Education':
+        return '📚';
+      case 'Finance':
+        return '💰';
+      case 'Real Estate':
+        return '🏠';
+      case 'Food & Beverage':
+        return '🍽️';
+      case 'Entertainment':
+        return '🎬';
+      case 'Other':
+        return '✨';
+      default:
+        return '🏷️';
+    }
   }
 
   Widget _buildConcernStep() {
@@ -425,12 +459,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       selectedId: _selectedConcernId,
       stepIndex: 0,
       totalSteps: 2,
-      childAspectRatio: 1.28,
-      iconBoxSize: 64,
-      emojiSize: 34,
-      iconSize: 32,
-      cardPadding: const EdgeInsets.fromLTRB(10, 12, 10, 10),
-      labelFontSize: 13,
       onBack: () => _onBack(false),
       onSelect: (id) => setState(() => _selectedConcernId = id),
       onContinue: _selectedConcernId == null
@@ -445,6 +473,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           (c) => BusinessOptionItem(
             id: c.name,
             label: c.label.isNotEmpty ? c.label : c.name,
+            emoji: _categoryEmoji(c.name),
             icon: _categoryIcon(c.icon),
             iconUrl: c.iconUrl.isNotEmpty ? c.iconUrl : null,
           ),

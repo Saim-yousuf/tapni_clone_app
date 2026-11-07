@@ -137,6 +137,10 @@ Future<bool> openPublishedWebsiteForCatalog(
         ? catalogLink.catalogType
         : 'menu',
   );
+  if (!ReleaseFeatures.canOpenPublicWebsiteType(websiteType) &&
+      !ReleaseFeatures.canUseShopping) {
+    return false;
+  }
 
   Future<bool> openUrl(
     String url,
@@ -298,8 +302,14 @@ class Launcher {
         return;
       }
       final websiteType = websiteTypeFromCatalogType(
-        model.catalogType?.isNotEmpty == true ? model.catalogType : 'menu',
+        model.catalogType?.isNotEmpty == true
+            ? model.catalogType
+            : (catalogTypeFromWebsiteLink(model) ?? 'menu'),
       );
+      // Public open only for enabled website types (menu-first rollout).
+      if (!ReleaseFeatures.canOpenPublicWebsiteType(websiteType)) {
+        return;
+      }
       var url = model.fullUrl;
       var previewMode = false;
 

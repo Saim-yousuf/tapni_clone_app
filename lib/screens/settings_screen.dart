@@ -35,6 +35,7 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/feedback_dialog.dart';
 import 'package:tapni_app/widgets/logout_confirm_dialog.dart';
 import 'package:tapni_app/widgets/notification_icon_button.dart';
+import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/wa_tools_widgets.dart';
 import 'package:tapni_app/widgets/app_toast.dart';
 
@@ -190,21 +191,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     const SizedBox(height: 8),
                     if (ReleaseFeatures.canShowBusinessSuite)
-                      _BusinessSuiteCard(
-                        showBadge: profile.isPro &&
-                            leadsProvider.notifications.any(
-                              (n) =>
-                                  n['type'] == 'catalog_order' &&
-                                  n['isRead'] == false,
+                      profile.isPro
+                          ? _BusinessSuiteCard(
+                              showBadge: leadsProvider.notifications.any(
+                                (n) =>
+                                    n['type'] == 'catalog_order' &&
+                                    n['isRead'] == false,
+                              ),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  AppPageRoute(
+                                    builder: (_) =>
+                                        const BusinessSuiteScreen(),
+                                  ),
+                                );
+                              },
+                            )
+                          : WaForYouCard(
+                              title: context.l10n.tryBusinessPro2,
+                              description:
+                                  context.l10n.unlockBusinessProDescription,
+                              buttonLabel: context.l10n.tryBusinessPro,
+                              onTap: () => SubcriptionSheet.show(context),
                             ),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            AppPageRoute(
-                              builder: (_) => const BusinessSuiteScreen(),
-                            ),
-                          );
-                        },
-                      ),
                     WaSectionHeader(context.l10n.yourProfile),
                     WaToolsListTile(
                       icon: Icons.person_outline,
@@ -319,15 +328,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                     ),
           
-                    if (ReleaseFeatures.canUseShopping) ...[
+                    // Orders stay visible whenever menu/public ordering is live,
+                    // even if the broader shopping release gate is still off.
+                    if (ReleaseFeatures.canUseShopping ||
+                        ReleaseFeatures.canOpenPublicWebsite) ...[
                       WaSectionHeader(context.l10n.shoppingRewards),
-                      WaToolsListTile(
-                        icon: Icons.menu_book_outlined,
-                        title: 'Customer guide',
-                        subtitle:
-                            'How to browse, order, track, and claim stamp rewards',
-                        onTap: () => showCustomerAppGuide(context),
-                      ),
+                      if (ReleaseFeatures.canUseShopping)
+                        WaToolsListTile(
+                          icon: Icons.menu_book_outlined,
+                          title: 'Customer guide',
+                          subtitle:
+                              'How to browse, order, track, and claim stamp rewards',
+                          onTap: () => showCustomerAppGuide(context),
+                        ),
                       WaToolsListTile(
                         icon: Icons.receipt_long_outlined,
                         title: 'My Orders & Bookings',
@@ -337,36 +350,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           Navigator.of(context).push(
                             AppPageRoute(
                               builder: (_) =>
-                                  OrdersListScreen(isBusinessView: false),
+                                  const OrdersListScreen(isBusinessView: false),
                             ),
                           );
                         },
                       ),
-                      WaToolsListTile(
-                        icon: Icons.payment_outlined,
-                        title: 'Payments',
-                        subtitle: 'Saved cards, payment history, and refunds',
-                        onTap: () {
-                          Navigator.of(context).push(
-                            AppPageRoute(
-                              builder: (_) =>
-                                  const CustomerPaymentCenterScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                      WaToolsListTile(
-                        icon: Icons.card_giftcard_outlined,
-                        title: context.l10n.myRewardCards,
-                        subtitle: context.l10n.myRewardCardsSubtitle,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            AppPageRoute(
-                              builder: (_) => CustomerLoyaltyHomeScreen(),
-                            ),
-                          );
-                        },
-                      ),
+                      if (ReleaseFeatures.canUseShopping) ...[
+                        WaToolsListTile(
+                          icon: Icons.payment_outlined,
+                          title: 'Payments',
+                          subtitle: 'Saved cards, payment history, and refunds',
+                          onTap: () {
+                            Navigator.of(context).push(
+                              AppPageRoute(
+                                builder: (_) =>
+                                    const CustomerPaymentCenterScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                        WaToolsListTile(
+                          icon: Icons.card_giftcard_outlined,
+                          title: context.l10n.myRewardCards,
+                          subtitle: context.l10n.myRewardCardsSubtitle,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              AppPageRoute(
+                                builder: (_) => CustomerLoyaltyHomeScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ],
 
                     if (ReleaseFeatures.canUseWorkplace) ...[

@@ -1291,7 +1291,7 @@ class _LockedAnalyticsPreview extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: Container(
             width: double.infinity,
-            margin: EdgeInsets.fromLTRB(16, 0, 16, bottomPad > 24 ? 24 : 16),
+            margin: EdgeInsets.fromLTRB(16, 0, 16, bottomPad),
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
             decoration: BoxDecoration(
               color: Colors.white,

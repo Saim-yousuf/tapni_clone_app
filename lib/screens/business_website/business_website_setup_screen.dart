@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/business_website/business_website_models.dart';
 import 'package:tapni_app/models/link_template.dart';
@@ -7,11 +8,15 @@ import 'package:tapni_app/repository/business_website_repo.dart';
 import 'package:tapni_app/screens/business_website/business_presence_ui.dart';
 import 'package:tapni_app/screens/business_website/business_website_settings_screen.dart';
 import 'package:tapni_app/screens/business_website/business_website_webview_screen.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/business_features.dart';
 import 'package:tapni_app/utils/catalog_helper.dart' show catalogTypesMatch;
+import 'package:tapni_app/utils/release_features.dart';
+import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/app_toast.dart';
+import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 /// Maps Links catalogType → websiteType.
 String websiteTypeFromCatalogType(String? catalogType) {
@@ -79,11 +84,18 @@ class _BusinessWebsiteSetupScreenState
   bool _loading = true;
   bool _creating = false;
   String? _error;
+  /// True when category was auto-picked (known business type / single option).
+  bool _categoryStepSkipped = false;
+  /// True when niche/subcategory was auto-picked (only one option).
+  bool _subcategoryStepSkipped = false;
 
   BusinessWebsiteCatalog? _catalog;
   WebsiteCategory? _category;
   WebsiteSubcategory? _subcategory;
   WebsiteTemplateSummary? _template;
+
+  /// Blocks row select after closing sample (ghost tap on the list item).
+  bool _blockTemplateSelect = false;
 
   String get _websiteType => widget.websiteType;
 
@@ -94,6 +106,12 @@ class _BusinessWebsiteSetupScreenState
   @override
   void initState() {
     super.initState();
+    if (!ReleaseFeatures.canOpenPublicWebsiteType(_websiteType)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) Navigator.of(context).maybePop();
+      });
+      return;
+    }
     _loadCatalog();
   }
 
@@ -128,13 +146,21 @@ class _BusinessWebsiteSetupScreenState
           .whereType<String>()
           .where((id) => id.isNotEmpty)
           .toSet();
-      // Hide categories / subcategories that have no template for this type.
-      var subs = parsed.subcategories
-          .where((s) => typedSubIds.contains(s.id))
-          .toList();
+      // Categories that actually have templates for this website type.
       var cats = parsed.categories
           .where((c) => typedCatIds.contains(c.id))
           .toList();
+
+      // Niches: menu keeps every subcategory under those categories so the
+      // niche step still appears (Cafe / Restaurant / …) even if only one
+      // niche currently has a template. Other types stay template-gated.
+      var subs = _websiteType == 'menu'
+          ? parsed.subcategories
+              .where((s) => cats.any((c) => c.id == s.categoryId))
+              .toList()
+          : parsed.subcategories
+              .where((s) => typedSubIds.contains(s.id))
+              .toList();
 
       // Products websiteType serves both Products and Stay packs.
       // When businessType is known, keep only the matching industry category.
@@ -152,14 +178,13 @@ class _BusinessWebsiteSetupScreenState
         if (matched.isNotEmpty) {
           final matchedIds = matched.map((c) => c.id).toSet();
           cats = matched;
-          subs = subs.where((s) => matchedIds.contains(s.categoryId)).toList();
-          final subIds = subs.map((s) => s.id).toSet();
+          subs = parsed.subcategories
+              .where((s) => matchedIds.contains(s.categoryId))
+              .toList();
           filtered = BusinessWebsiteCatalog(
             categories: cats,
             subcategories: subs,
-            templates: typed
-                .where((t) => subIds.contains(t.subcategoryId))
-                .toList(),
+            templates: typed,
           );
         }
       }
@@ -170,62 +195,105 @@ class _BusinessWebsiteSetupScreenState
         templates: typed,
       );
     }
+
+    final catalog = filtered ?? parsed;
+    // Resolve skips before first paint so progress never flashes 3 steps.
+    final defaults = _resolveKnownBusinessTypeDefaults(catalog);
+    final noTemplates = (catalog?.templates.isEmpty ?? true);
+    final noCategories = (catalog?.categories.isEmpty ?? true);
+
     setState(() {
-      _catalog = filtered ?? parsed;
+      _catalog = catalog;
+      if (defaults != null) {
+        _category = defaults.category;
+        _subcategory = defaults.subcategory;
+        _categoryStepSkipped = true;
+        _subcategoryStepSkipped = defaults.skipSubcategory;
+        _step = defaults.skipSubcategory ? 2 : 1;
+      } else if (noCategories || noTemplates) {
+        // Empty catalog must not strand on a blank category picker.
+        _category = null;
+        _subcategory = null;
+        _categoryStepSkipped = true;
+        _subcategoryStepSkipped = true;
+        _step = 2;
+        _error = noTemplates
+            ? 'No $_typeLabel templates are available yet. Add templates in admin, then try again.'
+            : null;
+      } else {
+        _category = null;
+        _subcategory = null;
+        _categoryStepSkipped = false;
+        _subcategoryStepSkipped = false;
+        _step = 0;
+      }
+      _template = null;
       _loading = false;
     });
-    _applyKnownBusinessTypeDefaults();
   }
 
-  /// Skip Retail/Hospitality picker when businessType already resolves it.
-  void _applyKnownBusinessTypeDefaults() {
-    final catalog = _catalog;
-    if (catalog == null) return;
-    if (_websiteType != 'products') return;
-    if (_resolvedBusinessType != 'products' &&
-        _resolvedBusinessType != 'stay') {
-      return;
-    }
+  /// Auto-pick category / niche when unambiguous. Null = show step 0.
+  _SetupDefaults? _resolveKnownBusinessTypeDefaults(
+    BusinessWebsiteCatalog? catalog,
+  ) {
+    if (catalog == null) return null;
 
     final cats = catalog.categories;
-    if (cats.isEmpty) return;
+    if (cats.isEmpty) return null;
 
-    WebsiteCategory? category = _category;
-    if (category == null) {
-      if (cats.length == 1) {
-        category = cats.first;
-      } else {
-        final matched = cats
-            .where(
-              (c) => websiteCategoryMatchesBusinessType(
-                c.name,
-                _resolvedBusinessType,
-              ),
-            )
-            .toList();
-        if (matched.length == 1) category = matched.first;
-      }
+    WebsiteCategory? category;
+    if (cats.length == 1) {
+      category = cats.first;
+    } else if (_resolvedBusinessType.isNotEmpty) {
+      final matched = cats
+          .where(
+            (c) => websiteCategoryMatchesBusinessType(
+              c.name,
+              _resolvedBusinessType,
+            ),
+          )
+          .toList();
+      if (matched.length == 1) category = matched.first;
     }
-    if (category == null) return;
+    if (category == null) return null;
 
-    final subs = catalog.subcategories
-        .where((s) => s.categoryId == category!.id)
-        .toList();
-    WebsiteSubcategory? subcategory = _subcategory;
-    if (subcategory == null && subs.length == 1) {
-      subcategory = subs.first;
-    }
+    final shouldSkipCategory = cats.length == 1 ||
+        (_resolvedBusinessType.isNotEmpty &&
+            websiteCategoryMatchesBusinessType(
+              category.name,
+              _resolvedBusinessType,
+            ));
+    if (!shouldSkipCategory) return null;
 
-    setState(() {
-      _category = category;
-      _subcategory = subcategory;
-      // Skip category (and subcategory when unambiguous) → template style.
-      if (subcategory != null) {
-        _step = 2;
-      } else {
-        _step = 1;
-      }
-    });
+    // Always show niche step — never auto-skip to style when category is known.
+    // (One template under Restaurant used to hide Cafe / Ice Cream entirely.)
+    return _SetupDefaults(
+      category: category,
+      subcategory: null,
+      skipSubcategory: false,
+    );
+  }
+
+  /// Internal steps that are still shown to the user.
+  List<int> get _visibleSteps {
+    final steps = <int>[];
+    if (!_categoryStepSkipped) steps.add(0);
+    if (!_subcategoryStepSkipped) steps.add(1);
+    steps.add(2); // style is always shown
+    return steps;
+  }
+
+  int get _progressTotal => _visibleSteps.length;
+
+  int get _progressStep {
+    final idx = _visibleSteps.indexOf(_step);
+    return idx < 0 ? 0 : idx;
+  }
+
+  int get _minStep {
+    if (_subcategoryStepSkipped) return 2;
+    if (_categoryStepSkipped) return 1;
+    return 0;
   }
 
   List<WebsiteSubcategory> get _subsForCategory {
@@ -273,39 +341,38 @@ class _BusinessWebsiteSetupScreenState
     }
   }
 
-  String get _ctaLabel {
-    if (_step == 2) return 'Use Template';
-    return 'Continue';
-  }
-
-  bool get _canContinue {
-    switch (_step) {
-      case 0:
-        return _category != null;
-      case 1:
-        return _subcategory != null;
-      case 2:
-        return _template != null;
-      default:
-        return false;
-    }
-  }
-
-  Future<void> _onContinue() async {
-    if (_step < 2) {
-      setState(() => _step += 1);
+  Future<void> _goNextStep() async {
+    if (_creating) return;
+    final visible = _visibleSteps;
+    final idx = visible.indexOf(_step);
+    final nextIdx = idx < 0 ? 0 : idx + 1;
+    if (nextIdx < visible.length) {
+      // Brief beat so select animation is visible before the step swap.
+      await Future<void>.delayed(const Duration(milliseconds: 180));
+      if (!mounted || _creating) return;
+      setState(() => _step = visible[nextIdx]);
       return;
     }
     await _create();
   }
 
+  Future<void> _pickAndAdvance(VoidCallback applySelection) async {
+    if (_creating || _blockTemplateSelect) return;
+    HapticFeedback.selectionClick();
+    setState(applySelection);
+    await _goNextStep();
+  }
+
   Future<void> _previewTemplateSample(WebsiteTemplateSummary template) async {
+    // View sample must never select / advance the template step.
+    _blockTemplateSelect = true;
     final res = await _repo.previewTemplateSample(
       templateId: template.id,
       asJson: true,
     );
     if (!mounted) return;
     if (!res.success) {
+      _blockTemplateSelect = false;
       showAppToast(
             context,
             res.message ?? 'Could not open sample',
@@ -315,6 +382,7 @@ class _BusinessWebsiteSetupScreenState
     }
     final preview = _repo.parsePreview(res.data);
     if (preview == null || preview.html.isEmpty) {
+      _blockTemplateSelect = false;
       showAppToast(
             context,
             'Sample preview was empty',
@@ -332,6 +400,10 @@ class _BusinessWebsiteSetupScreenState
         ),
       ),
     );
+    if (!mounted) return;
+    // Absorb residual tap that would otherwise hit the row InkWell.
+    await Future<void>.delayed(const Duration(milliseconds: 400));
+    if (mounted) _blockTemplateSelect = false;
   }
 
   Future<void> _create() async {
@@ -406,21 +478,16 @@ class _BusinessWebsiteSetupScreenState
     );
   }
 
-  bool get _businessTypeLocksCategory =>
-      _websiteType == 'products' &&
-      (_resolvedBusinessType == 'products' ||
-          _resolvedBusinessType == 'stay');
-
   void _onBack() {
-    if (_step > 0) {
-      // Don't re-expose Retail/Hospitality when businessType already decided it.
-      final minStep = _businessTypeLocksCategory && _category != null ? 1 : 0;
-      final next = _step - 1;
-      if (next < minStep) {
+    if (_step > _minStep) {
+      // Jump back only across visible steps (skip auto-filled ones).
+      final visible = _visibleSteps;
+      final idx = visible.indexOf(_step);
+      if (idx <= 0) {
         Navigator.of(context).pop();
         return;
       }
-      setState(() => _step = next);
+      setState(() => _step = visible[idx - 1]);
       return;
     }
     Navigator.of(context).pop();
@@ -431,20 +498,22 @@ class _BusinessWebsiteSetupScreenState
     return BwPresenceScaffold(
       title: _title,
       onBack: _onBack,
-      belowTitle: BwProgressBar(step: _step),
-      bottom: BwBottomCta(
-        label: _ctaLabel,
-        loading: _creating,
-        onPressed: _canContinue && !_creating ? _onContinue : null,
-      ),
-      body: _loading
+      belowTitle: (_loading || _creating)
+          ? null
+          : BwProgressBar(
+              step: _progressStep,
+              total: _progressTotal,
+            ),
+      body: _loading || _creating
           ? const Center(child: CircularProgressIndicator(color: Colors.black))
           : _error != null
               ? _ErrorBody(message: _error!, onRetry: _loadCatalog)
-              : AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 220),
+              : AppContentSwitcher(
+                  duration: AppMotion.content,
                   child: KeyedSubtree(
-                    key: ValueKey(_step),
+                    key: ValueKey<String>(
+                      'setup-step-$_step-$_progressTotal',
+                    ),
                     child: _buildStep(),
                   ),
                 ),
@@ -469,48 +538,62 @@ class _BusinessWebsiteSetupScreenState
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       children: [
-        Text(
-          'Choose a category for your $_typeLabel',
-          style: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w800,
-            color: Colors.black,
-            height: 1.15,
-            letterSpacing: -0.4,
+        AppAppear(
+          index: 0,
+          child: Text(
+            'Choose a category for your $_typeLabel',
+            style: WaUi.toolsTitleOf(
+              size: 26,
+              weight: FontWeight.w700,
+              color: AuthUi.textPrimary,
+              height: 1.2,
+            ),
           ),
         ),
         const SizedBox(height: 8),
-        const Text(
-          'Your profile name, bio, photo, and cover are used on the site.',
-          style: TextStyle(fontSize: 15, color: AuthUi.textSecondary, height: 1.4),
-        ),
-        const SizedBox(height: 28),
-        const BwFieldLabel('Category'),
-        const SizedBox(height: 12),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: categories.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 1.15,
+        AppAppear(
+          index: 1,
+          child: Text(
+            'Your profile name, bio, photo, and cover are used on the site.',
+            style: WaUi.body.copyWith(
+              fontSize: 14,
+              color: AuthUi.textSecondary,
+              height: 1.4,
+            ),
           ),
-          itemBuilder: (context, index) {
-            final cat = categories[index];
-            return BwSelectCard(
-              label: cat.name,
-              icon: BwUi.categoryIcon(cat.name),
-              selected: _category?.id == cat.id,
-              onTap: () => setState(() {
-                _category = cat;
-                _subcategory = null;
-                _template = null;
-              }),
-            );
-          },
         ),
+        const SizedBox(height: 16),
+        if (categories.isEmpty)
+          AppAppear(
+            index: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Text(
+                'No categories with $_typeLabel templates yet.',
+                textAlign: TextAlign.center,
+                style: WaUi.body.copyWith(color: AuthUi.textSecondary),
+              ),
+            ),
+          )
+        else
+          for (var i = 0; i < categories.length; i++) ...[
+            if (i > 0)
+              const Divider(height: 1, thickness: 1, color: Color(0xFFE8E8E8)),
+            AppAppear(
+              index: i + 2,
+              maxStagger: 12,
+              child: _OptionRow(
+                label: categories[i].name,
+                icon: BwUi.categoryIcon(categories[i].name),
+                selected: _category?.id == categories[i].id,
+                onTap: () => _pickAndAdvance(() {
+                  _category = categories[i];
+                  _subcategory = null;
+                  _template = null;
+                }),
+              ),
+            ),
+          ],
       ],
     );
   }
@@ -521,57 +604,64 @@ class _BusinessWebsiteSetupScreenState
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       children: [
-        Text(
-          known
-              ? 'Pick a niche for your templates'
-              : 'What type of business is this?',
-          style: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w800,
-            color: Colors.black,
-            height: 1.15,
-            letterSpacing: -0.4,
+        AppAppear(
+          index: 0,
+          child: Text(
+            known
+                ? 'Pick a niche for your templates'
+                : 'What type of business is this?',
+            style: WaUi.toolsTitleOf(
+              size: 26,
+              weight: FontWeight.w700,
+              color: AuthUi.textPrimary,
+              height: 1.2,
+            ),
           ),
         ),
-        const SizedBox(height: 8),
-        Text(
-          _category?.name ?? '',
-          style: const TextStyle(fontSize: 15, color: AuthUi.textSecondary),
-        ),
-        const SizedBox(height: 24),
-        if (subs.isEmpty)
-          const Padding(
-            padding: EdgeInsets.only(top: 40),
+        if ((_category?.name ?? '').isNotEmpty) ...[
+          const SizedBox(height: 8),
+          AppAppear(
+            index: 1,
             child: Text(
-              'No business types for this category yet.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AuthUi.textSecondary),
+              _category!.name,
+              style: WaUi.body.copyWith(
+                fontSize: 14,
+                color: AuthUi.textSecondary,
+              ),
+            ),
+          ),
+        ],
+        const SizedBox(height: 16),
+        if (subs.isEmpty)
+          AppAppear(
+            index: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Text(
+                'No business types for this category yet.',
+                textAlign: TextAlign.center,
+                style: WaUi.body.copyWith(color: AuthUi.textSecondary),
+              ),
             ),
           )
         else
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: subs.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.15,
-            ),
-            itemBuilder: (context, index) {
-              final sub = subs[index];
-              return BwSelectCard(
-                label: sub.name,
-                icon: BwUi.categoryIcon(sub.name),
-                selected: _subcategory?.id == sub.id,
-                onTap: () => setState(() {
-                  _subcategory = sub;
+          for (var i = 0; i < subs.length; i++) ...[
+            if (i > 0)
+              const Divider(height: 1, thickness: 1, color: Color(0xFFE8E8E8)),
+            AppAppear(
+              index: i + 2,
+              maxStagger: 12,
+              child: _OptionRow(
+                label: subs[i].name,
+                icon: BwUi.categoryIcon(subs[i].name),
+                selected: _subcategory?.id == subs[i].id,
+                onTap: () => _pickAndAdvance(() {
+                  _subcategory = subs[i];
                   _template = null;
                 }),
-              );
-            },
-          ),
+              ),
+            ),
+          ],
       ],
     );
   }
@@ -581,168 +671,294 @@ class _BusinessWebsiteSetupScreenState
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       children: [
-        const Text(
-          'Choose Style',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w800,
-            color: Colors.black,
-            height: 1.15,
-            letterSpacing: -0.4,
+        AppAppear(
+          index: 0,
+          child: Text(
+            'Choose Style',
+            style: WaUi.toolsTitleOf(
+              size: 26,
+              weight: FontWeight.w700,
+              color: AuthUi.textPrimary,
+              height: 1.2,
+            ),
           ),
         ),
         const SizedBox(height: 8),
-        const Text(
-          'Pick a template. You can customize content and colors later.',
-          style: TextStyle(fontSize: 15, color: AuthUi.textSecondary, height: 1.4),
+        AppAppear(
+          index: 1,
+          child: Text(
+            'Pick a template. You can customize content and colors later.',
+            style: WaUi.body.copyWith(
+              fontSize: 14,
+              color: AuthUi.textSecondary,
+              height: 1.4,
+            ),
+          ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 8),
         if (templates.isEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 40),
-            child: Text(
-              _subcategory == null
-                  ? 'Select a business type to see templates.'
-                  : 'No templates for ${_subcategory!.name} yet.',
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: AuthUi.textSecondary),
+          AppAppear(
+            index: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Text(
+                (_catalog?.templates.isEmpty ?? true)
+                    ? 'No $_typeLabel templates are available yet.'
+                    : _subcategory == null
+                        ? 'Select a business type to see templates.'
+                        : 'No templates for ${_subcategory!.name} yet.',
+                textAlign: TextAlign.center,
+                style: WaUi.body.copyWith(color: AuthUi.textSecondary),
+              ),
             ),
           )
         else
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: templates.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 14,
-              crossAxisSpacing: 14,
-              childAspectRatio: 0.62,
+          for (var i = 0; i < templates.length; i++) ...[
+            if (i > 0)
+              const Divider(
+                height: 1,
+                thickness: 1,
+                color: Color(0xFFE8E8E8),
+              ),
+            AppAppear(
+              index: i + 2,
+              maxStagger: 10,
+              child: _TemplateRow(
+                template: templates[i],
+                selected: _template?.id == templates[i].id,
+                onSelect: () => _pickAndAdvance(() {
+                  _template = templates[i];
+                }),
+                onSample: () => _previewTemplateSample(templates[i]),
+              ),
             ),
-            itemBuilder: (context, index) {
-              final t = templates[index];
-              final selected = _template?.id == t.id;
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 160),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: selected ? Colors.black : BwUi.cardBorder,
-                    width: selected ? 2.5 : 1,
-                  ),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => setState(() => _template = t),
-                        child: t.thumbnail.isNotEmpty
-                            ? Image.network(
-                                t.thumbnail,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => _thumbFallback(),
-                              )
-                            : _thumbFallback(),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () => setState(() => _template = t),
-                            child: Text(
-                              t.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: OutlinedButton(
-                                  onPressed: () => _previewTemplateSample(t),
-                                  style: OutlinedButton.styleFrom(
-                                    foregroundColor: Colors.black,
-                                    side: const BorderSide(
-                                      color: BwUi.cardBorder,
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8,
-                                    ),
-                                    minimumSize: Size.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(999),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Sample',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: FilledButton(
-                                  onPressed: () =>
-                                      setState(() => _template = t),
-                                  style: FilledButton.styleFrom(
-                                    backgroundColor: selected
-                                        ? Colors.black
-                                        : const Color(0xFF111111),
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8,
-                                    ),
-                                    minimumSize: Size.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(999),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    selected ? 'Selected' : 'Select',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+          ],
       ],
     );
   }
+}
 
-  Widget _thumbFallback() {
-    return Container(
-      color: BwUi.iconTileBg,
-      child: const Center(
-        child: Icon(Icons.web_asset, size: 36, color: Colors.black54),
+class _SetupDefaults {
+  final WebsiteCategory category;
+  final WebsiteSubcategory? subcategory;
+  final bool skipSubcategory;
+
+  const _SetupDefaults({
+    required this.category,
+    required this.subcategory,
+    required this.skipSubcategory,
+  });
+}
+
+class _OptionRow extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _OptionRow({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: AppMotion.content,
+        curve: AppMotion.easeOut,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Row(
+          children: [
+            AnimatedContainer(
+              duration: AppMotion.content,
+              curve: AppMotion.easeOut,
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: selected ? Colors.black : BarqodyChrome.searchBg,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                size: 20,
+                color: selected ? Colors.white : AuthUi.textPrimary,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                label,
+                style: WaUi.body.copyWith(
+                  fontSize: 16,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                  color: AuthUi.textPrimary,
+                ),
+              ),
+            ),
+            AnimatedSwitcher(
+              duration: AppMotion.content,
+              switchInCurve: AppMotion.easeOut,
+              switchOutCurve: AppMotion.easeIn,
+              transitionBuilder: (child, anim) => ScaleTransition(
+                scale: anim,
+                child: FadeTransition(opacity: anim, child: child),
+              ),
+              child: Icon(
+                selected
+                    ? Icons.check_circle_rounded
+                    : Icons.chevron_right_rounded,
+                key: ValueKey(selected),
+                size: 24,
+                color: selected ? Colors.black : BarqodyChrome.secondaryText,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TemplateRow extends StatelessWidget {
+  final WebsiteTemplateSummary template;
+  final bool selected;
+  final VoidCallback onSelect;
+  final VoidCallback onSample;
+
+  const _TemplateRow({
+    required this.template,
+    required this.selected,
+    required this.onSelect,
+    required this.onSample,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final thumb = AnimatedScale(
+      scale: selected ? 1.05 : 1,
+      duration: AppMotion.content,
+      curve: AppMotion.easeOut,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: SizedBox(
+          width: 56,
+          height: 72,
+          child: template.thumbnail.isNotEmpty
+              ? Image.network(
+                  template.thumbnail,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => const ColoredBox(
+                    color: Color(0xFFF2F2F7),
+                    child: Icon(Icons.web_asset, color: Colors.black54),
+                  ),
+                )
+              : const ColoredBox(
+                  color: Color(0xFFF2F2F7),
+                  child: Icon(Icons.web_asset, color: Colors.black54),
+                ),
+        ),
+      ),
+    );
+
+    final check = AnimatedSwitcher(
+      duration: AppMotion.content,
+      switchInCurve: AppMotion.easeOut,
+      switchOutCurve: AppMotion.easeIn,
+      transitionBuilder: (child, anim) => ScaleTransition(
+        scale: anim,
+        child: FadeTransition(opacity: anim, child: child),
+      ),
+      child: Icon(
+        selected ? Icons.check_circle_rounded : Icons.circle_outlined,
+        key: ValueKey(selected),
+        size: 24,
+        color: selected ? Colors.black : BarqodyChrome.secondaryText,
+      ),
+    );
+
+    return AnimatedContainer(
+      duration: AppMotion.content,
+      curve: AppMotion.easeOut,
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
+      decoration: BoxDecoration(
+        color: selected
+            ? Colors.black.withValues(alpha: 0.04)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onSelect,
+              borderRadius: BorderRadius.circular(12),
+              child: thumb,
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: onSelect,
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              template.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: WaUi.body.copyWith(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AuthUi.textPrimary,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          check,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                TextButton(
+                  onPressed: onSample,
+                  style: TextButton.styleFrom(
+                    foregroundColor: AuthUi.textSecondary,
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 32),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    alignment: Alignment.centerLeft,
+                  ),
+                  child: Text(
+                    'View sample',
+                    style: WaUi.body.copyWith(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AuthUi.textSecondary,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AuthUi.textSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -195,7 +195,8 @@ class CatalogCheckout {
             customerUsername: customerUsername,
             customerName: customerName,
             guestPhone: guestPhone,
-            businessUsername: businessUsername ?? businessName,
+            businessUsername: businessUsername,
+            businessName: businessName,
             totalItems: totalItems,
             totalAmount: serverTotal >= 0 ? serverTotal : totalAmount,
             currency:

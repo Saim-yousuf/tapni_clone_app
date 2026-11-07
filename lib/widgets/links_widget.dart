@@ -87,7 +87,8 @@ class LinkSheet {
       provider.fetchLinkCatalog();
     }
 
-    // Close Add Links → run template flow → reopen until user dismisses.
+    // Close Add Links → child flow → reopen picker ONLY when child returns
+    // via back (true). Save / navigate / delete ends the session.
     while (context.mounted) {
       final selected = await _presentAddLinkPicker(context, provider);
       if (!context.mounted || selected == null) return;
@@ -95,7 +96,12 @@ class LinkSheet {
       // so the next modal isn't pushed on a still-dismissing route.
       await Future<void>.delayed(AppMotion.sheetReverse);
       if (!context.mounted) return;
-      await _openSelectedTemplate(context, selected, provider);
+      final reopenPicker = await _openSelectedTemplate(
+        context,
+        selected,
+        provider,
+      );
+      if (!context.mounted || !reopenPicker) return;
     }
   }
 
@@ -297,6 +303,39 @@ class LinkSheet {
                                         category.templates.isNotEmpty,
                                   )
                                   .toList();
+                            } else {
+                              // Menu-first rollout: hide disabled website/catalog types.
+                              dedupedCatalog = dedupedCatalog
+                                  .map(
+                                    (category) => category.copyWith(
+                                      templates: category.templates
+                                          .where((template) {
+                                            final action =
+                                                template.actionType;
+                                            if (action != 'menu_catalog' &&
+                                                action !=
+                                                    'business_website' &&
+                                                !isBusinessWebsiteLinkTemplate(
+                                                  template,
+                                                )) {
+                                              return true;
+                                            }
+                                            final type =
+                                                (template.catalogType ??
+                                                        'menu')
+                                                    .trim();
+                                            return ReleaseFeatures
+                                                .isCatalogOrWebsiteTypeEnabled(
+                                              type.isEmpty ? 'menu' : type,
+                                            );
+                                          }).toList(),
+                                    ),
+                                  )
+                                  .where(
+                                    (category) =>
+                                        category.templates.isNotEmpty,
+                                  )
+                                  .toList();
                             }
                             final catalog = query.isEmpty
                                 ? dedupedCatalog
@@ -371,7 +410,9 @@ class LinkSheet {
     );
   }
 
-  Future<void> _openSelectedTemplate(
+  /// Returns `true` only when the user pressed back on a child sheet
+  /// (reopen Add Links). Save / delete / push-navigation → `false`.
+  Future<bool> _openSelectedTemplate(
     BuildContext context,
     LinkTemplate template,
     ProfileProvider provider,
@@ -388,7 +429,8 @@ class LinkSheet {
         backgroundColor: Colors.transparent,
         builder: (_) => const ProUpgradeSheet(),
       );
-      return;
+      // Still browsing templates after dismissing Pro sheet.
+      return true;
     }
     if (isDocumentsLinkTemplate(template) ||
         template.actionType == 'document') {
@@ -401,6 +443,7 @@ class LinkSheet {
           ),
         ),
       );
+      return false;
     } else if (isGalleryLinkTemplate(template) ||
         template.actionType == 'gallery') {
       if (provider.profile.socialLinks.any((link) => link.isGalleryLink)) {
@@ -409,7 +452,7 @@ class LinkSheet {
               context.l10n.profileTabGallery,
               kind: AppToastKind.info,
             );
-        return;
+        return false;
       }
       await provider.addGalleryLink(template: template, context: context);
       if (context.mounted) {
@@ -423,44 +466,44 @@ class LinkSheet {
           ),
         );
       }
+      return false;
     } else if (isBusinessWebsiteLinkTemplate(template) ||
         template.actionType == 'business_website') {
-      if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) return;
+      if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) return false;
       showAppToast(
             context,
             'Use Menu, Services, Products, or Portfolio instead',
             kind: AppToastKind.info,
           );
+      return false;
     } else if (template.actionType == 'menu_catalog') {
-      if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) return;
+      if (!ReleaseFeatures.canManageCatalogOrWebsiteLinks) return false;
       await _openTypedWebsiteFromCatalogTemplate(context, template, provider);
+      return false;
     } else if (template.actionType == 'contact_card') {
       final existing = _findExistingLinkForTemplate(provider, template);
       if (existing != null) {
-        await showExistingLinkBottomSheet(context, existing, provider);
-      } else {
-        await contact_card.showContactCardBottomSheet(
-          context,
-          template,
-          provider,
-        );
+        return showExistingLinkBottomSheet(context, existing, provider);
       }
+      return contact_card.showContactCardBottomSheet(
+        context,
+        template,
+        provider,
+      );
     } else if (_isCustomTemplate(template)) {
-      await _showCustomTemplateBottomSheet(context, template, provider);
+      return _showCustomTemplateBottomSheet(context, template, provider);
     } else if (template.fieldType == 'bank') {
       final existing = _findExistingLinkForTemplate(provider, template);
       if (existing != null) {
-        await showExistingLinkBottomSheet(context, existing, provider);
-      } else {
-        await _showBankTemplateBottomSheet(context, template, provider);
+        return showExistingLinkBottomSheet(context, existing, provider);
       }
+      return _showBankTemplateBottomSheet(context, template, provider);
     } else {
       final existing = _findExistingLinkForTemplate(provider, template);
       if (existing != null) {
-        await showExistingLinkBottomSheet(context, existing, provider);
-      } else {
-        await _showNewTemplateLinkBottomSheet(context, template, provider);
+        return showExistingLinkBottomSheet(context, existing, provider);
       }
+      return _showNewTemplateLinkBottomSheet(context, template, provider);
     }
   }
 
@@ -760,12 +803,12 @@ class LinkSheet {
     return pickedToBase64(file);
   }
 
-  Future<void> _showCustomTemplateBottomSheet(
+  Future<bool> _showCustomTemplateBottomSheet(
     BuildContext context,
     LinkTemplate template,
     ProfileProvider provider, {
     SocialLink? existingLink,
-  }) {
+  }) async {
     if (template.fieldType == 'bank') {
       return _showBankTemplateBottomSheet(
         context,
@@ -784,7 +827,7 @@ class LinkSheet {
     String logo = existingLink?.logoUrl ?? '';
     bool showLink = existingLink?.isPublic ?? true;
 
-    return showAppModalBottomSheet(
+    final result = await showAppModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -812,7 +855,7 @@ class LinkSheet {
                     children: [
                       SheetHeader(
                         title: ctx.l10n.customLink,
-                        onBack: () => Navigator.pop(ctx),
+                        onBack: () => Navigator.pop(ctx, true),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -865,7 +908,7 @@ class LinkSheet {
                                       existingLink.id,
                                       context,
                                     );
-                                    Navigator.pop(ctx);
+                                    Navigator.pop(ctx, false);
                                   }),
                                   const SizedBox(width: 12),
                                 ],
@@ -902,7 +945,7 @@ class LinkSheet {
                                           entries: entries,
                                         );
                                       }
-                                      Navigator.pop(ctx);
+                                      Navigator.pop(ctx, false);
                                     },
                                   ),
                                 ),
@@ -921,6 +964,7 @@ class LinkSheet {
         );
       },
     );
+    return result == true;
   }
 
   Widget _selectedLogoTile(String logo) {
@@ -1034,13 +1078,13 @@ class LinkSheet {
     );
   }
 
-  Future<void> _showBankTemplateBottomSheet(
+  Future<bool> _showBankTemplateBottomSheet(
     BuildContext context,
     LinkTemplate template,
     ProfileProvider provider, {
     bool allowCustomMeta = false,
     SocialLink? existingLink,
-  }) {
+  }) async {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bankDetails = existingLink?.bankDetails ?? {};
     final labelController = TextEditingController(
@@ -1059,7 +1103,7 @@ class LinkSheet {
     String logo = existingLink?.logoUrl ?? '';
     bool showLink = existingLink?.isPublic ?? true;
 
-    return showAppModalBottomSheet(
+    final result = await showAppModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -1089,7 +1133,7 @@ class LinkSheet {
                           ? context.l10n.customBank
                           : template.label,
                       padHorizontal: false,
-                      onBack: () => Navigator.pop(ctx),
+                      onBack: () => Navigator.pop(ctx, true),
                     ),
                     const SizedBox(height: 20),
                     Row(
@@ -1159,7 +1203,7 @@ class LinkSheet {
                               existingLink.id,
                               context,
                             );
-                            Navigator.pop(ctx);
+                            Navigator.pop(ctx, false);
                           }),
                           const SizedBox(width: 12),
                         ],
@@ -1202,7 +1246,7 @@ class LinkSheet {
                                   bankDetails: details,
                                 );
                               }
-                              Navigator.pop(ctx);
+                              Navigator.pop(ctx, false);
                             },
                           ),
                         ),
@@ -1217,6 +1261,7 @@ class LinkSheet {
         );
       },
     );
+    return result == true;
   }
 
   /// Barqody-style light-grey rounded field (fill `#F2F2F7`, no border).
@@ -1906,11 +1951,11 @@ class LinkSheet {
     );
   }
 
-  Future<void> _showNewTemplateLinkBottomSheet(
+  Future<bool> _showNewTemplateLinkBottomSheet(
     BuildContext context,
     LinkTemplate template,
     ProfileProvider provider,
-  ) {
+  ) async {
     final isPhone = _keyboardTypeFor(template.fieldType) == TextInputType.phone;
     final drafts = <_LinkEntryDraft>[
       _LinkEntryDraft(
@@ -1918,7 +1963,7 @@ class LinkSheet {
       ),
     ];
 
-    return showAppModalBottomSheet(
+    final result = await showAppModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -1935,7 +1980,7 @@ class LinkSheet {
                 context,
                 entries: entries,
               );
-              Navigator.pop(ctx);
+              Navigator.pop(ctx, false);
             }
 
             return Padding(
@@ -1959,7 +2004,7 @@ class LinkSheet {
                     children: [
                       SheetHeader(
                         title: ctx.l10n.createNewLink,
-                        onBack: () => Navigator.pop(ctx),
+                        onBack: () => Navigator.pop(ctx, true),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
@@ -2014,7 +2059,7 @@ class LinkSheet {
                                   child: PillButton(
                                     label: context.l10n.cancel,
                                     filled: false,
-                                    onPressed: () => Navigator.pop(ctx),
+                                    onPressed: () => Navigator.pop(ctx, true),
                                   ),
                                 ),
                                 const SizedBox(width: 12),
@@ -2039,6 +2084,7 @@ class LinkSheet {
         );
       },
     );
+    return result == true;
   }
 
   Widget _sheetCheckButton(VoidCallback onTap) {
@@ -2304,6 +2350,9 @@ class LinkSheet {
 
     final catalogType = _resolveCatalogType(null, template, provider);
     final websiteType = websiteTypeFromCatalogType(catalogType);
+    if (!ReleaseFeatures.isCatalogOrWebsiteTypeEnabled(websiteType)) {
+      return;
+    }
 
     final repo = BusinessWebsiteRepo();
     final mineRes = await repo.getMine(websiteType: websiteType);
@@ -2334,15 +2383,18 @@ class LinkSheet {
       return;
     }
 
-    final explicitType =
-        normalizeBusinessType(provider.profile.businessType);
+    final profile = provider.profile;
+    final resolvedType = resolveBusinessTypeForRouting(
+      businessType: profile.businessType,
+      businessCategory: profile.businessCategory,
+    );
     await Navigator.push(
       context,
       AppPageRoute(
         builder: (_) => BusinessWebsiteSetupScreen(
           linkTemplate: template,
           websiteType: websiteType,
-          businessType: explicitType.isEmpty ? null : explicitType,
+          businessType: resolvedType.isEmpty ? null : resolvedType,
         ),
       ),
     );
@@ -2664,7 +2716,7 @@ class LinkSheet {
     );
   }
 
-  Future<void> showExistingLinkBottomSheet(
+  Future<bool> showExistingLinkBottomSheet(
     BuildContext context,
     SocialLink link,
     ProfileProvider provider,
@@ -2689,14 +2741,14 @@ class LinkSheet {
     if (link.isGalleryLink ||
         (catalogTemplate != null && isGalleryLinkTemplate(catalogTemplate))) {
       await _showGalleryLinkBottomSheet(context, link, provider);
-      return;
+      return false;
     }
 
     if (link.isBusinessWebsiteLink ||
         (catalogTemplate != null &&
             isBusinessWebsiteLinkTemplate(catalogTemplate))) {
       await _showBusinessWebsiteLinkBottomSheet(context, link, provider);
-      return;
+      return false;
     }
 
     final isCatalog = link.isCatalogLink ||
@@ -2716,7 +2768,7 @@ class LinkSheet {
           ),
         ),
       );
-      return;
+      return false;
     }
 
     if (isCatalog) {
@@ -2726,7 +2778,7 @@ class LinkSheet {
         provider,
         template: catalogTemplate,
       );
-      return;
+      return false;
     }
 
     final isCustomLink =
@@ -2757,34 +2809,31 @@ class LinkSheet {
     );
 
     if (template.actionType == 'contact_card') {
-      await contact_card.showContactCardBottomSheet(
+      return contact_card.showContactCardBottomSheet(
         context,
         template,
         provider,
         existingLink: link,
       );
-      return;
     }
 
     if (template.fieldType == 'bank') {
-      await _showBankTemplateBottomSheet(
+      return _showBankTemplateBottomSheet(
         context,
         template,
         provider,
         allowCustomMeta: isCustomLink,
         existingLink: link,
       );
-      return;
     }
 
     if (isCustomLink) {
-      await _showCustomTemplateBottomSheet(
+      return _showCustomTemplateBottomSheet(
         context,
         template,
         provider,
         existingLink: link,
       );
-      return;
     }
 
     final isPhone =
@@ -2795,7 +2844,7 @@ class LinkSheet {
       defaultDial: _defaultDialCountry(context),
     );
 
-    await showAppModalBottomSheet(
+    final result = await showAppModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -2832,12 +2881,12 @@ class LinkSheet {
                   );
                 }
               }
-              Navigator.pop(ctx);
+              Navigator.pop(ctx, false);
             }
 
             Future<void> doDeleteLink() async {
               await provider.deleteSocialLink(link.id, context);
-              if (ctx.mounted) Navigator.pop(ctx);
+              if (ctx.mounted) Navigator.pop(ctx, false);
             }
 
             return Padding(
@@ -2868,7 +2917,9 @@ class LinkSheet {
                         height: 44,
                         child: Row(
                           children: [
-                            CircleBackButton(onTap: () => Navigator.pop(ctx)),
+                            CircleBackButton(
+                              onTap: () => Navigator.pop(ctx, true),
+                            ),
                             Expanded(
                               child: Text(
                                 ctx.l10n.linkSettings,
@@ -2938,7 +2989,7 @@ class LinkSheet {
                             child: PillButton(
                               label: context.l10n.cancel,
                               filled: false,
-                              onPressed: () => Navigator.pop(ctx),
+                              onPressed: () => Navigator.pop(ctx, true),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -2960,5 +3011,6 @@ class LinkSheet {
         );
       },
     );
+    return result == true;
   }
 }

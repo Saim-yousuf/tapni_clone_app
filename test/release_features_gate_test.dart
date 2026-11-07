@@ -3,15 +3,29 @@ import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/utils/release_features.dart';
 
 void main() {
-  group('ReleaseFeatures initial personal release', () {
-    test('business surfaces are off', () {
+  group('ReleaseFeatures become-a-business phase', () {
+    test('business signup + suite are on; other business surfaces stay off', () {
       expect(ReleaseFeatures.explore, isFalse);
       expect(ReleaseFeatures.shopping, isFalse);
       expect(ReleaseFeatures.workplace, isFalse);
-      expect(ReleaseFeatures.publicWebsites, isFalse);
-      expect(ReleaseFeatures.businessOwner, isFalse);
-      expect(ReleaseFeatures.businessPro, isFalse);
-      expect(ReleaseFeatures.commercePayments, isFalse);
+      expect(ReleaseFeatures.businessOwner, isTrue);
+      expect(ReleaseFeatures.businessPro, isTrue);
+      expect(ReleaseFeatures.commercePayments, isTrue);
+    });
+
+    test('only menu public website type is enabled', () {
+      expect(ReleaseFeatures.publicWebsiteMenu, isTrue);
+      expect(ReleaseFeatures.publicWebsiteServices, isFalse);
+      expect(ReleaseFeatures.publicWebsiteProducts, isFalse);
+      expect(ReleaseFeatures.publicWebsitePortfolio, isFalse);
+      expect(ReleaseFeatures.publicWebsites, isTrue);
+      expect(ReleaseFeatures.canOpenPublicWebsite, isTrue);
+      expect(ReleaseFeatures.canOpenPublicWebsiteType('menu'), isTrue);
+      expect(ReleaseFeatures.canOpenPublicWebsiteType('catalog'), isTrue);
+      expect(ReleaseFeatures.canOpenPublicWebsiteType('service'), isFalse);
+      expect(ReleaseFeatures.canOpenPublicWebsiteType('services'), isFalse);
+      expect(ReleaseFeatures.canOpenPublicWebsiteType('products'), isFalse);
+      expect(ReleaseFeatures.canOpenPublicWebsiteType('portfolio'), isFalse);
     });
 
     test('personal surfaces are on', () {
@@ -23,7 +37,7 @@ void main() {
       expect(ReleaseFeatures.personalQrScan, isTrue);
     });
 
-    test('hides catalog and business website links', () {
+    test('business owner can see catalog and business website links', () {
       final catalog = SocialLink(
         id: '1',
         platform: SocialPlatform.instagram,
@@ -50,8 +64,8 @@ void main() {
 
       expect(catalog.isCatalogLink, isTrue);
       expect(website.isBusinessWebsiteLink, isTrue);
-      expect(ReleaseFeatures.isPersonalLinkVisible(catalog), isFalse);
-      expect(ReleaseFeatures.isPersonalLinkVisible(website), isFalse);
+      expect(ReleaseFeatures.isPersonalLinkVisible(catalog), isTrue);
+      expect(ReleaseFeatures.isPersonalLinkVisible(website), isTrue);
       expect(ReleaseFeatures.isPersonalLinkVisible(social), isTrue);
     });
 
@@ -63,8 +77,8 @@ void main() {
       bool routeLoyalty() => ReleaseFeatures.canUseShopping;
       bool routeEmployee() => ReleaseFeatures.canUseWorkplace;
 
-      expect(routeCatalogOrder(), isFalse);
-      expect(routeSubscription(), isFalse);
+      expect(routeCatalogOrder(), isTrue);
+      expect(routeSubscription(), isTrue);
       expect(routeLoyalty(), isFalse);
       expect(routeEmployee(), isFalse);
     });

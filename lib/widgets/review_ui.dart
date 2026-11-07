@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tapni_app/models/business_review.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 
@@ -35,20 +36,89 @@ class ReviewStarRow extends StatelessWidget {
         final star = i + 1;
         final filled = star <= rating;
         final icon = Icon(
-          filled ? Icons.star_rounded : Icons.star_rounded,
+          Icons.star_rounded,
           size: size,
           color: filled ? ReviewUi.starActive : ReviewUi.starInactive,
         );
         if (onChanged == null) return icon;
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
+        return _AnimatedReviewStar(
+          key: ValueKey('review-star-$star'),
+          filled: filled,
+          size: size,
           onTap: () => onChanged!(star),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: icon,
-          ),
         );
       }),
+    );
+  }
+}
+
+class _AnimatedReviewStar extends StatefulWidget {
+  final bool filled;
+  final double size;
+  final VoidCallback onTap;
+
+  const _AnimatedReviewStar({
+    super.key,
+    required this.filled,
+    required this.size,
+    required this.onTap,
+  });
+
+  @override
+  State<_AnimatedReviewStar> createState() => _AnimatedReviewStarState();
+}
+
+class _AnimatedReviewStarState extends State<_AnimatedReviewStar>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _AnimatedReviewStar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.filled != widget.filled && widget.filled) {
+      _pulse.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 1, end: 1.28), weight: 45),
+      TweenSequenceItem(tween: Tween(begin: 1.28, end: 1), weight: 55),
+    ]).animate(CurvedAnimation(parent: _pulse, curve: AppMotion.easeOut));
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        _pulse.forward(from: 0);
+        widget.onTap();
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: ScaleTransition(
+          scale: scale,
+          child: Icon(
+            Icons.star_rounded,
+            size: widget.size,
+            color: widget.filled ? ReviewUi.starActive : ReviewUi.starInactive,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -96,47 +166,52 @@ class ReviewDeleteButton extends StatelessWidget {
 class BarqodyReviewCard extends StatelessWidget {
   final BusinessReview review;
   final VoidCallback? onDelete;
+  final int appearIndex;
 
   const BarqodyReviewCard({
     super.key,
     required this.review,
     this.onDelete,
+    this.appearIndex = 0,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 14, 14, 16),
-      decoration: BoxDecoration(
-        color: ReviewUi.cardBg,
-        borderRadius: BorderRadius.circular(ReviewUi.cardRadius),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ReviewStarRow(rating: review.rating, size: 18),
-              ),
-              if (onDelete != null) ReviewDeleteButton(onTap: onDelete!),
-            ],
-          ),
-          if (review.text.trim().isNotEmpty) ...[
-            const SizedBox(height: 10),
-            Text(
-              review.text.trim(),
-              style: WaUi.body.copyWith(
-                fontSize: 14,
-                height: 1.45,
-                color: ReviewUi.bodyGray,
-                fontWeight: FontWeight.w400,
-              ),
+    return AppAppear(
+      index: appearIndex,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(16, 14, 14, 16),
+        decoration: BoxDecoration(
+          color: ReviewUi.cardBg,
+          borderRadius: BorderRadius.circular(ReviewUi.cardRadius),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ReviewStarRow(rating: review.rating, size: 18),
+                ),
+                if (onDelete != null) ReviewDeleteButton(onTap: onDelete!),
+              ],
             ),
+            if (review.text.trim().isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Text(
+                review.text.trim(),
+                style: WaUi.body.copyWith(
+                  fontSize: 14,
+                  height: 1.45,
+                  color: ReviewUi.bodyGray,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -153,10 +228,27 @@ Future<WriteReviewResult?> showWriteReviewSheet(
   BuildContext context, {
   required String title,
 }) {
-  return showDialog<WriteReviewResult>(
+  return showGeneralDialog<WriteReviewResult>(
     context: context,
+    barrierDismissible: true,
+    barrierLabel: 'Dismiss',
     barrierColor: Colors.black.withValues(alpha: 0.45),
-    builder: (ctx) => _WriteReviewDialog(title: title),
+    transitionDuration: AppMotion.dialog,
+    pageBuilder: (ctx, anim, secondary) => _WriteReviewDialog(title: title),
+    transitionBuilder: (ctx, anim, secondary, child) {
+      final curved = CurvedAnimation(
+        parent: anim,
+        curve: AppMotion.easeOut,
+        reverseCurve: AppMotion.easeIn,
+      );
+      return FadeTransition(
+        opacity: curved,
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.92, end: 1).animate(curved),
+          child: child,
+        ),
+      );
+    },
   );
 }
 
@@ -187,8 +279,8 @@ class _WriteReviewDialogState extends State<_WriteReviewDialog> {
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 28),
       child: AnimatedPadding(
-        duration: const Duration(milliseconds: 180),
-        curve: Curves.easeOut,
+        duration: AppMotion.dialogReverse,
+        curve: AppMotion.easeOut,
         padding: EdgeInsets.only(bottom: bottomInset > 0 ? 8 : 0),
         child: Material(
           color: Colors.white,

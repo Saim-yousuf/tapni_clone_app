@@ -146,7 +146,27 @@ String normalizeBusinessType(String? value) {
 }
 
 String inferBusinessTypeFromCategory(String? category) {
-  return kCategoryToBusinessType[category?.trim() ?? ''] ?? '';
+  final key = (category ?? '').trim();
+  if (key.isEmpty) return '';
+  final exact = kCategoryToBusinessType[key];
+  if (exact != null) return exact;
+  final lower = key.toLowerCase();
+  for (final entry in kCategoryToBusinessType.entries) {
+    if (entry.key.toLowerCase() == lower) return entry.value;
+  }
+  return '';
+}
+
+/// Always returns a concrete capability pack for persistence.
+String resolvePersistedBusinessType({
+  String? businessType,
+  String? businessCategory,
+}) {
+  final explicit = normalizeBusinessType(businessType);
+  if (explicit.isNotEmpty) return explicit;
+  final inferred = inferBusinessTypeFromCategory(businessCategory);
+  if (inferred.isNotEmpty) return inferred;
+  return 'products';
 }
 
 String businessTypeLabel(String? type) {
@@ -217,13 +237,34 @@ String resolveBusinessTypeForRouting({
   return inferBusinessTypeFromCategory(businessCategory);
 }
 
-/// Website template category names for products vertical (Retail vs Hospitality).
+/// Website template category names matched to [businessType] pack.
 bool websiteCategoryMatchesBusinessType(
   String categoryName,
   String? businessType,
 ) {
   final type = normalizeBusinessType(businessType);
   final name = categoryName.trim().toLowerCase();
+  if (type == 'restaurant') {
+    return name.contains('food') ||
+        name.contains('beverage') ||
+        name.contains('restaurant') ||
+        name.contains('dining') ||
+        name.contains('cafe') ||
+        name.contains('café');
+  }
+  if (type == 'services') {
+    return name.contains('service') ||
+        name.contains('health') ||
+        name.contains('beauty') ||
+        name.contains('salon') ||
+        name.contains('professional');
+  }
+  if (type == 'portfolio') {
+    return name.contains('portfolio') ||
+        name.contains('creative') ||
+        name.contains('design') ||
+        name.contains('agency');
+  }
   if (type == 'products') {
     return name.contains('retail') ||
         name.contains('ecommerce') ||
@@ -238,7 +279,6 @@ bool websiteCategoryMatchesBusinessType(
         name.contains('lodging') ||
         name.contains('resort');
   }
-  // Other business types: do not filter website categories by this helper.
   return true;
 }
 

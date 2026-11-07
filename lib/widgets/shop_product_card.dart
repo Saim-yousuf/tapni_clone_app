@@ -231,7 +231,7 @@ class ShopProductCard extends StatelessWidget {
                       ),
                     ],
                     const SizedBox(height: 4),
-                    if (Constants.reviewsEnabled) ...[
+                    if (Constants.reviewsEnabled && avgRating > 0) ...[
                       _StarRow(rating: avgRating),
                       const SizedBox(height: 8),
                     ],

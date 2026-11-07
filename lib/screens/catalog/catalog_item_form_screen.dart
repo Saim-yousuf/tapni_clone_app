@@ -60,6 +60,8 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   String? _savedImageUrl;
   bool _isActive = true;
   bool _isSaving = false;
+  bool _featured = false;
+  final Set<String> _tags = {};
 
   /// Marketplace classification (products only).
   final _marketplaceRepo = MarketplaceRepo();
@@ -72,6 +74,11 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
 
   bool get _isEditing => widget.existingItem != null;
   bool get _showMarketplace => widget.isProduct && !widget.isDocument;
+  bool get _isMenuItem =>
+      !widget.isDocument &&
+      !widget.isService &&
+      !widget.isPortfolio &&
+      !widget.isProduct;
 
   static const _bookingTypes = ['Appointment', 'Request', 'No Scheduling'];
 
@@ -118,6 +125,10 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
     _selectedCategory = existingCat.isNotEmpty ? existingCat : null;
     _savedImageUrl = existing?.imageUrl ?? '';
     _isActive = existing?.isActive ?? true;
+    _featured = existing?.featured ?? false;
+    _tags
+      ..clear()
+      ..addAll(existing?.tags ?? const []);
     _listOnMarketplace =
         (existing?.marketplaceCategoryId.trim().isNotEmpty ?? false);
     if (_showMarketplace) {
@@ -409,6 +420,8 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
             ? (int.tryParse(_rewardPointsCtrl.text.trim()) ?? 0)
             : 0,
         bookingType: widget.isService ? bookingType : 'appointment',
+        featured: _isMenuItem && _featured,
+        tags: _isMenuItem ? _tags.toList() : const [],
       ),
     );
   }
@@ -716,6 +729,47 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                       const SizedBox(height: 12),
                       _buildMarketplaceBlock(),
                     ],
+                    if (_isMenuItem) ...[
+                      const SizedBox(height: 28),
+                      _sectionHeading('Menu highlights'),
+                      const SizedBox(height: 12),
+                      _menuFeaturedToggle(),
+                      const SizedBox(height: 12),
+                      const _FieldLabel('TAGS'),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final tag in const [
+                            ('veg', 'Veg'),
+                            ('spicy', 'Spicy'),
+                            ('popular', 'Popular'),
+                          ])
+                            FilterChip(
+                              label: Text(tag.$2),
+                              selected: _tags.contains(tag.$1),
+                              onSelected: (selected) {
+                                setState(() {
+                                  if (selected) {
+                                    _tags.add(tag.$1);
+                                  } else {
+                                    _tags.remove(tag.$1);
+                                  }
+                                });
+                              },
+                              selectedColor: Colors.black,
+                              checkmarkColor: Colors.white,
+                              labelStyle: TextStyle(
+                                color: _tags.contains(tag.$1)
+                                    ? Colors.white
+                                    : Colors.black87,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
                     const SizedBox(height: 20),
                     _publicToggle(),
                   ],
@@ -742,6 +796,41 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _menuFeaturedToggle() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF4F4F5),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Featured',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                ),
+                SizedBox(height: 2),
+                Text(
+                  'Show in the featured strip on your menu site',
+                  style: TextStyle(fontSize: 12, color: Color(0xFF8E8E93)),
+                ),
+              ],
+            ),
+          ),
+          Switch.adaptive(
+            value: _featured,
+            activeColor: Colors.black,
+            onChanged: (v) => setState(() => _featured = v),
+          ),
+        ],
       ),
     );
   }

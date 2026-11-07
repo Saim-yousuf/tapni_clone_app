@@ -85,4 +85,22 @@ class AppPageRoute<T> extends MaterialPageRoute<T> {
   @override
   Duration get reverseTransitionDuration =>
       PremiumPageTransitionsBuilder.duration;
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    // Always use the premium slide — don't rely only on ThemeData
+    // (nested navigators / dialogs can skip PageTransitionsTheme).
+    return const PremiumPageTransitionsBuilder().buildTransitions<T>(
+      this,
+      context,
+      animation,
+      secondaryAnimation,
+      child,
+    );
+  }
 }

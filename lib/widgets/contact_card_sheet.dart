@@ -11,13 +11,14 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
-Future<void> showContactCardBottomSheet(
+/// Returns `true` when dismissed via back (reopen Add Links picker).
+Future<bool> showContactCardBottomSheet(
   BuildContext context,
   LinkTemplate template,
   ProfileProvider provider, {
   SocialLink? existingLink,
-}) {
-  return showAppModalBottomSheet(
+}) async {
+  final result = await showAppModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
     useSafeArea: false,
@@ -28,6 +29,7 @@ Future<void> showContactCardBottomSheet(
       existingLink: existingLink,
     ),
   );
+  return result == true;
 }
 
 class ContactCardBottomSheet extends StatefulWidget {
@@ -226,7 +228,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
             children: [
               SheetHeader(
                 title: context.l10n.contactCard,
-                onBack: () => Navigator.pop(context),
+                onBack: () => Navigator.pop(context, true),
               ),
               Expanded(
                 child: ListView(
@@ -618,7 +620,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
                   context,
                 );
               }
-              if (mounted) Navigator.pop(context);
+              if (mounted) Navigator.pop(context, false);
             },
           ),
         ),
@@ -740,7 +742,7 @@ class _ContactCardBottomSheetState extends State<ContactCardBottomSheet> {
       );
     }
 
-    if (mounted) Navigator.pop(context);
+    if (mounted) Navigator.pop(context, false);
   }
 
   String _firstFilled(List<TextEditingController> controllers) {

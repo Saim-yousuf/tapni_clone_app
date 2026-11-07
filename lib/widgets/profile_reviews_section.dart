@@ -525,12 +525,13 @@ class _BusinessReviewsBody extends StatelessWidget {
 
     return Column(
       children: [
-        ...preview.map(
-          (review) => Padding(
+        ...preview.asMap().entries.map(
+          (e) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: BarqodyReviewCard(
-              review: review,
-              onDelete: () => onReport(review.id),
+              review: e.value,
+              appearIndex: e.key,
+              onDelete: () => onReport(e.value.id),
             ),
           ),
         ),

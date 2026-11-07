@@ -25,6 +25,12 @@ class CatalogItem {
   /// `appointment` | `request` | `none`
   final String bookingType;
 
+  /// Highlight on menu website home (featured strip).
+  final bool featured;
+
+  /// Display tags: veg | spicy | popular.
+  final List<String> tags;
+
   CatalogItem({
     this.id = '',
     required this.name,
@@ -40,6 +46,8 @@ class CatalogItem {
     this.discountedPrice = 0,
     this.rewardPoints = 0,
     this.bookingType = 'appointment',
+    this.featured = false,
+    this.tags = const [],
   });
 
   /// Price shown to customers (discounted when offer is active).
@@ -59,7 +67,21 @@ class CatalogItem {
 
   bool get isListedOnMarketplace => marketplaceCategoryId.trim().isNotEmpty;
 
+  bool get isVeg => tags.contains('veg');
+  bool get isSpicy => tags.contains('spicy');
+  bool get isPopular => tags.contains('popular');
+
   factory CatalogItem.fromJson(Map<String, dynamic> json) {
+    final tagsRaw = json['tags'];
+    final tags = <String>[];
+    if (tagsRaw is List) {
+      for (final t in tagsRaw) {
+        final s = t?.toString().trim().toLowerCase() ?? '';
+        if (s == 'veg' || s == 'spicy' || s == 'popular') {
+          if (!tags.contains(s)) tags.add(s);
+        }
+      }
+    }
     return CatalogItem(
       id: json['_id']?.toString() ?? json['id']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
@@ -83,6 +105,8 @@ class CatalogItem {
           ? (json['rewardPoints'] as num).toInt()
           : int.tryParse(json['rewardPoints']?.toString() ?? '') ?? 0,
       bookingType: _normalizeBookingType(json['bookingType']?.toString()),
+      featured: json['featured'] == true,
+      tags: tags,
     );
   }
 
@@ -115,6 +139,8 @@ class CatalogItem {
           'discountedPrice': discountedPrice,
         if (rewardPoints > 0) 'rewardPoints': rewardPoints,
         'bookingType': bookingType,
+        'featured': featured,
+        'tags': tags,
       };
 
   CatalogItem copyWith({
@@ -132,6 +158,8 @@ class CatalogItem {
     double? discountedPrice,
     int? rewardPoints,
     String? bookingType,
+    bool? featured,
+    List<String>? tags,
   }) {
     return CatalogItem(
       id: id ?? this.id,
@@ -150,6 +178,8 @@ class CatalogItem {
       discountedPrice: discountedPrice ?? this.discountedPrice,
       rewardPoints: rewardPoints ?? this.rewardPoints,
       bookingType: bookingType ?? this.bookingType,
+      featured: featured ?? this.featured,
+      tags: tags ?? this.tags,
     );
   }
 }

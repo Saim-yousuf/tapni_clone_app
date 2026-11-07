@@ -23,10 +23,23 @@ class ReleaseFeatures {
   static const bool explore = false;
   static const bool shopping = false;
   static const bool workplace = false;
-  static const bool publicWebsites = false;
-  static const bool businessOwner = false;
-  static const bool businessPro = false;
-  static const bool commercePayments = false;
+  static const bool businessOwner = true;
+  static const bool businessPro = true;
+  /// Stripe config + PaymentSheet (Business Pro checkout).
+  static const bool commercePayments = true;
+
+  // ---- Public website types (enable one-by-one) ----
+  static const bool publicWebsiteMenu = true;
+  static const bool publicWebsiteServices = false;
+  static const bool publicWebsiteProducts = false;
+  static const bool publicWebsitePortfolio = false;
+
+  /// True when any public website type is live.
+  static bool get publicWebsites =>
+      publicWebsiteMenu ||
+      publicWebsiteServices ||
+      publicWebsiteProducts ||
+      publicWebsitePortfolio;
 
   static bool get canShowBusinessSuite => businessOwner;
   static bool get canOpenExplore => explore;
@@ -36,11 +49,40 @@ class ReleaseFeatures {
   static bool get canUseBusinessPro => businessPro;
   static bool get canUseCommercePayments => commercePayments;
 
+  /// [websiteOrCatalogType]: `menu` | `service` | `services` | `products` |
+  /// `portfolio` | `catalog` (menu family).
+  static bool canOpenPublicWebsiteType(String? websiteOrCatalogType) {
+    final t = (websiteOrCatalogType ?? 'menu').trim().toLowerCase();
+    switch (t) {
+      case 'services':
+      case 'service':
+        return publicWebsiteServices;
+      case 'products':
+      case 'product':
+        return publicWebsiteProducts;
+      case 'portfolio':
+        return publicWebsitePortfolio;
+      case 'menu':
+      case 'catalog':
+      case '':
+        return publicWebsiteMenu;
+      default:
+        return false;
+    }
+  }
+
+  /// Catalog inventory / website tiles allowed in Add Links this release.
+  static bool isCatalogOrWebsiteTypeEnabled(String? catalogOrWebsiteType) =>
+      canOpenPublicWebsiteType(catalogOrWebsiteType);
+
   /// Catalog inventory and published-site tiles stay in DB but are hidden.
   static bool isPersonalLinkVisible(SocialLink link) {
     if (!personalLinks) return false;
     if (link.isBusinessWebsiteLink || link.isCatalogLink) {
-      return publicWebsites || businessOwner || shopping;
+      if (!(publicWebsites || businessOwner || shopping)) return false;
+      // Owners still manage all tiles; public viewers only see enabled types.
+      if (businessOwner || shopping) return true;
+      return isCatalogOrWebsiteTypeEnabled(link.catalogType ?? 'menu');
     }
     return true;
   }

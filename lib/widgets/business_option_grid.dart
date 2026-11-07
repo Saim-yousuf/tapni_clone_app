@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tapni_app/utils/app_fonts.dart';
+import 'package:tapni_app/utils/app_motion.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/cached_app_image.dart';
+import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 
 class BusinessOptionItem {
   final String id;
@@ -19,7 +23,7 @@ class BusinessOptionItem {
   });
 }
 
-/// Screenshot-style progress + title + 2-col option grid + Continue.
+/// Interest-style wrap of pill chips (emoji + label) + progress + Continue.
 class BusinessOptionPickerPage extends StatelessWidget {
   const BusinessOptionPickerPage({
     super.key,
@@ -35,11 +39,13 @@ class BusinessOptionPickerPage extends StatelessWidget {
     this.continueLabel = 'Continue',
     this.loading = false,
     this.onBack,
-    this.childAspectRatio = 1.05,
-    this.iconBoxSize = 52,
-    this.emojiSize = 24,
-    this.iconSize = 26,
-    this.cardPadding = const EdgeInsets.fromLTRB(12, 18, 12, 14),
+    this.shimmerItemCount = 10,
+    // Kept for call-site compatibility; unused in pill layout.
+    this.childAspectRatio = 1,
+    this.iconBoxSize = 0,
+    this.emojiSize = 18,
+    this.iconSize = 18,
+    this.cardPadding = EdgeInsets.zero,
     this.labelFontSize = 14,
   });
 
@@ -55,6 +61,7 @@ class BusinessOptionPickerPage extends StatelessWidget {
   final String continueLabel;
   final bool loading;
   final VoidCallback? onBack;
+  final int shimmerItemCount;
   final double childAspectRatio;
   final double iconBoxSize;
   final double emojiSize;
@@ -62,7 +69,7 @@ class BusinessOptionPickerPage extends StatelessWidget {
   final EdgeInsets cardPadding;
   final double labelFontSize;
 
-  static const _muted = Color(0xFF8E8E93);
+  bool get _showShimmer => loading && options.isEmpty;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +80,7 @@ class BusinessOptionPickerPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(
             BarqodyChrome.sidePad,
-            10,
+            4,
             BarqodyChrome.sidePad,
             0,
           ),
@@ -83,78 +90,89 @@ class BusinessOptionPickerPage extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(
               BarqodyChrome.sidePad,
-              28,
+              18,
               BarqodyChrome.sidePad,
-              16,
+              12,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  question,
-                  style: AppFonts.textStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                    height: 1.15,
-                    letterSpacing: -0.4,
+                AppAppear(
+                  index: 0,
+                  child: Text(
+                    question,
+                    style: AppFonts.textStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w700,
+                      color: AuthUi.textPrimary,
+                      height: 1.2,
+                      letterSpacing: -0.4,
+                    ),
                   ),
                 ),
                 if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Text(
-                    subtitle!,
-                    style: AppFonts.textStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: _muted,
-                      height: 1.3,
+                  const SizedBox(height: 8),
+                  AppAppear(
+                    index: 1,
+                    child: Text(
+                      subtitle!,
+                      style: AppFonts.textStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: AuthUi.textSecondary,
+                        height: 1.4,
+                      ),
                     ),
                   ),
                 ],
                 const SizedBox(height: 22),
-                if (options.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 40),
-                    child: Center(
-                      child: Text(
-                        loading ? 'Loading…' : 'No options available',
-                        style: AppFonts.textStyle(
-                          fontSize: 14,
-                          color: _muted,
-                        ),
-                      ),
+                AppContentSwitcher(
+                  child: KeyedSubtree(
+                    key: ValueKey<String>(
+                      _showShimmer
+                          ? 'shimmer-$stepIndex'
+                          : 'pills-$stepIndex-${options.length}',
                     ),
-                  )
-                else
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: options.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: childAspectRatio,
-                    ),
-                    itemBuilder: (context, index) {
-                      final item = options[index];
-                      final selected = item.id == selectedId;
-                      return _OptionCard(
-                        item: item,
-                        selected: selected,
-                        iconBoxSize: iconBoxSize,
-                        emojiSize: emojiSize,
-                        iconSize: iconSize,
-                        padding: cardPadding,
-                        labelFontSize: labelFontSize,
-                        onTap: () {
-                          HapticFeedback.selectionClick();
-                          onSelect(item.id);
-                        },
-                      );
-                    },
+                    child: _showShimmer
+                        ? const _PillsShimmer()
+                        : options.isEmpty
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 28),
+                                child: Center(
+                                  child: Text(
+                                    'No options available',
+                                    style: AppFonts.textStyle(
+                                      fontSize: 14,
+                                      color: AuthUi.textMuted,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Wrap(
+                                spacing: 10,
+                                runSpacing: 10,
+                                children: [
+                                  for (var i = 0; i < options.length; i++)
+                                    AppAppear(
+                                      index: i + 2,
+                                      maxStagger: 12,
+                                      child: _InterestPill(
+                                        item: options[i],
+                                        selected: options[i].id == selectedId,
+                                        emojiSize: emojiSize,
+                                        iconSize: iconSize,
+                                        labelFontSize: labelFontSize,
+                                        onTap: () {
+                                          HapticFeedback.selectionClick();
+                                          onSelect(options[i].id);
+                                        },
+                                      ),
+                                    ),
+                                ],
+                              ),
                   ),
+                ),
               ],
             ),
           ),
@@ -164,15 +182,35 @@ class BusinessOptionPickerPage extends StatelessWidget {
             BarqodyChrome.sidePad,
             8,
             BarqodyChrome.sidePad,
-            16,
+            14,
           ),
           child: PillButton(
-            label: loading ? '…' : continueLabel,
+            label: loading && !_showShimmer ? '…' : continueLabel,
             enabled: !loading && selectedId != null && onContinue != null,
             onPressed: () => onContinue?.call(),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _PillsShimmer extends StatelessWidget {
+  const _PillsShimmer();
+
+  static const _widths = <double>[118, 132, 104, 146, 112, 128, 120, 138, 110, 124];
+
+  @override
+  Widget build(BuildContext context) {
+    return AppShimmer(
+      child: Wrap(
+        spacing: 10,
+        runSpacing: 10,
+        children: [
+          for (final w in _widths)
+            ShimmerBox(width: w, height: 44, borderRadius: 22),
+        ],
+      ),
     );
   }
 }
@@ -189,11 +227,13 @@ class _StepProgress extends StatelessWidget {
       children: List.generate(total, (i) {
         final active = i <= current;
         return Expanded(
-          child: Container(
+          child: AnimatedContainer(
+            duration: AppMotion.content,
+            curve: AppMotion.easeOut,
             margin: EdgeInsets.only(right: i == total - 1 ? 0 : 6),
             height: 3,
             decoration: BoxDecoration(
-              color: active ? Colors.black : const Color(0xFFE5E7EB),
+              color: active ? AuthUi.textPrimary : AuthUi.border,
               borderRadius: BorderRadius.circular(999),
             ),
           ),
@@ -203,72 +243,63 @@ class _StepProgress extends StatelessWidget {
   }
 }
 
-class _OptionCard extends StatelessWidget {
-  const _OptionCard({
+class _InterestPill extends StatelessWidget {
+  const _InterestPill({
     required this.item,
     required this.selected,
     required this.onTap,
-    required this.iconBoxSize,
     required this.emojiSize,
     required this.iconSize,
-    required this.padding,
     required this.labelFontSize,
   });
 
   final BusinessOptionItem item;
   final bool selected;
   final VoidCallback onTap;
-  final double iconBoxSize;
   final double emojiSize;
   final double iconSize;
-  final EdgeInsets padding;
   final double labelFontSize;
 
   @override
   Widget build(BuildContext context) {
-    final radius = iconBoxSize >= 60 ? 16.0 : 14.0;
+    final bg = selected ? Colors.black : const Color(0xFFF2F2F7);
+    final fg = selected ? Colors.white : AuthUi.textPrimary;
+
     return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(14),
+      color: bg,
+      borderRadius: BorderRadius.circular(999),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(999),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 160),
-          padding: padding,
+          curve: AppMotion.easeOut,
+          padding: const EdgeInsets.fromLTRB(14, 11, 16, 11),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(14),
+            color: bg,
+            borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: selected ? Colors.black : const Color(0xFFE5E7EB),
-              width: selected ? 2 : 1,
+              color: selected ? Colors.black : const Color(0xFFE5E5EA),
+              width: 1,
             ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 160),
-                width: iconBoxSize,
-                height: iconBoxSize,
-                decoration: BoxDecoration(
-                  color: selected ? Colors.black : const Color(0xFFF2F2F7),
-                  borderRadius: BorderRadius.circular(radius),
-                ),
-                alignment: Alignment.center,
-                child: _buildIcon(selected),
+              _Leading(
+                item: item,
+                selected: selected,
+                emojiSize: emojiSize,
+                iconSize: iconSize,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(width: 8),
               Text(
                 item.label,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
                 style: AppFonts.textStyle(
                   fontSize: labelFontSize,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                  height: 1.2,
+                  color: fg,
+                  height: 1.15,
                 ),
               ),
             ],
@@ -277,32 +308,49 @@ class _OptionCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildIcon(bool selected) {
-    final imageSize = iconSize + 2;
+class _Leading extends StatelessWidget {
+  const _Leading({
+    required this.item,
+    required this.selected,
+    required this.emojiSize,
+    required this.iconSize,
+  });
+
+  final BusinessOptionItem item;
+  final bool selected;
+  final double emojiSize;
+  final double iconSize;
+
+  @override
+  Widget build(BuildContext context) {
     if (item.iconUrl != null && item.iconUrl!.trim().isNotEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Image.network(
-          item.iconUrl!,
-          width: imageSize,
-          height: imageSize,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => _fallbackIcon(selected),
+      return CachedAppImage(
+        url: item.iconUrl!,
+        width: iconSize + 2,
+        height: iconSize + 2,
+        fit: BoxFit.cover,
+        borderRadius: BorderRadius.circular(6),
+        placeholder: ImageShimmerPlaceholder(
+          width: iconSize + 2,
+          height: iconSize + 2,
+          borderRadius: BorderRadius.circular(6),
         ),
+        error: _fallback(),
       );
     }
-    return _fallbackIcon(selected);
+    return _fallback();
   }
 
-  Widget _fallbackIcon(bool selected) {
+  Widget _fallback() {
     if (item.emoji != null && item.emoji!.isNotEmpty) {
       return Text(item.emoji!, style: TextStyle(fontSize: emojiSize));
     }
     return Icon(
       item.icon ?? Icons.category_rounded,
       size: iconSize,
-      color: selected ? Colors.white : Colors.black87,
+      color: selected ? Colors.white : AuthUi.textPrimary,
     );
   }
 }

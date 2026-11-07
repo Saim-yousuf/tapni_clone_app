@@ -14,6 +14,7 @@ import 'package:tapni_app/screens/explore_cart_screen.dart';
 import 'package:tapni_app/screens/scanned_profile_screen.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/money_format.dart';
+import 'package:tapni_app/utils/own_catalog_guard.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/profile_reviews_section.dart';
 import 'package:tapni_app/models/cart_line_item.dart';
@@ -180,6 +181,19 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
     final businessId = widget.profile.id;
     if (businessId == null) return;
 
+    if (OwnCatalogGuard.isOwnBusinessOf(
+      context,
+      businessId: businessId,
+      businessUsername: widget.profile.username ?? '',
+    )) {
+      showAppToast(
+        context,
+        OwnCatalogGuard.message,
+        kind: AppToastKind.warning,
+      );
+      return;
+    }
+
     if (_isService) {
       final result = await showServiceBookingSheet(
         context: context,
@@ -276,7 +290,8 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
             builder: (_) => OrderPlacedScreen(
               token: CatalogOrder.tokenFromApi(res.data),
               customerUsername: customerUsername,
-              businessUsername: widget.profile.username ?? _businessName,
+              businessUsername: widget.profile.username,
+              businessName: _businessName,
               totalItems: 1,
               totalAmount: _item.displayPrice * stay.nights,
               currency: _currency,
@@ -606,12 +621,10 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
     final chips = <Widget>[];
     final itemRating = _explore.avgRating;
     final itemCount = _explore.reviewCount;
-    if (Constants.reviewsEnabled && itemRating > 0) {
+    if (Constants.reviewsEnabled && itemRating > 0 && itemCount > 0) {
       chips.add(
         _chip(
-          itemCount > 0
-              ? '${itemRating.toStringAsFixed(1)} ($itemCount)'
-              : itemRating.toStringAsFixed(1),
+          '${itemRating.toStringAsFixed(1)} ($itemCount)',
           icon: Icons.star_rounded,
           iconColor: const Color(0xFFF5A623),
         ),

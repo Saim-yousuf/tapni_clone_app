@@ -2,7 +2,8 @@ class Constants {
   static const String appDomain = "https://barqody.com";
 
   /// Business / item / service reviews & star ratings (profile, explore, shop cards).
-  static const bool reviewsEnabled = false;
+  /// Item stars come from verified Review averages (not manual owner input).
+  static const bool reviewsEnabled = true;
 
   static List<String> countries = [
     "afghanistan",

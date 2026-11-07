@@ -26,7 +26,6 @@ import 'package:tapni_app/widgets/barqody_avatar_welcome.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/link_platform_icon.dart';
 import 'package:tapni_app/widgets/links_widget.dart';
-import 'package:tapni_app/widgets/pro_upgrade_sheet.dart';
 import 'package:tapni_app/widgets/connection_error_state.dart';
 import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 import 'package:tapni_app/widgets/verified_name.dart';
@@ -147,13 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  Future<void> _pickCoverPhoto(UserProfile profile) async {
-    // Personal release: cover photo is part of the digital card.
-    // When businessPro is re-enabled, keep the existing Pro restriction.
-    if (profile.isPro == false && ReleaseFeatures.canUseBusinessPro) {
-      SubcriptionSheet.show(context);
-      return;
-    }
+  Future<void> _pickCoverPhoto() async {
     final file = await pickFile();
     if (!mounted || file == null || !file.hasData) return;
     final bytes = await file.readBytes();
@@ -956,7 +949,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: coverHeight,
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap: () => _pickCoverPhoto(profile),
+                      onTap: _pickCoverPhoto,
                       child: Stack(
                         fit: StackFit.expand,
                         children: [
@@ -1033,7 +1026,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           // Screenshot: pencil on cover = edit cover (save is FAB ✓).
                           _editCircleButton(
-                            onTap: () => _pickCoverPhoto(profile),
+                            onTap: _pickCoverPhoto,
                           ),
                         ],
                       ),

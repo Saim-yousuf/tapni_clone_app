@@ -77,7 +77,9 @@ class BwProgressBar extends StatelessWidget {
         children: List.generate(total, (i) {
           final filled = i <= step;
           return Expanded(
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 420),
+              curve: Curves.easeOutCubic,
               height: 4,
               margin: EdgeInsets.only(right: i == total - 1 ? 0 : 6),
               decoration: BoxDecoration(

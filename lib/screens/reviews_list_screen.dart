@@ -196,6 +196,7 @@ class _ReviewsListScreenState extends State<ReviewsListScreen> {
                                     final review = _reviews[index];
                                     return BarqodyReviewCard(
                                       review: review,
+                                      appearIndex: index,
                                       onDelete: () => _report(review.id),
                                     );
                                   },

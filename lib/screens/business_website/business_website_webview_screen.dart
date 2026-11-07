@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -12,6 +13,7 @@ import 'package:tapni_app/screens/explore_cart_screen.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
 import 'package:tapni_app/utils/api_endpoint.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
+import 'package:tapni_app/utils/own_catalog_guard.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -106,19 +108,47 @@ class _BusinessWebsiteWebViewScreenState
 
   void _handleAddToCart(BwBridgeAddToCart payload) {
     if (!mounted || widget.sampleDemoPreview) return;
+    if (OwnCatalogGuard.isOwnBusinessOf(
+      context,
+      businessId: payload.businessId,
+      businessUsername: payload.businessUsername,
+      websiteSlug: payload.websiteSlug,
+    )) {
+      showAppToast(
+        context,
+        OwnCatalogGuard.message,
+        kind: AppToastKind.warning,
+      );
+      // Undo optimistic template cart bump so badge/ATC labels stay correct.
+      unawaited(_injectNativeCartToWeb(
+        businessId: payload.businessId,
+        websiteSlug: payload.websiteSlug,
+      ));
+      return;
+    }
     final cart = context.read<ExploreCartProvider>();
     cart.addItem(
       businessId: payload.businessId,
+      // Prefer real catalog link id; never substitute businessId (breaks
+      // findCatalogLink-by-id on authenticated placeOrder fallbacks).
       businessLinkId: payload.businessLinkId.isNotEmpty
           ? payload.businessLinkId
-          : payload.businessId,
+          : 'website:${payload.websiteSlug.isNotEmpty ? payload.websiteSlug : payload.businessId}',
       businessName: payload.businessName,
+      businessUsername: payload.businessUsername,
       catalogType: payload.catalogType,
       currency: payload.currency,
       websiteSlug: payload.websiteSlug,
+      ordersPaused: payload.ordersPaused,
+      isClosedNow: payload.isClosedNow,
       catalogItems: [payload.line.item],
       line: payload.line,
     );
+    // Keep detail-page ATC label in sync (In cart · Add more).
+    unawaited(_injectNativeCartToWeb(
+      businessId: payload.businessId,
+      websiteSlug: payload.websiteSlug,
+    ));
     showAppToast(
       context,
       '${payload.line.item.name} added to cart',
@@ -126,6 +156,74 @@ class _BusinessWebsiteWebViewScreenState
       actionLabel: 'View cart',
       onAction: _openNativeCart,
     );
+  }
+
+  /// Push native cart lines into the template so ATC buttons show in-cart state.
+  Future<void> _injectNativeCartToWeb({
+    String businessId = '',
+    String websiteSlug = '',
+  }) async {
+    final controller = _controller;
+    if (controller == null || widget.sampleDemoPreview) return;
+    final cart = context.read<ExploreCartProvider>();
+    final bid = businessId.trim();
+    final slug = websiteSlug.trim().toLowerCase();
+    final lines = <Map<String, dynamic>>[];
+    for (final vendor in cart.vendors) {
+      if (vendor.lines.isEmpty) continue;
+      final vBid = vendor.businessId.trim();
+      final vSlug = vendor.websiteSlug.trim().toLowerCase();
+      final match = (bid.isNotEmpty && vBid == bid) ||
+          (slug.isNotEmpty && vSlug == slug) ||
+          (bid.isEmpty && slug.isEmpty);
+      if (!match) continue;
+      for (final line in vendor.lines) {
+        lines.add({
+          'catalogItemId': line.item.id,
+          'name': line.item.name,
+          'quantity': line.quantity,
+        });
+      }
+    }
+    // Never wipe an optimistic JS bump with [] when Flutter cart has lines but
+    // vendor id/slug matching missed (badge would disappear after ATC).
+    if (lines.isEmpty && cart.itemCount > 0) {
+      for (final vendor in cart.vendors) {
+        for (final line in vendor.lines) {
+          lines.add({
+            'catalogItemId': line.item.id,
+            'name': line.item.name,
+            'quantity': line.quantity,
+          });
+        }
+      }
+    }
+    final payload = jsonEncode(lines);
+    await controller.runJavaScript('''
+      (function(){
+        try{
+          var lines=$payload;
+          if(typeof window.__BW_SET_NATIVE_CART==='function'){
+            window.__BW_SET_NATIVE_CART(lines);
+            return;
+          }
+          window.__BW_NATIVE_CART=lines;
+          var n=lines.reduce(function(s,i){ return s+(Number(i.quantity)||1); },0);
+          document.querySelectorAll('[data-bw-cart-badge]').forEach(function(el){
+            el.textContent=String(n);
+            if(n<1){ el.hidden=true; el.setAttribute('hidden','hidden'); }
+            else { el.hidden=false; el.removeAttribute('hidden'); }
+          });
+          document.querySelectorAll('[data-bw-shared-cart-fab]').forEach(function(el){
+            if(n<1){ el.hidden=true; el.setAttribute('hidden','hidden'); }
+            else { el.hidden=false; el.removeAttribute('hidden'); }
+          });
+          if(typeof window.__BW_SYNC_ADD_BUTTONS==='function'){
+            window.__BW_SYNC_ADD_BUTTONS();
+          }
+        }catch(e){}
+      })();
+    ''');
   }
 
   void _handleBridgeMessage(String rawMessage) {
@@ -152,6 +250,15 @@ class _BusinessWebsiteWebViewScreenState
         return;
       }
       if (BwFlutterCommerceBridge.isOpenCart(decoded)) {
+        final ordering = BwFlutterCommerceBridge.parseOpenCartSite(decoded);
+        if (ordering != null) {
+          context.read<ExploreCartProvider>().updateVendorOrderingStatus(
+                businessId: ordering.businessId,
+                websiteSlug: ordering.websiteSlug,
+                ordersPaused: ordering.ordersPaused,
+                isClosedNow: ordering.isClosedNow,
+              );
+        }
         _openNativeCart();
         return;
       }
@@ -409,6 +516,7 @@ class _BusinessWebsiteWebViewScreenState
             if (!widget.sampleDemoPreview) {
               await _injectFlutterAppFlag();
               await _injectShopper();
+              await _injectNativeCartToWeb();
             }
             if (mounted) setState(() => _loading = false);
           },
@@ -447,7 +555,25 @@ class _BusinessWebsiteWebViewScreenState
               }
             }
 
-            // Phase 2B: sample detail/cart pages load via preview API with JWT.
+            // Sample preview: cart screen must never open.
+            if (widget.sampleDemoPreview) {
+              final pageKey = (uri.queryParameters['pageKey'] ?? '').toLowerCase();
+              final pageSlug =
+                  (uri.queryParameters['pageSlug'] ?? '').toLowerCase();
+              final pageType =
+                  (uri.queryParameters['pageType'] ?? '').toLowerCase();
+              final path = uri.path.toLowerCase();
+              final isCart = pageKey == 'cart' ||
+                  pageSlug == 'cart' ||
+                  pageType == 'cart' ||
+                  path.contains('/p/cart') ||
+                  path.endsWith('/cart');
+              if (isCart) {
+                return NavigationDecision.prevent;
+              }
+            }
+
+            // Phase 2B: sample detail pages load via preview API with JWT.
             if (widget.sampleDemoPreview &&
                 sameHost &&
                 _isSamplePreviewApiUrl(request.url)) {
@@ -549,6 +675,10 @@ class _BusinessWebsiteWebViewScreenState
 
   @override
   Widget build(BuildContext context) {
+    final cartCount = widget.sampleDemoPreview
+        ? 0
+        : context.watch<ExploreCartProvider>().itemCount;
+
     // Close lives in a Flutter-only strip ABOVE the platform view.
     // On web, HtmlElementView/iframe steals taps from Stack overlays.
     return Scaffold(
@@ -578,6 +708,17 @@ class _BusinessWebsiteWebViewScreenState
                         child: CircleCloseButton(onTap: _close),
                       ),
                     ),
+                    if (!widget.sampleDemoPreview)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: _WebViewCartButton(
+                            count: cartCount,
+                            onTap: _openNativeCart,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -585,6 +726,73 @@ class _BusinessWebsiteWebViewScreenState
           ),
           Expanded(child: _siteBody()),
         ],
+      ),
+    );
+  }
+}
+
+class _WebViewCartButton extends StatelessWidget {
+  final int count;
+  final VoidCallback onTap;
+
+  const _WebViewCartButton({
+    required this.count,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: BarqodyChrome.circleBtn,
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.center,
+            children: [
+              Image.asset(
+                'assets/images/png/bag-icon.png',
+                width: 20,
+                height: 20,
+                color: Colors.black,
+                errorBuilder: (_, _, _) => const Icon(
+                  Icons.shopping_bag_outlined,
+                  size: 22,
+                  color: Colors.black,
+                ),
+              ),
+              if (count > 0)
+                Positioned(
+                  top: 2,
+                  right: 2,
+                  child: Container(
+                    constraints: const BoxConstraints(minWidth: 16),
+                    height: 16,
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.all(Radius.circular(99)),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      count > 99 ? '99+' : '$count',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w800,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

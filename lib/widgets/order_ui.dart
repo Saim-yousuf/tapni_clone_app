@@ -458,10 +458,7 @@ class OrderListCard extends StatelessWidget {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            [
-                              when,
-                              if (payHint.isNotEmpty) payHint,
-                            ].join(' · '),
+                            when,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: WaUi.caption.copyWith(
@@ -469,6 +466,36 @@ class OrderListCard extends StatelessWidget {
                             ),
                           ),
                         ),
+                        if (payHint.isNotEmpty) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
+                            decoration: BoxDecoration(
+                              color: payHint == 'Pay now'
+                                  ? Colors.black
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: payHint == 'Pay now'
+                                    ? Colors.black
+                                    : OrderUi.border,
+                              ),
+                            ),
+                            child: Text(
+                              payHint,
+                              style: WaUi.caption.copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 11,
+                                color: payHint == 'Pay now'
+                                    ? Colors.white
+                                    : OrderUi.muted,
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ],

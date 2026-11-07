@@ -17,6 +17,7 @@ import 'package:tapni_app/models/user_custom_card.dart';
 import 'package:tapni_app/services/mock_data_service.dart';
 import 'package:tapni_app/repository/auth_repo.dart';
 import 'package:tapni_app/utils/api_handler.dart';
+import 'package:tapni_app/utils/business_features.dart';
 import 'package:tapni_app/utils/card_template_catalog.dart';
 import 'package:tapni_app/utils/constant.dart';
 import 'package:tapni_app/utils/money_format.dart';
@@ -826,9 +827,14 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
     CustomDialog.loadingDialog(context);
 
+    final resolvedType = resolvePersistedBusinessType(
+      businessType: _profile.businessType,
+      businessCategory: businessCategory,
+    );
     final updated = _profile.copyWith(
       businessName: businessName,
       businessCategory: businessCategory,
+      businessType: resolvedType,
       latitude: latitude,
       longitude: longitude,
       businessAddress: businessAddress,
@@ -842,6 +848,7 @@ class ProfileProvider extends ChangeNotifier {
         jsonBody: {
           'businessName': businessName,
           'businessCategory': businessCategory,
+          'businessType': resolvedType,
           'latitude': latitude,
           'longitude': longitude,
           'businessAddress': businessAddress,

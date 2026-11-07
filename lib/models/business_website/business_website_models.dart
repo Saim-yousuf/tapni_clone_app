@@ -227,6 +227,192 @@ class BusinessWebsiteDesign {
   }
 }
 
+/// One day in weeklyHours (open/close are "HH:mm").
+class WebsiteDayHours {
+  final bool closed;
+  final String open;
+  final String close;
+
+  const WebsiteDayHours({
+    this.closed = false,
+    this.open = '11:00',
+    this.close = '23:00',
+  });
+
+  factory WebsiteDayHours.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return const WebsiteDayHours();
+    return WebsiteDayHours(
+      closed: json['closed'] == true,
+      open: json['open']?.toString() ?? '11:00',
+      close: json['close']?.toString() ?? '23:00',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'closed': closed,
+        'open': open,
+        'close': close,
+      };
+
+  WebsiteDayHours copyWith({bool? closed, String? open, String? close}) {
+    return WebsiteDayHours(
+      closed: closed ?? this.closed,
+      open: open ?? this.open,
+      close: close ?? this.close,
+    );
+  }
+}
+
+/// Menu storefront ordering rules on BusinessWebsite.
+class WebsiteOrdering {
+  static const dayKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+  static const dayLabels = {
+    'mon': 'Monday',
+    'tue': 'Tuesday',
+    'wed': 'Wednesday',
+    'thu': 'Thursday',
+    'fri': 'Friday',
+    'sat': 'Saturday',
+    'sun': 'Sunday',
+  };
+
+  final bool ordersPaused;
+  final bool acceptPickup;
+  final bool acceptDelivery;
+  final double minOrderAmount;
+  final double deliveryFee;
+  final double freeDeliveryAbove;
+  final List<String> deliveryAreas;
+  final int prepTimeMinutes;
+  final bool tipsEnabled;
+  final bool scheduleOrdersEnabled;
+  final String timezone;
+  final Map<String, WebsiteDayHours> weeklyHours;
+  final bool isOpenNow;
+
+  const WebsiteOrdering({
+    this.ordersPaused = false,
+    this.acceptPickup = true,
+    this.acceptDelivery = true,
+    this.minOrderAmount = 0,
+    this.deliveryFee = 0,
+    this.freeDeliveryAbove = 0,
+    this.deliveryAreas = const [],
+    this.prepTimeMinutes = 25,
+    this.tipsEnabled = false,
+    this.scheduleOrdersEnabled = false,
+    this.timezone = 'Asia/Karachi',
+    this.weeklyHours = const {},
+    this.isOpenNow = true,
+  });
+
+  Map<String, WebsiteDayHours> get resolvedWeeklyHours {
+    if (weeklyHours.length >= dayKeys.length) return weeklyHours;
+    final out = <String, WebsiteDayHours>{};
+    for (final k in dayKeys) {
+      out[k] = weeklyHours[k] ?? const WebsiteDayHours();
+    }
+    return out;
+  }
+
+  factory WebsiteOrdering.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return const WebsiteOrdering();
+    final hoursRaw = json['weeklyHours'];
+    final hours = <String, WebsiteDayHours>{};
+    if (hoursRaw is Map) {
+      for (final k in dayKeys) {
+        final v = hoursRaw[k];
+        hours[k] = WebsiteDayHours.fromJson(
+          v is Map ? Map<String, dynamic>.from(v) : null,
+        );
+      }
+    }
+    final areas = <String>[];
+    final areasRaw = json['deliveryAreas'];
+    if (areasRaw is List) {
+      for (final a in areasRaw) {
+        final t = a?.toString().trim() ?? '';
+        if (t.isNotEmpty) areas.add(t);
+      }
+    }
+    return WebsiteOrdering(
+      ordersPaused: json['ordersPaused'] == true,
+      acceptPickup: json['acceptPickup'] != false,
+      acceptDelivery: json['acceptDelivery'] != false,
+      minOrderAmount: (json['minOrderAmount'] is num)
+          ? (json['minOrderAmount'] as num).toDouble()
+          : double.tryParse('${json['minOrderAmount']}') ?? 0,
+      deliveryFee: (json['deliveryFee'] is num)
+          ? (json['deliveryFee'] as num).toDouble()
+          : double.tryParse('${json['deliveryFee']}') ?? 0,
+      freeDeliveryAbove: (json['freeDeliveryAbove'] is num)
+          ? (json['freeDeliveryAbove'] as num).toDouble()
+          : double.tryParse('${json['freeDeliveryAbove']}') ?? 0,
+      deliveryAreas: areas,
+      prepTimeMinutes: (json['prepTimeMinutes'] is num)
+          ? (json['prepTimeMinutes'] as num).toInt()
+          : int.tryParse('${json['prepTimeMinutes']}') ?? 25,
+      tipsEnabled: json['tipsEnabled'] == true,
+      scheduleOrdersEnabled: json['scheduleOrdersEnabled'] == true,
+      timezone: json['timezone']?.toString().trim().isNotEmpty == true
+          ? json['timezone'].toString().trim()
+          : 'Asia/Karachi',
+      weeklyHours: hours,
+      isOpenNow: json['isOpenNow'] != false,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'ordersPaused': ordersPaused,
+        'acceptPickup': acceptPickup,
+        'acceptDelivery': acceptDelivery,
+        'minOrderAmount': minOrderAmount,
+        'deliveryFee': deliveryFee,
+        'freeDeliveryAbove': freeDeliveryAbove,
+        'deliveryAreas': deliveryAreas,
+        'prepTimeMinutes': prepTimeMinutes,
+        'tipsEnabled': tipsEnabled,
+        'scheduleOrdersEnabled': scheduleOrdersEnabled,
+        'timezone': timezone,
+        'weeklyHours': {
+          for (final e in resolvedWeeklyHours.entries) e.key: e.value.toJson(),
+        },
+      };
+
+  WebsiteOrdering copyWith({
+    bool? ordersPaused,
+    bool? acceptPickup,
+    bool? acceptDelivery,
+    double? minOrderAmount,
+    double? deliveryFee,
+    double? freeDeliveryAbove,
+    List<String>? deliveryAreas,
+    int? prepTimeMinutes,
+    bool? tipsEnabled,
+    bool? scheduleOrdersEnabled,
+    String? timezone,
+    Map<String, WebsiteDayHours>? weeklyHours,
+    bool? isOpenNow,
+  }) {
+    return WebsiteOrdering(
+      ordersPaused: ordersPaused ?? this.ordersPaused,
+      acceptPickup: acceptPickup ?? this.acceptPickup,
+      acceptDelivery: acceptDelivery ?? this.acceptDelivery,
+      minOrderAmount: minOrderAmount ?? this.minOrderAmount,
+      deliveryFee: deliveryFee ?? this.deliveryFee,
+      freeDeliveryAbove: freeDeliveryAbove ?? this.freeDeliveryAbove,
+      deliveryAreas: deliveryAreas ?? this.deliveryAreas,
+      prepTimeMinutes: prepTimeMinutes ?? this.prepTimeMinutes,
+      tipsEnabled: tipsEnabled ?? this.tipsEnabled,
+      scheduleOrdersEnabled:
+          scheduleOrdersEnabled ?? this.scheduleOrdersEnabled,
+      timezone: timezone ?? this.timezone,
+      weeklyHours: weeklyHours ?? this.weeklyHours,
+      isOpenNow: isOpenNow ?? this.isOpenNow,
+    );
+  }
+}
+
 class BusinessWebsite {
   final String id;
   final String? userId;
@@ -239,6 +425,7 @@ class BusinessWebsite {
   final String websiteType;
   final String catalogLinkId;
   final BusinessWebsiteDesign design;
+  final WebsiteOrdering ordering;
   final String? categoryId;
   final String? categoryName;
   final String? subcategoryId;
@@ -260,6 +447,7 @@ class BusinessWebsite {
     this.websiteType = 'menu',
     this.catalogLinkId = '',
     this.design = const BusinessWebsiteDesign(),
+    this.ordering = const WebsiteOrdering(),
     this.categoryId,
     this.categoryName,
     this.subcategoryId,
@@ -324,6 +512,7 @@ class BusinessWebsite {
     String? websiteType,
     String? catalogLinkId,
     BusinessWebsiteDesign? design,
+    WebsiteOrdering? ordering,
     String? categoryId,
     String? categoryName,
     String? subcategoryId,
@@ -345,6 +534,7 @@ class BusinessWebsite {
       websiteType: websiteType ?? this.websiteType,
       catalogLinkId: catalogLinkId ?? this.catalogLinkId,
       design: design ?? this.design,
+      ordering: ordering ?? this.ordering,
       categoryId: categoryId ?? this.categoryId,
       categoryName: categoryName ?? this.categoryName,
       subcategoryId: subcategoryId ?? this.subcategoryId,
@@ -358,6 +548,7 @@ class BusinessWebsite {
 
   factory BusinessWebsite.fromJson(Map<String, dynamic> json) {
     final designRaw = json['design'];
+    final orderingRaw = json['ordering'];
     return BusinessWebsite(
       id: json['id']?.toString() ?? json['_id']?.toString() ?? '',
       userId: json['userId']?.toString(),
@@ -371,6 +562,9 @@ class BusinessWebsite {
       catalogLinkId: json['catalogLinkId']?.toString() ?? '',
       design: BusinessWebsiteDesign.fromJson(
         designRaw is Map ? Map<String, dynamic>.from(designRaw) : null,
+      ),
+      ordering: WebsiteOrdering.fromJson(
+        orderingRaw is Map ? Map<String, dynamic>.from(orderingRaw) : null,
       ),
       categoryId: json['categoryId']?.toString(),
       categoryName: json['categoryName']?.toString(),

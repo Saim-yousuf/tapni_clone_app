@@ -16,8 +16,8 @@ class Api {
   static void init(
     // Environment env
   ) {
-    // baseUrl = _localBaseUrl;
-    baseUrl = _liveBaseUrl;
+    baseUrl = _localBaseUrl;
+    // baseUrl = _liveBaseUrl;
 
     // env == Environment.local ? _localBaseUrl : _liveBaseUrl;
   }
@@ -216,12 +216,17 @@ class _CatalogApi {
   String get orders => "${Api.baseUrl}/api/catalog/orders";
   /// Guest / optional-auth website + Flutter guest checkout.
   String get publicOrders => "${Api.baseUrl}/api/catalog/public/orders";
+  /// Menu open/paused status for cart Place Order CTA.
+  String publicStorefrontStatus(String slug) =>
+      "${Api.baseUrl}/api/catalog/public/storefront/${Uri.encodeComponent(slug)}/status";
   String get incomingOrders => "${Api.baseUrl}/api/catalog/orders/incoming";
   String get myOrders => "${Api.baseUrl}/api/catalog/orders/my";
   /// Link a guest web order after phone OTP login (tracking code + phone match).
   String get claimGuestOrder =>
       "${Api.baseUrl}/api/catalog/orders/claim-guest";
   String order(String id) => "${Api.baseUrl}/api/catalog/orders/$id";
+  String cancelOrder(String id) =>
+      "${Api.baseUrl}/api/catalog/orders/$id/cancel";
   String updateStatus(String id) =>
       "${Api.baseUrl}/api/catalog/orders/$id/status";
   String markOrderRead(String id) =>

@@ -12,6 +12,8 @@ class BwBridgeAddToCart {
   final String currency;
   final String websiteSlug;
   final String bookingMode;
+  final bool ordersPaused;
+  final bool isClosedNow;
 
   const BwBridgeAddToCart({
     required this.line,
@@ -23,6 +25,23 @@ class BwBridgeAddToCart {
     required this.currency,
     required this.websiteSlug,
     required this.bookingMode,
+    this.ordersPaused = false,
+    this.isClosedNow = false,
+  });
+}
+
+/// Ordering flags from website → Flutter (addToCart / openCart).
+class BwBridgeSiteOrdering {
+  final String businessId;
+  final String websiteSlug;
+  final bool ordersPaused;
+  final bool isClosedNow;
+
+  const BwBridgeSiteOrdering({
+    required this.businessId,
+    required this.websiteSlug,
+    required this.ordersPaused,
+    required this.isClosedNow,
   });
 }
 
@@ -134,6 +153,7 @@ class BwFlutterCommerceBridge {
       return null;
     }
 
+    final ordering = _siteOrdering(site);
     return BwBridgeAddToCart(
       line: line,
       businessId: businessId,
@@ -150,7 +170,34 @@ class BwFlutterCommerceBridge {
           : 'PKR',
       websiteSlug: _str(site['websiteSlug']),
       bookingMode: bookingMode,
+      ordersPaused: ordering.ordersPaused,
+      isClosedNow: ordering.isClosedNow,
     );
+  }
+
+  static bool _truthy(dynamic v) {
+    if (v is bool) return v;
+    final s = _str(v).toLowerCase();
+    return s == 'true' || s == '1' || s == 'yes';
+  }
+
+  static BwBridgeSiteOrdering _siteOrdering(Map site) {
+    final paused = _truthy(site['ordersPaused']);
+    final closed = _truthy(site['isClosedNow']) ||
+        (!_truthy(site['isOpenNow']) && site.containsKey('isOpenNow'));
+    return BwBridgeSiteOrdering(
+      businessId: _str(site['businessId']),
+      websiteSlug: _str(site['websiteSlug']),
+      ordersPaused: paused,
+      isClosedNow: !paused && closed,
+    );
+  }
+
+  static BwBridgeSiteOrdering? parseOpenCartSite(Map raw) {
+    if (_str(raw['action']) != 'openCart') return null;
+    final siteRaw = raw['site'];
+    if (siteRaw is! Map) return null;
+    return _siteOrdering(Map<String, dynamic>.from(siteRaw));
   }
 
   static bool isOpenCart(Map raw) => _str(raw['action']) == 'openCart';

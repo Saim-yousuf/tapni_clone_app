@@ -27,6 +27,13 @@ class CatalogRepo {
     String? orderType,
     String? fulfillmentAddress,
     String? fulfillmentNotes,
+    String? deliveryArea,
+    String? scheduledFor,
+    double? tipAmount,
+    double? fulfillmentLat,
+    double? fulfillmentLng,
+    int? prepTimeMinutes,
+    String? guestPhone,
     @Deprecated('Dine-in removed; token ignored by backend') String? tableToken,
     String? paymentMethod,
     String? idempotencyKey,
@@ -34,11 +41,21 @@ class CatalogRepo {
     String? couponCode,
     String? offerId,
   }) async {
+    final tip = tipAmount ?? 0;
     final fulfillment = <String, dynamic>{
       if (fulfillmentAddress != null && fulfillmentAddress.isNotEmpty)
         'address': fulfillmentAddress,
       if (fulfillmentNotes != null && fulfillmentNotes.isNotEmpty)
         'notes': fulfillmentNotes,
+      if (deliveryArea != null && deliveryArea.isNotEmpty)
+        'deliveryArea': deliveryArea,
+      if (scheduledFor != null && scheduledFor.isNotEmpty)
+        'scheduledFor': scheduledFor,
+      if (fulfillmentLat != null) 'lat': fulfillmentLat,
+      if (fulfillmentLng != null) 'lng': fulfillmentLng,
+      if (prepTimeMinutes != null && prepTimeMinutes > 0)
+        'prepTimeMinutes': prepTimeMinutes,
+      if (tip > 0) 'tipAmount': tip,
     };
     return ApiHandler.request(
       api: Api.catalog.orders,
@@ -63,6 +80,8 @@ class CatalogRepo {
         if (checkOutDate != null && checkOutDate.isNotEmpty)
           'checkOutDate': checkOutDate,
         if (fulfillment.isNotEmpty) 'fulfillment': fulfillment,
+        if (guestPhone != null && guestPhone.isNotEmpty)
+          'guestPhone': guestPhone,
         if (paymentMethod != null && paymentMethod.isNotEmpty)
           'paymentMethod': paymentMethod,
         if (idempotencyKey != null && idempotencyKey.isNotEmpty)
@@ -92,6 +111,12 @@ class CatalogRepo {
     String? checkInDate,
     String? checkOutDate,
     String? orderType,
+    String? deliveryArea,
+    String? scheduledFor,
+    double? tipAmount,
+    double? fulfillmentLat,
+    double? fulfillmentLng,
+    int? prepTimeMinutes,
     String? paymentMethod,
     String? idempotencyKey,
     String? couponCode,
@@ -99,6 +124,7 @@ class CatalogRepo {
     /// When the shopper is signed in, send Bearer via [authorization].
     bool authorization = false,
   }) async {
+    final tip = tipAmount ?? 0;
     return ApiHandler.request(
       api: Api.catalog.publicOrders,
       method: ApiMethod.post,
@@ -118,6 +144,15 @@ class CatalogRepo {
           if (guestAddress != null && guestAddress.isNotEmpty)
             'address': guestAddress,
           if (notes != null && notes.isNotEmpty) 'notes': notes,
+          if (deliveryArea != null && deliveryArea.isNotEmpty)
+            'deliveryArea': deliveryArea,
+          if (scheduledFor != null && scheduledFor.isNotEmpty)
+            'scheduledFor': scheduledFor,
+          if (fulfillmentLat != null) 'lat': fulfillmentLat,
+          if (fulfillmentLng != null) 'lng': fulfillmentLng,
+          if (prepTimeMinutes != null && prepTimeMinutes > 0)
+            'prepTimeMinutes': prepTimeMinutes,
+          if (tip > 0) 'tipAmount': tip,
         },
         if (notes != null && notes.isNotEmpty) 'notes': notes,
         if (bookingDate != null && bookingDate.isNotEmpty)
@@ -150,6 +185,15 @@ class CatalogRepo {
       method: ApiMethod.post,
       authorization: true,
       jsonBody: {'trackingCode': trackingCode},
+    );
+  }
+
+  /// Menu open/paused flags for Flutter cart Place Order CTA.
+  Future<ApiResponse> getPublicStorefrontStatus({required String websiteSlug}) {
+    return ApiHandler.request(
+      api: Api.catalog.publicStorefrontStatus(websiteSlug),
+      method: ApiMethod.get,
+      authorization: false,
     );
   }
 
@@ -359,6 +403,16 @@ class CatalogRepo {
       method: ApiMethod.put,
       authorization: true,
       jsonBody: {'status': status},
+    );
+  }
+
+  /// Customer cancels their own order (held / pending / confirmed).
+  Future<ApiResponse> cancelOrderAsCustomer(String orderId) async {
+    return ApiHandler.request(
+      api: Api.catalog.cancelOrder(orderId),
+      method: ApiMethod.post,
+      authorization: true,
+      jsonBody: {},
     );
   }
 

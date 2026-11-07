@@ -1,5 +1,16 @@
 enum OrderStatus { held, pending, confirmed, completed, cancelled, noShow }
 
+double? _readCoord(dynamic raw) {
+  if (raw is num) return raw.toDouble();
+  if (raw is String) return double.tryParse(raw.trim());
+  return null;
+}
+
+/// Matches " (24.12345, 67.12345)" pins appended at checkout.
+final RegExp _addressPinRe = RegExp(
+  r'\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\)\s*$',
+);
+
 class CatalogOrder {
   final String id;
   final String businessId;
@@ -12,6 +23,8 @@ class CatalogOrder {
   final String? customerPhoto;
   final String guestName;
   final String guestPhone;
+  /// Best contact number for UI (order phone, else profile phone from API).
+  final String customerPhone;
   final String guestEmail;
   final String businessLinkId;
   final String catalogType;
@@ -21,6 +34,19 @@ class CatalogOrder {
   final String fulfillmentAddress;
   final String fulfillmentNotes;
   final String tableToken;
+  final String deliveryArea;
+  final String scheduledFor;
+  final double tipAmount;
+  final double deliveryFee;
+  /// Optional pin from delivery map picker.
+  final double? fulfillmentLat;
+  final double? fulfillmentLng;
+  /// Prep estimate snapshot (minutes), when storefront/order includes it.
+  final int prepTimeMinutes;
+  /// True when no BarQody customer is linked yet (guest claim).
+  final bool claimEligible;
+  /// Customer-facing tracking code when present on the payload.
+  final String guestTrackingCode;
   final List<CatalogOrderLineItem> items;
   final double totalAmount;
   /// Subtotal before points discount (falls back to totalAmount).
@@ -68,6 +94,7 @@ class CatalogOrder {
     this.customerPhoto,
     this.guestName = '',
     this.guestPhone = '',
+    this.customerPhone = '',
     this.guestEmail = '',
     this.businessLinkId = '',
     this.catalogType = 'catalog',
@@ -76,6 +103,15 @@ class CatalogOrder {
     this.fulfillmentAddress = '',
     this.fulfillmentNotes = '',
     this.tableToken = '',
+    this.deliveryArea = '',
+    this.scheduledFor = '',
+    this.tipAmount = 0,
+    this.deliveryFee = 0,
+    this.fulfillmentLat,
+    this.fulfillmentLng,
+    this.prepTimeMinutes = 0,
+    this.claimEligible = false,
+    this.guestTrackingCode = '',
     required this.items,
     this.totalAmount = 0,
     this.subtotalAmount = 0,
@@ -147,6 +183,11 @@ class CatalogOrder {
       customerPhoto: json['customerPhoto']?.toString(),
       guestName: json['guestName']?.toString() ?? '',
       guestPhone: json['guestPhone']?.toString() ?? '',
+      customerPhone: () {
+        final direct = json['customerPhone']?.toString().trim() ?? '';
+        if (direct.isNotEmpty) return direct;
+        return json['guestPhone']?.toString().trim() ?? '';
+      }(),
       guestEmail: json['guestEmail']?.toString() ?? '',
       businessLinkId: json['businessLinkId']?.toString() ?? '',
       catalogType: json['catalogType']?.toString() ?? 'catalog',
@@ -155,6 +196,28 @@ class CatalogOrder {
       fulfillmentAddress: fulfillment['address']?.toString() ?? '',
       fulfillmentNotes: fulfillment['notes']?.toString() ?? '',
       tableToken: fulfillment['tableToken']?.toString() ?? '',
+      deliveryArea: fulfillment['deliveryArea']?.toString() ?? '',
+      scheduledFor: fulfillment['scheduledFor']?.toString() ?? '',
+      tipAmount: (fulfillment['tipAmount'] is num)
+          ? (fulfillment['tipAmount'] as num).toDouble()
+          : 0,
+      deliveryFee: (fulfillment['deliveryFee'] is num)
+          ? (fulfillment['deliveryFee'] as num).toDouble()
+          : 0,
+      fulfillmentLat: _readCoord(
+        fulfillment['lat'] ?? fulfillment['latitude'],
+      ),
+      fulfillmentLng: _readCoord(
+        fulfillment['lng'] ?? fulfillment['longitude'],
+      ),
+      prepTimeMinutes: () {
+        final raw =
+            fulfillment['prepTimeMinutes'] ?? json['prepTimeMinutes'];
+        if (raw is num) return raw.toInt();
+        return int.tryParse('$raw') ?? 0;
+      }(),
+      claimEligible: json['claimEligible'] == true,
+      guestTrackingCode: json['guestTrackingCode']?.toString() ?? '',
       items: (json['items'] as List<dynamic>? ?? [])
           .map((e) => CatalogOrderLineItem.fromJson(
                 Map<String, dynamic>.from(e as Map),
@@ -241,6 +304,7 @@ class CatalogOrder {
       customerPhoto: customerPhoto,
       guestName: guestName,
       guestPhone: guestPhone,
+      customerPhone: customerPhone,
       guestEmail: guestEmail,
       businessLinkId: businessLinkId,
       catalogType: catalogType,
@@ -249,6 +313,15 @@ class CatalogOrder {
       fulfillmentAddress: fulfillmentAddress,
       fulfillmentNotes: fulfillmentNotes,
       tableToken: tableToken,
+      deliveryArea: deliveryArea,
+      scheduledFor: scheduledFor,
+      tipAmount: tipAmount,
+      deliveryFee: deliveryFee,
+      fulfillmentLat: fulfillmentLat,
+      fulfillmentLng: fulfillmentLng,
+      prepTimeMinutes: prepTimeMinutes,
+      claimEligible: claimEligible,
+      guestTrackingCode: guestTrackingCode,
       items: items,
       totalAmount: totalAmount,
       subtotalAmount: subtotalAmount,
@@ -323,8 +396,67 @@ class CatalogOrder {
     return 'Payment update';
   }
 
+  /// True when this order was meant to be paid online (card / Stripe).
+  bool get isOnlinePaymentMethod {
+    final method = paymentMethod.trim().toLowerCase();
+    final provider = paymentProvider.trim().toLowerCase();
+    if (method == 'cash' || method == 'cash_on_delivery' || method == 'cod') {
+      return false;
+    }
+    if (method == 'online' || method == 'card' || method == 'stripe') {
+      return true;
+    }
+    if (provider == 'stripe' || provider == 'mock') return true;
+    return false;
+  }
+
+  bool get isCashPaymentMethod {
+    final method = paymentMethod.trim().toLowerCase();
+    return method == 'cash' ||
+        method == 'cash_on_delivery' ||
+        method == 'cod';
+  }
+
+  bool get _paymentStillOpen {
+    if (status == OrderStatus.cancelled || status == OrderStatus.noShow) {
+      return false;
+    }
+    final p = paymentStatus.trim().toLowerCase();
+    if (isGenuinelyPaid || paymentSimulated) return false;
+    if (p == 'paid' ||
+        p == 'simulated_paid' ||
+        p == 'refunded' ||
+        p == 'partially_refunded' ||
+        p == 'not_required') {
+      return false;
+    }
+    return true;
+  }
+
+  /// COD / cash order not paid yet — customer can pay online from detail.
+  bool get canCustomerPayNow => isCashPaymentMethod && _paymentStillOpen;
+
+  /// Legacy alias: resume incomplete online checkout (rare; online is paid at place).
+  bool get needsOnlinePayment =>
+      isOnlinePaymentMethod && _paymentStillOpen;
+
+  bool get canCustomerCancel =>
+      status == OrderStatus.held ||
+      status == OrderStatus.pending ||
+      status == OrderStatus.confirmed;
+
+  bool get canBusinessRefund =>
+      (isGenuinelyPaid ||
+          paymentStatus == 'paid' ||
+          paymentStatus == 'partially_refunded') &&
+      refundStatus != 'refunded' &&
+      (status == OrderStatus.confirmed ||
+          status == OrderStatus.completed ||
+          status == OrderStatus.cancelled);
+
   /// Compact payment/refund hint for list cards (empty when nothing notable).
   String get listPaymentHint {
+    if (canCustomerPayNow) return 'Pay now';
     final pStatus = paymentStatus.trim().toLowerCase();
     if (pStatus == 'refunded' || hasRefund) {
       if (pStatus == 'partially_refunded' ||
@@ -338,10 +470,14 @@ class CatalogOrder {
     }
     if (pStatus == 'failed') return 'Payment failed';
     if (pStatus == 'not_required') return 'No payment';
+    if (pStatus == 'simulated_paid') return 'Demo payment';
+    if (isCashPaymentMethod &&
+        (pStatus == 'pending' || pStatus == 'unpaid' || pStatus.isEmpty)) {
+      return 'Cash';
+    }
     if (pStatus == 'pending' || pStatus == 'unpaid' || pStatus.isEmpty) {
       return 'Unpaid';
     }
-    if (pStatus == 'simulated_paid') return 'Demo payment';
     return '';
   }
 
@@ -369,6 +505,33 @@ class CatalogOrder {
   bool get isStay => kind == 'stay';
   bool get isAppointment => kind == 'appointment';
   bool get isTable => kind == 'table';
+  bool get isDelivery => orderType.trim().toLowerCase() == 'delivery';
+
+  /// Address without trailing map-pin coords (for clean UI).
+  String get displayFulfillmentAddress {
+    final raw = fulfillmentAddress.trim();
+    if (raw.isEmpty) return '';
+    return raw.replaceFirst(_addressPinRe, '').trim();
+  }
+
+  /// Best available map pin: stored lat/lng, else parsed from address.
+  ({double lat, double lng})? get mapCoordinates {
+    final storedLat = fulfillmentLat;
+    final storedLng = fulfillmentLng;
+    if (storedLat != null && storedLng != null) {
+      return (lat: storedLat, lng: storedLng);
+    }
+    final match = _addressPinRe.firstMatch(fulfillmentAddress.trim());
+    if (match == null) return null;
+    final lat = double.tryParse(match.group(1) ?? '');
+    final lng = double.tryParse(match.group(2) ?? '');
+    if (lat == null || lng == null) return null;
+    return (lat: lat, lng: lng);
+  }
+
+  bool get canOpenDeliveryMap =>
+      isDelivery &&
+      (mapCoordinates != null || displayFulfillmentAddress.isNotEmpty);
 
   /// Web / walk-in guest with no linked Barqody account.
   bool get isGuest =>
@@ -380,6 +543,46 @@ class CatalogOrder {
     if (name.isNotEmpty) return name;
     return guestName.trim();
   }
+
+  /// Phone for business contact UI.
+  String get displayContactPhone {
+    final a = customerPhone.trim();
+    if (a.isNotEmpty) return a;
+    return guestPhone.trim();
+  }
+
+  bool get isPickup {
+    final t = orderType.trim().toLowerCase();
+    return t == 'takeaway' || t == 'pickup';
+  }
+
+  /// One clear payment chip: "Cash · Unpaid", "Online · Paid", etc.
+  String get paymentStatusChipLabel {
+    final p = paymentStatus.trim().toLowerCase();
+    if (p == 'not_required') return 'No payment';
+    if (p == 'refunded' || refundStatus == 'refunded') return 'Refunded';
+    if (p == 'partially_refunded') return 'Partial refund';
+    if (p == 'failed') return 'Failed';
+    if (p == 'cancelled' || p == 'canceled') return 'Cancelled';
+
+    final paid = p == 'paid' || isGenuinelyPaid;
+    if (p == 'simulated_paid' || paymentSimulated) {
+      return isOnlinePaymentMethod ? 'Online · Demo paid' : 'Demo paid';
+    }
+    if (paid) {
+      if (isOnlinePaymentMethod) return 'Online · Paid';
+      if (isCashPaymentMethod) return 'Cash · Paid';
+      return 'Paid';
+    }
+
+    // Unpaid / pending — COD is the normal unpaid path.
+    if (isCashPaymentMethod || canCustomerPayNow) return 'Cash · Unpaid';
+    if (isOnlinePaymentMethod) return 'Online · Unpaid';
+    return 'Unpaid';
+  }
+
+  /// Separate method chip unused when status already includes method.
+  String get paymentMethodChipLabel => '';
 
   String get kindLabel {
     switch (kind) {
@@ -468,7 +671,26 @@ class CatalogOrder {
       if (who.isEmpty) return slot;
       return '$slot · $who';
     }
+    final scheduled = scheduledFor.trim();
+    if (scheduled.isNotEmpty) {
+      try {
+        final dt = DateTime.parse(scheduled).toLocal();
+        final d =
+            '${dt.day.toString().padLeft(2, '0')}-${dt.month.toString().padLeft(2, '0')}-${dt.year}';
+        final h = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
+        final m = dt.minute.toString().padLeft(2, '0');
+        final ap = dt.hour >= 12 ? 'PM' : 'AM';
+        return 'Scheduled · $d · $h:$m $ap';
+      } catch (_) {
+        return 'Scheduled · ${scheduled.replaceFirst('T', ' · ')}';
+      }
+    }
     return '';
+  }
+
+  String get prepTimeLabel {
+    if (prepTimeMinutes <= 0) return '';
+    return 'Ready in ~$prepTimeMinutes min';
   }
 
   static OrderStatus _parseStatus(String? value) {
@@ -610,7 +832,10 @@ class CatalogOrderLineItem {
       quantity: (json['quantity'] is num)
           ? (json['quantity'] as num).toInt()
           : 1,
-      notes: json['notes']?.toString() ?? '',
+      notes: (json['notes'] ?? json['note'] ?? json['itemNotes'])
+              ?.toString()
+              .trim() ??
+          '',
       imageUrl:
           json['image']?.toString() ?? json['imageUrl']?.toString() ?? '',
     );

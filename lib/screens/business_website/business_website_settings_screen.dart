@@ -9,10 +9,13 @@ import 'package:tapni_app/repository/business_website_repo.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/screens/business_website/business_presence_ui.dart';
 import 'package:tapni_app/screens/business_website/business_website_customize_screen.dart';
+import 'package:tapni_app/screens/business_website/business_website_hours_screen.dart';
+import 'package:tapni_app/screens/business_website/business_website_ordering_screen.dart';
 import 'package:tapni_app/screens/business_website/business_website_setup_guide_sheet.dart';
 import 'package:tapni_app/screens/business_website/business_website_setup_screen.dart'
     show catalogTypeFromWebsiteType;
 import 'package:tapni_app/screens/business_website/business_website_webview_screen.dart';
+import 'package:tapni_app/screens/orders/orders_list_screen.dart';
 import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/catalog_helper.dart' show catalogTypesMatch;
 import 'package:tapni_app/widgets/auth_ui.dart';
@@ -340,8 +343,36 @@ class _BusinessWebsiteSettingsScreenState
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
+  bool get _isMenuSite =>
+      (_website?.websiteType ?? widget.initialWebsite?.websiteType ?? 'menu')
+          .toLowerCase() ==
+      'menu';
+
+  int _activeMenuItemCount() {
+    final website = _website;
+    if (website == null || !mounted) return 0;
+    final provider = Provider.of<ProfileProvider>(context, listen: false);
+    final linked = _resolveCatalogInventoryLink(
+      links: provider.profile.socialLinks,
+      catalogType: catalogTypeFromWebsiteType(website.websiteType),
+      catalogLinkId: website.catalogLinkId,
+    );
+    final items = linked?.catalogItems ?? const [];
+    return items
+        .where((i) => i.isActive && i.name.trim().isNotEmpty)
+        .length;
+  }
+
   Future<void> _setPublished(bool published) async {
     if (_togglingStatus) return;
+    if (published && _isMenuSite && _activeMenuItemCount() < 1) {
+      showAppToast(
+        context,
+        'Add menu items before publishing your website.',
+        kind: AppToastKind.warning,
+      );
+      return;
+    }
     setState(() => _togglingStatus = true);
     final res = await _repo.updateWebsite(
       {'status': published ? 'published' : 'unpublished'},
@@ -363,6 +394,64 @@ class _BusinessWebsiteSettingsScreenState
       setState(() => _website = website);
       await _syncProfileLink(website);
     }
+  }
+
+  Future<void> _setOrdersPaused(bool paused) async {
+    final website = _website;
+    if (website == null) return;
+    final next = website.ordering.copyWith(ordersPaused: paused);
+    final res = await _repo.updateWebsite(
+      {'ordering': next.toJson()},
+      websiteId: website.id,
+      websiteType: website.websiteType,
+    );
+    if (!mounted) return;
+    if (!res.success) {
+      showAppToast(
+        context,
+        res.message ?? 'Could not update pause',
+        kind: AppToastKind.error,
+      );
+      return;
+    }
+    final updated = _repo.parseWebsite(res.data);
+    setState(() {
+      _website = updated ?? website.copyWith(ordering: next);
+    });
+  }
+
+  Future<void> _openHours() async {
+    final website = _website;
+    if (website == null) return;
+    final result = await Navigator.of(context).push<BusinessWebsite>(
+      AppPageRoute(
+        builder: (_) => BusinessWebsiteHoursScreen(website: website),
+      ),
+    );
+    if (result != null && mounted) {
+      setState(() => _website = result);
+    }
+  }
+
+  Future<void> _openOrdering() async {
+    final website = _website;
+    if (website == null) return;
+    final result = await Navigator.of(context).push<BusinessWebsite>(
+      AppPageRoute(
+        builder: (_) => BusinessWebsiteOrderingScreen(website: website),
+      ),
+    );
+    if (result != null && mounted) {
+      setState(() => _website = result);
+    }
+  }
+
+  void _openOrdersInbox() {
+    Navigator.of(context).push(
+      AppPageRoute(
+        builder: (_) => const OrdersListScreen(isBusinessView: true),
+      ),
+    );
   }
 
   Future<void> _deleteWebsite() async {
@@ -811,6 +900,70 @@ class _BusinessWebsiteSettingsScreenState
             ),
           ],
         ),
+        if (_isMenuSite) ...[
+          const SizedBox(height: 16),
+          _sectionCard(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Pause orders',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            w.ordering.ordersPaused
+                                ? 'Browsing OK · place order blocked'
+                                : 'Accepting orders',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: AuthUi.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Switch.adaptive(
+                      value: w.ordering.ordersPaused,
+                      activeColor: Colors.black,
+                      onChanged: _setOrdersPaused,
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1, color: BwUi.cardBorder),
+              _rowTile(
+                title: 'Hours',
+                subtitle: 'Weekly open / closed times',
+                onTap: _openHours,
+              ),
+              const Divider(height: 1, color: BwUi.cardBorder),
+              _rowTile(
+                title: 'Ordering',
+                subtitle: 'Pickup, delivery, fees & areas',
+                onTap: _openOrdering,
+              ),
+              const Divider(height: 1, color: BwUi.cardBorder),
+              _rowTile(
+                title: 'Orders',
+                subtitle: 'Open your order inbox',
+                onTap: _openOrdersInbox,
+              ),
+            ],
+          ),
+        ],
         const SizedBox(height: 16),
         _sectionCard(
           children: [
@@ -821,7 +974,7 @@ class _BusinessWebsiteSettingsScreenState
             ),
             const Divider(height: 1, color: BwUi.cardBorder),
             _rowTile(
-              title: 'Share link',
+              title: _isMenuSite ? 'Share menu' : 'Share link',
               subtitle: 'Send your public URL',
               onTap: _sharePublicLink,
             ),
@@ -923,6 +1076,7 @@ class _TemplateChooserScreen extends StatefulWidget {
 
 class _TemplateChooserScreenState extends State<_TemplateChooserScreen> {
   WebsiteTemplateSummary? _selected;
+  bool _blockSelect = false;
 
   @override
   void initState() {
@@ -933,6 +1087,21 @@ class _TemplateChooserScreenState extends State<_TemplateChooserScreen> {
         break;
       }
     }
+  }
+
+  Future<void> _openSample(WebsiteTemplateSummary template) async {
+    _blockSelect = true;
+    try {
+      await widget.onPreviewSample(template);
+    } finally {
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      if (mounted) _blockSelect = false;
+    }
+  }
+
+  void _selectTemplate(WebsiteTemplateSummary template) {
+    if (_blockSelect) return;
+    setState(() => _selected = template);
   }
 
   @override
@@ -998,7 +1167,7 @@ class _TemplateChooserScreenState extends State<_TemplateChooserScreen> {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => setState(() => _selected = t),
+                        onTap: () => _selectTemplate(t),
                         child: t.thumbnail.isNotEmpty
                             ? Image.network(
                                 t.thumbnail,
@@ -1039,8 +1208,7 @@ class _TemplateChooserScreenState extends State<_TemplateChooserScreen> {
                             children: [
                               Expanded(
                                 child: OutlinedButton(
-                                  onPressed: () =>
-                                      widget.onPreviewSample(t),
+                                  onPressed: () => _openSample(t),
                                   style: OutlinedButton.styleFrom(
                                     foregroundColor: Colors.black,
                                     side: const BorderSide(
@@ -1068,8 +1236,7 @@ class _TemplateChooserScreenState extends State<_TemplateChooserScreen> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: FilledButton(
-                                  onPressed: () =>
-                                      setState(() => _selected = t),
+                                  onPressed: () => _selectTemplate(t),
                                   style: FilledButton.styleFrom(
                                     backgroundColor: selected
                                         ? Colors.black
