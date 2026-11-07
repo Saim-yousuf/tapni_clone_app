@@ -13,7 +13,7 @@ import 'package:tapni_app/l10n/app_languages.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/providers/locale_provider.dart';
 import 'package:tapni_app/screens/app_language_screen.dart';
-import 'package:tapni_app/screens/business_suite_screen.dart';
+import 'package:tapni_app/screens/business/business_suite_shell_screen.dart';
 import 'package:tapni_app/screens/business_website/business_website_setup_guide_sheet.dart';
 import 'package:tapni_app/screens/find_user_screen.dart';
 import 'package:tapni_app/screens/help/help_center_screen.dart';
@@ -202,7 +202,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 Navigator.of(context).push(
                                   AppPageRoute(
                                     builder: (_) =>
-                                        const BusinessSuiteScreen(),
+                                        const BusinessSuiteShellScreen(),
                                   ),
                                 );
                               },

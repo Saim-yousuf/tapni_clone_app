@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/providers/explore_cart_provider.dart';
 import 'package:tapni_app/screens/explore_delivery_map_picker_screen.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
@@ -39,8 +40,6 @@ class _ExploreDeliveryAddressSheetState
   late final TextEditingController _notesCtrl;
   double? _lat;
   double? _lng;
-  /// hand | door
-  String _dropOff = 'hand';
   bool _showOptional = false;
 
   static const _fieldStyle = TextStyle(
@@ -57,16 +56,14 @@ class _ExploreDeliveryAddressSheetState
     _aptCtrl = TextEditingController(text: cart.deliveryApt);
     _entryCtrl = TextEditingController(text: cart.deliveryEntry);
     _buildingCtrl = TextEditingController(text: cart.deliveryBuilding);
-    _notesCtrl = TextEditingController(text: cart.deliveryNotes);
+    final cleanedNotes = stripLegacyDeliveryDropOffNotes(cart.deliveryNotes);
+    _notesCtrl = TextEditingController(text: cleanedNotes);
     _lat = cart.deliveryLat;
     _lng = cart.deliveryLng;
     _showOptional = cart.deliveryApt.trim().isNotEmpty ||
         cart.deliveryEntry.trim().isNotEmpty ||
         cart.deliveryBuilding.trim().isNotEmpty ||
-        cart.deliveryNotes.trim().isNotEmpty;
-    if (cart.deliveryNotes.contains('Leave at my door')) {
-      _dropOff = 'door';
-    }
+        cleanedNotes.isNotEmpty;
   }
 
   @override
@@ -140,14 +137,7 @@ class _ExploreDeliveryAddressSheetState
       );
       return;
     }
-    var notes = _notesCtrl.text.trim();
-    // Strip previous auto drop-off tags before re-applying.
-    notes = notes
-        .replaceAll(RegExp(r'(^|\s·\s)Leave at my door'), '')
-        .replaceAll(RegExp(r'(^|\s·\s)Hand it to me'), '')
-        .trim();
-    final tag = _dropOff == 'door' ? 'Leave at my door' : 'Hand it to me';
-    notes = notes.isEmpty ? tag : '$tag · $notes';
+    final notes = stripLegacyDeliveryDropOffNotes(_notesCtrl.text);
 
     context.read<ExploreCartProvider>().setDeliveryAddress(
           line: line,
@@ -293,31 +283,6 @@ class _ExploreDeliveryAddressSheetState
                   color: BarqodyChrome.secondaryText,
                 ),
               ),
-              const SizedBox(height: 14),
-              Text(
-                'Drop-off',
-                style: WaUi.body.copyWith(fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: _DropChip(
-                      label: 'Hand it to me',
-                      selected: _dropOff == 'hand',
-                      onTap: () => setState(() => _dropOff = 'hand'),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _DropChip(
-                      label: 'Leave at my door',
-                      selected: _dropOff == 'door',
-                      onTap: () => setState(() => _dropOff = 'door'),
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(height: 8),
               Material(
                 color: Colors.transparent,
@@ -399,42 +364,6 @@ class _ExploreDeliveryAddressSheetState
                 onPressed: _save,
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _DropChip extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _DropChip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: selected ? Colors.black : BarqodyChrome.fieldFill,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: WaUi.body.copyWith(
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
-              color: selected ? Colors.white : Colors.black,
-            ),
           ),
         ),
       ),

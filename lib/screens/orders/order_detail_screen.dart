@@ -51,6 +51,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   bool _isLoading = true;
   bool _loadFailed = false;
   bool _isUpdating = false;
+  bool _billExpanded = false;
+  bool _timelineExpanded = false;
 
   @override
   void initState() {
@@ -148,7 +150,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         showAppToast(
           context,
           context.l10n.statusUpdatedTo(
-            CatalogHelper.statusLabel(status, context.l10n),
+            CatalogHelper.statusLabel(
+              status,
+              context.l10n,
+              isDelivery: _order?.isDelivery ?? false,
+            ),
           ),
           kind: AppToastKind.success,
         );
@@ -534,6 +540,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   label: 'Share receipt',
                   onTap: () => Navigator.pop(ctx, 'share'),
                 ),
+                _MoreTile(
+                  icon: Icons.info_outline_rounded,
+                  label: 'Order details',
+                  onTap: () => Navigator.pop(ctx, 'details'),
+                ),
                 if (showPayment)
                   _MoreTile(
                     icon: Icons.payment_outlined,
@@ -578,6 +589,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         break;
       case 'share':
         await _shareReceipt(order);
+        break;
+      case 'details':
+        await _openDetailsSheet(order);
         break;
       case 'payment':
         await Navigator.of(context).push(
@@ -736,32 +750,22 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 ),
                 if (note.isNotEmpty) ...[
                   const SizedBox(height: 16),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-                    decoration: BoxDecoration(
-                      color: BarqodyChrome.fieldFill,
-                      borderRadius: BorderRadius.circular(14),
+                  const Divider(height: 1, thickness: 1, color: Color(0xFFE8E8ED)),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Your note',
+                    style: WaUi.caption.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: BarqodyChrome.secondaryText,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Your note',
-                          style: WaUi.caption.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: BarqodyChrome.secondaryText,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          note,
-                          style: WaUi.body.copyWith(
-                            fontWeight: FontWeight.w600,
-                            height: 1.35,
-                          ),
-                        ),
-                      ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    note,
+                    style: WaUi.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      height: 1.35,
+                      color: Colors.black,
                     ),
                   ),
                 ] else ...[
@@ -881,7 +885,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       for (final e in order.statusHistory) {
         entries.add(
           _TimelineEntry(
-            title: _statusTimelineTitle(e.to),
+            title: _statusTimelineTitle(e.to, order),
             subtitle: e.note.trim().isNotEmpty
                 ? e.note.trim()
                 : _statusTimelineSubtitle(e.to, order),
@@ -953,8 +957,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     } else if (status == OrderStatus.noShow) {
       steps.add(
         _TimelineEntry(
-          title: 'Not collected',
-          subtitle: 'Marked as uncollected',
+          title: _noShowLabel(order),
+          subtitle: _noShowSubtitle(order),
           at: order.updatedAt,
           done: true,
           isTerminalBad: true,
@@ -974,7 +978,45 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     return steps;
   }
 
-  String _statusTimelineTitle(String raw) {
+  /// Same backend status (`no_show`); copy differs by fulfillment.
+  String _noShowLabel(CatalogOrder order) =>
+      order.isDelivery ? 'Not delivered' : 'Not collected';
+
+  String _noShowSubtitle(CatalogOrder order) => order.isDelivery
+      ? 'Delivery couldn’t be completed'
+      : 'Customer didn’t pick up';
+
+  String _noShowHeroTitle(CatalogOrder order) {
+    final noun = order.nounLabel;
+    return order.isDelivery ? '$noun Not Delivered' : '$noun Not Collected';
+  }
+
+  String _noShowHeroFallback(CatalogOrder order) {
+    final noun = order.nounLabel.toLowerCase();
+    return order.isDelivery
+        ? 'Your $noun couldn’t be delivered'
+        : "You didn’t collect your $noun";
+  }
+
+  String _noShowEta(CatalogOrder order) => order.isDelivery
+      ? 'Marked as not delivered'
+      : 'Marked as not collected';
+
+  String _noShowActionLabel(CatalogOrder order) =>
+      order.isDelivery ? 'Couldn’t deliver' : 'Not collected';
+
+  String _noShowConfirmTitle(CatalogOrder order) => order.isDelivery
+      ? 'Mark as not delivered?'
+      : 'Mark as not collected?';
+
+  String _completeActionLabel(CatalogOrder order) =>
+      order.isDelivery ? 'Mark as Delivered' : 'Mark as Complete';
+
+  String _completeConfirmTitle(CatalogOrder order) => order.isDelivery
+      ? 'Mark this order as delivered?'
+      : 'Mark this order as complete?';
+
+  String _statusTimelineTitle(String raw, CatalogOrder order) {
     switch (raw.trim().toLowerCase()) {
       case 'held':
         return 'Held';
@@ -987,7 +1029,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       case 'cancelled':
         return 'Cancelled';
       case 'no_show':
-        return 'Not collected';
+        return _noShowLabel(order);
       default:
         return raw.replaceAll('_', ' ');
     }
@@ -1008,10 +1050,32 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       case 'cancelled':
         return 'Order cancelled';
       case 'no_show':
-        return 'Not collected';
+        return _noShowSubtitle(order);
       default:
         return '';
     }
+  }
+
+  String _statusHeroTitle(CatalogOrder order) {
+    final noun = order.nounLabel;
+    return switch (order.status) {
+      OrderStatus.completed => '$noun Complete',
+      OrderStatus.cancelled => '$noun Cancelled',
+      OrderStatus.noShow => _noShowHeroTitle(order),
+      OrderStatus.confirmed => '$noun Confirmed',
+      OrderStatus.held || OrderStatus.pending => '$noun Pending',
+    };
+  }
+
+  String _statusHeroFallback(CatalogOrder order) {
+    final noun = order.nounLabel.toLowerCase();
+    return switch (order.status) {
+      OrderStatus.completed => 'Your $noun has been completed successfully',
+      OrderStatus.cancelled => 'Your $noun has been cancelled',
+      OrderStatus.noShow => _noShowHeroFallback(order),
+      OrderStatus.confirmed => 'Your $noun has been confirmed',
+      OrderStatus.held || OrderStatus.pending => 'Your $noun is being processed',
+    };
   }
 
   String _etaLabel(CatalogOrder order) {
@@ -1054,60 +1118,191 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       case OrderStatus.cancelled:
         return 'This ${order.nounLabel.toLowerCase()} was cancelled';
       case OrderStatus.noShow:
-        return 'Marked as not collected';
+        return _noShowEta(order);
     }
   }
 
-  List<(String, String)> _overviewRows(CatalogOrder order) {
-    final hasBillExtras = order.tipAmount > 0 ||
+  String _metaLine(CatalogOrder order) {
+    final created = order.createdAt?.toLocal();
+    final date = created == null
+        ? ''
+        : DateFormat('dd MMM').format(created);
+    final time = created == null
+        ? ''
+        : DateFormat('h:mm a').format(created);
+    return [
+      if (order.hasToken) '#${order.tokenNumber}',
+      if (date.isNotEmpty) date,
+      if (time.isNotEmpty) time,
+    ].join(' · ');
+  }
+
+  bool _isTerminalStatus(CatalogOrder order) =>
+      order.status == OrderStatus.completed ||
+      order.status == OrderStatus.cancelled ||
+      order.status == OrderStatus.noShow;
+
+  List<(String, String)> _paymentMetaRows(CatalogOrder order) {
+    final rows = <(String, String)>[];
+    if (order.paymentLabel.isNotEmpty) {
+      rows.add(('Method', order.paymentLabel));
+    }
+    final status = order.paymentStatusChipLabel.trim();
+    if (status.isNotEmpty) {
+      rows.add(('Status', status));
+    }
+    if (order.guestTrackingCode.trim().isNotEmpty) {
+      rows.add(('Tracking', order.guestTrackingCode.trim()));
+    }
+    if (order.publicPaymentRef.isNotEmpty) {
+      rows.add(('Reference', order.publicPaymentRef));
+    }
+    if (order.hasRefund) {
+      rows.add(('Refund', order.refundStatus.replaceAll('_', ' ')));
+      if (order.refundedAmount > 0) {
+        rows.add((
+          'Refunded',
+          formatMoney(order.refundedAmount, currency: order.currency),
+        ));
+      }
+    }
+    if (order.loyaltyReward != null) {
+      rows.add(('Rewards', order.loyaltyReward!.summaryLabel));
+    }
+    return rows;
+  }
+
+  Future<void> _openInfoSheet({
+    required String title,
+    List<(String, String)> rows = const [],
+    String? body,
+    String? caption,
+  }) async {
+    final visible = rows.where((r) => r.$2.trim().isNotEmpty).toList();
+    final hasBody = (body ?? '').trim().isNotEmpty;
+    if (visible.isEmpty && !hasBody) return;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(BarqodyChrome.sheetRadius),
+        ),
+      ),
+      builder: (ctx) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SheetHeader(
+                  title: title,
+                  onBack: () => Navigator.pop(ctx),
+                ),
+                if ((caption ?? '').trim().isNotEmpty) ...[
+                  Text(
+                    caption!.trim(),
+                    style: WaUi.caption.copyWith(
+                      color: BarqodyChrome.secondaryText,
+                      fontWeight: FontWeight.w600,
+                      height: 1.35,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                ],
+                if (hasBody)
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: _Od.panel,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+                      child: Text(
+                        body!.trim(),
+                        style: WaUi.body.copyWith(
+                          fontWeight: FontWeight.w600,
+                          height: 1.45,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                if (visible.isNotEmpty) ...[
+                  if (hasBody) const SizedBox(height: 14),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: _Od.panel,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: _InfoCard(rows: visible),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  List<(String, String)> _paymentBillRows(CatalogOrder order) {
+    final rows = <(String, String)>[];
+    final showBreakdown = order.tipAmount > 0 ||
         order.deliveryFee > 0 ||
         order.couponDiscountAmount > 0 ||
         order.pointsDiscountAmount > 0;
-    return [
-      if (order.hasToken) ('Token', '#${order.tokenNumber}'),
-      ('Order Date', _orderDate(order)),
-      ('Order Time', _orderTime(order)),
-      (
-        'Total Items',
-        '${order.items.fold<int>(0, (s, i) => s + i.quantity)}',
-      ),
-      if (hasBillExtras) ...[
-        (
-          'Subtotal',
-          formatMoney(order.subtotalAmount, currency: order.currency),
-        ),
-        if (order.deliveryFee > 0)
-          (
-            'Delivery fee',
-            formatMoney(order.deliveryFee, currency: order.currency),
-          ),
-        if (order.tipAmount > 0)
-          (
-            'Tip',
-            formatMoney(order.tipAmount, currency: order.currency),
-          ),
-        if (order.couponDiscountAmount > 0)
-          (
-            order.couponCode.isNotEmpty
-                ? 'Coupon (${order.couponCode})'
-                : 'Coupon',
-            '−${formatMoney(order.couponDiscountAmount, currency: order.currency)}',
-          ),
-        if (order.pointsDiscountAmount > 0)
-          (
-            order.pointsRedeemed > 0
-                ? 'Points (${order.pointsRedeemed})'
-                : 'Points',
-            '−${formatMoney(order.pointsDiscountAmount, currency: order.currency)}',
-          ),
-      ],
-    ];
+    if (showBreakdown) {
+      rows.add((
+        'Subtotal',
+        formatMoney(order.subtotalAmount, currency: order.currency),
+      ));
+    }
+    if (order.deliveryFee > 0) {
+      rows.add((
+        'Delivery fee',
+        formatMoney(order.deliveryFee, currency: order.currency),
+      ));
+    }
+    if (order.tipAmount > 0) {
+      rows.add((
+        'Tip',
+        formatMoney(order.tipAmount, currency: order.currency),
+      ));
+    }
+    if (order.couponDiscountAmount > 0) {
+      rows.add((
+        order.couponCode.isNotEmpty
+            ? 'Coupon (${order.couponCode})'
+            : 'Coupon',
+        '−${formatMoney(order.couponDiscountAmount, currency: order.currency)}',
+      ));
+    }
+    if (order.pointsDiscountAmount > 0) {
+      rows.add((
+        order.pointsRedeemed > 0
+            ? 'Points (${order.pointsRedeemed})'
+            : 'Points',
+        '−${formatMoney(order.pointsDiscountAmount, currency: order.currency)}',
+      ));
+    }
+    return rows;
   }
 
   Future<void> _openDetailsSheet(CatalogOrder order) async {
     final whenRows = _whenRows(order);
-    final fulfillRows = _fulfillmentRows(order);
-    final paymentRows = _paymentRows(order);
+    final fulfillRows = _fulfillmentRows(order)
+        .where((r) => r.$1 != 'Notes')
+        .toList();
+    final paymentMeta = _paymentMetaRows(order);
+    final notes = stripLegacyDeliveryDropOffNotes(order.fulfillmentNotes);
     final phone = _contactPhone(order);
     final eta = _etaLabel(order);
 
@@ -1124,13 +1319,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         return SafeArea(
           child: DraggableScrollableSheet(
             expand: false,
-            initialChildSize: 0.62,
+            initialChildSize: 0.58,
             minChildSize: 0.4,
             maxChildSize: 0.92,
             builder: (_, scrollCtrl) {
               return ListView(
                 controller: scrollCtrl,
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
                 children: [
                   SheetHeader(
                     title: 'Order details',
@@ -1140,10 +1335,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     Text(
                       eta,
                       style: WaUi.body.copyWith(
-                        color: BarqodyChrome.secondaryText,
+                        color: const Color(0xFF5C5C62),
+                        fontWeight: FontWeight.w600,
+                        height: 1.35,
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 16),
                   ],
                   if (phone.isNotEmpty || order.canOpenDeliveryMap) ...[
                     Wrap(
@@ -1172,39 +1369,81 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     ),
                     const SizedBox(height: 18),
                   ],
-                  if (whenRows.isNotEmpty) ...[
-                    Text(
-                      order.isStay ? 'Stay' : 'When',
-                      style: WaUi.listTitle.copyWith(fontWeight: FontWeight.w800),
+                  if (notes.isNotEmpty) ...[
+                    const _OdSectionHeader(label: 'Order notes'),
+                    const SizedBox(height: 10),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: _Od.warnBg,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+                        child: Text(
+                          notes,
+                          style: WaUi.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                            height: 1.45,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    _InfoCard(rows: whenRows),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
+                  ],
+                  if (whenRows.isNotEmpty) ...[
+                    _OdSectionHeader(
+                      label: order.isStay ? 'Stay' : 'Schedule',
+                    ),
+                    const SizedBox(height: 10),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: _Od.panel,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        child: _InfoCard(rows: whenRows),
+                      ),
+                    ),
+                    const SizedBox(height: 18),
                   ],
                   if (fulfillRows.isNotEmpty) ...[
-                    Text(
-                      _fulfillmentTitle(order),
-                      style: WaUi.listTitle.copyWith(fontWeight: FontWeight.w800),
+                    _OdSectionHeader(label: _fulfillmentTitle(order)),
+                    const SizedBox(height: 10),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: _Od.panel,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        child: _InfoCard(rows: fulfillRows),
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    _InfoCard(rows: fulfillRows),
                     if (order.canOpenDeliveryMap) ...[
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 12),
                       PillButton(
                         label: 'View on map',
                         filled: false,
                         onPressed: () => _openDeliveryMap(order),
                       ),
                     ],
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                   ],
-                  if (paymentRows.isNotEmpty) ...[
-                    Text(
-                      'Payment',
-                      style: WaUi.listTitle.copyWith(fontWeight: FontWeight.w800),
+                  if (paymentMeta.isNotEmpty) ...[
+                    const _OdSectionHeader(label: 'Payment'),
+                    const SizedBox(height: 10),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: _Od.panel,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        child: _InfoCard(rows: paymentMeta),
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    _InfoCard(rows: paymentRows),
                   ],
                 ],
               );
@@ -1255,71 +1494,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     if (order.scheduledFor.trim().isNotEmpty) {
       rows.add(('Scheduled', _prettyDateTime(order.scheduledFor)));
     }
-    if (order.fulfillmentNotes.isNotEmpty) {
-      rows.add(('Notes', order.fulfillmentNotes));
-    }
-    return rows;
-  }
-
-  List<(String, String)> _paymentRows(CatalogOrder order) {
-    final rows = <(String, String)>[];
-    if (order.paymentLabel.isNotEmpty) {
-      rows.add(('Method', order.paymentLabel));
-    }
-    if (order.deliveryFee > 0 ||
-        order.tipAmount > 0 ||
-        order.couponDiscountAmount > 0 ||
-        order.pointsDiscountAmount > 0) {
-      rows.add((
-        'Subtotal',
-        formatMoney(order.subtotalAmount, currency: order.currency),
-      ));
-      if (order.deliveryFee > 0) {
-        rows.add((
-          'Delivery fee',
-          formatMoney(order.deliveryFee, currency: order.currency),
-        ));
-      }
-      if (order.tipAmount > 0) {
-        rows.add((
-          'Tip',
-          formatMoney(order.tipAmount, currency: order.currency),
-        ));
-      }
-      if (order.couponDiscountAmount > 0) {
-        rows.add((
-          order.couponCode.isNotEmpty
-              ? 'Coupon (${order.couponCode})'
-              : 'Coupon',
-          '−${formatMoney(order.couponDiscountAmount, currency: order.currency)}',
-        ));
-      }
-      if (order.pointsDiscountAmount > 0) {
-        rows.add((
-          order.pointsRedeemed > 0
-              ? 'Points (${order.pointsRedeemed})'
-              : 'Points',
-          '−${formatMoney(order.pointsDiscountAmount, currency: order.currency)}',
-        ));
-      }
-    }
-    if (order.guestTrackingCode.trim().isNotEmpty) {
-      rows.add(('Tracking', order.guestTrackingCode.trim()));
-    }
-    if (order.publicPaymentRef.isNotEmpty) {
-      rows.add(('Reference', order.publicPaymentRef));
-    }
-    if (order.hasRefund) {
-      rows.add(('Refund', order.refundStatus.replaceAll('_', ' ')));
-      if (order.refundedAmount > 0) {
-        rows.add((
-          'Refunded',
-          formatMoney(order.refundedAmount, currency: order.currency),
-        ));
-      }
-    }
-    if (order.loyaltyReward != null) {
-      rows.add(('Rewards', order.loyaltyReward!.summaryLabel));
+    final cleanNotes = stripLegacyDeliveryDropOffNotes(order.fulfillmentNotes);
+    if (cleanNotes.isNotEmpty) {
+      rows.add(('Notes', cleanNotes));
     }
     return rows;
   }
@@ -1340,9 +1517,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           order.status == OrderStatus.confirmed ||
           order.canBusinessRefund;
     }
-    return order.canCustomerPayNow ||
+    if (order.canCustomerPayNow ||
         order.canCustomerCancel ||
-        order.claimEligible;
+        order.claimEligible) {
+      return true;
+    }
+    return _showDoneActions(order) && order.status == OrderStatus.completed;
   }
 
   bool _showDoneActions(CatalogOrder order) {
@@ -1382,7 +1562,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           onRetry: _loadOrder,
                         )
                       : SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
+                          padding: EdgeInsets.fromLTRB(
+                            20,
+                            0,
+                            20,
+                            hasActions ? 20 : 32,
+                          ),
                           child: _buildBody(order, hasActions),
                         ),
             ),
@@ -1393,32 +1578,76 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     );
   }
 
-  Widget _buildBody(CatalogOrder order, bool hasActions) {
-    final hasExtraDetails = _whenRows(order).isNotEmpty ||
-        _fulfillmentRows(order).isNotEmpty ||
-        _paymentRows(order).isNotEmpty ||
-        _contactPhone(order).isNotEmpty ||
-        order.canOpenDeliveryMap ||
-        _etaLabel(order).isNotEmpty;
+  (String tone, String badge) _statusVisual(CatalogOrder order) {
+    return switch (order.status) {
+      OrderStatus.completed => ('good', 'Done'),
+      OrderStatus.cancelled => ('bad', 'Cancelled'),
+      OrderStatus.noShow => ('bad', _noShowLabel(order)),
+      OrderStatus.confirmed => ('live', 'In progress'),
+      OrderStatus.held || OrderStatus.pending => ('warn', 'Needs action'),
+    };
+  }
+
+  Widget _buildBody(CatalogOrder order, bool _) {
     final personName = widget.isBusinessView
         ? (order.displayCustomerName.isNotEmpty
             ? order.displayCustomerName
             : (order.isGuest ? 'Guest' : '—'))
         : order.businessName;
     final contactPhone = _contactPhone(order);
-    final showFulfillmentBadge =
+    final showFulfillment =
         (order.kind == 'order' || order.kind == 'table') &&
             (order.isDelivery || order.isPickup || order.orderTypeLabel.isNotEmpty);
+
+    final profileId =
+        widget.isBusinessView ? order.customerId : order.businessId;
+    final profileUsername = widget.isBusinessView
+        ? order.customerUsername
+        : order.businessUsername;
+    final canOpenProfile =
+        profileId.trim().isNotEmpty || profileUsername.trim().isNotEmpty;
+
+    final eta = _etaLabel(order);
+    final billRows = _paymentBillRows(order);
+    final totalText = formatMoney(
+      order.totalAmount,
+      currency: order.currency,
+    );
+    final meta = _metaLine(order);
+    final terminal = _isTerminalStatus(order);
+    final showTimeline = !terminal || _timelineExpanded;
+    final itemCount = order.items.fold<int>(0, (s, e) => s + e.quantity);
+    final statusVisual = _statusVisual(order);
+    final orderNotes = stripLegacyDeliveryDropOffNotes(order.fulfillmentNotes);
+    final whenRows = _whenRows(order);
+    final paymentMeta = _paymentMetaRows(order);
+    final fulfillExtras = _fulfillmentRows(order)
+        .where((r) => r.$1 == 'Area' || r.$1 == 'Table' || r.$1 == 'Scheduled')
+        .toList();
+
+    const sectionGap = 20.0;
+    const labelToPanel = 10.0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (showFulfillmentBadge) ...[
+        // 1) Status moment
+        _StatusHero(
+          title: _statusHeroTitle(order),
+          subtitle: eta.isNotEmpty ? eta : _statusHeroFallback(order),
+          meta: meta,
+          tone: statusVisual.$1,
+          badge: statusVisual.$2,
+        ),
+        const SizedBox(height: sectionGap),
+
+        // 2) Where / how
+        if (showFulfillment) ...[
           _FulfillmentBanner(
             isDelivery: order.isDelivery,
             title: order.isDelivery
-                ? 'Delivery order'
-                : (order.isPickup ? 'Pickup order' : order.orderTypeLabel),
+                ? 'Delivery'
+                : (order.isPickup ? 'Pickup' : order.orderTypeLabel),
             subtitle: order.isDelivery
                 ? (order.displayFulfillmentAddress.isNotEmpty
                     ? order.displayFulfillmentAddress
@@ -1427,148 +1656,307 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         : 'Deliver to customer'))
                 : (order.scheduledFor.trim().isNotEmpty
                     ? 'Collect · ${_prettyDateTime(order.scheduledFor)}'
-                    : 'Customer will collect'),
+                    : 'Collect at store'),
             onMap: order.canOpenDeliveryMap
                 ? () => _openDeliveryMap(order)
                 : null,
           ),
-          const SizedBox(height: 14),
-        ],
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            _PaymentStatusChip(
-              label: order.paymentStatusChipLabel,
-              tone: _paymentChipTone(order),
-            ),
-            if (order.tipAmount > 0)
-              _PaymentStatusChip(
-                label:
-                    'Tip · ${formatMoney(order.tipAmount, currency: order.currency)}',
-                tone: 'good',
+          if (fulfillExtras.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            _OdNavTile(
+              icon: Icons.info_outline_rounded,
+              title: 'Fulfillment details',
+              subtitle:
+                  fulfillExtras.map((e) => '${e.$1}: ${e.$2}').join(' · '),
+              onTap: () => _openInfoSheet(
+                title: 'Fulfillment details',
+                rows: fulfillExtras,
               ),
+            ),
           ],
-        ),
-        const SizedBox(height: 14),
-        for (var i = 0; i < order.items.length; i++) ...[
-          if (i > 0) const Divider(height: 1, color: BarqodyChrome.divider),
-          _OrderItemRow(
-            item: order.items[i],
-            currency: order.currency,
-            onTap: () => _showItemSheet(order.items[i], order.currency),
-          ),
+          const SizedBox(height: sectionGap),
         ],
-        const SizedBox(height: 18),
-        _InfoCard(
-          rows: _overviewRows(order),
-          totalLabel: 'Total amount',
-          totalValue: formatMoney(
-            order.totalAmount,
-            currency: order.currency,
-          ),
-        ),
-        const SizedBox(height: 4),
-        _PersonRow(
-          name: personName,
-          username: widget.isBusinessView
-              ? order.customerUsername
-              : order.businessUsername,
-          subtitle: widget.isBusinessView && contactPhone.isNotEmpty
-              ? contactPhone
-              : '',
-          badge: widget.isBusinessView && order.isGuest ? 'Guest' : null,
-          photoUrl: widget.isBusinessView
-              ? order.customerPhoto
-              : order.businessPhoto,
-          avatarColor: _avatarColor(personName),
-          onTap: () {
-            final id =
-                widget.isBusinessView ? order.customerId : order.businessId;
-            final uname = widget.isBusinessView
-                ? order.customerUsername
-                : order.businessUsername;
-            if (id.trim().isEmpty && uname.trim().isEmpty) return;
-            _viewProfile(
-              userId: id.trim().isEmpty ? null : id,
-              username: uname,
-            );
-          },
-        ),
-        if (widget.isBusinessView && contactPhone.isNotEmpty) ...[
-          const SizedBox(height: 4),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _QuickChip(
-                icon: Icons.call_outlined,
-                label: 'Call',
-                onTap: () => _openPhone(contactPhone),
-              ),
-              _QuickChip(
-                icon: Icons.chat_bubble_outline_rounded,
-                label: 'WhatsApp',
-                onTap: () => _openWhatsApp(contactPhone),
-              ),
-            ],
-          ),
-        ],
-        const SizedBox(height: 20),
-        Text(
-          'Order timeline',
-          style: WaUi.listTitle.copyWith(fontWeight: FontWeight.w800),
-        ),
-        const SizedBox(height: 10),
-        _OrderTimeline(entries: _timelineEntries(order)),
-        if (hasExtraDetails) ...[
-          const SizedBox(height: 8),
-          Center(
-            child: TextButton(
-              onPressed: () => _openDetailsSheet(order),
-              child: Text(
-                'More details',
-                style: WaUi.body.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                ),
-              ),
+
+        if (whenRows.isNotEmpty) ...[
+          _OdNavTile(
+            icon: Icons.event_outlined,
+            title: order.isStay ? 'Stay details' : 'Schedule details',
+            subtitle: whenRows.map((e) => e.$2).take(2).join(' · '),
+            onTap: () => _openInfoSheet(
+              title: order.isStay ? 'Stay details' : 'Schedule details',
+              rows: whenRows,
             ),
           ),
+          const SizedBox(height: sectionGap),
         ],
-        if (!hasActions) ...[
-          const SizedBox(height: 12),
-          _StatusBanner(
-            status: order.status,
-            noun: order.nounLabel,
-            subtitle: _etaLabel(order),
+
+        if (orderNotes.isNotEmpty) ...[
+          const _OdSectionHeader(label: 'Order notes'),
+          const SizedBox(height: labelToPanel),
+          _OdNoteCard(
+            text: orderNotes,
+            onTap: orderNotes.length > 120
+                ? () => _openInfoSheet(
+                      title: 'Order notes',
+                      body: orderNotes,
+                      caption: 'Special instructions for this order',
+                    )
+                : null,
           ),
+          const SizedBox(height: sectionGap),
         ],
-        if (_showDoneActions(order) &&
-            order.status == OrderStatus.completed) ...[
-          const SizedBox(height: 24),
-          Row(
+
+        // 3) Items receipt
+        _OdSectionHeader(
+          label: 'Items',
+          trailing: itemCount > 0
+              ? '$itemCount item${itemCount == 1 ? '' : 's'}'
+              : null,
+        ),
+        const SizedBox(height: labelToPanel),
+        _OdPanel(
+          padding: const EdgeInsets.fromLTRB(14, 6, 14, 6),
+          child: order.items.isEmpty
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  child: Text(
+                    'No items on this order',
+                    style: WaUi.body.copyWith(
+                      color: BarqodyChrome.secondaryText,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                )
+              : Column(
+                  children: [
+                    for (var i = 0; i < order.items.length; i++) ...[
+                      if (i > 0)
+                        const Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: _Od.hairline,
+                        ),
+                      _OrderItemRow(
+                        item: order.items[i],
+                        currency: order.currency,
+                        onTap: () =>
+                            _showItemSheet(order.items[i], order.currency),
+                      ),
+                    ],
+                  ],
+                ),
+        ),
+        const SizedBox(height: sectionGap),
+
+        // 4) Bill
+        const _OdSectionHeader(label: 'Bill'),
+        const SizedBox(height: labelToPanel),
+        _OdPanel(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (order.kind == 'order' || order.kind == 'table') ...[
-                Expanded(
-                  child: _OutlineActionButton(
-                    label: 'Reorder',
-                    enabled: !_isUpdating,
-                    onPressed: () => _reorder(order),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Total',
+                          style: WaUi.caption.copyWith(
+                            color: BarqodyChrome.secondaryText,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          totalText,
+                          style: WaUi.toolsTitleOf(
+                            size: 28,
+                            weight: FontWeight.w800,
+                            color: Colors.black,
+                            height: 1.05,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  _PaymentStatusChip(
+                    label: order.paymentStatusChipLabel,
+                    tone: _paymentChipTone(order),
+                  ),
+                ],
+              ),
+              if (billRows.isNotEmpty) ...[
+                const SizedBox(height: 14),
+                const Divider(height: 1, thickness: 1, color: _Od.hairline),
+                InkWell(
+                  onTap: () => setState(() => _billExpanded = !_billExpanded),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Row(
+                      children: [
+                        Text(
+                          _billExpanded ? 'Hide breakdown' : 'View breakdown',
+                          style: WaUi.body.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Spacer(),
+                        Icon(
+                          _billExpanded
+                              ? Icons.keyboard_arrow_up_rounded
+                              : Icons.keyboard_arrow_down_rounded,
+                          size: 22,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                if (_billExpanded) ...[
+                  _InfoCard(rows: billRows),
+                  const SizedBox(height: 4),
+                ],
               ],
-              Expanded(
-                child: PillButton(
-                  label: 'Leave a review',
-                  enabled: !_isUpdating,
-                  onPressed: () => _leaveReview(order),
+              if (paymentMeta.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                const Divider(height: 1, thickness: 1, color: _Od.hairline),
+                _OdNavTile(
+                  dense: true,
+                  icon: Icons.receipt_long_outlined,
+                  title: 'Payment details',
+                  subtitle: [
+                    if (order.paymentLabel.isNotEmpty) order.paymentLabel,
+                    if (order.publicPaymentRef.isNotEmpty) 'Ref available',
+                    if (order.hasRefund) 'Refund info',
+                  ].where((e) => e.trim().isNotEmpty).join(' · '),
+                  onTap: () => _openInfoSheet(
+                    title: 'Payment details',
+                    rows: paymentMeta,
+                    caption: 'Method, reference, and refund info for this order',
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
-        ],
+        ),
+        const SizedBox(height: sectionGap),
+
+        // 5) Who
+        _OdSectionHeader(
+          label: widget.isBusinessView ? 'Customer' : 'Business',
+        ),
+        const SizedBox(height: labelToPanel),
+        _OdPanel(
+          padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: _PersonRow(
+                  name: personName,
+                  username: profileUsername,
+                  subtitle: widget.isBusinessView && contactPhone.isNotEmpty
+                      ? contactPhone
+                      : '',
+                  badge:
+                      widget.isBusinessView && order.isGuest ? 'Guest' : null,
+                  photoUrl: widget.isBusinessView
+                      ? order.customerPhoto
+                      : order.businessPhoto,
+                  avatarColor: _avatarColor(personName),
+                  showChevron: canOpenProfile &&
+                      !(widget.isBusinessView && contactPhone.isNotEmpty),
+                  onTap: canOpenProfile
+                      ? () => _viewProfile(
+                            userId:
+                                profileId.trim().isEmpty ? null : profileId,
+                            username: profileUsername,
+                          )
+                      : null,
+                ),
+              ),
+              if (widget.isBusinessView && contactPhone.isNotEmpty) ...[
+                const SizedBox(width: 8),
+                _IconActionButton(
+                  icon: Icons.call_outlined,
+                  onTap: () => _openPhone(contactPhone),
+                ),
+                const SizedBox(width: 8),
+                _IconActionButton(
+                  icon: Icons.chat_bubble_outline_rounded,
+                  onTap: () => _openWhatsApp(contactPhone),
+                ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: sectionGap),
+
+        // 6) Timeline
+        _OdPanel(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Timeline',
+                      style: WaUi.body.copyWith(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  if (terminal)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => setState(
+                        () => _timelineExpanded = !_timelineExpanded,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 8,
+                        ),
+                        child: Text(
+                          _timelineExpanded ? 'Hide' : 'Show history',
+                          style: WaUi.caption.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              if (showTimeline) ...[
+                const SizedBox(height: 14),
+                _OrderTimeline(entries: _timelineEntries(order)),
+              ] else ...[
+                const SizedBox(height: 6),
+                Text(
+                  'Order finished. History available if you need it.',
+                  style: WaUi.caption.copyWith(
+                    color: BarqodyChrome.secondaryText,
+                    height: 1.35,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 4),
       ],
     );
   }
@@ -1587,14 +1975,34 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     final pay = !widget.isBusinessView && order.canCustomerPayNow;
     final claim = !widget.isBusinessView && order.claimEligible && !pay;
     final cancel = !widget.isBusinessView && order.canCustomerCancel;
+    final doneComplete = !widget.isBusinessView &&
+        _showDoneActions(order) &&
+        order.status == OrderStatus.completed;
 
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+    return Material(
+      color: Colors.white,
+      elevation: 0,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: const Border(
+            top: BorderSide(color: _Od.hairline, width: 1),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 16,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
             if (held) ...[
               PillButton(
                 label: 'Accept',
@@ -1657,11 +2065,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 children: [
                   Expanded(
                     child: _OutlineActionButton(
-                      label: 'UnCollected',
+                      label: _noShowActionLabel(order),
                       enabled: !_isUpdating,
                       onPressed: () => _confirmThen(
                         OrderStatus.noShow,
-                        title: 'Mark as uncollected?',
+                        title: _noShowConfirmTitle(order),
                       ),
                     ),
                   ),
@@ -1681,12 +2089,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               ),
               const SizedBox(height: 10),
               PillButton(
-                label: 'Mark as Complete',
+                label: _completeActionLabel(order),
                 enabled: !_isUpdating,
                 loading: _isUpdating,
                 onPressed: () => _confirmThen(
                   OrderStatus.completed,
-                  title: 'Mark as complete?',
+                  title: _completeConfirmTitle(order),
                 ),
               ),
             ] else if (refundOnly) ...[
@@ -1696,8 +2104,30 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 enabled: !_isUpdating,
                 onPressed: _refundPaidOrder,
               ),
+            ] else if (doneComplete) ...[
+              Row(
+                children: [
+                  if (order.kind == 'order' || order.kind == 'table') ...[
+                    Expanded(
+                      child: _OutlineActionButton(
+                        label: 'Reorder',
+                        enabled: !_isUpdating,
+                        onPressed: () => _reorder(order),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
+                  Expanded(
+                    child: PillButton(
+                      label: 'Leave a review',
+                      enabled: !_isUpdating,
+                      onPressed: () => _leaveReview(order),
+                    ),
+                  ),
+                ],
+              ),
             ] else ...[
-              // Customer: Pay now for unpaid COD / cash orders.
+              // Customer: Pay now primary, Cancel secondary.
               if (pay) ...[
                 PillButton(
                   label: 'Pay now',
@@ -1723,7 +2153,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 ),
               ],
             ],
-          ],
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -1774,68 +2206,30 @@ class _ErrorBody extends StatelessWidget {
   }
 }
 
-class _StatusIcon extends StatelessWidget {
-  final OrderStatus status;
+class _IconActionButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
 
-  const _StatusIcon({required this.status});
+  const _IconActionButton({
+    required this.icon,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    switch (status) {
-      case OrderStatus.completed:
-        return _CircleBadge(
-          child: Image.asset(
-            'assets/images/png/check-icon-1.png',
-            width: 22,
-            height: 22,
-            color: Colors.white,
-            errorBuilder: (_, _, _) => const Icon(
-              Icons.check_rounded,
-              color: Colors.white,
-              size: 26,
-            ),
-          ),
-        );
-      case OrderStatus.cancelled:
-        return _CircleBadge(
-          child: Image.asset(
-            'assets/images/png/cancel-icon.png',
-            width: 18,
-            height: 18,
-            color: Colors.white,
-            errorBuilder: (_, _, _) => const Icon(
-              Icons.close_rounded,
-              color: Colors.white,
-              size: 22,
-            ),
-          ),
-        );
-      case OrderStatus.noShow:
-        return Image.asset(
-          'assets/images/png/order-cance.png',
-          width: 56,
-          height: 56,
-          errorBuilder: (_, _, _) => Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.black, width: 3),
-            ),
-            child: const Icon(Icons.block_rounded, size: 28),
-          ),
-        );
-      case OrderStatus.confirmed:
-      case OrderStatus.held:
-      case OrderStatus.pending:
-        return Image.asset(
-          'assets/images/png/bag-icon.png',
-          width: 64,
-          height: 64,
-          errorBuilder: (_, _, _) =>
-              const Icon(Icons.shopping_bag_outlined, size: 56),
-        );
-    }
+    return Material(
+      color: Colors.white,
+      shape: const CircleBorder(),
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: Icon(icon, size: 18, color: Colors.black),
+        ),
+      ),
+    );
   }
 }
 
@@ -1853,13 +2247,15 @@ class _QuickChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: BarqodyChrome.fieldFill,
-      borderRadius: BorderRadius.circular(22),
+      color: Colors.white,
+      shape: StadiumBorder(
+        side: BorderSide(color: const Color(0xFFE0E0E5), width: 1),
+      ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(22),
+        customBorder: const StadiumBorder(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -1868,9 +2264,10 @@ class _QuickChip extends StatelessWidget {
               Text(
                 label,
                 style: WaUi.body.copyWith(
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontSize: 12.5,
                   height: 1,
+                  color: Colors.black,
                 ),
               ),
             ],
@@ -1920,14 +2317,10 @@ class _MoreTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      leading: Container(
+      leading: SizedBox(
         width: 40,
         height: 40,
-        decoration: const BoxDecoration(
-          color: BarqodyChrome.fieldFill,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(icon, size: 20, color: Colors.black),
+        child: Icon(icon, size: 22, color: Colors.black),
       ),
       title: Text(
         label,
@@ -1942,65 +2335,177 @@ class _MoreTile extends StatelessWidget {
   }
 }
 
-class _OrderItemRow extends StatelessWidget {
-  final CatalogOrderLineItem item;
-  final String currency;
-  final VoidCallback onTap;
+/// Local order-detail design tokens (quiet receipt).
+class _Od {
+  static const Color panel = Color(0xFFF6F6F4);
+  static const Color hairline = Color(0xFFE8E8E4);
+  static const Color delivery = Color(0xFFE8EEF5);
+  static const Color pickup = Color(0xFFF1F0EC);
+  static const Color goodBg = Color(0xFFE7F4EA);
+  static const Color goodFg = Color(0xFF1B5E3B);
+  static const Color warnBg = Color(0xFFFFF1E0);
+  static const Color warnFg = Color(0xFF8A4B12);
+  static const Color badBg = Color(0xFFFCECEC);
+  static const Color badFg = Color(0xFFB42318);
+  static const Color liveBg = Color(0xFF111111);
+  static const Color liveFg = Colors.white;
+}
 
-  const _OrderItemRow({
-    required this.item,
-    required this.currency,
-    required this.onTap,
+class _OdPanel extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+
+  const _OdPanel({
+    required this.child,
+    this.padding = const EdgeInsets.fromLTRB(14, 4, 14, 4),
   });
 
   @override
   Widget build(BuildContext context) {
-    final note = item.notes.trim();
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: _Od.panel,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Padding(padding: padding, child: child),
+    );
+  }
+}
+
+class _OdSectionHeader extends StatelessWidget {
+  final String label;
+  final String? trailing;
+
+  const _OdSectionHeader({required this.label, this.trailing});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            label,
+            style: WaUi.body.copyWith(
+              fontWeight: FontWeight.w800,
+              fontSize: 15,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        if ((trailing ?? '').trim().isNotEmpty)
+          Text(
+            trailing!.trim(),
+            style: WaUi.caption.copyWith(
+              color: BarqodyChrome.secondaryText,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _OdNoteCard extends StatelessWidget {
+  final String text;
+  final VoidCallback? onTap;
+
+  const _OdNoteCard({required this.text, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final truncated = text.length > 120;
+    final shown = truncated ? '${text.substring(0, 120).trimRight()}…' : text;
     return Material(
-      color: Colors.white,
+      color: _Od.warnBg,
+      borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 36,
-                child: Text(
-                  '${item.quantity} x',
-                  style: WaUi.body.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
+              const Icon(
+                Icons.sticky_note_2_outlined,
+                size: 20,
+                color: _Od.warnFg,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      shown,
+                      style: WaUi.body.copyWith(
+                        fontWeight: FontWeight.w600,
+                        height: 1.4,
+                        color: Colors.black,
+                      ),
+                    ),
+                    if (onTap != null) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        'Read more',
+                        style: WaUi.caption.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: _Od.warnFg,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: SizedBox(
-                  width: 56,
-                  height: 56,
-                  child: item.imageUrl.trim().isNotEmpty
-                      ? Image.network(
-                          item.imageUrl,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) => ColoredBox(
-                            color: BarqodyChrome.fieldFill,
-                            child: Icon(
-                              Icons.image_outlined,
-                              color: BarqodyChrome.secondaryText,
-                              size: 24,
-                            ),
-                          ),
-                        )
-                      : ColoredBox(
-                          color: BarqodyChrome.fieldFill,
-                          child: Icon(
-                            Icons.image_outlined,
-                            color: BarqodyChrome.secondaryText,
-                            size: 24,
-                          ),
-                        ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _OdNavTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+  final bool dense;
+
+  const _OdNavTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.dense = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final radius = dense ? 12.0 : 16.0;
+    return Material(
+      color: dense ? Colors.transparent : _Od.panel,
+      borderRadius: BorderRadius.circular(radius),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(radius),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            dense ? 0 : 14,
+            dense ? 12 : 14,
+            dense ? 0 : 10,
+            dense ? 8 : 14,
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: dense ? 36 : 40,
+                height: dense ? 36 : 40,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                child: Icon(icon, size: dense ? 18 : 20, color: Colors.black),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -2008,27 +2513,20 @@ class _OrderItemRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: WaUi.bodyMedium.copyWith(
-                        fontWeight: FontWeight.w700,
+                      title,
+                      style: WaUi.body.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      formatMoney(item.price, currency: currency),
-                      style: WaUi.body.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                    if (note.isNotEmpty) ...[
-                      const SizedBox(height: 4),
+                    if (subtitle.trim().isNotEmpty) ...[
+                      const SizedBox(height: 2),
                       Text(
-                        'Note: $note',
-                        maxLines: 2,
+                        subtitle.trim(),
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: WaUi.caption.copyWith(
                           color: BarqodyChrome.secondaryText,
-                          height: 1.3,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -2048,115 +2546,229 @@ class _OrderItemRow extends StatelessWidget {
   }
 }
 
-class _StatusBanner extends StatelessWidget {
-  final OrderStatus status;
-  final String noun;
-  final String subtitle;
+class _OrderItemRow extends StatelessWidget {
+  final CatalogOrderLineItem item;
+  final String currency;
+  final VoidCallback onTap;
 
-  const _StatusBanner({
-    required this.status,
-    required this.noun,
-    required this.subtitle,
+  const _OrderItemRow({
+    required this.item,
+    required this.currency,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final title = switch (status) {
-      OrderStatus.completed => '$noun Complete',
-      OrderStatus.cancelled => '$noun Cancelled',
-      OrderStatus.noShow => '$noun Not Collected',
-      OrderStatus.confirmed => '$noun Confirmed',
-      OrderStatus.held || OrderStatus.pending => '$noun Pending',
-    };
-    final fallback = switch (status) {
-      OrderStatus.completed => 'Your $noun has been completed successfully',
-      OrderStatus.cancelled => 'Your $noun has been cancelled',
-      OrderStatus.noShow => "You didn't collect your $noun",
-      OrderStatus.confirmed => 'Your $noun has been confirmed',
-      OrderStatus.held || OrderStatus.pending => 'Your $noun is being processed',
-    };
+    final unit = formatMoney(item.price, currency: currency);
+    final line = formatMoney(item.lineTotal, currency: currency);
+    final note = item.notes.trim();
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: item.imageUrl.trim().isNotEmpty
+                      ? Image.network(
+                          item.imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => ColoredBox(
+                            color: Colors.white,
+                            child: Icon(
+                              Icons.image_outlined,
+                              color: BarqodyChrome.secondaryText,
+                              size: 20,
+                            ),
+                          ),
+                        )
+                      : ColoredBox(
+                          color: Colors.white,
+                          child: Icon(
+                            Icons.image_outlined,
+                            color: BarqodyChrome.secondaryText,
+                            size: 20,
+                          ),
+                        ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${item.quantity}× ${item.name}',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: WaUi.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w700,
+                        height: 1.25,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      unit,
+                      style: WaUi.caption.copyWith(
+                        color: BarqodyChrome.secondaryText,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (note.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.sticky_note_2_outlined,
+                            size: 14,
+                            color: _Od.warnFg,
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              note,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: WaUi.caption.copyWith(
+                                color: _Od.warnFg,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                line,
+                style: WaUi.body.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Column(
-        children: [
-          _StatusIcon(status: status),
-          const SizedBox(height: 16),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: WaUi.toolsTitleOf(
-              size: 20,
-              weight: FontWeight.w800,
-              color: Colors.black,
+class _StatusHero extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String meta;
+  final String tone;
+  final String badge;
+
+  const _StatusHero({
+    required this.title,
+    required this.subtitle,
+    required this.meta,
+    required this.tone,
+    required this.badge,
+  });
+
+  (Color, Color) _pillColors() {
+    switch (tone) {
+      case 'good':
+        return (_Od.goodBg, _Od.goodFg);
+      case 'bad':
+        return (_Od.badBg, _Od.badFg);
+      case 'live':
+        return (_Od.liveBg, _Od.liveFg);
+      case 'warn':
+        return (_Od.warnBg, _Od.warnFg);
+      default:
+        return (const Color(0xFFEEEEEE), Colors.black);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = _pillColors();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: colors.$1,
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: Text(
+            badge,
+            style: WaUi.caption.copyWith(
+              fontWeight: FontWeight.w700,
+              color: colors.$2,
+              fontSize: 11.5,
+              height: 1.1,
             ),
           ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          title,
+          style: WaUi.toolsTitleOf(
+            size: 26,
+            weight: FontWeight.w800,
+            color: Colors.black,
+            height: 1.15,
+          ),
+        ),
+        if (subtitle.trim().isNotEmpty) ...[
           const SizedBox(height: 8),
           Text(
-            subtitle.isNotEmpty ? subtitle : fallback,
-            textAlign: TextAlign.center,
+            subtitle,
             style: WaUi.body.copyWith(
-              color: BarqodyChrome.secondaryText,
-              height: 1.35,
+              color: const Color(0xFF5C5C62),
+              height: 1.4,
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
             ),
           ),
         ],
-      ),
+        if (meta.trim().isNotEmpty) ...[
+          const SizedBox(height: 10),
+          Text(
+            meta,
+            style: WaUi.caption.copyWith(
+              color: BarqodyChrome.secondaryText,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.1,
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
 
 class _InfoCard extends StatelessWidget {
   final List<(String, String)> rows;
-  final String? totalLabel;
-  final String? totalValue;
 
-  const _InfoCard({
-    required this.rows,
-    this.totalLabel,
-    this.totalValue,
-  });
+  const _InfoCard({required this.rows});
 
   @override
   Widget build(BuildContext context) {
     final visible = rows.where((r) => r.$2.trim().isNotEmpty).toList();
-    final showTotal =
-        (totalLabel ?? '').isNotEmpty && (totalValue ?? '').isNotEmpty;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
-      decoration: BoxDecoration(
-        color: BarqodyChrome.fieldFill,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
-          for (final row in visible) _SummaryKV(label: row.$1, value: row.$2),
-          if (showTotal) ...[
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: Divider(height: 1, color: Color(0xFFE0E0E5)),
-            ),
-            Row(
-              children: [
-                Text(
-                  totalLabel!,
-                  style: WaUi.body.copyWith(
-                    color: BarqodyChrome.secondaryText,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  totalValue!,
-                  style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w800),
-                ),
-              ],
-            ),
-          ],
-        ],
-      ),
+    if (visible.isEmpty) return const SizedBox.shrink();
+    return Column(
+      children: [
+        for (final row in visible) _SummaryKV(label: row.$1, value: row.$2),
+      ],
     );
   }
 }
@@ -2170,7 +2782,7 @@ class _SummaryKV extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -2181,6 +2793,7 @@ class _SummaryKV extends StatelessWidget {
               style: WaUi.body.copyWith(
                 color: BarqodyChrome.secondaryText,
                 fontWeight: FontWeight.w500,
+                fontSize: 14,
               ),
             ),
           ),
@@ -2191,8 +2804,9 @@ class _SummaryKV extends StatelessWidget {
               value,
               textAlign: TextAlign.right,
               style: WaUi.body.copyWith(
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: Colors.black,
+                fontSize: 14,
               ),
             ),
           ),
@@ -2209,7 +2823,8 @@ class _PersonRow extends StatelessWidget {
   final String? badge;
   final String? photoUrl;
   final Color avatarColor;
-  final VoidCallback onTap;
+  final bool showChevron;
+  final VoidCallback? onTap;
 
   const _PersonRow({
     required this.name,
@@ -2218,7 +2833,8 @@ class _PersonRow extends StatelessWidget {
     this.badge,
     this.photoUrl,
     required this.avatarColor,
-    required this.onTap,
+    this.showChevron = true,
+    this.onTap,
   });
 
   @override
@@ -2227,109 +2843,98 @@ class _PersonRow extends StatelessWidget {
     final initial =
         displayName.isNotEmpty ? displayName[0].toUpperCase() : '?';
     final hasPhoto = photoUrl != null && photoUrl!.trim().isNotEmpty;
-    final canOpen = username.trim().isNotEmpty;
+    final canOpen = onTap != null;
 
     return Material(
-      color: Colors.white,
+      color: Colors.transparent,
       child: InkWell(
-        onTap: canOpen ? onTap : null,
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 26,
-                backgroundColor: avatarColor,
-                backgroundImage:
-                    hasPhoto ? NetworkImage(photoUrl!.trim()) : null,
-                child: hasPhoto
-                    ? null
-                    : Text(initial, style: WaUi.avatarInitial),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 22,
+              backgroundColor: avatarColor,
+              backgroundImage:
+                  hasPhoto ? NetworkImage(photoUrl!.trim()) : null,
+              child: hasPhoto
+                  ? null
+                  : Text(initial, style: WaUi.avatarInitial),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          displayName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: WaUi.bodyMedium.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      if ((badge ?? '').trim().isNotEmpty) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(999),
+                          ),
                           child: Text(
-                            displayName,
-                            style: WaUi.bodyMedium.copyWith(
-                              fontWeight: FontWeight.w700,
+                            badge!.trim(),
+                            style: WaUi.caption.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: BarqodyChrome.secondaryText,
                             ),
                           ),
                         ),
-                        if ((badge ?? '').trim().isNotEmpty) ...[
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: BarqodyChrome.fieldFill,
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                            child: Text(
-                              badge!.trim(),
-                              style: WaUi.caption.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: BarqodyChrome.secondaryText,
-                              ),
-                            ),
-                          ),
-                        ],
                       ],
+                    ],
+                  ),
+                  if (username.trim().isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      '@${username.trim()}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: WaUi.caption.copyWith(
+                        color: BarqodyChrome.secondaryText,
+                      ),
                     ),
-                    if (username.trim().isNotEmpty)
-                      Text(
-                        '@${username.trim()}',
-                        style: WaUi.caption.copyWith(
-                          color: BarqodyChrome.secondaryText,
-                        ),
-                      ),
-                    if (subtitle.trim().isNotEmpty)
-                      Text(
-                        subtitle.trim(),
-                        style: WaUi.caption.copyWith(
-                          color: BarqodyChrome.secondaryText,
-                        ),
-                      ),
                   ],
-                ),
+                  if (subtitle.trim().isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle.trim(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: WaUi.caption.copyWith(
+                        color: BarqodyChrome.secondaryText,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ],
               ),
-              if (canOpen)
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: BarqodyChrome.secondaryText,
-                ),
-            ],
-          ),
+            ),
+            if (canOpen && showChevron)
+              Icon(
+                Icons.chevron_right_rounded,
+                color: BarqodyChrome.secondaryText,
+              ),
+          ],
         ),
       ),
-    );
-  }
-}
-
-class _CircleBadge extends StatelessWidget {
-  final Widget child;
-
-  const _CircleBadge({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 56,
-      height: 56,
-      decoration: const BoxDecoration(
-        color: Colors.black,
-        shape: BoxShape.circle,
-      ),
-      alignment: Alignment.center,
-      child: child,
     );
   }
 }
@@ -2407,22 +3012,15 @@ class _OrderTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (entries.isEmpty) return const SizedBox.shrink();
-    return Container(
-      padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
-      decoration: BoxDecoration(
-        color: BarqodyChrome.fieldFill,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
-          for (var i = 0; i < entries.length; i++)
-            _TimelineRow(
-              entry: entries[i],
-              timeLabel: _fmt(entries[i].at),
-              isLast: i == entries.length - 1,
-            ),
-        ],
-      ),
+    return Column(
+      children: [
+        for (var i = 0; i < entries.length; i++)
+          _TimelineRow(
+            entry: entries[i],
+            timeLabel: _fmt(entries[i].at),
+            isLast: i == entries.length - 1,
+          ),
+      ],
     );
   }
 }
@@ -2440,9 +3038,71 @@ class _TimelineRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDone = entry.done && !entry.active;
     final accent = entry.isTerminalBad
         ? const Color(0xFFE53935)
-        : (entry.done || entry.active ? Colors.black : const Color(0xFFBDBDBD));
+        : (entry.done || entry.active ? Colors.black : const Color(0xFFC8C8CC));
+    final titleWeight = entry.active
+        ? FontWeight.w800
+        : (isDone ? FontWeight.w600 : FontWeight.w500);
+    final titleColor = entry.done || entry.active
+        ? Colors.black
+        : BarqodyChrome.secondaryText;
+
+    Widget marker;
+    if (entry.isTerminalBad && entry.done) {
+      marker = Container(
+        width: 22,
+        height: 22,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          border: Border.all(color: accent, width: 1.5),
+        ),
+        child: Icon(Icons.close_rounded, size: 14, color: accent),
+      );
+    } else if (isDone) {
+      marker = Container(
+        width: 22,
+        height: 22,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.black,
+        ),
+        child: const Icon(Icons.check_rounded, size: 14, color: Colors.white),
+      );
+    } else if (entry.active || entry.done) {
+      marker = Container(
+        width: 22,
+        height: 22,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          border: Border.all(color: Colors.black, width: 2),
+        ),
+        child: Center(
+          child: Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      );
+    } else {
+      marker = Container(
+        width: 22,
+        height: 22,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          border: Border.all(color: accent, width: 1.5),
+        ),
+      );
+    }
+
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2451,48 +3111,48 @@ class _TimelineRow extends StatelessWidget {
             width: 22,
             child: Column(
               children: [
-                Container(
-                  width: 12,
-                  height: 12,
-                  margin: const EdgeInsets.only(top: 4),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: entry.done || entry.active
-                        ? accent
-                        : Colors.transparent,
-                    border: Border.all(color: accent, width: 2),
-                  ),
-                ),
+                marker,
                 if (!isLast)
                   Expanded(
                     child: Container(
-                      width: 2,
+                      width: 1.5,
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      color: entry.done
-                          ? Colors.black.withValues(alpha: 0.25)
-                          : const Color(0xFFD6D6D6),
+                      color: isDone || entry.active
+                          ? Colors.black.withValues(alpha: 0.28)
+                          : const Color(0xFFE0E0E5),
                     ),
                   ),
               ],
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 14),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(bottom: isLast ? 4 : 16),
+              padding: EdgeInsets.only(bottom: isLast ? 2 : 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     entry.title,
                     style: WaUi.body.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: entry.done || entry.active
-                          ? Colors.black
-                          : BarqodyChrome.secondaryText,
+                      fontWeight: titleWeight,
+                      color: titleColor,
+                      height: 1.25,
                     ),
                   ),
-                  if (entry.subtitle.isNotEmpty) ...[
+                  if (entry.active && entry.subtitle.isNotEmpty) ...[
+                    const SizedBox(height: 3),
+                    Text(
+                      entry.subtitle,
+                      style: WaUi.caption.copyWith(
+                        color: BarqodyChrome.secondaryText,
+                        height: 1.35,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ] else if (!entry.active &&
+                      entry.done &&
+                      entry.subtitle.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(
                       entry.subtitle,
@@ -2508,7 +3168,8 @@ class _TimelineRow extends StatelessWidget {
                       timeLabel,
                       style: WaUi.caption.copyWith(
                         color: BarqodyChrome.secondaryText,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 11.5,
                       ),
                     ),
                   ],
@@ -2537,25 +3198,26 @@ class _FulfillmentBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isDelivery ? const Color(0xFFEEF6FF) : const Color(0xFFF3F4F6);
+    final bg = isDelivery ? _Od.delivery : _Od.pickup;
     final icon =
         isDelivery ? Icons.delivery_dining_rounded : Icons.storefront_rounded;
     return Material(
       color: bg,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(18),
       child: InkWell(
         onTap: onMap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 44,
-                height: 44,
+                width: 46,
+                height: 46,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(icon, color: Colors.black, size: 24),
               ),
@@ -2566,7 +3228,10 @@ class _FulfillmentBanner extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: WaUi.body.copyWith(fontWeight: FontWeight.w800),
+                      style: WaUi.body.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black,
+                      ),
                     ),
                     if (subtitle.trim().isNotEmpty) ...[
                       const SizedBox(height: 3),
@@ -2575,8 +3240,8 @@ class _FulfillmentBanner extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: WaUi.caption.copyWith(
-                          color: BarqodyChrome.secondaryText,
-                          height: 1.3,
+                          color: const Color(0xFF5C5C62),
+                          height: 1.35,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -2584,11 +3249,22 @@ class _FulfillmentBanner extends StatelessWidget {
                   ],
                 ),
               ),
-              if (onMap != null)
-                Icon(
-                  Icons.map_outlined,
-                  color: BarqodyChrome.secondaryText,
+              if (onMap != null) ...[
+                const SizedBox(width: 10),
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.map_outlined,
+                    size: 18,
+                    color: Colors.black,
+                  ),
                 ),
+              ],
             ],
           ),
         ),
@@ -2611,20 +3287,20 @@ class _PaymentStatusChip extends StatelessWidget {
     final Color bg;
     final Color fg;
     if (tone == 'good') {
-      bg = const Color(0xFFE8F5E9);
-      fg = const Color(0xFF1B5E20);
+      bg = _Od.goodBg;
+      fg = _Od.goodFg;
     } else if (tone == 'warn') {
-      bg = const Color(0xFFFFF3E0);
-      fg = const Color(0xFFE65100);
+      bg = _Od.warnBg;
+      fg = _Od.warnFg;
     } else if (tone == 'muted') {
-      bg = const Color(0xFFF5F5F5);
-      fg = const Color(0xFF616161);
+      bg = const Color(0xFFEEEEEE);
+      fg = BarqodyChrome.secondaryText;
     } else {
-      bg = BarqodyChrome.fieldFill;
+      bg = Colors.white;
       fg = Colors.black;
     }
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(999),
@@ -2632,9 +3308,10 @@ class _PaymentStatusChip extends StatelessWidget {
       child: Text(
         label,
         style: WaUi.caption.copyWith(
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w700,
           color: fg,
-          height: 1,
+          height: 1.1,
+          fontSize: 12,
         ),
       ),
     );

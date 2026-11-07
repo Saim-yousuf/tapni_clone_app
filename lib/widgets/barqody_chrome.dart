@@ -32,12 +32,16 @@ class BarqodyTitleBar extends StatelessWidget {
   /// button is not double-inset (~32).
   final bool padHorizontal;
 
+  /// When false, reserves no back control (centered title for tab shells).
+  final bool showBack;
+
   const BarqodyTitleBar({
     super.key,
     required this.title,
     this.trailing,
     this.onBack,
     this.padHorizontal = true,
+    this.showBack = true,
   });
 
   @override
@@ -54,7 +58,10 @@ class BarqodyTitleBar extends StatelessWidget {
         height: 44,
         child: Row(
           children: [
-            CircleBackButton(onTap: onBack),
+            if (showBack)
+              CircleBackButton(onTap: onBack)
+            else
+              const SizedBox(width: 40),
             Expanded(
               child: Text(
                 title,

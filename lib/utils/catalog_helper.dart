@@ -55,7 +55,11 @@ class CatalogHelper {
     }
   }
 
-  static String statusLabel(OrderStatus status, AppLocalizations l10n) {
+  static String statusLabel(
+    OrderStatus status,
+    AppLocalizations l10n, {
+    bool isDelivery = false,
+  }) {
     switch (status) {
       case OrderStatus.held:
         return 'Held';
@@ -68,7 +72,7 @@ class CatalogHelper {
       case OrderStatus.cancelled:
         return l10n.cancelled;
       case OrderStatus.noShow:
-        return l10n.customerNoShow;
+        return isDelivery ? 'Not delivered' : 'Not collected';
     }
   }
 

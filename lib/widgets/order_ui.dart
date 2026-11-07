@@ -51,11 +51,15 @@ class OrderUi {
       case OrderStatus.cancelled:
         return '$noun cancelled';
       case OrderStatus.noShow:
-        return '$noun missed';
+        return order.isDelivery ? '$noun not delivered' : '$noun not collected';
     }
   }
 
-  static String statusChipLabel(OrderStatus status, {String? l10nPending}) {
+  static String statusChipLabel(
+    OrderStatus status, {
+    String? l10nPending,
+    bool isDelivery = false,
+  }) {
     switch (status) {
       case OrderStatus.held:
         return 'Held';
@@ -68,7 +72,7 @@ class OrderUi {
       case OrderStatus.cancelled:
         return 'Cancelled';
       case OrderStatus.noShow:
-        return 'Missed';
+        return isDelivery ? 'Not delivered' : 'Not collected';
     }
   }
 }

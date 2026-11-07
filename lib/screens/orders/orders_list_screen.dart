@@ -20,7 +20,14 @@ enum _StatusGroup { all, active, completed, cancelled }
 class OrdersListScreen extends StatefulWidget {
   final bool isBusinessView;
 
-  const OrdersListScreen({super.key, required this.isBusinessView});
+  /// When true, no outer [SafeArea] and title bar has no back (suite tab).
+  final bool embedded;
+
+  const OrdersListScreen({
+    super.key,
+    required this.isBusinessView,
+    this.embedded = false,
+  });
 
   @override
   State<OrdersListScreen> createState() => _OrdersListScreenState();
@@ -292,14 +299,14 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
     final title =
         widget.isBusinessView ? 'Orders & Bookings' : 'My Orders & Bookings';
 
-    return Scaffold(
-      backgroundColor: BarqodyChrome.scaffold,
-      body: SafeArea(
-        child: Column(
+    final content = Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             BarqodyTitleBar(
               title: title,
+              onBack: widget.embedded
+                  ? () => Navigator.of(context).maybePop()
+                  : null,
               trailing: !widget.isBusinessView
                   ? SizedBox(
                       width: 40,
@@ -459,6 +466,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
                                     statusLabel: CatalogHelper.statusLabel(
                                       order.status,
                                       context.l10n,
+                                      isDelivery: order.isDelivery,
                                     ),
                                     onTap: () async {
                                       await Navigator.push(
@@ -479,8 +487,15 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
               ),
             ),
           ],
-        ),
-      ),
+    );
+
+    if (widget.embedded) {
+      return ColoredBox(color: BarqodyChrome.scaffold, child: content);
+    }
+
+    return Scaffold(
+      backgroundColor: BarqodyChrome.scaffold,
+      body: SafeArea(child: content),
     );
   }
 }

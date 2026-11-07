@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/models/explore_cart.dart';
 
 class ExploreCartProvider extends ChangeNotifier {
@@ -42,7 +43,8 @@ class ExploreCartProvider extends ChangeNotifier {
   String get deliveryApt => _deliveryApt;
   String get deliveryEntry => _deliveryEntry;
   String get deliveryBuilding => _deliveryBuilding;
-  String get deliveryNotes => _deliveryNotes;
+  String get deliveryNotes =>
+      stripLegacyDeliveryDropOffNotes(_deliveryNotes);
   double? get deliveryLat => _deliveryLat;
   double? get deliveryLng => _deliveryLng;
   String get paymentMethod => _paymentMethod;
@@ -184,7 +186,9 @@ class ExploreCartProvider extends ChangeNotifier {
     if (apt != null) _deliveryApt = apt.trim();
     if (entry != null) _deliveryEntry = entry.trim();
     if (building != null) _deliveryBuilding = building.trim();
-    if (notes != null) _deliveryNotes = notes.trim();
+    if (notes != null) {
+      _deliveryNotes = stripLegacyDeliveryDropOffNotes(notes);
+    }
     if (clearCoords) {
       _deliveryLat = null;
       _deliveryLng = null;

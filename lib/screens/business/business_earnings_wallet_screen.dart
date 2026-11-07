@@ -10,9 +10,29 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/finance_ui.dart';
 
+enum BusinessEarningsSection {
+  /// Overview + analytics + transactions (standalone screen).
+  all,
+
+  /// Metrics + charts only (suite Earnings tab).
+  dashboard,
+
+  /// Ledger / filters only (suite Transactions tab).
+  transactions,
+}
+
 /// Business financial dashboard (ledger-backed). No withdrawals.
 class BusinessEarningsWalletScreen extends StatefulWidget {
-  const BusinessEarningsWalletScreen({super.key});
+  const BusinessEarningsWalletScreen({
+    super.key,
+    this.embedded = false,
+    this.section = BusinessEarningsSection.all,
+  });
+
+  /// When true, skips outer [SafeArea] (parent shell owns it) and uses a
+  /// compact title bar without back when hosted in the suite.
+  final bool embedded;
+  final BusinessEarningsSection section;
 
   @override
   State<BusinessEarningsWalletScreen> createState() =>
@@ -209,385 +229,407 @@ class _BusinessEarningsWalletScreenState
     final periodRevenue = (totals['revenue'] as num?)?.toDouble() ?? 0;
     final periodRefunds = (totals['refunds'] as num?)?.toDouble() ?? 0;
 
+    final section = widget.section;
+    final showDashboard = section == BusinessEarningsSection.all ||
+        section == BusinessEarningsSection.dashboard;
+    final showTransactions = section == BusinessEarningsSection.all ||
+        section == BusinessEarningsSection.transactions;
+    final title = section == BusinessEarningsSection.transactions
+        ? 'Transactions'
+        : 'Earnings';
+
+    final content = Column(
+      children: [
+        BarqodyTitleBar(
+          title: title,
+          // Embedded (suite tab): back closes the whole suite shell.
+          onBack: widget.embedded
+              ? () => Navigator.of(context).maybePop()
+              : null,
+          trailing: showTransactions
+              ? SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    tooltip: 'Filter dates',
+                    onPressed: _pickRange,
+                    icon: const Icon(
+                      Icons.calendar_today_outlined,
+                      color: Colors.black,
+                      size: 20,
+                    ),
+                  ),
+                )
+              : const SizedBox(width: 40),
+        ),
+        Expanded(
+          child: _loading
+              ? const Center(
+                  child: CircularProgressIndicator(color: Colors.black),
+                )
+              : _error != null && _summary == null
+                  ? ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: [
+                        FinanceErrorBlock(
+                          message: _error!,
+                          onRetry: _load,
+                        ),
+                      ],
+                    )
+                  : RefreshIndicator(
+                      color: Colors.black,
+                      onRefresh: _load,
+                      child: ListView(
+                        padding: const EdgeInsets.fromLTRB(
+                          FinanceUi.sidePad,
+                          0,
+                          FinanceUi.sidePad,
+                          40,
+                        ),
+                        children: [
+                          if (_error != null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: Text(
+                                _error!,
+                                style: WaUi.caption.copyWith(
+                                  color: FinanceUi.danger,
+                                ),
+                              ),
+                            ),
+                          if (showDashboard) ...[
+                            const FinanceSectionHeader(
+                              title: 'Financial overview',
+                            ),
+                            FinanceMetricCard(
+                              label: 'Net revenue',
+                              value: formatMoney(
+                                (_summary?['netRevenue'] as num?)?.toDouble() ??
+                                    0,
+                                currency: currency,
+                              ),
+                              large: true,
+                              emphasize: true,
+                              subtitle: 'Revenue minus refunds',
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: FinanceMetricCard(
+                                    label: 'Total revenue',
+                                    value: formatMoney(
+                                      (_summary?['totalEarnings'] as num?)
+                                              ?.toDouble() ??
+                                          0,
+                                      currency: currency,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: FinanceMetricCard(
+                                    label: 'Available',
+                                    value: formatMoney(
+                                      (_summary?['availableBalance'] as num?)
+                                              ?.toDouble() ??
+                                          0,
+                                      currency: currency,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: FinanceMetricCard(
+                                    label: 'Pending',
+                                    value: formatMoney(
+                                      (_summary?['pendingBalance'] as num?)
+                                              ?.toDouble() ??
+                                          0,
+                                      currency: currency,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: FinanceMetricCard(
+                                    label: 'Refunded',
+                                    value: formatMoney(
+                                      (_summary?['totalRefunded'] as num?)
+                                              ?.toDouble() ??
+                                          0,
+                                      currency: currency,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            FinanceMetricCard(
+                              label: 'Stripe processing fees',
+                              value: formatMoney(
+                                (_summary?['totalStripeFees'] as num?)
+                                        ?.toDouble() ??
+                                    0,
+                                currency: currency,
+                              ),
+                              subtitle:
+                                  'BarQody takes no commission · Withdrawals not available yet',
+                            ),
+                            const SizedBox(height: 28),
+                            FinanceSectionHeader(
+                              title: 'Analytics',
+                              trailing: _analyticsLoading
+                                  ? const SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.black,
+                                      ),
+                                    )
+                                  : null,
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  for (final opt in const [
+                                    ('Day', 'day'),
+                                    ('Week', 'week'),
+                                    ('Month', 'month'),
+                                    ('Year', 'year'),
+                                  ])
+                                    FinanceFilterChip(
+                                      label: opt.$1,
+                                      selected: _chartRange == opt.$2,
+                                      onTap: () => _reloadAnalytics(opt.$2),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Text(
+                              'Revenue trend',
+                              style: WaUi.caption.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: FinanceUi.bodyMuted,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Row(
+                              children: [
+                                FinanceLegendDot(
+                                  color: Colors.black,
+                                  label: 'Revenue',
+                                ),
+                                SizedBox(width: 16),
+                                FinanceLegendDot(
+                                  color: FinanceUi.danger,
+                                  label: 'Refunds',
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            FinanceRevenueTrendChart(
+                              series: _seriesMaps(),
+                              bucket:
+                                  _analytics?['bucket']?.toString() ?? 'day',
+                              currency: currency,
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              'Payments vs refunds',
+                              style: WaUi.caption.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: FinanceUi.bodyMuted,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            FinancePaymentsRefundsChart(
+                              revenue: periodRevenue,
+                              refunds: periodRefunds,
+                              currency: currency,
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              'Earnings breakdown',
+                              style: WaUi.caption.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: FinanceUi.bodyMuted,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            FinanceBreakdownList(
+                              items: _breakdownMaps(),
+                              currency: currency,
+                            ),
+                            if (showTransactions) const SizedBox(height: 28),
+                          ],
+                          if (showTransactions) ...[
+                            FinanceSectionHeader(
+                              title: section ==
+                                      BusinessEarningsSection.transactions
+                                  ? 'All transactions'
+                                  : 'Transactions',
+                              trailing: Text(
+                                rangeLabel,
+                                style: WaUi.caption.copyWith(
+                                  color: FinanceUi.muted,
+                                ),
+                              ),
+                            ),
+                            FinanceSearchField(
+                              controller: _searchCtrl,
+                              onChanged: _onSearchChanged,
+                              onClear: () {
+                                _searchCtrl.clear();
+                                setState(() => _search = '');
+                                _reloadLedgerOnly();
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  FinanceFilterChip(
+                                    label: 'All',
+                                    selected: _typeFilter.isEmpty,
+                                    onTap: () {
+                                      setState(() => _typeFilter = '');
+                                      _reloadLedgerOnly();
+                                    },
+                                  ),
+                                  FinanceFilterChip(
+                                    label: 'Payments',
+                                    selected: _typeFilter == 'payment_credit',
+                                    onTap: () {
+                                      setState(
+                                        () => _typeFilter = 'payment_credit',
+                                      );
+                                      _reloadLedgerOnly();
+                                    },
+                                  ),
+                                  FinanceFilterChip(
+                                    label: 'Refunds',
+                                    selected: _typeFilter == 'refund_debit',
+                                    onTap: () {
+                                      setState(
+                                        () => _typeFilter = 'refund_debit',
+                                      );
+                                      _reloadLedgerOnly();
+                                    },
+                                  ),
+                                  FinanceFilterChip(
+                                    label: 'Partial',
+                                    selected:
+                                        _typeFilter == 'partial_refund_debit',
+                                    onTap: () {
+                                      setState(
+                                        () => _typeFilter =
+                                            'partial_refund_debit',
+                                      );
+                                      _reloadLedgerOnly();
+                                    },
+                                  ),
+                                  if (_range != null)
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() => _range = null);
+                                        _reloadLedgerOnly();
+                                      },
+                                      child: Text(
+                                        'Clear dates',
+                                        style: WaUi.caption.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            if (_ledger.isEmpty)
+                              const FinanceEmptyState(
+                                title: 'No transactions yet',
+                                subtitle:
+                                    'Payments and refunds will appear here as they settle.',
+                              )
+                            else
+                              ..._ledger.map((raw) {
+                                final e = raw is Map
+                                    ? Map<String, dynamic>.from(raw)
+                                    : <String, dynamic>{};
+                                final amount =
+                                    (e['amount'] as num?)?.toDouble() ?? 0;
+                                final type = e['type']?.toString() ?? '';
+                                final orderId = e['order']?.toString();
+                                final paymentId = e['payment']?.toString();
+                                final debit = FinanceUi.isDebitType(type) ||
+                                    amount < 0;
+                                final orderNo = e['orderNumber'];
+                                final publicRef =
+                                    e['publicRef']?.toString() ?? '';
+                                final note = e['note']?.toString() ?? '';
+                                final subtitle = [
+                                  FinanceUi.formatLedgerDate(e['createdAt']),
+                                  if (orderNo != null &&
+                                      '$orderNo'.trim().isNotEmpty)
+                                    '#$orderNo',
+                                  if (publicRef.isNotEmpty) publicRef,
+                                  if (note.isNotEmpty) note,
+                                ].where((s) => s.isNotEmpty).join(' · ');
+                                return FinanceTransactionTile(
+                                  title: FinanceUi.ledgerTypeLabel(type),
+                                  subtitle: subtitle.isEmpty
+                                      ? 'Ledger entry'
+                                      : subtitle,
+                                  amount: amount,
+                                  currency: currency,
+                                  isDebit: debit,
+                                  statusLabel: debit ? 'Debit' : 'Credit',
+                                  statusTone: debit
+                                      ? FinanceStatusTone.refunded
+                                      : FinanceStatusTone.success,
+                                  onTap: () {
+                                    if ((paymentId == null ||
+                                            paymentId.isEmpty) &&
+                                        (orderId == null || orderId.isEmpty)) {
+                                      return;
+                                    }
+                                    Navigator.of(context).push(
+                                      AppPageRoute(
+                                        builder: (_) => PaymentDetailScreen(
+                                          paymentId: paymentId,
+                                          orderId: orderId,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }),
+                          ],
+                        ],
+                      ),
+                    ),
+        ),
+      ],
+    );
+
+    if (widget.embedded) {
+      return ColoredBox(color: Colors.white, child: content);
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            BarqodyTitleBar(
-              title: 'Earnings',
-              trailing: SizedBox(
-                width: 40,
-                height: 40,
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  tooltip: 'Filter dates',
-                  onPressed: _pickRange,
-                  icon: const Icon(
-                    Icons.calendar_today_outlined,
-                    color: Colors.black,
-                    size: 20,
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: _loading
-                  ? const Center(
-                      child: CircularProgressIndicator(color: Colors.black),
-                    )
-                  : _error != null && _summary == null
-                      ? ListView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          children: [
-                            FinanceErrorBlock(
-                              message: _error!,
-                              onRetry: _load,
-                            ),
-                          ],
-                        )
-                      : RefreshIndicator(
-                          color: Colors.black,
-                          onRefresh: _load,
-                          child: ListView(
-                            padding: const EdgeInsets.fromLTRB(
-                              FinanceUi.sidePad,
-                              0,
-                              FinanceUi.sidePad,
-                              40,
-                            ),
-                            children: [
-                              if (_error != null)
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: Text(
-                                    _error!,
-                                    style: WaUi.caption.copyWith(
-                                      color: FinanceUi.danger,
-                                    ),
-                                  ),
-                                ),
-                              const FinanceSectionHeader(
-                                title: 'Financial overview',
-                              ),
-                              FinanceMetricCard(
-                                label: 'Net revenue',
-                                value: formatMoney(
-                                  (_summary?['netRevenue'] as num?)
-                                          ?.toDouble() ??
-                                      0,
-                                  currency: currency,
-                                ),
-                                large: true,
-                                emphasize: true,
-                                subtitle: 'Lifetime minus refunds',
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: FinanceMetricCard(
-                                      label: 'Total revenue',
-                                      value: formatMoney(
-                                        (_summary?['totalEarnings'] as num?)
-                                                ?.toDouble() ??
-                                            0,
-                                        currency: currency,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: FinanceMetricCard(
-                                      label: 'Available',
-                                      value: formatMoney(
-                                        (_summary?['availableBalance'] as num?)
-                                                ?.toDouble() ??
-                                            0,
-                                        currency: currency,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: FinanceMetricCard(
-                                      label: 'Pending',
-                                      value: formatMoney(
-                                        (_summary?['pendingBalance'] as num?)
-                                                ?.toDouble() ??
-                                            0,
-                                        currency: currency,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: FinanceMetricCard(
-                                      label: 'Refunded',
-                                      value: formatMoney(
-                                        (_summary?['totalRefunded'] as num?)
-                                                ?.toDouble() ??
-                                            0,
-                                        currency: currency,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              FinanceMetricCard(
-                                label: 'Stripe processing fees',
-                                value: formatMoney(
-                                  (_summary?['totalStripeFees'] as num?)
-                                          ?.toDouble() ??
-                                      0,
-                                  currency: currency,
-                                ),
-                                subtitle:
-                                    'BarQody takes no commission · Withdrawals not available yet',
-                              ),
-                              const SizedBox(height: 28),
-                              FinanceSectionHeader(
-                                title: 'Analytics',
-                                trailing: _analyticsLoading
-                                    ? const SizedBox(
-                                        width: 16,
-                                        height: 16,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Colors.black,
-                                        ),
-                                      )
-                                    : null,
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    for (final opt in const [
-                                      ('Day', 'day'),
-                                      ('Week', 'week'),
-                                      ('Month', 'month'),
-                                      ('Year', 'year'),
-                                    ])
-                                      FinanceFilterChip(
-                                        label: opt.$1,
-                                        selected: _chartRange == opt.$2,
-                                        onTap: () => _reloadAnalytics(opt.$2),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 14),
-                              Text(
-                                'Revenue trend',
-                                style: WaUi.caption.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: FinanceUi.bodyMuted,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: const [
-                                  FinanceLegendDot(
-                                    color: Colors.black,
-                                    label: 'Revenue',
-                                  ),
-                                  SizedBox(width: 16),
-                                  FinanceLegendDot(
-                                    color: FinanceUi.danger,
-                                    label: 'Refunds',
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              FinanceRevenueTrendChart(
-                                series: _seriesMaps(),
-                                bucket:
-                                    _analytics?['bucket']?.toString() ?? 'day',
-                                currency: currency,
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                'Payments vs refunds',
-                                style: WaUi.caption.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: FinanceUi.bodyMuted,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              FinancePaymentsRefundsChart(
-                                revenue: periodRevenue,
-                                refunds: periodRefunds,
-                                currency: currency,
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                'Earnings breakdown',
-                                style: WaUi.caption.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: FinanceUi.bodyMuted,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              FinanceBreakdownList(
-                                items: _breakdownMaps(),
-                                currency: currency,
-                              ),
-                              const SizedBox(height: 28),
-                              FinanceSectionHeader(
-                                title: 'Transactions',
-                                trailing: Text(
-                                  rangeLabel,
-                                  style: WaUi.caption.copyWith(
-                                    color: FinanceUi.muted,
-                                  ),
-                                ),
-                              ),
-                              FinanceSearchField(
-                                controller: _searchCtrl,
-                                onChanged: _onSearchChanged,
-                                onClear: () {
-                                  _searchCtrl.clear();
-                                  setState(() => _search = '');
-                                  _reloadLedgerOnly();
-                                },
-                              ),
-                              const SizedBox(height: 12),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    FinanceFilterChip(
-                                      label: 'All',
-                                      selected: _typeFilter.isEmpty,
-                                      onTap: () {
-                                        setState(() => _typeFilter = '');
-                                        _reloadLedgerOnly();
-                                      },
-                                    ),
-                                    FinanceFilterChip(
-                                      label: 'Payments',
-                                      selected:
-                                          _typeFilter == 'payment_credit',
-                                      onTap: () {
-                                        setState(
-                                          () =>
-                                              _typeFilter = 'payment_credit',
-                                        );
-                                        _reloadLedgerOnly();
-                                      },
-                                    ),
-                                    FinanceFilterChip(
-                                      label: 'Refunds',
-                                      selected: _typeFilter == 'refund_debit',
-                                      onTap: () {
-                                        setState(
-                                          () => _typeFilter = 'refund_debit',
-                                        );
-                                        _reloadLedgerOnly();
-                                      },
-                                    ),
-                                    FinanceFilterChip(
-                                      label: 'Partial',
-                                      selected: _typeFilter ==
-                                          'partial_refund_debit',
-                                      onTap: () {
-                                        setState(
-                                          () => _typeFilter =
-                                              'partial_refund_debit',
-                                        );
-                                        _reloadLedgerOnly();
-                                      },
-                                    ),
-                                    if (_range != null)
-                                      TextButton(
-                                        onPressed: () {
-                                          setState(() => _range = null);
-                                          _reloadLedgerOnly();
-                                        },
-                                        child: Text(
-                                          'Clear dates',
-                                          style: WaUi.caption.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              if (_ledger.isEmpty)
-                                const FinanceEmptyState(
-                                  title: 'No transactions yet',
-                                  subtitle:
-                                      'Payments and refunds will appear here as they settle.',
-                                )
-                              else
-                                ..._ledger.map((raw) {
-                                  final e = raw is Map
-                                      ? Map<String, dynamic>.from(raw)
-                                      : <String, dynamic>{};
-                                  final amount =
-                                      (e['amount'] as num?)?.toDouble() ?? 0;
-                                  final type = e['type']?.toString() ?? '';
-                                  final orderId = e['order']?.toString();
-                                  final paymentId = e['payment']?.toString();
-                                  final debit = FinanceUi.isDebitType(type) ||
-                                      amount < 0;
-                                  final orderNo = e['orderNumber'];
-                                  final publicRef =
-                                      e['publicRef']?.toString() ?? '';
-                                  final note = e['note']?.toString() ?? '';
-                                  final subtitle = [
-                                    FinanceUi.formatLedgerDate(e['createdAt']),
-                                    if (orderNo != null &&
-                                        '$orderNo'.trim().isNotEmpty)
-                                      '#$orderNo',
-                                    if (publicRef.isNotEmpty) publicRef,
-                                    if (note.isNotEmpty) note,
-                                  ].where((s) => s.isNotEmpty).join(' · ');
-                                  return FinanceTransactionTile(
-                                    title: FinanceUi.ledgerTypeLabel(type),
-                                    subtitle: subtitle.isEmpty
-                                        ? 'Ledger entry'
-                                        : subtitle,
-                                    amount: amount,
-                                    currency: currency,
-                                    isDebit: debit,
-                                    statusLabel: debit ? 'Debit' : 'Credit',
-                                    statusTone: debit
-                                        ? FinanceStatusTone.refunded
-                                        : FinanceStatusTone.success,
-                                    onTap: () {
-                                      if ((paymentId == null ||
-                                              paymentId.isEmpty) &&
-                                          (orderId == null ||
-                                              orderId.isEmpty)) {
-                                        return;
-                                      }
-                                      Navigator.of(context).push(
-                                        AppPageRoute(
-                                          builder: (_) => PaymentDetailScreen(
-                                            paymentId: paymentId,
-                                            orderId: orderId,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }),
-                            ],
-                          ),
-                        ),
-            ),
-          ],
-        ),
-      ),
+      body: SafeArea(child: content),
     );
   }
 }

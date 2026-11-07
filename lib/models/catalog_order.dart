@@ -6,6 +6,35 @@ double? _readCoord(dynamic raw) {
   return null;
 }
 
+/// Removes retired drop-off chip phrases from delivery/fulfillment notes.
+String stripLegacyDeliveryDropOffNotes(String? raw) {
+  var notes = (raw ?? '').trim();
+  if (notes.isEmpty) return '';
+  notes = notes
+      .replaceAll(
+        RegExp(r'(^|\s*[·•|,]\s*)Leave at my door\b', caseSensitive: false),
+        '',
+      )
+      .replaceAll(
+        RegExp(r'(^|\s*[·•|,]\s*)Hand it to me\b', caseSensitive: false),
+        '',
+      )
+      .replaceAll(
+        RegExp(
+          r'(^|\s*[·•|,]\s*)Leave at (the )?gate\b',
+          caseSensitive: false,
+        ),
+        '',
+      )
+      .replaceAll(RegExp(r'^[·•|,]\s*'), '')
+      .replaceAll(RegExp(r'\s*[·•|,]\s*$'), '')
+      .replaceAll(RegExp(r'\s*[·•]\s*[·•]\s*'), ' · ')
+      .replaceAll(RegExp(r'\s{2,}'), ' ')
+      .trim();
+  if (notes.replaceAll(RegExp(r'[·•|,.\s]+'), '').isEmpty) return '';
+  return notes;
+}
+
 /// Matches " (24.12345, 67.12345)" pins appended at checkout.
 final RegExp _addressPinRe = RegExp(
   r'\(\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\)\s*$',
@@ -194,7 +223,9 @@ class CatalogOrder {
       bookingKind: json['bookingKind']?.toString() ?? 'order',
       orderType: json['orderType']?.toString() ?? 'takeaway',
       fulfillmentAddress: fulfillment['address']?.toString() ?? '',
-      fulfillmentNotes: fulfillment['notes']?.toString() ?? '',
+      fulfillmentNotes: stripLegacyDeliveryDropOffNotes(
+        fulfillment['notes']?.toString(),
+      ),
       tableToken: fulfillment['tableToken']?.toString() ?? '',
       deliveryArea: fulfillment['deliveryArea']?.toString() ?? '',
       scheduledFor: fulfillment['scheduledFor']?.toString() ?? '',
