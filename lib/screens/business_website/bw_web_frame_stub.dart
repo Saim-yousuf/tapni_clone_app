@@ -10,7 +10,10 @@ Widget buildBusinessWebsiteWebFrame({
   bool flutterApp = false,
   void Function(String orderId, {String? accessToken})? onTrackOrder,
   void Function(BwBridgeAddToCart payload)? onAddToCart,
+  void Function(BwBridgeAdjustCartQty payload)? onAdjustCartQty,
   VoidCallback? onOpenCart,
+  VoidCallback? onCloseWebsite,
+  void Function(bool enabled)? onImmersiveNav,
 }) {
   return const SizedBox.shrink();
 }

@@ -179,11 +179,15 @@ class _ExploreCheckoutScreenState extends State<ExploreCheckoutScreen> {
           (line) => {
             if (line.item.id.isNotEmpty) 'catalogItemId': line.item.id,
             'name': line.item.name,
-            'price': line.item.displayPrice,
+            'price': line.unitPrice,
             'quantity': line.quantity,
             if (line.notes.isNotEmpty) 'notes': line.notes,
             if (line.item.category.isNotEmpty) 'category': line.item.category,
             if (line.item.imageUrl.isNotEmpty) 'image': line.item.imageUrl,
+            if (line.variantId.isNotEmpty) 'variantId': line.variantId,
+            if (line.optionIds.isNotEmpty) 'optionIds': line.optionIds,
+            if (line.displayConfigurationLabel.isNotEmpty)
+              'configurationLabel': line.displayConfigurationLabel,
           },
         )
         .toList();
@@ -414,7 +418,7 @@ class _ExploreCheckoutScreenState extends State<ExploreCheckoutScreen> {
         );
         final batchTotal = batch.lines.fold<double>(
           0,
-          (sum, line) => sum + (line.item.displayPrice * line.quantity),
+          (sum, line) => sum + line.lineTotal,
         );
         final vendorFee = isDelivery
             ? vendor.deliveryFeeForSubtotal(vendor.total)

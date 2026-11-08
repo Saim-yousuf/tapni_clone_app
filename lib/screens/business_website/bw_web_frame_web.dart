@@ -16,13 +16,19 @@ Widget buildBusinessWebsiteWebFrame({
   bool flutterApp = false,
   void Function(String orderId, {String? accessToken})? onTrackOrder,
   void Function(BwBridgeAddToCart payload)? onAddToCart,
+  void Function(BwBridgeAdjustCartQty payload)? onAdjustCartQty,
   VoidCallback? onOpenCart,
+  VoidCallback? onCloseWebsite,
+  void Function(bool enabled)? onImmersiveNav,
 }) {
   final htmlContent = html;
   final pageUrl = url;
   final trackOrder = onTrackOrder;
   final addToCart = onAddToCart;
+  final adjustCartQty = onAdjustCartQty;
   final openCart = onOpenCart;
+  final closeWebsite = onCloseWebsite;
+  final immersiveNav = onImmersiveNav;
   final injectFlutter = flutterApp;
   final shopperPayload = shopper == null || shopper.isEmpty
       ? null
@@ -62,9 +68,25 @@ Widget buildBusinessWebsiteWebFrame({
       return;
     }
 
-    if (data['action'] == 'addToCart') {
+    if (data['action'] == 'closeWebsite' || data['action'] == 'close') {
+      closeWebsite?.call();
+      return;
+    }
+
+    if (data['action'] == 'immersiveNav') {
+      immersiveNav?.call(data['enabled'] != false);
+      return;
+    }
+
+    if (data['action'] == 'addToCart' || data['action'] == 'configureItem') {
       final parsed = BwFlutterCommerceBridge.parseAddToCart(data);
       if (parsed != null) addToCart?.call(parsed);
+      return;
+    }
+
+    if (data['action'] == 'adjustCartQty') {
+      final parsed = BwFlutterCommerceBridge.parseAdjustCartQty(data);
+      if (parsed != null) adjustCartQty?.call(parsed);
       return;
     }
 

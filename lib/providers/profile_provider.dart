@@ -10,6 +10,7 @@ import 'package:tapni_app/utils/catalog_helper.dart' show catalogTypesMatch;
 import 'package:tapni_app/models/gallery_item.dart';
 import 'package:tapni_app/models/profile.dart';
 import 'package:tapni_app/models/business_card_design.dart';
+import 'package:tapni_app/models/catalog_item.dart';
 import 'package:tapni_app/models/social_link.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/card_template.dart';
@@ -996,15 +997,21 @@ class ProfileProvider extends ChangeNotifier {
 
       final localItems = local.catalogItems;
       final remoteItems = remote.catalogItems;
-      final catalogItems =
-          (localItems != null && localItems.isNotEmpty)
-              ? localItems
-              : remoteItems;
+      final catalogItems = _mergeCatalogItemsPreferRicher(
+        localItems,
+        remoteItems,
+      );
       final catalogCategories =
           (local.catalogCategories != null &&
                   local.catalogCategories!.isNotEmpty)
               ? local.catalogCategories
               : remote.catalogCategories;
+      // Prefer remote modifier library so Mongo-assigned group _ids stick.
+      final catalogModifierGroups =
+          (remote.catalogModifierGroups != null &&
+                  remote.catalogModifierGroups!.isNotEmpty)
+              ? remote.catalogModifierGroups
+              : local.catalogModifierGroups;
 
       return local.copyWith(
         id: RegExp(r'^[a-fA-F0-9]{24}$').hasMatch(remote.id)
@@ -1014,6 +1021,7 @@ class ProfileProvider extends ChangeNotifier {
         entries: entries,
         catalogItems: catalogItems,
         catalogCategories: catalogCategories,
+        catalogModifierGroups: catalogModifierGroups,
         actionType: (local.actionType != null && local.actionType!.isNotEmpty)
             ? local.actionType
             : remote.actionType,
@@ -1029,6 +1037,77 @@ class ProfileProvider extends ChangeNotifier {
             : local.value,
       );
     }).toList();
+  }
+
+  /// Keep local edits, but never drop sizes/prices that only exist remotely
+  /// (or vice versa when local still has richer size data).
+  static List<CatalogItem>? _mergeCatalogItemsPreferRicher(
+    List<CatalogItem>? local,
+    List<CatalogItem>? remote,
+  ) {
+    if (local == null || local.isEmpty) return remote;
+    if (remote == null || remote.isEmpty) return local;
+
+    final remoteById = <String, CatalogItem>{
+      for (final r in remote)
+        if (r.id.trim().isNotEmpty) r.id.trim(): r,
+    };
+    final remoteByName = <String, CatalogItem>{
+      for (final r in remote)
+        if (r.name.trim().isNotEmpty) r.name.trim().toLowerCase(): r,
+    };
+
+    CatalogItem mergeOne(CatalogItem l) {
+      final r = (l.id.trim().isNotEmpty ? remoteById[l.id.trim()] : null) ??
+          remoteByName[l.name.trim().toLowerCase()];
+      if (r == null) return l;
+
+      final localSizes =
+          l.variants.where((v) => v.name.trim().isNotEmpty).toList();
+      final remoteSizes =
+          r.variants.where((v) => v.name.trim().isNotEmpty).toList();
+      final localHasPricedSize = localSizes.any((v) => v.price > 0);
+      final remoteHasPricedSize = remoteSizes.any((v) => v.price > 0);
+
+      var variants = l.variants;
+      if (localSizes.isEmpty && remoteSizes.isNotEmpty) {
+        variants = r.variants;
+      } else if (localSizes.isNotEmpty &&
+          remoteSizes.isNotEmpty &&
+          !localHasPricedSize &&
+          remoteHasPricedSize) {
+        variants = r.variants;
+      } else if (localSizes.isNotEmpty && remoteSizes.isNotEmpty) {
+        // Prefer remote Mongo ids while keeping local prices when set.
+        variants = remoteHasPricedSize && !localHasPricedSize
+            ? r.variants
+            : (localHasPricedSize ? l.variants : r.variants);
+      }
+
+      final price = l.price > 0
+          ? l.price
+          : (r.price > 0
+              ? r.price
+              : (variants.isNotEmpty
+                  ? variants
+                      .map((v) => v.price)
+                      .where((p) => p > 0)
+                      .fold<double>(0, (a, b) => a == 0 || b < a ? b : a)
+                  : 0));
+
+      return l.copyWith(
+        id: r.id.isNotEmpty ? r.id : l.id,
+        price: price.toDouble(),
+        variants: variants,
+        optionGroupIds: l.optionGroupIds.isNotEmpty
+            ? l.optionGroupIds
+            : r.optionGroupIds,
+        optionGroups:
+            l.optionGroups.isNotEmpty ? l.optionGroups : r.optionGroups,
+      );
+    }
+
+    return local.map(mergeOne).toList();
   }
 
   String _linkEntriesCacheKey([UserProfile? profile]) {

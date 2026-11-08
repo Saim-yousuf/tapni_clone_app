@@ -16,6 +16,15 @@ class ExploreCartLine {
   /// `order` | `appointment` | `stay` (empty = treat as order).
   final String bookingKind;
 
+  /// Selected size / SKU id (menu modifiers).
+  final String variantId;
+
+  /// Selected option ids across all groups.
+  final List<String> optionIds;
+
+  /// Readable snapshot e.g. "Large · Extra cheese".
+  final String configurationLabel;
+
   const ExploreCartLine({
     required this.item,
     this.quantity = 1,
@@ -27,9 +36,29 @@ class ExploreCartLine {
     this.checkInDate = '',
     this.checkOutDate = '',
     this.bookingKind = '',
+    this.variantId = '',
+    this.optionIds = const [],
+    this.configurationLabel = '',
   });
 
-  double get lineTotal => item.displayPrice * quantity;
+  double get unitPrice => item.hasConfiguration
+      ? item.configuredUnitPrice(
+          variantId: variantId,
+          optionIds: optionIds,
+        )
+      : item.displayPrice;
+
+  double get lineTotal => unitPrice * quantity;
+
+  String get displayConfigurationLabel {
+    final snap = configurationLabel.trim();
+    if (snap.isNotEmpty) return snap;
+    if (!item.hasConfiguration) return '';
+    return item.configurationLabel(
+      variantId: variantId,
+      optionIds: optionIds,
+    );
+  }
 
   bool get hasAppointment =>
       bookingKind == 'appointment' ||
@@ -42,7 +71,10 @@ class ExploreCartLine {
   bool sameIdentityAs(ExploreCartLine other) {
     final sameItem = (item.id.isNotEmpty && item.id == other.item.id) ||
         item.name == other.item.name;
-    return sameItem &&
+    if (!sameItem) return false;
+    final sameConfig = variantId == other.variantId &&
+        _sameOptionIds(optionIds, other.optionIds);
+    return sameConfig &&
         bookingDate == other.bookingDate &&
         bookingTime == other.bookingTime &&
         resourceId == other.resourceId &&
@@ -51,7 +83,26 @@ class ExploreCartLine {
         bookingKind == other.bookingKind;
   }
 
-  ExploreCartLine copyWith({int? quantity, String? notes}) {
+  static bool _sameOptionIds(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    final sa = a.map((e) => e.trim()).where((e) => e.isNotEmpty).toList()
+      ..sort();
+    final sb = b.map((e) => e.trim()).where((e) => e.isNotEmpty).toList()
+      ..sort();
+    if (sa.length != sb.length) return false;
+    for (var i = 0; i < sa.length; i++) {
+      if (sa[i] != sb[i]) return false;
+    }
+    return true;
+  }
+
+  ExploreCartLine copyWith({
+    int? quantity,
+    String? notes,
+    String? variantId,
+    List<String>? optionIds,
+    String? configurationLabel,
+  }) {
     return ExploreCartLine(
       item: item,
       quantity: quantity ?? this.quantity,
@@ -63,6 +114,9 @@ class ExploreCartLine {
       checkInDate: checkInDate,
       checkOutDate: checkOutDate,
       bookingKind: bookingKind,
+      variantId: variantId ?? this.variantId,
+      optionIds: optionIds ?? this.optionIds,
+      configurationLabel: configurationLabel ?? this.configurationLabel,
     );
   }
 }

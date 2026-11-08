@@ -1,7 +1,8 @@
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/catalog_item_options.dart';
 import 'package:tapni_app/models/explore_cart.dart';
 
-/// Validated payload from website → Flutter `addToCart` bridge.
+/// Validated payload from website → Flutter `addToCart` / `configureItem` bridge.
 class BwBridgeAddToCart {
   final ExploreCartLine line;
   final String businessId;
@@ -15,6 +16,9 @@ class BwBridgeAddToCart {
   final bool ordersPaused;
   final bool isClosedNow;
 
+  /// When true, Flutter opens the configurator before adding to cart.
+  final bool needsConfiguration;
+
   const BwBridgeAddToCart({
     required this.line,
     required this.businessId,
@@ -27,6 +31,7 @@ class BwBridgeAddToCart {
     required this.bookingMode,
     this.ordersPaused = false,
     this.isClosedNow = false,
+    this.needsConfiguration = false,
   });
 }
 
@@ -84,10 +89,34 @@ class BwFlutterCommerceBridge {
     return 'order';
   }
 
+  static List<CatalogVariant> _parseVariants(dynamic raw) {
+    if (raw is! List) return const [];
+    final out = <CatalogVariant>[];
+    for (final e in raw) {
+      if (e is Map) {
+        out.add(CatalogVariant.fromJson(Map<String, dynamic>.from(e)));
+      }
+    }
+    return out;
+  }
+
+  static List<CatalogOptionGroup> _parseOptionGroups(dynamic raw) {
+    if (raw is! List) return const [];
+    final out = <CatalogOptionGroup>[];
+    for (final e in raw) {
+      if (e is Map) {
+        out.add(CatalogOptionGroup.fromJson(Map<String, dynamic>.from(e)));
+      }
+    }
+    return out;
+  }
+
   /// Returns null when the payload must be rejected.
+  /// Handles `addToCart` and `configureItem` (opens Flutter configurator).
   static BwBridgeAddToCart? parseAddToCart(Map raw) {
     final action = _str(raw['action']);
-    if (action != 'addToCart') return null;
+    final needsConfiguration = action == 'configureItem';
+    if (action != 'addToCart' && !needsConfiguration) return null;
 
     final itemRaw = raw['item'];
     if (itemRaw is! Map) return null;
@@ -117,10 +146,13 @@ class BwFlutterCommerceBridge {
     final bookingKind = _bookingKind(bookingMode, item);
 
     // Prices from WebView are display-only; server revalidates on placeOrder.
-    final priceRaw = item['price'];
+    final priceRaw = item['price'] ?? item['priceValue'] ?? item['startingPrice'];
     final price = priceRaw is num
         ? priceRaw.toDouble()
         : double.tryParse(_str(priceRaw)) ?? 0;
+
+    final variants = _parseVariants(item['variants']);
+    final optionGroups = _parseOptionGroups(item['optionGroups']);
 
     final catalogItem = CatalogItem(
       id: catalogItemId,
@@ -129,7 +161,18 @@ class BwFlutterCommerceBridge {
       imageUrl: _str(item['image'] ?? item['imageUrl']),
       category: _str(item['category']),
       isActive: true,
+      variants: variants,
+      optionGroups: optionGroups,
     );
+
+    final optionIds = <String>[];
+    final rawOpts = item['optionIds'];
+    if (rawOpts is List) {
+      for (final e in rawOpts) {
+        final s = _str(e);
+        if (s.isNotEmpty) optionIds.add(s);
+      }
+    }
 
     final line = ExploreCartLine(
       item: catalogItem,
@@ -142,6 +185,9 @@ class BwFlutterCommerceBridge {
       checkInDate: _str(item['checkInDate']),
       checkOutDate: _str(item['checkOutDate']),
       bookingKind: bookingKind,
+      variantId: _str(item['variantId']),
+      optionIds: optionIds,
+      configurationLabel: _str(item['configurationLabel']),
     );
 
     if (bookingKind == 'appointment' &&
@@ -172,6 +218,8 @@ class BwFlutterCommerceBridge {
       bookingMode: bookingMode,
       ordersPaused: ordering.ordersPaused,
       isClosedNow: ordering.isClosedNow,
+      needsConfiguration:
+          needsConfiguration || catalogItem.hasConfiguration,
     );
   }
 
@@ -201,4 +249,53 @@ class BwFlutterCommerceBridge {
   }
 
   static bool isOpenCart(Map raw) => _str(raw['action']) == 'openCart';
+
+  /// Row stepper − : decrease qty for a catalog item already in the native cart.
+  static BwBridgeAdjustCartQty? parseAdjustCartQty(Map raw) {
+    if (_str(raw['action']) != 'adjustCartQty') return null;
+    final itemRaw = raw['item'];
+    if (itemRaw is! Map) return null;
+    final item = Map<String, dynamic>.from(itemRaw);
+    final siteRaw = raw['site'];
+    final site = siteRaw is Map
+        ? Map<String, dynamic>.from(siteRaw)
+        : <String, dynamic>{};
+    final businessId = _str(site['businessId']);
+    if (businessId.isEmpty || businessId.startsWith('demo:')) return null;
+    final catalogItemId = _str(item['catalogItemId'] ?? item['id']);
+    final name = _str(item['name']);
+    if (catalogItemId.isEmpty && name.isEmpty) return null;
+    final deltaRaw = item['delta'] ?? raw['delta'] ?? -1;
+    final delta = deltaRaw is num
+        ? deltaRaw.round()
+        : (int.tryParse(_str(deltaRaw)) ?? -1);
+    if (delta == 0) return null;
+    return BwBridgeAdjustCartQty(
+      businessId: businessId,
+      businessLinkId: _str(site['businessLinkId']),
+      websiteSlug: _str(site['websiteSlug']),
+      catalogItemId: catalogItemId,
+      name: name,
+      delta: delta,
+    );
+  }
+}
+
+/// Decrease (or increase) quantity for a line matching catalog item id / name.
+class BwBridgeAdjustCartQty {
+  final String businessId;
+  final String businessLinkId;
+  final String websiteSlug;
+  final String catalogItemId;
+  final String name;
+  final int delta;
+
+  const BwBridgeAdjustCartQty({
+    required this.businessId,
+    required this.businessLinkId,
+    required this.websiteSlug,
+    required this.catalogItemId,
+    required this.name,
+    required this.delta,
+  });
 }

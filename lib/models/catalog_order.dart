@@ -774,8 +774,11 @@ class CatalogOrder {
     }
   }
 
-  String get itemsSummary =>
-      items.map((e) => '${e.quantity}x ${e.name}').join(', ');
+  String get itemsSummary => items.map((e) {
+        final config = e.configurationLabel.trim();
+        final label = config.isNotEmpty ? '${e.name} ($config)' : e.name;
+        return '${e.quantity}x $label';
+      }).join(', ');
 
   bool get hasToken => tokenNumber > 0;
 
@@ -839,6 +842,12 @@ class CatalogOrderLineItem {
   final String notes;
   final String imageUrl;
 
+  final String variantId;
+  final String variantName;
+  final List<String> optionIds;
+  final List<String> optionNames;
+  final String configurationLabel;
+
   CatalogOrderLineItem({
     required this.name,
     required this.price,
@@ -848,10 +857,39 @@ class CatalogOrderLineItem {
     this.quantity = 1,
     this.notes = '',
     this.imageUrl = '',
+    this.variantId = '',
+    this.variantName = '',
+    this.optionIds = const [],
+    this.optionNames = const [],
+    this.configurationLabel = '',
   });
 
   factory CatalogOrderLineItem.fromJson(Map<String, dynamic> json) {
     final listRaw = json['listPrice'];
+    final optionIds = <String>[];
+    final rawIds = json['optionIds'];
+    if (rawIds is List) {
+      for (final e in rawIds) {
+        final s = e?.toString().trim() ?? '';
+        if (s.isNotEmpty) optionIds.add(s);
+      }
+    }
+    final optionNames = <String>[];
+    final rawNames = json['optionNames'];
+    if (rawNames is List) {
+      for (final e in rawNames) {
+        final s = e?.toString().trim() ?? '';
+        if (s.isNotEmpty) optionNames.add(s);
+      }
+    }
+    var label = json['configurationLabel']?.toString().trim() ?? '';
+    if (label.isEmpty) {
+      final parts = <String>[];
+      final vn = json['variantName']?.toString().trim() ?? '';
+      if (vn.isNotEmpty) parts.add(vn);
+      parts.addAll(optionNames);
+      label = parts.join(' · ');
+    }
     return CatalogOrderLineItem(
       name: json['name']?.toString() ?? '',
       price: (json['price'] is num) ? (json['price'] as num).toDouble() : 0,
@@ -869,6 +907,11 @@ class CatalogOrderLineItem {
           '',
       imageUrl:
           json['image']?.toString() ?? json['imageUrl']?.toString() ?? '',
+      variantId: json['variantId']?.toString() ?? '',
+      variantName: json['variantName']?.toString() ?? '',
+      optionIds: optionIds,
+      optionNames: optionNames,
+      configurationLabel: label,
     );
   }
 

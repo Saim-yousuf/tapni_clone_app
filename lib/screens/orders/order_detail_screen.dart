@@ -356,7 +356,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     buf.writeln('');
     for (final item in order.items) {
       buf.writeln(
-        '${item.quantity}× ${item.name} — ${formatMoney(item.price * item.quantity, currency: order.currency)}',
+        item.configurationLabel.trim().isNotEmpty
+            ? '${item.quantity}× ${item.name} (${item.configurationLabel.trim()}) — ${formatMoney(item.price * item.quantity, currency: order.currency)}'
+            : '${item.quantity}× ${item.name} — ${formatMoney(item.price * item.quantity, currency: order.currency)}',
       );
     }
     buf.writeln('');
@@ -725,6 +727,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               fontWeight: FontWeight.w800,
                             ),
                           ),
+                          if (item.configurationLabel.trim().isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              item.configurationLabel.trim(),
+                              style: WaUi.body.copyWith(
+                                color: BarqodyChrome.secondaryText,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 6),
                           Text(
                             '${item.quantity} × ${formatMoney(item.price, currency: currency)}',
@@ -2615,6 +2627,19 @@ class _OrderItemRow extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
+                    if (item.configurationLabel.trim().isNotEmpty) ...[
+                      const SizedBox(height: 3),
+                      Text(
+                        item.configurationLabel.trim(),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: WaUi.caption.copyWith(
+                          color: BarqodyChrome.secondaryText,
+                          fontWeight: FontWeight.w600,
+                          height: 1.25,
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 3),
                     Text(
                       unit,

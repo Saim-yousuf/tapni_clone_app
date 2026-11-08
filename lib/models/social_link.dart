@@ -1,5 +1,6 @@
 import 'package:tapni_app/models/business_website/business_website_models.dart';
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/catalog_item_options.dart';
 import 'package:tapni_app/models/service_schedule.dart';
 
 enum SocialPlatform {
@@ -108,6 +109,8 @@ class SocialLink {
   final Map<String, String>? contactCard;
   final List<CatalogItem>? catalogItems;
   final List<String>? catalogCategories;
+  /// Shared modifier groups for this catalog (attach via item.optionGroupIds).
+  final List<CatalogOptionGroup>? catalogModifierGroups;
   final String? catalogType;
   final String? fileExt;
   final ServiceSchedule? serviceSchedule;
@@ -131,6 +134,7 @@ class SocialLink {
     this.contactCard,
     this.catalogItems,
     this.catalogCategories,
+    this.catalogModifierGroups,
     this.catalogType,
     this.fileExt,
     this.serviceSchedule,
@@ -155,6 +159,7 @@ class SocialLink {
     Map<String, String>? contactCard,
     List<CatalogItem>? catalogItems,
     List<String>? catalogCategories,
+    List<CatalogOptionGroup>? catalogModifierGroups,
     String? catalogType,
     String? fileExt,
     ServiceSchedule? serviceSchedule,
@@ -178,6 +183,8 @@ class SocialLink {
       contactCard: contactCard ?? this.contactCard,
       catalogItems: catalogItems ?? this.catalogItems,
       catalogCategories: catalogCategories ?? this.catalogCategories,
+      catalogModifierGroups:
+          catalogModifierGroups ?? this.catalogModifierGroups,
       catalogType: catalogType ?? this.catalogType,
       fileExt: fileExt ?? this.fileExt,
       serviceSchedule: serviceSchedule ?? this.serviceSchedule,
@@ -286,6 +293,14 @@ class SocialLink {
           (isCatalogLink ||
               (catalogCategories != null && catalogCategories!.isNotEmpty)))
         'catalogCategories': catalogCategories ?? const <String>[],
+      // Always send for menu catalogs so clears persist (same as catalogItems).
+      if (isCatalogLink ||
+          actionType == 'menu_catalog' ||
+          fieldType == 'menu_catalog' ||
+          (catalogModifierGroups != null && catalogModifierGroups!.isNotEmpty))
+        'catalogModifierGroups': (catalogModifierGroups ?? const [])
+            .map((g) => g.toJson())
+            .toList(),
       if (isCatalogLink && catalogType != null) 'catalogType': catalogType,
       if (isDocumentLink && catalogType != null) 'catalogType': catalogType,
       if (isBusinessWebsiteLink && catalogType != null)
@@ -515,6 +530,19 @@ class SocialLink {
           ?.map((e) => e.toString().trim())
           .where((e) => e.isNotEmpty)
           .toList(),
+      catalogModifierGroups: () {
+        final raw = json['catalogModifierGroups'];
+        if (raw is! List || raw.isEmpty) return null;
+        final out = <CatalogOptionGroup>[];
+        for (final e in raw) {
+          if (e is Map) {
+            out.add(
+              CatalogOptionGroup.fromJson(Map<String, dynamic>.from(e)),
+            );
+          }
+        }
+        return out.isEmpty ? null : out;
+      }(),
       serviceSchedule: json['serviceSchedule'] != null
           ? ServiceSchedule.fromJson(
               json['serviceSchedule'] as Map<String, dynamic>,

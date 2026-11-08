@@ -24,7 +24,10 @@ import 'package:tapni_app/screens/catalog/order_placed_screen.dart';
 import 'package:tapni_app/screens/catalog/service_booking_cart_screen.dart';
 import 'package:tapni_app/widgets/service_booking_sheet.dart';
 import 'package:tapni_app/widgets/stay_booking_sheet.dart';
+import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/catalog_item_configurator_sheet.dart';
+import 'package:tapni_app/widgets/catalog_size_chips.dart';
 import 'package:tapni_app/widgets/wa_primary_button.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/widgets/app_toast.dart';
@@ -54,6 +57,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
   final _repo = ReviewRepo();
   final _notesCtrl = TextEditingController();
   int _qty = 1;
+  String? _selectedVariantId;
 
   List<BusinessReview> _reviews = [];
   bool _loadingReviews = true;
@@ -62,7 +66,9 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
   bool get _isService => widget.catalogType == 'services';
   bool get _isProducts => widget.catalogType == 'products';
 
-  CatalogItem get _item => widget.catalogItem;
+  CatalogItem get _item => widget.catalogItem.withResolvedOptionGroups(
+        widget.catalogLink.catalogModifierGroups ?? const [],
+      );
 
   ExploreItem get _explore => widget.exploreItem;
 
@@ -85,7 +91,28 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
         country: widget.profile.country,
       );
 
+  double get _unitPrice {
+    if (_item.activeVariants.isNotEmpty) {
+      return _item.configuredUnitPrice(variantId: _selectedVariantId);
+    }
+    return _item.hasConfiguration
+        ? _item.startingPrice
+        : _item.displayPrice;
+  }
+
   String get _priceLabel {
+    final unit = _unitPrice;
+    if (_item.activeVariants.isNotEmpty && _selectedVariantId != null) {
+      return unit > 0
+          ? formatMoney(unit, currency: _currency)
+          : 'Free';
+    }
+    if (_item.hasConfiguration) {
+      if (_item.startingPrice > 0) {
+        return 'From ${formatMoney(_item.startingPrice, currency: _currency)}';
+      }
+      return 'From Free';
+    }
     if (_item.displayPrice > 0) {
       return formatMoney(_item.displayPrice, currency: _currency);
     }
@@ -95,6 +122,15 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
   @override
   void initState() {
     super.initState();
+    final vs = _item.activeVariants;
+    if (vs.isNotEmpty) {
+      // Default to cheapest size (popular food apps).
+      var best = vs.first;
+      for (final v in vs) {
+        if (v.price < best.price) best = v;
+      }
+      _selectedVariantId = best.id;
+    }
     _loadReviews();
   }
 
@@ -304,6 +340,39 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
       }
     }
 
+    ExploreCartLine line = ExploreCartLine(
+      item: _item,
+      quantity: _qty,
+      notes: _notesCtrl.text.trim(),
+    );
+    if (_item.hasConfiguration) {
+      final needsOptions = _item.activeOptionGroups.isNotEmpty;
+      final hasSizes = _item.activeVariants.isNotEmpty;
+      // Size already chosen on this screen — only open sheet for toppings /
+      // modifiers (popular food-app flow).
+      if (needsOptions) {
+        final configured = await showCatalogItemConfiguratorSheet(
+          context: context,
+          item: _item,
+          currency: _currency,
+          initialQuantity: _qty,
+          initialNotes: _notesCtrl.text.trim(),
+          initialVariantId: _selectedVariantId,
+        );
+        if (configured == null || !mounted) return;
+        line = configured.toCartLine(_item);
+      } else if (hasSizes) {
+        final vid = (_selectedVariantId ?? _item.activeVariants.first.id).trim();
+        line = ExploreCartLine(
+          item: _item,
+          quantity: _qty,
+          notes: _notesCtrl.text.trim(),
+          variantId: vid,
+          configurationLabel: _item.configurationLabel(variantId: vid),
+        );
+      }
+    }
+
     final cart = context.read<ExploreCartProvider>();
     cart.addItem(
       businessId: businessId,
@@ -313,11 +382,7 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
           widget.catalogType.isNotEmpty ? widget.catalogType : 'catalog',
       currency: _currency,
       catalogItems: widget.catalogLink.catalogItems ?? const [],
-      line: ExploreCartLine(
-        item: _item,
-        quantity: _qty,
-        notes: _notesCtrl.text.trim(),
-      ),
+      line: line,
     );
 
     if (!mounted) return;
@@ -354,33 +419,32 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
                     ),
                   ),
                   actions: [
-                    IconButton(
-                      tooltip: 'Cart',
-                      onPressed: () {
-                        final messenger = ScaffoldMessenger.of(context);
-                        messenger.hideCurrentSnackBar();
-                        final cart = context.read<ExploreCartProvider>();
-                        if (cart.isEmpty) {
-                          messenger.clearSnackBars();
-                          showAppToastMessenger(
-                                messenger,
-                                'Your cart is empty',
-                                kind: AppToastKind.warning, duration: Duration(seconds: 2),
-                              );
-                          return;
-                        }
-                        Navigator.of(context).push(
-                          AppPageRoute(
-                            builder: (_) => const ExploreCartScreen(),
-                          ),
-                        );
-                      },
-                      icon: Consumer<ExploreCartProvider>(
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Consumer<ExploreCartProvider>(
                         builder: (context, cart, _) {
-                          return Badge(
-                            isLabelVisible: cart.hasItems,
-                            label: Text('${cart.itemCount}'),
-                            child: const Icon(Icons.shopping_cart_outlined),
+                          return CircleAssetButton(
+                            asset: 'assets/images/png/bag-icon.png',
+                            badge: cart.hasItems,
+                            onTap: () {
+                              final messenger = ScaffoldMessenger.of(context);
+                              messenger.hideCurrentSnackBar();
+                              if (cart.isEmpty) {
+                                messenger.clearSnackBars();
+                                showAppToastMessenger(
+                                  messenger,
+                                  'Your cart is empty',
+                                  kind: AppToastKind.warning,
+                                  duration: const Duration(seconds: 2),
+                                );
+                                return;
+                              }
+                              Navigator.of(context).push(
+                                AppPageRoute(
+                                  builder: (_) => const ExploreCartScreen(),
+                                ),
+                              );
+                            },
                           );
                         },
                       ),
@@ -424,14 +488,91 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          _priceLabel,
-                          style: WaUi.headline.copyWith(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 22,
+                        AnimatedSwitcher(
+                          duration: AppMotion.content,
+                          switchInCurve: AppMotion.easeOut,
+                          switchOutCurve: AppMotion.easeIn,
+                          child: Text(
+                            _priceLabel,
+                            key: ValueKey(_priceLabel),
+                            style: WaUi.headline.copyWith(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 22,
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 14),
+                        if (_item.activeVariants.isNotEmpty) ...[
+                          const SizedBox(height: 20),
+                          Text(
+                            'Size',
+                            style: WaUi.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          CatalogSizeChips(
+                            variants: _item.activeVariants,
+                            selectedId: _selectedVariantId,
+                            currency: _currency,
+                            onSelected: (id) =>
+                                setState(() => _selectedVariantId = id),
+                          ),
+                        ],
+                        if (_item.activeOptionGroups.isNotEmpty) ...[
+                          const SizedBox(height: 16),
+                          Material(
+                            color: BarqodyChrome.fieldFill,
+                            borderRadius: BorderRadius.circular(16),
+                            child: InkWell(
+                              onTap: _onPrimaryAction,
+                              borderRadius: BorderRadius.circular(16),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  14,
+                                  14,
+                                  10,
+                                  14,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Customize',
+                                            style: WaUi.bodyMedium.copyWith(
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            _item.activeOptionGroups
+                                                .map((g) => g.name)
+                                                .join(' · '),
+                                            style: WaUi.body.copyWith(
+                                              color: WaUi.secondaryText,
+                                              height: 1.35,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Icon(
+                                      Icons.chevron_right_rounded,
+                                      color: WaUi.secondaryText,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 16),
                         _businessCard(),
                         const SizedBox(height: 18),
                         _metaChips(),
@@ -477,26 +618,37 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
                               Text(
                                 context.l10n.quantity,
                                 style: WaUi.bodyMedium.copyWith(
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 15,
                                 ),
                               ),
                               const Spacer(),
-                              IconButton(
-                                onPressed: _qty > 1
+                              _QtyCircle(
+                                icon: Icons.remove,
+                                onTap: _qty > 1
                                     ? () => setState(() => _qty--)
                                     : null,
-                                icon: const Icon(Icons.remove_circle_outline),
                               ),
-                              Text(
-                                '$_qty',
-                                style: WaUi.bodyMedium.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 16,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 14),
+                                child: AnimatedSwitcher(
+                                  duration: AppMotion.content,
+                                  child: Text(
+                                    '$_qty',
+                                    key: ValueKey(_qty),
+                                    style: WaUi.bodyMedium.copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 16,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () => setState(() => _qty++),
-                                icon: const Icon(Icons.add_circle_outline),
+                              _QtyCircle(
+                                icon: Icons.add,
+                                onTap: _qty < 99
+                                    ? () => setState(() => _qty++)
+                                    : null,
                               ),
                             ],
                           ),
@@ -756,28 +908,38 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
   }
 
   Widget _bottomBar() {
-    final total = _item.displayPrice * (_isService ? 1 : _qty);
-    final hasPrice = _item.displayPrice > 0;
+    final unit = _unitPrice;
+    final total = unit * (_isService ? 1 : _qty);
+    final hasPrice = unit > 0;
     final money = hasPrice
         ? formatMoney(total, currency: _currency)
         : null;
+    final needsCustomize = _item.activeOptionGroups.isNotEmpty;
     final action = _isService
         ? (hasPrice ? 'Book now ($money)' : 'Book now')
-        : (hasPrice
-            ? '${context.l10n.addToCart} ($money)'
-            : context.l10n.addToCart);
+        : (needsCustomize
+            ? (hasPrice ? 'Customize · $money' : 'Customize')
+            : (hasPrice
+                ? '${context.l10n.addToCart} ($money)'
+                : context.l10n.addToCart));
 
     return SafeArea(
       top: false,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
         decoration: const BoxDecoration(
           color: Colors.white,
           border: Border(top: BorderSide(color: Color(0xFFEEF0F2))),
         ),
-        child: WaPrimaryButton(
-          label: action,
-          onPressed: _onPrimaryAction,
+        child: AnimatedSwitcher(
+          duration: AppMotion.content,
+          switchInCurve: AppMotion.easeOut,
+          switchOutCurve: AppMotion.easeIn,
+          child: WaPrimaryButton(
+            key: ValueKey(action),
+            label: action,
+            onPressed: _onPrimaryAction,
+          ),
         ),
       ),
     );
@@ -817,6 +979,34 @@ class _ExploreItemDetailScreenState extends State<ExploreItemDetailScreen> {
         _isService ? Icons.handyman_outlined : Icons.fastfood_outlined,
         size: 64,
         color: WaUi.secondaryText,
+      ),
+    );
+  }
+}
+
+class _QtyCircle extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onTap;
+
+  const _QtyCircle({required this.icon, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: BarqodyChrome.fieldFill,
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: Icon(
+            icon,
+            size: 18,
+            color: onTap == null ? Colors.black26 : Colors.black,
+          ),
+        ),
       ),
     );
   }

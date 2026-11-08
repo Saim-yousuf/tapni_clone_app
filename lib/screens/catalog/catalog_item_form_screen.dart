@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/catalog_item_options.dart';
 import 'package:tapni_app/models/marketplace_category.dart';
 import 'package:tapni_app/repository/marketplace_repo.dart';
 import 'package:tapni_app/utils/document_file.dart';
@@ -23,6 +24,9 @@ class CatalogItemFormScreen extends StatefulWidget {
   /// Shows Marketplace Classification (global taxonomy) — products only.
   final bool isProduct;
 
+  /// Shared modifier library for this catalog (menu). Attach instead of retyping.
+  final List<CatalogOptionGroup> modifierLibrary;
+
   const CatalogItemFormScreen({
     super.key,
     required this.catalogLabel,
@@ -33,6 +37,7 @@ class CatalogItemFormScreen extends StatefulWidget {
     this.isService = false,
     this.isPortfolio = false,
     this.isProduct = false,
+    this.modifierLibrary = const [],
   });
 
   @override
@@ -63,6 +68,12 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   bool _featured = false;
   final Set<String> _tags = {};
 
+  /// Menu / product sizes (per item) + attached shared modifier group ids.
+  final List<_VariantEditors> _variantEditors = [];
+  final Set<String> _attachedGroupIds = {};
+  /// Legacy item-local groups not in the shared library.
+  List<CatalogOptionGroup> _localOptionGroups = [];
+
   /// Marketplace classification (products only).
   final _marketplaceRepo = MarketplaceRepo();
   List<MarketplaceCategory> _marketplaceTree = const [];
@@ -79,6 +90,9 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       !widget.isService &&
       !widget.isPortfolio &&
       !widget.isProduct;
+  /// Sizes + shared modifiers: menu and products catalogs.
+  bool get _supportsSizesAndModifiers =>
+      !widget.isDocument && !widget.isService && !widget.isPortfolio;
 
   static const _bookingTypes = ['Appointment', 'Request', 'No Scheduling'];
 
@@ -129,6 +143,27 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
     _tags
       ..clear()
       ..addAll(existing?.tags ?? const []);
+    _variantEditors
+      ..clear()
+      ..addAll(
+        (existing?.variants ?? const <CatalogVariant>[]).map(_editorFromVariant),
+      );
+    _attachedGroupIds
+      ..clear()
+      ..addAll(existing?.optionGroupIds ?? const []);
+    final libIds = {
+      for (final g in widget.modifierLibrary)
+        if (g.id.isNotEmpty) g.id,
+    };
+    // Promote legacy embedded groups that match library ids; keep true locals.
+    _localOptionGroups = [];
+    for (final g in existing?.optionGroups ?? const <CatalogOptionGroup>[]) {
+      if (g.id.isNotEmpty && libIds.contains(g.id)) {
+        _attachedGroupIds.add(g.id);
+      } else if (g.name.trim().isNotEmpty) {
+        _localOptionGroups.add(g);
+      }
+    }
     _listOnMarketplace =
         (existing?.marketplaceCategoryId.trim().isNotEmpty ?? false);
     if (_showMarketplace) {
@@ -190,7 +225,31 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
     _rewardPointsCtrl.dispose();
     _durationCtrl.dispose();
     _slotsCtrl.dispose();
+    for (final e in _variantEditors) {
+      e.dispose();
+    }
     super.dispose();
+  }
+
+  _VariantEditors _editorFromVariant(CatalogVariant v) {
+    return _VariantEditors(
+      id: v.id.isNotEmpty ? v.id : newCatalogOptionId(),
+      name: TextEditingController(text: v.name),
+      price: TextEditingController(
+        text: v.price > 0 ? v.price.toStringAsFixed(0) : '',
+      ),
+      isActive: v.isActive,
+    );
+  }
+
+  _VariantEditors _newVariantEditor({double seedPrice = 0}) {
+    return _VariantEditors(
+      id: newCatalogOptionId(),
+      name: TextEditingController(),
+      price: TextEditingController(
+        text: seedPrice > 0 ? seedPrice.toStringAsFixed(0) : '',
+      ),
+    );
   }
 
   double get _priceValue => double.tryParse(_priceCtrl.text.trim()) ?? 0;
@@ -307,6 +366,7 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
   }
 
   Future<void> _save() async {
+    FocusScope.of(context).unfocus();
     final name = _nameCtrl.text.trim();
     if (name.isEmpty) {
       showAppToast(
@@ -340,10 +400,28 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       }
     }
 
+    if (_supportsSizesAndModifiers && _variantEditors.any((e) {
+      final n = e.name.text.trim();
+      final p = e.price.text.trim();
+      return n.isNotEmpty && (p.isEmpty || (double.tryParse(p) ?? 0) <= 0);
+    })) {
+      showAppToast(
+        context,
+        'Enter a price for every size',
+        kind: AppToastKind.warning,
+      );
+      return;
+    }
+
     // Discount allowed for menu / products / services (not documents).
     // Valid only when discounted > 0 and strictly < base (free items unchanged).
     if (!widget.isDocument && _offerDiscount) {
-      final base = _priceValue;
+      // Sizes replace base price — validate against cheapest size when present.
+      final sized = _supportsSizesAndModifiers ? _normalizedVariants() : const [];
+      var base = _priceValue;
+      if (sized.isNotEmpty) {
+        base = sized.map((v) => v.price).reduce((a, b) => a < b ? a : b);
+      }
       final sale = _discountedValue;
       String? discountError;
       if (base <= 0) {
@@ -397,12 +475,24 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
       _ => 'appointment',
     };
     final listOnMarket = _showMarketplace && _listOnMarketplace;
+    final variants =
+        _supportsSizesAndModifiers ? _normalizedVariants() : const <CatalogVariant>[];
+    // Keep list/base price in sync with cheapest size so "From" never shows 0
+    // when sizes have real prices.
+    var basePrice = double.tryParse(_priceCtrl.text.trim()) ?? 0;
+    if (variants.isNotEmpty) {
+      var min = variants.first.price;
+      for (final v in variants) {
+        if (v.price < min) min = v.price;
+      }
+      if (min > 0) basePrice = min;
+    }
     Navigator.pop(
       context,
       CatalogItem(
         id: widget.existingItem?.id ?? '',
         name: name,
-        price: double.tryParse(_priceCtrl.text.trim()) ?? 0,
+        price: basePrice,
         description: _descCtrl.text.trim(),
         category: category,
         marketplaceCategoryId:
@@ -422,8 +512,54 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
         bookingType: widget.isService ? bookingType : 'appointment',
         featured: _isMenuItem && _featured,
         tags: _isMenuItem ? _tags.toList() : const [],
+        variants: variants,
+        optionGroupIds:
+            _supportsSizesAndModifiers ? _attachedGroupIds.toList() : const [],
+        // Snapshot attached library groups onto the item for cart/configurator
+        // even before remote id sync — plus any legacy local groups.
+        optionGroups: _supportsSizesAndModifiers
+            ? _snapshotAttachedGroups()
+            : const [],
       ),
     );
+  }
+
+  List<CatalogVariant> _normalizedVariants() {
+    final out = <CatalogVariant>[];
+    for (var i = 0; i < _variantEditors.length; i++) {
+      final e = _variantEditors[i];
+      final name = e.name.text.trim();
+      if (name.isEmpty) continue;
+      final price = double.tryParse(e.price.text.trim()) ?? 0;
+      out.add(
+        CatalogVariant(
+          id: e.id.isNotEmpty ? e.id : newCatalogOptionId(),
+          name: name,
+          price: price,
+          sortOrder: i,
+          isActive: e.isActive,
+        ),
+      );
+    }
+    return out;
+  }
+
+  List<CatalogOptionGroup> _snapshotAttachedGroups() {
+    final byId = {
+      for (final g in widget.modifierLibrary)
+        if (g.id.isNotEmpty) g.id: g,
+    };
+    final out = <CatalogOptionGroup>[];
+    final seen = <String>{};
+    for (final id in _attachedGroupIds) {
+      final g = byId[id];
+      if (g != null && seen.add(id)) out.add(g);
+    }
+    for (final g in _localOptionGroups) {
+      final key = g.id.isNotEmpty ? g.id : 'local:${g.name}';
+      if (seen.add(key)) out.add(g);
+    }
+    return out;
   }
 
   /// Shared Offer Discount toggle + discounted price fields (menu/products/services).
@@ -729,6 +865,34 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
                       const SizedBox(height: 12),
                       _buildMarketplaceBlock(),
                     ],
+                    if (_supportsSizesAndModifiers) ...[
+                      const SizedBox(height: 28),
+                      _sectionHeading('Sizes'),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Add Small / Medium / Large with each price. Customers pick a size on the detail page.',
+                        style: WaUi.body.copyWith(
+                          fontSize: 12,
+                          color: BarqodyChrome.secondaryText,
+                          height: 1.35,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _buildVariantsEditor(),
+                      const SizedBox(height: 28),
+                      _sectionHeading('Modifiers'),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Attach shared groups from your catalog library (Toppings, Sauce…). Create groups once under Modifiers.',
+                        style: WaUi.body.copyWith(
+                          fontSize: 12,
+                          color: BarqodyChrome.secondaryText,
+                          height: 1.35,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _buildAttachModifiers(),
+                    ],
                     if (_isMenuItem) ...[
                       const SizedBox(height: 28),
                       _sectionHeading('Menu highlights'),
@@ -797,6 +961,163 @@ class _CatalogItemFormScreenState extends State<CatalogItemFormScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildVariantsEditor() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < _variantEditors.length; i++) ...[
+          if (i > 0) const SizedBox(height: 8),
+          _VariantRow(
+            key: ValueKey('variant-${_variantEditors[i].id}-$i'),
+            editor: _variantEditors[i],
+            onRemove: () {
+              setState(() {
+                final removed = _variantEditors.removeAt(i);
+                removed.dispose();
+              });
+            },
+          ),
+        ],
+        if (_variantEditors.isEmpty)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Text(
+              'No sizes yet — e.g. Small 499, Medium 799, Large 999.',
+              style: WaUi.body.copyWith(
+                fontSize: 12,
+                color: BarqodyChrome.secondaryText,
+              ),
+            ),
+          ),
+        const SizedBox(height: 10),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton.icon(
+            onPressed: () {
+              setState(() {
+                _variantEditors.add(
+                  _newVariantEditor(
+                    seedPrice: double.tryParse(_priceCtrl.text.trim()) ?? 0,
+                  ),
+                );
+              });
+            },
+            icon: const Icon(Icons.add, size: 18, color: Colors.black),
+            label: const Text(
+              'Add size',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAttachModifiers() {
+    final lib = widget.modifierLibrary
+        .where((g) => g.id.isNotEmpty && g.name.trim().isNotEmpty)
+        .toList();
+    if (lib.isEmpty && _localOptionGroups.isEmpty) {
+      return _modifierCard(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(4, 10, 10, 10),
+          child: Text(
+            'No shared groups yet. Open Modifiers on the menu screen, create Toppings / Sauce once, then come back and attach them here.',
+            style: WaUi.body.copyWith(
+              fontSize: 13,
+              color: BarqodyChrome.secondaryText,
+              height: 1.35,
+            ),
+          ),
+        ),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (lib.isNotEmpty)
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final g in lib)
+                FilterChip(
+                  label: Text(
+                    g.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  selected: _attachedGroupIds.contains(g.id),
+                  onSelected: (sel) {
+                    setState(() {
+                      if (sel) {
+                        _attachedGroupIds.add(g.id);
+                      } else {
+                        _attachedGroupIds.remove(g.id);
+                      }
+                    });
+                  },
+                  selectedColor: Colors.black,
+                  checkmarkColor: Colors.white,
+                  labelStyle: TextStyle(
+                    color: _attachedGroupIds.contains(g.id)
+                        ? Colors.white
+                        : Colors.black87,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+            ],
+          ),
+        if (_localOptionGroups.isNotEmpty) ...[
+          const SizedBox(height: 10),
+          Text(
+            'Item-only groups (legacy)',
+            style: WaUi.caption.copyWith(
+              fontWeight: FontWeight.w700,
+              color: BarqodyChrome.secondaryText,
+            ),
+          ),
+          const SizedBox(height: 6),
+          for (var i = 0; i < _localOptionGroups.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: _modifierCard(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _localOptionGroups[i].name,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () =>
+                          setState(() => _localOptionGroups.removeAt(i)),
+                      icon: const Icon(Icons.remove_circle_outline, size: 18),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ],
+    );
+  }
+
+  Widget _modifierCard({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
+      decoration: BoxDecoration(
+        color: BarqodyChrome.fieldFill,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: child,
     );
   }
 
@@ -1420,6 +1741,90 @@ class _FieldLabel extends StatelessWidget {
         fontWeight: FontWeight.w700,
         letterSpacing: 0.6,
         color: BarqodyChrome.secondaryText,
+      ),
+    );
+  }
+}
+
+class _VariantEditors {
+  final String id;
+  final TextEditingController name;
+  final TextEditingController price;
+  final bool isActive;
+
+  _VariantEditors({
+    required this.id,
+    required this.name,
+    required this.price,
+    this.isActive = true,
+  });
+
+  void dispose() {
+    name.dispose();
+    price.dispose();
+  }
+}
+
+class _VariantRow extends StatelessWidget {
+  final _VariantEditors editor;
+  final VoidCallback onRemove;
+
+  const _VariantRow({
+    super.key,
+    required this.editor,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
+      decoration: BoxDecoration(
+        color: BarqodyChrome.fieldFill,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: TextField(
+              controller: editor.name,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+              decoration: const InputDecoration(
+                hintText: 'Size name',
+                border: InputBorder.none,
+                isDense: true,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          SizedBox(
+            width: 88,
+            child: TextField(
+              controller: editor.price,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              style: const TextStyle(fontWeight: FontWeight.w700),
+              decoration: const InputDecoration(
+                hintText: 'Price',
+                border: InputBorder.none,
+                isDense: true,
+              ),
+            ),
+          ),
+          IconButton(
+            tooltip: 'Remove',
+            onPressed: onRemove,
+            icon: Image.asset(
+              'assets/images/png/trash-bin-icon.png',
+              width: 16,
+              height: 16,
+              errorBuilder: (_, _, _) =>
+                  const Icon(Icons.delete_outline, size: 18),
+            ),
+          ),
+        ],
       ),
     );
   }

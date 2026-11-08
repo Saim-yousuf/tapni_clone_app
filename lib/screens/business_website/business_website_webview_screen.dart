@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/business_website/business_website_models.dart';
+import 'package:tapni_app/models/explore_cart.dart';
 import 'package:tapni_app/providers/explore_cart_provider.dart';
 import 'package:tapni_app/providers/profile_provider.dart';
 import 'package:tapni_app/screens/business_website/bw_flutter_commerce_bridge.dart';
@@ -16,6 +17,8 @@ import 'package:tapni_app/utils/app_page_transitions.dart';
 import 'package:tapni_app/utils/own_catalog_guard.dart';
 import 'package:tapni_app/utils/preference_helper.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/widgets/catalog_item_configurator_sheet.dart';
+import 'package:tapni_app/widgets/profile_screen_shimmer.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:tapni_app/widgets/app_toast.dart';
 
@@ -48,7 +51,10 @@ class BusinessWebsiteWebViewScreen extends StatefulWidget {
 class _BusinessWebsiteWebViewScreenState
     extends State<BusinessWebsiteWebViewScreen> {
   WebViewController? _controller;
-  bool _loading = true;
+  /// Only the first document load — avoid shimmer flashes on in-site nav.
+  bool _initialLoading = true;
+  /// When true, Ember (etc.) owns back/cart; Flutter floating chrome is hidden.
+  bool _templateOwnsChrome = false;
   String? _error;
   late final String _webViewType;
 
@@ -106,7 +112,57 @@ class _BusinessWebsiteWebViewScreenState
     );
   }
 
-  void _handleAddToCart(BwBridgeAddToCart payload) {
+  Future<void> _handleAdjustCartQty(BwBridgeAdjustCartQty payload) async {
+    if (!mounted || widget.sampleDemoPreview) return;
+    final cart = context.read<ExploreCartProvider>();
+    final vendors = cart.vendors;
+    final vIdx = vendors.indexWhere((v) {
+      if (payload.businessLinkId.isNotEmpty &&
+          v.businessLinkId == payload.businessLinkId) {
+        return true;
+      }
+      return v.businessId == payload.businessId;
+    });
+    if (vIdx < 0) {
+      unawaited(_injectNativeCartToWeb(
+        businessId: payload.businessId,
+        websiteSlug: payload.websiteSlug,
+      ));
+      return;
+    }
+    final vendor = vendors[vIdx];
+    final lineIdx = vendor.lines.indexWhere((line) {
+      final id = line.item.id.trim();
+      if (payload.catalogItemId.isNotEmpty && id == payload.catalogItemId) {
+        return true;
+      }
+      if (payload.catalogItemId.isEmpty &&
+          payload.name.isNotEmpty &&
+          line.item.name.trim() == payload.name) {
+        return true;
+      }
+      return false;
+    });
+    if (lineIdx < 0) {
+      unawaited(_injectNativeCartToWeb(
+        businessId: payload.businessId,
+        websiteSlug: payload.websiteSlug,
+      ));
+      return;
+    }
+    final nextQty = vendor.lines[lineIdx].quantity + payload.delta;
+    cart.updateQuantity(
+      businessLinkId: vendor.businessLinkId,
+      lineIndex: lineIdx,
+      quantity: nextQty,
+    );
+    unawaited(_injectNativeCartToWeb(
+      businessId: payload.businessId,
+      websiteSlug: payload.websiteSlug,
+    ));
+  }
+
+  Future<void> _handleAddToCart(BwBridgeAddToCart payload) async {
     if (!mounted || widget.sampleDemoPreview) return;
     if (OwnCatalogGuard.isOwnBusinessOf(
       context,
@@ -126,6 +182,42 @@ class _BusinessWebsiteWebViewScreenState
       ));
       return;
     }
+
+    var line = payload.line;
+    if (payload.needsConfiguration && line.item.hasConfiguration) {
+      // Template ATC for configured items — Flutter owns the picker UI.
+      // Size may already be chosen on the detail page (data-bw-variant-id).
+      unawaited(_injectNativeCartToWeb(
+        businessId: payload.businessId,
+        websiteSlug: payload.websiteSlug,
+      ));
+      final configured = await showCatalogItemConfiguratorSheet(
+        context: context,
+        item: line.item,
+        currency: payload.currency,
+        initialQuantity: line.quantity,
+        initialNotes: line.notes,
+        initialVariantId:
+            line.variantId.isNotEmpty ? line.variantId : null,
+      );
+      if (configured == null || !mounted) return;
+      line = ExploreCartLine(
+        item: line.item,
+        quantity: configured.quantity,
+        notes: configured.notes,
+        bookingDate: line.bookingDate,
+        bookingTime: line.bookingTime,
+        resourceId: line.resourceId,
+        resourceName: line.resourceName,
+        checkInDate: line.checkInDate,
+        checkOutDate: line.checkOutDate,
+        bookingKind: line.bookingKind,
+        variantId: configured.variantId,
+        optionIds: configured.optionIds,
+        configurationLabel: configured.configurationLabel,
+      );
+    }
+
     final cart = context.read<ExploreCartProvider>();
     cart.addItem(
       businessId: payload.businessId,
@@ -141,8 +233,8 @@ class _BusinessWebsiteWebViewScreenState
       websiteSlug: payload.websiteSlug,
       ordersPaused: payload.ordersPaused,
       isClosedNow: payload.isClosedNow,
-      catalogItems: [payload.line.item],
-      line: payload.line,
+      catalogItems: [line.item],
+      line: line,
     );
     // Keep detail-page ATC label in sync (In cart · Add more).
     unawaited(_injectNativeCartToWeb(
@@ -151,7 +243,7 @@ class _BusinessWebsiteWebViewScreenState
     ));
     showAppToast(
       context,
-      '${payload.line.item.name} added to cart',
+      '${line.item.name} added to cart',
       kind: AppToastKind.success,
       actionLabel: 'View cart',
       onAction: _openNativeCart,
@@ -243,6 +335,15 @@ class _BusinessWebsiteWebViewScreenState
 
     if (decoded != null) {
       final action = decoded['action']?.toString() ?? '';
+      if (action == 'closeWebsite' || action == 'close') {
+        _close();
+        return;
+      }
+      if (action == 'immersiveNav') {
+        final enabled = decoded['enabled'] != false;
+        _applyTemplateOwnsChrome(enabled);
+        return;
+      }
       if (action == 'trackOrder') {
         final id = decoded['orderId']?.toString() ?? '';
         final token = decoded['token']?.toString();
@@ -267,6 +368,11 @@ class _BusinessWebsiteWebViewScreenState
         _handleAddToCart(add);
         return;
       }
+      final adjust = BwFlutterCommerceBridge.parseAdjustCartQty(decoded);
+      if (adjust != null) {
+        _handleAdjustCartQty(adjust);
+        return;
+      }
       // Unknown structured action — ignore (do not treat as order id).
       if (action.isNotEmpty) return;
     }
@@ -281,6 +387,7 @@ class _BusinessWebsiteWebViewScreenState
     await controller.runJavaScript('''
       (function(){
         window.__BW_FLUTTER_APP=true;
+        try{ document.documentElement.classList.add('bw-flutter'); }catch(e){}
         try{
           if(typeof window.__BW_ON_FLUTTER_APP==='function') window.__BW_ON_FLUTTER_APP();
         }catch(e){}
@@ -351,8 +458,74 @@ class _BusinessWebsiteWebViewScreenState
   }
 
   int _chromeTopPx(BuildContext context) {
-    // Close sits in a Flutter strip above the site — no overlay inset needed.
-    return 0;
+    // Immersive templates own safe-area in their app-nav / detail header.
+    if (_templateOwnsChrome) return 0;
+    // Web: close strip sits outside the iframe — no inset.
+    if (kIsWeb) return 0;
+    // Native: floating close overlays the site — reserve top inset.
+    final top = MediaQuery.paddingOf(context).top;
+    return (top + 52).round();
+  }
+
+  void _applyTemplateOwnsChrome(bool enabled) {
+    if (!mounted) return;
+    if (_templateOwnsChrome == enabled) {
+      _injectChromeInsets();
+      return;
+    }
+    setState(() => _templateOwnsChrome = enabled);
+    _injectChromeInsets();
+  }
+
+  Future<void> _detectImmersiveNav() async {
+    final controller = _controller;
+    if (controller == null || widget.sampleDemoPreview) return;
+    try {
+      final raw = await controller.runJavaScriptReturningResult(
+        "(function(){try{return!!document.querySelector('[data-bw-immersive-nav]');}catch(e){return false;}})()",
+      );
+      final text = '$raw'.toLowerCase();
+      final enabled = text == 'true' || text == '1';
+      _applyTemplateOwnsChrome(enabled);
+    } catch (_) {}
+  }
+
+  Future<void> _onAndroidBack() async {
+    final controller = _controller;
+    if (controller != null) {
+      try {
+        if (await controller.canGoBack()) {
+          await controller.goBack();
+          return;
+        }
+      } catch (_) {}
+    }
+    _close();
+  }
+
+  void _retryLoad() {
+    final controller = _controller;
+    if (controller == null) {
+      setState(() {
+        _error = null;
+        _initialLoading = true;
+      });
+      _initNativeWebView();
+      return;
+    }
+    setState(() {
+      _error = null;
+      _initialLoading = true;
+    });
+    final html = widget.html;
+    final url = widget.url;
+    if (html != null && html.trim().isNotEmpty) {
+      controller.loadHtmlString(html, baseUrl: Api.baseUrl);
+    } else if (url != null && url.trim().isNotEmpty) {
+      final normalized = rewriteLocalhostToApiBase(url);
+      final target = _withShopperQuery(_withPreviewToken(normalized));
+      controller.loadRequest(Uri.parse(target), headers: _authHeaders);
+    }
   }
 
   String _withAppChromeQuery(String url) {
@@ -389,13 +562,24 @@ class _BusinessWebsiteWebViewScreenState
   }
 
   /// Clearance under Flutter close button + status bar (shared by every template).
+  /// Also injects `--bw-safe-*` because Android WebView often reports
+  /// `env(safe-area-inset-*)` as 0 — without this, template nav buttons clip
+  /// under the status bar in immersive mode.
   Future<void> _injectChromeInsets() async {
     final controller = _controller;
     if (controller == null || !mounted) return;
     final chromeTop = _chromeTopPx(context);
-    await controller.runJavaScript(
-      "document.documentElement.style.setProperty('--bw-chrome-top','${chromeTop}px');",
-    );
+    final pad = MediaQuery.paddingOf(context);
+    await controller.runJavaScript('''
+      (function(){
+        var r=document.documentElement.style;
+        r.setProperty('--bw-chrome-top','${chromeTop}px');
+        r.setProperty('--bw-safe-top','${pad.top.round()}px');
+        r.setProperty('--bw-safe-right','${pad.right.round()}px');
+        r.setProperty('--bw-safe-bottom','${pad.bottom.round()}px');
+        r.setProperty('--bw-safe-left','${pad.left.round()}px');
+      })();
+    ''');
   }
 
   Future<void> _injectShopper() async {
@@ -456,7 +640,7 @@ class _BusinessWebsiteWebViewScreenState
         'bw-site-${DateTime.now().microsecondsSinceEpoch}-${identityHashCode(this)}';
 
     if (kIsWeb) {
-      _loading = false;
+      _initialLoading = false;
       final html = widget.html?.trim();
       final url = widget.url?.trim();
       if ((html == null || html.isEmpty) && (url == null || url.isEmpty)) {
@@ -471,6 +655,8 @@ class _BusinessWebsiteWebViewScreenState
   void _initNativeWebView() {
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..enableZoom(false)
+      ..setBackgroundColor(const Color(0xFFFFFFFF))
       ..setOnJavaScriptAlertDialog((request) async {
         if (!mounted) return;
         showAppToast(
@@ -508,25 +694,34 @@ class _BusinessWebsiteWebViewScreenState
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (_) {
-            if (mounted) setState(() => _loading = true);
+            // Intentionally no shimmer on subsequent in-site navigations.
           },
           onPageFinished: (_) async {
             await _injectChromeInsets();
             // Do not inject shopper JWT / flutter flag into synthetic samples.
             if (!widget.sampleDemoPreview) {
               await _injectFlutterAppFlag();
+              await _detectImmersiveNav();
+              await _injectChromeInsets();
               await _injectShopper();
               await _injectNativeCartToWeb();
             }
-            if (mounted) setState(() => _loading = false);
-          },
-          onWebResourceError: (error) {
             if (mounted) {
               setState(() {
-                _loading = false;
-                _error = error.description;
+                _initialLoading = false;
+                _error = null;
               });
             }
+          },
+          onWebResourceError: (error) {
+            // Fonts / images / Stripe iframes fail often — never replace the
+            // whole restaurant UI unless the main document failed.
+            if (error.isForMainFrame != true) return;
+            if (!mounted) return;
+            setState(() {
+              _initialLoading = false;
+              _error = error.description;
+            });
           },
           onNavigationRequest: (request) {
             if (_tryHandleTrackOrderUrl(request.url)) {
@@ -626,7 +821,7 @@ class _BusinessWebsiteWebViewScreenState
       );
     } else {
       _error = 'Nothing to load';
-      _loading = false;
+      _initialLoading = false;
     }
   }
 
@@ -644,13 +839,42 @@ class _BusinessWebsiteWebViewScreenState
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Text(
-            _error!,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Color(0xFF71717A),
-              fontSize: 15,
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Couldn’t load this restaurant',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _error!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Color(0xFF71717A),
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 20),
+              FilledButton(
+                onPressed: _retryLoad,
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Try again'),
+              ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: _close,
+                child: const Text('Go back'),
+              ),
+            ],
           ),
         ),
       );
@@ -666,11 +890,42 @@ class _BusinessWebsiteWebViewScreenState
         flutterApp: !widget.sampleDemoPreview,
         onTrackOrder: widget.sampleDemoPreview ? null : _openTrackOrder,
         onAddToCart: widget.sampleDemoPreview ? null : _handleAddToCart,
+        onAdjustCartQty:
+            widget.sampleDemoPreview ? null : _handleAdjustCartQty,
         onOpenCart: widget.sampleDemoPreview ? null : _openNativeCart,
+        onCloseWebsite: widget.sampleDemoPreview ? null : _close,
+        onImmersiveNav: widget.sampleDemoPreview
+            ? null
+            : (enabled) => _applyTemplateOwnsChrome(enabled),
       );
     }
     if (_controller == null) return const SizedBox.shrink();
     return WebViewWidget(controller: _controller!);
+  }
+
+  Widget _chromeControls({required int cartCount}) {
+    // Explicit MediaQuery insets (not nested SafeArea inside Positioned) so
+    // close/cart stay inside the visible viewport on notched / small devices.
+    final pad = MediaQuery.paddingOf(context);
+    final left = pad.left > 12 ? pad.left : 12.0;
+    final right = pad.right > 12 ? pad.right : 12.0;
+    return Padding(
+      padding: EdgeInsets.only(top: pad.top, left: left, right: right),
+      child: SizedBox(
+        height: 52,
+        child: Row(
+          children: [
+            CircleCloseButton(onTap: _close),
+            const Spacer(),
+            if (!widget.sampleDemoPreview)
+              _WebViewCartButton(
+                count: cartCount,
+                onTap: _openNativeCart,
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -678,54 +933,67 @@ class _BusinessWebsiteWebViewScreenState
     final cartCount = widget.sampleDemoPreview
         ? 0
         : context.watch<ExploreCartProvider>().itemCount;
+    final showFlutterChrome = !_templateOwnsChrome;
 
-    // Close lives in a Flutter-only strip ABOVE the platform view.
-    // On web, HtmlElementView/iframe steals taps from Stack overlays.
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ColoredBox(
-            color: Colors.white,
-            child: SafeArea(
-              bottom: false,
-              child: SizedBox(
-                height: 52,
+    // Web iframe steals overlay taps — keep a thin strip above the view unless
+    // the template opted into immersive nav (Ember Kitchen).
+    if (kIsWeb) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) _close();
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (showFlutterChrome)
+                ColoredBox(
+                  color: Colors.white,
+                  child: _chromeControls(cartCount: cartCount),
+                ),
+              Expanded(
                 child: Stack(
                   children: [
-                    if (_loading)
-                      const Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: LinearProgressIndicator(minHeight: 2),
-                      ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: CircleCloseButton(onTap: _close),
-                      ),
-                    ),
-                    if (!widget.sampleDemoPreview)
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 12),
-                          child: _WebViewCartButton(
-                            count: cartCount,
-                            onTap: _openNativeCart,
-                          ),
-                        ),
+                    Positioned.fill(child: _siteBody()),
+                    if (_initialLoading && _error == null)
+                      const Positioned.fill(
+                        child: _RestaurantSiteShimmer(),
                       ),
                   ],
                 ),
               ),
-            ),
+            ],
           ),
-          Expanded(child: _siteBody()),
-        ],
+        ),
+      );
+    }
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        await _onAndroidBack();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: [
+            Positioned.fill(child: _siteBody()),
+            if (showFlutterChrome)
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: _chromeControls(cartCount: cartCount),
+              ),
+            if (_initialLoading && _error == null)
+              const Positioned.fill(
+                child: _RestaurantSiteShimmer(),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -792,6 +1060,119 @@ class _WebViewCartButton extends StatelessWidget {
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Ember-like menu skeleton — B&W shimmer while the restaurant page loads.
+class _RestaurantSiteShimmer extends StatelessWidget {
+  const _RestaurantSiteShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    final top = MediaQuery.paddingOf(context).top;
+    return ColoredBox(
+      color: Colors.white,
+      child: AppShimmer(
+        child: ListView(
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.fromLTRB(16, top + 8, 16, 24),
+          children: [
+            Row(
+              children: [
+                const ShimmerBox(width: 40, height: 40, shape: BoxShape.circle),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: ShimmerBox(width: double.infinity, height: 16, borderRadius: 8),
+                ),
+                const SizedBox(width: 12),
+                const ShimmerBox(width: 40, height: 40, shape: BoxShape.circle),
+              ],
+            ),
+            const SizedBox(height: 18),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const ShimmerBox(width: 72, height: 72, borderRadius: 18),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      ShimmerBox(width: 180, height: 22, borderRadius: 8),
+                      SizedBox(height: 10),
+                      ShimmerBox(width: double.infinity, height: 12, borderRadius: 6),
+                      SizedBox(height: 6),
+                      ShimmerBox(width: 140, height: 12, borderRadius: 6),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            const ShimmerBox(width: double.infinity, height: 44, borderRadius: 14),
+            const SizedBox(height: 22),
+            const ShimmerBox(width: 120, height: 18, borderRadius: 8),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 152,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 3,
+                separatorBuilder: (_, __) => const SizedBox(width: 12),
+                itemBuilder: (_, __) => const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShimmerBox(width: 136, height: 136, borderRadius: 14),
+                    SizedBox(height: 8),
+                    ShimmerBox(width: 96, height: 12, borderRadius: 6),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            Row(
+              children: const [
+                ShimmerBox(width: 44, height: 14, borderRadius: 6),
+                SizedBox(width: 16),
+                ShimmerBox(width: 64, height: 14, borderRadius: 6),
+                SizedBox(width: 16),
+                ShimmerBox(width: 52, height: 14, borderRadius: 6),
+                SizedBox(width: 16),
+                ShimmerBox(width: 56, height: 14, borderRadius: 6),
+              ],
+            ),
+            const SizedBox(height: 20),
+            const ShimmerBox(width: 100, height: 18, borderRadius: 8),
+            const SizedBox(height: 14),
+            for (var i = 0; i < 4; i++) ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ShimmerBox(width: 160, height: 14, borderRadius: 6),
+                        SizedBox(height: 8),
+                        ShimmerBox(width: double.infinity, height: 10, borderRadius: 6),
+                        SizedBox(height: 6),
+                        ShimmerBox(width: 120, height: 10, borderRadius: 6),
+                        SizedBox(height: 10),
+                        ShimmerBox(width: 64, height: 14, borderRadius: 6),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  const ShimmerBox(width: 108, height: 108, borderRadius: 14),
+                ],
+              ),
+              const SizedBox(height: 18),
+            ],
+          ],
         ),
       ),
     );

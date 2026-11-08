@@ -1263,6 +1263,18 @@ class _CartTile extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                             ),
               ),
+              if (line.displayConfigurationLabel.isNotEmpty) ...[
+                const SizedBox(height: 2),
+                Text(
+                  line.displayConfigurationLabel,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: WaUi.label.copyWith(
+                    color: BarqodyChrome.secondaryText,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
               const SizedBox(height: 4),
                           AppRollingMoney(
                 formatMoney(line.lineTotal, currency: currency),

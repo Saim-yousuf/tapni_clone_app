@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tapni_app/models/cart_line_item.dart';
 import 'package:tapni_app/models/catalog_item.dart';
+import 'package:tapni_app/models/catalog_item_options.dart';
 import 'package:tapni_app/models/link_template.dart';
 import 'package:tapni_app/models/service_schedule.dart';
 import 'package:tapni_app/models/social_link.dart';
@@ -22,6 +23,7 @@ import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/business_completeness_sheet.dart';
 import 'package:tapni_app/widgets/cached_app_image.dart';
 import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
+import 'package:tapni_app/widgets/catalog_modifier_library_sheet.dart';
 import 'package:tapni_app/widgets/catalog_product_card.dart';
 import 'package:tapni_app/widgets/document_viewer.dart';
 import 'package:tapni_app/widgets/service_detail_sheet.dart';
@@ -126,6 +128,7 @@ class MenuCatalogSheet extends StatefulWidget {
 class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   late List<CatalogItem> _items;
   late List<String> _catalogCategories;
+  late List<CatalogOptionGroup> _modifierGroups;
   late ServiceSchedule _serviceSchedule;
   final _newCategoryCtrl = TextEditingController();
   bool _isSaving = false;
@@ -142,6 +145,11 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   bool get _isServices => widget.catalogType == 'services';
   bool get _isProducts => widget.catalogType == 'products';
   bool get _isDocuments => widget.catalogType == 'documents';
+  bool get _isMenu =>
+      !_isDocuments &&
+      !_isServices &&
+      !_isProducts &&
+      widget.catalogType != 'portfolio';
   bool _didOpenInitialItem = false;
 
   String get _templateLogo {
@@ -160,12 +168,34 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         country: widget.provider?.profile.country,
       );
 
+  /// Prefer live profile link so modifiers survive provider rebuilds.
+  SocialLink? _liveCatalogLink() {
+    final links = widget.provider?.profile.socialLinks ?? const <SocialLink>[];
+    final existingId = widget.existingLink?.id;
+    if (existingId != null && existingId.isNotEmpty) {
+      for (final l in links) {
+        if (l.id == existingId) return l;
+      }
+    }
+    for (final l in links) {
+      if (l.isCatalogLink &&
+          catalogTypesMatch(l.catalogType, widget.catalogType)) {
+        return l;
+      }
+    }
+    return widget.existingLink;
+  }
+
   @override
   void initState() {
     super.initState();
-    _items = widget.existingLink?.catalogItems?.toList() ?? [];
+    final link = _liveCatalogLink() ?? widget.existingLink;
+    _items = link?.catalogItems?.toList() ?? [];
     _catalogCategories = List<String>.from(
-      widget.existingLink?.catalogCategories ?? [],
+      link?.catalogCategories ?? const [],
+    );
+    _modifierGroups = List<CatalogOptionGroup>.from(
+      link?.catalogModifierGroups ?? const [],
     );
     if (_catalogCategories.isEmpty && _items.isNotEmpty) {
       _catalogCategories = CatalogHelper.orderedCategories(
@@ -198,6 +228,18 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       _expandedCategories.add(grouped.keys.first);
     }
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final live = _liveCatalogLink();
+      if (live?.catalogModifierGroups != null &&
+          live!.catalogModifierGroups!.isNotEmpty) {
+        setState(() {
+          _modifierGroups =
+              List<CatalogOptionGroup>.from(live.catalogModifierGroups!);
+        });
+      }
+    });
+
     final initialName = widget.initialItemName?.trim();
     if (widget.isCustomerView &&
         initialName != null &&
@@ -212,6 +254,23 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           _onCustomerItemTap(index, _items[index]);
         }
       });
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant MenuCatalogSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final live = _liveCatalogLink();
+    final incoming = live?.catalogModifierGroups ??
+        widget.existingLink?.catalogModifierGroups;
+    if (incoming != null && incoming.isNotEmpty) {
+      final same = incoming.length == _modifierGroups.length &&
+          List.generate(incoming.length, (i) => incoming[i].id)
+              .join() ==
+          _modifierGroups.map((g) => g.id).join();
+      if (!same) {
+        _modifierGroups = List<CatalogOptionGroup>.from(incoming);
+      }
     }
   }
 
@@ -485,6 +544,47 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       controller: scrollController,
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
       children: [
+        if ((_isMenu || _isProducts) && _modifierGroups.isNotEmpty) ...[
+          Text(
+            'MODIFIER GROUPS',
+            style: WaUi.caption.copyWith(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.6,
+              color: BarqodyChrome.secondaryText,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final g in _modifierGroups)
+                Material(
+                  color: BarqodyChrome.fieldFill,
+                  borderRadius: BorderRadius.circular(14),
+                  child: InkWell(
+                    onTap: _openModifierLibrary,
+                    borderRadius: BorderRadius.circular(14),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      child: Text(
+                        g.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 18),
+        ],
         if (_items.isEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 40),
@@ -650,9 +750,13 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         ? (item.description.isNotEmpty
             ? item.description
             : context.l10n.viewDocument)
-        : (item.displayPrice > 0
-            ? formatMoney(item.displayPrice, currency: _currency)
-            : 'Free');
+        : (item.hasConfiguration
+            ? (item.startingPrice > 0
+                ? 'From ${formatMoney(item.startingPrice, currency: _currency)}'
+                : 'From Free')
+            : (item.displayPrice > 0
+                ? formatMoney(item.displayPrice, currency: _currency)
+                : 'Free'));
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -767,6 +871,40 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           : context.l10n.addCatalogItem(_catalogLabel),
     };
 
+    if (_isMenu || _isProducts) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: PillButton(
+                    label: 'Manage Sections',
+                    filled: false,
+                    onPressed: _openCategoryManagerSheet,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: PillButton(
+                    label: _modifierGroups.isEmpty
+                        ? 'Modifiers'
+                        : 'Modifiers (${_modifierGroups.length})',
+                    filled: false,
+                    onPressed: _openModifierLibrary,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            PillButton(label: addLabel, onPressed: _addItem),
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
       child: Row(
@@ -785,6 +923,36 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         ],
       ),
     );
+  }
+
+  Future<void> _openModifierLibrary() async {
+    final updated = await showCatalogModifierLibrarySheet(
+      context: context,
+      groups: _modifierGroups,
+    );
+    if (updated == null || !mounted) return;
+    // Keep local copy immediately so UI never goes blank after Done.
+    setState(() => _modifierGroups = updated);
+    await _saveCatalogLink(quiet: false);
+    if (!mounted) return;
+    final live = _liveCatalogLink();
+    final remoteGroups = live?.catalogModifierGroups;
+    if (remoteGroups != null && remoteGroups.isNotEmpty) {
+      setState(() {
+        _modifierGroups = List<CatalogOptionGroup>.from(remoteGroups);
+      });
+    }
+    if (mounted) {
+      showAppToast(
+        context,
+        _modifierGroups.isEmpty
+            ? 'No modifier groups saved'
+            : '${_modifierGroups.length} modifier group${_modifierGroups.length == 1 ? '' : 's'} ready',
+        kind: _modifierGroups.isEmpty
+            ? AppToastKind.warning
+            : AppToastKind.success,
+      );
+    }
   }
 
   Widget _capsLabel(String text) {
@@ -2009,6 +2177,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           isService: _isServices,
           isPortfolio: widget.catalogType == 'portfolio',
           isProduct: _isProducts,
+          modifierLibrary:
+              (_isMenu || _isProducts) ? _modifierGroups : const [],
         ),
       ),
     );
@@ -2036,6 +2206,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
           isService: _isServices,
           isPortfolio: widget.catalogType == 'portfolio',
           isProduct: _isProducts,
+          modifierLibrary:
+              (_isMenu || _isProducts) ? _modifierGroups : const [],
         ),
       ),
     );
@@ -2155,6 +2327,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             logoUrl: logoUrl,
             catalogItems: _items,
             catalogCategories: savedCategories,
+            catalogModifierGroups:
+                (_isMenu || _isProducts) ? _modifierGroups : const [],
             catalogType: widget.catalogType,
             serviceSchedule: _isServices ? _serviceSchedule : null,
             value: widget.existingLink!.id,
@@ -2170,6 +2344,8 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             logoUrl: logoUrl,
             catalogItems: _items,
             catalogCategories: savedCategories,
+            catalogModifierGroups:
+                (_isMenu || _isProducts) ? _modifierGroups : const [],
             catalogType: widget.catalogType,
             serviceSchedule: _isServices ? _serviceSchedule : null,
             value: 'catalog',
@@ -2224,6 +2400,20 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
       return;
     }
     widget.onSaved?.call();
+    // Re-hydrate from live profile so Mongo size ids / prices stick in UI.
+    if (mounted) {
+      final live = _liveCatalogLink();
+      final liveItems = live?.catalogItems;
+      if (liveItems != null && liveItems.isNotEmpty) {
+        setState(() {
+          _items = List<CatalogItem>.from(liveItems);
+          if (live?.catalogModifierGroups != null) {
+            _modifierGroups =
+                List<CatalogOptionGroup>.from(live!.catalogModifierGroups!);
+          }
+        });
+      }
+    }
     // Stay on screen — top save button is gone; changes auto-persist.
     if (!quiet && !widget.embedded && mounted) {
       showAppToast(

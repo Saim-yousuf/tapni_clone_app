@@ -37,7 +37,8 @@ void main() async {
   }
   await SharedPrefHelper.getInstance();
   Api.init();
-  // Match light theme by default (status + nav bars).
+  // Match light theme by default (status + nav 
+  // bars).
   AppTheme.applySystemUi(Brightness.light);
   runApp(
     MultiProvider(

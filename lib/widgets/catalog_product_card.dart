@@ -35,6 +35,11 @@ class CatalogProductCard extends StatelessWidget {
   }
 
   String get _priceLabel {
+    if (item.hasConfiguration) {
+      final price = item.startingPrice;
+      if (price <= 0) return 'From Free';
+      return 'From ${formatMoney(price, currency: currency)}';
+    }
     final price = item.displayPrice;
     if (price <= 0) {
       return formatMoney(0, currency: currency, freeLabel: 'Free');
