@@ -218,8 +218,9 @@ class BwFlutterCommerceBridge {
       bookingMode: bookingMode,
       ordersPaused: ordering.ordersPaused,
       isClosedNow: ordering.isClosedNow,
-      needsConfiguration:
-          needsConfiguration || catalogItem.hasConfiguration,
+      // Only `configureItem` opens the native sheet. Detail pages that already
+      // collected size/options post `addToCart` — do not re-ask via hasConfiguration.
+      needsConfiguration: needsConfiguration,
     );
   }
 

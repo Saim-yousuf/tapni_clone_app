@@ -199,6 +199,7 @@ class _BusinessWebsiteWebViewScreenState
         initialNotes: line.notes,
         initialVariantId:
             line.variantId.isNotEmpty ? line.variantId : null,
+        initialOptionIds: line.optionIds,
       );
       if (configured == null || !mounted) return;
       line = ExploreCartLine(
@@ -656,7 +657,8 @@ class _BusinessWebsiteWebViewScreenState
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..enableZoom(false)
-      ..setBackgroundColor(const Color(0xFFFFFFFF))
+      // Match Ember/cream storefronts — pure white flashes between MPA navigations.
+      ..setBackgroundColor(const Color(0xFFFFF8F1))
       ..setOnJavaScriptAlertDialog((request) async {
         if (!mounted) return;
         showAppToast(
@@ -944,13 +946,13 @@ class _BusinessWebsiteWebViewScreenState
           if (!didPop) _close();
         },
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: const Color(0xFFFFF8F1),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (showFlutterChrome)
                 ColoredBox(
-                  color: Colors.white,
+                  color: const Color(0xFFFFF8F1),
                   child: _chromeControls(cartCount: cartCount),
                 ),
               Expanded(
@@ -977,7 +979,7 @@ class _BusinessWebsiteWebViewScreenState
         await _onAndroidBack();
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFFFF8F1),
         body: Stack(
           children: [
             Positioned.fill(child: _siteBody()),

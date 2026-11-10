@@ -301,7 +301,7 @@ class _CatalogItemConfiguratorSheetState
                           name: g.activeOptions[i].name,
                           priceLabel: g.activeOptions[i].price > 0
                               ? '+${formatMoney(g.activeOptions[i].price, currency: widget.currency)}'
-                              : '',
+                              : 'Free',
                           selected: _selectedOptions
                               .contains(g.activeOptions[i].id),
                           single: g.isSingle,
@@ -317,7 +317,7 @@ class _CatalogItemConfiguratorSheetState
                       thickness: 1,
                       color: Color(0xFFF0F0F2),
                     ),
-                    const _SectionLabel('Notes'),
+                    const _SectionLabel('Special instructions'),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _notesCtrl,
@@ -522,6 +522,30 @@ class _OptionTile extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Expanded(
+                child: Text(
+                  name,
+                  style: TextStyle(
+                    fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+                    fontSize: 15,
+                    height: 1.25,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                priceLabel,
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  fontWeight: priceLabel == 'Free'
+                      ? FontWeight.w600
+                      : FontWeight.w700,
+                  fontSize: 13,
+                  color: selected ? Colors.black : Colors.black54,
+                ),
+              ),
+              const SizedBox(width: 10),
               AnimatedContainer(
                 duration: AppMotion.content,
                 curve: AppMotion.easeOut,
@@ -529,8 +553,7 @@ class _OptionTile extends StatelessWidget {
                 height: 22,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  shape: single ? BoxShape.circle : BoxShape.rectangle,
-                  borderRadius: single ? null : BorderRadius.circular(5),
+                  shape: BoxShape.circle,
                   color: selected ? Colors.black : Colors.transparent,
                   border: Border.all(
                     color: selected ? Colors.black : const Color(0xFFC8C8CE),
@@ -544,33 +567,6 @@ class _OptionTile extends StatelessWidget {
                         color: Colors.white,
                       )
                     : null,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  name,
-                  style: TextStyle(
-                    fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-                    fontSize: 15,
-                    height: 1.25,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              SizedBox(
-                width: 72,
-                child: priceLabel.isEmpty
-                    ? null
-                    : Text(
-                        priceLabel,
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                          color: selected ? Colors.black : Colors.black54,
-                        ),
-                      ),
               ),
             ],
           ),

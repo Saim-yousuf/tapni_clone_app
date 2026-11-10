@@ -1380,106 +1380,116 @@ class _QtyStepper extends StatefulWidget {
 }
 
 class _QtyStepperState extends State<_QtyStepper> {
+  static const _ink = Color(0xFF111111);
+  static const _soft = Color(0xFFF1F1F3);
+  static const _dangerBg = Color(0xFFFFE8E8);
+  static const _danger = Color(0xFFE11D48);
+
   @override
   Widget build(BuildContext context) {
     final qty = widget.quantity;
-    return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _QtyCircle(
-              filled: true,
-          onTap: widget.onIncrement,
-              child: Image.asset(
-                'assets/images/png/plus-icon.png',
-                width: 12,
-                height: 12,
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: _soft,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _QtyCircle(
+            backgroundColor: _ink,
+            onTap: widget.onIncrement,
+            child: Image.asset(
+              'assets/images/png/plus-icon.png',
+              width: 13,
+              height: 13,
+              color: Colors.white,
+              errorBuilder: (_, _, _) => const Icon(
+                Icons.add_rounded,
+                size: 16,
                 color: Colors.white,
-                errorBuilder: (_, _, _) => const Icon(
-                  Icons.add,
-                  size: 14,
-                  color: Colors.white,
-                ),
               ),
             ),
-        AppRollingText(
-          '$qty',
-          compareValue: qty,
-          width: 36,
-          height: 28,
-          style: WaUi.bodyMedium.copyWith(fontWeight: FontWeight.w800),
-        ),
-        SizedBox(
-          width: 32,
-          height: 32,
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 180),
-            switchInCurve: Curves.easeOut,
-            switchOutCurve: Curves.easeIn,
-            transitionBuilder: (child, anim) {
-              return FadeTransition(
-                opacity: anim,
-                child: ScaleTransition(
-                  scale: Tween<double>(begin: 0.86, end: 1).animate(anim),
-                  child: child,
-                ),
-              );
-            },
-            child: qty <= 1
-                ? _QtyCircle(
-                    key: const ValueKey('delete'),
-                filled: false,
-                borderColor: Colors.redAccent,
-                    backgroundColor:
-                        Colors.redAccent.withValues(alpha: 0.12),
-                    onTap: widget.onRemove,
-                child: Image.asset(
-                  'assets/images/png/order-delete.png',
-                  width: 14,
-                  height: 14,
-                  color: Colors.redAccent.shade700,
-                  errorBuilder: (_, _, _) => Icon(
-                    Icons.delete_outline_rounded,
-                    size: 16,
-                    color: Colors.redAccent.shade700,
-                  ),
-                ),
-              )
-                : _QtyCircle(
-                    key: const ValueKey('minus'),
-                filled: false,
-                    onTap: widget.onDecrement,
-                child: Image.asset(
-                  'assets/images/png/minus-icon.png',
-                  width: 12,
-                  height: 12,
-                  errorBuilder: (_, _, _) => const Icon(
-                    Icons.remove,
-                    size: 14,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
           ),
-        ),
-      ],
+          AppRollingText(
+            '$qty',
+            compareValue: qty,
+            width: 34,
+            height: 28,
+            style: WaUi.bodyMedium.copyWith(
+              fontWeight: FontWeight.w800,
+              color: _ink,
+              height: 1,
+            ),
+          ),
+          SizedBox(
+            width: 34,
+            height: 34,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 180),
+              switchInCurve: Curves.easeOut,
+              switchOutCurve: Curves.easeIn,
+              transitionBuilder: (child, anim) {
+                return FadeTransition(
+                  opacity: anim,
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 0.86, end: 1).animate(anim),
+                    child: child,
+                  ),
+                );
+              },
+              child: qty <= 1
+                  ? _QtyCircle(
+                      key: const ValueKey('delete'),
+                      backgroundColor: _dangerBg,
+                      onTap: widget.onRemove,
+                      child: Image.asset(
+                        'assets/images/png/order-delete.png',
+                        width: 14,
+                        height: 14,
+                        color: _danger,
+                        errorBuilder: (_, _, _) => const Icon(
+                          Icons.close_rounded,
+                          size: 16,
+                          color: _danger,
+                        ),
+                      ),
+                    )
+                  : _QtyCircle(
+                      key: const ValueKey('minus'),
+                      backgroundColor: Colors.white,
+                      onTap: widget.onDecrement,
+                      child: Image.asset(
+                        'assets/images/png/minus-icon.png',
+                        width: 13,
+                        height: 13,
+                        color: _ink,
+                        errorBuilder: (_, _, _) => const Icon(
+                          Icons.remove_rounded,
+                          size: 16,
+                          color: _ink,
+                        ),
+                      ),
+                    ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
 class _QtyCircle extends StatefulWidget {
-  final bool filled;
   final VoidCallback onTap;
   final Widget child;
-  final Color? borderColor;
-  final Color? backgroundColor;
+  final Color backgroundColor;
 
   const _QtyCircle({
     super.key,
-    required this.filled,
     required this.onTap,
     required this.child,
-    this.borderColor,
-    this.backgroundColor,
+    required this.backgroundColor,
   });
 
   @override
@@ -1499,7 +1509,7 @@ class _QtyCircleState extends State<_QtyCircle>
       duration: const Duration(milliseconds: 90),
       reverseDuration: const Duration(milliseconds: 160),
     );
-    _scale = Tween<double>(begin: 1, end: 0.82).animate(
+    _scale = Tween<double>(begin: 1, end: 0.86).animate(
       CurvedAnimation(
         parent: _press,
         curve: Curves.easeOut,
@@ -1527,27 +1537,16 @@ class _QtyCircleState extends State<_QtyCircle>
     return ScaleTransition(
       scale: _scale,
       child: Material(
-        color: widget.filled
-          ? Colors.black
-            : (widget.backgroundColor ?? Colors.transparent),
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
+        color: widget.backgroundColor,
+        shape: const CircleBorder(),
+        elevation: 0,
+        child: InkWell(
+          customBorder: const CircleBorder(),
           onTap: _handleTap,
-        child: Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-              border: widget.filled
-                ? null
-                : Border.all(
-                      color: widget.borderColor ?? Colors.black,
-                    width: 1.2,
-                  ),
-          ),
-          alignment: Alignment.center,
-            child: widget.child,
+          child: SizedBox(
+            width: 34,
+            height: 34,
+            child: Center(child: widget.child),
           ),
         ),
       ),
