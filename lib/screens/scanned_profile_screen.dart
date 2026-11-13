@@ -1593,7 +1593,9 @@ class _ScannedProfileScreenState extends State<ScannedProfileScreen> {
       link,
       context,
       businessId: profile.id,
-      businessName: profile.businessName ?? profile.name,
+      businessName: profile.name.trim().isNotEmpty
+          ? profile.name
+          : (profile.businessName ?? ''),
       businessCategory: profile.businessCategory,
       currency: profile.currency,
       galleryItems: profile.gallery,

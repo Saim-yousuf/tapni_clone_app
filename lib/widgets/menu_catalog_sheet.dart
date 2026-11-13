@@ -532,6 +532,149 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   // Business — Manage Menu
   // ---------------------------------------------------------------------
 
+  String get _ownerIntroCopy {
+    switch (widget.catalogType) {
+      case 'services':
+        return 'Organize sections and services customers can book.';
+      case 'products':
+        return 'Organize sections and products customers can browse.';
+      case 'portfolio':
+        return 'Organize sections and work you want to showcase.';
+      case 'documents':
+        return 'Add files customers can open from your profile.';
+      default:
+        return 'Organize sections and items customers see on your menu.';
+    }
+  }
+
+  String get _addItemLabel {
+    switch (widget.catalogType) {
+      case 'services':
+        return 'Add service';
+      case 'products':
+        return 'Add product';
+      case 'portfolio':
+        return 'Add portfolio item';
+      case 'documents':
+        return context.l10n.addDocument;
+      default:
+        return 'Add item';
+    }
+  }
+
+  Widget _sectionHeader({
+    required String title,
+    String? actionLabel,
+    VoidCallback? onAction,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: WaUi.toolsTitleOf(
+                size: 16,
+                weight: FontWeight.w800,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          if (actionLabel != null && onAction != null)
+            TextButton(
+              onPressed: onAction,
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                textStyle: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              child: Text(actionLabel),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildModifiersSummaryCard() {
+    final count = _modifierGroups.length;
+    final preview = _modifierGroups.take(4).map((g) => g.name).join(' · ');
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: _openModifierLibrary,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(14, 14, 12, 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: BarqodyChrome.divider),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: BarqodyChrome.fieldFill,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                alignment: Alignment.center,
+                child: const Icon(
+                  Icons.tune_rounded,
+                  size: 20,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      count == 0
+                          ? 'No modifiers yet'
+                          : '$count modifier${count == 1 ? '' : 's'}',
+                      style: WaUi.toolsTitleOf(
+                        size: 15,
+                        weight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      count == 0
+                          ? 'Add toppings, sizes, sauces, and more'
+                          : preview,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: WaUi.body.copyWith(
+                        fontSize: 12.5,
+                        color: BarqodyChrome.secondaryText,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 6),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: BarqodyChrome.secondaryText,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildBusinessView(ScrollController? scrollController) {
     final grouped = CatalogHelper.groupByCategoryOrdered(
       items: _items,
@@ -542,52 +685,35 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
 
     return ListView(
       controller: scrollController,
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
       children: [
-        if ((_isMenu || _isProducts) && _modifierGroups.isNotEmpty) ...[
-          Text(
-            'MODIFIER GROUPS',
-            style: WaUi.caption.copyWith(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.6,
-              color: BarqodyChrome.secondaryText,
-            ),
+        Text(
+          _ownerIntroCopy,
+          style: WaUi.body.copyWith(
+            fontSize: 13.5,
+            height: 1.4,
+            color: BarqodyChrome.bodyText,
           ),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final g in _modifierGroups)
-                Material(
-                  color: BarqodyChrome.fieldFill,
-                  borderRadius: BorderRadius.circular(14),
-                  child: InkWell(
-                    onTap: _openModifierLibrary,
-                    borderRadius: BorderRadius.circular(14),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      child: Text(
-                        g.name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
+        ),
+        if (_isMenu || _isProducts) ...[
           const SizedBox(height: 18),
+          _sectionHeader(
+            title: 'Modifiers',
+            actionLabel: 'Edit',
+            onAction: _openModifierLibrary,
+          ),
+          _buildModifiersSummaryCard(),
         ],
-        if (_items.isEmpty)
+        const SizedBox(height: 20),
+        if (!_isDocuments)
+          _sectionHeader(
+            title: 'Sections',
+            actionLabel: 'Edit',
+            onAction: _openCategoryManagerSheet,
+          ),
+        if (_items.isEmpty && categoryKeys.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40),
+            padding: const EdgeInsets.symmetric(vertical: 36),
             child: Column(
               children: [
                 Icon(
@@ -601,11 +727,24 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 Text(
                   _isDocuments
                       ? context.l10n.noDocumentsYet
-                      : context.l10n.noItemsYetAddFirstCatalogItem(
-                          _catalogLabel,
-                        ),
+                      : 'No items yet',
                   textAlign: TextAlign.center,
-                  style: WaUi.body.copyWith(color: BarqodyChrome.secondaryText),
+                  style: WaUi.toolsTitleOf(
+                    size: 16,
+                    weight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  _isDocuments
+                      ? 'Add your first document to get started.'
+                      : 'Create a section, then add your first item.',
+                  textAlign: TextAlign.center,
+                  style: WaUi.body.copyWith(
+                    fontSize: 13.5,
+                    color: BarqodyChrome.secondaryText,
+                  ),
                 ),
               ],
             ),
@@ -615,42 +754,100 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
             return Container(
               margin: const EdgeInsets.only(bottom: 10),
               decoration: BoxDecoration(
-                color: BarqodyChrome.fieldFill,
-                borderRadius: BorderRadius.circular(14),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: BarqodyChrome.divider),
               ),
               child: _businessItemTile(index),
             );
           })
+        else if (categoryKeys.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 28),
+            child: Text(
+              'No sections yet. Tap Edit to add one.',
+              textAlign: TextAlign.center,
+              style: WaUi.body.copyWith(color: BarqodyChrome.secondaryText),
+            ),
+          )
         else
           ...categoryKeys.map(
             (category) =>
                 _categoryAccordionCard(category, grouped[category]!),
           ),
-        const SizedBox(height: 8),
         if (_isServices) ...[
+          const SizedBox(height: 12),
           _buildServiceScheduleSettings(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
         ],
       ],
     );
   }
 
+  Widget _sectionCountPill(int count) {
+    final label = count == 0
+        ? 'No items yet'
+        : '$count item${count == 1 ? '' : 's'}';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: BarqodyChrome.fieldFill,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: WaUi.body.copyWith(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: BarqodyChrome.secondaryText,
+        ),
+      ),
+    );
+  }
+
+  Widget _sectionLeading(String category) {
+    final letter = category.trim().isEmpty
+        ? '#'
+        : category.trim().characters.first.toUpperCase();
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: BarqodyChrome.fieldFill,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        letter,
+        style: WaUi.toolsTitleOf(
+          size: 15,
+          weight: FontWeight.w800,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
   Widget _categoryAccordionCard(String category, List<CatalogItem> items) {
     final expanded = _expandedCategories.contains(category);
-    final countLabel = '${items.length} item${items.length == 1 ? '' : 's'}';
 
-    if (!expanded) {
-      return GestureDetector(
-        onTap: () => setState(() => _expandedCategories.add(category)),
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 10),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            color: BarqodyChrome.fieldFill,
-            borderRadius: BorderRadius.circular(14),
-          ),
+    Widget header({required bool isExpanded}) {
+      return InkWell(
+        onTap: () {
+          setState(() {
+            if (isExpanded) {
+              _expandedCategories.remove(category);
+            } else {
+              _expandedCategories.add(category);
+            }
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
           child: Row(
             children: [
+              _sectionLeading(category),
+              const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   category,
@@ -664,16 +861,12 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
                 ),
               ),
               const SizedBox(width: 8),
-              Text(
-                countLabel,
-                style: WaUi.body.copyWith(
-                  fontSize: 13,
-                  color: BarqodyChrome.secondaryText,
-                ),
-              ),
-              const SizedBox(width: 6),
-              const Icon(
-                Icons.chevron_right_rounded,
+              _sectionCountPill(items.length),
+              const SizedBox(width: 4),
+              Icon(
+                isExpanded
+                    ? Icons.keyboard_arrow_up_rounded
+                    : Icons.chevron_right_rounded,
                 color: BarqodyChrome.secondaryText,
               ),
             ],
@@ -690,57 +883,41 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
         border: Border.all(color: BarqodyChrome.divider),
       ),
       clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () => setState(() => _expandedCategories.remove(category)),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      category,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: WaUi.toolsTitleOf(
-                        size: 15,
-                        weight: FontWeight.w700,
-                        color: Colors.black,
+      child: expanded
+          ? Column(
+              children: [
+                header(isExpanded: true),
+                Divider(height: 1, thickness: 1, color: BarqodyChrome.divider),
+                if (items.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'No items in this section yet.',
+                        style: WaUi.body.copyWith(
+                          fontSize: 13,
+                          color: BarqodyChrome.secondaryText,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    countLabel,
-                    style: WaUi.body.copyWith(
-                      fontSize: 13,
-                      color: BarqodyChrome.secondaryText,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  const Icon(
-                    Icons.keyboard_arrow_up_rounded,
-                    color: Colors.black,
-                  ),
+                  )
+                else ...[
+                  for (var i = 0; i < items.length; i++) ...[
+                    _businessItemTile(_items.indexOf(items[i])),
+                    if (i < items.length - 1)
+                      Divider(
+                        height: 1,
+                        indent: 16,
+                        endIndent: 16,
+                        color: BarqodyChrome.divider.withValues(alpha: 0.7),
+                      ),
+                  ],
+                  const SizedBox(height: 6),
                 ],
-              ),
-            ),
-          ),
-          Divider(height: 1, thickness: 1, color: BarqodyChrome.divider),
-          for (var i = 0; i < items.length; i++) ...[
-            _businessItemTile(_items.indexOf(items[i])),
-            if (i < items.length - 1)
-              Divider(
-                height: 1,
-                indent: 16,
-                endIndent: 16,
-                color: BarqodyChrome.divider.withValues(alpha: 0.7),
-              ),
-          ],
-          const SizedBox(height: 6),
-        ],
-      ),
+              ],
+            )
+          : header(isExpanded: false),
     );
   }
 
@@ -851,76 +1028,17 @@ class _MenuCatalogSheetState extends State<MenuCatalogSheet> {
   }
 
   Widget _buildBusinessBottomBar() {
-    if (_isDocuments) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
-        child: PillButton(
-          label: context.l10n.addDocument,
-          onPressed: _addItem,
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(color: Color(0xFFE8E8E8), width: 1),
         ),
-      );
-    }
-
-    final addLabel = switch (widget.catalogType) {
-      'services' => 'Add Service',
-      'products' => 'Add Product',
-      'portfolio' => 'Add Portfolio Item',
-      'documents' => context.l10n.addDocument,
-      _ => _catalogLabel.toLowerCase() == 'menu'
-          ? 'Add Menu Item'
-          : context.l10n.addCatalogItem(_catalogLabel),
-    };
-
-    if (_isMenu || _isProducts) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: PillButton(
-                    label: 'Manage Sections',
-                    filled: false,
-                    onPressed: _openCategoryManagerSheet,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: PillButton(
-                    label: _modifierGroups.isEmpty
-                        ? 'Modifiers'
-                        : 'Modifiers (${_modifierGroups.length})',
-                    filled: false,
-                    onPressed: _openModifierLibrary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            PillButton(label: addLabel, onPressed: _addItem),
-          ],
-        ),
-      );
-    }
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: PillButton(
-              label: 'Manage Sections',
-              filled: false,
-              onPressed: _openCategoryManagerSheet,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: PillButton(label: addLabel, onPressed: _addItem),
-          ),
-        ],
+      ),
+      child: PillButton(
+        label: _addItemLabel,
+        onPressed: _addItem,
       ),
     );
   }

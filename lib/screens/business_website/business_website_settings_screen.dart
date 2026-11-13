@@ -125,6 +125,20 @@ class _BusinessWebsiteSettingsScreenState
     );
   }
 
+  String get _hubTitle {
+    switch (_website?.websiteType) {
+      case 'service':
+        return 'Your services';
+      case 'products':
+        return 'Your products';
+      case 'portfolio':
+        return 'Your portfolio';
+      case 'menu':
+      default:
+        return 'Your menu';
+    }
+  }
+
   String get _tabMenuLabel {
     switch (_website?.websiteType) {
       case 'service':
@@ -659,7 +673,7 @@ class _BusinessWebsiteSettingsScreenState
         child: Column(
           children: [
             BarqodyTitleBar(
-              title: 'Business Presence',
+              title: _hubTitle,
               onBack: () => Navigator.of(context).pop(),
             ),
             _buildTabs(),
@@ -707,7 +721,12 @@ class _BusinessWebsiteSettingsScreenState
 
   Widget _buildTabs() {
     return Container(
-      color: Colors.white,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(color: Color(0xFFE8E8E8), width: 1),
+        ),
+      ),
       child: TabBar(
         controller: _tabs,
         labelColor: Colors.black,
@@ -716,7 +735,9 @@ class _BusinessWebsiteSettingsScreenState
         unselectedLabelStyle:
             const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
         indicatorColor: Colors.black,
-        indicatorWeight: 3,
+        indicatorWeight: 2,
+        indicatorSize: TabBarIndicatorSize.label,
+        dividerColor: Colors.transparent,
         tabs: [
           Tab(text: _tabMenuLabel),
           const Tab(text: 'Settings'),
@@ -952,7 +973,7 @@ class _BusinessWebsiteSettingsScreenState
               const Divider(height: 1, color: BwUi.cardBorder),
               _rowTile(
                 title: 'Ordering',
-                subtitle: 'Pickup, delivery, fees & areas',
+                subtitle: 'Pickup, delivery & fees',
                 onTap: _openOrdering,
               ),
               const Divider(height: 1, color: BwUi.cardBorder),
@@ -1077,15 +1098,27 @@ class _TemplateChooserScreen extends StatefulWidget {
 class _TemplateChooserScreenState extends State<_TemplateChooserScreen> {
   WebsiteTemplateSummary? _selected;
   bool _blockSelect = false;
+  late final List<WebsiteTemplateSummary> _orderedTemplates;
 
   @override
   void initState() {
     super.initState();
-    for (final t in widget.templates) {
-      if (t.id == widget.currentTemplateId) {
-        _selected = t;
-        break;
+    _orderedTemplates = List<WebsiteTemplateSummary>.from(widget.templates);
+    final currentId = widget.currentTemplateId;
+    if (currentId != null && currentId.isNotEmpty) {
+      for (final t in _orderedTemplates) {
+        if (t.id == currentId) {
+          _selected = t;
+          break;
+        }
       }
+      // Selected template first when chooser opens.
+      _orderedTemplates.sort((a, b) {
+        final aSel = a.id == currentId;
+        final bSel = b.id == currentId;
+        if (aSel == bSel) return 0;
+        return aSel ? -1 : 1;
+      });
     }
   }
 
@@ -1138,135 +1171,128 @@ class _TemplateChooserScreenState extends State<_TemplateChooserScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          GridView.builder(
+          ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: widget.templates.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 14,
-              crossAxisSpacing: 14,
-              childAspectRatio: 0.62,
-            ),
+            itemCount: _orderedTemplates.length,
             itemBuilder: (context, index) {
-              final t = widget.templates[index];
+              final t = _orderedTemplates[index];
               final selected = _selected?.id == t.id;
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 160),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: selected ? Colors.black : BwUi.cardBorder,
-                    width: selected ? 2.5 : 1,
-                  ),
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: index == _orderedTemplates.length - 1 ? 0 : 14,
                 ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 160),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: selected ? Colors.black : BwUi.cardBorder,
+                      // Same width always — thicker selected border gets clipped.
+                      width: 2,
+                    ),
+                  ),
+                  // Don't clip the border; round only the inner content.
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
                         onTap: () => _selectTemplate(t),
-                        child: t.thumbnail.isNotEmpty
-                            ? Image.network(
-                                t.thumbnail,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => Container(
-                                  color: BwUi.iconTileBg,
-                                  child: const Icon(
-                                    Icons.web_asset,
-                                    color: Colors.black45,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  ColoredBox(
+                                    color: BwUi.iconTileBg,
+                                    child: t.thumbnail.isNotEmpty
+                                        ? Image.network(
+                                            t.thumbnail,
+                                            fit: BoxFit.cover,
+                                            alignment: Alignment.center,
+                                            errorBuilder: (_, __, ___) =>
+                                                const Center(
+                                              child: Icon(
+                                                Icons.web_asset,
+                                                color: Colors.black45,
+                                              ),
+                                            ),
+                                          )
+                                        : const Center(
+                                            child: Icon(
+                                              Icons.web_asset,
+                                              color: Colors.black45,
+                                            ),
+                                          ),
                                   ),
-                                ),
-                              )
-                            : Container(
-                                color: BwUi.iconTileBg,
-                                child: const Icon(
-                                  Icons.web_asset,
-                                  color: Colors.black45,
-                                ),
+                                  Positioned(
+                                    top: 10,
+                                    right: 10,
+                                    child: Material(
+                                      color: Colors.white,
+                                      elevation: 1.5,
+                                      shadowColor: Colors.black26,
+                                      shape: const CircleBorder(),
+                                      child: InkWell(
+                                        customBorder: const CircleBorder(),
+                                        onTap: () => _openSample(t),
+                                        child: const SizedBox(
+                                          width: 36,
+                                          height: 36,
+                                          child: Icon(
+                                            Icons.open_in_new_rounded,
+                                            size: 18,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            t.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: OutlinedButton(
-                                  onPressed: () => _openSample(t),
-                                  style: OutlinedButton.styleFrom(
-                                    foregroundColor: Colors.black,
-                                    side: const BorderSide(
-                                      color: BwUi.cardBorder,
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8,
-                                    ),
-                                    minimumSize: Size.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(999),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Sample',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 160),
+                              color: selected ? Colors.black : Colors.white,
+                              padding:
+                                  const EdgeInsets.fromLTRB(14, 14, 14, 14),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      t.name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: selected
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  if (selected) ...[
+                                    const SizedBox(width: 10),
+                                    const Icon(
+                                      Icons.check_rounded,
+                                      size: 22,
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ],
                               ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: FilledButton(
-                                  onPressed: () => _selectTemplate(t),
-                                  style: FilledButton.styleFrom(
-                                    backgroundColor: selected
-                                        ? Colors.black
-                                        : const Color(0xFF111111),
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8,
-                                    ),
-                                    minimumSize: Size.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(999),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    selected ? 'Selected' : 'Select',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
               );
             },

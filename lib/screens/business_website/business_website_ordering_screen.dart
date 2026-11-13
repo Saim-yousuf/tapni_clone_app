@@ -7,7 +7,7 @@ import 'package:tapni_app/utils/app_motion.dart';
 import 'package:tapni_app/widgets/app_toast.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 
-/// Pickup/delivery rules, fees, areas, tips, schedule for menu sites.
+/// Pickup/delivery rules, fees, tips, schedule for menu sites.
 class BusinessWebsiteOrderingScreen extends StatefulWidget {
   final BusinessWebsite website;
 
@@ -27,8 +27,6 @@ class _BusinessWebsiteOrderingScreenState
   late final TextEditingController _deliveryFeeCtrl;
   late final TextEditingController _freeAboveCtrl;
   late final TextEditingController _prepCtrl;
-  late final TextEditingController _areaCtrl;
-  late List<String> _areas;
   late bool _tipsEnabled;
   late bool _scheduleEnabled;
   bool _saving = false;
@@ -53,8 +51,6 @@ class _BusinessWebsiteOrderingScreenState
     _prepCtrl = TextEditingController(
       text: o.prepTimeMinutes > 0 ? '${o.prepTimeMinutes}' : '',
     );
-    _areaCtrl = TextEditingController();
-    _areas = List<String>.from(o.deliveryAreas);
     _tipsEnabled = o.tipsEnabled;
     _scheduleEnabled = o.scheduleOrdersEnabled;
   }
@@ -65,26 +61,11 @@ class _BusinessWebsiteOrderingScreenState
     _deliveryFeeCtrl.dispose();
     _freeAboveCtrl.dispose();
     _prepCtrl.dispose();
-    _areaCtrl.dispose();
     super.dispose();
   }
 
   double _num(TextEditingController c) =>
       double.tryParse(c.text.trim()) ?? 0;
-
-  void _addArea() {
-    final t = _areaCtrl.text.trim();
-    if (t.isEmpty) return;
-    final exists = _areas.any((a) => a.toLowerCase() == t.toLowerCase());
-    if (exists) {
-      _areaCtrl.clear();
-      return;
-    }
-    setState(() {
-      _areas = [..._areas, t];
-      _areaCtrl.clear();
-    });
-  }
 
   Future<void> _save() async {
     if (_saving) return;
@@ -104,7 +85,8 @@ class _BusinessWebsiteOrderingScreenState
       deliveryFee: _num(_deliveryFeeCtrl),
       freeDeliveryAbove: _num(_freeAboveCtrl),
       prepTimeMinutes: int.tryParse(_prepCtrl.text.trim()) ?? 0,
-      deliveryAreas: _areas,
+      // Areas setting removed — clear so checkout never requires a zone chip.
+      deliveryAreas: const [],
       tipsEnabled: _tipsEnabled,
       scheduleOrdersEnabled: _scheduleEnabled,
     );
@@ -203,97 +185,6 @@ class _BusinessWebsiteOrderingScreenState
           const SizedBox(height: 14),
           AppAppear(
             index: 2,
-            child: _card(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(14, 14, 14, 6),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Delivery areas',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _areas.isEmpty
-                            ? 'Empty list = deliver anywhere. Add areas to require a choice at checkout.'
-                            : 'Customers must pick one of these areas for delivery.',
-                        style: const TextStyle(
-                          fontSize: 12.5,
-                          height: 1.35,
-                          color: AuthUi.textSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _areaCtrl,
-                              textInputAction: TextInputAction.done,
-                              onSubmitted: (_) => _addArea(),
-                              decoration: InputDecoration(
-                                hintText: 'e.g. Gulshan',
-                                filled: true,
-                                fillColor: AuthUi.fieldFill,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                  borderSide: BorderSide.none,
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 12,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          TextButton(
-                            onPressed: _addArea,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.black,
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            child: const Text('Add'),
-                          ),
-                        ],
-                      ),
-                      if (_areas.isNotEmpty) ...[
-                        const SizedBox(height: 10),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            for (final a in _areas)
-                              InputChip(
-                                label: Text(a),
-                                onDeleted: () {
-                                  setState(() {
-                                    _areas =
-                                        _areas.where((x) => x != a).toList();
-                                  });
-                                },
-                                deleteIconColor: Colors.black54,
-                              ),
-                          ],
-                        ),
-                      ],
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-          AppAppear(
-            index: 3,
             child: _card(
               children: [
                 _switchRow(

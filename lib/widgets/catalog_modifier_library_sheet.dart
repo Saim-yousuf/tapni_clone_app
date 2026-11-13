@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tapni_app/models/catalog_item_options.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
+import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/sheet_scaffold.dart';
 
@@ -83,9 +85,6 @@ class _CatalogModifierLibrarySheetState
   void initState() {
     super.initState();
     _groups = widget.initial.map(_fromModel).toList();
-    if (_groups.isEmpty) {
-      _groups.add(_newGroup());
-    }
   }
 
   _GroupEditors _fromModel(CatalogOptionGroup g) {
@@ -182,6 +181,28 @@ class _CatalogModifierLibrarySheetState
     Navigator.pop(context, out);
   }
 
+  InputDecoration _fieldDecoration({
+    required String hint,
+    String? prefixText,
+  }) {
+    return InputDecoration(
+      hintText: hint,
+      prefixText: prefixText,
+      filled: true,
+      fillColor: AuthUi.fieldFill,
+      hintStyle: WaUi.body.copyWith(
+        fontSize: 14,
+        color: BarqodyChrome.secondaryText,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      isDense: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.viewInsetsOf(context).bottom;
@@ -203,9 +224,9 @@ class _CatalogModifierLibrarySheetState
                     children: [
                       Expanded(
                         child: Text(
-                          'Modifier Groups',
+                          'Modifiers',
                           style: WaUi.toolsTitleOf(
-                            size: 18,
+                            size: 20,
                             weight: FontWeight.w800,
                             color: Colors.black,
                           ),
@@ -217,53 +238,120 @@ class _CatalogModifierLibrarySheetState
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                child: Text(
-                  'Create once (e.g. Toppings, Sauce). Then attach the same group on many menu items.',
-                  style: WaUi.body.copyWith(
-                    fontSize: 13,
-                    color: BarqodyChrome.secondaryText,
-                    height: 1.35,
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Create toppings, sizes, or sauces once — then reuse them on any item.',
+                    style: WaUi.body.copyWith(
+                      fontSize: 13.5,
+                      color: BarqodyChrome.bodyText,
+                      height: 1.4,
+                    ),
                   ),
                 ),
               ),
               Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-                  children: [
-                    for (var gi = 0; gi < _groups.length; gi++) ...[
-                      if (gi > 0) const SizedBox(height: 12),
-                      _groupCard(gi),
-                    ],
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton.icon(
-                        onPressed: () {
-                          setState(() => _groups.add(_newGroup()));
-                        },
-                        icon: const Icon(Icons.add, color: Colors.black),
-                        label: const Text(
-                          'Add group',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
+                child: _groups.isEmpty
+                    ? _emptyState()
+                    : ListView(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+                        children: [
+                          for (var gi = 0; gi < _groups.length; gi++) ...[
+                            if (gi > 0) const SizedBox(height: 12),
+                            _groupCard(gi),
+                          ],
+                          const SizedBox(height: 14),
+                          _addGroupButton(),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
                 decoration: const BoxDecoration(
-                  color: Color(0xFFFAFAF9),
-                  border: Border(top: BorderSide(color: Color(0xFFEEF0F2))),
+                  color: Colors.white,
+                  border: Border(
+                    top: BorderSide(color: Color(0xFFE8E8E8)),
+                  ),
                 ),
                 child: PillButton(
-                  label: 'Done',
+                  label: 'Save modifiers',
                   onPressed: _done,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _emptyState() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(28, 24, 28, 16),
+      child: Column(
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: BarqodyChrome.fieldFill,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            alignment: Alignment.center,
+            child: const Icon(Icons.tune_rounded, size: 28, color: Colors.black),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'No modifiers yet',
+            style: WaUi.toolsTitleOf(
+              size: 17,
+              weight: FontWeight.w700,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Add a group like Extra Toppings or Drink Size, then list the choices.',
+            textAlign: TextAlign.center,
+            style: WaUi.body.copyWith(
+              fontSize: 13.5,
+              color: BarqodyChrome.secondaryText,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 20),
+          _addGroupButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _addGroupButton() {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: () => setState(() => _groups.add(_newGroup())),
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.black, width: 1.4),
+          ),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.add_rounded, size: 20, color: Colors.black),
+              SizedBox(width: 6),
+              Text(
+                'Add group',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
                 ),
               ),
             ],
@@ -275,11 +363,15 @@ class _CatalogModifierLibrarySheetState
 
   Widget _groupCard(int gi) {
     final g = _groups[gi];
+    final isMultiple = g.selectionType == 'multiple';
+    final isRequired = g.minSelections > 0;
+
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 8, 6, 8),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
       decoration: BoxDecoration(
-        color: BarqodyChrome.fieldFill,
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: BarqodyChrome.divider),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -287,138 +379,143 @@ class _CatalogModifierLibrarySheetState
           Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: g.name,
-                  decoration: const InputDecoration(
-                    hintText: 'Group name (e.g. Toppings)',
-                    border: InputBorder.none,
-                    isDense: true,
+                child: Text(
+                  'Group ${gi + 1}',
+                  style: WaUi.body.copyWith(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: BarqodyChrome.secondaryText,
                   ),
-                  style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
               ),
-              IconButton(
-                tooltip: 'Remove group',
-                onPressed: () {
-                  setState(() {
-                    final removed = _groups.removeAt(gi);
-                    removed.dispose();
-                  });
-                },
-                icon: Image.asset(
-                  'assets/images/png/trash-bin-icon.png',
-                  width: 16,
-                  height: 16,
-                  errorBuilder: (_, _, _) =>
-                      const Icon(Icons.delete_outline, size: 18),
+              Material(
+                color: BarqodyChrome.fieldFill,
+                shape: const CircleBorder(),
+                child: InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: () {
+                    setState(() {
+                      final removed = _groups.removeAt(gi);
+                      removed.dispose();
+                    });
+                  },
+                  child: SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/png/trash-bin-icon.png',
+                        width: 15,
+                        height: 15,
+                        errorBuilder: (_, __, ___) => const Icon(
+                          Icons.delete_outline,
+                          size: 17,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _MiniChip(
-                label: 'Single',
-                selected: g.selectionType != 'multiple',
-                onTap: () {
-                  setState(() {
-                    g.selectionType = 'single';
-                    g.maxSelections = 1;
-                    if (g.minSelections > 1) g.minSelections = 1;
-                  });
-                },
-              ),
-              _MiniChip(
-                label: 'Multiple',
-                selected: g.selectionType == 'multiple',
-                onTap: () {
-                  setState(() {
-                    g.selectionType = 'multiple';
-                    g.maxSelections =
-                        g.options.isNotEmpty ? g.options.length : 1;
-                  });
-                },
-              ),
-              _MiniChip(
-                label: 'Required',
-                selected: g.minSelections > 0,
-                onTap: () {
-                  setState(
-                    () => g.minSelections = g.minSelections > 0 ? 0 : 1,
-                  );
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          for (var oi = 0; oi < g.options.length; oi++) ...[
-            Container(
-              margin: const EdgeInsets.only(bottom: 6),
-              padding: const EdgeInsets.fromLTRB(12, 2, 2, 2),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: TextField(
-                      controller: g.options[oi].name,
-                      decoration: const InputDecoration(
-                        hintText: 'Option',
-                        border: InputBorder.none,
-                        isDense: true,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 78,
-                    child: TextField(
-                      controller: g.options[oi].price,
-                      keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                      decoration: const InputDecoration(
-                        hintText: '+Price',
-                        border: InputBorder.none,
-                        isDense: true,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    tooltip: 'Remove option',
-                    onPressed: () {
-                      setState(() {
-                        final removed = g.options.removeAt(oi);
-                        removed.dispose();
-                      });
-                    },
-                    icon: Image.asset(
-                      'assets/images/png/trash-bin-icon.png',
-                      width: 14,
-                      height: 14,
-                      errorBuilder: (_, _, _) =>
-                          const Icon(Icons.delete_outline, size: 16),
-                    ),
-                  ),
-                ],
-              ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: g.name,
+            textCapitalization: TextCapitalization.words,
+            decoration: _fieldDecoration(
+              hint: 'Name (e.g. Extra Toppings)',
             ),
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 15,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Customer can pick',
+            style: WaUi.body.copyWith(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: BarqodyChrome.secondaryText,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: _ChoiceChip(
+                  label: 'One',
+                  selected: !isMultiple,
+                  onTap: () {
+                    setState(() {
+                      g.selectionType = 'single';
+                      g.maxSelections = 1;
+                      if (g.minSelections > 1) g.minSelections = 1;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _ChoiceChip(
+                  label: 'Several',
+                  selected: isMultiple,
+                  onTap: () {
+                    setState(() {
+                      g.selectionType = 'multiple';
+                      g.maxSelections =
+                          g.options.isNotEmpty ? g.options.length : 1;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _ChoiceChip(
+                  label: 'Required',
+                  selected: isRequired,
+                  onTap: () {
+                    setState(
+                      () => g.minSelections = isRequired ? 0 : 1,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Text(
+            'Options',
+            style: WaUi.body.copyWith(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: BarqodyChrome.secondaryText,
+            ),
+          ),
+          const SizedBox(height: 8),
+          for (var oi = 0; oi < g.options.length; oi++) ...[
+            if (oi > 0) const SizedBox(height: 8),
+            _optionRow(g, oi),
           ],
+          const SizedBox(height: 4),
           Align(
             alignment: Alignment.centerLeft,
-            child: TextButton(
+            child: TextButton.icon(
               onPressed: () {
                 setState(() => g.options.add(_newOption()));
               },
-              child: const Text(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              icon: const Icon(Icons.add_rounded, size: 18),
+              label: const Text(
                 'Add option',
                 style: TextStyle(
-                  color: Colors.black,
                   fontWeight: FontWeight.w700,
+                  fontSize: 13.5,
                 ),
               ),
             ),
@@ -427,14 +524,78 @@ class _CatalogModifierLibrarySheetState
       ),
     );
   }
+
+  Widget _optionRow(_GroupEditors g, int oi) {
+    final o = g.options[oi];
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 3,
+          child: TextField(
+            controller: o.name,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: _fieldDecoration(hint: 'Option name'),
+          ),
+        ),
+        const SizedBox(width: 8),
+        SizedBox(
+          width: 88,
+          child: TextField(
+            controller: o.price,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+            ],
+            decoration: _fieldDecoration(hint: '0', prefixText: '+ '),
+          ),
+        ),
+        const SizedBox(width: 4),
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Material(
+            color: Colors.transparent,
+            shape: const CircleBorder(),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () {
+                setState(() {
+                  final removed = g.options.removeAt(oi);
+                  removed.dispose();
+                  if (g.options.isEmpty) {
+                    g.options.add(_newOption());
+                  }
+                });
+              },
+              child: SizedBox(
+                width: 36,
+                height: 36,
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/png/trash-bin-icon.png',
+                    width: 14,
+                    height: 14,
+                    errorBuilder: (_, __, ___) => const Icon(
+                      Icons.delete_outline,
+                      size: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-class _MiniChip extends StatelessWidget {
+class _ChoiceChip extends StatelessWidget {
   final String label;
   final bool selected;
   final VoidCallback onTap;
 
-  const _MiniChip({
+  const _ChoiceChip({
     required this.label,
     required this.selected,
     required this.onTap,
@@ -443,19 +604,21 @@ class _MiniChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: selected ? Colors.black : Colors.white,
-      borderRadius: BorderRadius.circular(20),
+      color: selected ? Colors.black : BarqodyChrome.fieldFill,
+      borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: selected ? Colors.white : Colors.black87,
-              fontWeight: FontWeight.w700,
-              fontSize: 12,
+        borderRadius: BorderRadius.circular(12),
+        child: SizedBox(
+          height: 40,
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: selected ? Colors.white : Colors.black87,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              ),
             ),
           ),
         ),

@@ -20,6 +20,8 @@ import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/auth_ui.dart';
 import 'package:tapni_app/widgets/app_rolling_text.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
+import 'package:tapni_app/models/catalog_item_options.dart';
+import 'package:tapni_app/widgets/catalog_item_configurator_sheet.dart';
 import 'package:tapni_app/widgets/catalog_item_detail_sheet.dart';
 import 'package:tapni_app/widgets/app_toast.dart';
 
@@ -121,15 +123,76 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
   }
 
 
+  CatalogItem _itemWithResolvedModifiers(
+    CatalogItem item, {
+    List<CatalogOptionGroup> library = const [],
+    List<CatalogItem> catalog = const [],
+  }) {
+    // Prefer a catalog snapshot that already has expanded groups.
+    final id = item.id.trim();
+    final name = item.name.trim().toLowerCase();
+    for (final c in catalog) {
+      final match = (id.isNotEmpty && c.id.trim() == id) ||
+          (name.isNotEmpty && c.name.trim().toLowerCase() == name);
+      if (!match) continue;
+      final resolved = library.isNotEmpty
+          ? c.withResolvedOptionGroups(library)
+          : c;
+      if (resolved.activeOptionGroups.isNotEmpty ||
+          resolved.activeVariants.isNotEmpty) {
+        return resolved;
+      }
+    }
+    if (library.isNotEmpty) {
+      return item.withResolvedOptionGroups(library);
+    }
+    return item;
+  }
+
   Future<void> _editCartLine({
     required ExploreCartVendor vendor,
     required int lineIndex,
   }) async {
     if (lineIndex < 0 || lineIndex >= vendor.lines.length) return;
     final line = vendor.lines[lineIndex];
+    final catalog = await _resolveAddMoreCatalog(vendor);
+    if (!mounted) return;
+    final item = _itemWithResolvedModifiers(
+      line.item,
+      catalog: catalog,
+    );
+
+    if (item.hasConfiguration &&
+        (item.activeOptionGroups.isNotEmpty ||
+            item.activeVariants.isNotEmpty)) {
+      final configured = await showCatalogItemConfiguratorSheet(
+        context: context,
+        item: item,
+        currency: vendor.currency,
+        initialQuantity: line.quantity,
+        initialNotes: line.notes,
+        initialVariantId:
+            line.variantId.isNotEmpty ? line.variantId : null,
+        initialOptionIds: line.optionIds,
+        addLabel: 'Update item',
+      );
+      if (configured == null || !mounted) return;
+      context.read<ExploreCartProvider>().updateLine(
+            businessLinkId: vendor.businessLinkId,
+            lineIndex: lineIndex,
+            quantity: configured.quantity,
+            notes: configured.notes,
+            variantId: configured.variantId,
+            optionIds: configured.optionIds,
+            configurationLabel: configured.configurationLabel,
+            item: item,
+          );
+      return;
+    }
+
     final detail = await showCatalogItemDetailSheet(
       context: context,
-      item: line.item,
+      item: item,
       currency: vendor.currency,
       initialQty: line.quantity,
       initialNotes: line.notes,
@@ -148,7 +211,6 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
     ExploreCartVendor vendor,
   ) async {
     final snapshot = vendor.catalogItems.where((i) => i.isActive).toList();
-    if (snapshot.length > 1) return snapshot;
 
     try {
       final repo = AuthRepo();
@@ -159,7 +221,9 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
                   username: vendor.websiteSlug.trim(),
                 )
               : null);
-      if (res == null || !res.success || res.data == null) return snapshot;
+      if (res == null || !res.success || res.data == null) {
+        return snapshot;
+      }
 
       final raw = res.data;
       Map<String, dynamic>? userJson;
@@ -192,8 +256,11 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
               return links.isNotEmpty ? links.first : null;
             }();
 
+      final library =
+          match?.catalogModifierGroups ?? const <CatalogOptionGroup>[];
       final items = (match?.catalogItems ?? const <CatalogItem>[])
           .where((i) => i.isActive)
+          .map((i) => i.withResolvedOptionGroups(library))
           .toList();
       if (items.isEmpty) return snapshot;
 
@@ -253,7 +320,7 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
       builder: (ctx) {
         return _AddMoreItemsSheet(
           items: available,
-                                  currency: vendor.currency,
+          currency: vendor.currency,
           inCartQtyByKey: inCartQty,
         );
       },
@@ -261,12 +328,36 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
 
     if (selected == null || !mounted) return;
 
-    final detail = await showCatalogItemDetailSheet(
-      context: context,
-      item: selected,
-      currency: vendor.currency,
+    final item = _itemWithResolvedModifiers(
+      selected,
+      catalog: available,
     );
-    if (detail == null || !mounted || detail.quantity <= 0) return;
+
+    ExploreCartLine line;
+    if (item.hasConfiguration &&
+        (item.activeOptionGroups.isNotEmpty ||
+            item.activeVariants.isNotEmpty)) {
+      final configured = await showCatalogItemConfiguratorSheet(
+        context: context,
+        item: item,
+        currency: vendor.currency,
+        addLabel: 'Add to cart',
+      );
+      if (configured == null || !mounted) return;
+      line = configured.toCartLine(item);
+    } else {
+      final detail = await showCatalogItemDetailSheet(
+        context: context,
+        item: item,
+        currency: vendor.currency,
+      );
+      if (detail == null || !mounted || detail.quantity <= 0) return;
+      line = ExploreCartLine(
+        item: item,
+        quantity: detail.quantity,
+        notes: detail.notes,
+      );
+    }
 
     cart.addItem(
       businessId: vendor.businessId,
@@ -278,12 +369,8 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
       websiteSlug: vendor.websiteSlug,
       ordersPaused: vendor.ordersPaused,
       isClosedNow: vendor.isClosedNow,
-      catalogItems: vendor.catalogItems,
-      line: ExploreCartLine(
-        item: selected,
-        quantity: detail.quantity,
-        notes: detail.notes,
-      ),
+      catalogItems: available.isNotEmpty ? available : vendor.catalogItems,
+      line: line,
     );
   }
 
@@ -329,10 +416,10 @@ class _ExploreCartScreenState extends State<ExploreCartScreen> {
     final blocked = vendors.where((v) => v.orderBlockedLabel != null).toList();
     if (blocked.isNotEmpty) {
       showAppToast(
-      context,
+        context,
         blocked.first.ordersPaused
-            ? 'This restaurant is not accepting orders right now.'
-            : 'This restaurant is closed right now.',
+            ? "We're not accepting orders right now. Please check back soon!"
+            : 'This restaurant is closed right now. Please check back soon!',
         kind: AppToastKind.warning,
       );
       return;

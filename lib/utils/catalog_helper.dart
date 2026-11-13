@@ -67,6 +67,8 @@ class CatalogHelper {
         return l10n.pending;
       case OrderStatus.confirmed:
         return 'Confirmed';
+      case OrderStatus.outForDelivery:
+        return isDelivery ? 'On the way' : 'Ready';
       case OrderStatus.completed:
         return l10n.completed;
       case OrderStatus.cancelled:
@@ -84,6 +86,8 @@ class CatalogHelper {
         return 'pending';
       case OrderStatus.confirmed:
         return 'confirmed';
+      case OrderStatus.outForDelivery:
+        return 'out_for_delivery';
       case OrderStatus.completed:
         return 'completed';
       case OrderStatus.cancelled:
@@ -99,6 +103,8 @@ class CatalogHelper {
         return OrderStatus.held;
       case 'confirmed':
         return OrderStatus.confirmed;
+      case 'out_for_delivery':
+        return OrderStatus.outForDelivery;
       case 'completed':
         return OrderStatus.completed;
       case 'cancelled':

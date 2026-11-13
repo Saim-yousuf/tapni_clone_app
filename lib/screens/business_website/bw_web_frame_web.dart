@@ -6,6 +6,42 @@ import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/widgets.dart';
 import 'package:tapni_app/screens/business_website/bw_flutter_commerce_bridge.dart';
+import 'package:tapni_app/utils/api_endpoint.dart';
+
+String _pinHtmlUploadsToApiBase(String html) {
+  final base = Uri.tryParse(Api.baseUrl);
+  if (base == null || base.host.isEmpty) return html;
+  final origin =
+      '${base.scheme}://${base.host}${base.hasPort ? ':${base.port}' : ''}';
+  var out = html.replaceAllMapped(
+    RegExp(
+      r'https?://(?:localhost|127\.0\.0\.1)(?::\d+)?',
+      caseSensitive: false,
+    ),
+    (_) => origin,
+  );
+  out = out.replaceAllMapped(
+    RegExp(
+      r'''((?:src|href)\s*=\s*["'])(/uploads/[^"']+)''',
+      caseSensitive: false,
+    ),
+    (m) => '${m[1]}$origin${m[2]}',
+  );
+  out = out.replaceAllMapped(
+    RegExp(
+      r'''url\(\s*(['"]?)(/uploads/[^)'"]+)\1\s*\)''',
+      caseSensitive: false,
+    ),
+    (m) => 'url(${m[1]}$origin${m[2]}${m[1]})',
+  );
+  if (!RegExp(r'<base\s', caseSensitive: false).hasMatch(out)) {
+    out = out.replaceFirstMapped(
+      RegExp(r'<head([^>]*)>', caseSensitive: false),
+      (m) => '<head${m[1]}><base href="$origin/">',
+    );
+  }
+  return out;
+}
 
 /// Flutter Web iframe host for business website preview / public URL.
 Widget buildBusinessWebsiteWebFrame({
@@ -169,7 +205,7 @@ Widget buildBusinessWebsiteWebFrame({
     final content = htmlContent?.trim() ?? '';
     final target = pageUrl?.trim() ?? '';
     if (content.isNotEmpty) {
-      iframe.srcdoc = content;
+      iframe.srcdoc = _pinHtmlUploadsToApiBase(content);
     } else if (target.isNotEmpty) {
       iframe.src = target;
     }

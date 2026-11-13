@@ -320,7 +320,6 @@ class _BusinessWebsiteWebViewScreenState
   }
 
   void _handleBridgeMessage(String rawMessage) {
-    if (widget.sampleDemoPreview) return;
     final raw = rawMessage.trim();
     if (raw.isEmpty) return;
 
@@ -336,6 +335,7 @@ class _BusinessWebsiteWebViewScreenState
 
     if (decoded != null) {
       final action = decoded['action']?.toString() ?? '';
+      // Sample may dismiss via in-template back (data-bw-close → closeWebsite).
       if (action == 'closeWebsite' || action == 'close') {
         _close();
         return;
@@ -345,6 +345,8 @@ class _BusinessWebsiteWebViewScreenState
         _applyTemplateOwnsChrome(enabled);
         return;
       }
+      // Everything else is live commerce — not for synthetic samples.
+      if (widget.sampleDemoPreview) return;
       if (action == 'trackOrder') {
         final id = decoded['orderId']?.toString() ?? '';
         final token = decoded['token']?.toString();
@@ -384,7 +386,7 @@ class _BusinessWebsiteWebViewScreenState
 
   Future<void> _injectFlutterAppFlag() async {
     final controller = _controller;
-    if (controller == null || widget.sampleDemoPreview) return;
+    if (controller == null) return;
     await controller.runJavaScript('''
       (function(){
         window.__BW_FLUTTER_APP=true;
@@ -480,7 +482,7 @@ class _BusinessWebsiteWebViewScreenState
 
   Future<void> _detectImmersiveNav() async {
     final controller = _controller;
-    if (controller == null || widget.sampleDemoPreview) return;
+    if (controller == null) return;
     try {
       final raw = await controller.runJavaScriptReturningResult(
         "(function(){try{return!!document.querySelector('[data-bw-immersive-nav]');}catch(e){return false;}})()",
@@ -521,7 +523,10 @@ class _BusinessWebsiteWebViewScreenState
     final html = widget.html;
     final url = widget.url;
     if (html != null && html.trim().isNotEmpty) {
-      controller.loadHtmlString(html, baseUrl: Api.baseUrl);
+      controller.loadHtmlString(
+        _htmlPinnedToApiBase(html),
+        baseUrl: Api.baseUrl,
+      );
     } else if (url != null && url.trim().isNotEmpty) {
       final normalized = rewriteLocalhostToApiBase(url);
       final target = _withShopperQuery(_withPreviewToken(normalized));
@@ -529,13 +534,51 @@ class _BusinessWebsiteWebViewScreenState
     }
   }
 
+  /// Pin media hosts to [Api.baseUrl] so covers load in WebView / HTML string.
+  String _htmlPinnedToApiBase(String html) {
+    final base = Uri.tryParse(Api.baseUrl);
+    if (base == null || base.host.isEmpty) return html;
+    final origin =
+        '${base.scheme}://${base.host}${base.hasPort ? ':${base.port}' : ''}';
+    var out = html.replaceAllMapped(
+      RegExp(
+        r'https?://(?:localhost|127\.0\.0\.1)(?::\d+)?',
+        caseSensitive: false,
+      ),
+      (_) => origin,
+    );
+    // Root-relative uploads → absolute API origin (srcdoc / baseUrl edge cases).
+    out = out.replaceAllMapped(
+      RegExp(
+        r'''((?:src|href)\s*=\s*["'])(/uploads/[^"']+)''',
+        caseSensitive: false,
+      ),
+      (m) => '${m[1]}$origin${m[2]}',
+    );
+    out = out.replaceAllMapped(
+      RegExp(
+        r'''url\(\s*(['"]?)(/uploads/[^)'"]+)\1\s*\)''',
+        caseSensitive: false,
+      ),
+      (m) => 'url(${m[1]}$origin${m[2]}${m[1]})',
+    );
+    if (!RegExp(r'<base\s', caseSensitive: false).hasMatch(out)) {
+      out = out.replaceFirstMapped(
+        RegExp(r'<head([^>]*)>', caseSensitive: false),
+        (m) => '<head${m[1]}><base href="$origin/">',
+      );
+    }
+    return out;
+  }
+
   String _withAppChromeQuery(String url) {
     try {
       final uri = Uri.parse(url);
       final q = Map<String, String>.from(uri.queryParameters);
       q['bw_chrome'] = '${_chromeTopPx(context)}';
-      // Early signal for commerce runtime before JS injection finishes.
-      if (!widget.sampleDemoPreview) q['bw_app'] = '1';
+      // Early signal for commerce / immersive chrome before JS injection.
+      // Samples need this too so template back is visible (not Flutter X).
+      q['bw_app'] = '1';
       return uri.replace(queryParameters: q).toString();
     } catch (_) {
       return url;
@@ -700,8 +743,13 @@ class _BusinessWebsiteWebViewScreenState
           },
           onPageFinished: (_) async {
             await _injectChromeInsets();
-            // Do not inject shopper JWT / flutter flag into synthetic samples.
-            if (!widget.sampleDemoPreview) {
+            if (widget.sampleDemoPreview) {
+              // Immersive samples own back (no Flutter X). Always mark flutter
+              // shell so data-bw-close can post closeWebsite despite demo guard.
+              await _detectImmersiveNav();
+              await _injectFlutterAppFlag();
+              await _injectChromeInsets();
+            } else {
               await _injectFlutterAppFlag();
               await _detectImmersiveNav();
               await _injectChromeInsets();
@@ -812,7 +860,10 @@ class _BusinessWebsiteWebViewScreenState
     final html = widget.html;
     final url = widget.url;
     if (html != null && html.trim().isNotEmpty) {
-      controller.loadHtmlString(html, baseUrl: Api.baseUrl);
+      controller.loadHtmlString(
+        _htmlPinnedToApiBase(html),
+        baseUrl: Api.baseUrl,
+      );
     } else if (url != null && url.trim().isNotEmpty) {
       // Chrome may have stored localhost; Android must use Api.baseUrl (LAN IP).
       final normalized = rewriteLocalhostToApiBase(url);
@@ -889,16 +940,16 @@ class _BusinessWebsiteWebViewScreenState
             : null,
         html: widget.html,
         shopper: widget.sampleDemoPreview ? null : _shopperPayload(),
-        flutterApp: !widget.sampleDemoPreview,
+        // Sample immersive templates still need flutter chrome class so their
+        // in-template back control is visible and can dismiss the preview.
+        flutterApp: true,
         onTrackOrder: widget.sampleDemoPreview ? null : _openTrackOrder,
         onAddToCart: widget.sampleDemoPreview ? null : _handleAddToCart,
         onAdjustCartQty:
             widget.sampleDemoPreview ? null : _handleAdjustCartQty,
         onOpenCart: widget.sampleDemoPreview ? null : _openNativeCart,
-        onCloseWebsite: widget.sampleDemoPreview ? null : _close,
-        onImmersiveNav: widget.sampleDemoPreview
-            ? null
-            : (enabled) => _applyTemplateOwnsChrome(enabled),
+        onCloseWebsite: _close,
+        onImmersiveNav: (enabled) => _applyTemplateOwnsChrome(enabled),
       );
     }
     if (_controller == null) return const SizedBox.shrink();
@@ -935,7 +986,10 @@ class _BusinessWebsiteWebViewScreenState
     final cartCount = widget.sampleDemoPreview
         ? 0
         : context.watch<ExploreCartProvider>().itemCount;
-    final showFlutterChrome = !_templateOwnsChrome;
+    // Sample: never overlay CircleCloseButton — immersive packs own back;
+    // non-immersive samples still dismiss via system/gesture back (_close).
+    final showFlutterChrome =
+        !widget.sampleDemoPreview && !_templateOwnsChrome;
 
     // Web iframe steals overlay taps — keep a thin strip above the view unless
     // the template opted into immersive nav (Ember Kitchen).

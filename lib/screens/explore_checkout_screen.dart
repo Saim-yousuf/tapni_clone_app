@@ -388,8 +388,8 @@ class _ExploreCheckoutScreenState extends State<ExploreCheckoutScreen> {
       showAppToastMessenger(
         messenger,
         blocked.first.ordersPaused
-            ? 'This restaurant is not accepting orders right now.'
-            : 'This restaurant is closed right now.',
+            ? "We're not accepting orders right now. Please check back soon!"
+            : 'This restaurant is closed right now. Please check back soon!',
         kind: AppToastKind.warning,
       );
       return;

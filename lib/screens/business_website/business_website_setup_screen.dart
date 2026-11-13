@@ -845,21 +845,25 @@ class _TemplateRow extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: SizedBox(
-          width: 56,
-          height: 72,
-          child: template.thumbnail.isNotEmpty
-              ? Image.network(
-                  template.thumbnail,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => const ColoredBox(
+          width: 88,
+          height: 50,
+          child: ColoredBox(
+            color: const Color(0xFFF2F2F7),
+            child: template.thumbnail.isNotEmpty
+                ? Image.network(
+                    template.thumbnail,
+                    fit: BoxFit.contain,
+                    alignment: Alignment.center,
+                    errorBuilder: (_, _, _) => const ColoredBox(
+                      color: Color(0xFFF2F2F7),
+                      child: Icon(Icons.web_asset, color: Colors.black54),
+                    ),
+                  )
+                : const ColoredBox(
                     color: Color(0xFFF2F2F7),
                     child: Icon(Icons.web_asset, color: Colors.black54),
                   ),
-                )
-              : const ColoredBox(
-                  color: Color(0xFFF2F2F7),
-                  child: Icon(Icons.web_asset, color: Colors.black54),
-                ),
+          ),
         ),
       ),
     );

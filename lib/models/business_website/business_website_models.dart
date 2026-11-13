@@ -70,6 +70,8 @@ class WebsiteTemplateSummary {
   final String description;
   final String thumbnail;
   final String defaultThemeColor;
+  /// Template-owned default hero/front cover (absolute URL when from API).
+  final String defaultFrontImage;
   final String templateType;
   final String? categoryId;
   final String? categoryName;
@@ -84,6 +86,7 @@ class WebsiteTemplateSummary {
     this.description = '',
     this.thumbnail = '',
     this.defaultThemeColor = '#ff6fa5',
+    this.defaultFrontImage = '',
     this.templateType = 'menu',
     this.categoryId,
     this.categoryName,
@@ -101,6 +104,7 @@ class WebsiteTemplateSummary {
       thumbnail: json['thumbnail']?.toString() ?? '',
       defaultThemeColor:
           json['defaultThemeColor']?.toString() ?? '#ff6fa5',
+      defaultFrontImage: json['defaultFrontImage']?.toString() ?? '',
       templateType: json['templateType']?.toString() ?? 'menu',
       categoryId: json['categoryId']?.toString(),
       categoryName: json['categoryName']?.toString(),
@@ -158,6 +162,10 @@ class BusinessWebsiteDesign {
   /// Missing on legacy docs → treated as true.
   final bool showLogo;
   final bool showBio;
+  /// Absolute URL for storefront hero/front image (default Ember-style cover).
+  final String frontImage;
+  /// True when using the shared default cover (not an owner upload).
+  final bool frontImageIsDefault;
 
   const BusinessWebsiteDesign({
     this.themeColor = '#ff6fa5',
@@ -168,6 +176,8 @@ class BusinessWebsiteDesign {
     this.homepageHeadline = '',
     this.showLogo = true,
     this.showBio = true,
+    this.frontImage = '',
+    this.frontImageIsDefault = true,
   });
 
   Map<String, dynamic> toJson() => {
@@ -179,19 +189,30 @@ class BusinessWebsiteDesign {
         'homepageHeadline': homepageHeadline,
         'showLogo': showLogo,
         'showBio': showBio,
+        'frontImage': frontImage,
+        'frontImageIsDefault': frontImageIsDefault,
       };
 
   /// Partial payload for PUT design merge (does not wipe server fields).
-  Map<String, dynamic> toDesignPatchJson() => {
+  /// [frontImageOverride] — data URI upload, empty string to reset default,
+  /// or null to leave front image unchanged on the server.
+  Map<String, dynamic> toDesignPatchJson({String? frontImageOverride}) => {
         'themeColor': themeColor,
         'hasCustomThemeColor': hasCustomThemeColor,
         'homepageHeadline': homepageHeadline,
         'showLogo': showLogo,
         'showBio': showBio,
+        if (frontImageOverride != null) 'frontImage': frontImageOverride,
       };
 
   factory BusinessWebsiteDesign.fromJson(Map<String, dynamic>? json) {
     if (json == null) return const BusinessWebsiteDesign();
+    final front = json['frontImage']?.toString() ?? '';
+    final isDefault = json['frontImageIsDefault'] == true ||
+        front.isEmpty ||
+        front.contains('/uploads/website-templates/ember-kitchen-cover.jpg') ||
+        front.contains('/uploads/website-templates/black-olive-cover.jpg') ||
+        front.contains('/uploads/website-templates/menu-default-cover.jpg');
     return BusinessWebsiteDesign(
       themeColor: json['themeColor']?.toString() ?? '#ff6fa5',
       fontStyle: json['fontStyle']?.toString() ?? 'modern',
@@ -201,6 +222,8 @@ class BusinessWebsiteDesign {
       homepageHeadline: json['homepageHeadline']?.toString() ?? '',
       showLogo: json['showLogo'] != false,
       showBio: json['showBio'] != false,
+      frontImage: front,
+      frontImageIsDefault: isDefault,
     );
   }
 
@@ -213,6 +236,8 @@ class BusinessWebsiteDesign {
     String? homepageHeadline,
     bool? showLogo,
     bool? showBio,
+    String? frontImage,
+    bool? frontImageIsDefault,
   }) {
     return BusinessWebsiteDesign(
       themeColor: themeColor ?? this.themeColor,
@@ -223,6 +248,8 @@ class BusinessWebsiteDesign {
       homepageHeadline: homepageHeadline ?? this.homepageHeadline,
       showLogo: showLogo ?? this.showLogo,
       showBio: showBio ?? this.showBio,
+      frontImage: frontImage ?? this.frontImage,
+      frontImageIsDefault: frontImageIsDefault ?? this.frontImageIsDefault,
     );
   }
 }

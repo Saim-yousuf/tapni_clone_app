@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tapni_app/helper/image_helper.dart';
 import 'package:tapni_app/models/business_website/business_website_models.dart';
 import 'package:tapni_app/repository/business_website_repo.dart';
 import 'package:tapni_app/screens/business_website/business_presence_ui.dart';
@@ -74,6 +77,13 @@ class _BusinessWebsiteCustomizeScreenState
   late bool _hasCustomThemeColor;
   late bool _showLogo;
   late bool _showBio;
+  late String _frontImageUrl;
+  late bool _frontImageIsDefault;
+  /// Local pick preview; when set, save/preview send a data URI upload.
+  Uint8List? _frontImageBytes;
+  String? _frontImageMime;
+  /// True when owner chose Reset to default (send empty frontImage).
+  bool _resetFrontImage = false;
   late BusinessWebsiteDesign _initial;
 
   bool _saving = false;
@@ -97,6 +107,8 @@ class _BusinessWebsiteCustomizeScreenState
     _hasCustomThemeColor = d.hasCustomThemeColor;
     _showLogo = d.showLogo;
     _showBio = d.showBio;
+    _frontImageUrl = d.frontImage;
+    _frontImageIsDefault = d.frontImageIsDefault || d.frontImage.isEmpty;
     _hexCtrl = TextEditingController(text: _themeColor.toUpperCase());
     _headlineCtrl = TextEditingController(text: d.homepageHeadline);
   }
@@ -117,7 +129,26 @@ class _BusinessWebsiteCustomizeScreenState
         fontStyle: _initial.fontStyle,
         buttonStyle: _initial.buttonStyle,
         cardStyle: _initial.cardStyle,
+        frontImage: _frontImageUrl,
+        frontImageIsDefault: _frontImageIsDefault && _frontImageBytes == null,
       );
+
+  bool get _frontImageDirty =>
+      _frontImageBytes != null ||
+      _resetFrontImage ||
+      (_frontImageIsDefault != _initial.frontImageIsDefault);
+
+  /// null = leave unchanged; '' = reset default; data URI = upload.
+  String? get _frontImagePatch {
+    if (_frontImageBytes != null) {
+      return bytesToDataUri(
+        _frontImageBytes!,
+        mimeType: _frontImageMime ?? 'image/jpeg',
+      );
+    }
+    if (_resetFrontImage) return '';
+    return null;
+  }
 
   bool get _dirty {
     final d = _draft;
@@ -126,7 +157,35 @@ class _BusinessWebsiteCustomizeScreenState
         d.hasCustomThemeColor != _initial.hasCustomThemeColor ||
         d.homepageHeadline != _initial.homepageHeadline.trim() ||
         d.showLogo != _initial.showLogo ||
-        d.showBio != _initial.showBio;
+        d.showBio != _initial.showBio ||
+        _frontImageDirty;
+  }
+
+  Future<void> _pickFrontImage() async {
+    final file = await pickSingleFile(
+      allowedExtensions: const ['png', 'jpg', 'jpeg', 'webp'],
+    );
+    if (file == null || !file.hasData) return;
+    final bytes = await file.readBytes();
+    if (!mounted || bytes.isEmpty) return;
+    setState(() {
+      _frontImageBytes = bytes;
+      _frontImageMime = file.mimeType;
+      _resetFrontImage = false;
+      _frontImageIsDefault = false;
+    });
+  }
+
+  void _resetFrontToDefault() {
+    setState(() {
+      _frontImageBytes = null;
+      _frontImageMime = null;
+      _resetFrontImage = true;
+      _frontImageIsDefault = true;
+      _frontImageUrl = _initial.frontImageIsDefault
+          ? _initial.frontImage
+          : '';
+    });
   }
 
   void _applyColor(String hex, {required bool custom}) {
@@ -185,7 +244,9 @@ class _BusinessWebsiteCustomizeScreenState
     final res = await _repo.previewMine(
       websiteId: widget.website.id,
       websiteType: widget.website.websiteType,
-      designDraft: _draft.toDesignPatchJson(),
+      designDraft: _draft.toDesignPatchJson(
+        frontImageOverride: _frontImagePatch,
+      ),
     );
     if (!mounted) return;
     setState(() => _previewing = false);
@@ -234,7 +295,11 @@ class _BusinessWebsiteCustomizeScreenState
     });
     final draft = _draft;
     final res = await _repo.updateWebsite(
-      {'design': draft.toDesignPatchJson()},
+      {
+        'design': draft.toDesignPatchJson(
+          frontImageOverride: _frontImagePatch,
+        ),
+      },
       websiteId: widget.website.id,
       websiteType: widget.website.websiteType,
     );
@@ -398,6 +463,77 @@ class _BusinessWebsiteCustomizeScreenState
                     onPressed: () =>
                         _applyColor(_templateFallback, custom: false),
                     child: const Text('Use template default color'),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            _sectionCard(
+              title: 'Front image',
+              subtitle:
+                  'Hero cover for this template. Leave default to use the cover we set for the template.',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: _frontImageBytes != null
+                          ? Image.memory(
+                              _frontImageBytes!,
+                              fit: BoxFit.cover,
+                            )
+                          : (_frontImageUrl.isNotEmpty && !_resetFrontImage
+                              ? Image.network(
+                                  _frontImageUrl,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => Container(
+                                    color: const Color(0xFFF2F2F7),
+                                    alignment: Alignment.center,
+                                    child: const Text(
+                                      'Default cover',
+                                      style: TextStyle(
+                                        color: AuthUi.textSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  color: const Color(0xFFF2F2F7),
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    'Default cover will be used',
+                                    style: TextStyle(
+                                      color: AuthUi.textSecondary,
+                                    ),
+                                  ),
+                                )),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AuthOutlinedPillButton(
+                          label: 'Change',
+                          onPressed: (_saving || _previewing)
+                              ? null
+                              : _pickFrontImage,
+                        ),
+                      ),
+                      if (!_frontImageIsDefault || _frontImageBytes != null) ...[
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: AuthOutlinedPillButton(
+                            label: 'Use default',
+                            onPressed: (_saving || _previewing)
+                                ? null
+                                : _resetFrontToDefault,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ],
               ),

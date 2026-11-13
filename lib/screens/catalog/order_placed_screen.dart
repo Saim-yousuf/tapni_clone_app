@@ -57,8 +57,9 @@ class OrderPlacedScreen extends StatefulWidget {
 }
 
 class _OrderPlacedScreenState extends State<OrderPlacedScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _ctrl;
+  late final AnimationController _pulseCtrl;
   late final Animation<double> _heroScale;
   late final Animation<double> _heroFade;
   late final Animation<Offset> _bodySlide;
@@ -169,6 +170,10 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen>
       vsync: this,
       duration: const Duration(milliseconds: 900),
     );
+    _pulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1600),
+    );
     _heroScale = CurvedAnimation(
       parent: _ctrl,
       curve: const Interval(0.0, 0.55, curve: Curves.easeOutBack),
@@ -190,13 +195,103 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen>
       parent: _ctrl,
       curve: const Interval(0.28, 1.0, curve: Curves.easeOut),
     );
-    _ctrl.forward();
+    _ctrl.forward().whenComplete(() {
+      if (mounted) _pulseCtrl.repeat();
+    });
   }
 
   @override
   void dispose() {
+    _pulseCtrl.dispose();
     _ctrl.dispose();
     super.dispose();
+  }
+
+  Widget _buildSuccessHero() {
+    return SizedBox(
+      width: 128,
+      height: 128,
+      child: AnimatedBuilder(
+        animation: Listenable.merge([_heroScale, _heroFade, _pulseCtrl]),
+        builder: (context, _) {
+          final pulse = Curves.easeOut.transform(_pulseCtrl.value);
+          final ringScale = 1.0 + (pulse * 0.55);
+          final ringOpacity = (1.0 - pulse) * 0.38;
+          final ring2 = Curves.easeOut.transform(
+            ((_pulseCtrl.value + 0.45) % 1.0),
+          );
+          final ring2Scale = 1.0 + (ring2 * 0.55);
+          final ring2Opacity = (1.0 - ring2) * 0.22;
+
+          return FadeTransition(
+            opacity: _heroFade,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.82, end: 1).animate(_heroScale),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Transform.scale(
+                    scale: ringScale,
+                    child: Container(
+                      width: 88,
+                      height: 88,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black.withValues(alpha: ringOpacity),
+                          width: 2.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Transform.scale(
+                    scale: ring2Scale,
+                    child: Container(
+                      width: 88,
+                      height: 88,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black.withValues(alpha: ring2Opacity),
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 88,
+                    height: 88,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.16),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      'assets/images/png/check-icon-1.png',
+                      width: 34,
+                      height: 34,
+                      color: Colors.white,
+                      errorBuilder: (_, _, _) => const Icon(
+                        Icons.check_rounded,
+                        color: Colors.white,
+                        size: 42,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -218,41 +313,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen>
                 padding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
                 child: Column(
                   children: [
-                    FadeTransition(
-                      opacity: _heroFade,
-                      child: ScaleTransition(
-                        scale: Tween<double>(begin: 0.82, end: 1).animate(
-                          _heroScale,
-                        ),
-                        child: Container(
-                          width: 88,
-                          height: 88,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.16),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
-                              ),
-                            ],
-                          ),
-                          alignment: Alignment.center,
-                          child: Image.asset(
-                            'assets/images/png/check-icon-1.png',
-                            width: 34,
-                            height: 34,
-                            color: Colors.white,
-                            errorBuilder: (_, _, _) => const Icon(
-                              Icons.check_rounded,
-                              color: Colors.white,
-                              size: 42,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    _buildSuccessHero(),
                     const SizedBox(height: 26),
                     FadeTransition(
                       opacity: _bodyFade,

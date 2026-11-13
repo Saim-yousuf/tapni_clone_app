@@ -1,4 +1,12 @@
-enum OrderStatus { held, pending, confirmed, completed, cancelled, noShow }
+enum OrderStatus {
+  held,
+  pending,
+  confirmed,
+  outForDelivery,
+  completed,
+  cancelled,
+  noShow,
+}
 
 double? _readCoord(dynamic raw) {
   if (raw is num) return raw.toDouble();
@@ -482,6 +490,7 @@ class CatalogOrder {
           paymentStatus == 'partially_refunded') &&
       refundStatus != 'refunded' &&
       (status == OrderStatus.confirmed ||
+          status == OrderStatus.outForDelivery ||
           status == OrderStatus.completed ||
           status == OrderStatus.cancelled);
 
@@ -730,6 +739,8 @@ class CatalogOrder {
         return OrderStatus.held;
       case 'confirmed':
         return OrderStatus.confirmed;
+      case 'out_for_delivery':
+        return OrderStatus.outForDelivery;
       case 'completed':
         return OrderStatus.completed;
       case 'cancelled':
@@ -763,6 +774,8 @@ class CatalogOrder {
         return 'held';
       case OrderStatus.confirmed:
         return 'confirmed';
+      case OrderStatus.outForDelivery:
+        return 'out_for_delivery';
       case OrderStatus.completed:
         return 'completed';
       case OrderStatus.cancelled:

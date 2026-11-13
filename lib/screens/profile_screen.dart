@@ -1559,7 +1559,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             link,
             context,
             businessId: p.id,
-            businessName: p.businessName ?? p.name,
+            businessName:
+                p.name.trim().isNotEmpty ? p.name : (p.businessName ?? ''),
             businessCategory: p.businessCategory,
             currency: p.currency,
             peerLinks: p.socialLinks,

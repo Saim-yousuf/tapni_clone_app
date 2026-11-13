@@ -352,9 +352,10 @@ class ProfileProvider extends ChangeNotifier {
     return CardDisplayData(
       id: UserCustomCard.primaryId,
       title: 'Main Card',
-      name: _profile.businessName?.isNotEmpty == true
-          ? _profile.businessName!
-          : _profile.name,
+      // Profile name is canonical; businessName is kept in sync on save.
+      name: _profile.name.isNotEmpty
+          ? _profile.name
+          : (_profile.businessName ?? ''),
       subtitle: _profile.designation.isNotEmpty
           ? _profile.designation
           : (_profile.company.isNotEmpty ? _profile.company : null),
@@ -699,8 +700,18 @@ class ProfileProvider extends ChangeNotifier {
         ? resolveCurrency(country: country)
         : _profile.currency;
 
+    // Profile name is the canonical display name. When businessName isn't
+    // explicitly edited here, keep it in lockstep so cards/share don't keep
+    // an old brand label (e.g. leftover "Zain").
+    final trimmedName = name.trim();
+    final explicitBiz = businessName?.trim();
+    final syncedBusinessName =
+        (explicitBiz != null && explicitBiz.isNotEmpty)
+            ? explicitBiz
+            : trimmedName;
+
     final updatedProfile = _profile.copyWith(
-      name: name,
+      name: trimmedName,
       designation: designation,
       company: company,
       bio: bio,
@@ -710,13 +721,14 @@ class ProfileProvider extends ChangeNotifier {
       socialLinks: links,
       country: country,
       currency: resolvedCurrency,
-      businessName: businessName,
+      businessName: syncedBusinessName,
       businessCategory: businessCategory,
       businessConcern: businessConcern,
       businessType: businessType,
     );
 
     final json = updatedProfile.toApiJson();
+    json['businessName'] = syncedBusinessName;
     if (profileImageBytes != null && profileImageBytes.isNotEmpty) {
       json['profilePhoto'] = await bytesToBase64(profileImageBytes);
     }
@@ -730,11 +742,13 @@ class ProfileProvider extends ChangeNotifier {
       final response = await repo.updateProfile(jsonBody: json);
 
       if (response.success) {
+        Map<String, dynamic>? cachedUser;
         if (response.data is Map<String, dynamic>) {
           final data = response.data as Map<String, dynamic>;
           final profileData = data['user'] is Map<String, dynamic>
               ? data['user'] as Map<String, dynamic>
               : data;
+          cachedUser = Map<String, dynamic>.from(profileData);
           try {
             _profile = UserProfile.fromApiJson(profileData);
           } catch (_) {
@@ -742,6 +756,22 @@ class ProfileProvider extends ChangeNotifier {
           }
         } else {
           _profile = updatedProfile;
+        }
+        // Ensure local + cache never keep a stale businessName after rename.
+        if ((_profile.businessName ?? '').trim().isEmpty ||
+            explicitBiz == null ||
+            explicitBiz.isEmpty) {
+          _profile = _profile.copyWith(businessName: trimmedName);
+          cachedUser ??= <String, dynamic>{};
+          cachedUser['businessName'] = trimmedName;
+          cachedUser['name'] = trimmedName;
+          if (_profile.id != null) {
+            cachedUser['_id'] = _profile.id;
+            cachedUser['id'] = _profile.id;
+          }
+        }
+        if (cachedUser != null) {
+          await _saveProfileCache(cachedUser);
         }
         await AccountStorage.updateActiveProfileMeta(
           userId: _profile.id,
@@ -859,11 +889,13 @@ class ProfileProvider extends ChangeNotifier {
       );
 
       if (response.success) {
+        Map<String, dynamic>? cachedUser;
         if (response.data is Map<String, dynamic>) {
           final data = response.data as Map<String, dynamic>;
           final profileData = data['user'] is Map<String, dynamic>
               ? data['user'] as Map<String, dynamic>
               : data;
+          cachedUser = Map<String, dynamic>.from(profileData);
           try {
             _profile = UserProfile.fromApiJson(profileData);
           } catch (_) {
@@ -871,6 +903,9 @@ class ProfileProvider extends ChangeNotifier {
           }
         } else {
           _profile = updated;
+        }
+        if (cachedUser != null) {
+          await _saveProfileCache(cachedUser);
         }
         notifyListeners();
       }

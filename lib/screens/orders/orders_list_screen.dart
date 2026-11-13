@@ -4,11 +4,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:tapni_app/l10n/app_localizations_fallback.dart';
 import 'package:tapni_app/models/catalog_order.dart';
 import 'package:tapni_app/repository/catalog_repo.dart';
+import 'package:tapni_app/screens/orders/customer_order_chrome.dart';
 import 'package:tapni_app/screens/orders/order_detail_screen.dart';
-import 'package:tapni_app/utils/catalog_helper.dart';
 import 'package:tapni_app/utils/whatsapp_ui.dart';
 import 'package:tapni_app/widgets/barqody_chrome.dart';
 import 'package:tapni_app/widgets/order_ui.dart';
@@ -107,7 +106,8 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
       case _StatusGroup.active:
         return o.status == OrderStatus.held ||
             o.status == OrderStatus.pending ||
-            o.status == OrderStatus.confirmed;
+            o.status == OrderStatus.confirmed ||
+            o.status == OrderStatus.outForDelivery;
       case _StatusGroup.completed:
         return o.status == OrderStatus.completed;
       case _StatusGroup.cancelled:
@@ -281,6 +281,25 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
     }
   }
 
+  /// Customer-facing labels aligned with detail progress (no fake courier states).
+  String _customerStatusLabel(CatalogOrder order) {
+    switch (order.status) {
+      case OrderStatus.held:
+      case OrderStatus.pending:
+        return 'Pending';
+      case OrderStatus.confirmed:
+        return 'Preparing';
+      case OrderStatus.outForDelivery:
+        return order.isDelivery ? 'On the way' : 'Ready';
+      case OrderStatus.completed:
+        return order.isDelivery ? 'Delivered' : 'Completed';
+      case OrderStatus.cancelled:
+        return 'Cancelled';
+      case OrderStatus.noShow:
+        return order.isDelivery ? 'Not delivered' : 'Not collected';
+    }
+  }
+
   String _emptyTitle() {
     switch (_group) {
       case _StatusGroup.all:
@@ -294,199 +313,203 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
     }
   }
 
+  Future<void> _openOrder(CatalogOrder order) async {
+    await Navigator.push(
+      context,
+      AppPageRoute(
+        builder: (_) => OrderDetailScreen(
+          orderId: order.id,
+          isBusinessView: widget.isBusinessView,
+        ),
+      ),
+    );
+    _load();
+  }
+
   @override
   Widget build(BuildContext context) {
     final title =
         widget.isBusinessView ? 'Orders & Bookings' : 'My Orders & Bookings';
 
     final content = Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            BarqodyTitleBar(
-              title: title,
-              onBack: widget.embedded
-                  ? () => Navigator.of(context).maybePop()
-                  : null,
-              trailing: !widget.isBusinessView
-                  ? SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        tooltip: 'Claim guest order',
-                        onPressed: _claimGuestOrder,
-                        icon: const Icon(
-                          Icons.link_rounded,
-                          color: Colors.black,
-                          size: 22,
-                        ),
-                      ),
-                    )
-                  : null,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                OrderUi.sidePad,
-                0,
-                OrderUi.sidePad,
-                12,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _searchCtrl,
-                      onChanged: _onSearchChanged,
-                      style: WaUi.body,
-                      decoration: InputDecoration(
-                        hintText: widget.isBusinessView
-                            ? 'Search customer, #order, item…'
-                            : 'Search business, #order, item…',
-                        hintStyle: WaUi.caption.copyWith(color: OrderUi.muted),
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: OrderUi.muted,
-                          size: 20,
-                        ),
-                        suffixIcon: _searchCtrl.text.isEmpty
-                            ? null
-                            : IconButton(
-                                onPressed: () {
-                                  _searchCtrl.clear();
-                                  setState(() => _search = '');
-                                  _load();
-                                },
-                                icon: const Icon(Icons.clear, size: 18),
-                              ),
-                        filled: true,
-                        fillColor: BarqodyChrome.searchBg,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        BarqodyTitleBar(
+          title: title,
+          onBack: widget.embedded
+              ? () => Navigator.of(context).maybePop()
+              : null,
+          trailing: !widget.isBusinessView
+              ? SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    tooltip: 'Claim guest order',
+                    onPressed: _claimGuestOrder,
+                    icon: const Icon(
+                      Icons.link_rounded,
+                      color: Colors.black,
+                      size: 22,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  _FiltersButton(
-                    count: _activeFilterCount,
-                    onTap: _openFilters,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: OrderUi.sidePad),
-              child: _StatusGroupTabs(
-                group: _group,
-                onChanged: (g) {
-                  HapticFeedback.selectionClick();
-                  setState(() => _group = g);
-                  _load();
-                },
-              ),
-            ),
-            if (_hasAdvancedFilters)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  OrderUi.sidePad,
-                  10,
-                  OrderUi.sidePad,
-                  0,
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: _resetAdvancedFilters,
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                )
+              : null,
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            OrderUi.sidePad,
+            0,
+            OrderUi.sidePad,
+            12,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _searchCtrl,
+                  onChanged: _onSearchChanged,
+                  style: WaUi.body,
+                  decoration: InputDecoration(
+                    hintText: widget.isBusinessView
+                        ? 'Search customer, #order, item…'
+                        : 'Search business, #order, item…',
+                    hintStyle: WaUi.caption.copyWith(color: OrderUi.muted),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: OrderUi.muted,
+                      size: 20,
                     ),
-                    child: Text(
-                      'Clear filters',
-                      style: WaUi.caption.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: RefreshIndicator(
-                color: Colors.black,
-                onRefresh: _load,
-                child: _loading
-                    ? ListView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        children: const [
-                          SizedBox(height: 160),
-                          Center(
-                            child:
-                                CircularProgressIndicator(color: Colors.black),
+                    suffixIcon: _searchCtrl.text.isEmpty
+                        ? null
+                        : IconButton(
+                            onPressed: () {
+                              _searchCtrl.clear();
+                              setState(() => _search = '');
+                              _load();
+                            },
+                            icon: const Icon(Icons.clear, size: 18),
                           ),
-                        ],
-                      )
-                    : _failed
-                        ? OrderErrorState(onRetry: _load)
-                        : _orders.isEmpty
-                            ? ListView(
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                children: [
-                                  OrderEmptyState(
-                                    title: _emptyTitle(),
-                                    subtitle: widget.isBusinessView
-                                        ? 'New customer orders and bookings will appear here.'
-                                        : 'When you place an order or book, it will appear here.',
-                                  ),
-                                ],
-                              )
-                            : ListView.separated(
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                padding: const EdgeInsets.fromLTRB(
-                                  OrderUi.sidePad,
-                                  0,
-                                  OrderUi.sidePad,
-                                  28,
-                                ),
-                                itemCount: _orders.length,
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(height: 10),
-                                itemBuilder: (context, index) {
-                                  final order = _orders[index];
-                                  return OrderListCard(
-                                    order: order,
-                                    isBusinessView: widget.isBusinessView,
-                                    statusLabel: CatalogHelper.statusLabel(
-                                      order.status,
-                                      context.l10n,
-                                      isDelivery: order.isDelivery,
-                                    ),
-                                    onTap: () async {
-                                      await Navigator.push(
-                                        context,
-                                        AppPageRoute(
-                                          builder: (_) => OrderDetailScreen(
-                                            orderId: order.id,
-                                            isBusinessView:
-                                                widget.isBusinessView,
-                                          ),
-                                        ),
-                                      );
-                                      _load();
-                                    },
-                                  );
-                                },
-                              ),
+                    filled: true,
+                    fillColor: BarqodyChrome.searchBg,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              _FiltersButton(
+                count: _activeFilterCount,
+                onTap: _openFilters,
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: OrderUi.sidePad),
+          child: _StatusGroupTabs(
+            group: _group,
+            onChanged: (g) {
+              HapticFeedback.selectionClick();
+              setState(() => _group = g);
+              _load();
+            },
+            opsLabels: true,
+          ),
+        ),
+        if (_hasAdvancedFilters)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              OrderUi.sidePad,
+              10,
+              OrderUi.sidePad,
+              0,
+            ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: _resetAdvancedFilters,
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
+                  'Clear filters',
+                  style: WaUi.caption.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
               ),
             ),
-          ],
+          ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: RefreshIndicator(
+            color: Colors.black,
+            onRefresh: _load,
+            child: _loading
+                ? ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: const [
+                      SizedBox(height: 160),
+                      Center(
+                        child: CircularProgressIndicator(color: Colors.black),
+                      ),
+                    ],
+                  )
+                : _failed
+                    ? OrderErrorState(onRetry: _load)
+                    : _orders.isEmpty
+                        ? ListView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            children: [
+                              OrderEmptyState(
+                                title: _emptyTitle(),
+                                subtitle: widget.isBusinessView
+                                    ? 'New customer orders and bookings will appear here.'
+                                    : 'When you place an order or book, it will appear here.',
+                              ),
+                            ],
+                          )
+                        : ListView.separated(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            padding: const EdgeInsets.fromLTRB(
+                              OrderUi.sidePad,
+                              0,
+                              OrderUi.sidePad,
+                              28,
+                            ),
+                            itemCount: _orders.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 10),
+                            itemBuilder: (context, index) {
+                              final order = _orders[index];
+                              if (!widget.isBusinessView) {
+                                return CxOrderListCard(
+                                  order: order,
+                                  statusLabel: _customerStatusLabel(order),
+                                  onTap: () => _openOrder(order),
+                                );
+                              }
+                              return BizOrderListCard(
+                                order: order,
+                                statusLabel:
+                                    CxProgressStep.statusLabelBusiness(order),
+                                onTap: () => _openOrder(order),
+                              );
+                            },
+                          ),
+          ),
+        ),
+      ],
     );
 
     if (widget.embedded) {
@@ -547,7 +570,10 @@ class _OrdersFilterResult {
 }
 
 class _FiltersButton extends StatelessWidget {
-  const _FiltersButton({required this.count, required this.onTap});
+  const _FiltersButton({
+    required this.count,
+    required this.onTap,
+  });
 
   final int count;
   final VoidCallback onTap;
@@ -617,20 +643,27 @@ class _StatusGroupTabs extends StatelessWidget {
   const _StatusGroupTabs({
     required this.group,
     required this.onChanged,
+    this.opsLabels = false,
   });
 
   final _StatusGroup group;
   final ValueChanged<_StatusGroup> onChanged;
-
-  static const _tabs = <(_StatusGroup, String)>[
-    (_StatusGroup.all, 'All'),
-    (_StatusGroup.active, 'Active'),
-    (_StatusGroup.completed, 'Completed'),
-    (_StatusGroup.cancelled, 'Cancelled'),
-  ];
+  final bool opsLabels;
 
   @override
   Widget build(BuildContext context) {
+    final tabs = <(_StatusGroup, String)>[
+      (_StatusGroup.all, 'All'),
+      (
+        _StatusGroup.active,
+        opsLabels ? 'Preparing' : 'Active',
+      ),
+      (
+        _StatusGroup.completed,
+        opsLabels ? 'Delivered' : 'Completed',
+      ),
+      (_StatusGroup.cancelled, 'Cancelled'),
+    ];
     return Container(
       height: 46,
       padding: const EdgeInsets.all(4),
@@ -640,7 +673,7 @@ class _StatusGroupTabs extends StatelessWidget {
       ),
       child: Row(
         children: [
-          for (final tab in _tabs)
+          for (final tab in tabs)
             Expanded(
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,

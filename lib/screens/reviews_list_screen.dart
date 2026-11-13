@@ -84,7 +84,7 @@ class _ReviewsListScreenState extends State<ReviewsListScreen> {
 
     final result = await showWriteReviewSheet(
       context,
-      title: 'Review ${widget.profile.businessName ?? widget.profile.name}',
+      title: 'Review ${widget.profile.name.trim().isNotEmpty ? widget.profile.name : (widget.profile.businessName ?? '')}',
     );
     if (result == null) return;
 
@@ -94,7 +94,9 @@ class _ReviewsListScreenState extends State<ReviewsListScreen> {
       businessId: businessId,
       rating: result.rating,
       text: result.text,
-      targetLabel: widget.profile.businessName ?? widget.profile.name,
+      targetLabel: widget.profile.name.trim().isNotEmpty
+          ? widget.profile.name
+          : (widget.profile.businessName ?? ''),
     );
 
     if (!mounted) return;

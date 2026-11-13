@@ -46,6 +46,8 @@ class OrderUi {
         return '$noun pending';
       case OrderStatus.confirmed:
         return '$noun confirmed';
+      case OrderStatus.outForDelivery:
+        return order.isDelivery ? '$noun on the way' : '$noun ready';
       case OrderStatus.completed:
         return '$noun complete';
       case OrderStatus.cancelled:
@@ -67,6 +69,8 @@ class OrderUi {
         return l10nPending ?? 'Pending';
       case OrderStatus.confirmed:
         return 'Confirmed';
+      case OrderStatus.outForDelivery:
+        return isDelivery ? 'On the way' : 'Ready';
       case OrderStatus.completed:
         return 'Completed';
       case OrderStatus.cancelled:
@@ -102,6 +106,10 @@ class OrderStatusBadgeLabeled extends StatelessWidget {
       case OrderStatus.confirmed:
         fg = const Color(0xFF1B7F4E);
         bg = const Color(0xFFE8F5EE);
+        break;
+      case OrderStatus.outForDelivery:
+        fg = const Color(0xFF1A56C4);
+        bg = const Color(0xFFE8EEF8);
         break;
       case OrderStatus.completed:
         fg = Colors.black;

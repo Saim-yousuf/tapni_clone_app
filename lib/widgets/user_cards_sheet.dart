@@ -137,9 +137,9 @@ List<CardDisplayData> cardDisplaysForProfile(UserProfile profile) {
       .where((l) => l.isActive)
       .map((l) => l.id)
       .toList();
-  final displayName = profile.businessName?.trim().isNotEmpty == true
-      ? profile.businessName!.trim()
-      : profile.name;
+  final displayName = profile.name.trim().isNotEmpty
+      ? profile.name.trim()
+      : (profile.businessName?.trim() ?? '');
   final subtitle = profile.designation.isNotEmpty
       ? profile.designation
       : (profile.company.isNotEmpty ? profile.company : null);

@@ -404,6 +404,10 @@ class ExploreCartProvider extends ChangeNotifier {
     required int lineIndex,
     int? quantity,
     String? notes,
+    String? variantId,
+    List<String>? optionIds,
+    String? configurationLabel,
+    CatalogItem? item,
   }) {
     final vIdx = _vendors.indexWhere((v) => v.businessLinkId == businessLinkId);
     if (vIdx < 0) return;
@@ -416,9 +420,21 @@ class ExploreCartProvider extends ChangeNotifier {
     if (nextQty <= 0) {
       lines.removeAt(lineIndex);
     } else {
-      lines[lineIndex] = current.copyWith(
+      lines[lineIndex] = ExploreCartLine(
+        item: item ?? current.item,
         quantity: nextQty,
         notes: notes ?? current.notes,
+        bookingDate: current.bookingDate,
+        bookingTime: current.bookingTime,
+        resourceId: current.resourceId,
+        resourceName: current.resourceName,
+        checkInDate: current.checkInDate,
+        checkOutDate: current.checkOutDate,
+        bookingKind: current.bookingKind,
+        variantId: variantId ?? current.variantId,
+        optionIds: optionIds ?? current.optionIds,
+        configurationLabel:
+            configurationLabel ?? current.configurationLabel,
       );
     }
 
