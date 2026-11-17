@@ -407,9 +407,11 @@ class _CatalogModifierLibrarySheetState
                         'assets/images/png/trash-bin-icon.png',
                         width: 15,
                         height: 15,
+                        color: const Color(0xFFE53935),
                         errorBuilder: (_, __, ___) => const Icon(
                           Icons.delete_outline,
                           size: 17,
+                          color: Color(0xFFE53935),
                         ),
                       ),
                     ),
@@ -575,9 +577,11 @@ class _CatalogModifierLibrarySheetState
                     'assets/images/png/trash-bin-icon.png',
                     width: 14,
                     height: 14,
+                    color: const Color(0xFFE53935),
                     errorBuilder: (_, __, ___) => const Icon(
                       Icons.delete_outline,
                       size: 16,
+                      color: Color(0xFFE53935),
                     ),
                   ),
                 ),

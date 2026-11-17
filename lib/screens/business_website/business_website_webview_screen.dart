@@ -394,8 +394,33 @@ class _BusinessWebsiteWebViewScreenState
         try{
           if(typeof window.__BW_ON_FLUTTER_APP==='function') window.__BW_ON_FLUTTER_APP();
         }catch(e){}
+        try{
+          if(typeof window.__BW_KICK_HERO_PAINT==='function') window.__BW_KICK_HERO_PAINT();
+        }catch(e){}
       })();
     ''');
+  }
+
+  /// Android WebView often blanks hero cover until first scroll composite.
+  Future<void> _kickHeroCoverPaint() async {
+    final controller = _controller;
+    if (controller == null) return;
+    try {
+      await controller.runJavaScript('''
+        (function(){
+          try{
+            if(typeof window.__BW_KICK_HERO_PAINT==='function'){
+              window.__BW_KICK_HERO_PAINT();
+              setTimeout(function(){ try{ window.__BW_KICK_HERO_PAINT(); }catch(e){} }, 120);
+              return;
+            }
+            var y=window.scrollY||document.documentElement.scrollTop||0;
+            window.scrollTo(0, y+1);
+            window.scrollTo(0, y);
+          }catch(e){}
+        })();
+      ''');
+    } catch (_) {}
   }
 
   bool _tryHandleTrackOrderUrl(String url) {
@@ -740,21 +765,26 @@ class _BusinessWebsiteWebViewScreenState
         NavigationDelegate(
           onPageStarted: (_) {
             // Intentionally no shimmer on subsequent in-site navigations.
+            // Mark flutter early so immersive template back is visible before
+            // onPageFinished (otherwise hero shows cart only, no back).
+            _injectFlutterAppFlag();
           },
           onPageFinished: (_) async {
             await _injectChromeInsets();
             if (widget.sampleDemoPreview) {
               // Immersive samples own back (no Flutter X). Always mark flutter
               // shell so data-bw-close can post closeWebsite despite demo guard.
-              await _detectImmersiveNav();
               await _injectFlutterAppFlag();
+              await _detectImmersiveNav();
               await _injectChromeInsets();
+              await _kickHeroCoverPaint();
             } else {
               await _injectFlutterAppFlag();
               await _detectImmersiveNav();
               await _injectChromeInsets();
               await _injectShopper();
               await _injectNativeCartToWeb();
+              await _kickHeroCoverPaint();
             }
             if (mounted) {
               setState(() {

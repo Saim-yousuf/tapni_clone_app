@@ -65,6 +65,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   /// Skip sheet enter when returning from edit mode only.
   bool _skipSheetEnterOnce = false;
   int _sheetEnterPlayId = 0;
+  /// Tracks last known edit flag so shell tab-away can still reset sheet chrome.
+  bool _wasEditingProfile = false;
 
   @override
   void initState() {
@@ -108,16 +110,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  void _exitEditMode(ProfileProvider profileProvider) {
+  /// Rest sheet + expand chrome (avatar/name visible, no close X).
+  ///
+  /// [DraggableScrollableController] keeps its last size across edit↔view
+  /// swaps; without this, Profile → Edit → Analytics → Profile lands expanded.
+  void _resetProfileSheetToRest() {
+    _sheetExpandProgress.value = 0;
+    void jumpIfAttached() {
+      if (!mounted || !_sheetController.isAttached) return;
+      final target = _sheetInitialSize.clamp(0.0, 1.0);
+      try {
+        _sheetController.jumpTo(target);
+      } catch (_) {
+        // Controller can briefly disagree while DSS mounts.
+      }
+    }
+
+    jumpIfAttached();
+    // Edit→view remount attaches DSS on the next frame; jump again then.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _sheetExpandProgress.value = 0;
+      jumpIfAttached();
+    });
+  }
+
+  void _cleanupAfterLeavingEdit() {
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
     final profile = profileProvider.profile;
     _nameController.text = profile.name;
     _bioController.text = profile.bio;
     profileImageBytes = null;
     coverImageBytes = null;
+    profileProvider.onSaveTriggered = null;
+    _resetProfileSheetToRest();
+  }
+
+  void _exitEditMode(ProfileProvider profileProvider) {
     // Next view build should not re-run sheet enter.
     _skipSheetEnterOnce = true;
+    _cleanupAfterLeavingEdit();
     profileProvider.setEditingProfile(false);
-    profileProvider.onSaveTriggered = null;
   }
 
   void _enterEditMode(ProfileProvider profileProvider) {
@@ -125,6 +159,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _nameController.text = profile.name;
     _bioController.text = profile.bio;
     _skipSheetEnterOnce = true;
+    // Leave view sheet at rest so remount after edit does not restore expand.
+    _resetProfileSheetToRest();
     profileProvider.setEditingProfile(true);
     profileProvider.onSaveTriggered = () => _saveProfile(profileProvider);
   }
@@ -139,7 +175,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final editing =
         Provider.of<ProfileProvider>(context, listen: false).isEditingProfile;
     if (editing) return;
-    // My Card opened from shell — replay sheet enter (no DSS remount).
+    // My Card opened from shell — collapse any leftover expand, then replay enter.
+    _resetProfileSheetToRest();
     setState(() {
       _skipSheetEnterOnce = false;
       _sheetEnterPlayId = next;
@@ -259,6 +296,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         !profileProvider.hasLoadedProfile &&
         ((connectivity.initialized && connectivity.isOffline) ||
             profileProvider.hasFetchedProfile);
+
+    // Shell tabs call setEditingProfile(false) without [_exitEditMode] — still
+    // clear draft bytes and reset sheet so view does not reopen expanded.
+    if (_wasEditingProfile && !isEditing) {
+      _skipSheetEnterOnce = true;
+      // Avoid jumpTo during build; DSS may attach on this same frame.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        if (Provider.of<ProfileProvider>(context, listen: false)
+            .isEditingProfile) {
+          return;
+        }
+        _cleanupAfterLeavingEdit();
+      });
+    }
+    _wasEditingProfile = isEditing;
 
     if (connectivity.reconnectTick != _lastReconnectTick) {
       _lastReconnectTick = connectivity.reconnectTick;

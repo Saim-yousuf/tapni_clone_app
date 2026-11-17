@@ -493,8 +493,20 @@ class _BusinessWebsiteSetupScreenState
     Navigator.of(context).pop();
   }
 
+  Future<void> _confirmStyleAndContinue() async {
+    if (_creating || _blockTemplateSelect || _template == null) return;
+    HapticFeedback.selectionClick();
+    await _goNextStep();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final showStyleCta = !_loading &&
+        !_creating &&
+        _error == null &&
+        _step == 2 &&
+        _templatesForSelection.isNotEmpty;
+
     return BwPresenceScaffold(
       title: _title,
       onBack: _onBack,
@@ -504,6 +516,13 @@ class _BusinessWebsiteSetupScreenState
               step: _progressStep,
               total: _progressTotal,
             ),
+      bottom: showStyleCta
+          ? BwBottomCta(
+              label: 'Use Template',
+              loading: _creating,
+              onPressed: _template == null ? null : _confirmStyleAndContinue,
+            )
+          : null,
       body: _loading || _creating
           ? const Center(child: CircularProgressIndicator(color: Colors.black))
           : _error != null
@@ -673,13 +692,14 @@ class _BusinessWebsiteSetupScreenState
       children: [
         AppAppear(
           index: 0,
-          child: Text(
+          child: const Text(
             'Choose Style',
-            style: WaUi.toolsTitleOf(
-              size: 26,
-              weight: FontWeight.w700,
-              color: AuthUi.textPrimary,
-              height: 1.2,
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+              color: Colors.black,
+              height: 1.15,
+              letterSpacing: -0.4,
             ),
           ),
         ),
@@ -687,15 +707,15 @@ class _BusinessWebsiteSetupScreenState
         AppAppear(
           index: 1,
           child: Text(
-            'Pick a template. You can customize content and colors later.',
-            style: WaUi.body.copyWith(
-              fontSize: 14,
+            'Pick a ${_typeLabel.toLowerCase()} template.',
+            style: const TextStyle(
+              fontSize: 15,
               color: AuthUi.textSecondary,
               height: 1.4,
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 24),
         if (templates.isEmpty)
           AppAppear(
             index: 2,
@@ -713,26 +733,26 @@ class _BusinessWebsiteSetupScreenState
             ),
           )
         else
-          for (var i = 0; i < templates.length; i++) ...[
-            if (i > 0)
-              const Divider(
-                height: 1,
-                thickness: 1,
-                color: Color(0xFFE8E8E8),
-              ),
+          for (var i = 0; i < templates.length; i++)
             AppAppear(
               index: i + 2,
               maxStagger: 10,
-              child: _TemplateRow(
-                template: templates[i],
-                selected: _template?.id == templates[i].id,
-                onSelect: () => _pickAndAdvance(() {
-                  _template = templates[i];
-                }),
-                onSample: () => _previewTemplateSample(templates[i]),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: i == templates.length - 1 ? 0 : 14,
+                ),
+                child: _TemplateCard(
+                  template: templates[i],
+                  selected: _template?.id == templates[i].id,
+                  onSelect: () {
+                    if (_creating || _blockTemplateSelect) return;
+                    HapticFeedback.selectionClick();
+                    setState(() => _template = templates[i]);
+                  },
+                  onSample: () => _previewTemplateSample(templates[i]),
+                ),
               ),
             ),
-          ],
       ],
     );
   }
@@ -823,13 +843,14 @@ class _OptionRow extends StatelessWidget {
   }
 }
 
-class _TemplateRow extends StatelessWidget {
+/// Same card chrome as settings `_TemplateChooserScreen`.
+class _TemplateCard extends StatelessWidget {
   final WebsiteTemplateSummary template;
   final bool selected;
   final VoidCallback onSelect;
   final VoidCallback onSample;
 
-  const _TemplateRow({
+  const _TemplateCard({
     required this.template,
     required this.selected,
     required this.onSelect,
@@ -838,131 +859,110 @@ class _TemplateRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final thumb = AnimatedScale(
-      scale: selected ? 1.05 : 1,
-      duration: AppMotion.content,
-      curve: AppMotion.easeOut,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: SizedBox(
-          width: 88,
-          height: 50,
-          child: ColoredBox(
-            color: const Color(0xFFF2F2F7),
-            child: template.thumbnail.isNotEmpty
-                ? Image.network(
-                    template.thumbnail,
-                    fit: BoxFit.contain,
-                    alignment: Alignment.center,
-                    errorBuilder: (_, _, _) => const ColoredBox(
-                      color: Color(0xFFF2F2F7),
-                      child: Icon(Icons.web_asset, color: Colors.black54),
-                    ),
-                  )
-                : const ColoredBox(
-                    color: Color(0xFFF2F2F7),
-                    child: Icon(Icons.web_asset, color: Colors.black54),
-                  ),
-          ),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 160),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: selected ? Colors.black : BwUi.cardBorder,
+          width: 2,
         ),
       ),
-    );
-
-    final check = AnimatedSwitcher(
-      duration: AppMotion.content,
-      switchInCurve: AppMotion.easeOut,
-      switchOutCurve: AppMotion.easeIn,
-      transitionBuilder: (child, anim) => ScaleTransition(
-        scale: anim,
-        child: FadeTransition(opacity: anim, child: child),
-      ),
-      child: Icon(
-        selected ? Icons.check_circle_rounded : Icons.circle_outlined,
-        key: ValueKey(selected),
-        size: 24,
-        color: selected ? Colors.black : BarqodyChrome.secondaryText,
-      ),
-    );
-
-    return AnimatedContainer(
-      duration: AppMotion.content,
-      curve: AppMotion.easeOut,
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
-      decoration: BoxDecoration(
-        color: selected
-            ? Colors.black.withValues(alpha: 0.04)
-            : Colors.transparent,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: onSelect,
-              borderRadius: BorderRadius.circular(12),
-              child: thumb,
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onSelect,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: onSelect,
-                    borderRadius: BorderRadius.circular(8),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              template.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: WaUi.body.copyWith(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: AuthUi.textPrimary,
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      ColoredBox(
+                        color: BwUi.iconTileBg,
+                        child: template.thumbnail.isNotEmpty
+                            ? Image.network(
+                                template.thumbnail,
+                                fit: BoxFit.cover,
+                                alignment: Alignment.center,
+                                errorBuilder: (_, __, ___) => const Center(
+                                  child: Icon(
+                                    Icons.web_asset,
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                              )
+                            : const Center(
+                                child: Icon(
+                                  Icons.web_asset,
+                                  color: Colors.black45,
+                                ),
+                              ),
+                      ),
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: Material(
+                          color: Colors.white,
+                          elevation: 1.5,
+                          shadowColor: Colors.black26,
+                          shape: const CircleBorder(),
+                          child: InkWell(
+                            customBorder: const CircleBorder(),
+                            onTap: onSample,
+                            child: const SizedBox(
+                              width: 36,
+                              height: 36,
+                              child: Icon(
+                                Icons.open_in_new_rounded,
+                                size: 18,
+                                color: Colors.black,
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          check,
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 2),
-                TextButton(
-                  onPressed: onSample,
-                  style: TextButton.styleFrom(
-                    foregroundColor: AuthUi.textSecondary,
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(0, 32),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    alignment: Alignment.centerLeft,
-                  ),
-                  child: Text(
-                    'View sample',
-                    style: WaUi.body.copyWith(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AuthUi.textSecondary,
-                      decoration: TextDecoration.underline,
-                      decorationColor: AuthUi.textSecondary,
-                    ),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 160),
+                  color: selected ? Colors.black : Colors.white,
+                  padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          template.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: selected ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      ),
+                      if (selected) ...[
+                        const SizedBox(width: 10),
+                        const Icon(
+                          Icons.check_rounded,
+                          size: 22,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
